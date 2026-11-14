@@ -1,0 +1,40 @@
+# Local environment variables; keep examples available for the team.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Operating system files.
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local editor preferences; allow shared VS Code configuration.
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Logs and temporary files.
+*.log
+*.tmp
+*.swp
+*~
+
+# Frontend, Python, Rust, and local verification artifacts.
+node_modules/
+dist/
+build/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+target/
+.local/
