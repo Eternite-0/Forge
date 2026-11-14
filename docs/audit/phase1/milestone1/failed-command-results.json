@@ -1,0 +1,62 @@
+[
+  {
+    "id": "pytest",
+    "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short -o junit_logging=all --junitxml=..\\.local\\phase1\\milestone1\\final-pytest.xml",
+    "log": "final-pytest.log",
+    "cwd": "D:\\Competition_this\\Agent\\backend",
+    "started_at": "2026-11-14T14:40:05.090Z",
+    "chunk_id": "4e9926",
+    "wall_time_seconds": 7.6500814,
+    "exit_code": 1,
+    "original_token_count": 619,
+    "output": "...........................F...............................              [100%]\r\n================================== FAILURES ===================================\r\n_________ test_concurrent_initialization_keeps_one_version_and_router _________\r\ntests\\test_migrations.py:123: in test_concurrent_initialization_keeps_one_version_and_router\r\n    identities = list(executor.map(open_store, range(4)))\r\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nC:\\Python313\\Lib\\concurrent\\futures\\_base.py:619: in result_iterator\r\n    yield _result_or_cancel(fs.pop())\r\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nC:\\Python313\\Lib\\concurrent\\futures\\_base.py:317: in _result_or_cancel\r\n    return fut.result(timeout)\r\n           ^^^^^^^^^^^^^^^^^^^\r\nC:\\Python313\\Lib\\concurrent\\futures\\_base.py:449: in result\r\n    return self.__get_result()\r\n           ^^^^^^^^^^^^^^^^^^^\r\nC:\\Python313\\Lib\\concurrent\\futures\\_base.py:401: in __get_result\r\n    raise self._exception\r\nC:\\Python313\\Lib\\concurrent\\futures\\thread.py:59: in run\r\n    result = self.fn(*self.args, **self.kwargs)\r\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\ntests\\test_migrations.py:120: in open_store\r\n    return Store(path).ensure_router()[\"router_session_id\"]\r\n           ^^^^^^^^^^^\r\nsrc\\forge_core\\store.py:199: in __init__\r\n    self._initialize()\r\nsrc\\forge_core\\store.py:227: in _initialize\r\n    with self.connection() as connection:\r\n         ^^^^^^^^^^^^^^^^^\r\nC:\\Python313\\Lib\\contextlib.py:141: in __enter__\r\n    return next(self.gen)\r\n           ^^^^^^^^^^^^^^\r\nsrc\\forge_core\\store.py:220: in connection\r\n    connection = self._connect()\r\n                 ^^^^^^^^^^^^^^^\r\nsrc\\forge_core\\store.py:211: in _connect\r\n    connection.execute(\"PRAGMA journal_mode=WAL\")\r\nE   sqlite3.OperationalError: database is locked\r\n============================== warnings summary ===============================\r\n.venv\\Lib\\site-packages\\fastapi\\testclient.py:1\r\n  D:\\Competition_this\\Agent\\backend\\.venv\\Lib\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\r\n    from starlette.testclient import TestClient as TestClient  # noqa\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n=========================== short test summary info ===========================\r\nFAILED tests/test_migrations.py::test_concurrent_initialization_keeps_one_version_and_router\r\n1 failed, 58 passed, 1 warning in 6.59s\r\n"
+  },
+  {
+    "id": "ruff",
+    "command": ".\\.venv\\Scripts\\python.exe -m ruff check src tests --config pyproject.toml",
+    "log": "final-ruff.log",
+    "cwd": "D:\\Competition_this\\Agent\\backend",
+    "started_at": "2026-11-14T14:40:05.112Z",
+    "chunk_id": "f01bde",
+    "wall_time_seconds": 0.712449,
+    "exit_code": 0,
+    "original_token_count": 41,
+    "output": "All checks passed!\r\nwarning: Failed to write cache file `D:\\Competition_this\\Agent\\backend\\.ruff_cache\\0.17.5\\5717894422958149287`: 拒绝访问。 (os error 5)\r\n"
+  },
+  {
+    "id": "format",
+    "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check src tests",
+    "log": "final-format.log",
+    "cwd": "D:\\Competition_this\\Agent\\backend",
+    "started_at": "2026-11-14T14:40:05.112Z",
+    "chunk_id": "06bc0c",
+    "wall_time_seconds": 0.6206867,
+    "exit_code": 0,
+    "original_token_count": 7,
+    "output": "20 files already formatted\r\n"
+  },
+  {
+    "id": "pip-check",
+    "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+    "log": "final-pip-check.log",
+    "cwd": "D:\\Competition_this\\Agent\\backend",
+    "started_at": "2026-11-14T14:40:05.112Z",
+    "chunk_id": "0f44a3",
+    "wall_time_seconds": 1.0922406,
+    "exit_code": 0,
+    "original_token_count": 8,
+    "output": "No broken requirements found.\r\n"
+  },
+  {
+    "id": "compile",
+    "command": ".\\.venv\\Scripts\\python.exe -m compileall -q src tests",
+    "log": "final-compile.log",
+    "cwd": "D:\\Competition_this\\Agent\\backend",
+    "started_at": "2026-11-14T14:40:05.112Z",
+    "chunk_id": "69c6c9",
+    "wall_time_seconds": 0.7366187,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  }
+]

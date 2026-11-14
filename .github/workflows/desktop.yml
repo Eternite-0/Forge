@@ -1,0 +1,24 @@
+name: Desktop UI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows-node24:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24.19.0'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - run: npm ci --registry=https://registry.npmjs.org
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --registry=https://registry.npmjs.org

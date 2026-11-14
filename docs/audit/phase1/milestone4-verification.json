@@ -1,0 +1,425 @@
+{
+  "date": "2026-11-15",
+  "environment": "Windows, Python 3.13",
+  "commands": [
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\final-pytest.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/final-pytest.txt",
+      "junit": "milestone4/final-pytest.xml",
+      "note": "196 passed before import-only sorting"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_quest_graph.py tests/test_startup.py tests/test_m4_integration.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\post-import-pytest.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/post-import-pytest.txt",
+      "junit": "milestone4/post-import-pytest.xml",
+      "note": "34 passed after import sorting"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/ruff-check.txt",
+      "previous_failure": "milestone4/ruff-check-before-fix.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check --no-cache src tests scripts",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/ruff-format.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/pip-check.txt"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "repository root",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/git-diff-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_m4_integration.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\integration-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone4/integration-before.txt",
+      "junit": "milestone4/integration-before.xml",
+      "purpose": "red lifespan regression"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_m4_integration.py::test_slow_notice_model_does_not_block_delivery_of_later_critical_event -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\slow-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone4/slow-before.txt",
+      "note": "earlier worker.notice fixture; not evidence for final event whitelist"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_m4_integration.py::test_notice_failures_back_off_persist_and_stop_after_limit -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\notice-backoff-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone4/notice-backoff-before.txt",
+      "note": "earlier worker.notice fixture; not evidence for final event whitelist"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_quest_graph.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone4\\graph-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone4/graph-before.log",
+      "junit": "milestone4/graph-before.xml",
+      "purpose": "red collection failure"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_quest_graph.py tests/test_m4_adversarial.py tests/test_persistent_router.py tests/test_migrations.py -q --tb=short",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/graph-router-final.log",
+      "note": "57 passed"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe ..\\.local\\phase1\\milestone4\\check_preservation.py",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "output": "milestone4/m3-tests-preservation.json"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_event_dispatcher.py -q --junitxml=..\\.local\\phase1\\milestone4\\dispatcher-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone4/dispatcher-before.txt",
+      "junit": "milestone4/dispatcher-before.xml",
+      "purpose": "red collection failure"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_event_dispatcher.py -q --junitxml=..\\.local\\phase1\\milestone4\\planner-dispatch-green.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/planner-dispatch-green.txt",
+      "junit": "milestone4/planner-dispatch-green.xml",
+      "note": "15 passed"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_m4_adversarial.py -q --junitxml=..\\.local\\phase1\\milestone4\\adversarial-green.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone4/adversarial-green.txt",
+      "junit": "milestone4/adversarial-green.xml",
+      "note": "6 passed"
+    }
+  ],
+  "changed_files": "milestone4/changed-files.json",
+  "historical_preservation": "milestone4/historical-preservation.json",
+  "limitations": [
+    "No live provider or true Worker execution was verified.",
+    "Event at-least-once delivery does not guarantee exactly-once external effects.",
+    "Approved plans do not grant unrestricted execution; M5 requires governed intents, receipts and recovery.",
+    "Memory/compaction and native desktop integration are future work.",
+    "Lock is unchanged from M3; no repeated vulnerability scan was claimed."
+  ],
+  "files": [
+    {
+      "path": "milestone4/adversarial-green-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/adversarial-green.txt",
+      "sha256": "B3ADECDBBE33FB10EDB2573D5B1844920FBFC538521927C4371A0AC9F61A7AC2",
+      "bytes": 100
+    },
+    {
+      "path": "milestone4/adversarial-green.xml",
+      "sha256": "D0E6A451511DEB94D728FC349B3EA0836DC899F742388CE67FF80EB514AE663C",
+      "bytes": 1039
+    },
+    {
+      "path": "milestone4/autoplan-first.txt",
+      "sha256": "EBECF37EBA4B61C305509C80CFC62212C4A25639DD8DA5D2129B748F4DDA5359",
+      "bytes": 599
+    },
+    {
+      "path": "milestone4/autoplan-first.xml",
+      "sha256": "33871C270D42F163F5F8B1E98D08F3FA3934AFE8C0C7D1C8E30ECECB90D5C2AF",
+      "bytes": 388
+    },
+    {
+      "path": "milestone4/changed-files.json",
+      "sha256": "03453E620294CD33DA1002B73A2DCC33E1EA73960EA76529D2B9F558CDC39917",
+      "bytes": 3607
+    },
+    {
+      "path": "milestone4/check_preservation.py",
+      "sha256": "7891BCCC0E452AD669986A1DB2FDC256ADD8603A88BBBEB741B8158F8F752799",
+      "bytes": 1282
+    },
+    {
+      "path": "milestone4/dispatcher-before-exit.txt",
+      "sha256": "DF4E26A04A444901B95AFEF44E4A96CFAE34690FFF2AD2C66389C70079CDFF2B",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/dispatcher-before.txt",
+      "sha256": "9006CD4DD29D5B9F3BFE8C9F183674B5D517AB17484678FBE39B3B70445CAFC4",
+      "bytes": 938
+    },
+    {
+      "path": "milestone4/dispatcher-before.xml",
+      "sha256": "870558F058F2B420A7F007C0DFDE77C282A4020294AD82FB2BA0F41473B058FC",
+      "bytes": 937
+    },
+    {
+      "path": "milestone4/dispatcher-green-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/dispatcher-green.txt",
+      "sha256": "CEADDDB1316115407CF0D962D7DF09B67DDFF3332C0E85EBAE7D9BB93F1F7088",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/dispatcher-green.xml",
+      "sha256": "409BDE3DA7B2C7D96A2EACE4E4254F45F549FA54149BBDDD4AF9FB93845F03F7",
+      "bytes": 1916
+    },
+    {
+      "path": "milestone4/final-pytest.txt",
+      "sha256": "8B1C7C41E8B9BF4315B7ABCE55872A30C4DD3072C48C0AE7EF6A45EB59DB9918",
+      "bytes": 764
+    },
+    {
+      "path": "milestone4/final-pytest.xml",
+      "sha256": "C907B5301783FAE374383F718ABF4ACFDB728AD819E414CEE4CC4B1DBD982B9E",
+      "bytes": 24078
+    },
+    {
+      "path": "milestone4/git-diff-check.txt",
+      "sha256": "78E1EEFDD5B61C51D0683723752D200301095922E4BB612EA6DD3EA448D410BF",
+      "bytes": 14
+    },
+    {
+      "path": "milestone4/graph-before.log",
+      "sha256": "B0BAD6604ABC4E7E9AAB5188D1F0C7059EF1812A50C07D69A4C5369AE03356F6",
+      "bytes": 920
+    },
+    {
+      "path": "milestone4/graph-before.xml",
+      "sha256": "FF2E7D977611DD8174A7DE15571CB5FEA40F423C86FBF5C6245ED5F5189C8776",
+      "bytes": 919
+    },
+    {
+      "path": "milestone4/graph-combined.log",
+      "sha256": "3136D0922E67A8936B354671D3E4D14EBB546C12D29A5D3E70EF18B8194EC2B6",
+      "bytes": 2377
+    },
+    {
+      "path": "milestone4/graph-fenced.log",
+      "sha256": "DF969E6A6A05BF55952EAD03CC8E29919B70ABDF8F1F58C5BC544528F239E8B6",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/graph-final-diagnostic.log",
+      "sha256": "53E9E2DB5505A7CDAADF9BC850E377207829E8710346DC1A35500580956E8631",
+      "bytes": 1609
+    },
+    {
+      "path": "milestone4/graph-hardening.log",
+      "sha256": "B1722A6CD22A5B41914BA73D6D6E73AF7F1206D21C4C60262DF688EF6B1D1B15",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/graph-initial.log",
+      "sha256": "3B97B06FE2E5771BE71EEA212B78D624AA5221D53D9F75C8CE6348FCE958DC6B",
+      "bytes": 100
+    },
+    {
+      "path": "milestone4/graph-integration.log",
+      "sha256": "9DCE57A02F46391587376B6BC489F4BB9E424A42A7CA3EBC69C538A165651405",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/graph-router-final.log",
+      "sha256": "AE504339E279260BEB3C9FC97D7EEB98497187B760B9BC30EED7C6B39C8462F1",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/graph-router-integration.log",
+      "sha256": "F11D040C77E5EDAAA5046985FD63B59D99299EF25CAB1CB86FDF741033FA0D76",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/graph-terminal-before-exit.txt",
+      "sha256": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/graph-terminal-before.txt",
+      "sha256": "ADB33A9D64E1DE65F949F6C3665F8797AB0720C860E4D46A725C821CAA783C7F",
+      "bytes": 1446
+    },
+    {
+      "path": "milestone4/graph-wire-first.txt",
+      "sha256": "646ECEE1B33C604DC4B1CEFB739D5CA05B5F44535C3BA4106FA1E3BBACA96980",
+      "bytes": 599
+    },
+    {
+      "path": "milestone4/graph-wire-first.xml",
+      "sha256": "73E7A385611DEA534ABD98CFDE0E6DB548636F481D493B1720C789472484F280",
+      "bytes": 381
+    },
+    {
+      "path": "milestone4/historical-preservation.json",
+      "sha256": "678F3C3B81ACD8F8C5901108645ECDE5FD7CCEB5E89E3D0245F26E139BB801DF",
+      "bytes": 42379
+    },
+    {
+      "path": "milestone4/integration-before.txt",
+      "sha256": "38C5B0B751CC1F788E920D34BE63073034DA3EF7CF525E2FF18E38416E9EB586",
+      "bytes": 1342
+    },
+    {
+      "path": "milestone4/integration-before.xml",
+      "sha256": "887866DE033E93D79C8BC42B68BEF4CCD0021EBB4DE2C42357D30B119789B35F",
+      "bytes": 887
+    },
+    {
+      "path": "milestone4/lifespan-diagnostic.log",
+      "sha256": "223C4216E0C1FA9616012FCA54E4CC6F44E9F74937A268E68383459043AD205F",
+      "bytes": 587
+    },
+    {
+      "path": "milestone4/lock-preservation.txt",
+      "sha256": "DE40B717B2B894392C26C20A759A7501944B2BD8E15885DB2AF033482E2D69DC",
+      "bytes": 29
+    },
+    {
+      "path": "milestone4/m3-tests-preservation.json",
+      "sha256": "672C8358BD5EB74EA84B384CBBA13EA143D97B0F9DF790C4937941E7466E5954",
+      "bytes": 234
+    },
+    {
+      "path": "milestone4/notice-backoff-before.txt",
+      "sha256": "FB894E0BC70811465D5AC4EC7A8B66E3A19CF79B253F5A37CBB81FA75FA8BFE0",
+      "bytes": 1319
+    },
+    {
+      "path": "milestone4/notice-backoff-before.xml",
+      "sha256": "5C7FE56F8432576BA97178DB3CCBED8C2EF896DF051C72101AE5ABF4B7ED923E",
+      "bytes": 865
+    },
+    {
+      "path": "milestone4/notice-fencing-before-exit.txt",
+      "sha256": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/notice-fencing-before.txt",
+      "sha256": "25B8A8614F0DD8915F280AFB609F30493B55FA4F8A07EFCFA1BE2A970AF9C7FB",
+      "bytes": 3092
+    },
+    {
+      "path": "milestone4/notice-race-before-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/notice-race-before.txt",
+      "sha256": "DB80EF13E92E5F4207AAE7ADF10ABB9DB0CC7DFACCD870DC2654E9A9A25EC009",
+      "bytes": 100
+    },
+    {
+      "path": "milestone4/notice-success-fencing-before-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/notice-success-fencing-before.txt",
+      "sha256": "DB4CE22A81508CCB886F409BF6D5791DF57D3810DD37302D8C4C62E5F45A28A3",
+      "bytes": 100
+    },
+    {
+      "path": "milestone4/pip-check.txt",
+      "sha256": "43796A030CD6F4BAD98CA184982F47754DA0A5E5B0A023D2F4CB1A98907E1E32",
+      "bytes": 45
+    },
+    {
+      "path": "milestone4/planner-dispatch-before-exit.txt",
+      "sha256": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/planner-dispatch-before.txt",
+      "sha256": "024FF922220964D3A6EA85C417C325A4D5A06C8BD8A16291B016252BC8F240B2",
+      "bytes": 1209
+    },
+    {
+      "path": "milestone4/planner-dispatch-green-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone4/planner-dispatch-green.txt",
+      "sha256": "8DFE061A257FDD0B513191B0C0EFDAEDB6E1A15E8480B41C6E1A282A1B442D4B",
+      "bytes": 101
+    },
+    {
+      "path": "milestone4/planner-dispatch-green.xml",
+      "sha256": "C318A841683EF81F2A7A891F025B8380939BA20B94A086C95CD8F17BB7220A60",
+      "bytes": 2044
+    },
+    {
+      "path": "milestone4/post-import-pytest.txt",
+      "sha256": "71E061173C0BFAE4E7D60FBC002026F241F9F76E4A896600C2EE52FC9D6BAE4E",
+      "bytes": 601
+    },
+    {
+      "path": "milestone4/post-import-pytest.xml",
+      "sha256": "D88E964F0935C7D08C3EDDB5939D117FAAFDED4125DE88B0C498A26E109AA94F",
+      "bytes": 4564
+    },
+    {
+      "path": "milestone4/ruff-check-before-fix.txt",
+      "sha256": "7322CD1A54BF9C86196E5575C9615A72A716E614B1E36BEF40D5992962F9CEF3",
+      "bytes": 3430
+    },
+    {
+      "path": "milestone4/ruff-check.txt",
+      "sha256": "F41060B0588FA28F9BD1779123401BCDFD7F0A4C4BD2F935EA8CCDBF8CDB501A",
+      "bytes": 34
+    },
+    {
+      "path": "milestone4/ruff-format.txt",
+      "sha256": "31A4B489B7AF90DA961067980408AD21EEB017F3FE9DD4EF026303C22099CF22",
+      "bytes": 42
+    },
+    {
+      "path": "milestone4/slow-before.txt",
+      "sha256": "A5CAAC98DEDD26B868277200F60924FFF0AFF754A7C83D50C150C701D05BD04A",
+      "bytes": 1277
+    },
+    {
+      "path": "milestone4/slow-before.xml",
+      "sha256": "427B96E729182CD8607C618F44D808CE2C425531CBD0631A2EF78747E187F8DE",
+      "bytes": 823
+    }
+  ]
+}

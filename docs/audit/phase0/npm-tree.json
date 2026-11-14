@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0",
+  "name": "forge-desktop",
+  "dependencies": {
+    "@tauri-apps/cli": {
+      "version": "2.12.4",
+      "resolved": "https://registry.npmjs.org/@tauri-apps/cli/-/cli-2.12.4.tgz",
+      "overridden": false
+    },
+    "@types/react-dom": {
+      "version": "18.3.7",
+      "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.3.7.tgz",
+      "overridden": false
+    },
+    "@types/react": {
+      "version": "18.3.31",
+      "resolved": "https://registry.npmjs.org/@types/react/-/react-18.3.31.tgz",
+      "overridden": false
+    },
+    "@vitejs/plugin-react": {
+      "version": "4.7.0",
+      "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.7.0.tgz",
+      "overridden": false
+    },
+    "react-dom": {
+      "version": "18.3.1",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz",
+      "overridden": false
+    },
+    "react": {
+      "version": "18.3.1",
+      "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+      "overridden": false
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "overridden": false
+    },
+    "vite": {
+      "version": "5.4.21",
+      "resolved": "https://registry.npmjs.org/vite/-/vite-5.4.21.tgz",
+      "overridden": false
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "pid": 23976,
+  "handles": [
+    {
+      "type": "Socket",
+      "fd": 2,
+      "destroyed": false
+    },
+    {
+      "type": "Socket",
+      "fd": 1,
+      "destroyed": false
+    }
+  ],
+  "requests": []
+}

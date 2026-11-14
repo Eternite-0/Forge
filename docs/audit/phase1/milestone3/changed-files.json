@@ -1,0 +1,157 @@
+[
+  {
+    "path": "backend\\src\\forge_api\\main.py",
+    "change": "modified",
+    "sha256": "F48FCC95EB975E2BEF418D7C233B11DA68B1FE1608F19A6F2B672F055F0CB0BC"
+  },
+  {
+    "path": "backend\\src\\forge_core\\benchmark.py",
+    "change": "new",
+    "sha256": "D374849C0C372DCFA3ECF47499BA6C4F1B812E5BFBD155C53E1797747DD60451"
+  },
+  {
+    "path": "backend\\src\\forge_core\\domain.py",
+    "change": "modified",
+    "sha256": "B88028E760A11CBFDBD43389B8956369168FE7488249E80E821107D531EF0A02"
+  },
+  {
+    "path": "backend\\src\\forge_core\\migrations.py",
+    "change": "modified",
+    "sha256": "2CF9E92096C643BC86F6FB6814888EA35EAA1F367B3A41289121F094530D3AC5"
+  },
+  {
+    "path": "backend\\src\\forge_core\\model_intelligence.py",
+    "change": "new",
+    "sha256": "9AA3EA3CBD9D4BBC2D5426AADE528BAED9DB10063C09B9DADFFE004AB1F2C210"
+  },
+  {
+    "path": "backend\\src\\forge_core\\registry_schema.py",
+    "change": "new",
+    "sha256": "1288D91A5677A054CAECFD4102562CAC64D77CD28216F20B21306CC1B6E865C8"
+  },
+  {
+    "path": "backend\\src\\forge_core\\registry.py",
+    "change": "modified",
+    "sha256": "6A87C7F9F0F91FBD64255FC88238BEF3DFB6979079E6C723423654C373104051"
+  },
+  {
+    "path": "backend\\src\\forge_core\\router_domain.py",
+    "change": "new",
+    "sha256": "144022927C72A698940C05537D6F5E3F612842B9F0247D5E28C70284A3B07106"
+  },
+  {
+    "path": "backend\\src\\forge_core\\router.py",
+    "change": "modified",
+    "sha256": "7283AE64F3A195539972A8C7FCF21ACF205D923E249CE91850C3D547F5F1A369"
+  },
+  {
+    "path": "backend\\src\\forge_core\\runtime.py",
+    "change": "modified",
+    "sha256": "465C87435C71B7EDDDBC867FE70912633D031AAD563D13533008FF3C71457790"
+  },
+  {
+    "path": "backend\\src\\forge_core\\store.py",
+    "change": "modified",
+    "sha256": "F6468AD2671710E2F7C0D4328354D34A3A88221ED85B5B975964D57B6462FBB7"
+  },
+  {
+    "path": "backend\\src\\forge_core\\providers\\__init__.py",
+    "change": "new",
+    "sha256": "0CCE7C02FD19695B2D634D733A5D504840F5C695769F7E0466804390FB650DDB"
+  },
+  {
+    "path": "backend\\src\\forge_core\\providers\\config.py",
+    "change": "new",
+    "sha256": "932853D19C9A310364A08939869570A83B2C3EC7B00DE7DB34B12406DEF0DE55"
+  },
+  {
+    "path": "backend\\tests\\conftest.py",
+    "change": "modified",
+    "sha256": "6FA4572D933BC65AD082B36B32EEF2A6E096138A9B84FC0F5322D6884A3CB717"
+  },
+  {
+    "path": "backend\\tests\\test_api_trust.py",
+    "change": "modified",
+    "sha256": "A5ADFC276F93917084A152B627A30F28F35FDFEF62800F7E7A277380A98C5EC6"
+  },
+  {
+    "path": "backend\\tests\\test_benchmark_m3.py",
+    "change": "new",
+    "sha256": "BF5E95F031819B19434A3699D39F7EA931E9BFC4CB28FFF739B3263C2C909AF9"
+  },
+  {
+    "path": "backend\\tests\\test_core.py",
+    "change": "modified",
+    "sha256": "D93004FF7C4539447741DC4AB9FB05C2ED43350D15E46E05DB837C80BCA5C8A3"
+  },
+  {
+    "path": "backend\\tests\\test_migrations.py",
+    "change": "modified",
+    "sha256": "E7CFE79E92B3A8E67069EB97C7545E17DACCBD3D7AEEEB117B949B37970EEAC7"
+  },
+  {
+    "path": "backend\\tests\\test_model_registry_m3.py",
+    "change": "new",
+    "sha256": "C34EE37A8E228E670764F93A64105A71654C147A9A3B6BF51BFAA7702DB62742"
+  },
+  {
+    "path": "backend\\tests\\test_persistent_router.py",
+    "change": "new",
+    "sha256": "68965A8D899B85B4C0A4B1581B31A678D9950CA7312E13111DA28D3B74860BA8"
+  },
+  {
+    "path": "backend\\tests\\test_providers.py",
+    "change": "new",
+    "sha256": "DC26C111EB476389D5CFE86C800F5E80F68CE6A81EA41940C621D9F6C4CC50FA"
+  },
+  {
+    "path": "backend\\tests\\test_startup.py",
+    "change": "modified",
+    "sha256": "67D763938B99E1EA5EAA9F54BEA5ED52621E95751BACEF32B2EE0E29C8B03479"
+  },
+  {
+    "path": "backend\\tests\\test_transactions.py",
+    "change": "modified",
+    "sha256": "E0B3AAAF4CA3FB40F46AA160CDE762544D3C729E94581279FCA8134BC134481B"
+  },
+  {
+    "path": "backend\\scripts\\run_mock_benchmark.py",
+    "change": "new",
+    "sha256": "AEA09C880810D6B8DDB0708A2B8688419AE139757E4BD6E719A0446C08E60BF7"
+  },
+  {
+    "path": "backend\\pyproject.toml",
+    "change": "modified",
+    "sha256": "C7BFB4A6098000B87DCC3FF8332A7646C72D4363F84C1605D71865FA19B2B3FE"
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE3_REPORT.md",
+    "change": "new",
+    "sha256": "D9D4AA0D35B079D0533C83510A33D36EB6A9F5553C87C97C6B2D448818C1737A"
+  },
+  {
+    "path": "docs\\ROADMAP.md",
+    "change": "modified",
+    "sha256": "64F6AA6BAA192FF7781F5AF1603D6331D5D001E7B07CEE6BFA9A9DFD3E54569B"
+  },
+  {
+    "path": "docs\\STATUS.md",
+    "change": "modified",
+    "sha256": "8540B471EF5CD7BBA4E9C6378848549F377106B4870EAD89C7E009159E2A5128"
+  },
+  {
+    "path": "docs\\adr\\ADR-005-model-observation-provenance.md",
+    "change": "new",
+    "sha256": "5621D751D094D4D51FD790BC20A463C877963579F0E96409D36A03027AAC0F1A"
+  },
+  {
+    "path": ".github\\workflows\\backend.yml",
+    "change": "new",
+    "sha256": "8661F4F1D3B215205E381C0427CCFEF4A7464AE84DDD73239E64BFE31186A954"
+  },
+  {
+    "path": "README.md",
+    "change": "modified",
+    "sha256": "CAEA1405E9B6D7939D7DE85D75285399DFD25693D789208040455521A03291AA"
+  }
+]

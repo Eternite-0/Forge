@@ -1,0 +1,362 @@
+{
+  "dataset": "synthetic-team-v2",
+  "seed": 42,
+  "mode": "synthetic",
+  "purpose": "selection/protocol correctness; not real-model task performance",
+  "coordination_proxy": "distinct selected profiles minus one; synthetic, not measured latency",
+  "scenarios": 3,
+  "metric_definitions": {
+    "constraint_violation_rate": "violating selected teams / feasible selected teams; refusals reported separately",
+    "coverage_strength": "sum of maximum selected synthetic capability value over required dimensions",
+    "estimated_cost": "synthetic USD prices and fixed token estimates, not observed provider spend",
+    "timing": "single local execution of selection algorithm, not model task latency"
+  },
+  "summary": [
+    {
+      "variant": "single_model",
+      "attempts": 3,
+      "feasible_selections": 2,
+      "infeasible_selections": 1,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 2,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 240.0,
+      "estimated_cost_microunits_sum": 900,
+      "coordination_proxy_sum": 0,
+      "elapsed_seconds_sum": 0.0035275999834993854
+    },
+    {
+      "variant": "greedy",
+      "attempts": 3,
+      "feasible_selections": 2,
+      "infeasible_selections": 1,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 2,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 242.0,
+      "estimated_cost_microunits_sum": 900,
+      "coordination_proxy_sum": 1,
+      "elapsed_seconds_sum": 0.0004417000018293038
+    },
+    {
+      "variant": "coverage",
+      "attempts": 3,
+      "feasible_selections": 3,
+      "infeasible_selections": 0,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 3,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 427.0,
+      "estimated_cost_microunits_sum": 2400,
+      "coordination_proxy_sum": 2,
+      "elapsed_seconds_sum": 0.00036149997322354466
+    },
+    {
+      "variant": "complementarity",
+      "attempts": 3,
+      "feasible_selections": 3,
+      "infeasible_selections": 0,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 3,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 425.0,
+      "estimated_cost_microunits_sum": 2400,
+      "coordination_proxy_sum": 1,
+      "elapsed_seconds_sum": 0.0003388000186532736
+    },
+    {
+      "variant": "no_confidence",
+      "attempts": 3,
+      "feasible_selections": 3,
+      "infeasible_selections": 0,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 3,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 425.0,
+      "estimated_cost_microunits_sum": 2400,
+      "coordination_proxy_sum": 1,
+      "elapsed_seconds_sum": 0.0003330000181449577
+    },
+    {
+      "variant": "no_coordination",
+      "attempts": 3,
+      "feasible_selections": 3,
+      "infeasible_selections": 0,
+      "violating_selections": 0,
+      "constraint_violation_denominator": 3,
+      "constraint_violation_rate": 0.0,
+      "coverage_strength_sum": 427.0,
+      "estimated_cost_microunits_sum": 2400,
+      "coordination_proxy_sum": 2,
+      "elapsed_seconds_sum": 0.00035000001662410796
+    }
+  ],
+  "results": [
+    {
+      "task_id": "coordination",
+      "variant": "single_model",
+      "selected": [
+        "general",
+        "general"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 160.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 0.0033451999915996566
+    },
+    {
+      "task_id": "coordination",
+      "variant": "greedy",
+      "selected": [
+        "researcher",
+        "coder"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 162.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.000254700004006736
+    },
+    {
+      "task_id": "coordination",
+      "variant": "coverage",
+      "selected": [
+        "researcher",
+        "coder"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 162.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.00016479998885188252
+    },
+    {
+      "task_id": "coordination",
+      "variant": "complementarity",
+      "selected": [
+        "general",
+        "general"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 160.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 0.0001512000017100945
+    },
+    {
+      "task_id": "coordination",
+      "variant": "no_confidence",
+      "selected": [
+        "general",
+        "general"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 160.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 0.0001432999997632578
+    },
+    {
+      "task_id": "coordination",
+      "variant": "no_coordination",
+      "selected": [
+        "researcher",
+        "coder"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 162.0,
+      "estimated_cost_microunits": 600,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.00014119999832473695
+    },
+    {
+      "task_id": "confidence",
+      "variant": "single_model",
+      "selected": [
+        "z_confident"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 9.129999671131372e-05
+    },
+    {
+      "task_id": "confidence",
+      "variant": "greedy",
+      "selected": [
+        "z_confident"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 8.519999391864985e-05
+    },
+    {
+      "task_id": "confidence",
+      "variant": "coverage",
+      "selected": [
+        "z_confident"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 8.13999940874055e-05
+    },
+    {
+      "task_id": "confidence",
+      "variant": "complementarity",
+      "selected": [
+        "z_confident"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 7.96000094851479e-05
+    },
+    {
+      "task_id": "confidence",
+      "variant": "no_confidence",
+      "selected": [
+        "a_uncertain"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 8.150000940077007e-05
+    },
+    {
+      "task_id": "confidence",
+      "variant": "no_coordination",
+      "selected": [
+        "z_confident"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 1,
+      "coverage_strength": 80.0,
+      "estimated_cost_microunits": 300,
+      "currency": "USD",
+      "coordination_proxy": 0,
+      "status": "selected",
+      "elapsed_seconds": 8.13000078778714e-05
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "single_model",
+      "status": "no_feasible_selection",
+      "reason": "No team satisfies the combined budget",
+      "constraint_violations": 0,
+      "elapsed_seconds": 9.109999518841505e-05
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "greedy",
+      "status": "no_feasible_selection",
+      "reason": "No team satisfies the combined budget",
+      "constraint_violations": 0,
+      "elapsed_seconds": 0.00010180000390391797
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "coverage",
+      "selected": [
+        "z_cheaper",
+        "a_expensive"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 185.0,
+      "estimated_cost_microunits": 1500,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.00011529999028425664
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "complementarity",
+      "selected": [
+        "z_cheaper",
+        "a_expensive"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 185.0,
+      "estimated_cost_microunits": 1500,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.00010800000745803118
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "no_confidence",
+      "selected": [
+        "z_cheaper",
+        "a_expensive"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 185.0,
+      "estimated_cost_microunits": 1500,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.00010820000898092985
+    },
+    {
+      "task_id": "budget_trap",
+      "variant": "no_coordination",
+      "selected": [
+        "z_cheaper",
+        "a_expensive"
+      ],
+      "constraint_violations": 0,
+      "required_covered": 2,
+      "coverage_strength": 185.0,
+      "estimated_cost_microunits": 1500,
+      "currency": "USD",
+      "coordination_proxy": 1,
+      "status": "selected",
+      "elapsed_seconds": 0.0001275000104214996
+    }
+  ]
+}

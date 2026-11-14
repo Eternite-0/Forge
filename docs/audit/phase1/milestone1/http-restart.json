@@ -1,0 +1,24 @@
+{
+  "observations": [
+    {
+      "cwd": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\cli-cwd",
+      "router": "router_e9e316652877",
+      "messages": 2,
+      "stale_http": 409,
+      "illegal_http": 409
+    },
+    {
+      "cwd": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\desktop-cwd",
+      "router": "router_e9e316652877",
+      "messages": 2,
+      "stale_http": 409,
+      "illegal_http": 409
+    }
+  ],
+  "db": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\workspace\\state\\core.sqlite3",
+  "quest_id": "quest_f3e90d9ac8de",
+  "final_status": "rejected",
+  "version": 1,
+  "events": 2,
+  "outbox": 2
+}

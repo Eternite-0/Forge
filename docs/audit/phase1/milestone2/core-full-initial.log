@@ -1,0 +1,100 @@
+.FF......FFFF...................F......FFFF............................  [100%]
+================================== FAILURES ===================================
+___________________________ test_api_trust_boundary ___________________________
+tests\test_api_trust.py:17: in test_api_trust_boundary
+    session = health.json()["session"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'session'
+________________________ test_startup_requires_secret _________________________
+tests\test_api_trust.py:39: in test_startup_requires_secret
+    with pytest.raises(ValueError, match="FORGE_CORE_SECRET"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______ test_terminal_status_rejects_transition_without_writes[completed] ______
+tests\test_concurrency.py:66: in test_terminal_status_rejects_transition_without_writes
+    store.save_quest(quest)
+src\forge_core\store.py:295: in save_quest
+    return self._write("save_quest", quest, conversation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:283: in _write
+    return getattr(work, method)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:58: in save_quest
+    raise DomainError("New Quest must begin proposed at version zero")
+E   forge_core.domain.DomainError: New Quest must begin proposed at version zero
+_______ test_terminal_status_rejects_transition_without_writes[failed] ________
+tests\test_concurrency.py:66: in test_terminal_status_rejects_transition_without_writes
+    store.save_quest(quest)
+src\forge_core\store.py:295: in save_quest
+    return self._write("save_quest", quest, conversation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:283: in _write
+    return getattr(work, method)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:58: in save_quest
+    raise DomainError("New Quest must begin proposed at version zero")
+E   forge_core.domain.DomainError: New Quest must begin proposed at version zero
+______ test_terminal_status_rejects_transition_without_writes[cancelled] ______
+tests\test_concurrency.py:66: in test_terminal_status_rejects_transition_without_writes
+    store.save_quest(quest)
+src\forge_core\store.py:295: in save_quest
+    return self._write("save_quest", quest, conversation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:283: in _write
+    return getattr(work, method)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:58: in save_quest
+    raise DomainError("New Quest must begin proposed at version zero")
+E   forge_core.domain.DomainError: New Quest must begin proposed at version zero
+______ test_terminal_status_rejects_transition_without_writes[rejected] _______
+tests\test_concurrency.py:66: in test_terminal_status_rejects_transition_without_writes
+    store.save_quest(quest)
+src\forge_core\store.py:295: in save_quest
+    return self._write("save_quest", quest, conversation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:283: in _write
+    return getattr(work, method)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\store.py:58: in save_quest
+    raise DomainError("New Quest must begin proposed at version zero")
+E   forge_core.domain.DomainError: New Quest must begin proposed at version zero
+__________________________ test_each_migration_step ___________________________
+tests\test_migrations.py:80: in test_each_migration_step
+    assert SCHEMA_VERSION == 3
+E   assert 4 == 3
+_________ test_each_migration_failure_rolls_back_a_fresh_database[1] __________
+tests\test_migrations.py:148: in test_each_migration_failure_rolls_back_a_fresh_database
+    assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 3
+E   assert 4 == 3
+_________ test_each_migration_failure_rolls_back_a_fresh_database[2] __________
+tests\test_migrations.py:148: in test_each_migration_failure_rolls_back_a_fresh_database
+    assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 3
+E   assert 4 == 3
+_________ test_each_migration_failure_rolls_back_a_fresh_database[3] __________
+tests\test_migrations.py:148: in test_each_migration_failure_rolls_back_a_fresh_database
+    assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 3
+E   assert 4 == 3
+_____________ test_cross_origin_simple_post_cannot_create_worker ______________
+tests\test_security_adversarial.py:22: in test_cross_origin_simple_post_cannot_create_worker
+    assert response.status_code in (401, 403)
+E   assert 200 in (401, 403)
+E    +  where 200 = <Response [200 OK]>.status_code
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_api_trust.py::test_api_trust_boundary - KeyError: 'session'
+FAILED tests/test_api_trust.py::test_startup_requires_secret - Failed: DID NO...
+FAILED tests/test_concurrency.py::test_terminal_status_rejects_transition_without_writes[completed]
+FAILED tests/test_concurrency.py::test_terminal_status_rejects_transition_without_writes[failed]
+FAILED tests/test_concurrency.py::test_terminal_status_rejects_transition_without_writes[cancelled]
+FAILED tests/test_concurrency.py::test_terminal_status_rejects_transition_without_writes[rejected]
+FAILED tests/test_migrations.py::test_each_migration_step - assert 4 == 3
+FAILED tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database[1]
+FAILED tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database[2]
+FAILED tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database[3]
+FAILED tests/test_security_adversarial.py::test_cross_origin_simple_post_cannot_create_worker
+11 failed, 60 passed, 1 warning in 9.31s

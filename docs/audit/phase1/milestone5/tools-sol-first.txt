@@ -1,0 +1,73 @@
+..................FFF                                                    [100%]
+================================== FAILURES ===================================
+_ test_mcp_protocol_error_has_failed_receipt[{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}] _
+
+mock_run = (<forge_core.store.Store object at 0x0000029881E43A10>, Quest(id='quest_913bb2a6fe40', title='Tool task', goal='Test r...quest_913bb2a6fe40', 'revision': 1, 'digest': '8f38b16460fa4f3b5b0460fb5e0ddfcac04a4de753a3be7d4dcee2ba77d27f0d', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000029881F64050>
+body = '{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}'
+
+    @pytest.mark.parametrize("body", ['{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}', '{"jsonrpc":"2.0","id":"other","result":{}}', 'not JSON'])
+    def test_mcp_protocol_error_has_failed_receipt(mock_run, monkeypatch, body):
+        import asyncio
+        import hashlib
+        import json
+        from forge_core.governance import GovernanceService
+    
+        store, quest, worker, plan = mock_run
+        with store.unit_of_work() as work:
+            run = work.connection.execute("SELECT * FROM worker_runs WHERE id='run'").fetchone()
+            tools = json.loads(run["allowed_tools_json"]) + ["mcp_call"]
+>           proposal = work.connection.execute("SELECT proposal_json FROM team_proposals WHERE id='team-id'").fetchone()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such column: proposal_json
+
+backend\tests\test_tool_engine.py:518: OperationalError
+_ test_mcp_protocol_error_has_failed_receipt[{"jsonrpc":"2.0","id":"other","result":{}}] _
+
+mock_run = (<forge_core.store.Store object at 0x0000029881F4C050>, Quest(id='quest_9a54b3ee684e', title='Tool task', goal='Test r...quest_9a54b3ee684e', 'revision': 1, 'digest': '8f38b16460fa4f3b5b0460fb5e0ddfcac04a4de753a3be7d4dcee2ba77d27f0d', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000298FFDB4160>
+body = '{"jsonrpc":"2.0","id":"other","result":{}}'
+
+    @pytest.mark.parametrize("body", ['{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}', '{"jsonrpc":"2.0","id":"other","result":{}}', 'not JSON'])
+    def test_mcp_protocol_error_has_failed_receipt(mock_run, monkeypatch, body):
+        import asyncio
+        import hashlib
+        import json
+        from forge_core.governance import GovernanceService
+    
+        store, quest, worker, plan = mock_run
+        with store.unit_of_work() as work:
+            run = work.connection.execute("SELECT * FROM worker_runs WHERE id='run'").fetchone()
+            tools = json.loads(run["allowed_tools_json"]) + ["mcp_call"]
+>           proposal = work.connection.execute("SELECT proposal_json FROM team_proposals WHERE id='team-id'").fetchone()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such column: proposal_json
+
+backend\tests\test_tool_engine.py:518: OperationalError
+____________ test_mcp_protocol_error_has_failed_receipt[not JSON] _____________
+
+mock_run = (<forge_core.store.Store object at 0x0000029881EF63F0>, Quest(id='quest_9f4dc403b943', title='Tool task', goal='Test r...quest_9f4dc403b943', 'revision': 1, 'digest': '8f38b16460fa4f3b5b0460fb5e0ddfcac04a4de753a3be7d4dcee2ba77d27f0d', ...})
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000029881F76BE0>
+body = 'not JSON'
+
+    @pytest.mark.parametrize("body", ['{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}', '{"jsonrpc":"2.0","id":"other","result":{}}', 'not JSON'])
+    def test_mcp_protocol_error_has_failed_receipt(mock_run, monkeypatch, body):
+        import asyncio
+        import hashlib
+        import json
+        from forge_core.governance import GovernanceService
+    
+        store, quest, worker, plan = mock_run
+        with store.unit_of_work() as work:
+            run = work.connection.execute("SELECT * FROM worker_runs WHERE id='run'").fetchone()
+            tools = json.loads(run["allowed_tools_json"]) + ["mcp_call"]
+>           proposal = work.connection.execute("SELECT proposal_json FROM team_proposals WHERE id='team-id'").fetchone()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           sqlite3.OperationalError: no such column: proposal_json
+
+backend\tests\test_tool_engine.py:518: OperationalError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_tool_engine.py::test_mcp_protocol_error_has_failed_receipt[{"jsonrpc":"2.0","id":"bad-mcp","error":{"code":-1}}]
+FAILED backend\tests\test_tool_engine.py::test_mcp_protocol_error_has_failed_receipt[{"jsonrpc":"2.0","id":"other","result":{}}]
+FAILED backend\tests\test_tool_engine.py::test_mcp_protocol_error_has_failed_receipt[not JSON]
+3 failed, 18 passed in 2.43s

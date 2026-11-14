@@ -1,0 +1,20 @@
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml
+All checks passed!
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff format --check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml
+109 files already formatted
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m pip check
+No broken requirements found.
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent\backend
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml
+All checks passed!
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent\backend
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff format --check --no-cache src tests scripts --config pyproject.toml
+109 files already formatted
+EXIT_CODE=0

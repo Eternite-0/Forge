@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.716" timestamp="2026-11-15T00:03:25.456419+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_integration" name="test_slow_notice_model_does_not_block_delivery_of_later_critical_event" time="2.161"><failure message="AssertionError: Background dispatch did not reach the expected state">tests\test_m4_integration.py:290: in test_slow_notice_model_does_not_block_delivery_of_later_critical_event
+    wait_for(
+tests\test_m4_integration.py:26: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state</failure></testcase></testsuite></testsuites>

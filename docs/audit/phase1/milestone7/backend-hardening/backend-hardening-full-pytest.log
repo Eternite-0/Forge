@@ -1,0 +1,497 @@
+COMMAND=.\backend\.venv\Scripts\python.exe -m pytest backend/tests -c backend/pyproject.toml -q
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+......................FFF............................F.................. [ 73%]
+...................................FF................................... [ 88%]
+........................................................                 [100%]
+================================== FAILURES ===================================
+_ test_cross_origin_simple_post_cannot_create_worker[https://attacker.invalid] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_cross_origin_simple_post_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D2E69C7A10>
+origin = 'https://attacker.invalid'
+
+    @pytest.mark.parametrize(
+        "origin", ["https://attacker.invalid", "null", "http://localhost:5173.evil.invalid"]
+    )
+    def test_cross_origin_simple_post_cannot_create_worker(tmp_path, monkeypatch, origin):
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "cross-origin.sqlite3"))
+        monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+        from forge_api import main
+    
+        importlib.reload(main)
+        quest = Quest(title="Cross-origin", goal="Reject unsolicited writes")
+        main.store.save_quest(quest)
+        with TestClient(
+            main.app, base_url="http://127.0.0.1:8765", client=("127.0.0.1", 12345)
+        ) as client:
+            response = client.post(
+                f"/api/quests/{quest.id}/workers?role=untrusted-site",
+                headers={"Origin": origin, "Authorization": f"Bearer {main.guard._token}"},
+            )
+        assert response.status_code == 403
+        assert main.store.list_workers(quest.id) == []
+>       assert main.store.list_events() == []
+E       AssertionError: assert [{'seq': 1, '... 'main', ...}] == []
+E         
+E         Left contains 2 more items, first extra item: {'seq': 1, 'id': 'evt_2f4c20401af9', 'event_type': 'core.started', 'conversation_id': 'main', ...}
+E         Use -v to get more diff
+
+backend\tests\test_security_adversarial.py:32: AssertionError
+__________ test_cross_origin_simple_post_cannot_create_worker[null] ___________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_cross_origin_simple_post_1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D2E6C8D550>
+origin = 'null'
+
+    @pytest.mark.parametrize(
+        "origin", ["https://attacker.invalid", "null", "http://localhost:5173.evil.invalid"]
+    )
+    def test_cross_origin_simple_post_cannot_create_worker(tmp_path, monkeypatch, origin):
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "cross-origin.sqlite3"))
+        monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+        from forge_api import main
+    
+        importlib.reload(main)
+        quest = Quest(title="Cross-origin", goal="Reject unsolicited writes")
+        main.store.save_quest(quest)
+        with TestClient(
+            main.app, base_url="http://127.0.0.1:8765", client=("127.0.0.1", 12345)
+        ) as client:
+            response = client.post(
+                f"/api/quests/{quest.id}/workers?role=untrusted-site",
+                headers={"Origin": origin, "Authorization": f"Bearer {main.guard._token}"},
+            )
+        assert response.status_code == 403
+        assert main.store.list_workers(quest.id) == []
+>       assert main.store.list_events() == []
+E       AssertionError: assert [{'seq': 1, '... 'main', ...}] == []
+E         
+E         Left contains 2 more items, first extra item: {'seq': 1, 'id': 'evt_6e47b84a6747', 'event_type': 'core.started', 'conversation_id': 'main', ...}
+E         Use -v to get more diff
+
+backend\tests\test_security_adversarial.py:32: AssertionError
+_ test_cross_origin_simple_post_cannot_create_worker[http://localhost:5173.evil.invalid] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_cross_origin_simple_post_2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D2E65C0A60>
+origin = 'http://localhost:5173.evil.invalid'
+
+    @pytest.mark.parametrize(
+        "origin", ["https://attacker.invalid", "null", "http://localhost:5173.evil.invalid"]
+    )
+    def test_cross_origin_simple_post_cannot_create_worker(tmp_path, monkeypatch, origin):
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "cross-origin.sqlite3"))
+        monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+        from forge_api import main
+    
+        importlib.reload(main)
+        quest = Quest(title="Cross-origin", goal="Reject unsolicited writes")
+        main.store.save_quest(quest)
+        with TestClient(
+            main.app, base_url="http://127.0.0.1:8765", client=("127.0.0.1", 12345)
+        ) as client:
+            response = client.post(
+                f"/api/quests/{quest.id}/workers?role=untrusted-site",
+                headers={"Origin": origin, "Authorization": f"Bearer {main.guard._token}"},
+            )
+        assert response.status_code == 403
+        assert main.store.list_workers(quest.id) == []
+>       assert main.store.list_events() == []
+E       AssertionError: assert [{'seq': 1, '... 'main', ...}] == []
+E         
+E         Left contains 2 more items, first extra item: {'seq': 1, 'id': 'evt_e319f60a622b', 'event_type': 'core.started', 'conversation_id': 'main', ...}
+E         Use -v to get more diff
+
+backend\tests\test_security_adversarial.py:32: AssertionError
+___ test_core_launcher_restart_preserves_workspace_and_rejects_stale_state ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_core_launcher_restart_pre0')
+
+    def test_core_launcher_restart_preserves_workspace_and_rejects_stale_state(tmp_path):
+        workspace = tmp_path / "workspace"
+        workspace.mkdir()
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            port = listener.getsockname()[1]
+        (workspace / ".env").write_text(
+            f"FORGE_DB_PATH=state/core.sqlite3\nFORGE_PORT={port}\n", encoding="utf-8"
+        )
+        environment = {key: value for key, value in os.environ.items() if not key.startswith("FORGE_")}
+        # The explicit CLI option must win over a conflicting process setting.
+        environment["FORGE_WORKSPACE_ROOT"] = str(tmp_path / "wrong-workspace")
+        # Inject a labeled mock only in the child test process while exercising the real launcher.
+        hook = tmp_path / "test-injection"
+        hook.mkdir()
+        (hook / "sitecustomize.py").write_text(
+            """
+    import json
+    from forge_core.router import RouterService
+    _init = RouterService.__init__
+    class MockProvider:
+        execution_mode = "mock"
+        async def generate(self, request):
+            decision = {"intent":"create_quest","reply":"mock","title":"测试","goal":"测试","quest_id":None,"candidates":[]}
+            return type("MockResponse", (), {"text":json.dumps(decision),"tool_calls":[],"usage":{}})()
+    def init(self, *args, **kwargs):
+        kwargs.update(provider=MockProvider(), model_id="mock")
+        _init(self, *args, **kwargs)
+    RouterService.__init__ = init
+    """,
+            encoding="utf-8",
+        )
+        environment["PYTHONPATH"] = str(hook) + os.pathsep + environment.get("PYTHONPATH", "")
+        base_url = f"http://127.0.0.1:{port}"
+        token = None
+    
+        def request(path, payload=None):
+            data = None if payload is None else json.dumps(payload).encode()
+            headers = {"Content-Type": "application/json"}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            req = Request(base_url + path, data=data, headers=headers)
+            try:
+                response = urlopen(req, timeout=1)
+            except HTTPError as exc:
+                response = exc
+            with response:
+                return response.status, json.load(response)
+    
+        observations = []
+        quest_id = None
+        for name in ("cli-cwd", "desktop-cwd"):
+            secret = secrets.token_hex(32)
+            environment["FORGE_CORE_SECRET"] = secret
+            token = None
+            cwd = tmp_path / name
+            cwd.mkdir()
+            (cwd / ".env").write_text("FORGE_DB_PATH=wrong.sqlite3\n", encoding="utf-8")
+            with (tmp_path / f"{name}.log").open("w", encoding="utf-8") as log:
+                process = subprocess.Popen(
+                    [sys.executable, "-m", "forge_api", "--workspace-root", str(workspace)],
+                    cwd=cwd,
+                    env=environment,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                )
+                try:
+                    deadline = time.monotonic() + 15
+                    while True:
+                        assert process.poll() is None, (tmp_path / f"{name}.log").read_text()
+                        try:
+                            status, health = request("/health")
+                            assert status == 200
+                            token = hmac.new(
+                                bytes.fromhex(secret), health["session"].encode(), hashlib.sha256
+                            ).hexdigest()
+                            status, health = request("/health")
+                            break
+                        except (URLError, TimeoutError):
+                            assert time.monotonic() < deadline, "Core did not start"
+                            time.sleep(0.05)
+                    if quest_id is None:
+                        status, _result = request(
+                            "/api/conversation/message", {"content": "帮我开发数据层"}
+                        )
+                        assert status == 200
+                        status, quests = request("/api/quests")
+                        assert status == 200
+                        quest_id = quests[0]["id"]
+                        status, rejected = request(
+                            f"/api/quests/{quest_id}/transition",
+                            {
+                                "status": "rejected",
+                                "expected_version": 0,
+                            },
+                        )
+                        assert status == 200
+                        assert rejected["version"] == 1
+                    status, conflict = request(
+                        f"/api/quests/{quest_id}/transition",
+                        {
+                            "status": "awaiting_approval",
+                            "expected_version": 0,
+                        },
+                    )
+                    assert status == 409
+                    assert "version" in conflict["detail"].lower()
+                    status, illegal = request(
+                        f"/api/quests/{quest_id}/transition",
+                        {
+                            "status": "running",
+                            "expected_version": 1,
+                        },
+                    )
+                    assert status == 409
+                    assert "Illegal Quest transition" in illegal["detail"]
+                    status, conversation = request("/api/conversation")
+                    assert status == 200
+                    assert len(conversation["messages"]) == 2
+                    observations.append(
+                        {
+                            "cwd": str(cwd),
+                            "router": health["router_session_id"],
+                            "messages": 2,
+                            "stale_http": 409,
+                            "illegal_http": 409,
+                        }
+                    )
+                finally:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
+            assert not (cwd / "wrong.sqlite3").exists()
+            log_text = (tmp_path / f"{name}.log").read_text(encoding="utf-8")
+            assert secret not in log_text and token not in log_text
+        assert observations[0]["router"] == observations[1]["router"]
+        store = Store(workspace=Workspace.from_path(workspace), path="state/core.sqlite3")
+        assert store.get_quest(quest_id)["status"] == "rejected"
+        assert store.get_quest(quest_id)["version"] == 1
+>       assert len(store.list_events()) == len(store.list_outbox()) == 2
+E       AssertionError: assert 4 == 2
+E        +  where 4 = len([{'event_id': 'evt_87fbd57b505c', 'created_at': '2026-11-14T20:52:18.629871+00:00', 'delivered_at': None, 'seq': 1, .....'event_id': 'evt_bc1ef9c8a872', 'created_at': '2026-11-14T20:52:19.835834+00:00', 'delivered_at': None, 'seq': 4, ...}])
+E        +    where [{'event_id': 'evt_87fbd57b505c', 'created_at': '2026-11-14T20:52:18.629871+00:00', 'delivered_at': None, 'seq': 1, .....'event_id': 'evt_bc1ef9c8a872', 'created_at': '2026-11-14T20:52:19.835834+00:00', 'delivered_at': None, 'seq': 4, ...}] = list_outbox()
+E        +      where list_outbox = <forge_core.store.Store object at 0x000001D2E7CF0350>.list_outbox
+
+backend\tests\test_startup.py:161: AssertionError
+__________ test_worker_proposal_and_event_failure_rolls_back[events] __________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_worker_proposal_and_event0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D2E7D956A0>
+table = 'events'
+
+    @pytest.mark.parametrize("table", ["events", "outbox"])
+    def test_worker_proposal_and_event_failure_rolls_back(tmp_path, monkeypatch, table):
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "worker-api.sqlite3"))
+        secret = secrets.token_hex(32)
+        monkeypatch.setenv("FORGE_CORE_SECRET", secret)
+        main = importlib.import_module("forge_api.main")
+        importlib.reload(main)
+        quest = Quest(title="Worker", goal="Atomic worker proposal")
+        main.store.save_quest(quest)
+        install_abort_trigger(main.store.path, table)
+>       with TestClient(
+            main.app,
+            raise_server_exceptions=False,
+            base_url="http://127.0.0.1:8765",
+            client=("127.0.0.1", 12345),
+        ) as client:
+
+backend\tests\test_transactions.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\.venv\Lib\site-packages\starlette\testclient.py:572: in __enter__
+    portal.call(self.wait_startup)
+backend\.venv\Lib\site-packages\anyio\from_thread.py:347: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+backend\.venv\Lib\site-packages\anyio\from_thread.py:272: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\.venv\Lib\site-packages\starlette\testclient.py:608: in wait_startup
+    await receive()
+backend\.venv\Lib\site-packages\starlette\testclient.py:599: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+backend\.venv\Lib\site-packages\anyio\from_thread.py:272: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\.venv\Lib\site-packages\starlette\testclient.py:589: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+backend\.venv\Lib\site-packages\fastapi\applications.py:1181: in __call__
+    await lifespan(
+backend\.venv\Lib\site-packages\fastapi\telemetry\_runtime.py:238: in lifespan
+    await app(scope, wrapped_receive, wrapped_send)
+backend\.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\cors.py:79: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\routing.py:2798: in app
+    await self.lifespan(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\routing.py:661: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_api\main.py:248: in lifespan
+    generation = start(store, session_challenge=guard.session)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\lifecycle.py:25: in start
+    work.append_event(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.store.UnitOfWork object at 0x000001D2E6C8FC40>
+event = ForgeEvent(id='evt_f2a6e53d4729', event_type='core.started', conversation_id='main', quest_id=None, worker_id=None, pa...6': '4c161a464fdcf23e8a089bf8533aa6e035cacd0e1be39ee947b0ceb6ea71d5ba'}, created_at='2026-11-14T20:52:32.305939+00:00')
+
+    def append_event(self, event):
+>       cursor = self.connection.execute(
+            """INSERT INTO events(id,event_type,conversation_id,quest_id,worker_id,payload,created_at)
+               VALUES (?,?,?,?,?,?,?)""",
+            (
+                event.id,
+                event.event_type,
+                event.conversation_id,
+                event.quest_id,
+                event.worker_id,
+                json.dumps(event.payload, ensure_ascii=False),
+                event.created_at,
+            ),
+        )
+E       sqlite3.IntegrityError: audit real SQLite failure
+
+backend\src\forge_core\store.py:142: IntegrityError
+__________ test_worker_proposal_and_event_failure_rolls_back[outbox] __________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-430/test_worker_proposal_and_event1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D2E8595780>
+table = 'outbox'
+
+    @pytest.mark.parametrize("table", ["events", "outbox"])
+    def test_worker_proposal_and_event_failure_rolls_back(tmp_path, monkeypatch, table):
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "worker-api.sqlite3"))
+        secret = secrets.token_hex(32)
+        monkeypatch.setenv("FORGE_CORE_SECRET", secret)
+        main = importlib.import_module("forge_api.main")
+        importlib.reload(main)
+        quest = Quest(title="Worker", goal="Atomic worker proposal")
+        main.store.save_quest(quest)
+        install_abort_trigger(main.store.path, table)
+>       with TestClient(
+            main.app,
+            raise_server_exceptions=False,
+            base_url="http://127.0.0.1:8765",
+            client=("127.0.0.1", 12345),
+        ) as client:
+
+backend\tests\test_transactions.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\.venv\Lib\site-packages\starlette\testclient.py:572: in __enter__
+    portal.call(self.wait_startup)
+backend\.venv\Lib\site-packages\anyio\from_thread.py:347: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+backend\.venv\Lib\site-packages\anyio\from_thread.py:272: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\.venv\Lib\site-packages\starlette\testclient.py:608: in wait_startup
+    await receive()
+backend\.venv\Lib\site-packages\starlette\testclient.py:599: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+backend\.venv\Lib\site-packages\anyio\from_thread.py:272: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\.venv\Lib\site-packages\starlette\testclient.py:589: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+backend\.venv\Lib\site-packages\fastapi\applications.py:1181: in __call__
+    await lifespan(
+backend\.venv\Lib\site-packages\fastapi\telemetry\_runtime.py:238: in lifespan
+    await app(scope, wrapped_receive, wrapped_send)
+backend\.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\cors.py:79: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+backend\.venv\Lib\site-packages\fastapi\routing.py:2798: in app
+    await self.lifespan(scope, receive, send)
+backend\.venv\Lib\site-packages\starlette\routing.py:661: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_api\main.py:248: in lifespan
+    generation = start(store, session_challenge=guard.session)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\lifecycle.py:25: in start
+    work.append_event(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.store.UnitOfWork object at 0x000001D2E87E1320>
+event = ForgeEvent(id='evt_c90daedf30c8', event_type='core.started', conversation_id='main', quest_id=None, worker_id=None, pa...6': 'c7f6827eea7c28ed1a1b19bf499b2dbb0b485f758e52ce4f494b91eed12ff87d'}, created_at='2026-11-14T20:52:32.554003+00:00')
+
+    def append_event(self, event):
+        cursor = self.connection.execute(
+            """INSERT INTO events(id,event_type,conversation_id,quest_id,worker_id,payload,created_at)
+               VALUES (?,?,?,?,?,?,?)""",
+            (
+                event.id,
+                event.event_type,
+                event.conversation_id,
+                event.quest_id,
+                event.worker_id,
+                json.dumps(event.payload, ensure_ascii=False),
+                event.created_at,
+            ),
+        )
+>       self.connection.execute(
+            "INSERT INTO outbox(event_id,created_at) VALUES (?,?)", (event.id, event.created_at)
+        )
+E       sqlite3.IntegrityError: audit real SQLite failure
+
+backend\src\forge_core\store.py:155: IntegrityError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_security_adversarial.py::test_cross_origin_simple_post_cannot_create_worker[https://attacker.invalid]
+FAILED backend\tests\test_security_adversarial.py::test_cross_origin_simple_post_cannot_create_worker[null]
+FAILED backend\tests\test_security_adversarial.py::test_cross_origin_simple_post_cannot_create_worker[http://localhost:5173.evil.invalid]
+FAILED backend\tests\test_startup.py::test_core_launcher_restart_preserves_workspace_and_rejects_stale_state
+FAILED backend\tests\test_transactions.py::test_worker_proposal_and_event_failure_rolls_back[events]
+FAILED backend\tests\test_transactions.py::test_worker_proposal_and_event_failure_rolls_back[outbox]
+6 failed, 482 passed, 1 warning in 117.50s (0:01:57)
+EXIT_CODE=1

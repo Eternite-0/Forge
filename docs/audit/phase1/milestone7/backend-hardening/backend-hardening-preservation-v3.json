@@ -1,0 +1,63 @@
+{
+  "historic_files": 367,
+  "historic_hash_changes": [],
+  "original_test_functions": 282,
+  "missing_tests": [],
+  "assertion_changes_for_review": [
+    {
+      "file": "backend/tests/test_api_trust.py",
+      "test": "test_approval_and_grants_http_are_user_controlled",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Attribute(value=Call(func=Attribute(value=Name(id='client', ctx=Load()), attr='post', ctx=Load()), args=[Name(id='path', ctx=Load())], keywords=[keyword(arg='headers', value=Name(id='headers', ctx=Load())), keyword(arg='json', value=Dict(keys=[Constant(value='decision')], values=[Constant(value='APPROVED')]))]), attr='status_code', ctx=Load()), ops=[Eq()], comparators=[Constant(value=409)]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_migrations.py",
+      "test": "test_each_migration_step",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Name(id='SCHEMA_VERSION', ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_migrations.py",
+      "test": "test_each_migration_failure_rolls_back_a_fresh_database",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Subscript(value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='connection', ctx=Load()), attr='execute', ctx=Load()), args=[Constant(value='SELECT version FROM schema_meta')]), attr='fetchone', ctx=Load())), slice=Constant(value=0), ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_migrations.py",
+      "test": "test_v8_component_failure_rolls_back_v7_data",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Subscript(value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='connection', ctx=Load()), attr='execute', ctx=Load()), args=[Constant(value='SELECT version FROM schema_meta')]), attr='fetchone', ctx=Load())), slice=Constant(value=0), ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_security_adversarial.py",
+      "test": "test_cross_origin_simple_post_cannot_create_worker",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Call(func=Attribute(value=Attribute(value=Name(id='main', ctx=Load()), attr='store', ctx=Load()), attr='list_events', ctx=Load())), ops=[Eq()], comparators=[List(ctx=Load())]))",
+        "Assert(test=Compare(left=Call(func=Attribute(value=Attribute(value=Name(id='main', ctx=Load()), attr='store', ctx=Load()), attr='list_outbox', ctx=Load())), ops=[Eq()], comparators=[List(ctx=Load())]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_startup.py",
+      "test": "test_core_launcher_restart_preserves_workspace_and_rejects_stale_state",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Call(func=Name(id='len', ctx=Load()), args=[Call(func=Attribute(value=Name(id='store', ctx=Load()), attr='list_events', ctx=Load()))]), ops=[Eq(), Eq()], comparators=[Call(func=Name(id='len', ctx=Load()), args=[Call(func=Attribute(value=Name(id='store', ctx=Load()), attr='list_outbox', ctx=Load()))]), Constant(value=2)]))"
+      ]
+    },
+    {
+      "file": "backend/tests/test_transactions.py",
+      "test": "test_worker_proposal_and_event_failure_rolls_back",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Call(func=Attribute(value=Attribute(value=Name(id='main', ctx=Load()), attr='store', ctx=Load()), attr='list_events', ctx=Load())), ops=[Eq()], comparators=[List(ctx=Load())]))",
+        "Assert(test=Compare(left=Call(func=Attribute(value=Attribute(value=Name(id='main', ctx=Load()), attr='store', ctx=Load()), attr='list_outbox', ctx=Load())), ops=[Eq()], comparators=[List(ctx=Load())]))"
+      ]
+    }
+  ],
+  "assertion_changes_reviewed": true,
+  "source_files": 112,
+  "source_manifest_sha256": "377a63dfc99291296dc41ed4ae2eafb77397954f2b9cc3ca8e646693a81c6f50",
+  "baseline_manifest_sha256": "cb8911cf1e7d7f28a4dc63eb6845c345f55e8d0d2653aae59109e9c5b5891555"
+}

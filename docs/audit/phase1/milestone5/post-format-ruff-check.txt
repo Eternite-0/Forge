@@ -1,0 +1,20 @@
+RUF059 Unpacked variable `old` is never used
+   --> backend\tests\test_team_reassignment_m5.py:211:49
+    |
+210 | def test_reassignment_does_not_refund_quest_allocations_and_is_bounded(tmp_path):
+211 |     store, quest, plan, roles, limits, service, old, manager, runs = prepared_team(tmp_path)
+    |                                                 ^^^
+212 |     with store.unit_of_work() as work:
+213 |         work.connection.execute(
+    |
+help: Prefix it with an underscore or any other dummy variable pattern
+    |
+210 | def test_reassignment_does_not_refund_quest_allocations_and_is_bounded(tmp_path):
+    -     store, quest, plan, roles, limits, service, old, manager, runs = prepared_team(tmp_path)
+211 +     store, quest, plan, roles, limits, service, _old, manager, runs = prepared_team(tmp_path)
+212 |     with store.unit_of_work() as work:
+    |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 1 error.
+1 unsafe fix available with `--fix --unsafe-fixes`.

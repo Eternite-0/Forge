@@ -1,0 +1,23 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______ test_worker_durable_inbox_deduplicates_and_injects_before_model _______
+
+graph = (<forge_core.store.Store object at 0x00000215495FA7B0>, Quest(id='quest_5fee1424817c', title='Task', goal='Implement t...quest_5fee1424817c', 'revision': 1, 'digest': 'a0aaf41c85ecb3df0c9e75cbbcfeb5ec9e1d6232e6df35e2f27b0f487edaab20', ...})
+
+    def test_worker_durable_inbox_deduplicates_and_injects_before_model(graph):
+        store, quest, plan = graph
+        class InboxModel:
+            execution_mode = "mock"
+            async def generate(self, request):
+                assert sum("dependency-receipt" in item["content"] for item in request.messages) == 1
+                return ModelResponse(text='{"summary":"done"}',tool_calls=[],usage={"input_tokens":10,"output_tokens":5})
+        manager = WorkerManager(store,ProviderPool({"mock-provider":InboxModel()}),MockToolEngine(),team_authority=MockApprovedTeam(plan))
+        session = manager.start(quest.id,plan["id"],"n",team_digest="team",member_index=0)
+>       assert manager.deliver(session["id"],"event-one",{"receipt":"dependency-receipt"}) is True
+               ^^^^^^^^^^^^^^^
+E       AttributeError: 'WorkerManager' object has no attribute 'deliver'
+
+backend\tests\test_worker_runtime.py:232: AttributeError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_runtime.py::test_worker_durable_inbox_deduplicates_and_injects_before_model
+1 failed, 5 deselected in 0.44s

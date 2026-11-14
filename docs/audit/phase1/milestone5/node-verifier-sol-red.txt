@@ -1,0 +1,271 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+__ test_independent_json_positive_path_settles_worker_and_rechecks_artifact ___
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_independent_json_positive0')
+
+    def test_independent_json_positive_path_settles_worker_and_rechecks_artifact(tmp_path):
+>       store, quest, _, run, artifact = reviewed_artifact(tmp_path)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_node_verifier_m5.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_independent_json_positive0')
+criterion = None, conditional = False
+
+    def reviewed_artifact(tmp_path, *, criterion=None, conditional=False):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        artifact = tmp_path / "work/result.json"
+        quest = Quest(title="Verifier contract fixture", goal="Create valid JSON")
+        store.save_quest(quest)
+        nodes = [{"key": "n", "objective": quest.goal, "success_criteria": [criterion or "json_valid:" + str(artifact)], "budget_tokens": 16000, "allowed_tools": ["file_write"]}]
+        if conditional:
+            nodes.append({"key": "failure_only", "objective": "Run on failure", "success_criteria": ["must never execute"], "budget_tokens": 100, "allowed_tools": []})
+        graph = QuestGraphService(store)
+        plan = graph.propose(quest.id, {"nodes": nodes, "edges": [{"source": "n", "target": "failure_only", "condition": "failure"}] if conditional else [], "max_total_tokens": 16100}, expected_version=0)
+        graph.approve(quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(id="fixture", provider="fixture", model_id="scripted", display_name="Test only provenance stub", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        teams = TeamCompositionService(store)
+        team = teams.propose(quest.id, [{"id": "coding", "task_node_key": "n", "tools": ["file_write"], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60}], {"max_members": 1, "max_depth": 0, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 1, "allowed_tools": ["file_write"]}, strategy="greedy", expected_version=2)
+        teams.approve(quest.id, plan["plan_revision"], team["proposal_digest"], expected_version=2, actor="local_user")
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+    
+        class ScriptedProvenanceStub:
+            execution_mode = "live"
+            count = 0
+    
+            async def generate(self, request):
+                self.count += 1
+                return ModelResponse(text='{"summary":"fixture"}' if self.count == 2 else "", tool_calls=[] if self.count == 2 else [{"id": "write", "name": "file_write", "arguments": {"path": "work/result.json", "content": '{"ok":true}'}}], usage={"input_tokens": 30, "output_tokens": 20})
+    
+        manager = WorkerManager(store, ProviderPool({"fixture": ScriptedProvenanceStub()}), ToolEngine(store), team_authority=teams)
+        run = manager.start(quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0)
+        outcome = asyncio.run(manager.run(run["id"]))
+>       assert outcome["state"] == "review_pending"
+E       AssertionError: assert 'blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked
+
+backend\tests\test_node_verifier_m5.py:54: AssertionError
+_____________ test_unverifiable_natural_language_never_completes ______________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_unverifiable_natural_lang0')
+
+    def test_unverifiable_natural_language_never_completes(tmp_path):
+>       store, quest, _, _, _ = reviewed_artifact(tmp_path, criterion="This algorithm is correct")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_node_verifier_m5.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_unverifiable_natural_lang0')
+criterion = 'This algorithm is correct', conditional = False
+
+    def reviewed_artifact(tmp_path, *, criterion=None, conditional=False):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        artifact = tmp_path / "work/result.json"
+        quest = Quest(title="Verifier contract fixture", goal="Create valid JSON")
+        store.save_quest(quest)
+        nodes = [{"key": "n", "objective": quest.goal, "success_criteria": [criterion or "json_valid:" + str(artifact)], "budget_tokens": 16000, "allowed_tools": ["file_write"]}]
+        if conditional:
+            nodes.append({"key": "failure_only", "objective": "Run on failure", "success_criteria": ["must never execute"], "budget_tokens": 100, "allowed_tools": []})
+        graph = QuestGraphService(store)
+        plan = graph.propose(quest.id, {"nodes": nodes, "edges": [{"source": "n", "target": "failure_only", "condition": "failure"}] if conditional else [], "max_total_tokens": 16100}, expected_version=0)
+        graph.approve(quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(id="fixture", provider="fixture", model_id="scripted", display_name="Test only provenance stub", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        teams = TeamCompositionService(store)
+        team = teams.propose(quest.id, [{"id": "coding", "task_node_key": "n", "tools": ["file_write"], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60}], {"max_members": 1, "max_depth": 0, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 1, "allowed_tools": ["file_write"]}, strategy="greedy", expected_version=2)
+        teams.approve(quest.id, plan["plan_revision"], team["proposal_digest"], expected_version=2, actor="local_user")
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+    
+        class ScriptedProvenanceStub:
+            execution_mode = "live"
+            count = 0
+    
+            async def generate(self, request):
+                self.count += 1
+                return ModelResponse(text='{"summary":"fixture"}' if self.count == 2 else "", tool_calls=[] if self.count == 2 else [{"id": "write", "name": "file_write", "arguments": {"path": "work/result.json", "content": '{"ok":true}'}}], usage={"input_tokens": 30, "output_tokens": 20})
+    
+        manager = WorkerManager(store, ProviderPool({"fixture": ScriptedProvenanceStub()}), ToolEngine(store), team_authority=teams)
+        run = manager.start(quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0)
+        outcome = asyncio.run(manager.run(run["id"]))
+>       assert outcome["state"] == "review_pending"
+E       AssertionError: assert 'blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked
+
+backend\tests\test_node_verifier_m5.py:54: AssertionError
+_____________ test_conditionally_unused_failure_branch_is_skipped _____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_conditionally_unused_fail0')
+
+    def test_conditionally_unused_failure_branch_is_skipped(tmp_path):
+>       store, quest, plan, _, _ = reviewed_artifact(tmp_path, conditional=True)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_node_verifier_m5.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_node_verifier_m5.py:39: in reviewed_artifact
+    team = teams.propose(quest.id, [{"id": "coding", "task_node_key": "n", "tools": ["file_write"], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60}], {"max_members": 1, "max_depth": 0, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 1, "allowed_tools": ["file_write"]}, strategy="greedy", expected_version=2)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000025B26322AD0>
+quest_id = 'quest_367e6a934f06'
+roles = [RoleSpec(id='coding', task_node_key='n', required_capabilities={}, tools=['file_write'], input_tokens=9000, output_to...econds=60, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=1, max_depth=0, max_concurrency=1, max_total_tokens=12000, max_total_tool_calls=1, max_cost_microunits=None, currency=None, allowed_tools=['file_write'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if not isinstance(reassignment_reason, str) or not reassignment_reason.strip() or len(reassignment_reason) > 2000:
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type='quest.plan_approved' AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            role_nodes = [role.task_node_key for role in roles]
+            if len(role_nodes) != len(nodes) or set(role_nodes) != set(nodes):
+>               raise DomainError("Each approved task node requires exactly one team member")
+E               forge_core.domain.DomainError: Each approved task node requires exactly one team member
+
+backend\src\forge_core\team_composition.py:583: DomainError
+______________________ test_forged_root_skip_is_rejected ______________________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_forged_root_skip_is_rejec0')
+
+    def test_forged_root_skip_is_rejected(tmp_path):
+>       store, quest, plan, _, _ = reviewed_artifact(tmp_path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_node_verifier_m5.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-142/test_forged_root_skip_is_rejec0')
+criterion = None, conditional = False
+
+    def reviewed_artifact(tmp_path, *, criterion=None, conditional=False):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        artifact = tmp_path / "work/result.json"
+        quest = Quest(title="Verifier contract fixture", goal="Create valid JSON")
+        store.save_quest(quest)
+        nodes = [{"key": "n", "objective": quest.goal, "success_criteria": [criterion or "json_valid:" + str(artifact)], "budget_tokens": 16000, "allowed_tools": ["file_write"]}]
+        if conditional:
+            nodes.append({"key": "failure_only", "objective": "Run on failure", "success_criteria": ["must never execute"], "budget_tokens": 100, "allowed_tools": []})
+        graph = QuestGraphService(store)
+        plan = graph.propose(quest.id, {"nodes": nodes, "edges": [{"source": "n", "target": "failure_only", "condition": "failure"}] if conditional else [], "max_total_tokens": 16100}, expected_version=0)
+        graph.approve(quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(id="fixture", provider="fixture", model_id="scripted", display_name="Test only provenance stub", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        teams = TeamCompositionService(store)
+        team = teams.propose(quest.id, [{"id": "coding", "task_node_key": "n", "tools": ["file_write"], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60}], {"max_members": 1, "max_depth": 0, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 1, "allowed_tools": ["file_write"]}, strategy="greedy", expected_version=2)
+        teams.approve(quest.id, plan["plan_revision"], team["proposal_digest"], expected_version=2, actor="local_user")
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+    
+        class ScriptedProvenanceStub:
+            execution_mode = "live"
+            count = 0
+    
+            async def generate(self, request):
+                self.count += 1
+                return ModelResponse(text='{"summary":"fixture"}' if self.count == 2 else "", tool_calls=[] if self.count == 2 else [{"id": "write", "name": "file_write", "arguments": {"path": "work/result.json", "content": '{"ok":true}'}}], usage={"input_tokens": 30, "output_tokens": 20})
+    
+        manager = WorkerManager(store, ProviderPool({"fixture": ScriptedProvenanceStub()}), ToolEngine(store), team_authority=teams)
+        run = manager.start(quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0)
+        outcome = asyncio.run(manager.run(run["id"]))
+>       assert outcome["state"] == "review_pending"
+E       AssertionError: assert 'blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked
+
+backend\tests\test_node_verifier_m5.py:54: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_node_verifier_m5.py::test_independent_json_positive_path_settles_worker_and_rechecks_artifact
+FAILED backend\tests\test_node_verifier_m5.py::test_unverifiable_natural_language_never_completes
+FAILED backend\tests\test_node_verifier_m5.py::test_conditionally_unused_failure_branch_is_skipped
+FAILED backend\tests\test_node_verifier_m5.py::test_forged_root_skip_is_rejected
+4 failed in 0.85s

@@ -1,0 +1,25 @@
+......FFF                                                                [100%]
+================================== FAILURES ===================================
+________ test_default_workspace_is_user_scoped_not_installation_scoped ________
+tests\test_settings.py:99: in test_default_workspace_is_user_scoped_not_installation_scoped
+    assert settings.workspace.root == expected.resolve()
+E   AssertionError: assert WindowsPath('D:/Competition_this/Agent') == WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default')
+E    +  where WindowsPath('D:/Competition_this/Agent') = Workspace(id='760120188e875c6a9f4854e5', root=WindowsPath('D:/Competition_this/Agent')).root
+E    +    where Workspace(id='760120188e875c6a9f4854e5', root=WindowsPath('D:/Competition_this/Agent')) = Settings(workspace=Workspace(id='760120188e875c6a9f4854e5', root=WindowsPath('D:/Competition_this/Agent')), db_path=WindowsPath('D:/Competition_this/Agent/data/forge.sqlite3'), host='127.0.0.1', port=8765).workspace
+E    +  and   WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default') = resolve()
+E    +    where resolve = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default').resolve
+_____ test_direct_workspace_constructor_cannot_bypass_absolute_path_rule ______
+tests\test_settings.py:105: in test_direct_workspace_constructor_cannot_bypass_absolute_path_rule
+    with pytest.raises(ValueError, match="absolute"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+_____________ test_explicit_empty_workspace_identity_is_rejected ______________
+tests\test_settings.py:112: in test_explicit_empty_workspace_identity_is_rejected
+    with pytest.raises(ValueError, match="empty"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+=========================== short test summary info ===========================
+FAILED tests/test_settings.py::test_default_workspace_is_user_scoped_not_installation_scoped
+FAILED tests/test_settings.py::test_direct_workspace_constructor_cannot_bypass_absolute_path_rule
+FAILED tests/test_settings.py::test_explicit_empty_workspace_identity_is_rejected
+3 failed, 6 passed in 1.20s

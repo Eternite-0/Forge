@@ -1,0 +1,5 @@
+{
+  "exit_code": 1,
+  "command": "python -m pytest tests/test_settings.py -q --tb=short",
+  "timestamp": "2026-11-14T14:35:57.0816481Z"
+}

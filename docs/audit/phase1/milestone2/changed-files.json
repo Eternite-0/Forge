@@ -1,0 +1,197 @@
+[
+  {
+    "path": "backend\\src\\forge_api\\main.py",
+    "change": "modified",
+    "sha256": "AE8A6FB32EE6110215F79F7088BDFFA0FDE8129AD4DBAFA01A210BB132FDB2EE"
+  },
+  {
+    "path": "backend\\src\\forge_api\\security.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "13FDB1FC18D0FF40151EF589FA120668D9ADC9F1CE087C3A508A0FF280278135"
+  },
+  {
+    "path": "backend\\src\\forge_core\\evidence.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "90596965A338BE5A7B6039BA5C450AF29C7C04CA97B430C5927E91D9CE7A6F5F"
+  },
+  {
+    "path": "backend\\src\\forge_core\\governance.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "EEE5582678B441C9E0CD439688C79A2683053FA288E5F101D4DF62801C3A5CEB"
+  },
+  {
+    "path": "backend\\src\\forge_core\\migrations.py",
+    "change": "modified",
+    "sha256": "C4DFE2CE0E5E0AFB6D45D683B635D4E310C012F4E09FEEE0560EA3D7A62B563F"
+  },
+  {
+    "path": "backend\\src\\forge_core\\quest_service.py",
+    "change": "modified",
+    "sha256": "90CB1DC26DCB19A6E6D3EAAF1945DA63AE44F5917333A309CA963663DE290956"
+  },
+  {
+    "path": "backend\\src\\forge_core\\security_domain.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "C0990D671ED34F8B8A8A05922CF4CCBE1D5412A925EA57749ECC580B42AEEDC9"
+  },
+  {
+    "path": "backend\\src\\forge_core\\settings.py",
+    "change": "modified",
+    "sha256": "6911F1F4643AE730B8371561D77817A9FB2494D285A19B070088A8C766FEE947"
+  },
+  {
+    "path": "backend\\src\\forge_core\\store.py",
+    "change": "modified",
+    "sha256": "B3B6F70907D4E40DEA9EBD255D237C7B0CA306D7276950CC080ED287B515493C"
+  },
+  {
+    "path": "backend\\tests\\test_api_trust.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "7F14A8090CD17458F44079C1E07C2B2EAA5916A8D6FD599B65735495ACC045F1"
+  },
+  {
+    "path": "backend\\tests\\test_api.py",
+    "change": "modified",
+    "sha256": "662EB9A735EEE4560D5865396B7937548B237EBB38DA09FA8443FC81B53F8EB5"
+  },
+  {
+    "path": "backend\\tests\\test_concurrency.py",
+    "change": "modified",
+    "sha256": "C7EF2BF457E65DAD3965A5AB640088D6451ACC2A57989A48B266EF674D15EB36"
+  },
+  {
+    "path": "backend\\tests\\test_evidence_gate.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "818D3B179942B3FE4004DA31C94E46A2E3BC34C52C111D7BD013E3D1F843CD9F"
+  },
+  {
+    "path": "backend\\tests\\test_execution_evidence.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "24AECFA747BE6D3966641C5FD02D78E7C8610E5A973EE53392B2639841C5FC68"
+  },
+  {
+    "path": "backend\\tests\\test_governance.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "02C301BFFC6B2C76F8346AAD85D9B9D74F7A62106A4A737CBDCEFE6BAF8488C8"
+  },
+  {
+    "path": "backend\\tests\\test_migrations.py",
+    "change": "modified",
+    "sha256": "BC4505650980B9BB25C8AE0F9CCF606282DFAF8D11874160E53AB73B53D52508"
+  },
+  {
+    "path": "backend\\tests\\test_security_adversarial.py",
+    "change": "new_or_not_in_baseline",
+    "sha256": "CA4278F44BF202C80641CE0EBBA203F2075E9411B2D09BA79FF778DC77FA83F2"
+  },
+  {
+    "path": "backend\\tests\\test_settings.py",
+    "change": "modified",
+    "sha256": "FC139F82307FAC9409D1C17B02F78D5E893001BBCD3FEC723B12E34EC5F19104"
+  },
+  {
+    "path": "backend\\tests\\test_startup.py",
+    "change": "modified",
+    "sha256": "3E49F93D088C046E85A8893901AFD5E9809E51CA1C0ECEA4247E845215C9CAB3"
+  },
+  {
+    "path": "backend\\tests\\test_transactions.py",
+    "change": "modified",
+    "sha256": "989E45548531C78D1C25F2EA16AFF25D4D2E046D664F8444EE16765204162A70"
+  },
+  {
+    "path": "backend\\requirements-lock.txt",
+    "change": "new_or_not_in_baseline",
+    "sha256": "12E37D3785913AF25EAD6763660A3A939B67DF3CC85B0EB53A7686213C739166"
+  },
+  {
+    "path": "backend\\.env.example",
+    "change": "modified",
+    "sha256": "6E7B319455A969F6C04E81EAA6D35B2B4D8AC35F9C8B86ECB4B6C2CECE931523"
+  },
+  {
+    "path": "desktop\\src\\App.tsx",
+    "change": "new_or_not_in_baseline",
+    "sha256": "5A4EACF7904C403C1CFED9557A8E9CF58BD44EA23FE4C129C4EF0AED64801D54"
+  },
+  {
+    "path": "desktop\\src\\main.tsx",
+    "change": "new_or_not_in_baseline",
+    "sha256": "2B6A9DB3AFADE0368685414BEBED9DA061CBECFAED13E1A7A025854ED0630A07"
+  },
+  {
+    "path": "desktop\\src\\style.css",
+    "change": "new_or_not_in_baseline",
+    "sha256": "C68DBBEB64AF849DFDEB9D08C840A8DCC57F8C784FF97DADDD46E2C9334817AF"
+  },
+  {
+    "path": "desktop\\src\\vite-env.d.ts",
+    "change": "new_or_not_in_baseline",
+    "sha256": "65996936FBB042915F7B74A200FCDDE7E410F32A669B1AB9597CFAA4B0FADDB5"
+  },
+  {
+    "path": "desktop\\src-tauri\\build.rs",
+    "change": "new_or_not_in_baseline",
+    "sha256": "8AF41C0062014FC594E4BB9899E60EE9930AB57D4CF0C73041FF557D6EC736E6"
+  },
+  {
+    "path": "desktop\\src-tauri\\Cargo.toml",
+    "change": "new_or_not_in_baseline",
+    "sha256": "479D9F84502D9C941F123FEF28A5BCA2DBB5184713C06D953C96D970F950AD53"
+  },
+  {
+    "path": "desktop\\src-tauri\\tauri.conf.json",
+    "change": "new_or_not_in_baseline",
+    "sha256": "C7A1AC062ED426029ABF8AE0429E0774F3FAF13AFCC9A1C79852ACEAFE3B6247"
+  },
+  {
+    "path": "desktop\\src-tauri\\capabilities\\default.json",
+    "change": "new_or_not_in_baseline",
+    "sha256": "D6504DB0F3357DF7871750EBEBBBBF67B17E1D5F81F13BC31E0A6194CB2DAF13"
+  },
+  {
+    "path": "desktop\\src-tauri\\src\\main.rs",
+    "change": "new_or_not_in_baseline",
+    "sha256": "E20E3C042589A10813229D1F4A167CC10D9179D5C93C54BE4BA99D401D3A378D"
+  },
+  {
+    "path": "desktop\\package.json",
+    "change": "new_or_not_in_baseline",
+    "sha256": "0B4D76F4B52AD9A4825CCCD514CCF9EA75F8D95D4D3541B129C2293FA94F3119"
+  },
+  {
+    "path": "desktop\\package-lock.json",
+    "change": "new_or_not_in_baseline",
+    "sha256": "035470C7CA880C0C0DDA408403C28D2BEB19ADBFC8603AB4C9D8B58A37E6CC84"
+  },
+  {
+    "path": "README.md",
+    "change": "modified",
+    "sha256": "DDC0DA643F113D7E116321A2BEB5935308329D8DB23A84A25A86D930A3459272"
+  },
+  {
+    "path": "docs\\STATUS.md",
+    "change": "modified",
+    "sha256": "5790B248855C15C481825A6B7448E51735576230CA9181959C84FE63979FF498"
+  },
+  {
+    "path": "docs\\ROADMAP.md",
+    "change": "modified",
+    "sha256": "E680415DCD2D7E45B217B13148BB0C00242F2899440DF45B79F77CD67FF55023"
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE2_REPORT.md",
+    "change": "new_or_not_in_baseline",
+    "sha256": "D68890A38C9D2B3D893AB7E7BE40551A5AD72F2328C575FA8F4F3C574092C031"
+  },
+  {
+    "path": "docs\\adr\\ADR-004-governance-trust-boundary.md",
+    "change": "new_or_not_in_baseline",
+    "sha256": "042EA37DAF1B71A674A68CA1A9A8D6A157D050A4549A0933FD19A39DF0102652"
+  },
+  {
+    "path": "scripts\\run-backend.ps1",
+    "change": "modified_per_implementation_review_baseline_not_captured",
+    "sha256": "B63CBAD9083B1F048D98C589990B9BAD53FC696CD63739D665835BC6826D508D"
+  }
+]

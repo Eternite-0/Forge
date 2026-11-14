@@ -1,0 +1,44 @@
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml
+All checks passed!
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff format --check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml
+unformatted: File would be reformatted
+  --> backend\tests\test_security_adversarial.py:44:12
+   |
+43 |     assert [event["event_type"] for event in events] == ["core.started", "core.stopped"]
+   -     assert json.loads(events[0]["payload"])["generation"] == json.loads(events[1]["payload"])[
+   -         "generation"
+   -     ]
+44 +     assert (
+45 +         json.loads(events[0]["payload"])["generation"]
+46 +         == json.loads(events[1]["payload"])["generation"]
+47 +     )
+48 |     assert {event["id"] for event in events} == {
+   |
+
+unformatted: File would be reformatted
+   --> backend\tests\test_transactions.py:106:12
+    |
+105 |     assert [event["event_type"] for event in events] == ["core.started", "core.stopped"]
+    -     assert json.loads(events[0]["payload"])["generation"] == json.loads(events[1]["payload"])[
+    -         "generation"
+    -     ]
+106 +     assert (
+107 +         json.loads(events[0]["payload"])["generation"]
+108 +         == json.loads(events[1]["payload"])["generation"]
+109 +     )
+110 |     assert {event["id"] for event in events} == {
+    |
+
+2 files would be reformatted, 107 files already formatted
+EXIT_CODE=1
+CWD=D:\Competition_this\Agent
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m pip check
+No broken requirements found.
+EXIT_CODE=0
+CWD=D:\Competition_this\Agent\backend
+COMMAND=D:\Competition_this\Agent\backend\.venv\Scripts\python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml
+All checks passed!
+EXIT_CODE=0

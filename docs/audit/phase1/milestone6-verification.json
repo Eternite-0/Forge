@@ -1,0 +1,218 @@
+{
+  "date": "2026-11-15",
+  "environment": "Windows / Python 3.13 / local",
+  "status": "local_m6_verification_passed",
+  "tests": {
+    "passed": 372,
+    "warnings": 1,
+    "seconds": 77.78,
+    "junit": ".local/phase1/milestone6/final3-pytest.xml"
+  },
+  "checks": [
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pytest backend/tests -q -c backend/pyproject.toml --tb=short --junitxml=.local/phase1/milestone6/final3-pytest.xml",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final3-pytest.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m ruff check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final5-ruff-root.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml",
+      "cwd": "backend",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final5-ruff-backend.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m ruff format --check --no-cache backend/src backend/tests backend/scripts",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final5-ruff-format.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pip check",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final-pip-check.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pip_audit --disable-pip --no-deps -r backend/requirements-lock.txt --format json --output .local/phase1/milestone6/final-pip-audit.json --progress-spinner off",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final-pip-audit.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe backend/scripts/audit_m6_preservation.py",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/historical-preservation-final.json"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run_context_study.py",
+      "cwd": "backend",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final2-context-study.json"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": ".local/phase1/milestone6/final2-diff-check.log"
+    }
+  ],
+  "historical_preservation": {
+    "baseline": ".local/phase1/milestone6-baseline/manifest.json",
+    "historical_report_files": 361,
+    "changed_historical_reports": 0,
+    "test_functions": 221,
+    "missing_test_functions": 0,
+    "changed_assertion_ast": 2,
+    "details": ".local/phase1/milestone6/historical-preservation-final.json"
+  },
+  "earlier_lint_failures": {
+    "root_log": ".local/phase1/milestone6/final-ruff-check.log",
+    "backend_log": ".local/phase1/milestone6/final2-ruff-check.log",
+    "reason": "Inconsistent first-party package detection between working directories; explicit isort settings and import-only sorting fixed both without disabling rules."
+  },
+  "native_preflight": {
+    "command": "cargo +1.90.0 check --manifest-path desktop/src-tauri/Cargo.toml",
+    "exit_code": 101,
+    "reason": "Windows resource build requires missing desktop/src-tauri/icons/icon.ico",
+    "log": ".local/phase1/native-preflight/m6-cargo-check.log",
+    "cargo_lock_preserved": true
+  },
+  "live_diagnostic": {
+    "status": "bounded_continuation_passed",
+    "first_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T181504Z-5f66b1a7/report.json",
+      "status": "failed",
+      "reason": "provider response truncated at 512 output tokens; Python failed even though wrapper did not propagate its exit code",
+      "sha256": "0e9d63eda0ae3423ef9307a74d3729010e176e214f93889488b64efbaf8dc1cb"
+    },
+    "second_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T181650Z-ef4fdf0a/report.json",
+      "status": "failed",
+      "reason": "DomainError after one HTTP attempt; specific cause not preserved",
+      "sha256": "fc5b34dc95f8bd6ab240048cf5445aa4c5a6b855e3e3382934fadae9fc46d6f7"
+    },
+    "third_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T182124Z-5979302e/report.json",
+      "status": "failed",
+      "reason": "first HTTP attempt completed; second logical generate rejected locally by token budget; no second HTTP attempt",
+      "sha256": "3f5bafaed26a8f02182d8454403b520f2714fe367641d69a99ef2caefeb94f4e"
+    },
+    "fourth_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T182553Z-890b09fc/report.json",
+      "status": "failed",
+      "reason": "one HTTP attempt requested five tools; Core enforced its four-tool limit",
+      "sha256": "01ad984b621307224872fe01420e133216abd16b4861996d854f98fe99ecffa7"
+    },
+    "fifth_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T182946Z-44a52707/report.json",
+      "status": "failed",
+      "reason": "two HTTP attempts completed and tool limit was respected; final decision violated the strict Router schema",
+      "sha256": "adbbfb4255984aafef4553b50c4aaa94eac52631208e37b3b1d039969e7d1ca0"
+    },
+    "total_http_attempts": 7,
+    "sixth_probe": {
+      "report": ".local/phase1/milestone6/context-20261114T183632Z-53aba023/report.json",
+      "sha256": "0614dd17635e67a65ca51d8e53f741a9b1dfca99288ae5fb0640fe5a6e2c7488",
+      "status": "passed",
+      "http_attempts": 1,
+      "input_tokens": 5420,
+      "output_tokens": 532,
+      "cost": "unknown",
+      "scope": "strict continue_quest with original target, 60 synthetic constraints, 105 cancelled synthetic Quests, same Router identity and source readback"
+    }
+  },
+  "evidence": [
+    {
+      "sha256": "907b46445e6c457c04d435574e27e7166c3ecdca2c8b05b25c12eeb1951c5e30",
+      "path": ".local/phase1/milestone6/final2-pytest.log"
+    },
+    {
+      "sha256": "9b499004806d0c622effef383e133510bfe697b1fb3ac98322011967639a5017",
+      "path": ".local/phase1/milestone6/final2-pytest.xml"
+    },
+    {
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+      "path": ".local/phase1/milestone6/final4-ruff-root.log"
+    },
+    {
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+      "path": ".local/phase1/milestone6/final4-ruff-backend.log"
+    },
+    {
+      "sha256": "6f98e79876f7a35b44bb5599706367d8ec75cfe40456b3eead17dabb7f3a8793",
+      "path": ".local/phase1/milestone6/final4-ruff-format.log"
+    },
+    {
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "path": ".local/phase1/milestone6/final-pip-check.log"
+    },
+    {
+      "sha256": "7b64686881522c5ae7a62fd81926cfcf739f0b76651d7c42803c2525cb1253b4",
+      "path": ".local/phase1/milestone6/final-pip-audit.json"
+    },
+    {
+      "sha256": "e82148c0c30269ca5a2c35420ece6af011a4faf5a375325d750e243ffdb10625",
+      "path": ".local/phase1/milestone6/final-pip-audit.log"
+    },
+    {
+      "sha256": "4c2f59532d2fd6af314b5206433da96b1c83b989c18a1426e09a5959045b5447",
+      "path": ".local/phase1/milestone6/historical-preservation.json"
+    },
+    {
+      "sha256": "7cb140ed276ec9faa91d21c635ce4d1e260ef662507cc869e2d9f3963e53cd40",
+      "path": ".local/phase1/milestone6/final-context-study.json"
+    },
+    {
+      "sha256": "4ca49d9eefe7a634484f6ef6edf4155fe23dc5f28bd6cc76119857af2c16056c",
+      "path": ".local/phase1/milestone6/final-ruff-check.log"
+    },
+    {
+      "sha256": "c3302cf5d478098eecc9c1e83caae1c0ddcfbcde50a77088bd27139d2fe13724",
+      "path": ".local/phase1/milestone6/final2-ruff-check.log"
+    },
+    {
+      "sha256": "09d773ce5dab6cfd68a11d3b0905278a76de8a319b1fbc3fe02e578b07cf04ce",
+      "path": ".local/phase1/native-preflight/m6-cargo-check.log"
+    },
+    {
+      "path": ".local/phase1/milestone6/final3-pytest.log",
+      "sha256": "e50170321fb7cc85fb07789c8be084492dfe463b93c5c9446bda1dc1f8336a9f"
+    },
+    {
+      "path": ".local/phase1/milestone6/final3-pytest.xml",
+      "sha256": "c121aa636e1070b75626d1b86967b72812a715aa0b748d5a92a9686c8b210bf1"
+    },
+    {
+      "path": ".local/phase1/milestone6/final5-ruff-root.log",
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "path": ".local/phase1/milestone6/final5-ruff-backend.log",
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "path": ".local/phase1/milestone6/final5-ruff-format.log",
+      "sha256": "9e494e31b64d470d082e519a0d091bf390d945264b96485bb541055ecced2f5a"
+    },
+    {
+      "path": ".local/phase1/milestone6/historical-preservation-final.json",
+      "sha256": "4c2f59532d2fd6af314b5206433da96b1c83b989c18a1426e09a5959045b5447"
+    },
+    {
+      "path": ".local/phase1/milestone6/final2-context-study.json",
+      "sha256": "7cb140ed276ec9faa91d21c635ce4d1e260ef662507cc869e2d9f3963e53cd40"
+    },
+    {
+      "path": ".local/phase1/milestone6/context-20261114T183632Z-53aba023/report.json",
+      "sha256": "0614dd17635e67a65ca51d8e53f741a9b1dfca99288ae5fb0640fe5a6e2c7488"
+    }
+  ]
+}

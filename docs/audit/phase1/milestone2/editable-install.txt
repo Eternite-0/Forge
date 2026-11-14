@@ -1,0 +1,17 @@
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Obtaining file:///D:/Competition_this/Agent/backend
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: forge-agent-core
+  Building editable for forge-agent-core (pyproject.toml): started
+  Building editable for forge-agent-core (pyproject.toml): finished with status 'done'
+  Created wheel for forge-agent-core: filename=forge_agent_core-0.2.0-0.editable-py3-none-any.whl size=1418 sha256=9e296d7d56e80c1186c32b6a3922ee1da87045b5dd9fe3e1836e449ced53df92
+  Stored in directory: C:\Users\msi\AppData\Local\Temp\pip-ephem-wheel-cache-h0iam3wu\wheels\73\62\ee\3a26f1ea54ed7089c0c6ae3144b053fad6dc52e9dbc9eeecb6
+Successfully built forge-agent-core
+Installing collected packages: forge-agent-core
+Successfully installed forge-agent-core-0.2.0
+
+[notice] A new release of pip is available: 25.2 -> 26.3
+[notice] To update, run: D:\Competition_this\Agent\.local\phase1\milestone2\lock-venv\Scripts\python.exe -m pip install --upgrade pip

@@ -1,0 +1,60 @@
+.....................FF                                                  [100%]
+================================== FAILURES ===================================
+________ test_old_plan_pending_does_not_suppress_current_tool_approval ________
+
+mock_run = (<forge_core.store.Store object at 0x0000015C6EE54A50>, Quest(id='quest_72b9aca8f0e6', title='Tool task', goal='Test r...quest_72b9aca8f0e6', 'revision': 1, 'digest': '8f38b16460fa4f3b5b0460fb5e0ddfcac04a4de753a3be7d4dcee2ba77d27f0d', ...})
+
+    def test_old_plan_pending_does_not_suppress_current_tool_approval(mock_run):
+        import asyncio
+        from forge_core.governance import GovernanceService
+        from forge_core.tool_engine import ToolAuthorizationRequired
+        store, quest, worker, _ = mock_run
+        params = {"url": "https://example.test/item"}
+        old = GovernanceService(store).request_approval(quest.id, "browser_get", params, params["url"], "R2", "old plan")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE approvals SET plan_revision=0 WHERE id=?", (old["id"],))
+        reserve(store, "current", "browser_get", params)
+        with pytest.raises(ToolAuthorizationRequired):
+            asyncio.run(ToolEngine(store, network_hosts=["example.test"]).execute(call_id="current", quest_id=quest.id, worker_id=worker.id, run_id="run", lease_token="lease", tool_name="browser_get", parameters=params))
+        with store.connection() as connection:
+>           assert connection.execute("SELECT COUNT(*) FROM approvals WHERE plan_revision=1 AND status='PENDING'").fetchone()[0] == 1
+E           assert 0 == 1
+
+backend\tests\test_tool_engine.py:622: AssertionError
+_ test_concurrent_same_call_requests_one_approval_and_separate_calls_bind_individually _
+
+mock_run = (<forge_core.store.Store object at 0x0000015C6EE936E0>, Quest(id='quest_2d428383d76c', title='Tool task', goal='Test r...quest_2d428383d76c', 'revision': 1, 'digest': '8f38b16460fa4f3b5b0460fb5e0ddfcac04a4de753a3be7d4dcee2ba77d27f0d', ...})
+
+    def test_concurrent_same_call_requests_one_approval_and_separate_calls_bind_individually(mock_run):
+        import asyncio
+        from concurrent.futures import ThreadPoolExecutor
+        from threading import Barrier
+        from forge_core.tool_engine import ToolAuthorizationRequired
+        from forge_core.governance import GovernanceService
+        store, quest, worker, _ = mock_run
+        params = {"url": "https://example.test/item"}
+        reserve(store, "first", "browser_get", params)
+        reserve(store, "second", "browser_get", params)
+        engine = ToolEngine(store, network_hosts=["example.test"])
+        barrier = Barrier(2)
+        def request(call_id):
+            barrier.wait(timeout=5)
+            with pytest.raises(ToolAuthorizationRequired):
+                asyncio.run(engine.execute(call_id=call_id, quest_id=quest.id, worker_id=worker.id, run_id="run", lease_token="lease", tool_name="browser_get", parameters=params))
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            list(pool.map(request, ["first", "first"]))
+        with store.connection() as connection:
+            assert connection.execute("SELECT COUNT(*) FROM approvals").fetchone()[0] == 1
+        barrier = Barrier(1)
+        request("second")
+        with store.connection() as connection:
+            approvals = connection.execute("SELECT id FROM approvals").fetchall()
+>           assert len(approvals) == 2
+E           assert 1 == 2
+E            +  where 1 = len([<sqlite3.Row object at 0x0000015C6EE2BD00>])
+
+backend\tests\test_tool_engine.py:649: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_tool_engine.py::test_old_plan_pending_does_not_suppress_current_tool_approval
+FAILED backend\tests\test_tool_engine.py::test_concurrent_same_call_requests_one_approval_and_separate_calls_bind_individually
+2 failed, 21 passed in 2.99s

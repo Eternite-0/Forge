@@ -1,0 +1,11 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_conflicting_capability_and_performance_sources_are_rejected _______
+tests\test_team_composition_m5.py:31: in test_conflicting_capability_and_performance_sources_are_rejected
+    with pytest.raises(ValidationError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValidationError
+=========================== short test summary info ===========================
+FAILED tests/test_team_composition_m5.py::test_conflicting_capability_and_performance_sources_are_rejected
+1 failed in 0.25s
+Exit code: 1

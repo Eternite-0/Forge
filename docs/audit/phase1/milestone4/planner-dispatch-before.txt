@@ -1,0 +1,24 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________ test_tick_routes_planner_events_to_independent_consumer ___________
+
+store = <forge_core.store.Store object at 0x0000029EAF3E02F0>
+
+    def test_tick_routes_planner_events_to_independent_consumer(store):
+        proposed = ForgeEvent(event_type="quest.proposed", payload={"objective": "design"})
+        ordinary = ForgeEvent(event_type="ordinary", payload={"info": "x"})
+        store.append_event(proposed)
+        store.append_event(ordinary)
+        d = Dispatcher(store)
+        for _ in range(3):
+            d.tick()
+>       assert [item["event_id"] for item in d.inbox("planner")] == [proposed.id]
+E       AssertionError: assert [] == ['evt_cf90358cce6e']
+E         
+E         Right contains one more item: 'evt_cf90358cce6e'
+E         Use -v to get more diff
+
+tests\test_event_dispatcher.py:184: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_event_dispatcher.py::test_tick_routes_planner_events_to_independent_consumer
+1 failed in 0.47s

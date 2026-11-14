@@ -1,0 +1,106 @@
+{
+  "dataset": "tool-governance-matrix-v2",
+  "mode": "isolated-local-synthetic-worker",
+  "external_requests": 0,
+  "actual_execution_requests": 3,
+  "unique_action_receipts": 2,
+  "cases": [
+    {
+      "case": "r0_actual_file_read",
+      "expected": "allow",
+      "actual": "allow",
+      "boundary": "execution"
+    },
+    {
+      "case": "r1_missing_grant",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "r1_actual_granted_write",
+      "expected": "allow",
+      "actual": "allow",
+      "boundary": "execution"
+    },
+    {
+      "case": "idempotent_receipt",
+      "expected": "allow",
+      "actual": "allow",
+      "boundary": "receipt_replay"
+    },
+    {
+      "case": "reserved_parameter_substitution",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "path_attack_0",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "path_attack_1",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "path_attack_2",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "grant_revoked_before_execution",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "begin"
+    },
+    {
+      "case": "r2_missing_approval",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "r2_approval_parameter_substitution",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "r2_concurrent_winner",
+      "expected": "allow",
+      "actual": "allow",
+      "boundary": "prepare"
+    },
+    {
+      "case": "r2_concurrent_replay",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "r2_revoked_approval",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "prepare"
+    },
+    {
+      "case": "forged_receipt_cannot_complete",
+      "expected": "deny",
+      "actual": "deny",
+      "boundary": "independent_verifier"
+    }
+  ],
+  "expected_deny_denominator": 11,
+  "expected_allow_denominator": 4,
+  "false_allows": 0,
+  "false_denials": 0,
+  "false_allow_rate": 0.0,
+  "false_deny_rate": 0.0,
+  "limitations": "Small deterministic regression matrix, not attack prevalence. Worker/provider context is a SQL fixture; real local file tools execute. R2 stops at intent preparation."
+}

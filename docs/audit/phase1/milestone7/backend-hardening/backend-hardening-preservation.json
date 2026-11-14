@@ -1,0 +1,38 @@
+{
+  "historic_files": 367,
+  "historic_hash_changes": [],
+  "original_test_functions": 282,
+  "missing_tests": [
+    "test_worker_runtime.py:test_two_real_gateway_workers_wait_without_spending_extra_steps"
+  ],
+  "assertion_changes_for_review": [
+    {
+      "file": "test_api_trust.py",
+      "test": "test_approval_and_grants_http_are_user_controlled",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Attribute(value=Call(func=Attribute(value=Name(id='client', ctx=Load()), attr='post', ctx=Load()), args=[Name(id='path', ctx=Load())], keywords=[keyword(arg='headers', value=Name(id='headers', ctx=Load())), keyword(arg='json', value=Dict(keys=[Constant(value='decision')], values=[Constant(value='APPROVED')]))]), attr='status_code', ctx=Load()), ops=[Eq()], comparators=[Constant(value=409)]))"
+      ]
+    },
+    {
+      "file": "test_migrations.py",
+      "test": "test_each_migration_step",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Name(id='SCHEMA_VERSION', ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    },
+    {
+      "file": "test_migrations.py",
+      "test": "test_each_migration_failure_rolls_back_a_fresh_database",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Subscript(value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='connection', ctx=Load()), attr='execute', ctx=Load()), args=[Constant(value='SELECT version FROM schema_meta')]), attr='fetchone', ctx=Load())), slice=Constant(value=0), ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    },
+    {
+      "file": "test_migrations.py",
+      "test": "test_v8_component_failure_rolls_back_v7_data",
+      "removed_assertions": [
+        "Assert(test=Compare(left=Subscript(value=Call(func=Attribute(value=Call(func=Attribute(value=Name(id='connection', ctx=Load()), attr='execute', ctx=Load()), args=[Constant(value='SELECT version FROM schema_meta')]), attr='fetchone', ctx=Load())), slice=Constant(value=0), ctx=Load()), ops=[Eq()], comparators=[Constant(value=8)]))"
+      ]
+    }
+  ]
+}

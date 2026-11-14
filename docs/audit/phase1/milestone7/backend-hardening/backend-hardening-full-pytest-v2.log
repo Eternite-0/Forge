@@ -1,0 +1,18 @@
+COMMAND=.\backend\.venv\Scripts\python.exe -m pytest backend/tests -c backend/pyproject.toml -q
+ENVIRONMENT=FORGE_* removed from test child
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 73%]
+........................................................................ [ 88%]
+........................................................                 [100%]
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+488 passed, 1 warning in 115.49s (0:01:55)
+
+EXIT_CODE=0

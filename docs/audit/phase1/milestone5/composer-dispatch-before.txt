@@ -1,0 +1,24 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____________ test_tick_routes_composer_only_approved_plan_events _____________
+
+store = <forge_core.store.Store object at 0x000001DFA4CF42F0>
+
+    def test_tick_routes_composer_only_approved_plan_events(store):
+        approved = ForgeEvent(event_type="quest.plan_approved", payload={"plan_id": "p"})
+        ordinary = ForgeEvent(event_type="ordinary")
+        store.append_event(approved)
+        store.append_event(ordinary)
+        d = Dispatcher(store)
+        for _ in range(3):
+            d.tick()
+>       assert [item["event_id"] for item in d.inbox("composer")] == [approved.id]
+E       AssertionError: assert [] == ['evt_ed4be7f3345c']
+E         
+E         Right contains one more item: 'evt_ed4be7f3345c'
+E         Use -v to get more diff
+
+tests\test_event_dispatcher.py:203: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_event_dispatcher.py::test_tick_routes_composer_only_approved_plan_events
+1 failed in 0.29s

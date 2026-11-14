@@ -1,0 +1,36 @@
+................................F.................................F..... [ 83%]
+..............                                                           [100%]
+================================== FAILURES ===================================
+_________ test_notice_failures_back_off_persist_and_stop_after_limit __________
+tests\test_m4_integration.py:426: in test_notice_failures_back_off_persist_and_stop_after_limit
+    assert notice()["notice_dead_at"] is not None
+E   assert None is not None
+_________ test_over_hundred_quests_explicit_old_id_remains_resolvable _________
+tests\test_persistent_router.py:423: in test_over_hundred_quests_explicit_old_id_remains_resolvable
+    result = asyncio.run(router.handle_user_message(f"继续 {first.id}", request_id="old-quest"))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+src\forge_core\router.py:430: in handle_user_message
+    context, cursor = self._context(snapshot, text)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\router.py:198: in _context
+    raise DomainError("Router context budget exceeded")
+E   forge_core.domain.DomainError: Router context budget exceeded
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_m4_integration.py::test_notice_failures_back_off_persist_and_stop_after_limit
+FAILED tests/test_persistent_router.py::test_over_hundred_quests_explicit_old_id_remains_resolvable
+2 failed, 84 passed, 1 warning in 24.54s

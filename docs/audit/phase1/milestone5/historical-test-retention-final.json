@@ -1,0 +1,169 @@
+{
+  "original_test_functions": 153,
+  "original_asserts": 508,
+  "unchanged_asserts": 507,
+  "files": [
+    {
+      "path": "backend\\tests\\test_api.py",
+      "original_test_functions": 1,
+      "removed_test_functions": [],
+      "original_asserts": 4,
+      "unchanged_asserts": 4,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_api_trust.py",
+      "original_test_functions": 6,
+      "removed_test_functions": [],
+      "original_asserts": 47,
+      "unchanged_asserts": 47,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_benchmark_m3.py",
+      "original_test_functions": 2,
+      "removed_test_functions": [],
+      "original_asserts": 5,
+      "unchanged_asserts": 5,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_concurrency.py",
+      "original_test_functions": 4,
+      "removed_test_functions": [],
+      "original_asserts": 17,
+      "unchanged_asserts": 17,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_core.py",
+      "original_test_functions": 7,
+      "removed_test_functions": [],
+      "original_asserts": 11,
+      "unchanged_asserts": 11,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_event_dispatcher.py",
+      "original_test_functions": 15,
+      "removed_test_functions": [],
+      "original_asserts": 40,
+      "unchanged_asserts": 40,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_evidence_gate.py",
+      "original_test_functions": 3,
+      "removed_test_functions": [],
+      "original_asserts": 4,
+      "unchanged_asserts": 4,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_execution_evidence.py",
+      "original_test_functions": 4,
+      "removed_test_functions": [],
+      "original_asserts": 15,
+      "unchanged_asserts": 15,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_governance.py",
+      "original_test_functions": 9,
+      "removed_test_functions": [],
+      "original_asserts": 16,
+      "unchanged_asserts": 16,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_m4_adversarial.py",
+      "original_test_functions": 5,
+      "removed_test_functions": [],
+      "original_asserts": 13,
+      "unchanged_asserts": 13,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_m4_integration.py",
+      "original_test_functions": 14,
+      "removed_test_functions": [],
+      "original_asserts": 75,
+      "unchanged_asserts": 75,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_migrations.py",
+      "original_test_functions": 8,
+      "removed_test_functions": [],
+      "original_asserts": 37,
+      "unchanged_asserts": 36,
+      "removed_or_changed_asserts": [
+        "Assert(test=Compare(left=Name(id='SCHEMA_VERSION', ctx=Load()), ops=[Eq()], comparators=[Constant(value=6)]))"
+      ]
+    },
+    {
+      "path": "backend\\tests\\test_model_registry_m3.py",
+      "original_test_functions": 6,
+      "removed_test_functions": [],
+      "original_asserts": 18,
+      "unchanged_asserts": 18,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_persistent_router.py",
+      "original_test_functions": 14,
+      "removed_test_functions": [],
+      "original_asserts": 42,
+      "unchanged_asserts": 42,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_providers.py",
+      "original_test_functions": 21,
+      "removed_test_functions": [],
+      "original_asserts": 56,
+      "unchanged_asserts": 56,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_quest_graph.py",
+      "original_test_functions": 11,
+      "removed_test_functions": [],
+      "original_asserts": 34,
+      "unchanged_asserts": 34,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_security_adversarial.py",
+      "original_test_functions": 1,
+      "removed_test_functions": [],
+      "original_asserts": 4,
+      "unchanged_asserts": 4,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_settings.py",
+      "original_test_functions": 9,
+      "removed_test_functions": [],
+      "original_asserts": 9,
+      "unchanged_asserts": 9,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_startup.py",
+      "original_test_functions": 1,
+      "removed_test_functions": [],
+      "original_asserts": 20,
+      "unchanged_asserts": 20,
+      "removed_or_changed_asserts": []
+    },
+    {
+      "path": "backend\\tests\\test_transactions.py",
+      "original_test_functions": 12,
+      "removed_test_functions": [],
+      "original_asserts": 41,
+      "unchanged_asserts": 41,
+      "removed_or_changed_asserts": []
+    }
+  ]
+}

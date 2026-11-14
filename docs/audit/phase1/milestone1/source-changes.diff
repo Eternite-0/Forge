@@ -1,0 +1,1375 @@
+--- before/backend/src/forge_api/main.py
++++ after/backend/src/forge_api/main.py
+@@ -1,89 +1,125 @@
+-import os
+ from fastapi import FastAPI, HTTPException
+ from fastapi.middleware.cors import CORSMiddleware
+ from pydantic import BaseModel, Field
++
++from forge_core.domain import DomainError, ForgeEvent, ModelProfile, QuestStatus, WorkerSession
++from forge_core.quest_service import QuestService
++from forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer
++from forge_core.router import RouterService
++from forge_core.settings import Settings
+ from forge_core.store import Store
+-from forge_core.registry import ModelRegistry, TeamComposer, DEFAULT_ROLES
+-from forge_core.router import RouterService
+-from forge_core.domain import ModelProfile, WorkerSession, ForgeEvent, QuestStatus, DomainError
+-from forge_core.quest_service import QuestService
+ 
+-db_path = os.getenv("FORGE_DB_PATH","data/forge.sqlite3")
+-store = Store(db_path)
++settings = Settings.load()
++db_path = settings.db_path
++store = Store(db_path, workspace=settings.workspace)
+ registry = ModelRegistry(store)
+ composer = TeamComposer(registry)
+-router = RouterService(store,composer)
++router = RouterService(store, composer)
+ quest_service = QuestService(store)
+ 
+-app = FastAPI(title="FORGE Core",version="0.2.0")
+-app.add_middleware(CORSMiddleware,
+-    allow_origins=["http://127.0.0.1:5173","http://localhost:5173","tauri://localhost"],
+-    allow_credentials=True,allow_methods=["GET","POST"],allow_headers=["Content-Type"])
++app = FastAPI(title="FORGE Core", version="0.2.0")
++app.add_middleware(
++    CORSMiddleware,
++    allow_origins=["http://127.0.0.1:5173", "http://localhost:5173", "tauri://localhost"],
++    allow_credentials=True,
++    allow_methods=["GET", "POST"],
++    allow_headers=["Content-Type"],
++)
++
+ 
+ class MessageIn(BaseModel):
+-    content: str = Field(min_length=1,max_length=20000)
++    content: str = Field(min_length=1, max_length=20000)
++
+ 
+ class QuestTransitionIn(BaseModel):
+     status: QuestStatus
++    expected_version: int | None = Field(default=None, ge=0)
++
+ 
+ @app.get("/health")
+ def health():
+-    state=store.ensure_router()
+-    return {"status":"ok","product":"FORGE","conversation_id":"main",
+-            "router_session_id":state["router_session_id"]}
++    state = store.ensure_router()
++    return {
++        "status": "ok",
++        "product": "FORGE",
++        "conversation_id": "main",
++        "router_session_id": state["router_session_id"],
++    }
++
+ 
+ @app.get("/api/conversation")
+ def get_conversation():
+-    return {"conversation_id":"main","router":store.ensure_router(),
+-            "messages":store.list_messages()}
++    return {
++        "conversation_id": "main",
++        "router": store.ensure_router(),
++        "messages": store.list_messages(),
++    }
++
+ 
+ @app.post("/api/conversation/message")
+ def send_message(payload: MessageIn):
+     return router.handle_user_message(payload.content)
+ 
++
+ @app.get("/api/quests")
+ def list_quests():
+     return store.list_quests()
+ 
++
+ @app.get("/api/quests/{quest_id}")
+ def get_quest(quest_id: str):
+-    quest=store.get_quest(quest_id)
++    quest = store.get_quest(quest_id)
+     if quest is None:
+-        raise HTTPException(status_code=404,detail="Quest not found")
+-    return {"quest":quest,"workers":store.list_workers(quest_id)}
++        raise HTTPException(status_code=404, detail="Quest not found")
++    return {"quest": quest, "workers": store.list_workers(quest_id)}
++
+ 
+ @app.post("/api/quests/{quest_id}/transition")
+ def transition_quest(quest_id: str, payload: QuestTransitionIn):
+     try:
+-        return quest_service.transition(quest_id, payload.status)
++        return quest_service.transition(
++            quest_id, payload.status, expected_version=payload.expected_version
++        )
+     except KeyError:
+         raise HTTPException(status_code=404, detail="Quest not found")
+     except DomainError as exc:
+         raise HTTPException(status_code=409, detail=str(exc))
+ 
++
+ @app.post("/api/quests/{quest_id}/workers")
+-def propose_worker(quest_id: str,role: str,model_id: str | None = None):
+-    if store.get_quest(quest_id) is None:
+-        raise HTTPException(status_code=404,detail="Quest not found")
+-    worker=WorkerSession(quest_id=quest_id,role=role,model_id=model_id)
+-    store.save_worker(worker)
+-    store.append_event(ForgeEvent(event_type="worker.proposed",quest_id=quest_id,
+-                                  worker_id=worker.id,payload={"role":role,"hidden":True}))
++def propose_worker(quest_id: str, role: str, model_id: str | None = None):
++    with store.unit_of_work() as work:
++        if work.get_quest(quest_id) is None:
++            raise HTTPException(status_code=404, detail="Quest not found")
++        worker = WorkerSession(quest_id=quest_id, role=role, model_id=model_id)
++        work.save_worker(worker)
++        work.append_event(
++            ForgeEvent(
++                event_type="worker.proposed",
++                quest_id=quest_id,
++                worker_id=worker.id,
++                payload={"role": role, "hidden": True},
++            )
++        )
+     return worker
++
+ 
+ @app.get("/api/models")
+ def list_models():
+     return registry.list()
+ 
++
+ @app.post("/api/models")
+ def upsert_model(profile: ModelProfile):
+     return registry.upsert(profile)
+ 
++
+ @app.get("/api/events")
+-def list_events(after: int = 0,limit: int = 200):
++def list_events(after: int = 0, limit: int = 200):
+     if after < 0:
+-        raise HTTPException(status_code=422,detail="'after' must be >= 0")
+-    return store.list_events(after=after,limit=max(1,min(limit,500)))
++        raise HTTPException(status_code=422, detail="'after' must be >= 0")
++    return store.list_events(after=after, limit=max(1, min(limit, 500)))
++
+ 
+ @app.get("/api/team/preview")
+ def preview_team():
+--- before/backend/src/forge_core/domain.py
++++ after/backend/src/forge_core/domain.py
+@@ -1,13 +1,17 @@
+-from datetime import datetime, timezone
++from datetime import UTC, datetime
+ from enum import Enum
+ from uuid import uuid4
++
+ from pydantic import BaseModel, Field
+ 
++
+ def now_iso() -> str:
+-    return datetime.now(timezone.utc).isoformat()
++    return datetime.now(UTC).isoformat()
++
+ 
+ def new_id(prefix: str) -> str:
+     return f"{prefix}_{uuid4().hex[:12]}"
++
+ 
+ class IntentType(str, Enum):
+     CHAT = "chat"
+@@ -16,6 +20,7 @@
+     UPDATE_QUEST = "update_quest"
+     STATUS_QUERY = "status_query"
+     APPROVAL_RESPONSE = "approval_response"
++
+ 
+ class QuestStatus(str, Enum):
+     PROPOSED = "proposed"
+@@ -32,27 +37,57 @@
+     CANCELLED = "cancelled"
+     REJECTED = "rejected"
+ 
++
+ ALLOWED_QUEST_TRANSITIONS = {
+-    QuestStatus.PROPOSED: {QuestStatus.AWAITING_APPROVAL, QuestStatus.REJECTED, QuestStatus.CANCELLED},
+-    QuestStatus.AWAITING_APPROVAL: {QuestStatus.APPROVED, QuestStatus.REJECTED, QuestStatus.CANCELLED},
++    QuestStatus.PROPOSED: {
++        QuestStatus.AWAITING_APPROVAL,
++        QuestStatus.REJECTED,
++        QuestStatus.CANCELLED,
++    },
++    QuestStatus.AWAITING_APPROVAL: {
++        QuestStatus.APPROVED,
++        QuestStatus.REJECTED,
++        QuestStatus.CANCELLED,
++    },
+     QuestStatus.APPROVED: {QuestStatus.QUEUED, QuestStatus.PAUSED, QuestStatus.CANCELLED},
+     QuestStatus.QUEUED: {QuestStatus.RUNNING, QuestStatus.PAUSED, QuestStatus.CANCELLED},
+-    QuestStatus.RUNNING: {QuestStatus.BLOCKED, QuestStatus.PAUSED, QuestStatus.NEEDS_INPUT,
+-                          QuestStatus.REVIEWING, QuestStatus.COMPLETED, QuestStatus.FAILED, QuestStatus.CANCELLED},
+-    QuestStatus.BLOCKED: {QuestStatus.QUEUED, QuestStatus.RUNNING, QuestStatus.CANCELLED, QuestStatus.FAILED},
++    QuestStatus.RUNNING: {
++        QuestStatus.BLOCKED,
++        QuestStatus.PAUSED,
++        QuestStatus.NEEDS_INPUT,
++        QuestStatus.REVIEWING,
++        QuestStatus.COMPLETED,
++        QuestStatus.FAILED,
++        QuestStatus.CANCELLED,
++    },
++    QuestStatus.BLOCKED: {
++        QuestStatus.QUEUED,
++        QuestStatus.RUNNING,
++        QuestStatus.CANCELLED,
++        QuestStatus.FAILED,
++    },
+     QuestStatus.PAUSED: {QuestStatus.QUEUED, QuestStatus.CANCELLED},
+     QuestStatus.NEEDS_INPUT: {QuestStatus.QUEUED, QuestStatus.CANCELLED},
+     QuestStatus.REVIEWING: {QuestStatus.RUNNING, QuestStatus.COMPLETED, QuestStatus.FAILED},
+-    QuestStatus.COMPLETED: set(), QuestStatus.FAILED: set(),
+-    QuestStatus.CANCELLED: set(), QuestStatus.REJECTED: set(),
++    QuestStatus.COMPLETED: set(),
++    QuestStatus.FAILED: set(),
++    QuestStatus.CANCELLED: set(),
++    QuestStatus.REJECTED: set(),
+ }
++
+ 
+ class DomainError(ValueError):
+     pass
+ 
++
++class QuestVersionConflict(DomainError):
++    pass
++
++
+ def validate_quest_transition(current: QuestStatus, target: QuestStatus) -> None:
+     if target not in ALLOWED_QUEST_TRANSITIONS[current]:
+         raise DomainError(f"Illegal Quest transition: {current.value} -> {target.value}")
++
+ 
+ class ConversationMessage(BaseModel):
+     id: str = Field(default_factory=lambda: new_id("msg"))
+@@ -61,15 +96,18 @@
+     created_at: str = Field(default_factory=now_iso)
+     metadata: dict = Field(default_factory=dict)
+ 
++
+ class Quest(BaseModel):
+     id: str = Field(default_factory=lambda: new_id("quest"))
+     title: str
+     goal: str
+     status: QuestStatus = QuestStatus.PROPOSED
++    version: int = Field(default=0, ge=0)
+     priority: int = Field(default=3, ge=1, le=5)
+     created_at: str = Field(default_factory=now_iso)
+     updated_at: str = Field(default_factory=now_iso)
+     metadata: dict = Field(default_factory=dict)
++
+ 
+ class WorkerSession(BaseModel):
+     id: str = Field(default_factory=lambda: new_id("worker"))
+@@ -81,6 +119,7 @@
+     created_at: str = Field(default_factory=now_iso)
+     metadata: dict = Field(default_factory=dict)
+ 
++
+ class ForgeEvent(BaseModel):
+     id: str = Field(default_factory=lambda: new_id("evt"))
+     event_type: str
+@@ -89,6 +128,7 @@
+     worker_id: str | None = None
+     payload: dict = Field(default_factory=dict)
+     created_at: str = Field(default_factory=now_iso)
++
+ 
+ class ModelProfile(BaseModel):
+     id: str
+@@ -102,6 +142,7 @@
+     tokens_per_second: float | None = None
+     provenance: dict = Field(default_factory=dict)
+ 
++
+ class RoleTemplate(BaseModel):
+     id: str
+     name: str
+--- before/backend/src/forge_core/quest_service.py
++++ after/backend/src/forge_core/quest_service.py
+@@ -1,22 +1,47 @@
+-from .domain import QuestStatus, DomainError, validate_quest_transition, ForgeEvent, now_iso
++from .domain import (
++    ForgeEvent,
++    QuestStatus,
++    QuestVersionConflict,
++    now_iso,
++    validate_quest_transition,
++)
++
+ 
+ class QuestService:
+     def __init__(self, store):
+         self.store = store
+ 
+-    def transition(self, quest_id: str, target: QuestStatus):
+-        record = self.store.get_quest(quest_id)
+-        if record is None:
+-            raise KeyError(quest_id)
+-        current = QuestStatus(record["status"])
+-        validate_quest_transition(current, target)
+-        timestamp = now_iso()
+-        updated = self.store.transition_quest(quest_id, target.value, timestamp)
+-        if not updated:
+-            raise RuntimeError("Quest disappeared during transition")
+-        self.store.append_event(ForgeEvent(
+-            event_type="quest.status_changed",
+-            quest_id=quest_id,
+-            payload={"from": current.value, "to": target.value}
+-        ))
+-        return self.store.get_quest(quest_id)
++    def transition(
++        self, quest_id: str, target: QuestStatus, *, expected_version: int | None = None
++    ):
++        with self.store.unit_of_work() as work:
++            record = work.get_quest(quest_id)
++            if record is None:
++                raise KeyError(quest_id)
++            if expected_version is not None and record["version"] != expected_version:
++                raise QuestVersionConflict(
++                    f"Quest version conflict: expected {expected_version}, current {record['version']}"
++                )
++            current = QuestStatus(record["status"])
++            validate_quest_transition(current, target)
++            if not work.transition_quest(
++                quest_id,
++                target.value,
++                now_iso(),
++                expected_version=record["version"],
++                expected_status=current.value,
++            ):
++                raise QuestVersionConflict("Quest version conflict during transition")
++            work.append_event(
++                ForgeEvent(
++                    event_type="quest.status_changed",
++                    conversation_id=record["conversation_id"],
++                    quest_id=quest_id,
++                    payload={
++                        "from": current.value,
++                        "to": target.value,
++                        "version": record["version"] + 1,
++                    },
++                )
++            )
++            return work.get_quest(quest_id)
+--- before/backend/src/forge_core/registry.py
++++ after/backend/src/forge_core/registry.py
+@@ -1,17 +1,38 @@
+ from .domain import RoleTemplate
+ 
+ DEFAULT_ROLES = [
+-    RoleTemplate(id="research",name="Research",description="Research and synthesis",
+-                 required_capabilities={"research":75,"writing":55}),
+-    RoleTemplate(id="math",name="Math",description="Formal reasoning and quantitative analysis",
+-                 required_capabilities={"math":80,"reasoning":75}),
+-    RoleTemplate(id="coding",name="Coding",description="Implement and debug software",
+-                 required_capabilities={"coding":80,"tool_use":65}),
+-    RoleTemplate(id="design",name="Design",description="Visual and interaction design",
+-                 required_capabilities={"design":75,"vision":60}),
+-    RoleTemplate(id="review",name="Reviewer",description="Independent verification",
+-                 required_capabilities={"reasoning":75,"instruction_following":75}),
++    RoleTemplate(
++        id="research",
++        name="Research",
++        description="Research and synthesis",
++        required_capabilities={"research": 75, "writing": 55},
++    ),
++    RoleTemplate(
++        id="math",
++        name="Math",
++        description="Formal reasoning and quantitative analysis",
++        required_capabilities={"math": 80, "reasoning": 75},
++    ),
++    RoleTemplate(
++        id="coding",
++        name="Coding",
++        description="Implement and debug software",
++        required_capabilities={"coding": 80, "tool_use": 65},
++    ),
++    RoleTemplate(
++        id="design",
++        name="Design",
++        description="Visual and interaction design",
++        required_capabilities={"design": 75, "vision": 60},
++    ),
++    RoleTemplate(
++        id="review",
++        name="Reviewer",
++        description="Independent verification",
++        required_capabilities={"reasoning": 75, "instruction_following": 75},
++    ),
+ ]
++
+ 
+ class ModelRegistry:
+     def __init__(self, store):
+@@ -33,13 +54,17 @@
+                 fit = 50.0
+             else:
+                 # Unknown capability remains a neutral-low candidate, never fabricated.
+-                fit = sum(model.capabilities.get(k,0.0) * min(v,100.0)/100.0
+-                          for k,v in required.items()) / len(required)
+-            ranked.append((model,round(fit,2)))
+-        return sorted(ranked,key=lambda item:item[1],reverse=True)
++                fit = sum(
++                    model.capabilities.get(k, 0.0) * min(v, 100.0) / 100.0
++                    for k, v in required.items()
++                ) / len(required)
++            ranked.append((model, round(fit, 2)))
++        return sorted(ranked, key=lambda item: item[1], reverse=True)
++
+ 
+ class TeamComposer:
+     """Explainable baseline. Research-grade complementarity optimization is a later milestone."""
++
+     def __init__(self, registry):
+         self.registry = registry
+ 
+@@ -47,14 +72,16 @@
+         proposals = []
+         for role in roles:
+             candidates = self.registry.candidates(role.required_capabilities)
+-            proposals.append({
+-                "role_id":role.id,
+-                "role_name":role.name,
+-                "required_capabilities":role.required_capabilities,
+-                "model_candidates":[
+-                    {"model_id":model.id,"provider":model.provider,"fit_score":score}
+-                    for model,score in candidates[:3]
+-                ],
+-                "status":"proposed"
+-            })
++            proposals.append(
++                {
++                    "role_id": role.id,
++                    "role_name": role.name,
++                    "required_capabilities": role.required_capabilities,
++                    "model_candidates": [
++                        {"model_id": model.id, "provider": model.provider, "fit_score": score}
++                        for model, score in candidates[:3]
++                    ],
++                    "status": "proposed",
++                }
++            )
+         return proposals
+--- before/backend/src/forge_core/router.py
++++ after/backend/src/forge_core/router.py
+@@ -1,8 +1,10 @@
+-from .domain import IntentType, Quest, ConversationMessage, ForgeEvent
++from .domain import ConversationMessage, ForgeEvent, IntentType, Quest
+ from .registry import DEFAULT_ROLES
++
+ 
+ class RouterService:
+     """Bootstrap Router policy. Replace with a model-backed Agent Loop in Phase 1."""
++
+     def __init__(self, store, composer):
+         self.store, self.composer = store, composer
+         self.store.ensure_router()
+@@ -10,37 +12,59 @@
+     @staticmethod
+     def classify(text):
+         value = text.casefold()
+-        if any(token in value for token in ("进度","怎么样了","status","状态")):
++        if any(token in value for token in ("进度", "怎么样了", "status", "状态")):
+             return IntentType.STATUS_QUERY
+-        if any(token in value for token in ("继续","接着","上次","之前那个")):
++        if any(token in value for token in ("继续", "接着", "上次", "之前那个")):
+             return IntentType.CONTINUE_QUEST
+-        if any(token in value for token in ("帮我","请你","研究","开发","设计","分析","完成","制作")):
++        if any(
++            token in value
++            for token in ("帮我", "请你", "研究", "开发", "设计", "分析", "完成", "制作")
++        ):
+             return IntentType.CREATE_QUEST
+         return IntentType.CHAT
+ 
+     def handle_user_message(self, text):
+-        user_message = ConversationMessage(role="user",content=text)
+-        self.store.add_message(user_message)
++        with self.store.unit_of_work() as work:
++            return self._handle_user_message(text, work)
++
++    def _handle_user_message(self, text, work):
++        user_message = ConversationMessage(role="user", content=text)
++        work.add_message(user_message)
+         intent = self.classify(text)
+         if intent == IntentType.CREATE_QUEST:
+-            quest = Quest(title=text[:48],goal=text)
+-            self.store.save_quest(quest)
++            quest = Quest(title=text[:48], goal=text)
++            work.save_quest(quest)
+             team = self.composer.compose(DEFAULT_ROLES)
+-            self.store.append_event(ForgeEvent(event_type="quest.proposed",quest_id=quest.id,
+-                                               payload={"team_proposal":team}))
+-            reply = (f"我已将目标登记为后台 Quest「{quest.title}」。当前只生成了团队提案；"
+-                     "真实模型规划和 Worker 执行尚未接入。正式执行前会展示计划并请求批准。")
++            work.append_event(
++                ForgeEvent(
++                    event_type="quest.proposed", quest_id=quest.id, payload={"team_proposal": team}
++                )
++            )
++            reply = (
++                f"我已将目标登记为后台 Quest「{quest.title}」。当前只生成了团队提案；"
++                "真实模型规划和 Worker 执行尚未接入。正式执行前会展示计划并请求批准。"
++            )
+         elif intent == IntentType.STATUS_QUERY:
+-            quests = self.store.list_quests()
+-            reply = "目前没有后台 Quest。" if not quests else "当前 Quest：\n" + "\n".join(
+-                f"- {item['title']} [{item['status']}]" for item in quests[:10])
++            quests = work.list_quests()
++            reply = (
++                "目前没有后台 Quest。"
++                if not quests
++                else "当前 Quest：\n"
++                + "\n".join(f"- {item['title']} [{item['status']}]" for item in quests[:10])
++            )
+         elif intent == IntentType.CONTINUE_QUEST:
+-            reply = ("我会在同一个对话中关联已有 Quest。当前 Starter 尚未实现语义级 Quest Resolver；"
+-                     "如果有多个可能目标，我不会擅自选择。")
++            reply = (
++                "我会在同一个对话中关联已有 Quest。当前 Starter 尚未实现语义级 Quest Resolver；"
++                "如果有多个可能目标，我不会擅自选择。"
++            )
+         else:
+             reply = "我一直在这里。你可以在这个对话中持续交流；复杂目标会成为后台 Quest，由我统一协调隐藏 Worker。"
+-        assistant_message = ConversationMessage(role="assistant",content=reply,
+-                                                metadata={"intent":intent.value})
+-        self.store.add_message(assistant_message)
+-        return {"intent":intent.value,"user_message":user_message,
+-                "assistant_message":assistant_message}
++        assistant_message = ConversationMessage(
++            role="assistant", content=reply, metadata={"intent": intent.value}
++        )
++        work.add_message(assistant_message)
++        return {
++            "intent": intent.value,
++            "user_message": user_message,
++            "assistant_message": assistant_message,
++        }
+--- before/backend/src/forge_core/runtime.py
++++ after/backend/src/forge_core/runtime.py
+@@ -1,12 +1,14 @@
+ from dataclasses import dataclass
+-from typing import Protocol, Any
++from typing import Any, Protocol
++
+ 
+ @dataclass
+ class ModelRequest:
+     model_id: str
+-    messages: list[dict[str,Any]]
++    messages: list[dict[str, Any]]
+     tools: list[dict] | None = None
+     max_output_tokens: int = 2048
++
+ 
+ @dataclass
+ class ModelResponse:
+@@ -14,19 +16,23 @@
+     tool_calls: list[dict]
+     usage: dict
+ 
++
+ class ProviderAdapter(Protocol):
+     async def generate(self, request: ModelRequest) -> ModelResponse: ...
++
+ 
+ class UnconfiguredProvider:
+     async def generate(self, request: ModelRequest) -> ModelResponse:
+         raise RuntimeError("No provider configured. No model call was performed.")
+ 
++
+ class ToolDefinition:
+-    def __init__(self,name,description,input_schema,risk="R0"):
+-        self.name=name
+-        self.description=description
+-        self.input_schema=input_schema
+-        self.risk=risk
++    def __init__(self, name, description, input_schema, risk="R0"):
++        self.name = name
++        self.description = description
++        self.input_schema = input_schema
++        self.risk = risk
++
+ 
+ class ToolRegistry:
+     def __init__(self):
+@@ -37,22 +43,26 @@
+             raise ValueError(f"Tool already registered: {tool.name}")
+         self._tools[tool.name] = tool
+ 
+-    def get(self,name):
++    def get(self, name):
+         return self._tools.get(name)
++
+ 
+ class AgentLoop:
+     """Native Agent Loop skeleton. Tool execution is blocked until policy enforcement exists."""
+-    def __init__(self,provider,tools,max_steps=8):
+-        self.provider=provider
+-        self.tools=tools
+-        self.max_steps=max_steps
+ 
+-    async def run(self,model_id,messages):
+-        trace=[]
++    def __init__(self, provider, tools, max_steps=8):
++        self.provider = provider
++        self.tools = tools
++        self.max_steps = max_steps
++
++    async def run(self, model_id, messages):
++        trace = []
+         for step in range(self.max_steps):
+-            response=await self.provider.generate(ModelRequest(model_id=model_id,messages=messages))
+-            trace.append({"step":step,"text":response.text,"tool_calls":response.tool_calls})
++            response = await self.provider.generate(
++                ModelRequest(model_id=model_id, messages=messages)
++            )
++            trace.append({"step": step, "text": response.text, "tool_calls": response.tool_calls})
+             if not response.tool_calls:
+-                return {"status":"completed","text":response.text,"trace":trace}
+-            return {"status":"policy_engine_required","trace":trace}
+-        return {"status":"max_steps_reached","trace":trace}
++                return {"status": "completed", "text": response.text, "trace": trace}
++            return {"status": "policy_engine_required", "trace": trace}
++        return {"status": "max_steps_reached", "trace": trace}
+--- before/backend/src/forge_core/store.py
++++ after/backend/src/forge_core/store.py
+@@ -1,143 +1,364 @@
++"""SQLite connection ownership, repositories and atomic units of work."""
++
+ import json
+ import sqlite3
++import time
++from contextlib import contextmanager
+ from pathlib import Path
+-from .domain import now_iso
+-
+-SCHEMA_VERSION = 1
++
++from .domain import ModelProfile, QuestStatus, new_id, now_iso, validate_quest_transition
++from .migrations import SCHEMA_VERSION, migrate
++from .settings import Settings, Workspace
++
++__all__ = ["SCHEMA_VERSION", "Repository", "Store", "UnitOfWork", "WorkspaceMismatchError"]
++
++
++class WorkspaceMismatchError(ValueError):
++    pass
++
++
++class Repository:
++    """Operations on one caller-owned connection; never commits or closes it."""
++
++    def __init__(self, connection: sqlite3.Connection):
++        self.connection = connection
++
++    def ensure_router(self, conversation_id="main"):
++        row = self.connection.execute(
++            "SELECT * FROM router_state WHERE conversation_id=?", (conversation_id,)
++        ).fetchone()
++        if row is None:
++            raise KeyError(f"Unknown conversation: {conversation_id}")
++        return dict(row)
++
++    def add_message(self, msg, conversation_id="main"):
++        self.connection.execute(
++            "INSERT INTO messages(id,conversation_id,role,content,created_at,metadata) VALUES (?,?,?,?,?,?)",
++            (
++                msg.id,
++                conversation_id,
++                msg.role,
++                msg.content,
++                msg.created_at,
++                json.dumps(msg.metadata, ensure_ascii=False),
++            ),
++        )
++        return msg
++
++    def list_messages(self, conversation_id="main", limit=200):
++        rows = self.connection.execute(
++            """SELECT * FROM (SELECT rowid,* FROM messages WHERE conversation_id=?
++               ORDER BY rowid DESC LIMIT ?) ORDER BY rowid""",
++            (conversation_id, limit),
++        ).fetchall()
++        return [dict(row) for row in rows]
++
++    def save_quest(self, quest, conversation_id="main"):
++        self.connection.execute(
++            """INSERT INTO quests(id,conversation_id,title,goal,status,priority,created_at,
++               updated_at,metadata,version) VALUES (?,?,?,?,?,?,?,?,?,?)""",
++            (
++                quest.id,
++                conversation_id,
++                quest.title,
++                quest.goal,
++                quest.status.value,
++                quest.priority,
++                quest.created_at,
++                quest.updated_at,
++                json.dumps(quest.metadata, ensure_ascii=False),
++                quest.version,
++            ),
++        )
++        return quest
++
++    def get_quest(self, quest_id):
++        row = self.connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
++        return dict(row) if row else None
++
++    def list_quests(self, conversation_id="main", limit=100):
++        rows = self.connection.execute(
++            "SELECT * FROM quests WHERE conversation_id=? ORDER BY updated_at DESC LIMIT ?",
++            (conversation_id, limit),
++        ).fetchall()
++        return [dict(row) for row in rows]
++
++    def transition_quest(
++        self, quest_id, new_status, updated_at, *, expected_version, expected_status
++    ):
++        validate_quest_transition(QuestStatus(expected_status), QuestStatus(new_status))
++        cursor = self.connection.execute(
++            """UPDATE quests SET status=?,updated_at=?,version=version+1
++               WHERE id=? AND status=? AND version=?""",
++            (new_status, updated_at, quest_id, expected_status, expected_version),
++        )
++        return cursor.rowcount == 1
++
++    def save_worker(self, worker):
++        self.connection.execute(
++            """INSERT INTO workers(id,quest_id,role,model_id,status,hidden,created_at,metadata)
++               VALUES (?,?,?,?,?,?,?,?)""",
++            (
++                worker.id,
++                worker.quest_id,
++                worker.role,
++                worker.model_id,
++                worker.status,
++                int(worker.hidden),
++                worker.created_at,
++                json.dumps(worker.metadata, ensure_ascii=False),
++            ),
++        )
++        return worker
++
++    def list_workers(self, quest_id=None):
++        if quest_id:
++            rows = self.connection.execute(
++                "SELECT * FROM workers WHERE quest_id=? ORDER BY created_at", (quest_id,)
++            ).fetchall()
++        else:
++            rows = self.connection.execute("SELECT * FROM workers ORDER BY created_at").fetchall()
++        return [dict(row) for row in rows]
++
++    def append_event(self, event):
++        cursor = self.connection.execute(
++            """INSERT INTO events(id,event_type,conversation_id,quest_id,worker_id,payload,created_at)
++               VALUES (?,?,?,?,?,?,?)""",
++            (
++                event.id,
++                event.event_type,
++                event.conversation_id,
++                event.quest_id,
++                event.worker_id,
++                json.dumps(event.payload, ensure_ascii=False),
++                event.created_at,
++            ),
++        )
++        self.connection.execute(
++            "INSERT INTO outbox(event_id,created_at) VALUES (?,?)", (event.id, event.created_at)
++        )
++        return cursor.lastrowid
++
++    def list_events(self, after=0, limit=200, conversation_id="main"):
++        rows = self.connection.execute(
++            "SELECT * FROM events WHERE conversation_id=? AND seq>? ORDER BY seq LIMIT ?",
++            (conversation_id, after, limit),
++        ).fetchall()
++        return [dict(row) for row in rows]
++
++    def list_outbox(self, *, pending_only=True, limit=200):
++        predicate = "WHERE o.delivered_at IS NULL" if pending_only else ""
++        rows = self.connection.execute(
++            f"""SELECT o.event_id,o.created_at,o.delivered_at,e.seq,e.event_type,
++                e.conversation_id,e.quest_id,e.worker_id,e.payload
++                FROM outbox o JOIN events e ON e.id=o.event_id {predicate}
++                ORDER BY e.seq LIMIT ?""",
++            (limit,),
++        ).fetchall()
++        return [dict(row) for row in rows]
++
++    def mark_outbox_delivered(self, event_id):
++        self.connection.execute(
++            "UPDATE outbox SET delivered_at=? WHERE event_id=? AND delivered_at IS NULL",
++            (now_iso(), event_id),
++        )
++        return (
++            self.connection.execute("SELECT 1 FROM outbox WHERE event_id=?", (event_id,)).fetchone()
++            is not None
++        )
++
++    def save_model(self, profile):
++        self.connection.execute(
++            "INSERT OR REPLACE INTO models(id,profile,updated_at) VALUES (?,?,?)",
++            (profile.id, profile.model_dump_json(), now_iso()),
++        )
++
++    def list_models(self):
++        rows = self.connection.execute("SELECT profile FROM models ORDER BY id").fetchall()
++        return [ModelProfile.model_validate_json(row["profile"]) for row in rows]
++
+ 
+ class Store:
+-    def __init__(self, path: str = "data/forge.sqlite3"):
+-        self.path = path
+-        Path(path).parent.mkdir(parents=True, exist_ok=True)
++    def __init__(
++        self,
++        path: str | Path | None = None,
++        *,
++        workspace: Workspace | None = None,
++        busy_timeout_ms=5000,
++    ):
++        if workspace is None:
++            settings = Settings.load()
++            workspace = settings.workspace
++            if path is None:
++                path = settings.db_path
++        self.workspace = workspace
++        self.path = str(workspace.resolve("data/forge.sqlite3" if path is None else path))
++        if busy_timeout_ms < 0:
++            raise ValueError("busy_timeout_ms must be nonnegative")
++        self.busy_timeout_ms = busy_timeout_ms
++        Path(self.path).parent.mkdir(parents=True, exist_ok=True)
+         self._initialize()
+ 
+     def _connect(self):
+-        conn = sqlite3.connect(self.path, timeout=10, check_same_thread=False)
+-        conn.row_factory = sqlite3.Row
+-        conn.execute("PRAGMA journal_mode=WAL")
+-        conn.execute("PRAGMA foreign_keys=ON")
+-        conn.execute("PRAGMA busy_timeout=5000")
+-        return conn
++        connection = sqlite3.connect(
++            self.path,
++            timeout=self.busy_timeout_ms / 1000,
++            isolation_level=None,
++            check_same_thread=False,
++        )
++        try:
++            connection.row_factory = sqlite3.Row
++            connection.execute(f"PRAGMA busy_timeout={int(self.busy_timeout_ms)}")
++            self._enable_wal(connection)
++            connection.execute("PRAGMA foreign_keys=ON")
++            return connection
++        except BaseException:
++            connection.close()
++            raise
++
++    def _enable_wal(self, connection):
++        # A concurrent journal-mode lock upgrade can return BUSY without invoking
++        # SQLite's busy handler. Bound retries by the same connection timeout.
++        deadline = time.monotonic() + self.busy_timeout_ms / 1000
++        while True:
++            try:
++                mode = connection.execute("PRAGMA journal_mode=WAL").fetchone()[0]
++            except sqlite3.OperationalError as exc:
++                remaining = deadline - time.monotonic()
++                if exc.sqlite_errorcode != sqlite3.SQLITE_BUSY or remaining <= 0:
++                    raise
++                time.sleep(min(0.01, remaining))
++            else:
++                if mode.lower() != "wal":
++                    raise sqlite3.OperationalError(f"WAL is required; SQLite selected {mode}")
++                return
++
++    @contextmanager
++    def connection(self):
++        connection = self._connect()
++        try:
++            yield connection
++        finally:
++            connection.close()
+ 
+     def _initialize(self):
+-        from .domain import new_id
+-        with self._connect() as conn:
+-            conn.executescript("""
+-            CREATE TABLE IF NOT EXISTS schema_meta(version INTEGER NOT NULL);
+-            CREATE TABLE IF NOT EXISTS conversations(
+-              id TEXT PRIMARY KEY, created_at TEXT NOT NULL);
+-            CREATE TABLE IF NOT EXISTS messages(
+-              id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL REFERENCES conversations(id),
+-              role TEXT NOT NULL, content TEXT NOT NULL, created_at TEXT NOT NULL, metadata TEXT NOT NULL);
+-            CREATE TABLE IF NOT EXISTS router_state(
+-              conversation_id TEXT PRIMARY KEY REFERENCES conversations(id),
+-              router_session_id TEXT NOT NULL, event_cursor INTEGER NOT NULL DEFAULT 0,
+-              capsule TEXT NOT NULL DEFAULT '{}');
+-            CREATE TABLE IF NOT EXISTS quests(
+-              id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL REFERENCES conversations(id),
+-              title TEXT NOT NULL, goal TEXT NOT NULL, status TEXT NOT NULL,
+-              priority INTEGER NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+-              metadata TEXT NOT NULL);
+-            CREATE TABLE IF NOT EXISTS workers(
+-              id TEXT PRIMARY KEY, quest_id TEXT NOT NULL REFERENCES quests(id),
+-              role TEXT NOT NULL, model_id TEXT, status TEXT NOT NULL,
+-              hidden INTEGER NOT NULL, created_at TEXT NOT NULL, metadata TEXT NOT NULL);
+-            CREATE TABLE IF NOT EXISTS events(
+-              seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL,
+-              event_type TEXT NOT NULL, conversation_id TEXT NOT NULL,
+-              quest_id TEXT, worker_id TEXT, payload TEXT NOT NULL, created_at TEXT NOT NULL);
+-            CREATE INDEX IF NOT EXISTS idx_events_conversation_seq ON events(conversation_id, seq);
+-            CREATE INDEX IF NOT EXISTS idx_quests_status ON quests(status);
+-            CREATE TABLE IF NOT EXISTS models(
+-              id TEXT PRIMARY KEY, profile TEXT NOT NULL, updated_at TEXT NOT NULL);
+-            """)
+-            conn.execute("INSERT OR IGNORE INTO schema_meta(version) VALUES (?)", (SCHEMA_VERSION,))
+-            conn.execute("INSERT OR IGNORE INTO conversations(id,created_at) VALUES (?,?)", ("main",now_iso()))
+-            conn.execute("INSERT OR IGNORE INTO router_state(conversation_id,router_session_id) VALUES (?,?)",
+-                         ("main",new_id("router")))
++        with self.connection() as connection:
++            migrate(connection)
++        with self.unit_of_work() as work:
++            connection = work.connection
++            binding = connection.execute("SELECT id FROM workspace WHERE singleton=1").fetchone()
++            if binding is not None and binding["id"] != self.workspace.id:
++                raise WorkspaceMismatchError("Database belongs to a different workspace")
++            connection.execute(
++                "INSERT OR IGNORE INTO workspace(singleton,id,root) VALUES (1,?,?)",
++                (self.workspace.id, str(self.workspace.root)),
++            )
++            connection.execute(
++                "INSERT OR IGNORE INTO conversations(id,created_at) VALUES (?,?)",
++                ("main", now_iso()),
++            )
++            connection.execute(
++                "INSERT OR IGNORE INTO router_state(conversation_id,router_session_id) VALUES (?,?)",
++                ("main", new_id("router")),
++            )
++
++    def unit_of_work(self):
++        return UnitOfWork(self)
++
++    def _read(self, method, *args, **kwargs):
++        with self.connection() as connection:
++            return getattr(Repository(connection), method)(*args, **kwargs)
++
++    def _write(self, method, *args, **kwargs):
++        with self.unit_of_work() as work:
++            return getattr(work, method)(*args, **kwargs)
+ 
+     def ensure_router(self, conversation_id="main"):
+-        with self._connect() as conn:
+-            row = conn.execute("SELECT * FROM router_state WHERE conversation_id=?", (conversation_id,)).fetchone()
+-            if row is None:
+-                raise KeyError(f"Unknown conversation: {conversation_id}")
+-            return dict(row)
++        return self._read("ensure_router", conversation_id)
+ 
+     def add_message(self, msg, conversation_id="main"):
+-        with self._connect() as conn:
+-            conn.execute("INSERT INTO messages VALUES (?,?,?,?,?,?)",
+-                         (msg.id,conversation_id,msg.role,msg.content,msg.created_at,
+-                          json.dumps(msg.metadata,ensure_ascii=False)))
+-        return msg
++        return self._write("add_message", msg, conversation_id)
+ 
+     def list_messages(self, conversation_id="main", limit=200):
+-        with self._connect() as conn:
+-            rows = conn.execute(
+-                "SELECT * FROM (SELECT rowid,* FROM messages WHERE conversation_id=? ORDER BY rowid DESC LIMIT ?) ORDER BY rowid",
+-                (conversation_id,limit)).fetchall()
+-        return [dict(r) for r in rows]
++        return self._read("list_messages", conversation_id, limit)
+ 
+     def save_quest(self, quest, conversation_id="main"):
+-        with self._connect() as conn:
+-            conn.execute("INSERT INTO quests VALUES (?,?,?,?,?,?,?,?,?)",
+-                         (quest.id,conversation_id,quest.title,quest.goal,quest.status.value,
+-                          quest.priority,quest.created_at,quest.updated_at,
+-                          json.dumps(quest.metadata,ensure_ascii=False)))
+-        return quest
++        return self._write("save_quest", quest, conversation_id)
+ 
+     def get_quest(self, quest_id):
+-        with self._connect() as conn:
+-            row = conn.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
+-        return dict(row) if row else None
++        return self._read("get_quest", quest_id)
+ 
+     def list_quests(self, conversation_id="main", limit=100):
+-        with self._connect() as conn:
+-            rows = conn.execute("SELECT * FROM quests WHERE conversation_id=? ORDER BY updated_at DESC LIMIT ?",
+-                                (conversation_id,limit)).fetchall()
+-        return [dict(r) for r in rows]
+-
+-    def transition_quest(self, quest_id, new_status, updated_at):
+-        with self._connect() as conn:
+-            cur = conn.execute("UPDATE quests SET status=?,updated_at=? WHERE id=?",
+-                               (new_status,updated_at,quest_id))
+-            return cur.rowcount == 1
++        return self._read("list_quests", conversation_id, limit)
++
++    def transition_quest(
++        self, quest_id, new_status, updated_at, *, expected_version, expected_status
++    ):
++        return self._write(
++            "transition_quest",
++            quest_id,
++            new_status,
++            updated_at,
++            expected_version=expected_version,
++            expected_status=expected_status,
++        )
+ 
+     def save_worker(self, worker):
+-        with self._connect() as conn:
+-            conn.execute("INSERT INTO workers VALUES (?,?,?,?,?,?,?,?)",
+-                         (worker.id,worker.quest_id,worker.role,worker.model_id,worker.status,
+-                          int(worker.hidden),worker.created_at,json.dumps(worker.metadata,ensure_ascii=False)))
+-        return worker
++        return self._write("save_worker", worker)
+ 
+     def list_workers(self, quest_id=None):
+-        with self._connect() as conn:
+-            if quest_id:
+-                rows = conn.execute("SELECT * FROM workers WHERE quest_id=? ORDER BY created_at", (quest_id,)).fetchall()
++        return self._read("list_workers", quest_id)
++
++    def append_event(self, event):
++        return self._write("append_event", event)
++
++    def list_events(self, after=0, limit=200, conversation_id="main"):
++        return self._read("list_events", after, limit, conversation_id)
++
++    def list_outbox(self, *, pending_only=True, limit=200):
++        return self._read("list_outbox", pending_only=pending_only, limit=limit)
++
++    def mark_outbox_delivered(self, event_id):
++        return self._write("mark_outbox_delivered", event_id)
++
++    def save_model(self, profile):
++        return self._write("save_model", profile)
++
++    def list_models(self):
++        return self._read("list_models")
++
++
++class UnitOfWork(Repository):
++    """Single-use transaction: commit on success, rollback on any exception, always close."""
++
++    def __init__(self, store):
++        self.store = store
++        self._entered = False
++
++    def __enter__(self):
++        if self._entered:
++            raise RuntimeError("UnitOfWork is single-use")
++        self._entered = True
++        self._connection_context = self.store.connection()
++        connection = self._connection_context.__enter__()
++        try:
++            connection.execute("BEGIN IMMEDIATE")
++        except BaseException:
++            self._connection_context.__exit__(None, None, None)
++            raise
++        super().__init__(connection)
++        return self
++
++    def __exit__(self, exception_type, exception, traceback):
++        try:
++            if exception_type is not None:
++                self.connection.rollback()
+             else:
+-                rows = conn.execute("SELECT * FROM workers ORDER BY created_at").fetchall()
+-        return [dict(r) for r in rows]
+-
+-    def append_event(self, event):
+-        with self._connect() as conn:
+-            cur = conn.execute(
+-                "INSERT INTO events(id,event_type,conversation_id,quest_id,worker_id,payload,created_at) VALUES (?,?,?,?,?,?,?)",
+-                (event.id,event.event_type,event.conversation_id,event.quest_id,event.worker_id,
+-                 json.dumps(event.payload,ensure_ascii=False),event.created_at))
+-            return cur.lastrowid
+-
+-    def list_events(self, after=0, limit=200, conversation_id="main"):
+-        with self._connect() as conn:
+-            rows = conn.execute("SELECT * FROM events WHERE conversation_id=? AND seq>? ORDER BY seq LIMIT ?",
+-                                (conversation_id,after,limit)).fetchall()
+-        return [dict(r) for r in rows]
+-
+-    def save_model(self, profile):
+-        with self._connect() as conn:
+-            conn.execute("INSERT OR REPLACE INTO models VALUES (?,?,?)",
+-                         (profile.id,profile.model_dump_json(),now_iso()))
+-
+-    def list_models(self):
+-        from .domain import ModelProfile
+-        with self._connect() as conn:
+-            rows = conn.execute("SELECT profile FROM models ORDER BY id").fetchall()
+-        return [ModelProfile.model_validate_json(r["profile"]) for r in rows]
++                try:
++                    self.connection.commit()
++                except BaseException:
++                    self.connection.rollback()
++                    raise
++        finally:
++            self._connection_context.__exit__(None, None, None)
++        return False
+--- before/backend/tests/test_api.py
++++ after/backend/tests/test_api.py
+@@ -1,10 +1,13 @@
+ from fastapi.testclient import TestClient
++
+ 
+ def test_api_health_and_single_conversation(tmp_path, monkeypatch):
+     monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "api.sqlite3"))
+     # Import after setting DB path so the app's composition root uses the isolated DB.
+     import importlib
+-    import forge_api.main as main
++
++    from forge_api import main
++
+     importlib.reload(main)
+     client = TestClient(main.app)
+     health = client.get("/health")
+--- before/backend/tests/test_core.py
++++ after/backend/tests/test_core.py
+@@ -1,52 +1,66 @@
+ import pytest
++
++from forge_core.domain import DomainError, ModelProfile, QuestStatus, validate_quest_transition
++from forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer
++from forge_core.router import RouterService
+ from forge_core.store import Store
+-from forge_core.registry import ModelRegistry, TeamComposer, DEFAULT_ROLES
+-from forge_core.router import RouterService
+-from forge_core.domain import ModelProfile, QuestStatus, DomainError, validate_quest_transition
++
+ 
+ def make_store(tmp_path):
+-    return Store(str(tmp_path/"forge-test.sqlite3"))
++    return Store(str(tmp_path / "forge-test.sqlite3"))
++
+ 
+ def test_router_identity_survives_store_reopen(tmp_path):
+-    path=str(tmp_path/"persistent.sqlite3")
+-    first=Store(path).ensure_router()["router_session_id"]
+-    second=Store(path).ensure_router()["router_session_id"]
++    path = str(tmp_path / "persistent.sqlite3")
++    first = Store(path).ensure_router()["router_session_id"]
++    second = Store(path).ensure_router()["router_session_id"]
+     assert first == second
+ 
++
+ def test_single_conversation_stores_messages_and_quest(tmp_path):
+-    store=make_store(tmp_path)
+-    router=RouterService(store,TeamComposer(ModelRegistry(store)))
+-    result=router.handle_user_message("帮我研究一个新的多模态 Agent 算法")
++    store = make_store(tmp_path)
++    router = RouterService(store, TeamComposer(ModelRegistry(store)))
++    result = router.handle_user_message("帮我研究一个新的多模态 Agent 算法")
+     assert result["intent"] == "create_quest"
+     assert len(store.list_messages()) == 2
+     assert len(store.list_quests()) == 1
+     assert store.list_quests()[0]["status"] == "proposed"
+ 
++
+ def test_chat_does_not_create_quest(tmp_path):
+-    store=make_store(tmp_path)
+-    router=RouterService(store,TeamComposer(ModelRegistry(store)))
+-    result=router.handle_user_message("你好，今天怎么样？")
++    store = make_store(tmp_path)
++    router = RouterService(store, TeamComposer(ModelRegistry(store)))
++    result = router.handle_user_message("你好，今天怎么样？")
+     assert result["intent"] == "chat"
+     assert store.list_quests() == []
+ 
++
+ def test_model_registry_team_composition(tmp_path):
+-    store=make_store(tmp_path)
+-    registry=ModelRegistry(store)
+-    registry.upsert(ModelProfile(id="model-a",provider="test",display_name="Research Model",
+-                                 capabilities={"research":90,"writing":80}))
+-    proposal=TeamComposer(registry).compose([DEFAULT_ROLES[0]])
++    store = make_store(tmp_path)
++    registry = ModelRegistry(store)
++    registry.upsert(
++        ModelProfile(
++            id="model-a",
++            provider="test",
++            display_name="Research Model",
++            capabilities={"research": 90, "writing": 80},
++        )
++    )
++    proposal = TeamComposer(registry).compose([DEFAULT_ROLES[0]])
+     assert proposal[0]["model_candidates"][0]["model_id"] == "model-a"
+ 
++
+ def test_quest_transition_validation():
+-    validate_quest_transition(QuestStatus.PROPOSED,QuestStatus.AWAITING_APPROVAL)
++    validate_quest_transition(QuestStatus.PROPOSED, QuestStatus.AWAITING_APPROVAL)
+     with pytest.raises(DomainError):
+-        validate_quest_transition(QuestStatus.COMPLETED,QuestStatus.RUNNING)
++        validate_quest_transition(QuestStatus.COMPLETED, QuestStatus.RUNNING)
+ 
+ 
+ def test_quest_lifecycle_transition_is_persisted(tmp_path):
+-    from forge_core.domain import Quest, QuestStatus, DomainError
++    from forge_core.domain import DomainError, Quest, QuestStatus
+     from forge_core.quest_service import QuestService
+-    store = Store(str(tmp_path/"lifecycle.sqlite3"))
++
++    store = Store(str(tmp_path / "lifecycle.sqlite3"))
+     quest = Quest(title="Test", goal="Test goal")
+     store.save_quest(quest)
+     service = QuestService(store)
+@@ -55,9 +69,11 @@
+     with pytest.raises(DomainError):
+         service.transition(quest.id, QuestStatus.COMPLETED)
+ 
++
+ def test_worker_sessions_are_hidden_by_default(tmp_path):
+     from forge_core.domain import Quest, WorkerSession
+-    store = Store(str(tmp_path/"worker.sqlite3"))
++
++    store = Store(str(tmp_path / "worker.sqlite3"))
+     quest = Quest(title="Hidden worker", goal="Background work")
+     store.save_quest(quest)
+     worker = WorkerSession(quest_id=quest.id, role="research")
+--- before/backend/pyproject.toml
++++ after/backend/pyproject.toml
+@@ -6,7 +6,7 @@
+ name = "forge-agent-core"
+ version = "0.2.0"
+ requires-python = ">=3.11"
+-dependencies = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "pydantic>=2.6"]
++dependencies = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "pydantic>=2.6", "python-dotenv>=1.0"]
+ 
+ [project.optional-dependencies]
+ dev = ["pytest>=8.0", "httpx>=0.27", "ruff>=0.3"]
+--- before/README.md
++++ after/README.md
+@@ -2,9 +2,9 @@
+ 
+ FORGE is a self-built, general-purpose autonomous Agent desktop application.
+ 
+-## Engineering audit status — 2026-11-14
++## Engineering status — 2026-11-14
+ 
+-Phase 0 audit is complete with blocking findings. Python tests (8) and the frontend production build passed. Full Tauri native compilation remains unverified because Cargo dependency downloads failed. Approval/evidence enforcement and actual Router/Worker execution are not implemented. Phase 1 has not started.
++Phase 0 audit is preserved. Phase 1 Milestone 1 adds transactional SQLite migrations, atomic units of work and Outbox records, Quest version checks, explicit connection ownership and stable Workspace settings. See the [Milestone 1 report](docs/PHASE1_MILESTONE1_REPORT.md) for actual validation and acceptance status. Approval/evidence enforcement and actual Router/Worker execution remain unimplemented. Full Tauri native compilation remains unverified because Cargo dependency downloads failed during Phase 0.
+ 
+ See [current status](docs/STATUS.md), the [Phase 0 audit report](docs/PHASE0_AUDIT.md), and the report's dependency-ordered development plan. The release references `codex/MASTER_PROMPT.md`, but that file is missing from the supplied archive.
+ 
+@@ -54,10 +54,47 @@
+ source .venv/bin/activate
+ python -m pip install -e ".[dev]"
+ pytest
+-uvicorn forge_api.main:app --reload --host 127.0.0.1 --port 8765
++python -m forge_api
+ ```
+ 
+ Open `http://127.0.0.1:8765/docs`.
++
++### Workspace and Settings
++
++`python -m forge_api` is the shared Core launcher. From the repository root on Windows, `./scripts/run-backend.ps1` sets up the virtual environment and uses that launcher without shell activation. Pass `-WorkspaceRoot 'D:\YourWorkspace'` to the script, or `python -m forge_api --workspace-root 'D:\YourWorkspace'` directly. Workspace roots must be absolute paths.
++
++The default Workspace is independent of the checkout, installation and shell directory:
++
++| OS | Default Workspace root |
++| --- | --- |
++| Windows | `%LOCALAPPDATA%/FORGE/workspaces/default` |
++| macOS | `~/Library/Application Support/FORGE/workspaces/default` |
++| Linux | `${XDG_DATA_HOME:-~/.local/share}/forge/workspaces/default` |
++
++The database defaults to `<WorkspaceRoot>/data/forge.sqlite3`. Settings are loaded as follows:
++
++1. Choose the root using `--workspace-root`, then the process variable `FORGE_WORKSPACE_ROOT`, then the OS default (in that order). A root in `.env` is rejected because the root determines which file to read.
++2. Load `<WorkspaceRoot>/.env` if present. `FORGE_ENV_FILE` in the process environment can select another file; relative file names resolve from the root. An explicitly selected missing file is an error. The shell directory's `.env` is ignored. Copy `backend/.env.example` to the selected Workspace root.
++3. Process variables override file values. Supported settings are `FORGE_WORKSPACE_ID`, `FORGE_DB_PATH`, `FORGE_HOST` and `FORGE_PORT`; empty values and invalid ports fail startup. `.env` does not expand variables or modify the process environment.
++4. Resolve relative database paths from the root and normalize them to absolute paths. The default Workspace ID is a hash of the normalized root; an explicit stable ID supports moving a Workspace. A database already bound to another ID is rejected.
++
++The CLI and a future desktop Core bootstrap must pass the same Workspace settings. The current Tauri shell does not yet start Core; native desktop startup is still a later milestone. Direct `uvicorn forge_api.main:app` uses the same Settings loader, but host/port command flags must be supplied to Uvicorn separately; prefer the shared launcher.
++
++Legacy databases are **not discovered or moved automatically**. If an earlier version used `backend/data/forge.sqlite3` or another CWD-relative location, stop its Core process, back up the database with SQLite's backup API (or copy the database and WAL files together while stopped), and set `FORGE_DB_PATH` to its absolute path. The first successful open migrates it in place from v1 to v3 without changing the Router ID or existing records. Migration failure rolls back the entire pending chain; unknown future versions and ambiguous version metadata are rejected. Downgrades are unsupported.
++
++Events and pending Outbox rows commit in the same transaction as their associated business changes. The Outbox currently provides ordered reads and idempotent acknowledgement only; dispatch, leasing, retries and consumer deduplication are later work. Historical events are migrated as pending and require idempotent consumption.
++
++### Backend checks
++
++```powershell
++# From backend, after installing .[dev]
++.\.venv\Scripts\python.exe -m pytest -q
++.\.venv\Scripts\python.exe -m ruff check src tests --config pyproject.toml
++.\.venv\Scripts\python.exe -m ruff format --check src tests
++.\.venv\Scripts\python.exe -m pip check
++```
++
++`python-dotenv` is an explicit runtime dependency for Workspace configuration. No model provider or external Agent execution backend is required for these checks.
+ 
+ ## Desktop UI setup
+ 
+@@ -90,7 +127,7 @@
+ 6. `docs/ROADMAP.md`
+ 7. `codex/MASTER_PROMPT.md`
+ 
+-Run only Phase 0 audit first. Do not rewrite architecture or skip the acceptance gates.
++Follow the user's currently authorized milestone and the acceptance gates in `docs/STATUS.md`. Phase 0 is complete; Milestone 2 requires separate user acceptance of Milestone 1. The referenced `codex/MASTER_PROMPT.md` remains missing from the supplied release.
+ 
+ ## Native desktop build (after Rust toolchain installation)
+ 
+--- before/backend/.env.example
++++ after/backend/.env.example
+@@ -1,3 +1,7 @@
++# Copy this file to <WorkspaceRoot>/.env, not the current shell directory.
++# Select WorkspaceRoot first with --workspace-root or the FORGE_WORKSPACE_ROOT process variable.
++# Relative paths below are resolved from WorkspaceRoot. Process variables override this file.
++# FORGE_WORKSPACE_ID=your-stable-workspace-id
+ FORGE_DB_PATH=data/forge.sqlite3
+ FORGE_HOST=127.0.0.1
+ FORGE_PORT=8765
+--- before/scripts/run-backend.ps1
++++ after/scripts/run-backend.ps1
+@@ -1,6 +1,23 @@
++param([string]$WorkspaceRoot)
++
+ $ErrorActionPreference = "Stop"
+-Set-Location (Join-Path $PSScriptRoot "..\backend")
+-if (-not (Test-Path ".venv")) { python -m venv .venv }
+-& .\.venv\Scripts\Activate.ps1
+-python -m pip install -e ".[dev]"
+-uvicorn forge_api.main:app --reload --host 127.0.0.1 --port 8765
++$backendRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\backend"))
++$backendPython = Join-Path $backendRoot ".venv\Scripts\python.exe"
++Push-Location $backendRoot
++try {
++    if (-not (Test-Path -LiteralPath $backendPython)) {
++        python -m venv .venv
++        if ($LASTEXITCODE -ne 0) { throw "Creating the backend virtual environment failed" }
++    }
++    & $backendPython -m pip install -e ".[dev]"
++    if ($LASTEXITCODE -ne 0) { throw "Installing backend dependencies failed" }
++    $launchArguments = @("-m", "forge_api")
++    if ($PSBoundParameters.ContainsKey("WorkspaceRoot")) {
++        $launchArguments += @("--workspace-root", $WorkspaceRoot)
++    }
++    & $backendPython @launchArguments
++    if ($LASTEXITCODE -ne 0) { throw "FORGE Core exited with code $LASTEXITCODE" }
++}
++finally {
++    Pop-Location
++}

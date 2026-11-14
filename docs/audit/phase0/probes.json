@@ -1,0 +1,296 @@
+{
+  "started_at": "2026-11-14T13:30:38.631457+00:00",
+  "diagnostics": {
+    "api_validation_matrix": {
+      "health": {
+        "status": 200,
+        "content_type": "application/json"
+      },
+      "missing_quest": {
+        "status": 404,
+        "content_type": "application/json"
+      },
+      "empty_message": {
+        "status": 422,
+        "content_type": "application/json"
+      },
+      "missing_content": {
+        "status": 422,
+        "content_type": "application/json"
+      },
+      "oversize_message": {
+        "status": 422,
+        "content_type": "application/json"
+      },
+      "whitespace_message": {
+        "status": 200,
+        "content_type": "application/json"
+      },
+      "invalid_status": {
+        "status": 422,
+        "content_type": "application/json"
+      },
+      "illegal_transition": {
+        "status": 409,
+        "content_type": "application/json"
+      },
+      "negative_event_cursor": {
+        "status": 422,
+        "content_type": "application/json"
+      },
+      "unknown_quest_worker": {
+        "status": 404,
+        "content_type": "application/json"
+      }
+    },
+    "completion_without_execution_or_approval": {
+      "transitions": [
+        {
+          "target": "awaiting_approval",
+          "http_status": 200
+        },
+        {
+          "target": "approved",
+          "http_status": 200
+        },
+        {
+          "target": "queued",
+          "http_status": 200
+        },
+        {
+          "target": "running",
+          "http_status": 200
+        },
+        {
+          "target": "completed",
+          "http_status": 200
+        }
+      ],
+      "final_status": "completed",
+      "workers": [],
+      "authorization_header_sent": false
+    },
+    "worker_on_completed_quest_with_invalid_assignment": {
+      "http_status": 200,
+      "worker": {
+        "id": "worker_74b62ba59d14",
+        "quest_id": "quest_433c18bdbaa5",
+        "role": "",
+        "model_id": "missing-model",
+        "status": "proposed",
+        "hidden": true,
+        "created_at": "2026-11-14T13:30:38.874323+00:00",
+        "metadata": {}
+      }
+    },
+    "untrusted_origin_simple_post": {
+      "http_status": 200,
+      "worker_created": true,
+      "access_control_allow_origin": null
+    },
+    "cors_preflight": {
+      "http://localhost:5173": 200,
+      "tauri://localhost": 200,
+      "http://tauri.localhost": 400,
+      "https://untrusted.invalid": 400
+    },
+    "invalid_model_metadata": {
+      "http_status": 200,
+      "accepted_profile": {
+        "id": "invalid-profile",
+        "provider": "audit",
+        "display_name": "Audit",
+        "enabled": true,
+        "capabilities": {
+          "coding": 10000.0,
+          "research": -50.0
+        },
+        "context_window": -1,
+        "input_cost_per_million": -9.0,
+        "output_cost_per_million": null,
+        "tokens_per_second": null,
+        "provenance": {}
+      }
+    },
+    "transition_event_failure": {
+      "http_status": 500,
+      "body": "Internal Server Error",
+      "content_type": "text/plain; charset=utf-8",
+      "persisted_status": "awaiting_approval",
+      "events_for_quest": []
+    },
+    "request_retry": {
+      "same_idempotency_key": true,
+      "quests_created": 2
+    },
+    "openapi": {
+      "paths": [
+        "/api/conversation",
+        "/api/conversation/message",
+        "/api/events",
+        "/api/models",
+        "/api/quests",
+        "/api/quests/{quest_id}",
+        "/api/quests/{quest_id}/transition",
+        "/api/quests/{quest_id}/workers",
+        "/api/team/preview",
+        "/health"
+      ],
+      "security_schemes": null
+    },
+    "schema_version_handling": {
+      "versions_after_three_opens": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "future_version_reopen": [
+        [
+          999
+        ],
+        [
+          999
+        ],
+        [
+          999
+        ],
+        [
+          1
+        ]
+      ]
+    },
+    "sqlite_schema": {
+      "tables": [
+        [
+          "schema_meta",
+          "CREATE TABLE schema_meta(version INTEGER NOT NULL)"
+        ],
+        [
+          "conversations",
+          "CREATE TABLE conversations(\n              id TEXT PRIMARY KEY, created_at TEXT NOT NULL)"
+        ],
+        [
+          "messages",
+          "CREATE TABLE messages(\n              id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL REFERENCES conversations(id),\n              role TEXT NOT NULL, content TEXT NOT NULL, created_at TEXT NOT NULL, metadata TEXT NOT NULL)"
+        ],
+        [
+          "router_state",
+          "CREATE TABLE router_state(\n              conversation_id TEXT PRIMARY KEY REFERENCES conversations(id),\n              router_session_id TEXT NOT NULL, event_cursor INTEGER NOT NULL DEFAULT 0,\n              capsule TEXT NOT NULL DEFAULT '{}')"
+        ],
+        [
+          "quests",
+          "CREATE TABLE quests(\n              id TEXT PRIMARY KEY, conversation_id TEXT NOT NULL REFERENCES conversations(id),\n              title TEXT NOT NULL, goal TEXT NOT NULL, status TEXT NOT NULL,\n              priority INTEGER NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,\n              metadata TEXT NOT NULL)"
+        ],
+        [
+          "workers",
+          "CREATE TABLE workers(\n              id TEXT PRIMARY KEY, quest_id TEXT NOT NULL REFERENCES quests(id),\n              role TEXT NOT NULL, model_id TEXT, status TEXT NOT NULL,\n              hidden INTEGER NOT NULL, created_at TEXT NOT NULL, metadata TEXT NOT NULL)"
+        ],
+        [
+          "events",
+          "CREATE TABLE events(\n              seq INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT UNIQUE NOT NULL,\n              event_type TEXT NOT NULL, conversation_id TEXT NOT NULL,\n              quest_id TEXT, worker_id TEXT, payload TEXT NOT NULL, created_at TEXT NOT NULL)"
+        ],
+        [
+          "sqlite_sequence",
+          "CREATE TABLE sqlite_sequence(name,seq)"
+        ],
+        [
+          "models",
+          "CREATE TABLE models(\n              id TEXT PRIMARY KEY, profile TEXT NOT NULL, updated_at TEXT NOT NULL)"
+        ]
+      ],
+      "integrity_check": [
+        [
+          "ok"
+        ]
+      ],
+      "foreign_key_check": []
+    },
+    "connection_lifecycle": {
+      "usable_after_repository_method": true
+    },
+    "event_foreign_keys": {
+      "orphan_event_accepted": true
+    },
+    "router_partial_write": {
+      "error": "Phase 0 injected composer failure",
+      "messages": 1,
+      "quests": 1,
+      "events": 0
+    },
+    "stale_transition_interleaving": {
+      "method": "Second Store rejects after first service reads, before first service updates",
+      "final_status": "awaiting_approval",
+      "events": [
+        {
+          "from": "proposed",
+          "to": "rejected"
+        },
+        {
+          "from": "proposed",
+          "to": "awaiting_approval"
+        }
+      ]
+    },
+    "history_limit": {
+      "stored": 205,
+      "returned_by_default": 200,
+      "first_returned_content": "5"
+    },
+    "unknown_capability_ranking": {
+      "candidates": [
+        {
+          "id": "unknown",
+          "score": 0.0
+        }
+      ]
+    },
+    "router_classifier": {
+      "Build a desktop application": "chat",
+      "帮我开发状态监控工具": "status_query",
+      "批准": "chat",
+      "修改需求：使用离线模式": "chat",
+      "继续之前那个任务": "continue_quest"
+    },
+    "agent_loop_tool_boundary": {
+      "result": {
+        "status": "policy_engine_required",
+        "trace": [
+          {
+            "step": 0,
+            "text": "",
+            "tool_calls": [
+              {
+                "name": "audit_read",
+                "arguments": {}
+              }
+            ]
+          }
+        ]
+      },
+      "provider_calls": 1,
+      "advertised_tools": null
+    },
+    "cwd-a": {
+      "dotenv_value": "env-selected.sqlite3",
+      "actual": {
+        "db": "D:\\Competition_this\\Agent\\.local\\phase0\\probes-18a2af6e\\cwd-a\\data\\forge.sqlite3",
+        "router": "router_c24a63a9a2d0"
+      }
+    },
+    "cwd-b": {
+      "dotenv_value": "env-selected.sqlite3",
+      "actual": {
+        "db": "D:\\Competition_this\\Agent\\.local\\phase0\\probes-18a2af6e\\cwd-b\\data\\forge.sqlite3",
+        "router": "router_599242ead0e6"
+      }
+    }
+  },
+  "ended_at": "2026-11-14T13:30:40.225963+00:00",
+  "meaning_of_exit_zero": "Diagnostics executed, not product acceptance. Evaluate observations against audit report."
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.406" timestamp="2026-11-14T22:37:13.798946+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_startup" name="test_core_launcher_restart_preserves_workspace_and_rejects_stale_state" time="1.177"><failure message="AssertionError: D:\Competition_this\Agent\backend\.venv\Scripts\python.exe: No module named forge_api.__main__; 'forge_api' is a package and cannot be directly executed&#10;  &#10;assert 1 is None&#10; +  where 1 = poll()&#10; +    where poll = &lt;Popen: returncode: 1 args: ['D:\\Competition_this\\Agent\\backend\\.venv\\S...&gt;.poll">tests\test_startup.py:54: in test_core_launcher_restart_preserves_workspace_and_rejects_stale_state
+    assert process.poll() is None, (tmp_path / f"{name}.log").read_text()
+E   AssertionError: D:\Competition_this\Agent\backend\.venv\Scripts\python.exe: No module named forge_api.__main__; 'forge_api' is a package and cannot be directly executed
+E     
+E   assert 1 is None
+E    +  where 1 = poll()
+E    +    where poll = &lt;Popen: returncode: 1 args: ['D:\\Competition_this\\Agent\\backend\\.venv\\S...&gt;.poll</failure></testcase></testsuite></testsuites>

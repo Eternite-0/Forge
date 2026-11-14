@@ -1,0 +1,113 @@
+...............................................................FF....F.. [ 26%]
+.FF..F.FFF.............................................................. [ 52%]
+........................................................................ [ 79%]
+........................................................                 [100%]
+================================== FAILURES ===================================
+________ test_expired_planner_attempt_cannot_modify_new_attempt[False] ________
+backend\tests\test_m4_adversarial.py:281: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\tests\test_m4_adversarial.py:279: in race
+    assert await second
+E   assert False
+________ test_expired_planner_attempt_cannot_modify_new_attempt[True] _________
+backend\tests\test_m4_adversarial.py:281: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\tests\test_m4_adversarial.py:279: in race
+    assert await second
+E   assert False
+_________ test_graph_planner_sends_strict_wire_schema_through_gateway _________
+backend\src\forge_core\quest_graph.py:478: in generate
+    data = GraphWire.model_validate_json(response.text).proposal().model_dump()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   pydantic_core._pydantic_core.ValidationError: 2 validation errors for GraphWire
+E   nodes.0.allowed_tools
+E     Field required [type=missing, input_value={'key': 'a', 'objective':...None, 'max_attempts': 1}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.14/v/missing
+E   cost_currency
+E     Field required [type=missing, input_value={'nodes': [{'key': 'a', '...duration_seconds': None}, input_type=dict]
+E       For further information visit https://errors.pydantic.dev/2.14/v/missing
+
+The above exception was the direct cause of the following exception:
+backend\tests\test_m4_integration.py:240: in test_graph_planner_sends_strict_wire_schema_through_gateway
+    result = asyncio.run(
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\quest_graph.py:480: in generate
+    raise DomainError("Invalid graph proposal") from exc
+E   forge_core.domain.DomainError: Invalid graph proposal
+_________ test_notice_failures_back_off_persist_and_stop_after_limit __________
+backend\tests\test_m4_integration.py:428: in test_notice_failures_back_off_persist_and_stop_after_limit
+    assert mock.calls == 5
+E   assert 4 == 5
+E    +  where 4 = <test_m4_integration.test_notice_failures_back_off_persist_and_stop_after_limit.<locals>.BadMock object at 0x0000028C7665E7B0>.calls
+__ test_authenticated_graph_controls_survive_restart_without_running_worker ___
+backend\tests\test_m4_integration.py:480: in test_authenticated_graph_controls_survive_restart_without_running_worker
+    assert response.status_code == 200
+E   assert 409 == 200
+E    +  where 409 = <Response [409 Conflict]>.status_code
+_____ test_user_turn_automatically_plans_once_without_extra_user_message ______
+backend\tests\test_m4_integration.py:620: in test_user_turn_automatically_plans_once_without_extra_user_message
+    wait_for(lambda: client.get(path, headers=token).status_code == 200)
+backend\tests\test_m4_integration.py:26: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state
+______________ test_planner_refuses_stale_quest_after_model_call ______________
+backend\tests\test_m4_integration.py:741: in test_planner_refuses_stale_quest_after_model_call
+    with pytest.raises(DomainError, match="version"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'version'
+E     Actual message: 'Invalid graph proposal'
+_______ test_actual_lifespan_schedules_parallel_dag_verifies_and_relays _______
+backend\tests\test_m5_lifespan_execution.py:51: in test_actual_lifespan_schedules_parallel_dag_verifies_and_relays
+    from forge_core.domain import CapabilityMeasurement
+E   ImportError: cannot import name 'CapabilityMeasurement' from 'forge_core.domain' (D:\Competition_this\Agent\backend\src\forge_core\domain.py)
+_________ test_actual_lifespan_help_creates_only_pending_reassignment _________
+backend\tests\test_m5_lifespan_execution.py:135: in test_actual_lifespan_help_creates_only_pending_reassignment
+    wait_for(lambda: len(main.list_teams(quest.id)) == 2)
+backend\tests\test_m5_lifespan_execution.py:37: in wait_for
+    assert check()
+E   assert False
+E    +  where False = <function test_actual_lifespan_help_creates_only_pending_reassignment.<locals>.<lambda> at 0x0000028C770AC900>()
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt[False]
+FAILED backend\tests\test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt[True]
+FAILED backend\tests\test_m4_integration.py::test_graph_planner_sends_strict_wire_schema_through_gateway
+FAILED backend\tests\test_m4_integration.py::test_notice_failures_back_off_persist_and_stop_after_limit
+FAILED backend\tests\test_m4_integration.py::test_authenticated_graph_controls_survive_restart_without_running_worker
+FAILED backend\tests\test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message
+FAILED backend\tests\test_m4_integration.py::test_planner_refuses_stale_quest_after_model_call
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_schedules_parallel_dag_verifies_and_relays
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_help_creates_only_pending_reassignment
+9 failed, 263 passed, 1 warning in 50.06s

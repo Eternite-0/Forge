@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.751" timestamp="2026-11-14T23:31:38.617880+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_persistent_router" name="test_model_decision_and_request_idempotency" time="0.103"><failure message="TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'">tests\test_persistent_router.py:32: in test_model_decision_and_request_idempotency
+    store, provider, router = make_router(tmp_path, decision)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_persistent_router.py:27: in make_router
+    return store, provider, RouterService(store, TeamComposer(ModelRegistry(store)), provider=provider, model_id="mock")
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'</failure></testcase><testcase classname="tests.test_persistent_router" name="test_ambiguous_reference_never_picks_latest" time="0.049"><failure message="TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'">tests\test_persistent_router.py:44: in test_ambiguous_reference_never_picks_latest
+    store, _, router = make_router(tmp_path, decision)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_persistent_router.py:27: in make_router
+    return store, provider, RouterService(store, TeamComposer(ModelRegistry(store)), provider=provider, model_id="mock")
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'</failure></testcase><testcase classname="tests.test_persistent_router" name="test_invalid_model_output_is_atomic" time="0.049"><failure message="TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'">tests\test_persistent_router.py:53: in test_invalid_model_output_is_atomic
+    store, _, router = make_router(tmp_path, {"intent": "create_quest", "passed": True})
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_persistent_router.py:27: in make_router
+    return store, provider, RouterService(store, TeamComposer(ModelRegistry(store)), provider=provider, model_id="mock")
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: RouterService.__init__() got an unexpected keyword argument 'provider'</failure></testcase></testsuite></testsuites>

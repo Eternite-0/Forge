@@ -1,0 +1,18 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_________ test_notice_failures_back_off_persist_and_stop_after_limit __________
+tests\test_m4_integration.py:333: in test_notice_failures_back_off_persist_and_stop_after_limit
+    wait_for(lambda: notice() is not None and notice()["notice_attempts"] == 1)
+tests\test_m4_integration.py:26: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_m4_integration.py::test_notice_failures_back_off_persist_and_stop_after_limit
+1 failed, 1 warning in 5.18s
+Exit code: 1

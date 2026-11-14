@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-11-14T13:45:52.877797+00:00",
+  "results": [
+    {
+      "name": "frontend-build-clean",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "run",
+        "build"
+      ],
+      "offline": false,
+      "timeout_seconds": 60,
+      "timed_out": false,
+      "exit_code": 0,
+      "elapsed_seconds": 5.1
+    },
+    {
+      "name": "tauri-build-offline",
+      "command": [
+        "C:\\Program Files\\nodejs\\npm.cmd",
+        "run",
+        "tauri",
+        "--",
+        "build",
+        "--ci",
+        "--no-bundle"
+      ],
+      "offline": true,
+      "timeout_seconds": 90,
+      "timed_out": false,
+      "exit_code": 1,
+      "elapsed_seconds": 8.67
+    },
+    {
+      "name": "tauri-rust-offline",
+      "command": [
+        "C:\\Users\\msi\\.cargo\\bin\\cargo.EXE",
+        "check",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "offline": true,
+      "timeout_seconds": 30,
+      "timed_out": false,
+      "exit_code": 101,
+      "elapsed_seconds": 0.33
+    }
+  ]
+}

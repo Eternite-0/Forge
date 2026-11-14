@@ -1,0 +1,126 @@
+{
+  "date": "2026-11-15",
+  "status": "backend_hardening_verified",
+  "milestone_status": "in_progress",
+  "desktop_acceptance": "deferred_by_user",
+  "scope": "backend_hardening",
+  "final_checks": [
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pytest backend/tests -c backend/pyproject.toml -q",
+      "cwd": "repository root",
+      "environment": "FORGE_* variables removed from test child",
+      "passed": 488,
+      "warnings": 1,
+      "warning": "Starlette TestClient httpx deprecation",
+      "seconds": 107.62,
+      "exit_code": 0,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-full-pytest-v3.log",
+      "sha256": "8a6ab54799200d4a41a999fe10d820a7d38ca67a81265399e444d848c16b18dd"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m ruff check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v3.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m ruff format --check --no-cache backend/src backend/tests backend/scripts --config backend/pyproject.toml",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "files": 109,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v3.log"
+    },
+    {
+      "command": "backend/.venv/Scripts/python.exe -m pip check",
+      "cwd": "repository root",
+      "exit_code": 0,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v3.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml",
+      "cwd": "backend",
+      "exit_code": 0,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v3.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m ruff format --check --no-cache src tests scripts --config pyproject.toml",
+      "cwd": "backend",
+      "exit_code": 0,
+      "files": 109,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v3.log"
+    }
+  ],
+  "historical_preservation": {
+    "status": "v3_snapshot_checked",
+    "baseline": "docs/audit/phase1/milestone7/backend-hardening/baseline-manifest.json",
+    "baseline_sha256": "cb8911cf1e7d7f28a4dc63eb6845c345f55e8d0d2653aae59109e9c5b5891555",
+    "source_manifest": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-source-manifest-v3.json",
+    "source_files": 112,
+    "source_manifest_sha256": "377a63dfc99291296dc41ed4ae2eafb77397954f2b9cc3ca8e646693a81c6f50",
+    "historical_files": 367,
+    "changed_historical_files": 0,
+    "original_test_functions": 282,
+    "missing_original_tests": 0,
+    "assertion_changes": [
+      {"test": "test_migrations.py::test_each_migration_step", "reason": "Schema version assertion updated from 8 to 9."},
+      {"test": "test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database", "reason": "Schema version assertion updated from 8 to 9."},
+      {"test": "test_migrations.py::test_v8_component_failure_rolls_back_v7_data", "reason": "Final schema version assertion updated from 8 to 9; rollback assertion retained."},
+      {"test": "test_api_trust.py::test_approval_and_grants_http_are_user_controlled", "reason": "Missing required digest and revision now fails input validation with 422 instead of 409."},
+      {"test": "test_security_adversarial.py::test_cross_origin_simple_post_cannot_create_worker", "reason": "Checks request-scoped state and complete lifecycle events rather than assuming empty events/outbox."},
+      {"test": "test_transactions.py::test_worker_proposal_and_event_failure_rolls_back", "reason": "Isolates request failure from lifespan and validates lifecycle events/outbox."},
+      {"test": "test_startup.py::test_core_launcher_restart_preserves_workspace_and_rejects_stale_state", "reason": "Distinguishes two business events from two startup events and verifies outbox mappings."}
+    ],
+    "evidence": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-preservation-v3.json",
+    "evidence_sha256": "9f1e8a6eba0c554bf23755aa46c2e3de823296b32ff47465dd134060ad8eab70",
+    "initial_failed_scan": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-preservation.json",
+    "format_ast_before": "docs/audit/phase1/milestone7/backend-hardening/format-ast-before.txt",
+    "format_ast_after": "docs/audit/phase1/milestone7/backend-hardening/format-ast-after.txt"
+  },
+  "findings": [
+    "worker_admission_pressure_durable_queue",
+    "zero_post_reservation_refund",
+    "preserve_original_cancellation_test_branch",
+    "reviewer_trusted_receipt_provenance",
+    "core_lifecycle_recovery_evidence",
+    "router_exact_quest_binding",
+    "semantic_executor_relocation_provenance"
+  ],
+  "intermediate_checks": [
+    {
+      "description": "Router and semantic targeted tests before final integration",
+      "passed": 36,
+      "exit_code": 0,
+      "final": false
+    },
+    {
+      "description": "First full backend pytest failed before lifecycle-isolation repair",
+      "passed": 482,
+      "failed": 6,
+      "warnings": 1,
+      "seconds": 117.5,
+      "exit_code": 1,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-full-pytest.log",
+      "final": false
+    },
+    {
+      "description": "v2 full pytest; format check failed on two files",
+      "passed": 488,
+      "warnings": 1,
+      "seconds": 115.49,
+      "exit_code": 0,
+      "log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-full-pytest-v2.log",
+      "format_exit_code": 1,
+      "format_log": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-static-v2.log",
+      "final": false
+    }
+  ],
+  "posttest_integrity": {
+    "exit_code": 0,
+    "source_files_unchanged": 112,
+    "historical_files_unchanged": 367,
+    "evidence": "docs/audit/phase1/milestone7/backend-hardening/backend-hardening-posttest-integrity.json"
+  },
+  "static_log_sha256": "c39f7646855fd29db1cabd577308d3aa1689960db8b68f7ca0c05e2d23194b05",
+  "real_provider_alpha": "not_claimed",
+  "notes": "v3 full pytest, static and preservation checks passed locally. v2 full pytest passed but format check failed; earlier failures and logs remain preserved. Scripted live-labelled test model is not a real provider. Provenance uses the trusted SQLite boundary; the complete six-role source-approval, Reviewer and restart Mock chain, paid Alpha, desktop and NSIS acceptance remain unverified."
+}

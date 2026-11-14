@@ -1,0 +1,48 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+________ test_historical_team_can_be_rechecked_after_quest_completion _________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-184/test_historical_team_can_be_re0')
+
+    def test_historical_team_can_be_rechecked_after_quest_completion(tmp_path):
+        store, quest, plan, _, _, service, old, _, runs = prepared_team(tmp_path)
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='completed' WHERE id=?", (quest.id,))
+>           assert service.get_historical_approved(quest.id, plan["revision"], old["proposal_digest"], connection=work.connection, run_id=runs[0]["id"])["status"] == "approved"
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_team_reassignment_m5.py:275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\team_composition.py:967: in get_historical_approved
+    _, row, body = self._checked(
+backend\src\forge_core\team_composition.py:737: in _checked
+    quest, plan = self._current_plan(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x000002940C40EF20>
+quest_id = 'quest_62548aba4b48', plan_revision = 1
+plan_digest = 'a93c5f770d308cb34d225a623a6a4522f179b5b17a8eb27297785771c7d15c67'
+allow_running = True
+
+    @staticmethod
+    def _current_plan(connection, quest_id, plan_revision, plan_digest, *, allow_running=False):
+        quest = connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
+        plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?", (quest_id, plan_revision)
+        ).fetchone()
+        if (
+            quest is None
+            or plan is None
+            or quest["plan_revision"] != plan_revision
+            or quest["status"]
+            not in ({"approved", "queued", "running"} if allow_running else {"approved", "queued"})
+            or plan["status"] != "approved"
+            or plan["digest"] != plan_digest
+        ):
+>           raise DomainError("Approved current plan required")
+E           forge_core.domain.DomainError: Approved current plan required
+
+backend\src\forge_core\team_composition.py:497: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_team_reassignment_m5.py::test_historical_team_can_be_rechecked_after_quest_completion
+1 failed in 0.68s

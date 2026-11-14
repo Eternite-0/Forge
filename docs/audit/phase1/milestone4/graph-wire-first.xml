@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="1.317" timestamp="2026-11-15T00:01:16.747116+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_integration" name="test_graph_planner_sends_strict_wire_schema_through_gateway" time="0.253" /></testsuite></testsuites>

@@ -1,0 +1,10 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________ test_initial_execution_state_and_direct_cas_are_blocked ___________
+tests\test_evidence_gate.py:10: in test_initial_execution_state_and_direct_cas_are_blocked
+    with pytest.raises(DomainError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE DomainError
+=========================== short test summary info ===========================
+FAILED tests/test_evidence_gate.py::test_initial_execution_state_and_direct_cas_are_blocked
+1 failed in 0.51s

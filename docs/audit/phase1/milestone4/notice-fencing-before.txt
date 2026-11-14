@@ -1,0 +1,63 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________ test_expired_notice_attempt_is_fenced_from_new_attempt ____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-93/test_expired_notice_attempt_is0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001976A974640>
+
+    def test_expired_notice_attempt_is_fenced_from_new_attempt(tmp_path, monkeypatch):
+        import asyncio
+        import time
+    
+        from forge_core.dispatcher import Dispatcher
+        from forge_core.domain import ForgeEvent
+        from forge_core.registry import ModelRegistry, TeamComposer
+        from forge_core.router import RouterService
+    
+        now = [1000.0]
+        monkeypatch.setattr(time, "time", lambda: now[0])
+        store = Store(tmp_path / "race.sqlite3", workspace=Workspace.from_path(tmp_path))
+        event = ForgeEvent(event_type="approval.requested", payload={"reason": "test"})
+        store.append_event(event)
+        dispatcher = Dispatcher(store, clock=lambda: now[0])
+        dispatcher.register("router")
+        dispatcher.deliver(dispatcher.claim("router"))
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE event_inbox SET notice_attempts=3 WHERE event_id=?", (event.id,))
+    
+        class Provider:
+            execution_mode = "mock"
+            def __init__(self):
+                self.started = asyncio.Event()
+                self.release = asyncio.Event()
+                self.calls = 0
+            async def generate(self, request):
+                self.calls += 1
+                if self.calls == 1:
+                    self.started.set()
+                    await self.release.wait()
+                    raise RuntimeError("stale failure")
+                await asyncio.sleep(0)
+                return type("Response", (), {"text": '{"action":"silent","reply":null}', "usage": {}})()
+    
+        async def race():
+            provider = Provider()
+            router = RouterService(store, TeamComposer(ModelRegistry(store)), provider=provider, model_id="mock")
+            first = asyncio.create_task(router.handle_pending_events(dispatcher))
+            await provider.started.wait()
+            now[0] += 61
+            # Let the old attempt fail while a new lease exists, before new completion.
+            second = asyncio.create_task(router.handle_pending_events(dispatcher))
+            provider.release.set()
+            return await asyncio.gather(first, second)
+    
+        result = asyncio.run(race())
+        notice = dispatcher.inbox("router")[0]
+>       assert any(result)
+E       assert False
+E        +  where False = any([False, False])
+
+tests\test_m4_adversarial.py:119: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_m4_adversarial.py::test_expired_notice_attempt_is_fenced_from_new_attempt
+1 failed in 0.95s

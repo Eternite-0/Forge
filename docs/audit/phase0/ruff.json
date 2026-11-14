@@ -1,0 +1,468 @@
+[
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 50,
+      "row": 9
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_api\\main.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import os\n\nfrom fastapi import FastAPI, HTTPException\nfrom fastapi.middleware.cors import CORSMiddleware\nfrom pydantic import BaseModel, Field\n\nfrom forge_core.domain import DomainError, ForgeEvent, ModelProfile, QuestStatus, WorkerSession\nfrom forge_core.quest_service import QuestService\nfrom forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer\nfrom forge_core.router import RouterService\nfrom forge_core.store import Store\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 11
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 38,
+      "row": 4
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\domain.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime, timezone\nfrom enum import Enum\nfrom uuid import uuid4\n\nfrom pydantic import BaseModel, Field\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 6
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "UP017",
+    "end_location": {
+      "column": 37,
+      "row": 7
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\domain.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime, timezone, UTC",
+          "end_location": {
+            "column": 40,
+            "row": 1
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        },
+        {
+          "content": "UTC",
+          "end_location": {
+            "column": 37,
+            "row": 7
+          },
+          "location": {
+            "column": 25,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Convert to `datetime.UTC` alias"
+    },
+    "location": {
+      "column": 25,
+      "row": 7
+    },
+    "message": "Use `datetime.UTC` alias",
+    "name": "datetime-timezone-utc",
+    "noqa_row": 7,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/datetime-timezone-utc"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 93,
+      "row": 1
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\quest_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from .domain import DomainError, ForgeEvent, QuestStatus, now_iso, validate_quest_transition\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 3
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 1
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\quest_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from .domain import QuestStatus, validate_quest_transition, ForgeEvent, now_iso",
+          "end_location": {
+            "column": 93,
+            "row": 1
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Remove unused import: `.domain.DomainError`"
+    },
+    "location": {
+      "column": 34,
+      "row": 1
+    },
+    "message": "`.domain.DomainError` imported but unused",
+    "name": "unused-import",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 36,
+      "row": 2
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\router.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from .domain import ConversationMessage, ForgeEvent, IntentType, Quest\nfrom .registry import DEFAULT_ROLES\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 33,
+      "row": 2
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\runtime.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass\nfrom typing import Any, Protocol\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 4
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 28,
+      "row": 4
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\src\\forge_core\\store.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import json\nimport sqlite3\nfrom pathlib import Path\n\nfrom .domain import now_iso\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 6
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 42,
+      "row": 1
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\tests\\test_api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from fastapi.testclient import TestClient\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 3
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 34,
+      "row": 7
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\tests\\test_api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "    import importlib\n\n    import forge_api.main as main\n",
+          "end_location": {
+            "column": 1,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 6
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 5,
+      "row": 6
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 6,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "PLR0402",
+    "end_location": {
+      "column": 34,
+      "row": 7
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\tests\\test_api.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from forge_api import main",
+          "end_location": {
+            "column": 34,
+            "row": 7
+          },
+          "location": {
+            "column": 5,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Replace with `from forge_api import main`"
+    },
+    "location": {
+      "column": 12,
+      "row": 7
+    },
+    "message": "Use `from forge_api import main` in lieu of alias",
+    "name": "manual-from-import",
+    "noqa_row": 7,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/manual-from-import"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 96,
+      "row": 5
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\tests\\test_core.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "import pytest\n\nfrom forge_core.domain import DomainError, ModelProfile, QuestStatus, validate_quest_transition\nfrom forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer\nfrom forge_core.router import RouterService\nfrom forge_core.store import Store\n\n\n",
+          "end_location": {
+            "column": 1,
+            "row": 7
+          },
+          "location": {
+            "column": 1,
+            "row": 1
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 1,
+      "row": 1
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 1,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  },
+  {
+    "cell": null,
+    "code": "I001",
+    "end_location": {
+      "column": 54,
+      "row": 48
+    },
+    "filename": "D:\\Competition_this\\Agent\\backend\\tests\\test_core.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "    from forge_core.domain import DomainError, Quest, QuestStatus\n    from forge_core.quest_service import QuestService\n",
+          "end_location": {
+            "column": 1,
+            "row": 49
+          },
+          "location": {
+            "column": 1,
+            "row": 47
+          }
+        }
+      ],
+      "message": "Organize imports"
+    },
+    "location": {
+      "column": 5,
+      "row": 47
+    },
+    "message": "Import block is un-sorted or un-formatted",
+    "name": "unsorted-imports",
+    "noqa_row": 47,
+    "severity": "error",
+    "url": "https://docs.astral.sh/ruff/rules/unsorted-imports"
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "chunk_id": "29616f",
+    "wall_time_seconds": 0.4331027,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  },
+  {
+    "chunk_id": "8fb8d1",
+    "wall_time_seconds": 0.4734876,
+    "exit_code": 0,
+    "original_token_count": 23,
+    "output": "Verified 25 artifact hashes, 12 preserved Phase 0 files, JSON and local document links.\r\n"
+  },
+  {
+    "chunk_id": "58d2dd",
+    "wall_time_seconds": 0.9968538,
+    "exit_code": 0,
+    "original_token_count": 184,
+    "output": " M .gitignore\n M README.md\n?? backend/\n?? desktop/\n?? docs/CONTEXT_MEMORY_GOVERNANCE.md\n?? docs/DOMAIN_AND_LIFECYCLE.md\n?? docs/MODEL_REGISTRY_AND_TEAM_COMPOSITION.md\n?? docs/PHASE0_AUDIT.md\n?? docs/PHASE1_MILESTONE1_REPORT.md\n?? docs/PRODUCT_ARCHITECTURE.md\n?? docs/QUALITY_GATES.md\n?? docs/REFERENCE_NOTES.md\n?? docs/REFERENCE_TRACEABILITY.md\n?? docs/ROADMAP.md\n?? docs/ROUTER_AND_WORKER_PROTOCOL.md\n?? docs/STATUS.md\n?? docs/adr/\n?? docs/audit/\n?? scripts/audit_http_phase0.py\n?? scripts/audit_phase0.py\n?? scripts/run-backend.ps1\n?? scripts/run-desktop-ui.ps1\n\r\nCount             : 25\r\nAverage           : \r\nSum               : 232962\r\nMaximum           : \r\nMinimum           : \r\nStandardDeviation : \r\nProperty          : Length\r\n\r\n"
+  }
+]

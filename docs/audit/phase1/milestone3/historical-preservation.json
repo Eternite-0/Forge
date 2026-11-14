@@ -1,0 +1,728 @@
+[
+  {
+    "path": "docs\\PHASE0_AUDIT.md",
+    "baseline": "94BFDF114A39F0E4E659E2A1C4C7543AADBD9B6E2F81740E66EADADE6AF191E7",
+    "current": "94BFDF114A39F0E4E659E2A1C4C7543AADBD9B6E2F81740E66EADADE6AF191E7",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE1_REPORT.md",
+    "baseline": "F171E448C9B9131EDA8D2A1A314C796F2CD27336EC46D117B26C0236DE388871",
+    "current": "F171E448C9B9131EDA8D2A1A314C796F2CD27336EC46D117B26C0236DE388871",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE2_REPORT.md",
+    "baseline": "D68890A38C9D2B3D893AB7E7BE40551A5AD72F2328C575FA8F4F3C574092C031",
+    "current": "D68890A38C9D2B3D893AB7E7BE40551A5AD72F2328C575FA8F4F3C574092C031",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\archive-check.json",
+    "baseline": "66BD815B623FDFCD3CCF6D1EA9C527058B7D5200B606604C419D913FD2BAA2E5",
+    "current": "66BD815B623FDFCD3CCF6D1EA9C527058B7D5200B606604C419D913FD2BAA2E5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\build-results.json",
+    "baseline": "568253CAA0B3D477253B96138C472B7D3628A7C294C4335C5091DF77FC386308",
+    "current": "568253CAA0B3D477253B96138C472B7D3628A7C294C4335C5091DF77FC386308",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\http-smoke.json",
+    "baseline": "1FF4F6E5F6979ADF876402FDA7C38418044D6924F1910B11B2186440210A709A",
+    "current": "1FF4F6E5F6979ADF876402FDA7C38418044D6924F1910B11B2186440210A709A",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-audit-production.json",
+    "baseline": "8FFE215A46E77F7FDD3C8B66C39885520EFF42B990BCF4AF7D75B39B1CE165F9",
+    "current": "8FFE215A46E77F7FDD3C8B66C39885520EFF42B990BCF4AF7D75B39B1CE165F9",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-audit.json",
+    "baseline": "DB9887DC5F1328C38F860AB904D3F83E9EE70326C2B0031D36C4BC9A4EFEC2BB",
+    "current": "DB9887DC5F1328C38F860AB904D3F83E9EE70326C2B0031D36C4BC9A4EFEC2BB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-tree.json",
+    "baseline": "94D793545BF49BAD61AFB8B1246144AF677EBA74ED84193E802AAB85955E0695",
+    "current": "94D793545BF49BAD61AFB8B1246144AF677EBA74ED84193E802AAB85955E0695",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\probes.json",
+    "baseline": "7EF42D4501BC2B54C5F02D41DD8EBA70A05F499B39BAF1E0F9B9ADB5258C83BF",
+    "current": "7EF42D4501BC2B54C5F02D41DD8EBA70A05F499B39BAF1E0F9B9ADB5258C83BF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\pytest.xml",
+    "baseline": "621EEFD3F52957A86F9B0C255FA036D129591BF004850BAE350F31F379674B65",
+    "current": "621EEFD3F52957A86F9B0C255FA036D129591BF004850BAE350F31F379674B65",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\python-environment.txt",
+    "baseline": "82F96AC02FE907C99562FF91CE53F5CDD92B3FD560EB72C758F0FAA56248557D",
+    "current": "82F96AC02FE907C99562FF91CE53F5CDD92B3FD560EB72C758F0FAA56248557D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\ruff.json",
+    "baseline": "35CE158DDB0AC894663A0C3465C8A44EE88F8123F8AF049348CC32E49816BCE9",
+    "current": "35CE158DDB0AC894663A0C3465C8A44EE88F8123F8AF049348CC32E49816BCE9",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\verification.json",
+    "baseline": "D4D4C94CD7E2908F39D6B678297DC45F3E6299401B5DEF8E933D05027535E384",
+    "current": "D4D4C94CD7E2908F39D6B678297DC45F3E6299401B5DEF8E933D05027535E384",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1-verification.json",
+    "baseline": "72135CCB3812E9D00B0D0814C77826C954BD9728D496321552206E017B8015D5",
+    "current": "72135CCB3812E9D00B0D0814C77826C954BD9728D496321552206E017B8015D5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2-verification.json",
+    "baseline": "489F217A2B3AEFA44D4B20E1AA810F99BCEA510EC8DB20EAB12FE0B1621D1180",
+    "current": "489F217A2B3AEFA44D4B20E1AA810F99BCEA510EC8DB20EAB12FE0B1621D1180",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\auxiliary-results.json",
+    "baseline": "5AE0708C5362090958FAF527873A93B855F2948A41AB5AFABFD06FB35C9A433E",
+    "current": "5AE0708C5362090958FAF527873A93B855F2948A41AB5AFABFD06FB35C9A433E",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\baseline-source.json",
+    "baseline": "AA71A117E85430921F928038074EA14C3F619C04DCF23E0836ABB9E07B0F1D41",
+    "current": "AA71A117E85430921F928038074EA14C3F619C04DCF23E0836ABB9E07B0F1D41",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-pytest.txt",
+    "baseline": "04874B8FB75BB96B547D1AF483E9C9A819137189768B88DA814FCC72C6592690",
+    "current": "04874B8FB75BB96B547D1AF483E9C9A819137189768B88DA814FCC72C6592690",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-pytest.xml",
+    "baseline": "4E7E6A1DC1987053E311BCE4D6D7DAE44F374E32A622D95BD949BE38495FC1A2",
+    "current": "4E7E6A1DC1987053E311BCE4D6D7DAE44F374E32A622D95BD949BE38495FC1A2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-result.json",
+    "baseline": "E0C2A133209F266B86D2B8B23A4FC3AA4D744BE336D3922CE9F7D3417FEFF007",
+    "current": "E0C2A133209F266B86D2B8B23A4FC3AA4D744BE336D3922CE9F7D3417FEFF007",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\delivery-results.json",
+    "baseline": "9B1B35AE75E03BA88577934D530E94D7F5D53CD91BA71FC731EFB2D033DA6015",
+    "current": "9B1B35AE75E03BA88577934D530E94D7F5D53CD91BA71FC731EFB2D033DA6015",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\failed-command-results.json",
+    "baseline": "FCDA9A0CB458757E708C39C797F5A2684F81EEFE29C88A8B27144246BBEA309C",
+    "current": "FCDA9A0CB458757E708C39C797F5A2684F81EEFE29C88A8B27144246BBEA309C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-compile.txt",
+    "baseline": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "current": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-format.txt",
+    "baseline": "66F7D03F920E131ED22153A556DD7F796A42A1ADFF045C9C14639DC96E36A3D8",
+    "current": "66F7D03F920E131ED22153A556DD7F796A42A1ADFF045C9C14639DC96E36A3D8",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pip-check.txt",
+    "baseline": "672AEC65A45BED50E70229C70934A7EEBF0462595C459B83023027645D57CCCF",
+    "current": "672AEC65A45BED50E70229C70934A7EEBF0462595C459B83023027645D57CCCF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pytest.txt",
+    "baseline": "2C2ED4C896A29F34556D0CAACCA2DF9C7EFBC0063C3F9E1FA240359BBB1A3BB5",
+    "current": "2C2ED4C896A29F34556D0CAACCA2DF9C7EFBC0063C3F9E1FA240359BBB1A3BB5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pytest.xml",
+    "baseline": "98BB35F942B7A616C6A3862FE83B0628F0413A9C095C7E2084D5709FEE27C3C3",
+    "current": "98BB35F942B7A616C6A3862FE83B0628F0413A9C095C7E2084D5709FEE27C3C3",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-ruff.txt",
+    "baseline": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "current": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\http-restart.json",
+    "baseline": "762BDD87D8526F1BED642F7177F8EB2685B0B5731336ED79D7B908AFF1707AE2",
+    "current": "762BDD87D8526F1BED642F7177F8EB2685B0B5731336ED79D7B908AFF1707AE2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\initialization-race.txt",
+    "baseline": "AB149D03E4E8659E983631D6D4262E8147061A0388401AE15DE4E7974E54AD29",
+    "current": "AB149D03E4E8659E983631D6D4262E8147061A0388401AE15DE4E7974E54AD29",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\initialization-race.xml",
+    "baseline": "A23D4E338D19835B2C14EB17879269EDBF8942B586FFF8F9798C2927A243C053",
+    "current": "A23D4E338D19835B2C14EB17879269EDBF8942B586FFF8F9798C2927A243C053",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\install.txt",
+    "baseline": "CB0954FE1A8D5149741922657DB2ADAE2A30DE163B56B41AD961B5D6083F071E",
+    "current": "CB0954FE1A8D5149741922657DB2ADAE2A30DE163B56B41AD961B5D6083F071E",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\original-tests-preserved.json",
+    "baseline": "D560FA42223B9D733AB844C953DEDD4868A16F4EFE88918C5B3C1643BCBD7A5D",
+    "current": "D560FA42223B9D733AB844C953DEDD4868A16F4EFE88918C5B3C1643BCBD7A5D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\passed-command-results.json",
+    "baseline": "189D3164F007E7A65439A3B42DCD0EA200F373D887BAEE26A4E1A03B6A8B5D5A",
+    "current": "189D3164F007E7A65439A3B42DCD0EA200F373D887BAEE26A4E1A03B6A8B5D5A",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\phase0-preservation.json",
+    "baseline": "DEEF77DA556313DF5FEAAA6B9194F514887E0A44A9ED3EFBBFAE27B3A8FE75CF",
+    "current": "DEEF77DA556313DF5FEAAA6B9194F514887E0A44A9ED3EFBBFAE27B3A8FE75CF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before-result.json",
+    "baseline": "8B219CF679548E80C74815A9891F360F2C37C29538B20CF92F66BB7432745115",
+    "current": "8B219CF679548E80C74815A9891F360F2C37C29538B20CF92F66BB7432745115",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before.txt",
+    "baseline": "D3B833A38C1B639DAD2948B8E635E136B5891404482EEB055472C905543FF055",
+    "current": "D3B833A38C1B639DAD2948B8E635E136B5891404482EEB055472C905543FF055",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before.xml",
+    "baseline": "2F8819FADE53398AD8045079BCEAA0BABDA8A06A8198ACC9E031285B002DF652",
+    "current": "2F8819FADE53398AD8045079BCEAA0BABDA8A06A8198ACC9E031285B002DF652",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\source-changes.diff",
+    "baseline": "08ECC555AC5BA553B6A121D260629BDC330FFDFE1A875F8344A7C48AF0142691",
+    "current": "08ECC555AC5BA553B6A121D260629BDC330FFDFE1A875F8344A7C48AF0142691",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\startup-before.txt",
+    "baseline": "E96DECCDF212C9DBD4F76151467A89164D464AFB759A364E6729762D1B6D9939",
+    "current": "E96DECCDF212C9DBD4F76151467A89164D464AFB759A364E6729762D1B6D9939",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\startup-before.xml",
+    "baseline": "696F516E6BC960B688D2A1D34506A6AE3DE46E28AE45C0736E46B34DE7AF463F",
+    "current": "696F516E6BC960B688D2A1D34506A6AE3DE46E28AE45C0736E46B34DE7AF463F",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\adversarial-before.txt",
+    "baseline": "DEF4C80EE07F8E4D1467075F0D76DB805D0C8DDA49BCE685174F83BEEF0363F6",
+    "current": "DEF4C80EE07F8E4D1467075F0D76DB805D0C8DDA49BCE685174F83BEEF0363F6",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\api-before.txt",
+    "baseline": "75FD767A477D71CB3F007BAAE29C3216E6B3AFC595D183D2297E6FDD789F2769",
+    "current": "75FD767A477D71CB3F007BAAE29C3216E6B3AFC595D183D2297E6FDD789F2769",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\api-before.xml",
+    "baseline": "C8DBEAC52630C8883B8F57DFD337DAFD06FFF54E512589BF27508FFBB5E65983",
+    "current": "C8DBEAC52630C8883B8F57DFD337DAFD06FFF54E512589BF27508FFBB5E65983",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\api-full-integration.txt",
+    "baseline": "D6650416C80EFC9D7B0DE7FE41B0C4069310C72C3B4397C76EE52D796099134C",
+    "current": "D6650416C80EFC9D7B0DE7FE41B0C4069310C72C3B4397C76EE52D796099134C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\api-full-integration.xml",
+    "baseline": "A93B1DD7DFB492A7EC23B4C4480A1E6F1082F5F7C9B633205069E9A4361CDB76",
+    "current": "A93B1DD7DFB492A7EC23B4C4480A1E6F1082F5F7C9B633205069E9A4361CDB76",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\approval-api-before.txt",
+    "baseline": "D70991736C6B05F0597DCD81697984C004E81352AC70CEB9B4F9102D52663BBF",
+    "current": "D70991736C6B05F0597DCD81697984C004E81352AC70CEB9B4F9102D52663BBF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\approval-api-before.xml",
+    "baseline": "AD358DD2E807F7DA2DAD8B39FED70203E75E0E33247F3CCD8886C74987BA07A2",
+    "current": "AD358DD2E807F7DA2DAD8B39FED70203E75E0E33247F3CCD8886C74987BA07A2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\changed-files.json",
+    "baseline": "9E2AEFEA8779A439BC703E931C2B6722E5387C47DE3E34950590606A0655A375",
+    "current": "9E2AEFEA8779A439BC703E931C2B6722E5387C47DE3E34950590606A0655A375",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-after.log",
+    "baseline": "B3FF4F782702364307922E4600CFF5417A5C94AB4601F181286FE8B91FB29F1E",
+    "current": "B3FF4F782702364307922E4600CFF5417A5C94AB4601F181286FE8B91FB29F1E",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-after.xml",
+    "baseline": "9453B55BD00F03BF7BDCA0D3D0B5CC33DB68268EB9CEB6365F1884E3A9AAFA2B",
+    "current": "9453B55BD00F03BF7BDCA0D3D0B5CC33DB68268EB9CEB6365F1884E3A9AAFA2B",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-before.log",
+    "baseline": "4A0AC672403904262162DB8D0C99642C48ADBD37954AFB04A50E94E0AC8D74F8",
+    "current": "4A0AC672403904262162DB8D0C99642C48ADBD37954AFB04A50E94E0AC8D74F8",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-before.xml",
+    "baseline": "B4809A63E7BFC85C117FE7BB0D5CD4E769D24107776BCD6A8A1B87C92A301BAE",
+    "current": "B4809A63E7BFC85C117FE7BB0D5CD4E769D24107776BCD6A8A1B87C92A301BAE",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-bypass-before.log",
+    "baseline": "858EDB73D779EF9668AC3A4C874B8F8793B37C92EEB047EECD0BB117B499BF2C",
+    "current": "858EDB73D779EF9668AC3A4C874B8F8793B37C92EEB047EECD0BB117B499BF2C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-expanded-final.log",
+    "baseline": "775226452390D0600936F8BCF80A9ED850DAF4A194E5FF02BCCAE1A22BCEF7AD",
+    "current": "775226452390D0600936F8BCF80A9ED850DAF4A194E5FF02BCCAE1A22BCEF7AD",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-expanded.log",
+    "baseline": "F8B31C17ED2A25538B1D187BBD83A7C650E702311E0E770B8FEF9F39F814CE29",
+    "current": "F8B31C17ED2A25538B1D187BBD83A7C650E702311E0E770B8FEF9F39F814CE29",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-full-initial.log",
+    "baseline": "B212376142D36B2F1AB98DB617AE11277B0E8AE0632E79D8511345AA672263C4",
+    "current": "B212376142D36B2F1AB98DB617AE11277B0E8AE0632E79D8511345AA672263C4",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-integrated-final.log",
+    "baseline": "448780913F5303E94CF871A4731118ED4458F3B6FD8A60DF749F5C42E4563EEB",
+    "current": "448780913F5303E94CF871A4731118ED4458F3B6FD8A60DF749F5C42E4563EEB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-integrated.log",
+    "baseline": "E4C095A586C94D9FA74B0E1871A1A65241B9E6DAD133AEFCFB8E5E76D2F92C59",
+    "current": "E4C095A586C94D9FA74B0E1871A1A65241B9E6DAD133AEFCFB8E5E76D2F92C59",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\core-ruff.log",
+    "baseline": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "current": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\editable-install.txt",
+    "baseline": "B73DDFCFCBBADB0AD4C485D1CCB2CC970189E58FFDE8EBC20CC94BBE98D94B10",
+    "current": "B73DDFCFCBBADB0AD4C485D1CCB2CC970189E58FFDE8EBC20CC94BBE98D94B10",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\evidence-before.txt",
+    "baseline": "F55FF903ACEA665D0E1E3DDF6A622641A77D1E8FF81F5A20C4B12840492EF0E8",
+    "current": "F55FF903ACEA665D0E1E3DDF6A622641A77D1E8FF81F5A20C4B12840492EF0E8",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\final-pytest.txt",
+    "baseline": "EEA4837657AD305A73025045FED6C430EE12295F9EECCC0305CC7557E094D41D",
+    "current": "EEA4837657AD305A73025045FED6C430EE12295F9EECCC0305CC7557E094D41D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\final-pytest.xml",
+    "baseline": "11909252830425C8F3BEF12AF47E519A976B96665851679FFCA4B211D3A96F0F",
+    "current": "11909252830425C8F3BEF12AF47E519A976B96665851679FFCA4B211D3A96F0F",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-active-handles.json",
+    "baseline": "6DFB2D778DED9D18148FDE058E2A07EE3AB7B1C89126D236307CB5626D0B4EBA",
+    "current": "6DFB2D778DED9D18148FDE058E2A07EE3AB7B1C89126D236307CB5626D0B4EBA",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-audit-before.json",
+    "baseline": "4E73F42C0C3A5A62AC6C620882A7329A60A93771F6000D70BFEB1A4DED902553",
+    "current": "4E73F42C0C3A5A62AC6C620882A7329A60A93771F6000D70BFEB1A4DED902553",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-audit-official-before.json",
+    "baseline": "C99465A71565AD0EE7C1B1C17BB665F4887FB4FF4304510D0374827D91613ECF",
+    "current": "C99465A71565AD0EE7C1B1C17BB665F4887FB4FF4304510D0374827D91613ECF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-build-interrupted.txt",
+    "baseline": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+    "current": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-build.txt",
+    "baseline": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+    "current": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-baseline-build-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-baseline-build.txt",
+    "baseline": "7FF63155D9C2F1C1D30350BB67020ECECC7C4342EFDAB784E7AF04FC4889E2F5",
+    "current": "7FF63155D9C2F1C1D30350BB67020ECECC7C4342EFDAB784E7AF04FC4889E2F5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-diagnostic-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-diagnostic.txt",
+    "baseline": "6C605467E24A8BD7C9E15A6A24E73CD53A166E2C9539A770BC23B18AF861BE9D",
+    "current": "6C605467E24A8BD7C9E15A6A24E73CD53A166E2C9539A770BC23B18AF861BE9D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-install-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-install.txt",
+    "baseline": "E4ABEF1A88A92DDDDB32DB50C9412E9447EBBE488510161E7D2F4355D0474D18",
+    "current": "E4ABEF1A88A92DDDDB32DB50C9412E9447EBBE488510161E7D2F4355D0474D18",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-stop-build-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-clean-stop-build.txt",
+    "baseline": "8EB62F8871C6319C42DBAD105409F9527A361544C30D1A94A4D9103F3F9DC15C",
+    "current": "8EB62F8871C6319C42DBAD105409F9527A361544C30D1A94A4D9103F3F9DC15C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-final-install-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-final-install.txt",
+    "baseline": "9984D9E1F2AD8CA58F126608162E9CD0A7A3A3E34BB5551DE1C5BD4816B68940",
+    "current": "9984D9E1F2AD8CA58F126608162E9CD0A7A3A3E34BB5551DE1C5BD4816B68940",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-pinned-audit-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-pinned-audit.json",
+    "baseline": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+    "current": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-pinned-install-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-pinned-install.txt",
+    "baseline": "6780245538BFA6D1662A5B4D6A36F0ED754BBD742B8005C25F70D30ED1457571",
+    "current": "6780245538BFA6D1662A5B4D6A36F0ED754BBD742B8005C25F70D30ED1457571",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-audit-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-audit.json",
+    "baseline": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+    "current": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-build-1-result.json",
+    "baseline": "25DB97AC49F0F7C55D0CF0A88CD1B6CAEE06323C5F7981D0E00D9F610579C6DE",
+    "current": "25DB97AC49F0F7C55D0CF0A88CD1B6CAEE06323C5F7981D0E00D9F610579C6DE",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-build-1.txt",
+    "baseline": "F1C0B24EA96A522625AC7786CE3CCED6B044880413BCEDC4B907734CC12090ED",
+    "current": "F1C0B24EA96A522625AC7786CE3CCED6B044880413BCEDC4B907734CC12090ED",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-build-2-result.json",
+    "baseline": "3ABD9B23D79EB2E4DC836CDC646178F97D070D8A02B001E7BA57716052F1DFD4",
+    "current": "3ABD9B23D79EB2E4DC836CDC646178F97D070D8A02B001E7BA57716052F1DFD4",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-build-2.txt",
+    "baseline": "983A85242DDB5FA39DB741F3F4CAF2A2D56670477E563FA7E1C23A3BD244A316",
+    "current": "983A85242DDB5FA39DB741F3F4CAF2A2D56670477E563FA7E1C23A3BD244A316",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-install-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-project-install.txt",
+    "baseline": "46D75B29ADCF4AA2B117AE68DB87903F16DC3348D7F180699BCB950FB99F1BC2",
+    "current": "46D75B29ADCF4AA2B117AE68DB87903F16DC3348D7F180699BCB950FB99F1BC2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-reproduction-before-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-reproduction-before.txt",
+    "baseline": "2EABD32A6672C47E4CBC179FD619BEB510BD3AA9FBCC7E23FDB26323BF670DFA",
+    "current": "2EABD32A6672C47E4CBC179FD619BEB510BD3AA9FBCC7E23FDB26323BF670DFA",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-typescript-failure-exit.txt",
+    "baseline": "DF4E26A04A444901B95AFEF44E4A96CFAE34690FFF2AD2C66389C70079CDFF2B",
+    "current": "DF4E26A04A444901B95AFEF44E4A96CFAE34690FFF2AD2C66389C70079CDFF2B",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-typescript-failure.txt",
+    "baseline": "44F4BB7579843A5A1D2F6325403138ADEAE998C183A50CC93067B14A81ABEBC1",
+    "current": "44F4BB7579843A5A1D2F6325403138ADEAE998C183A50CC93067B14A81ABEBC1",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-upgrade-build-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-upgrade-build.txt",
+    "baseline": "346BF079BF03C214CDCC5D226DA38D92D22DFDDC2048DBF4DE4C8DD2ACA471B0",
+    "current": "346BF079BF03C214CDCC5D226DA38D92D22DFDDC2048DBF4DE4C8DD2ACA471B0",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-upgrade-install-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-upgrade-install.txt",
+    "baseline": "5B3BD3237944429EB745E87932C900E086D098F47DAB76611FA9DD3A217A72FB",
+    "current": "5B3BD3237944429EB745E87932C900E086D098F47DAB76611FA9DD3A217A72FB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-vite-failure-exit.txt",
+    "baseline": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+    "current": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-vite-failure.txt",
+    "baseline": "9D9D049D675862006B7FD610B1EAA7E4099531103F9F78A4B7199530BA38157B",
+    "current": "9D9D049D675862006B7FD610B1EAA7E4099531103F9F78A4B7199530BA38157B",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-build-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-build.txt",
+    "baseline": "2EE295668ACAB76492798BE2886997BB6C4BD65AAF68D5365A7D6A48C3B9BD80",
+    "current": "2EE295668ACAB76492798BE2886997BB6C4BD65AAF68D5365A7D6A48C3B9BD80",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-diagnostic-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-diagnostic.txt",
+    "baseline": "432B5A58B119E593E0BFFBDE832B70DAFF0213FC23784302467C6B12CF65887C",
+    "current": "432B5A58B119E593E0BFFBDE832B70DAFF0213FC23784302467C6B12CF65887C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-handles.json",
+    "baseline": "CEC202CA500B255EE427BB501070DC5CD4A3CA3FD32F709DFCC0DF1129F7A94D",
+    "current": "CEC202CA500B255EE427BB501070DC5CD4A3CA3FD32F709DFCC0DF1129F7A94D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-immediate-exit.txt",
+    "baseline": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "current": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-immediate-handles.json",
+    "baseline": "49FF71D90E8A74AF225BC832B57FC0291AD89BE45009B60C1C16147CB32F0E57",
+    "current": "49FF71D90E8A74AF225BC832B57FC0291AD89BE45009B60C1C16147CB32F0E57",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\frontend-wrapper-immediate.txt",
+    "baseline": "698666ABA68EEB478C82322B6743C131744A98897A350060AA649B14E0F35A76",
+    "current": "698666ABA68EEB478C82322B6743C131744A98897A350060AA649B14E0F35A76",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\historical-preservation.json",
+    "baseline": "438BCD47F56E0D9E230C50C4E63C42CEF74E76E1EFB66D724D1B02FCD18C47D9",
+    "current": "438BCD47F56E0D9E230C50C4E63C42CEF74E76E1EFB66D724D1B02FCD18C47D9",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\lock-install.txt",
+    "baseline": "841B9E8DC01EDE0385988832190176A8CAA4C211D561AA174DF2BF120B651564",
+    "current": "841B9E8DC01EDE0385988832190176A8CAA4C211D561AA174DF2BF120B651564",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\pip-audit.json",
+    "baseline": "A885294EF2D93B24FCD5A61F6433BBA8B5743F547E5163839B92FD5932CEFE4B",
+    "current": "A885294EF2D93B24FCD5A61F6433BBA8B5743F547E5163839B92FD5932CEFE4B",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\pip-audit.txt",
+    "baseline": "1F410F6C8AFBD20EA946C1669CC115BD20B121568785BC003B5FA61E98DB809D",
+    "current": "1F410F6C8AFBD20EA946C1669CC115BD20B121568785BC003B5FA61E98DB809D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\pip-check.txt",
+    "baseline": "43796A030CD6F4BAD98CA184982F47754DA0A5E5B0A023D2F4CB1A98907E1E32",
+    "current": "43796A030CD6F4BAD98CA184982F47754DA0A5E5B0A023D2F4CB1A98907E1E32",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\policy-evidence-final.log",
+    "baseline": "F492F781271F8B57B37555423804839A0DF40F901676BBF97CA28D45494D45FB",
+    "current": "F492F781271F8B57B37555423804839A0DF40F901676BBF97CA28D45494D45FB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\policy-final.log",
+    "baseline": "166150195C8599CAC1C74B8C31B19E31A318D52CFBEF51EDBB25A07618361EEB",
+    "current": "166150195C8599CAC1C74B8C31B19E31A318D52CFBEF51EDBB25A07618361EEB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\pytest.txt",
+    "baseline": "DBE6C3526E001DB39F8A0225145DC20BEF23690AA41F6CFE0328AC651DEDC4B3",
+    "current": "DBE6C3526E001DB39F8A0225145DC20BEF23690AA41F6CFE0328AC651DEDC4B3",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\pytest.xml",
+    "baseline": "472D48579922A7BF1F86EFBB6DBEE52D27AD8AB1C6CD9B310376C63B35295D05",
+    "current": "472D48579922A7BF1F86EFBB6DBEE52D27AD8AB1C6CD9B310376C63B35295D05",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\ruff-check.txt",
+    "baseline": "F41060B0588FA28F9BD1779123401BCDFD7F0A4C4BD2F935EA8CCDBF8CDB501A",
+    "current": "F41060B0588FA28F9BD1779123401BCDFD7F0A4C4BD2F935EA8CCDBF8CDB501A",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone2\\ruff-format.txt",
+    "baseline": "F3275BEE776B40D0A8A6F2E99D2829398601AB3AECB66B2E030D6CA8D6772A21",
+    "current": "F3275BEE776B40D0A8A6F2E99D2829398601AB3AECB66B2E030D6CA8D6772A21",
+    "unchanged": true
+  }
+]
