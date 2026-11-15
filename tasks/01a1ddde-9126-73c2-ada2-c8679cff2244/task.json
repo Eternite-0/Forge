@@ -1,0 +1,17 @@
+{
+  "tool_use_id": "01a1ddde-9126-73c2-ada2-c8679cff2244",
+  "agent_id": "01a1ddde-9126-73c2-ada2-c8679cff2244",
+  "subagent_type": "default",
+  "files": [
+    "backend/tests/test_planner_operator_budget_phase2.py"
+  ],
+  "token_usage": {
+    "input_tokens": 5147,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 2064640,
+    "output_tokens": 2973,
+    "api_call_count": 10
+  },
+  "started_at": "2026-11-15T14:21:54.676882+08:00",
+  "completed_at": "2026-11-15T14:51:20.5111788+08:00"
+}

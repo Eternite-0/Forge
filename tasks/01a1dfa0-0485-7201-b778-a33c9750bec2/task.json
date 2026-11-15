@@ -1,0 +1,40 @@
+{
+  "tool_use_id": "01a1dfa0-0485-7201-b778-a33c9750bec2",
+  "agent_id": "01a1dfa0-0485-7201-b778-a33c9750bec2",
+  "subagent_type": "default",
+  "files": [
+    "backend/src/forge_core/planner_input_roundtrip.py",
+    "backend/src/forge_core/source_wire.py",
+    "backend/src/forge_core/worker_prefetch.py",
+    "backend/src/forge_core/worker_prompts.py",
+    "backend/tests/test_core_source_prefetch_v23.py",
+    "backend/tests/test_source_wire_v28.py",
+    "backend/src/forge_core/capacity_preflight.py",
+    "backend/src/forge_core/team_composition.py",
+    "backend/src/forge_core/worker_envelope.py",
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/src/forge_core/budget_policy.py",
+    "backend/src/forge_core/independent_review.py",
+    "backend/tests/test_worker_token_policy_v28.py",
+    "backend/src/forge_core/evidence.py",
+    "backend/src/forge_core/hierarchical_plans.py",
+    "backend/src/forge_core/context_service.py",
+    "backend/src/forge_core/model_compaction.py",
+    "backend/tests/test_model_compaction_v29.py",
+    "backend/src/forge_core/worker_model_usage.py",
+    "backend/src/forge_core/worker_model_compaction.py",
+    "backend/tests/test_worker_model_compaction_v29.py",
+    "backend/tests/test_reviewer_serial_capacity_phase2.py",
+    "backend/tests/test_worker_request_framing_v17.py",
+    "backend/tests/test_delivery_diagnostics_v22.py"
+  ],
+  "token_usage": {
+    "input_tokens": 1377153,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 29409024,
+    "output_tokens": 134585,
+    "api_call_count": 245
+  },
+  "started_at": "2026-11-15T22:32:52.7163881+08:00",
+  "completed_at": "2026-11-16T04:08:03.7805921+08:00"
+}

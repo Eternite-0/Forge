@@ -3,16 +3,28 @@
   "checkpoint_id": "01M7GD5RE1Z0PD9B1B5XFE0AFF",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 3,
+  "checkpoints_count": 5,
   "files_touched": [
+    "README.md",
     "backend/src/forge_api/main.py",
+    "backend/src/forge_core/dispatcher.py",
+    "backend/src/forge_core/evidence.py",
+    "backend/src/forge_core/independent_review.py",
+    "backend/src/forge_core/memory.py",
     "backend/src/forge_core/migrations.py",
     "backend/src/forge_core/quest_graph.py",
     "backend/src/forge_core/router.py",
     "backend/src/forge_core/router_domain.py",
     "backend/src/forge_core/team_composition.py",
+    "backend/src/forge_core/tool_domain.py",
+    "backend/src/forge_core/tool_engine.py",
+    "backend/src/forge_core/worker_prompts.py",
     "backend/src/forge_core/worker_runtime.py",
-    "backend/tests/test_migrations.py"
+    "backend/tests/test_m4_integration.py",
+    "backend/tests/test_migrations.py",
+    "backend/tests/test_worker_model_usage_migration_phase2.py",
+    "backend/tests/test_worker_runtime.py",
+    "backend/tests/test_workspace_backup_m7.py"
   ],
   "sessions": [
     {
@@ -35,34 +47,48 @@
       "compact_transcript": "/2/transcript.jsonl",
       "content_hash": "/2/content_hash.txt",
       "prompt": "/2/prompt.txt"
+    },
+    {
+      "metadata": "/3/metadata.json",
+      "transcript": "/3/full.jsonl",
+      "compact_transcript": "/3/transcript.jsonl",
+      "content_hash": "/3/content_hash.txt",
+      "prompt": "/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 63228,
+    "input_tokens": 7793144,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 25344,
-    "output_tokens": 39,
-    "api_call_count": 3
+    "cache_read_tokens": 327657216,
+    "output_tokens": 797325,
+    "api_call_count": 2112,
+    "subagent_tokens": {
+      "input_tokens": 25130965,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 737052416,
+      "output_tokens": 2872313,
+      "api_call_count": 5466
+    }
   },
   "redaction": {
-    "replacements": 6,
+    "replacements": 1364,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 6,
+      "credential_value": 399,
       "credentialed_uri": 0,
-      "custom": 0,
-      "entropy": 0,
+      "custom": 94,
+      "entropy": 626,
       "key_context": 0,
-      "pii": 0,
+      "pii": 245,
       "provider_token": 0,
       "shell_stdin": 0
     },
     "custom_rules_active": 1,
     "pii": {
-      "EMAIL": 0,
-      "IP": 0,
+      "EMAIL": 242,
+      "IP": 3,
       "PHONE": 0
     }
   }

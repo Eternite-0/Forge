@@ -1,0 +1,17 @@
+{
+  "tool_use_id": "01a1de0e-c6fd-7272-b775-4652da4562c9",
+  "agent_id": "01a1de0e-c6fd-7272-b775-4652da4562c9",
+  "subagent_type": "default",
+  "files": [
+    "docs/audit/phase2/startup-io-v14-diagnosis.md"
+  ],
+  "token_usage": {
+    "input_tokens": 31406,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 3031680,
+    "output_tokens": 7802,
+    "api_call_count": 18
+  },
+  "started_at": "2026-11-15T15:14:34.1779461+08:00",
+  "completed_at": "2026-11-15T15:46:08.6381044+08:00"
+}
