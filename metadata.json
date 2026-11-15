@@ -3,7 +3,7 @@
   "checkpoint_id": "01M7GD5RE1Z0PD9B1B5XFE0AFF",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 30,
+  "checkpoints_count": 31,
   "files_touched": [
     "README.md",
     "backend/src/forge_api/main.py",
@@ -85,40 +85,47 @@
       "compact_transcript": "/7/transcript.jsonl",
       "content_hash": "/7/content_hash.txt",
       "prompt": "/7/prompt.txt"
+    },
+    {
+      "metadata": "/8/metadata.json",
+      "transcript": "/8/full.jsonl",
+      "compact_transcript": "/8/transcript.jsonl",
+      "content_hash": "/8/content_hash.txt",
+      "prompt": "/8/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 12234275,
+    "input_tokens": 12368143,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 466841472,
-    "output_tokens": 1350857,
-    "api_call_count": 3079,
+    "cache_read_tokens": 474818688,
+    "output_tokens": 1373709,
+    "api_call_count": 3142,
     "subagent_tokens": {
-      "input_tokens": 36964613,
+      "input_tokens": 37159066,
       "cache_creation_tokens": 0,
-      "cache_read_tokens": 1001484032,
-      "output_tokens": 3778658,
-      "api_call_count": 7424
+      "cache_read_tokens": 1008533248,
+      "output_tokens": 3800034,
+      "api_call_count": 7488
     }
   },
   "redaction": {
-    "replacements": 7007,
+    "replacements": 7081,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 446,
+      "credential_value": 476,
       "credentialed_uri": 8,
-      "custom": 124,
-      "entropy": 6722,
+      "custom": 142,
+      "entropy": 6730,
       "key_context": 0,
-      "pii": 328,
+      "pii": 346,
       "provider_token": 0,
       "shell_stdin": 0
     },
     "custom_rules_active": 1,
     "pii": {
-      "EMAIL": 325,
+      "EMAIL": 343,
       "IP": 3,
       "PHONE": 0
     }
