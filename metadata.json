@@ -3,7 +3,7 @@
   "checkpoint_id": "01M7GD5RE1Z0PD9B1B5XFE0AFF",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 29,
+  "checkpoints_count": 30,
   "files_touched": [
     "README.md",
     "backend/src/forge_api/main.py",
@@ -78,14 +78,21 @@
       "compact_transcript": "/6/transcript.jsonl",
       "content_hash": "/6/content_hash.txt",
       "prompt": "/6/prompt.txt"
+    },
+    {
+      "metadata": "/7/metadata.json",
+      "transcript": "/7/full.jsonl",
+      "compact_transcript": "/7/transcript.jsonl",
+      "content_hash": "/7/content_hash.txt",
+      "prompt": "/7/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 12226048,
+    "input_tokens": 12234275,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 466818560,
-    "output_tokens": 1350844,
-    "api_call_count": 3078,
+    "cache_read_tokens": 466841472,
+    "output_tokens": 1350857,
+    "api_call_count": 3079,
     "subagent_tokens": {
       "input_tokens": 36964613,
       "cache_creation_tokens": 0,
@@ -95,12 +102,12 @@
     }
   },
   "redaction": {
-    "replacements": 7005,
+    "replacements": 7007,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 444,
+      "credential_value": 446,
       "credentialed_uri": 8,
       "custom": 124,
       "entropy": 6722,
