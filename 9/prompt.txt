@@ -1,0 +1,61 @@
+我们需要纠正 FORGE 的架构方向。你自己设定一个目标，不断推进。
+
+本项目真正的目标是：**自主研发一套通用版 DeepSeek Super-agent，而不是普通 Agent、Agent 管理平台或简单的 Multi-Agent 框架。**
+
+请将 DeepSeek Harness 团队的《Exploring Super-agent Design: Towards a More Autonomous Agent System》作为核心架构依据，并深入研究官方原型：
+
+[https://github.com/DeepSeek-ai/dsh-superagent-prototype](https://github.com/DeepSeek-ai/dsh-superagent-prototype)
+
+同时研究：
+
+- [https://github.com/openai/codex](https://github.com/openai/codex)
+- [https://github.com/anthropics/claude-code](https://github.com/anthropics/claude-code)
+
+Codex 和 Claude Code 主要用于研究底层 Harness、工具执行、上下文压缩和权限设计；**DeepSeek Super-agent 才是 FORGE 的总体架构目标。**
+
+### 必须实现的核心架构
+
+1. Persistent Router：一个长期存在的主 Session，负责所有用户交互、全局记忆和任务协调。
+2. Isolated Workers：每项独立任务使用独立 Worker Session 和执行环境，Worker 不直接与用户交互。
+3. Event-driven Triggers：支持用户消息、定时任务、文件变化、任务结果及外部事件；实现 Fast Path 和 Slow Path 两级过滤。
+4. Thread Subscription & Pass-through：同一任务后续事件直接路由到对应 Worker，避免所有事件都经过 Router 推理。
+5. Inline & Spill：合理控制上下文，把必要信息内联，完整内容保留在外部存储并按需读取。
+6. Chain of Recall：通过对象引用关系恢复历史任务、项目状态、决策和执行记录。
+7. Persistent State：Conversation、Router、Worker、Quest 和 Event 均可持久化与恢复。
+8. Watchdog：监控 Router、Worker、Dispatcher 和执行环境，处理异常退出、超时及恢复。
+
+### FORGE 自己的扩展
+
+- 通用 Workspace 自动识别和关联，不局限于 GitHub。
+- Model Intelligence Registry：管理模型的数学、编程、设计、研究、推理、速度和成本属性。
+- Adaptive Team Composition：Router 根据任务动态选择模型、角色和 Worker 数量。
+- 本地优先，支持终端、文件、浏览器、Git、MCP 和 GPU 等工具。
+- 统一对话入口，所有 Worker 结果由 Router 汇总。
+
+### 重构要求
+
+先深入阅读 DeepSeek 论文、官方原型的文档和源码，逐模块对比当前 FORGE。
+
+重点审查现有 Router、Worker Runtime、Dispatcher、Event、Context、Memory 和 Watchdog 实现。
+
+不要推倒重写，也不要为了架构图增加无意义的 Manager。保留已经可靠的数据库事务、CAS、Outbox、权限和证据机制。
+
+前端目前效果不错，保持现有前端不变，主要重构后端。
+
+允许连续实施，不必每个小阶段等待确认。每次重构都必须有测试和真实 Provider 验证。
+
+### 最终验收
+
+用户只与一个长期存在的 FORGE 对话。
+
+FORGE 能够持续接收事件、理解任务、自动创建和管理多个隐藏 Worker、订阅后续事件、并行执行、主动恢复失败，并通过 Chain of Recall 保持跨项目连续性。
+
+用户不需要管理 Session，不需要手动分配 Agent，也不需要频繁重新解释任务。
+
+请先完成架构差异审计，再制定最小改动的重构计划，然后直接实施。
+
+**不要再把 FORGE 做成 Quest/DAG/Approval 管理平台。它们只是 Super-agent 的内部基础设施。核心产品是一个持续运行、主动工作、能够组织多个 Worker 的 Super-agent。**
+
+---
+
+把代码提交到github吧

@@ -1,0 +1,36 @@
+{
+  "tool_use_id": "01a1e063-6bec-7fa2-a6e3-9108dbacf5d8",
+  "agent_id": "01a1e063-6bec-7fa2-a6e3-9108dbacf5d8",
+  "subagent_type": "default",
+  "files": [
+    "docs/SUPERAGENT_VALIDATION_BASELINE.md",
+    "backend/src/forge_core/workspace_discovery.py",
+    "backend/src/forge_core/watchdog.py",
+    "backend/tests/test_watchdog.py",
+    "backend/tests/test_workspace_discovery.py",
+    "backend/tests/test_migrations.py",
+    "backend/tests/test_worker_model_usage_migration_phase2.py",
+    "backend/tests/test_worker_runtime.py",
+    "backend/scripts/verify_superagent.py",
+    "backend/src/forge_core/worker_core_provenance.py",
+    "backend/src/forge_core/evidence.py",
+    "backend/src/forge_core/independent_review.py",
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/src/forge_core/worker_superagent.py",
+    "backend/tests/test_worker_core_provenance_superagent.py",
+    "backend/scripts/verify_superagent_cold_start.py",
+    "docs/audit/superagent/20261115T190232Z-065808-diagnostic.json",
+    "docs/audit/superagent/20261115T190431Z-cold-1f2fe2-diagnostic.json",
+    "backend/tests/test_superagent_acceptance_driver.py",
+    "docs/audit/superagent/20261115T192301Z-67cf20-diagnostic.json"
+  ],
+  "token_usage": {
+    "input_tokens": 781665,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 43564160,
+    "output_tokens": 108228,
+    "api_call_count": 299
+  },
+  "started_at": "2026-11-16T02:06:16.7764496+08:00",
+  "completed_at": "2026-11-16T03:51:36.1020733+08:00"
+}

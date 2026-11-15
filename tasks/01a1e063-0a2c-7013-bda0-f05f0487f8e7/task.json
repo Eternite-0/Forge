@@ -1,0 +1,37 @@
+{
+  "tool_use_id": "01a1e063-0a2c-7013-bda0-f05f0487f8e7",
+  "agent_id": "01a1e063-0a2c-7013-bda0-f05f0487f8e7",
+  "subagent_type": "default",
+  "files": [
+    "docs/SUPERAGENT_DEEPSEEK_RESEARCH.md",
+    "backend/src/forge_core/superagent_events.py",
+    "backend/src/forge_core/superagent_schema.py",
+    "backend/src/forge_core/dispatcher.py",
+    "backend/src/forge_core/superagent_sources.py",
+    "backend/tests/test_superagent_events.py",
+    "backend/tests/test_superagent_loop.py",
+    "backend/src/forge_api/__main__.py",
+    "backend/src/forge_api/supervisor.py",
+    "backend/tests/test_core_supervisor.py",
+    "README.md",
+    "backend/src/forge_api/main.py",
+    "backend/src/forge_core/watchdog.py",
+    "backend/tests/test_watchdog.py",
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/tests/test_worker_trigger_backpressure_superagent.py",
+    "backend/src/forge_core/superagent_loop.py",
+    "backend/tests/test_trigger_late_attach_superagent.py",
+    "backend/src/forge_core/recall_chain.py",
+    "backend/tests/test_recall_archive_dependencies_superagent.py",
+    "backend/tests/test_worker_lifespan_m5.py"
+  ],
+  "token_usage": {
+    "input_tokens": 1085594,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 23712384,
+    "output_tokens": 106856,
+    "api_call_count": 182
+  },
+  "started_at": "2026-11-16T02:05:51.5020015+08:00",
+  "completed_at": "2026-11-16T03:51:36.1015527+08:00"
+}

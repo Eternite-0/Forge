@@ -1,0 +1,33 @@
+{
+  "tool_use_id": "01a1e063-3ba0-7683-964f-db54a5f53e84",
+  "agent_id": "01a1e063-3ba0-7683-964f-db54a5f53e84",
+  "subagent_type": "default",
+  "files": [
+    "docs/SUPERAGENT_HARNESS_AUDIT.md",
+    "backend/src/forge_core/memory.py",
+    "backend/src/forge_core/recall_chain.py",
+    "backend/src/forge_core/tool_engine.py",
+    "backend/src/forge_core/worker_environment.py",
+    "backend/tests/test_recall_chain_superagent.py",
+    "backend/tests/test_worker_environment_superagent.py",
+    "backend/src/forge_core/gpu_tools.py",
+    "backend/src/forge_core/tool_domain.py",
+    "backend/tests/test_gpu_tools_superagent.py",
+    "backend/src/forge_core/router.py",
+    "backend/src/forge_core/router_domain.py",
+    "backend/src/forge_core/superagent_loop.py",
+    "backend/src/forge_core/superagent_delegation.py",
+    "backend/tests/test_superagent_delegation.py",
+    "backend/tests/test_superagent_loop.py",
+    "backend/tests/test_router_responsiveness_superagent.py"
+  ],
+  "token_usage": {
+    "input_tokens": 862907,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 25479936,
+    "output_tokens": 95813,
+    "api_call_count": 185
+  },
+  "started_at": "2026-11-16T02:06:03.9674453+08:00",
+  "completed_at": "2026-11-16T03:51:36.1015527+08:00"
+}
