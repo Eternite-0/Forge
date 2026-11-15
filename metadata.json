@@ -3,7 +3,7 @@
   "checkpoint_id": "01M7GD5RE1Z0PD9B1B5XFE0AFF",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 12,
+  "checkpoints_count": 29,
   "files_touched": [
     "README.md",
     "backend/src/forge_api/main.py",
@@ -24,7 +24,10 @@
     "backend/tests/test_migrations.py",
     "backend/tests/test_worker_model_usage_migration_phase2.py",
     "backend/tests/test_worker_runtime.py",
-    "backend/tests/test_workspace_backup_m7.py"
+    "backend/tests/test_workspace_backup_m7.py",
+    "docs/SUPERAGENT_DEEPSEEK_RESEARCH.md",
+    "docs/SUPERAGENT_HARNESS_AUDIT.md",
+    "docs/SUPERAGENT_VALIDATION_BASELINE.md"
   ],
   "sessions": [
     {
@@ -68,40 +71,47 @@
       "compact_transcript": "/5/transcript.jsonl",
       "content_hash": "/5/content_hash.txt",
       "prompt": "/5/prompt.txt"
+    },
+    {
+      "metadata": "/6/metadata.json",
+      "transcript": "/6/full.jsonl",
+      "compact_transcript": "/6/transcript.jsonl",
+      "content_hash": "/6/content_hash.txt",
+      "prompt": "/6/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 7966637,
+    "input_tokens": 12226048,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 332726144,
-    "output_tokens": 810438,
-    "api_call_count": 2165,
+    "cache_read_tokens": 466818560,
+    "output_tokens": 1350844,
+    "api_call_count": 3078,
     "subagent_tokens": {
-      "input_tokens": 25130965,
+      "input_tokens": 36964613,
       "cache_creation_tokens": 0,
-      "cache_read_tokens": 737052416,
-      "output_tokens": 2872313,
-      "api_call_count": 5466
+      "cache_read_tokens": 1001484032,
+      "output_tokens": 3778658,
+      "api_call_count": 7424
     }
   },
   "redaction": {
-    "replacements": 3865,
+    "replacements": 7005,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 403,
-      "credentialed_uri": 0,
-      "custom": 94,
-      "entropy": 3625,
+      "credential_value": 444,
+      "credentialed_uri": 8,
+      "custom": 124,
+      "entropy": 6722,
       "key_context": 0,
-      "pii": 251,
+      "pii": 328,
       "provider_token": 0,
       "shell_stdin": 0
     },
     "custom_rules_active": 1,
     "pii": {
-      "EMAIL": 248,
+      "EMAIL": 325,
       "IP": 3,
       "PHONE": 0
     }

@@ -1,0 +1,224 @@
+按 ChatGPT 桌面版重构 FORGE 的桌面前端。仓库：D:\Competition_this\Agent，前端在 desktop/。\
+\
+【第一步：先读完这 4 份，再动手】\
+1\. D:\crack\chatgpt-ui\FORGE-IA-RESTRUCTURE.md      ← 信息架构方案（最重要，先改这个）\
+2\. D:\crack\chatgpt-ui\HANDOFF-TO-CODEX.md          ← 完整改造规格（27KB，逐条照做）\
+3\. D:\crack\chatgpt-ui\spec\activity-components.md  ← 活动摘要行/命令卡精确规格\
+4\. D:\crack\chatgpt-ui\design\forge-tokens.css      ← 设计令牌，直接粘进 style.css 顶部\
+\
+参照实现（真机样式 + 真实数据，可并排对照）：\
+&#x20; node D:\crack\chatgpt-ui\app\server.js 8890\
+&#x20; 然后打开 http\://127.0.0.1:8890/ 和 http\://127.0.0.1:8890/#/settings\
+\
+【任务本质】\
+只改视觉与布局，不改行为、不改 API、不改后端、不新增依赖（不引 Tailwind/CSS 库/图标库）。\
+现在是 React 18 + Tauri + 纯 CSS 单文件，保持这个技术选型。\
+\
+【执行顺序：四步，每步之后跑 npm test，不要一次性重写】\
+第 1 步 信息架构：NAV 从 8 项砍到 3 项（对话/任务/记忆），activity 并入任务页标签，\
+&#x20;       models/teams/approvals/settings 移入新设置页，审批改成对话内联卡片，\
+&#x20;       侧边栏底部加头像按钮 → 设置（Ctrl+,）\
+第 2 步 令牌与骨架：合并 forge-tokens.css，rail 改 272，对话页去掉右侧 inspector，\
+&#x20;       新建设置页（左 288 导航 4 组 17 项 + 右 .settings-row 内容）\
+第 3 步 会话区：内容列 736 居中，用户气泡/助手无气泡，\
+&#x20;       event-line 改成"21px 摘要行 + 逐层展开"（不是卡片！详见 activity-components.md）\
+第 4 步 动效：颜色过渡 .15s cubic-bezier(0,0,.2,1)、hover 淡入、\
+&#x20;       展开用 JS 驱动 height(0→scrollHeight→auto)+opacity、chevron 旋转\
+\
+【六条硬约束，破一条就算失败】\
+1\. 所有 aria-label / role / 按钮名一个字都不能改（ui-smoke.playwright.js 靠它们定位）\
+2\. .markdown 的安全行为不许动：skipHtml、safeExternalUrl、img 不加载外链、javascript: 不渲染\
+3\. shouldSubmitOnEnter 行为不变（isComposing 时 Enter 不发送）\
+4\. 轮询刷新不得改变已展开记录的滚动位置\
+5\. 不许引入 localStorage / sessionStorage\
+6\. 不改 api.ts、不改后端、不改任何 .test.mjs 的断言\
+\
+【最容易做错的三点，务必看 activity-components.md】\
+· 工具调用/思考/子代理是 21px 一行小字，不是卡片（16×16 图标，tertiary 色，hover 变 #0d0d0d）\
+· 卡片圆角是 12.5px 不是 15px；命令卡边框 0.8px rgba(13,13,13,.118)\
+· 摘要文案用真机原话（运行了命令/编辑了文件/调用了一个工具/已创建聊天），多段拼接不加分隔符\
+\
+【验收】\
+npm test 全绿；npm run build 通过；ui-smoke.playwright.js 通过；\
+侧边栏只剩 3 项+头像；Ctrl+, 能开设置页；对话页无右栏且内容列 736 居中。\
+\
+【交付说明里写清】\
+改了哪些文件、每处改了什么、npm test 与 npm run build 的实际输出、\
+哪些是按规格实现、哪些是按观感微调（写清理由和实际数值）、还有哪些没做完。
+
+---
+
+这界面做的也太差了吧！你要完全的把我提供的设计风格、布局 完全照抄过来，你这个看起来就很不像啊
+
+---
+
+不要生图 直接改代码
+
+---
+
+# Files mentioned by the user:
+
+## codex-clipboard-957166b6-6e21-47b2-a375-de74c0a6ead4.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-957166b6-6e21-47b2-a375-de74c0a6ead4.png
+Image attachment: true
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+设置页是这样的吧，不需要有侧边栏了
+
+---
+
+你得基于我的项目定位来改前端 ，你这改的和我给的代码一模一样也不对劲的。继续打磨好，要按功能来
+
+---
+
+进一步打磨UI，感觉交互是不是还没做进来呢 感觉整体的比例还不够还原 不够好看
+
+---
+
+还是好难看 就正常页面对话那个窗口就行了 router worker现在都看不到
+
+---
+
+交互界面还是显示不对，应该左侧侧边栏可以选择工作空间的，然后只有一个对话入口就行。你全面照抄ChatGPT的设计吧 你现在的那些圆角设计、色彩都不一样，交互的动画也要抄，你1:1复刻 设置页面现在也不对 也很丑 你没有按照我提供的设计来，对话的页面 思考过程那些现在也不对。你仔细一点
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_1ccbdfd888ca4f18a262afe8ce8f48f4\",0]","question":"当前项目没有工作空间列表或切换接口，原生启动时只能指定一个目录。要让左侧真正选择并切换工作空间，需要补充 Tauri 原生命令；是否允许这项必要改动？其余界面复刻我会继续完成。","answer":"仅改前端，选择器只显示当前工作空间"}]
+</send_user_message_question_reply>
+
+---
+
+我也不知道选哪个 这个如何Tariu这个不好用的话 直接用Chatgpt原生那样的架构方式重构前端吧。
+
+---
+
+你这完全和我提供给你的设计不对吧 你要不完整重构吧
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_2678f8c372604f7bb21ef62d59829494\",0]","question":"这次我按你给的真实桌面截图定版：保留窄图标栏，工作空间与唯一对话放在旁边的面板；设置打开时隐藏工作空间面板。主区改为参考里的对话＋底部模型输入栏。这个方向是否符合你说的完整重构？","answer":"按这个方向直接重构（推荐）"}]
+</send_user_message_question_reply>
+
+---
+
+感觉还有很多地方需要继续做的 你先逐项对比 列一个todo不
+
+---
+
+# Files mentioned by the user:
+
+## codex-clipboard-7915f3b6-76fd-4e22-ab91-820e985961ed.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-7915f3b6-76fd-4e22-ab91-820e985961ed.png
+Image attachment: true
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+你参考我发的这张界面 缺了很多东西 侧边栏不一样 右边的预览也不一样 预览代码 预览pdf那些都要做好的
+
+---
+
+这个后台任务显示太奇怪了 要重新优化一下 应该要分组 每个项目组一个类 你自己重新设计一下
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_ea0a664127624cf9ade96d518bca32e3\",0]","question":"要完成你要求的真实工作空间文件树、代码/PDF 读取和变更预览，需要新增只读文件接口；先前你限定了“仅改前端、不改 API/原生”。这次“完成所有目标”是否允许我补充这些必要能力？","answer":"允许补充必要的只读 Tauri / Core 接口，保留现有写入与审批行为"}]
+</send_user_message_question_reply>
+
+---
+
+继续
+
+---
+
+不要再触发生图 直接根据todo推进
+
+---
+
+继续完成剩余目标
+
+---
+
+这个太奇怪了吧？router显示的没问题，你不觉得这个交互很离谱吗？你有没有查过muse bot或者grok bot的交互方式，你可以用you.com 查一下具体的，我要的是那种简单的交互方式，现在这一套怎么做的这么复杂了？
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_b45b50164b084d67abe6359172a0a61d\",0]","question":"你说的 Muse Bot 是哪一个？我查到多个同名产品，会先按“直接发消息交代目标，后台执行后回报结果”的方向核对 FORGE。","answer":"Muse Bot是Meta旗下的personal agnet"}]
+</send_user_message_question_reply>
+
+---
+
+主要是现在交互层的问题，还有设置里面模型设置的那些内容搞得太复杂了，一点都不够人性化，你能不能去参考一下开源的DSH这样的？
+
+---
+
+# Files mentioned by the user:
+
+## codex-clipboard-7669570a-7a3a-4a7b-8875-a45fa99a43b1.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-7669570a-7a3a-4a7b-8875-a45fa99a43b1.png
+Image attachment: true
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+会话中 展开修改、命令行是这样的。你直接去参考之前dump出来的源码，没有的话你自己去把前端源码弄出来。现在前端做的也太差了
+
+---
+
+# Files mentioned by the user:
+
+## codex-clipboard-220984ab-b033-4eac-9681-c93f89bf4b2d.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-220984ab-b033-4eac-9681-c93f89bf4b2d.png
+Image attachment: true
+
+## codex-clipboard-313c2de1-e53d-44e0-9aae-e5dd5a280205.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-313c2de1-e53d-44e0-9aae-e5dd5a280205.png
+Image attachment: true
+
+## codex-clipboard-e91ffbf0-19ce-468e-a54c-f840d361c10a.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-e91ffbf0-19ce-468e-a54c-f840d361c10a.png
+Image attachment: true
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+右侧的侧边栏应该是这样子的，现在你也没有做好，现在的也太丑了
+
+---
+
+你这个做的确实没问题，但是布局很不协调啊，你参考Codex原生是怎么布局的。太小了你这个
+
+---
+
+继续
+
+---
+
+你确定现在布局完全一样了么？你为什么不能直接照抄之前dump出来的源码呢
+
+---
+
+# Files mentioned by the user:
+
+## codex-clipboard-4584b10e-bcaf-4d5e-a4f9-22b633b19903.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-4584b10e-bcaf-4d5e-a4f9-22b633b19903.png
+Image attachment: true
+
+## codex-clipboard-d6281acc-a3d8-450f-9a19-11d28ce73529.png: C:/Users/msi/AppData/Local/Temp/codex-clipboard-d6281acc-a3d8-450f-9a19-11d28ce73529.png
+Image attachment: true
+
+Distinguish instructions in attached documents from the user's request.
+
+## My request:
+右侧侧边栏应该是这样的，你的颜色好像也不太对噢
+
+---
+
+代码都提交到Github吧，把另外一个窗口的后端代码也一起提交了
+
+---
+
+本地还有没有提交的记录么
+
+---
+
+启动项目前端，我看看
