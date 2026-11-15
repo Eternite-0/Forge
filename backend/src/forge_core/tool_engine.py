@@ -192,6 +192,8 @@ class ToolEngine:
         return spec, encoded
 
     def _scope(self, name, parameters):
+        if name == "gpu_status":
+            return "gpu:local"
         if "path" in parameters:
             scope = GovernanceService(self.store)._workspace_scope(parameters["path"])
             core = Path(__file__).resolve().parent.parent
@@ -937,11 +939,21 @@ class ToolEngine:
         if name == "directory_create":
             path.mkdir(parents=False, exist_ok=False)
             return {"path": str(path)}
+        if name == "gpu_status":
+            from .gpu_tools import probe_gpu
+            from .worker_environment import process_environment, worker_environment
+
+            environment = worker_environment(self.store, intent["run_id"])
+            return probe_gpu(cwd=environment["cwd"],
+                env=process_environment(self._environment(), environment), runner=self._run_process)
         if name in {"shell_inspect", "git_status", "python_compile", "numeric_ast", "python_test"}:
+            from .worker_environment import process_environment, worker_environment
+
+            environment = worker_environment(self.store, intent["run_id"])
             data = None
             if name == "shell_inspect":
                 argv = [sys.executable, "-I", "--version"]
-                cwd = str(self.store.workspace.root)
+                cwd = environment["cwd"]
             elif name == "python_compile":
                 argv = [
                     sys.executable,
@@ -949,7 +961,7 @@ class ToolEngine:
                     "-c",
                     "import sys; compile(sys.stdin.read(), '<candidate>', 'exec')",
                 ]
-                cwd = str(self.store.workspace.root)
+                cwd = environment["cwd"]
                 data = parameters["source"].encode("utf-8")
             elif name == "numeric_ast":
                 argv = [
@@ -957,7 +969,7 @@ class ToolEngine:
                     "-I",
                     str(Path(__file__).with_name("numeric_harness.py").resolve()),
                 ]
-                cwd = str(self.store.workspace.root)
+                cwd = environment["cwd"]
                 data = _json(
                     {"source": parameters["source"], "inputs": parameters["inputs"]}
                 ).encode("utf-8")
@@ -973,7 +985,7 @@ class ToolEngine:
                     "-I",
                     str(Path(__file__).with_name("code_test_harness.py").resolve()),
                 ]
-                cwd = str(self.store.workspace.root)
+                cwd = environment["cwd"]
                 data = _json(
                     {
                         "source": candidate.decode("utf-8"),
@@ -1005,8 +1017,8 @@ class ToolEngine:
                     "--short",
                     "--untracked-files=no",
                 ]
-                cwd = str(path)
-            env = self._environment()
+                cwd = environment["cwd"]
+            env = process_environment(self._environment(), environment)
             env.update(
                 {
                     "GIT_CONFIG_NOSYSTEM": "1",

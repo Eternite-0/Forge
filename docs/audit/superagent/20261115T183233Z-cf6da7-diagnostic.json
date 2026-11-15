@@ -1,0 +1,81 @@
+{
+  "run_id": "20261115T183233Z-cf6da7",
+  "status": "failed",
+  "execution_mode": "live",
+  "stop_reason": "stopped_on_first_review_blocked_without_retry",
+  "first_failure": {
+    "reason_code": "review_contract_or_budget_failed",
+    "run_id": "run_dd9d181ca1bc",
+    "plan_id": "plan_f7531b9fc7c5",
+    "task_node_key": "task",
+    "result_event_id": "evt_5a4280585a66"
+  },
+  "workers": [
+    {
+      "id": "run_ba031636202e",
+      "worker_id": "worker_6521d1a43602",
+      "quest_id": "quest_6c121b15b955",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "model_id": "deepseek-v4.1-flash",
+      "output_limit": 8192,
+      "model_context_window": 65536,
+      "token_spent": 28976,
+      "token_limit": 73728,
+      "steps": 6,
+      "step_limit": 32,
+      "read_trigger_calls": 0,
+      "delivered_followups": 1
+    },
+    {
+      "id": "run_dd9d181ca1bc",
+      "worker_id": "worker_c8c432c4973e",
+      "quest_id": "quest_08de30369afc",
+      "state": "review_pending",
+      "execution_mode": "live",
+      "model_id": "deepseek-v4.1-flash",
+      "output_limit": 8192,
+      "model_context_window": 65536,
+      "token_spent": 21107,
+      "token_limit": 73728,
+      "steps": 4,
+      "step_limit": 32,
+      "read_trigger_calls": 1,
+      "delivered_followups": 1
+    }
+  ],
+  "model_calls": 25,
+  "model_calls_by_purpose": {
+    "independent_reviewer": 1,
+    "memory_semantic_retrieval": 2,
+    "router": 2,
+    "router_notice": 10,
+    "router_reflect": 1,
+    "worker": 9
+  },
+  "admission_states": {
+    "settled": 25
+  },
+  "charged_tokens": 110935,
+  "configuration": {
+    "max_calls": 32,
+    "token_limit": 500000,
+    "timeout_seconds": 900,
+    "provider_timeout_seconds": 120,
+    "provider_retries": 0,
+    "worker_lease_seconds": 150,
+    "concurrency": 2,
+    "router_context": 65536,
+    "router_output_reserve": 4096,
+    "reasoning_effort": "none",
+    "provider_identity": "unverified_proxy_reported_identity"
+  },
+  "mock_results": null,
+  "original_evidence_retained": true,
+  "readonly_packet_diagnostic": {
+    "exception_type": "DomainError",
+    "fixed_error": "Independent review receipt failed provenance validation",
+    "network_calls": 0,
+    "mutation": false
+  }
+}

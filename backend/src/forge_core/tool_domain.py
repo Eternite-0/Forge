@@ -70,6 +70,16 @@ _OUTPUTS = {
     "directory_list": {"entries": {"type": "array", "items": _STRING, "maxItems": 1000}},
     "directory_create": {"path": _STRING},
     "shell_inspect": _PROCESS,
+    "gpu_status": {
+        "status": {
+            "type": "string",
+            "enum": ["available", "unsupported", "unavailable"],
+            "maxLength": 32,
+        },
+        "reason": {"type": "string", "maxLength": 256},
+        "devices_json": {"type": "string", "maxLength": 32768},
+        "probe_json": {"type": "string", "maxLength": 2097152},
+    },
     "python_compile": {**_PROCESS, "source_sha256": _HASH},
     "git_status": _PROCESS,
     "browser_get": {"status_code": {"type": "integer"}, "body": _STRING, "sha256": _HASH},
@@ -197,6 +207,16 @@ CONTRACTS = (
         "R0",
         "process.inspect",
         "process",
+    ),
+    _contract(
+        "gpu_status",
+        "Read local NVIDIA GPU inventory and utilization with a fixed bounded diagnostic; "
+        "returns unsupported when no NVIDIA tooling/device is present. No GPU computation or driver changes.",
+        {},
+        [],
+        "R0",
+        "gpu.inspect",
+        "read-only hardware diagnostic process",
     ),
     _contract(
         "python_compile",

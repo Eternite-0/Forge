@@ -500,6 +500,9 @@ def _review_receipts(store, connection, run):
             "worker_read_context_source",
             "worker_read_action_receipt",
             "worker_read_completed_delivery",
+            "read_trigger",
+            "recall_object",
+            "handback_trigger",
         }:
             from .evidence import _verify_worker_context_call
 

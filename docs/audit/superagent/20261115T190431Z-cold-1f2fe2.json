@@ -1,0 +1,35 @@
+{
+  "run_id": "20261115T190431Z-cold-1f2fe2",
+  "execution_mode": "live",
+  "model_id": "deepseek-v4.1-flash",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "capability_source": "existing_exploratory_operator_priors_not_benchmark",
+  "source_sha256": "4ec32f39ccbf3cd4e2d2a30c0043cd5c095bcdc5dbc9768d0cb8009131bfbb7d",
+  "driver_sha256": "346aae5bf57cf7235243e1d55ed10b5754cc0f6ad73c6aabac543c84999cd826",
+  "checks": {
+    "cold_event_created_one_task": true,
+    "adaptive_two_hidden_workers": true,
+    "parallel_workers_observed": true,
+    "both_independent_artifacts_verified": true,
+    "router_delivered_event_result": true,
+    "two_router_assignments_persisted": true,
+    "two_role_contracts_and_selected_models": true,
+    "unchanged_original_mandate_source_hash": true,
+    "timer_dispatched_by_slow_path": true,
+    "file_noise_ignored_by_slow_path": true,
+    "actual_router_trigger_inference": true,
+    "typed_recall_links_to_execution": true,
+    "no_unsettled_calls": true,
+    "source_snapshot_unchanged": true
+  },
+  "status": "passed",
+  "max_calls": 32,
+  "model_calls": 19,
+  "charged_tokens": 58442,
+  "admission_states": {
+    "reserved": 1,
+    "settled": 18
+  },
+  "max_running_workers_observed": 2,
+  "seconds": 35.976
+}

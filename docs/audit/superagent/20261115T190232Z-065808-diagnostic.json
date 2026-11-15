@@ -1,0 +1,44 @@
+{
+  "run_id": "20261115T190232Z-065808",
+  "execution_mode": "live",
+  "acceptance_status": "failed",
+  "reason_code": "model_call_ceiling_reached",
+  "original_report_preserved": true,
+  "model_call_ceiling": 32,
+  "final_admission_states": {
+    "settled": 30,
+    "reserved": 2
+  },
+  "final_charged_tokens": 204971,
+  "unknown_outcome_replayed": false,
+  "timeline_utc": {
+    "first_quest_created": "2026-11-15T19:02:45.219375+00:00",
+    "first_worker_accepted": "2026-11-15T19:02:46.320734+00:00",
+    "first_worker_result": "2026-11-15T19:02:59.392271+00:00",
+    "first_independent_review_result": "2026-11-15T19:03:02.726085+00:00",
+    "first_node_verified": "2026-11-15T19:03:02.800121+00:00",
+    "second_quest_created": "2026-11-15T19:03:23.529712+00:00",
+    "second_worker_accepted": "2026-11-15T19:03:24.600619+00:00",
+    "first_followup_injected": "2026-11-15T19:03:25.463113+00:00"
+  },
+  "facts": {
+    "first_worker_completed_with_core_source_review": true,
+    "second_worker_still_running_at_stop": true,
+    "first_worker_already_completed_before_driver_followup_poll": true,
+    "followup_injected_into_second_task_only": true,
+    "parallel_workers_observed": false,
+    "second_turn_semantic_retrieval_cycles": 3,
+    "second_turn_context_retries_inferred_from_control_flow": 2,
+    "specific_snapshot_conflict_field_persisted": false,
+    "router_notice_calls": 6,
+    "notice_self_generation_loop_observed": false,
+    "notice_attempts_per_processed_event": 1
+  },
+  "root_causes": [
+    "The driver sends both conversation HTTP requests sequentially and only then polls Workers and injects followups. A short first task may finish before that observation window starts.",
+    "The second user turn reran semantic retrieval and Router reasoning after concurrent snapshot conflicts while the first Worker progressed. Each loop also required a bounded schema or recalled-requirement reflection; the exact rejected response reason is not retained."
+  ],
+  "source_sha256": "4ec32f39ccbf3cd4e2d2a30c0043cd5c095bcdc5dbc9768d0cb8009131bfbb7d",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "mock_results": null
+}

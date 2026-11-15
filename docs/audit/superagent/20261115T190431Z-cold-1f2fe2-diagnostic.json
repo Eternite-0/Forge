@@ -1,0 +1,23 @@
+{
+  "run_id": "20261115T190431Z-cold-1f2fe2",
+  "execution_mode": "live",
+  "effective_acceptance_status": "failed",
+  "original_report_status": "passed",
+  "original_report_preserved": true,
+  "reason_code": "provider_notice_started_between_settled_check_and_core_stop",
+  "business_checks_observed_true": 14,
+  "parallel_hidden_workers_observed": 2,
+  "completed_workers": 2,
+  "completed_quests": 1,
+  "final_model_calls": 19,
+  "final_admission_states": {
+    "settled": 18,
+    "reserved": 1
+  },
+  "final_charged_tokens": 58442,
+  "unknown_outcome_replayed": false,
+  "source_sha256": "4ec32f39ccbf3cd4e2d2a30c0043cd5c095bcdc5dbc9768d0cb8009131bfbb7d",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "mock_results": null,
+  "note": "The original business observations remain valid, but its no_unsettled_calls check was stale at final shutdown. The original passing status must not be used as final acceptance. Original isolated workspace evidence is retained."
+}

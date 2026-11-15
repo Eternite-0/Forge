@@ -161,8 +161,8 @@ def test_v11_cutover_preserves_all_history_and_does_not_backfill(legacy_database
             "SELECT name,sql FROM sqlite_master ORDER BY name"
         ).fetchall()
         migrate(connection)
-        assert SCHEMA_VERSION == 13
-        assert connection.execute("SELECT version FROM schema_meta").fetchone() == (13,)
+        assert SCHEMA_VERSION >= 14
+        assert connection.execute("SELECT version FROM schema_meta").fetchone() == (SCHEMA_VERSION,)
         assert connection.execute("SELECT * FROM worker_model_reservations").fetchall() == []
         after = _snapshot(connection)
         assert {table: after[table] for table in before} == before

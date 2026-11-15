@@ -488,6 +488,12 @@ class Dispatcher:
             )
 
     def tick(self):
+        # Deterministic subscription deliveries must keep moving even while the
+        # Router is occupied with inference. The source JSON remains durable when
+        # a Worker's bounded inbox temporarily applies backpressure.
+        from .superagent_events import TriggerService
+
+        TriggerService(self.store).reconcile(limit=32)
         deadline = time.monotonic() + 0.05
         self.register("router")
         self.register("planner")

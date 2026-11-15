@@ -572,7 +572,7 @@ def test_invalid_graph_never_changes_quest_or_outbox(tmp_path, edges):
     assert store.list_events() == [] and store.list_outbox() == []
 
 
-def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path, monkeypatch):
+def test_legacy_user_turn_automatically_plans_once_without_extra_message(tmp_path, monkeypatch):
     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
     monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
@@ -587,6 +587,9 @@ def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path,
     from forge_api import main
 
     importlib.reload(main)
+    # The manual planning compatibility path remains available. Production now
+    # uses autonomous delegation, covered by test_superagent_loop instead.
+    main.router.autonomous = False
     configure_planner_capacity(main)
     graph = semantic_capacity_graph("a", "Plan")
     decision = {

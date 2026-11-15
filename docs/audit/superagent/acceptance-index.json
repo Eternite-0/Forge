@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-16",
+  "scope": "Super-agent backend architecture correction and bounded real integration; not arbitrary-task or packaged-desktop acceptance",
+  "base_commit": "4b220d8bdbd834bbadda53d0baa7756e9c1bb90f",
+  "source_sha256": "388123662a3e14adcba343ee2d62c6eb84679a989a0f90780d7037efb27c277e",
+  "snapshot_definition": "backend/src/**/*.py sorted by path, followed by backend/scripts/verify_superagent.py; SHA256 over each repository-relative POSIX path and original file bytes",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "configured_model_id": "deepseek-v4.1-flash",
+  "frozen_regression": {
+    "report": "backend-regression-frozen.xml",
+    "sha256": "3932098019168d4d767e7b7f22c993a130b639534dc0f21fbfbc814e1a70e99e",
+    "tests": 2328,
+    "passed": 2312,
+    "failed": 14,
+    "errors": 0,
+    "skipped": 2,
+    "seconds": 647.081,
+    "failed_cases": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "tests.test_worker_task_sources_v23::test_compact_protocol_keeps_complete_contracts_sources_and_legacy_policy_bytes"
+    ],
+    "failure_set_matches_reproduced_baseline": true
+  },
+  "reproduced_baseline": {
+    "report": "baseline-affected.xml",
+    "sha256": "cea3bc467e1bd8ee3458ca6f32a8060475ad174c139107e2c0276c2f6f947f9f",
+    "tests": 223,
+    "passed": 209,
+    "failed": 14,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 22.063,
+    "failed_cases": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "tests.test_worker_task_sources_v23::test_compact_protocol_keeps_complete_contracts_sources_and_legacy_policy_bytes"
+    ]
+  },
+  "final_real_provider_runs": [
+    {
+      "report": "20261115T193658Z-d72209.json",
+      "sha256": "dacff8f43db83a208608a7358148615b1ed913778318cc8600a2a60eeaa03810",
+      "run_id": "20261115T193658Z-d72209",
+      "checks_passed": 17,
+      "settled_calls": 22,
+      "charged_tokens": 126055,
+      "status": "passed",
+      "final_provider_calls_settled": true,
+      "final_router_deliveries_drained": true
+    },
+    {
+      "report": "20261115T193938Z-cold-697d50.json",
+      "sha256": "d5c0175fc776cb7326477fbff78621aa1f9e55e199823e855e7a4ac5a46a30d9",
+      "run_id": "20261115T193938Z-cold-697d50",
+      "checks_passed": 16,
+      "settled_calls": 17,
+      "charged_tokens": 51306,
+      "status": "passed",
+      "final_provider_calls_settled": true,
+      "final_router_deliveries_drained": true
+    }
+  ],
+  "focused_checks": {
+    "router_compatibility_mutation_native_wire_passed": 154,
+    "lifecycle_stability": {
+      "rounds": 3,
+      "passed_each_round": 7
+    },
+    "changed_python_ruff": "passed",
+    "git_diff_check": "passed",
+    "frontend_and_tauri_diff": "none",
+    "new_dependencies": "none"
+  },
+  "historical_evidence": [
+    {
+      "run_id": "20261115T183233Z-cf6da7",
+      "effective_status": "failed",
+      "diagnostic": "20261115T183233Z-cf6da7-diagnostic.json"
+    },
+    {
+      "run_id": "20261115T190232Z-065808",
+      "effective_status": "failed_with_unsettled_calls_no_replay",
+      "report": "20261115T190232Z-065808.json",
+      "diagnostic": "20261115T190232Z-065808-diagnostic.json"
+    },
+    {
+      "run_id": "20261115T190431Z-cold-1f2fe2",
+      "original_report_status": "passed",
+      "effective_status": "failed_with_unsettled_calls_no_replay",
+      "report": "20261115T190431Z-cold-1f2fe2.json",
+      "diagnostic": "20261115T190431Z-cold-1f2fe2-diagnostic.json"
+    },
+    {
+      "run_id": "20261115T192301Z-67cf20",
+      "effective_status": "failed_recap_wire_budget",
+      "report": "20261115T192301Z-67cf20.json",
+      "diagnostic": "20261115T192301Z-67cf20-diagnostic.json"
+    },
+    {
+      "run_id": "20261115T192629Z-cold-d0dae9",
+      "effective_status": "passed_on_earlier_snapshot",
+      "report": "20261115T192629Z-cold-d0dae9.json"
+    }
+  ],
+  "unresolved_diagnostic": {
+    "report": "backend-regression-acceptance.xml",
+    "test": "tests.test_lifecycle_m7::test_actual_desktop_core_restart_keeps_router_and_changes_generation",
+    "symptom": "SQLite disk I/O error after desktop hard stop; not reproduced in three focused rounds or final full regression; cause not established"
+  }
+}

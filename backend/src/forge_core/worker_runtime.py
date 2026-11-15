@@ -284,6 +284,12 @@ def _read_action_receipt(store, connection, run_id, arguments):
 
 
 def _read_worker_core_source(store, connection, run_id, name, arguments, *, historical=False):
+    from .worker_superagent import NAMES, read
+
+    if name in NAMES:
+        if historical:
+            raise DomainError("Historical Core source requires its durable checkpoint proof")
+        return read(store, connection, run_id, name, arguments)
     if name == "worker_read_context_source":
         return _read_worker_source_slice(store, run_id, arguments, connection=connection)
     if name == "worker_read_action_receipt":
@@ -879,6 +885,24 @@ class WorkerManager:
                 **({"upstream_receipts": receipt_refs} if receipt_refs is not None else {}),
             }
             from .worker_prompts import initial_worker_messages
+            from .worker_superagent import task_context
+
+            superagent = task_context(c, quest)
+            if superagent:
+                capsule["superagent"] = superagent
+                from .worker_environment import worker_environment
+
+                capsule["execution_environment"] = worker_environment(
+                    self.store, run_id, create=False, connection=c
+                )
+                from .superagent_events import TriggerService
+
+                metadata = json.loads(quest["metadata"])
+                for thread_id in dict.fromkeys(
+                    [metadata.get("thread_id"), *metadata.get("thread_ids", [])]
+                ):
+                    if thread_id:
+                        TriggerService(self.store).subscribe(thread_id, run_id, connection=c)
 
             system, prompt = initial_worker_messages(
                 capsule,
@@ -1705,6 +1729,9 @@ class WorkerManager:
     def _checkpoint(self, run_id, token):
         with self.store.unit_of_work() as work:
             row = self._renew_lease(work.connection, run_id, token)
+            from .superagent_events import TriggerService
+
+            TriggerService(self.store).flush_run(run_id, connection=work.connection)
             inbox = work.connection.execute(
                 "SELECT event_id,payload_json FROM worker_inbox WHERE run_id=? AND consumed=0 ORDER BY rowid",
                 (run_id,),
@@ -1794,8 +1821,17 @@ class WorkerManager:
                     "worker_read_context_source",
                     "worker_read_action_receipt",
                     "worker_read_completed_delivery",
+                    "read_trigger",
+                    "handback_trigger",
+                    "recall_object",
                 }:
-                    receipt_read = pending["tool_name"] != "worker_read_context_source"
+                    receipt_read = pending["tool_name"] in {
+                        "worker_read_action_receipt",
+                        "worker_read_completed_delivery",
+                    }
+                    from .worker_superagent import NAMES as superagent_names
+
+                    superagent_call = pending["tool_name"] in superagent_names
                     try:
                         if receipt_read:
                             with self.store.unit_of_work() as work:
@@ -1811,6 +1847,21 @@ class WorkerManager:
                             content = _json(
                                 _read_worker_source_slice(self.store, run_id, arguments)
                             )
+                        elif pending["tool_name"] in {
+                            "read_trigger",
+                            "handback_trigger",
+                            "recall_object",
+                        }:
+                            from .worker_superagent import TOOLS
+
+                            definition = next(
+                                item for item in TOOLS if item["name"] == pending["tool_name"]
+                            )
+                            jsonschema.validate(arguments, definition["input_schema"])
+                            # Read and handback checkpoint atomically below. A
+                            # handback must not be applied before its success,
+                            # Core provenance and tool transcript are durable.
+                            content = None
                         else:
                             from .tool_domain import CONTRACTS
 
@@ -1834,7 +1885,7 @@ class WorkerManager:
                             if pending["tool_name"] == "worker_read_completed_delivery"
                             else 16384
                         )
-                        if len(content.encode("utf-8")) > maximum:
+                        if content is not None and len(content.encode("utf-8")) > maximum:
                             raise DomainError("Archived source exceeds readback limit")
                         with self.store.unit_of_work() as work:
                             self._fenced(work.connection, run_id, token)
@@ -1847,6 +1898,13 @@ class WorkerManager:
                                     arguments,
                                 )
                             )
+                            if superagent_call:
+                                from .worker_core_provenance import checkpoint
+
+                                content = checked
+                                if len(content.encode("utf-8")) > maximum:
+                                    raise DomainError("Archived source exceeds readback limit")
+                                checkpoint(self.store, work.connection, run_id, pending, content)
                             if checked != content:
                                 raise DomainError("Archived Worker source changed during readback")
                             work.connection.execute(
@@ -2201,6 +2259,11 @@ class WorkerManager:
                         source_readback=source_readback_available, help_allowed=help_allowed
                     )
                 )
+                if contract.get("superagent"):
+                    from .worker_superagent import TOOLS
+
+                    definitions.extend(TOOLS)
+                    allowed.extend(item["name"] for item in TOOLS)
                 from .context_service import ContextService
 
                 remaining = (
@@ -2909,6 +2972,31 @@ class WorkerManager:
             with self.store.unit_of_work() as work:
                 c = work.connection
                 current = self._fenced(c, run_id, token)
+                from .superagent_events import TriggerService
+
+                trigger_debt = (
+                    TriggerService(self.store).flush_run(run_id, connection=c)
+                    if not calls
+                    else {"pending": False}
+                )
+                if not calls and (trigger_debt["pending"] or c.execute(
+                    "SELECT 1 FROM worker_inbox WHERE run_id=? AND consumed=0 LIMIT 1", (run_id,)
+                ).fetchone()):
+                    # An event arriving during inference belongs to this task.
+                    # Preserve the charged draft but consume the new input before
+                    # publishing a result. The write lock makes the boundary
+                    # atomic with subscription delivery and final state change.
+                    ordinal = c.execute(
+                        "SELECT COALESCE(MAX(ordinal),-1)+1 FROM worker_messages WHERE run_id=?", (run_id,)
+                    ).fetchone()[0]
+                    c.execute("INSERT INTO worker_messages VALUES (?,?,'assistant',?)", (
+                        run_id, ordinal, _json({"role": "assistant", "content": response.text})))
+                    c.execute("INSERT INTO worker_messages VALUES (?,?,'user',?)", (
+                        run_id, ordinal + 1, _json({"role": "user", "content":
+                            "Core delivery boundary: new task events arrived during that draft. "
+                            "Consume the following inbox context and full referenced contents before finalizing."})))
+                    c.execute("UPDATE worker_capsules SET next_action='model',revision=revision+1 WHERE run_id=?", (run_id,))
+                    continue
                 if current["tool_spent"] + len(calls) > current["tool_limit"]:
                     raise DomainError("Tool call budget exceeded")
                 if any(

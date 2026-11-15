@@ -702,8 +702,13 @@ class QuestGraphService:
             _remaining_parent=parent["id"],
         )
 
-    def approve(self, quest_id, digest, plan_revision, *, expected_version, actor):
-        if actor != "local_user":
+    def approve(
+        self, quest_id, digest, plan_revision, *, expected_version, actor, _delegation=None
+    ):
+        from .superagent_delegation import DelegationAuthority
+
+        delegated = type(_delegation) is DelegationAuthority and actor == _delegation.actor
+        if actor != "local_user" and not delegated:
             raise DomainError("Only the authenticated local user may approve a plan")
         with self.store.unit_of_work() as work:
             quest = work.get_quest(quest_id)
@@ -735,6 +740,10 @@ class QuestGraphService:
             approved_graph = json.loads(row["graph_json"])
             if hashlib.sha256(_canonical(approved_graph).encode("utf-8")).hexdigest() != digest:
                 raise DomainError("Plan content does not match approval digest")
+            if delegated:
+                _delegation.check(
+                    work.connection, quest_id, "plan", plan_revision, digest, approved_graph
+                )
             if approved_graph.get("execution_constraints") or approved_graph.get(
                 "capacity_contract"
             ):
@@ -1091,7 +1100,9 @@ class QuestGraphService:
         composition_capacity = (data.get("capacity_contract") or {}).get("composition_capacity")
         previous_envelopes = {
             key: observation["review_envelope"]
-            for key, observation in ((data.get("capacity_contract") or {}).get("nodes") or {}).items()
+            for key, observation in (
+                (data.get("capacity_contract") or {}).get("nodes") or {}
+            ).items()
             if observation.get("review_envelope")
         }
         data["capacity_contract"] = {

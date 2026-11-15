@@ -218,6 +218,11 @@ def initial_worker_messages(capsule, *, has_successors):
         policy = _compact_worker_policy(capsule)
     task = {key: capsule[key] for key in ("objective", "success_criteria", "quest_id", "plan_id")}
     task["node_key"] = capsule["task_node_key"]
+    if capsule.get("superagent"):
+        task["superagent"] = capsule["superagent"]
+        policy += " You own this independent task. Plan execution internally; use scoped Recall and Trigger tools for full sources and later events."
+    if capsule.get("execution_environment"):
+        task["execution_environment"] = capsule["execution_environment"]
 
     if "input_acquisition_policy" in capsule:
         if capsule["input_acquisition_policy"] not in INPUT_POLICIES:

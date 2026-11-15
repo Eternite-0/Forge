@@ -54,6 +54,30 @@ class MemoryService:
         self.store = store
         self.path = str(getattr(store, "path", store))
 
+    def recall_object(self, reference, *, connection=None, **options):
+        """Read an existing typed object; recall never confers execution authority."""
+        from .recall_chain import recall_object
+
+        with self._connection(connection) as db:
+            if connection is None:
+                db.execute("BEGIN")
+            result = recall_object(db, reference, **options)
+            if connection is None:
+                db.commit()
+            return result
+
+    def recall_chain(self, references, *, connection=None, **options):
+        """Traverse existing references under one consistent read snapshot."""
+        from .recall_chain import recall_chain
+
+        with self._connection(connection) as db:
+            if connection is None:
+                db.execute("BEGIN")
+            result = recall_chain(db, references, **options)
+            if connection is None:
+                db.commit()
+            return result
+
     async def retrieve_semantic_context(self, query, **options):
         """One budgeted semantic selection over verified, bounded source candidates.
 

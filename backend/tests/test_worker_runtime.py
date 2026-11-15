@@ -20,6 +20,29 @@ def run(coro):
     return asyncio.run(coro)
 
 
+def _remove_post_v13_tables(connection):
+    """Construct a genuine older fixture rather than only editing its version.
+
+    Current-schema copies contain later independent tables; these must also be
+    removed so the migration under test can strictly create its own objects.
+    """
+    for table in (
+        "superagent_trigger_deliveries",
+        "superagent_subscriptions",
+        "superagent_timers",
+        "superagent_file_watches",
+        "superagent_triggers",
+        "superagent_threads",
+        "superagent_sources",
+        "delegation_contracts",
+        "delegation_mandates",
+        "task_project_links",
+        "workspace_projects",
+        "runtime_heartbeats",
+    ):
+        connection.execute(f"DROP TABLE {table}")
+
+
 @pytest.fixture
 def graph(tmp_path):
     store = Store(tmp_path / "worker.sqlite3", workspace=Workspace.from_path(tmp_path))
@@ -145,6 +168,57 @@ def test_worker_model_tool_loop_is_hidden_and_never_completes_quest(graph):
     assert store.get_quest(quest.id)["status"] != "completed"
     assert store.list_messages() == []
     assert any(event["event_type"] == "worker.result" for event in store.list_events())
+
+
+def test_event_arriving_during_final_inference_is_consumed_before_delivery(graph):
+    store, quest, plan = graph
+    session_id = None
+
+    class LateEventModel:
+        execution_mode = "mock"
+        calls = 0
+
+        async def generate(self, request):
+            self.calls += 1
+            if self.calls == 1:
+                with store.unit_of_work() as work:
+                    work.connection.execute(
+                        "INSERT INTO worker_inbox(run_id,event_id,payload_json,consumed) "
+                        "VALUES (?,? ,?,0)",
+                        (session_id, "late-event", json.dumps({"followup": "include appendix"})),
+                    )
+                return ModelResponse(
+                    text='{"summary":"draft"}', tool_calls=[],
+                    usage={"input_tokens": 10, "output_tokens": 5},
+                )
+            assert "include appendix" in json.dumps(request.messages)
+            assert not any(e["event_type"] == "worker.result" for e in store.list_events())
+            return ModelResponse(
+                text='{"summary":"done with appendix"}', tool_calls=[],
+                usage={"input_tokens": 10, "output_tokens": 5},
+            )
+
+    model = LateEventModel()
+    manager = WorkerManager(
+        store, ProviderPool({"mock-provider": model}), MockToolEngine(),
+        team_authority=MockApprovedTeam(plan),
+    )
+    session_id = manager.start(
+        quest.id, plan["id"], "n", team_digest="team", member_index=0,
+    )["id"]
+    result = run(manager.run(session_id))
+    assert result["state"] == "review_pending"
+    assert model.calls == 2 and result["steps"] == 2 and result["token_spent"] == 30
+    with store.connection() as connection:
+        assert connection.execute(
+            "SELECT consumed FROM worker_inbox WHERE run_id=?", (session_id,),
+        ).fetchone()[0] == 1
+        assert connection.execute(
+            "SELECT COUNT(*) FROM worker_messages WHERE run_id=? "
+            "AND message_json LIKE '%draft%'", (session_id,),
+        ).fetchone()[0] >= 1
+    events = [e for e in store.list_events() if e["event_type"] == "worker.result"]
+    assert len(events) == 1
 
 
 def test_worker_output_limit_uses_approved_role_not_fixed_256(graph):
@@ -1149,6 +1223,7 @@ def test_v7_worker_opening_migrates_once_with_known_reserves(graph, tmp_path):
             "repairs",
         ):
             target.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
+        _remove_post_v13_tables(target)
         target.execute("UPDATE schema_meta SET version=7")
         migrate(target)
         migrate(target)
@@ -1242,6 +1317,7 @@ def test_v8_active_worker_enters_output_review_without_changing_team_or_budget(g
         target.execute("DROP TABLE constraint_index_cursor")
         target.execute("DROP TABLE worker_model_reservations")
         target.execute("DROP TABLE worker_core_source_reads")
+        _remove_post_v13_tables(target)
         target.execute("UPDATE schema_meta SET version=8")
         migrate(target)
         assert target.execute(

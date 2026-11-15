@@ -3,7 +3,7 @@
 import sqlite3
 from collections.abc import Callable, Mapping
 
-SCHEMA_VERSION = 13
+SCHEMA_VERSION = 14
 Migration = Callable[[sqlite3.Connection], None]
 
 
@@ -330,6 +330,18 @@ def _core_source_prefetch(connection):
     migrate(connection)
 
 
+def _superagent_state(connection):
+    from .superagent_delegation import migrate as migrate_delegation
+    from .superagent_schema import migrate_superagent
+    from .watchdog import migrate as migrate_watchdog
+    from .workspace_discovery import migrate as migrate_projects
+
+    migrate_superagent(connection)
+    migrate_delegation(connection)
+    migrate_watchdog(connection)
+    migrate_projects(connection)
+
+
 MIGRATIONS: Mapping[int, Migration] = {
     1: _initial_schema,
     2: _reliable_state,
@@ -344,6 +356,7 @@ MIGRATIONS: Mapping[int, Migration] = {
     11: _constraint_index,
     12: _worker_model_reservations,
     13: _core_source_prefetch,
+    14: _superagent_state,
 }
 
 

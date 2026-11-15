@@ -1,19 +1,35 @@
-# FORGE v4 — Persistent Router Agent System
+# FORGE v4 — General-purpose Super-agent
 
-FORGE is a self-built, general-purpose autonomous Agent desktop application.
+FORGE is a self-built, general-purpose DeepSeek-style Super-agent desktop
+application: one persistent Router conversation coordinates hidden, isolated
+Workers and continuously receives events.
 
 ## Engineering status — 2026-11-16
 
-Phase 2 now defaults to execution without cumulative token limits, with recorded
-usage and model context/output limits still enforced. Source-bound memory
-handoffs, lossless source framing and model context compaction are implemented.
-The last archived V29 suite recorded **2,079 passed tests and 8 failures**;
-all eight failed cases pass with the existing V30 fixes. New plans now use
-task-sized delivery/response allowances and two bounded corrections. Unavailable
-extra-source reads are hidden after complete zero-action prefetch. The latest
-live L1 reached independent review and revision, with all 15 calls settled, but
-did not pass content review. See the [current handoff](docs/PHASE2_HANDOFF.md) for
-the remaining boundary. A new full suite is intentionally not being rerun.
+The backend architecture now follows DeepSeek Super-agent's
+persistent Router and independent Workers. The default Core delegates ordinary
+conversational tasks automatically, filters environmental events, sends Thread
+continuations directly to subscribed Workers, follows typed Chain of Recall
+references, and supervises durable execution. Plans, Quests and approval records
+are internal infrastructure. The frontend is unchanged in this correction.
+
+Read the [architecture audit and refactor plan](docs/SUPERAGENT_REFACTOR_PLAN.md),
+[product architecture](docs/PRODUCT_ARCHITECTURE.md) and
+[implementation and validation report](docs/SUPERAGENT_IMPLEMENTATION_REPORT.md)
+for the exact implemented behavior, tests, real Provider observations and limits.
+Historical Phase 2 evidence remains available below; it does not describe the
+new autonomous dispatch path.
+
+Frozen-source real Provider acceptance passed both the
+[conversational/restart scenario](docs/audit/superagent/20261115T193658Z-d72209.json)
+and the [event/adaptive-team scenario](docs/audit/superagent/20261115T193938Z-cold-697d50.json),
+with 22/22 and 17/17 calls settled respectively. These bounded observations
+verify the new backend flow; exact tool limits and regression debt are recorded
+in the implementation report and do not establish arbitrary-task correctness.
+The frozen backend regression recorded **2312 passed, 14 failed, 2 skipped**;
+the fourteen failures match those reproduced on the base source and tests.
+See the [acceptance index](docs/audit/superagent/acceptance-index.json) for
+report hashes, final evidence and preserved diagnostic history.
 
 See the [current status](docs/PHASE2_STATUS.md), [Phase 2 report](docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md),
 [experiments](docs/PHASE2_EXPERIMENTS.md) and [V22 historical boundary](docs/audit/phase2/acceptance-independent-v22-boundary.md).
@@ -38,7 +54,7 @@ See [current status](docs/STATUS.md), the [Phase 0 audit report](docs/PHASE0_AUD
 7. Model Registry uses provider metadata, FORGE benchmark results, online performance and explicit user overrides.
 8. Team composition combines reusable role templates with bounded dynamic role synthesis.
 9. FORGE owns its Agent Loop, Router, Worker Runtime, Tool Engine, Memory, Governance and Evidence.
-10. Codex, DSH and Claude Code are architectural references only, never execution backends.
+10. DeepSeek Super-agent defines the overall architecture; Codex and Claude Code inform Harness design. None is an execution backend.
 
 ## What this release contains
 
@@ -56,7 +72,15 @@ See [current status](docs/STATUS.md), the [Phase 0 audit report](docs/PHASE0_AUD
 
 ## Important maturity statement
 
-This is an engineering foundation with bounded context recovery, sourced lexical and model semantic recall, and evidence-gated execution. The Router uses a configured Provider or explicitly fails. Mock tests, synthetic experiments and real-provider observations are identified separately. The current independent reviewer uses the approved Worker's model in a fresh context. Bounded feedback-driven remaining-DAG proposals are implemented; their general quality, arbitrary-scale continuity and complex-task correctness remain subject to recorded acceptance. Plan/team/replacement approval stays authenticated and Review mode remains enabled. A proposal record alone never proves execution.
+This is an engineering implementation with bounded context recovery, source-bound
+recall and evidence-gated execution. A configured Provider is required; Mock
+tests and real Provider observations are identified separately. Autonomous
+internal plan/team contracts use an auditable host mandate tied to the original
+request or admitted Trigger. Manual approvals retain authenticated user authority,
+and risky tool actions still require their own authorization. A mandate or
+proposal does not prove execution. Worker directories are private execution
+contexts, not an OS sandbox. General complex-task correctness remains subject to
+recorded acceptance.
 
 ## Backend setup
 
@@ -133,6 +157,17 @@ The authenticated user API supports `POST /api/approvals`, `GET /api/approvals?q
 
 `python -m forge_api` is the shared Core launcher. From the repository root on Windows, `./scripts/run-backend.ps1` sets up the virtual environment and uses that launcher without shell activation. Pass `-WorkspaceRoot 'D:\YourWorkspace'` to the script, or `python -m forge_api --workspace-root 'D:\YourWorkspace'` directly. Workspace roots must be absolute paths.
 
+The CLI launcher supervises a separate Core process and restarts unexpected exits
+with bounded backoff (at most five restarts in ten minutes; five minutes of stable
+operation resets that count). Normal shutdown, invalid configuration and a restore
+fence stop recovery. A separate supervisor lock prevents duplicate launchers, and
+the Core retains its existing Workspace lock. The bootstrap secret reaches the
+child through a private pipe; each replacement rotates its session challenge and
+invalidates old bearer tokens. On Windows a Job Object drains the Core's descendant
+processes before recovery and kills them if the supervisor dies. The native
+`--desktop-host` protocol is unchanged; automatic native desktop process restart
+is not yet integrated.
+
 The default Workspace is independent of the checkout, installation and shell directory:
 
 | OS | Default Workspace root |
@@ -162,7 +197,39 @@ Legacy databases are **not discovered or moved automatically**. If an earlier ve
 
 Events and pending Outbox rows commit in the same transaction as their associated business changes. Durable per-consumer delivery uses leases, fencing, bounded retries, Inbox deduplication and dead-letter/replay records. Historical events migrate as pending. External tool effects require their own durable intents and receipts; event delivery alone does not make external effects exactly once.
 
-### Approved Worker execution
+### Autonomous event and Worker execution
+
+The default Router creates bounded internal execution contracts automatically.
+It may choose one to four independent Worker assignments and preset roles; the
+Registry/Composer selects eligible models. Detailed execution stays inside each
+Worker. User and event source references remain attached to the host mandate.
+The existing manual contract APIs remain compatibility and inspection tools.
+
+Authenticated host integrations can register sources with
+`POST /api/triggers/sources` and submit events with `POST /api/triggers`.
+Persistent schedules use `POST /api/triggers/schedules`; local file watches use
+`POST /api/triggers/file-watches`. These are Core integration endpoints and are
+not exposed as bearer-bearing model tools. Source policy filters events before
+inference. Subscribed Thread events go directly to Worker Inboxes, while cold
+events receive bounded Router filtering. `GET /api/recall?reference=<typed-ref>`,
+`GET /api/projects/discovered` and `GET /api/runtime/health` expose bounded
+inspection. Project associations do not grant tool access.
+
+Schedules and file watches currently require those authenticated host APIs;
+natural-language schedule/watch creation is not a model tool. External ingress
+accepts events from a trusted local adapter, without adding a public webhook
+server or built-in messaging connectors.
+
+Autonomous Workers use fixed local file/Python/Git/GPU tools. Terminal inspection
+is a fixed version probe, Git is status-only, and arbitrary shell execution is
+unavailable. The separately authorized browser tool performs allowlisted HTTPS
+GET without interactive rendering; MCP supports preconfigured HTTPS JSON-RPC
+calls. Browser and MCP are outside the default autonomous tool allowlist. GPU
+support is read-only diagnostics. See the implementation report for exact scope
+and the tools exercised by real Provider validation.
+
+The following execution details describe the shared governed Harness used by
+both autonomous and manually approved contracts.
 
 `python_test` runs bounded pure Python function tests against a governed workspace
 file using an isolated subprocess and an AST interpreter. Its approved parameters

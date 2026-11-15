@@ -34,7 +34,15 @@ def test_lifespan_recovers_one_tick_failure_and_closes_all_tasks(tmp_path, monke
     main.router.model_id = "test-enable"
     with TestClient(main.app, base_url="http://127.0.0.1", client=("127.0.0.1", 12345)):
         deadline = time.monotonic() + 4
-        while calls < 2 and time.monotonic() < deadline:
+        while time.monotonic() < deadline:
+            # The operation increments its counter before run_loop commits a
+            # successful heartbeat and publishes recovered component health.
+            if (
+                calls >= 2
+                and main.app.state.background_health.get("planner") == "ok"
+                and main.app.state.background_health.get("verifier") == "ok"
+            ):
+                break
             time.sleep(0.02)
         assert calls >= 2
         assert main.app.state.background_health["planner"] == "ok"

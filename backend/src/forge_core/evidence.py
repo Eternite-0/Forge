@@ -56,19 +56,27 @@ def _approval_valid(approval, quest):
 def _verify_worker_context_call(store, connection, run_id, call):
     """Recheck Core's read-only context tool against its own archived source."""
     from .worker_runtime import _json, _read_worker_core_source
+    from .worker_superagent import NAMES
 
     try:
         if call["state"] != "succeeded" or call["receipt_id"] is not None:
             return False
         arguments = json.loads(call["arguments_json"])
-        result = _json(
-            _read_worker_core_source(
-                store, connection, run_id, call["tool_name"], arguments, historical=True
+        if call["tool_name"] in NAMES:
+            from .worker_core_provenance import verify
+
+            if not verify(store, connection, run_id, call):
+                return False
+            result = call["result_json"]
+        else:
+            result = _json(
+                _read_worker_core_source(
+                    store, connection, run_id, call["tool_name"], arguments, historical=True
+                )
             )
-        )
         if call["result_json"] != result:
             return False
-        if call["tool_name"] == "worker_read_completed_delivery":
+        if call["tool_name"] == "worker_read_completed_delivery" or call["tool_name"] in NAMES:
             assistant_messages = connection.execute(
                 "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant'",
                 (run_id,),
@@ -481,6 +489,9 @@ class CompletionGate:
                 "worker_read_context_source",
                 "worker_read_action_receipt",
                 "worker_read_completed_delivery",
+                "read_trigger",
+                "recall_object",
+                "handback_trigger",
             }:
                 if not _verify_worker_context_call(self.store, work.connection, run["id"], call):
                     raise DomainError("Worker context source provenance is invalid")

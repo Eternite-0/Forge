@@ -242,6 +242,18 @@ def test_v7_snapshot_is_migrated_in_staging_before_publish(tmp_path):
     db = archive / "files" / manifest["database"]
     with closing(sqlite3.connect(db)) as connection:
         for table in (
+            "superagent_trigger_deliveries",
+            "superagent_subscriptions",
+            "superagent_timers",
+            "superagent_file_watches",
+            "superagent_triggers",
+            "superagent_threads",
+            "superagent_sources",
+            "delegation_contracts",
+            "delegation_mandates",
+            "task_project_links",
+            "workspace_projects",
+            "runtime_heartbeats",
             "worker_core_source_reads",
             "worker_model_reservations",
             "model_budget_attempts",

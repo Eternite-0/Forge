@@ -1,0 +1,45 @@
+{
+  "run_id": "20261115T192301Z-67cf20",
+  "execution_mode": "live",
+  "acceptance_status": "failed",
+  "original_report_preserved": true,
+  "reason_code": "recap_router_tool_context_budget_exceeded",
+  "model_calls": 23,
+  "admission_states": {"settled": 23},
+  "charged_tokens": 115765,
+  "readonly_reconstruction": {
+    "provider_calls": 0,
+    "database_writes": 0,
+    "context_bytes": 44538,
+    "completed_context_bytes": 2043,
+    "first_round_wire_bytes": 61785,
+    "input_ceiling_bytes": 61440,
+    "fixed_exception": "Router tool context budget exceeded",
+    "semantic_results_required_to_reproduce": false
+  },
+  "parallel_observation_correction": {
+    "original_report_maximum": 1,
+    "corrected_maximum_observed_ownership": 2,
+    "reason_code": "driver_overwrote_first_unclosed_claim_on_same_run_reclaim",
+    "first_run_accepted": "2026-11-15T19:23:16.647244+00:00",
+    "first_run_result": "2026-11-15T19:23:35.727301+00:00",
+    "second_run_first_accepted": "2026-11-15T19:23:25.906865+00:00",
+    "second_run_tool_observations": [
+      "2026-11-15T19:23:28.854785+00:00",
+      "2026-11-15T19:23:29.177089+00:00",
+      "2026-11-15T19:23:38.284881+00:00"
+    ],
+    "second_run_reaccepted": "2026-11-15T19:23:40.144670+00:00",
+    "second_run_result": "2026-11-15T19:23:50.045410+00:00",
+    "semantics": "Observed ownership spans may include Provider-capacity waits; they do not establish continuous computation or CPU concurrency."
+  },
+  "initial_user_turns": {
+    "router_calls": 2,
+    "semantic_calls": 2,
+    "reflection_calls": 0,
+    "snapshot_retry_cycles_observed": 0
+  },
+  "source_sha256": "d6f381b0ec8761b933cfd605cb94cb42f69e2f97ef908eaf40fe6f2839009b70",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "mock_results": null
+}

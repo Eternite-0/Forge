@@ -1140,6 +1140,12 @@ class TeamCompositionService:
             historical=historical,
             lineage_evidence=lineage_evidence,
         )
+        if status == "approved":
+            from .superagent_delegation import validate_contract_authority
+
+            validate_contract_authority(
+                connection, quest_id, plan["approved_by"], "plan", plan_revision, plan["digest"]
+            )
         try:
             if _digest(json.loads(plan["graph_json"])) != row["plan_digest"]:
                 raise ValueError
@@ -1170,8 +1176,13 @@ class TeamCompositionService:
             raise DomainError("Team proposal is stale or invalid") from exc
         return quest, row, body
 
-    def approve(self, quest_id, plan_revision, proposal_digest, *, expected_version, actor):
-        if actor != "local_user":
+    def approve(
+        self, quest_id, plan_revision, proposal_digest, *, expected_version, actor, _delegation=None
+    ):
+        from .superagent_delegation import DelegationAuthority
+
+        delegated = type(_delegation) is DelegationAuthority and actor == _delegation.actor
+        if actor != "local_user" and not delegated:
             raise DomainError("Only the authenticated user may approve a team")
         with self.store.unit_of_work() as work:
             quest, row, body = self._checked(
@@ -1184,6 +1195,10 @@ class TeamCompositionService:
             )
             if quest["version"] != expected_version:
                 raise DomainError("Quest version conflict")
+            if delegated:
+                _delegation.check(
+                    work.connection, quest_id, "team", plan_revision, proposal_digest, body
+                )
             self._check_operator_concurrency(CompositionLimits.model_validate(body["limits"]))
             graph = json.loads(
                 work.connection.execute(
@@ -1483,6 +1498,11 @@ class TeamCompositionService:
         _, row, body = self._checked(
             connection, quest_id, plan_revision, proposal_digest, status="approved"
         )
+        from .superagent_delegation import validate_contract_authority
+
+        validate_contract_authority(
+            connection, quest_id, row["approved_by"], "team", plan_revision, proposal_digest
+        )
         return {
             **body,
             "id": row["id"],
@@ -1503,10 +1523,14 @@ class TeamCompositionService:
         if (
             record is None
             or record["status"] not in {"approved", "superseded"}
-            or record["approved_by"] != "local_user"
             or not record["approved_at"]
         ):
             raise DomainError("Historical team approval unavailable")
+        from .superagent_delegation import validate_contract_authority
+
+        validate_contract_authority(
+            connection, quest_id, record["approved_by"], "team", plan_revision, proposal_digest
+        )
         run = connection.execute(
             "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_revision=? AND team_digest=?",
             (run_id, quest_id, plan_revision, proposal_digest),

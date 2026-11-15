@@ -1,6 +1,17 @@
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+
+class IndependentDispatch(BaseModel):
+    """One coarse task; its Worker owns detailed planning and execution."""
+
+    model_config = ConfigDict(extra="forbid", strict=True, str_strip_whitespace=True)
+
+    objective: str = Field(min_length=1, max_length=1200)
+    role: Literal[
+        "research", "math", "planner", "architect", "coding", "design", "experiment", "reviewer"
+    ]
 
 
 class RouterDecision(BaseModel):
@@ -57,6 +68,17 @@ class RouterDecision(BaseModel):
             "hypotheses, never as verified file contents."
         ),
     )
+    independent_dispatches: list[IndependentDispatch] = Field(
+        default_factory=list,
+        max_length=4,
+        description="Optional independent Worker objectives and roles for create_quest only.",
+    )
+
+    @model_validator(mode="after")
+    def dispatch_new_tasks_only(self):
+        if self.independent_dispatches and self.intent != "create_quest":
+            raise ValueError("Independent dispatches require a new task")
+        return self
 
 
 class TaskCapsule(BaseModel):

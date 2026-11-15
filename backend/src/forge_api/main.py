@@ -67,6 +67,9 @@ from forge_core.router import RouterService
 from forge_core.runtime import ModelCallContext, ModelRequest
 from forge_core.settings import Settings, Workspace, default_workspace_root
 from forge_core.store import Store
+from forge_core.superagent_delegation import SuperagentDelegation
+from forge_core.superagent_events import TriggerService
+from forge_core.superagent_loop import process_triggers
 from forge_core.team_composition import (
     PRESET_ROLES,
     TeamCompositionService,
@@ -76,6 +79,7 @@ from forge_core.timeline import read_timeline
 from forge_core.token_policy import token_budgets_enforced
 from forge_core.tool_domain import CONTRACTS
 from forge_core.tool_engine import ToolEngine
+from forge_core.watchdog import Watchdog
 from forge_core.worker_runtime import (
     WorkerManager,
     WorkerScheduler,
@@ -83,6 +87,7 @@ from forge_core.worker_runtime import (
 )
 from forge_core.worker_schema import STRICT_DELIVERY_OUTPUT_SCHEMA
 from forge_core.workspace_backup import FENCE_NAME, recover_interrupted_restore
+from forge_core.workspace_discovery import WorkspaceDiscovery
 from forge_core.workspace_lock import WorkspaceLock
 
 guard = SessionGuard()
@@ -188,7 +193,9 @@ router = RouterService(
     context_limit=context_limit_value,
     output_reserve=int(os.environ.get("FORGE_ROUTER_OUTPUT_RESERVE", "2048")),
     semantic_recall=True,
+    autonomous=True,
 )
+router_turn_lock = asyncio.Lock()
 quest_service = QuestService(store)
 quest_graph = QuestGraphService(store, budget_ledger=model_budget)
 native_worker_concurrency = 2
@@ -269,6 +276,14 @@ async def _core_lifespan(application):
         lease_seconds=worker_lease_seconds_from_env(),
     )
     scheduler = WorkerScheduler(manager)
+    delegation = SuperagentDelegation(
+        store, quest_graph, team_service, max_concurrency=native_worker_concurrency
+    )
+    triggers = TriggerService(store)
+    projects = WorkspaceDiscovery(store)
+    watchdog = Watchdog(store)
+    application.state.watchdog = watchdog
+    application.state.triggers = triggers
     reviewer = IndependentReviewService(manager, max_rounds=review_max_rounds_from_env())
     application.state.worker_manager = manager
     application.state.worker_scheduler = scheduler
@@ -280,6 +295,7 @@ async def _core_lifespan(application):
             try:
                 if enabled():
                     await operation()
+                watchdog.heartbeat(name, timeout_seconds=600)
                 failures = 0
                 application.state.background_health[name] = "ok"
             except asyncio.CancelledError:
@@ -287,6 +303,10 @@ async def _core_lifespan(application):
             except Exception:  # noqa: BLE001 - retry without exposing provider data
                 failures += 1
                 application.state.background_health[name] = "retrying"
+                try:
+                    watchdog.heartbeat(name, state="retrying", timeout_seconds=600)
+                except Exception:  # noqa: BLE001, S110 - one throttled warning follows below.
+                    pass
                 logging.getLogger(__name__).warning("Background %s failed; retrying", name)
             await asyncio.sleep(min(0.5 * (2 ** min(failures, 6)), 30))
 
@@ -294,30 +314,72 @@ async def _core_lifespan(application):
         await asyncio.to_thread(dispatcher.tick)
 
     async def router_tick():
-        await router.handle_pending_events(dispatcher)
+        async with router_turn_lock:
+            await process_triggers(router)
+            await router.handle_pending_events(dispatcher)
+
+    async def delegation_tick():
+        await asyncio.to_thread(delegation.tick)
+
+    async def source_tick():
+        from forge_core.superagent_sources import LocalTriggerSources
+
+        sources = LocalTriggerSources(store)
+        await asyncio.to_thread(sources.poll_due)
+        await asyncio.to_thread(sources.poll_files)
+
+    async def watchdog_tick():
+        await asyncio.to_thread(watchdog.tick)
+        watchdog.supervise(loops, restart_loop)
+
+    async def prepare_worker_tick():
+        with store.connection() as c:
+            quests = c.execute(
+                "SELECT id FROM quests WHERE status IN ('approved','queued','running') "
+                "AND NOT EXISTS (SELECT 1 FROM task_project_links l WHERE l.quest_id=quests.id) "
+                "LIMIT 16"
+            ).fetchall()
+        for quest in quests:
+            await asyncio.to_thread(projects.associate_request, quest["id"])
+        await scheduler.tick()
 
     async def verify_tick():
         await reviewer.tick()
         await asyncio.to_thread(NodeVerifier(store, revision_handler=manager.request_revision).tick)
 
-    task = asyncio.create_task(run_loop("dispatcher", dispatch_tick))
-    router_task = asyncio.create_task(
-        run_loop("router", router_tick, lambda: bool(router.model_id))
-    )
-    planner_task = asyncio.create_task(
-        run_loop("planner", process_pending_plan, lambda: bool(router.model_id))
-    )
-    composer_task = asyncio.create_task(
-        run_loop("composer", process_pending_team, lambda: bool(router.model_id))
-    )
-    worker_task = asyncio.create_task(run_loop("worker", scheduler.tick))
-    verifier_task = asyncio.create_task(run_loop("verifier", verify_tick))
-    tasks = [task, router_task, planner_task, composer_task, worker_task, verifier_task]
-    application.state.background_tasks = tasks
+    operations = {
+        "dispatcher": dispatch_tick,
+        "router": router_tick,
+        "planner": process_pending_plan,
+        "composer": process_pending_team,
+        "worker": prepare_worker_tick,
+        "verifier": verify_tick,
+        "delegation": delegation_tick,
+        "sources": source_tick,
+    }
+
+    def restart_loop(name):
+        watchdog.heartbeat(name, state="restarting", timeout_seconds=600)
+        return asyncio.create_task(
+            run_loop(
+                name,
+                operations[name],
+                lambda: (
+                    bool(router.model_id)
+                    if name in {"router", "planner", "composer", "delegation"}
+                    else True
+                ),
+            )
+        )
+
+    loops = {name: restart_loop(name) for name in operations}
+    watchdog_task = asyncio.create_task(run_loop("watchdog", watchdog_tick))
+    application.state.background_tasks = list(loops.values()) + [watchdog_task]
     try:
         yield
     finally:
         stop.set()
+        tasks = list(loops.values()) + [watchdog_task]
         for background_task in tasks:
             background_task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
@@ -461,6 +523,14 @@ async def process_pending_plan():
             return False
         notice = dict(row)
         quest = work.get_quest(notice["quest_id"])
+        if work.connection.execute(
+            "SELECT 1 FROM delegation_mandates WHERE quest_id=?", (notice["quest_id"],)
+        ).fetchone():
+            work.connection.execute(
+                "UPDATE event_inbox SET processed_at=? WHERE consumer_id='planner' AND event_id=?",
+                (now_iso(), notice["event_id"]),
+            )
+            return True
         existing = work.connection.execute(
             "SELECT 1 FROM quest_plans WHERE quest_id=? AND revision=? LIMIT 1",
             (notice["quest_id"], quest["plan_revision"] if quest else -1),
@@ -575,6 +645,14 @@ async def process_pending_team():
             return False
         notice = dict(row)
         quest = work.get_quest(notice["quest_id"])
+        if work.connection.execute(
+            "SELECT 1 FROM delegation_mandates WHERE quest_id=?", (notice["quest_id"],)
+        ).fetchone():
+            work.connection.execute(
+                "UPDATE event_inbox SET processed_at=? WHERE consumer_id='composer' AND event_id=?",
+                (now_iso(), notice["event_id"]),
+            )
+            return True
         plan = work.connection.execute(
             "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
             (notice["quest_id"], quest["plan_revision"] if quest else -1),
@@ -1506,11 +1584,98 @@ def budget_summary():
 @app.post("/api/conversation/message")
 async def send_message(payload: MessageIn):
     try:
-        return await router.handle_user_message(payload.content, request_id=payload.request_id)
+        async with router_turn_lock:
+            return await router.handle_user_message(payload.content, request_id=payload.request_id)
     except DomainError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except ProviderError as exc:
         raise HTTPException(status_code=503, detail=f"Provider unavailable: {exc.code}") from exc
+
+
+class TriggerSourceIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str = Field(min_length=1, max_length=256)
+    kind: str = Field(min_length=1, max_length=256)
+    mode: Literal["candidate", "explicit", "ignore"] = "candidate"
+    allowed_actors: list[str] | None = None
+
+
+class TriggerIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str
+    external_id: str
+    thread_key: str
+    payload: dict
+    actor: str | None = None
+    addressed: bool = False
+
+
+class TriggerScheduleIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str
+    thread_key: str
+    payload: dict
+    due_at: float = Field(allow_inf_nan=False)
+    interval_seconds: float | None = Field(default=None, gt=0, allow_inf_nan=False)
+
+
+class TriggerFileWatchIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source_id: str
+    path: str
+    thread_key: str | None = None
+
+
+@app.post("/api/triggers/sources")
+def register_trigger_source(payload: TriggerSourceIn):
+    return TriggerService(store).register_source(**payload.model_dump())
+
+
+@app.post("/api/triggers")
+def receive_trigger(payload: TriggerIn):
+    return TriggerService(store).receive(**payload.model_dump())
+
+
+@app.get("/api/triggers")
+def pending_triggers(limit: int = Query(default=32, ge=1, le=256)):
+    return TriggerService(store).pending(limit=limit)
+
+
+@app.post("/api/triggers/schedules")
+def schedule_trigger(payload: TriggerScheduleIn):
+    from forge_core.superagent_sources import LocalTriggerSources
+
+    return LocalTriggerSources(store).schedule(**payload.model_dump())
+
+
+@app.post("/api/triggers/file-watches")
+def watch_trigger_file(payload: TriggerFileWatchIn):
+    from forge_core.superagent_sources import LocalTriggerSources
+
+    return LocalTriggerSources(store).watch_file(
+        payload.source_id, payload.path, thread_key=payload.thread_key
+    )
+
+
+@app.get("/api/recall")
+def recall_object(
+    reference: str,
+    offset: int = Query(default=0, ge=0),
+    relation_offset: int = Query(default=0, ge=0, le=4096),
+):
+    return MemoryService(store).recall_object(
+        reference, offset=offset, relation_offset=relation_offset, max_bytes=8192
+    )
+
+
+@app.get("/api/projects/discovered")
+def discovered_projects():
+    return WorkspaceDiscovery(store).list_projects()
+
+
+@app.get("/api/runtime/health")
+def runtime_health():
+    return {"components": Watchdog(store).snapshot()}
 
 
 @app.get("/api/artifacts/receipts/{receipt_id}/diff")

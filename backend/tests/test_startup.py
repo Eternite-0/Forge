@@ -42,7 +42,9 @@ class MockProvider:
         decision = {"intent":"create_quest","reply":"mock","title":"测试","goal":"测试","quest_id":None,"candidates":[]}
         return type("MockResponse", (), {"text":json.dumps(decision),"tool_calls":[],"usage":{}})()
 def init(self, *args, **kwargs):
-    kwargs.update(provider=MockProvider(), model_id="mock")
+    # This fixture exercises manual lifecycle CAS; autonomous task admission has
+    # its own integration tests with a fully configured model registry.
+    kwargs.update(provider=MockProvider(), model_id="mock", autonomous=False)
     _init(self, *args, **kwargs)
 RouterService.__init__ = init
 """,
