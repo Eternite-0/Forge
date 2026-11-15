@@ -1,0 +1,135 @@
+...................F....                                                 [100%]
+================================== FAILURES ===================================
+_ test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[None] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-668/test_approved_completed_lineag0')
+mutation = None
+
+    @pytest.mark.parametrize("mutation", [None, "goal", "inherited_state", "source_state", "preview"])
+    def test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards(
+        tmp_path, mutation
+    ):
+        store, manager, _model, worker = prepared(
+            tmp_path, [tool("file_read", {"path": "work/input.txt"}), response(delivery())]
+        )
+        asyncio.run(manager.run(worker["id"]))
+        # A state fixture isolates read-only lineage reconstruction. Mock execution
+        # is deliberately never accepted as live completed-task or PASS evidence.
+        with store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE worker_runs SET state='succeeded' WHERE id=?", (worker["id"],)
+            )
+            work.connection.execute(
+                "UPDATE task_nodes SET status='succeeded' WHERE plan_id=?", (worker["plan_id"],)
+            )
+            work.connection.execute(
+                "UPDATE workers SET status='succeeded' WHERE id=?", (worker["worker_id"],)
+            )
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            original_hash = _hash(_packet(store, connection, row))
+            original_run = dict(row)
+            original_graph = json.loads(
+                connection.execute(
+                    "SELECT graph_json FROM quest_plans WHERE id=?", (worker["plan_id"],)
+                ).fetchone()[0]
+            )
+            version = connection.execute(
+                "SELECT version FROM quests WHERE id=?", (worker["quest_id"],)
+            ).fetchone()[0]
+        graphs = QuestGraphService(store)
+        proposed = graphs.propose_remaining(
+            worker["quest_id"], original_graph, expected_version=version
+        )
+        with store.connection() as connection:
+            assert (
+                connection.execute(
+                    "SELECT plan_revision FROM quests WHERE id=?", (worker["quest_id"],)
+                ).fetchone()[0]
+                == worker["plan_revision"]
+            )
+            version = connection.execute(
+                "SELECT version FROM quests WHERE id=?", (worker["quest_id"],)
+            ).fetchone()[0]
+        graphs.approve(
+            worker["quest_id"],
+            proposed["digest"],
+            proposed["plan_revision"],
+            expected_version=version,
+            actor="local_user",
+        )
+        with store.unit_of_work() as work:
+            if mutation == "goal":
+                work.connection.execute(
+                    "UPDATE quests SET goal='changed overall goal' WHERE id=?", (worker["quest_id"],)
+                )
+            elif mutation == "inherited_state":
+                work.connection.execute(
+                    "UPDATE task_nodes SET status='failed' WHERE plan_id=?", (proposed["id"],)
+                )
+            elif mutation == "source_state":
+                work.connection.execute(
+                    "UPDATE worker_runs SET state='review_pending' WHERE id=?", (worker["id"],)
+                )
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            if mutation == "preview":
+                with pytest.raises(DomainError):
+                    _review_assignment(store, connection, row, preview=True)
+            elif mutation:
+                with pytest.raises(DomainError):
+                    _packet(store, connection, row)
+            else:
+>               assert _hash(_packet(store, connection, row)) == original_hash
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:613: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\independent_review.py:366: in _packet
+    assignment = _review_assignment(store, connection, run)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:305: in _review_assignment
+    else authority.get_historical_approved(
+backend\src\forge_core\team_composition.py:1235: in get_historical_approved
+    _, row, body = self._checked(
+backend\src\forge_core\team_composition.py:948: in _checked
+    quest, plan = self._current_plan(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x0000018B5F14B010>
+quest_id = 'quest_10f79b13404c', plan_revision = 1
+plan_digest = '6bd27cc7e661095d84819bb0fa89fd37fe1e04a4958c883c0e26b587b15d576b'
+allow_running = True, historical = True
+
+    @staticmethod
+    def _current_plan(
+        connection, quest_id, plan_revision, plan_digest, *, allow_running=False, historical=False
+    ):
+        quest = connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
+        plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?", (quest_id, plan_revision)
+        ).fetchone()
+        if (
+            quest is None
+            or plan is None
+            or quest["plan_revision"] != plan_revision
+            or quest["status"]
+            not in (
+                {"approved", "queued", "running", "completed"}
+                if historical
+                else (
+                    {"approved", "queued", "running"} if allow_running else {"approved", "queued"}
+                )
+            )
+            or plan["status"] != "approved"
+            or plan["digest"] != plan_digest
+        ):
+>           raise DomainError("Approved current plan required")
+E           forge_core.domain.DomainError: Approved current plan required
+
+backend\src\forge_core\team_composition.py:636: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_review_envelope_phase2.py::test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[None]
+1 failed, 23 passed in 4.81s

@@ -1,0 +1,25 @@
+{
+  "scope": "unchanged_existing_assertion_and_wait_AST",
+  "files": {
+    "backend/tests/planner_capacity_fixtures.py": {
+      "assertion_count": 0,
+      "wait_count": 0,
+      "unchanged": true
+    },
+    "backend/tests/test_core_measured_planner_v19.py": {
+      "assertion_count": 51,
+      "wait_count": 0,
+      "unchanged": true
+    },
+    "backend/tests/test_m4_integration.py": {
+      "assertion_count": 76,
+      "wait_count": 10,
+      "unchanged": true
+    },
+    "backend/tests/test_m4_adversarial.py": {
+      "assertion_count": 13,
+      "wait_count": 0,
+      "unchanged": true
+    }
+  }
+}

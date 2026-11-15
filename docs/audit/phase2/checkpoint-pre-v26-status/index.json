@@ -1,0 +1,45 @@
+{
+  "scope": "Exact previous status bytes; no acceptance promotion",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 54159,
+      "sha256": "34ee14ae695af57afe4ed44fef3c53ed7235573cf937fd0347f9aac9bf348a4d"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "bytes": 8759,
+      "sha256": "0a0d267289c0cc447643f665e9752c335e073080a70371b51a1254146f7007ed"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "bytes": 6968,
+      "sha256": "3c9ed5a4f294d4484c7e429f65abacd2e6ea5cda132e0352f4682436b0650f95"
+    },
+    {
+      "path": "docs/QUALITY_GATES.md",
+      "bytes": 8378,
+      "sha256": "6be4161c7718f7d5c9d6a8e339398abdb6114969bf1f59caa47d1642c4dc2972"
+    },
+    {
+      "path": "docs/PHASE2_STATUS.md",
+      "bytes": 10034,
+      "sha256": "162c16b062fe0d5b3f07b714f9eea14a12768fef3b5a149f476bc5054bf79d8f"
+    },
+    {
+      "path": "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "bytes": 13061,
+      "sha256": "629cb2d732569407eda7eaba357126d944bc831d3d1167e024339f166b12d52f"
+    },
+    {
+      "path": "docs/PHASE2_EXPERIMENTS.md",
+      "bytes": 12944,
+      "sha256": "a7d2361af4a8199cc84cb3d25e9993e87e25bd3cb458dfa671b56f92b4fccdf8"
+    },
+    {
+      "path": "docs/audit/phase2/verification.json",
+      "bytes": 149249,
+      "sha256": "3c016c3ef6df2b2316f4ef341ae7de8cae19312f8fd185a2960f81e79c0479d7"
+    }
+  ]
+}

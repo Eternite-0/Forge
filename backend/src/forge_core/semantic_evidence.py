@@ -92,11 +92,36 @@ class SemanticVerifier:
         ).fetchone()
         if intent is None or call is None or node is None:
             raise DomainError("Semantic receipt binding missing")
+        inherited = False
         if (
-            quest["status"] not in (("running", "completed") if historical else ("running",))
-            or quest["plan_revision"] != plan_revision
+            historical
+            and quest["plan_revision"] != plan_revision
+            and worker["state"] == "succeeded"
+        ):
+            from .plan_lineage import validated_lineage_source
+
+            current_plan = connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if current_plan is None:
+                raise DomainError("Semantic current lineage is unavailable")
+            source = validated_lineage_source(connection, quest, current_plan, worker["node_key"])
+            inherited = (
+                source["source_run"]["id"] == run_id
+                and source["source_plan"]["id"] == plan_id
+                and source["source_run"]["worker_id"] == worker_id
+            )
+        if (
+            quest["status"]
+            not in (
+                {"approved", "queued", "running", "reviewing", "completed"}
+                if inherited
+                else (("running", "completed") if historical else ("running",))
+            )
+            or (quest["plan_revision"] != plan_revision and not inherited)
             or plan["revision"] != plan_revision
-            or plan["status"] != "approved"
+            or plan["status"] not in ({"approved", "superseded"} if inherited else {"approved"})
             or worker["quest_id"] != quest_id
             or worker["worker_id"] != worker_id
             or worker["plan_id"] != plan_id
@@ -111,13 +136,13 @@ class SemanticVerifier:
             or intent["run_id"] != run_id
             or intent["plan_id"] != plan_id
             or intent["plan_revision"] != plan_revision
-            or intent["tool_name"] != "file_write"
+            or intent["tool_name"] not in {"file_write", "file_revise"}
             or intent["state"] != "succeeded"
             or intent["execution_mode"] != "live"
             or receipt["execution_mode"] != "live"
             or call["state"] != "succeeded"
             or call["call_id"] != intent["call_id"]
-            or call["tool_name"] != "file_write"
+            or call["tool_name"] != intent["tool_name"]
         ):
             raise DomainError("Semantic evidence is outside the current approved execution")
         try:
@@ -133,7 +158,12 @@ class SemanticVerifier:
             expected_path = Path(GovernanceService(self.store)._workspace_scope(params["path"]))
             if (
                 not isinstance(params, dict)
-                or set(params) != {"path", "content"}
+                or set(params)
+                != (
+                    {"path", "content"}
+                    if intent["tool_name"] == "file_write"
+                    else {"path", "content", "prior_receipt_id", "expected_sha256"}
+                )
                 or not isinstance(params["content"], str)
                 or params != call_params
                 or parameter_digest(params) != intent["parameter_digest"]
@@ -180,9 +210,13 @@ class SemanticVerifier:
             if (
                 member["role_id"] != worker["role_id"]
                 or member["task_node_key"] != worker["node_key"]
-                or "file_write" not in member["tool_scope"]
+                or intent["tool_name"] not in member["tool_scope"]
             ):
                 raise ValueError("team")
+            if intent["tool_name"] == "file_revise":
+                from .artifact_revision import verify_file_revision_chain
+
+                verify_file_revision_chain(connection, run_id, receipt_id)
         except (KeyError, TypeError, ValueError, IndexError, json.JSONDecodeError) as exc:
             raise DomainError("Semantic evidence failed integrity validation") from exc
         return {

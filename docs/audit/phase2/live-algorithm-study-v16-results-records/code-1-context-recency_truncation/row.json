@@ -1,0 +1,93 @@
+{
+  "candidate": {
+    "answers": [],
+    "citations": [],
+    "completed": false,
+    "retained_constraints": []
+  },
+  "case_id": "code-1",
+  "context_cap": 16384,
+  "context_records_sha256": "a4fb59b11c44060c951b8c94d92dabcdd52f066149d42b632cb2ac5d7c31795a",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "code_contract",
+  "duration_seconds": 2.2893444999936037,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": false,
+    "obligations_retained": 0,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer",
+      "source_evidence",
+      "lost_obligation",
+      "not_completed"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_4f6f0940c808",
+      "receipt_id": "receipt_1dfdb4f69245",
+      "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+      "source_id": "function"
+    },
+    {
+      "intent_id": "action_b5fd3e04d542",
+      "receipt_id": "receipt_5cba7346b69e",
+      "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+      "source_id": "inputs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_76533900fc61",
+      "duration_seconds": 1.8201291000004858,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "0c5340ae5933811aa6a2d33cf8dde2bb2d0bc75c1906499f9980d8f8bd2b8588",
+      "response_sha256": "363ac876264ace1233b2d38957becdad31e8e94ea1c20172d883978a7e3911e6",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 443,
+        "output_tokens": 21
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_76533900fc61",
+        "cost_charged": null,
+        "input_charged": 443,
+        "input_reserved": 3113,
+        "output_charged": 21,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 443,
+    "known_input_tokens": 443,
+    "known_output_tokens": 21,
+    "model_calls": 1,
+    "output_tokens": 21,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "recency_truncation"
+}

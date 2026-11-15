@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-15",
+  "classification": "offline_readonly_live_snapshot_diagnostic",
+  "source_workspace": "ws-20261115T004902Z-L2-7bc427",
+  "worker_run_id": "run_29ac0f123139",
+  "original_live_status": "blocked",
+  "original_failure_code": "context_budget",
+  "source_connection": "mode=ro",
+  "execution": "temporary_sqlite_backup_only",
+  "provider_calls": 0,
+  "tool_executions": 0,
+  "worker_token_limit": 58000,
+  "worker_token_spent": 25977,
+  "remaining_allowance": 32023,
+  "output_reserve": 8000,
+  "tool_definitions_bytes": 2136,
+  "tools_output_and_fixed_overhead": 10264,
+  "input_budget_bytes": 21759,
+  "original_context_failure_reproduced": true,
+  "before_initial_and_raw_tail_bytes": 23930,
+  "before_minimum_pinned_context_bytes": 29381,
+  "after_context_bytes": 12326,
+  "recent_exchange": {
+    "raw_results_omitted": true,
+    "reason": "input_budget",
+    "requires_source_readback": true,
+    "source_refs": ["14", "15", "16"],
+    "trust": "untrusted archived data; not completion evidence"
+  },
+  "worker_counters_and_state_unchanged": true,
+  "evidence_receipts_events_unchanged": true,
+  "original_worker_messages_unchanged": true,
+  "exact_source_readback": [
+    {
+      "ordinal": 14,
+      "bytes": 380,
+      "sha256": "a8a1cb007c0653d6130c7050624053c9b0e195901bcad76bc398bfaebe721b8c",
+      "exact_match": true
+    },
+    {
+      "ordinal": 15,
+      "bytes": 8383,
+      "sha256": "61c94c9733c26b40786f525486431975f49f6c1318987f3248863e6ca9c6e0c7",
+      "exact_match": true
+    },
+    {
+      "ordinal": 16,
+      "bytes": 12994,
+      "sha256": "3f0d6bfbaf82e9bbacabc42312e9e590143b2a9ee766623c504d7a5bf37e1dfc",
+      "exact_match": true
+    }
+  ],
+  "context_service_sha256": "46b946cc6b1331b76c9b39f56defb04d7b2f62e36ff070c947b5f808c1b9e908",
+  "validation": {
+    "new_regression_cases": 7,
+    "focused_context_group": {
+      "passed": 25,
+      "pytest_wall_seconds": 9.13,
+      "junit": "worker-context-tail-tests.xml"
+    },
+    "expanded_related_group": {
+      "passed": 97,
+      "pytest_wall_seconds": 22.8,
+      "junit": "worker-context-tail-integration-tests.xml"
+    },
+    "ruff_check": "passed",
+    "ruff_format_check": "passed"
+  },
+  "limits": [
+    "The original live failure and approved budget are unchanged.",
+    "Additional tail archival requires a prior archive so the current request already offers original-source readback.",
+    "Only a whole latest exchange with all successful same-run, worker, plan, revision and mode-bound intents and receipts is eligible.",
+    "Pending, uncertain, incomplete or unreceipted tails remain live and may block.",
+    "The initial contract, original cumulative budget and completion evidence checks remain mandatory.",
+    "No model continuation, task completion or repair quality is established by this diagnostic."
+  ]
+}

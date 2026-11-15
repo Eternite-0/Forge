@@ -1,0 +1,310 @@
+{
+  "acceptance": {
+    "checks": {
+      "accounted_model_usage": "passed",
+      "approved_current_dag": "passed",
+      "bounded_approved_team": "passed",
+      "completed_quest": "failed",
+      "database_evidence": "passed",
+      "independent_content_review": "failed",
+      "independent_delivery_review": "failed",
+      "input_integrity": "passed",
+      "input_sources_read": "passed",
+      "one_worker": "passed",
+      "readonly_tool_receipts": "passed",
+      "real_provider_calls": "passed",
+      "receipt_integrity": "passed",
+      "router_completion_summary": "failed",
+      "single_conversation": "passed",
+      "structured_deliveries": "failed",
+      "successful_worker_nodes": "failed",
+      "three_ranked_findings_or_explicit_insufficient_evidence": "failed"
+    },
+    "failed_checks": [
+      "completed_quest",
+      "successful_worker_nodes",
+      "structured_deliveries",
+      "independent_content_review",
+      "independent_delivery_review",
+      "three_ranked_findings_or_explicit_insufficient_evidence",
+      "router_completion_summary"
+    ],
+    "passed": false,
+    "status": "failed",
+    "unknown_checks": []
+  },
+  "actual_final_status": "running",
+  "artifact_hashes": [],
+  "code_snapshot_sha256": null,
+  "compaction": {
+    "archive_created": null,
+    "rebuilt_messages": null,
+    "source_count": null,
+    "source_readback_available": null
+  },
+  "context_archives": 0,
+  "conversation_count": 1,
+  "cost": null,
+  "driver_final_status": null,
+  "duration_seconds": 573.398,
+  "execution_mode": "live",
+  "failures": [
+    "quest_did_not_reach_terminal_state",
+    "acceptance_failed:completed_quest",
+    "acceptance_failed:successful_worker_nodes",
+    "acceptance_failed:structured_deliveries",
+    "acceptance_failed:independent_content_review",
+    "acceptance_failed:independent_delivery_review",
+    "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+    "acceptance_failed:router_completion_summary"
+  ],
+  "inspection_error": null,
+  "level": "L1",
+  "model_attempts": [
+    {
+      "attempt_id": "7c061585943a4db9af09336a37a8ab40",
+      "call_id": "call_cb853a099759",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2548,
+      "input_reserved": 12867,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 1423,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "0f9e033bb80d45de8a96ad430efeed33",
+      "call_id": "call_0f673d19a1c6",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3623,
+      "input_reserved": 17771,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 1338,
+      "output_reserved": 8192,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "7e055df943234d0db1d8490e75cecd7e",
+      "call_id": "call_df6163229013",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2628,
+      "input_reserved": 15272,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 3564,
+      "output_reserved": 8192,
+      "provider_id": "wb-local",
+      "purpose": "team_composer",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "478e47d9840140be980e606e92956010",
+      "call_id": "call_b27fdff0f749",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2628,
+      "input_reserved": 15272,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 5974,
+      "output_reserved": 8192,
+      "provider_id": "wb-local",
+      "purpose": "team_composer",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "a5601712fc894fbd84e4f826d175b393",
+      "call_id": "model_call_7fbfe26c71c9",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 1789,
+      "input_reserved": 6924,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 90,
+      "output_reserved": 7000,
+      "provider_id": "wb-local",
+      "purpose": "worker",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "08357c16a4774ff9a0490b373d5302e5",
+      "call_id": "model_call_d0164823c679",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2338,
+      "input_reserved": 8830,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 91,
+      "output_reserved": 7000,
+      "provider_id": "wb-local",
+      "purpose": "worker",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "d08e3c36f6144fdfa2be6523ab38e50f",
+      "call_id": "model_call_ac125ef70aa1",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 5681,
+      "input_reserved": 22883,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 7000,
+      "output_reserved": 7000,
+      "provider_id": "wb-local",
+      "purpose": "worker",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "ea91ce2916a84032a9a5a6cfc2ab96e3",
+      "call_id": "call_5e7755213e68",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2391,
+      "input_reserved": 10032,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 75,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_notice",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "de6e7a722b8d40d1864178273d6ec153",
+      "call_id": "call_bbf8ff523822",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2521,
+      "input_reserved": 10426,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 49,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_notice",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "92dfdb45b7c54b3b95917e5b0dc19e64",
+      "call_id": "call_78fd8d2b0978",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2390,
+      "input_reserved": 10032,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 60,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_notice",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "68bdd2e1628e44d296b024537c6db34a",
+      "call_id": "call_bcef8205ecc5",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2429,
+      "input_reserved": 10192,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 463,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_notice",
+      "state": "settled"
+    }
+  ],
+  "model_attempts_omitted": 0,
+  "model_calls": 11,
+  "model_settlement_wait": {
+    "timeout_seconds": null,
+    "unsettled_attempts": null,
+    "waited_seconds": null
+  },
+  "publication_scope": "Allowlisted summaries of already-redacted live-driver records. Prompt/reply/log/artifact content omitted; unknown usage/cost preserved. A completed Quest alone does not establish scenario acceptance.",
+  "restart": {
+    "after": null,
+    "initial_router_identity": null,
+    "restored_router_identity": null,
+    "router_identity_retained": null,
+    "same_workspace": null
+  },
+  "retry_accounting": null,
+  "retry_breakdown": {
+    "background_notice_retries": null,
+    "provider_http_retries": null,
+    "review_revision_requests": null,
+    "worker_self_repairs": null
+  },
+  "retry_count": 0,
+  "review_results": [],
+  "router_status": 200,
+  "run_id": "20261115T000018Z-L1-639362",
+  "runtime_settings": {
+    "model_concurrency_limit": null,
+    "model_token_limit": null,
+    "provider_max_retries": null,
+    "provider_timeout_seconds": null,
+    "reasoning_effort": null,
+    "review_max_rounds": null,
+    "worker_lease_seconds": null
+  },
+  "scenario_id": "forge-phase2-level-1-v1",
+  "schema_version": 1,
+  "semantic_test_runs": 0,
+  "token_usage": {
+    "input": 30966,
+    "output": 20127,
+    "unknown_attempts": 0
+  },
+  "tool_calls": 4,
+  "tools": [
+    {
+      "call_id": "call_b461817d10753679ac0601f249a210b13f61118d9ef84d8cfecd89406d798902",
+      "execution_mode": "live",
+      "receipt_id": "receipt_64d3f25ee5e8",
+      "state": "succeeded",
+      "tool_name": "file_read"
+    },
+    {
+      "call_id": "call_a45342611c1d31172805218557cea4fa68af348475c1f3810fa71435fc706c32",
+      "execution_mode": "live",
+      "receipt_id": "receipt_be80717222dc",
+      "state": "succeeded",
+      "tool_name": "directory_list"
+    },
+    {
+      "call_id": "call_c77dcd7c1cb9d9430ecc15f263523da942f486b1df4d79b16eecee3daa7f9441",
+      "execution_mode": "live",
+      "receipt_id": "receipt_e265052020f1",
+      "state": "succeeded",
+      "tool_name": "file_read"
+    },
+    {
+      "call_id": "call_e619b2fee4582d4722b10bf84f9678ea85ba8a854ad2fd90b4a5b77071d26603",
+      "execution_mode": "live",
+      "receipt_id": "receipt_475606005a8e",
+      "state": "succeeded",
+      "tool_name": "file_read"
+    }
+  ],
+  "workers": [
+    {
+      "execution_mode": "live",
+      "id": "run_6eef5defe15c",
+      "model_id": "deepseek-v4.1-flash",
+      "node_key": "analysis",
+      "provider_id": "wb-local",
+      "repairs": 0,
+      "role_id": "reviewer",
+      "state": "blocked",
+      "steps": 3,
+      "token_limit": 63000,
+      "token_spent": 34111,
+      "tool_spent": 4,
+      "worker_id": "worker_e903cf5cfd5b"
+    }
+  ]
+}

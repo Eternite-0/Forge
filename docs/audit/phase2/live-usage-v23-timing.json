@@ -1,0 +1,1472 @@
+{
+  "generated_at": "2026-11-15T13:02:21.854570+00:00",
+  "source_version": "v23",
+  "scope": "Immutable timing and failure interpretation of three original finished strict V23 drivers. SQLite URI mode=ro, query_only, explicit BEGIN. No Store construction, Provider call, credentials, source edits or original record changes.",
+  "audit_driver": {
+    "path": ".local/phase2/audit_v23_addenda.py",
+    "bytes": 13509,
+    "sha256": "5d6c449b86218aec0b0aeb5b8e8d42b6eebb343460c64502cfa356d29d8bfad5"
+  },
+  "usage_audit": {
+    "path": "docs/audit/phase2/live-usage-v23-audit.json",
+    "bytes": 25381,
+    "sha256": "6dd75adea3f0eef2f4e2a40293a19b7afd0a1d2c399e37bb79923078ae06aabc"
+  },
+  "runs": [
+    {
+      "run_id": "20261115T124831Z-L1-e59339",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T124831Z-L1-e59339/run.json",
+        "bytes": 45090,
+        "sha256": "6e51ab977eac79904a6374803af90789c50930cdee3ca0827a2992965e39ed77"
+      },
+      "timestamps": {
+        "driver_started": "2026-11-15T12:48:31.876270+00:00",
+        "core_started": "2026-11-15T12:48:33.008870+00:00",
+        "quest_proposed": "2026-11-15T12:48:43.868406+00:00",
+        "final_plan_rejected": "2026-11-15T12:48:52.070924+00:00",
+        "planner_notice_dead": "2026-11-15T12:48:52.074412+00:00",
+        "driver_finished": "2026-11-15T12:48:53.530421+00:00"
+      },
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core_started",
+          "seconds": 1.1326
+        },
+        {
+          "from": "core_started",
+          "to": "quest_proposed",
+          "seconds": 10.859536
+        },
+        {
+          "from": "quest_proposed",
+          "to": "final_plan_rejected",
+          "seconds": 8.202518
+        },
+        {
+          "from": "final_plan_rejected",
+          "to": "planner_notice_dead",
+          "seconds": 0.003488
+        },
+        {
+          "from": "planner_notice_dead",
+          "to": "driver_finished",
+          "seconds": 1.456009
+        }
+      ],
+      "whole_driver_duration_seconds": 21.647,
+      "utc_wall_interval_seconds": 21.654151,
+      "transcript": [
+        {
+          "at": 2.9,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 12.03,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 13.33,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 21.64,
+          "label": "events",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:one_worker",
+        "acceptance_unknown:readonly_tool_receipts",
+        "acceptance_unknown:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_unknown:independent_delivery_review"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.002,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "aced1fc475614ba09f5118aec8251989",
+          "call_id": "memory_call_c22082244d75",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 793,
+          "output_charged": 26,
+          "created_at": 1794746916.2569644
+        },
+        {
+          "attempt_id": "c02be4a81a0b42419386962256449d1d",
+          "call_id": "call_65728c132451",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 2888,
+          "output_charged": 567,
+          "created_at": 1794746919.2115316
+        },
+        {
+          "attempt_id": "7f7e898b25bf4eeca59b5a00c01c9674",
+          "call_id": "call_39f0c0aedad6",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 5871,
+          "output_charged": 364,
+          "created_at": 1794746925.1384058
+        },
+        {
+          "attempt_id": "a4519738c86146bcb5e4ac4590173af9",
+          "call_id": "call_9af341782e34",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6928,
+          "output_charged": 335,
+          "created_at": 1794746929.129162
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_known_gateway_tokens": 17772,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_99a99c011f3a",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.1940100000065286,
+          "ttft_seconds": null,
+          "output_tokens": 26,
+          "created_at": "2026-11-15T12:48:38.724690+00:00"
+        },
+        {
+          "id": "observation_6aa65f1aa885",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.112746699975105,
+          "ttft_seconds": null,
+          "output_tokens": 567,
+          "created_at": "2026-11-15T12:48:43.859010+00:00"
+        },
+        {
+          "id": "observation_8aa96da99233",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 4.037514199997531,
+          "ttft_seconds": null,
+          "output_tokens": 364,
+          "created_at": "2026-11-15T12:48:48.508787+00:00"
+        },
+        {
+          "id": "observation_9119a0eb3390",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.292790600011358,
+          "ttft_seconds": null,
+          "output_tokens": 335,
+          "created_at": "2026-11-15T12:48:51.977385+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 4,
+        "sum_seconds": 15.637061499990523,
+        "mean_seconds": 3.9092653749976307,
+        "p95_seconds": 5.112746699975105
+      },
+      "retained_planner_rejections": [
+        {
+          "seq": 3,
+          "created_at": "2026-11-15T12:48:48.681153+00:00",
+          "planner_call_id": "call_39f0c0aedad6",
+          "response_sha256": "ee800b07f1362ec19b5c7f162de0948a6645ab11783e860e76f6e6d8d9e8b5d7",
+          "response_bytes": 1628,
+          "validation_errors": [
+            "No eligible model fits complete node capacity: analyze-weaknesses; Complete bounded review packet exceeds 65536 bytes: analyze-weaknesses"
+          ],
+          "capacity_diagnostics": {
+            "node": "analyze-weaknesses",
+            "rejected_candidates": [
+              {
+                "node": "analyze-weaknesses",
+                "raw_packet_bytes": 25962,
+                "growth_bound": 50177,
+                "raw_packet_bound": 77163,
+                "raw_packet_limit": 65536,
+                "known_source_bytes": 13916,
+                "future_source_bytes_bound": 0,
+                "declared_bounds": {
+                  "max_artifact_bytes": 1,
+                  "max_delivery_bytes": 16384,
+                  "max_source_receipt_bytes": 47708
+                }
+              }
+            ],
+            "all_rejected_nodes": [
+              {
+                "node": "analyze-weaknesses",
+                "errors": [
+                  "Complete bounded review packet exceeds 65536 bytes: analyze-weaknesses"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "analyze-weaknesses",
+                    "raw_packet_bytes": 25962,
+                    "growth_bound": 50177,
+                    "raw_packet_bound": 77163,
+                    "raw_packet_limit": 65536,
+                    "known_source_bytes": 13916,
+                    "future_source_bytes_bound": 0,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 16384,
+                      "max_source_receipt_bytes": 47708
+                    }
+                  }
+                ]
+              }
+            ],
+            "bounded_measurement": "All nodes and up to two model failures per node are measured without model calls or execution. The original plan remains rejected until every contract passes.",
+            "source_capacity_preview": {
+              "version": "planner-source-preview-v1",
+              "status": "unavailable",
+              "scope": "diagnostic_only_no_plan_or_authority",
+              "reason": "invalid_source_projection"
+            },
+            "complete_capacity_preview": {
+              "version": "planner-capacity-preview-v23",
+              "status": "available",
+              "scope": "diagnostic_only_valid_nodes_original_formulas_no_allocation_or_authority",
+              "nodes": [
+                {
+                  "node": "analyze-weaknesses",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 13916,
+                      "future_source_bytes_bound": 0,
+                      "raw_packet_bytes": 25975,
+                      "growth_bound": 50177,
+                      "raw_packet_bound": 77176,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 131627,
+                      "correction_input_bound": 135140,
+                      "worker_input_bound": 30690,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2049,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 67193,
+                      "action_completion_calls": 1,
+                      "action_completion_total_bound": 34455,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                }
+              ],
+              "preserved_completed_keys": []
+            },
+            "allocation_mode": "core_measured"
+          }
+        },
+        {
+          "seq": 4,
+          "created_at": "2026-11-15T12:48:52.070924+00:00",
+          "planner_call_id": "call_9af341782e34",
+          "response_sha256": "4fa06d3b8661f5e8d62ca5a60c4701d8411bea13ba3916250ebe4ab4032ae86e",
+          "response_bytes": 1516,
+          "validation_errors": [
+            "Measured independent resources exceed original task ceiling"
+          ],
+          "capacity_diagnostics": {
+            "allocation_mode": "core_measured",
+            "shape": "independent_cycles",
+            "node_tokens": {
+              "analyze-weaknesses": 195882
+            },
+            "required_total": 213882,
+            "original_ceiling": 180000,
+            "required_action": "Repair the declared DAG or byte bounds while preserving all requirements. Core cannot shrink sources/outputs or increase the original ceiling."
+          }
+        }
+      ],
+      "worker_runs": 0,
+      "core_source_admissions": 0,
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T124831Z-L2-f05578",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T124831Z-L2-f05578/run.json",
+        "bytes": 52235,
+        "sha256": "14e38adf7cfdf4e0ab257e8186ee2cb08420f9b051f25cfbaf8443178e3d322d"
+      },
+      "timestamps": {
+        "driver_started": "2026-11-15T12:48:31.957808+00:00",
+        "core_started": "2026-11-15T12:48:33.008901+00:00",
+        "quest_proposed": "2026-11-15T12:48:43.703848+00:00",
+        "final_plan_rejected": "2026-11-15T12:48:56.326251+00:00",
+        "planner_notice_dead": "2026-11-15T12:48:56.329776+00:00",
+        "driver_finished": "2026-11-15T12:48:58.250151+00:00"
+      },
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core_started",
+          "seconds": 1.051093
+        },
+        {
+          "from": "core_started",
+          "to": "quest_proposed",
+          "seconds": 10.694947
+        },
+        {
+          "from": "quest_proposed",
+          "to": "final_plan_rejected",
+          "seconds": 12.622403
+        },
+        {
+          "from": "final_plan_rejected",
+          "to": "planner_notice_dead",
+          "seconds": 0.003525
+        },
+        {
+          "from": "planner_notice_dead",
+          "to": "driver_finished",
+          "seconds": 1.920375
+        }
+      ],
+      "whole_driver_duration_seconds": 26.283,
+      "utc_wall_interval_seconds": 26.292343,
+      "transcript": [
+        {
+          "at": 2.85,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 11.76,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 12.46,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 26.28,
+          "label": "events",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:three_or_four_specialist_workers",
+        "acceptance_unknown:real_source_citations",
+        "acceptance_unknown:artifact_receipt_hashes",
+        "acceptance_unknown:independent_content_review"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.003,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "44d1dbff98084cfcbcc5fb6e4fe9f45c",
+          "call_id": "memory_call_dfd9482e3eb5",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 847,
+          "output_charged": 26,
+          "created_at": 1794746916.2596776
+        },
+        {
+          "attempt_id": "c5e2af4d8b154de4b137e5ef22218470",
+          "call_id": "call_5c3b58f39f0b",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 2929,
+          "output_charged": 709,
+          "created_at": 1794746918.7856889
+        },
+        {
+          "attempt_id": "41dc2b15c18543cbbff5c54a4fe6b9e7",
+          "call_id": "call_27fb465e4e30",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6099,
+          "output_charged": 844,
+          "created_at": 1794746925.2075167
+        },
+        {
+          "attempt_id": "c7c9fae5f5c6414a898223b263076715",
+          "call_id": "call_96449633083f",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 7983,
+          "output_charged": 759,
+          "created_at": 1794746931.7315018
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_known_gateway_tokens": 20196,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_3b4f62770510",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 2.5729695000045467,
+          "ttft_seconds": null,
+          "output_tokens": 26,
+          "created_at": "2026-11-15T12:48:38.118661+00:00"
+        },
+        {
+          "id": "observation_6934e7972c70",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.557648499991046,
+          "ttft_seconds": null,
+          "output_tokens": 709,
+          "created_at": "2026-11-15T12:48:43.696428+00:00"
+        },
+        {
+          "id": "observation_7a7e03bc2901",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 6.530975100002252,
+          "ttft_seconds": null,
+          "output_tokens": 844,
+          "created_at": "2026-11-15T12:48:51.099631+00:00"
+        },
+        {
+          "id": "observation_c9cee986a609",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 4.984628999984125,
+          "ttft_seconds": null,
+          "output_tokens": 759,
+          "created_at": "2026-11-15T12:48:56.251748+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 4,
+        "sum_seconds": 19.64622209998197,
+        "mean_seconds": 4.911555524995492,
+        "p95_seconds": 6.530975100002252
+      },
+      "retained_planner_rejections": [
+        {
+          "seq": 3,
+          "created_at": "2026-11-15T12:48:51.263419+00:00",
+          "planner_call_id": "call_27fb465e4e30",
+          "response_sha256": "ac1fa65245ef29f9a11b4b48001a603f95552409212b7f6e66da8e8bdf270fed",
+          "response_bytes": 3711,
+          "validation_errors": [
+            "No eligible model fits complete node capacity: research-evidence; review_envelope_bounds_invalid"
+          ],
+          "capacity_diagnostics": {
+            "node": "research-evidence",
+            "rejected_candidates": [],
+            "all_rejected_nodes": [
+              {
+                "node": "research-evidence",
+                "errors": [
+                  "review_envelope_bounds_invalid"
+                ],
+                "rejected_candidates": []
+              },
+              {
+                "node": "architecture-compare",
+                "errors": [
+                  "Complete bounded review packet exceeds 65536 bytes: architecture-compare"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "architecture-compare",
+                    "raw_packet_bytes": 12689,
+                    "growth_bound": 57251,
+                    "raw_packet_bound": 70964,
+                    "raw_packet_limit": 65536,
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 30178,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 24000,
+                      "max_source_receipt_bytes": 33252
+                    }
+                  }
+                ]
+              },
+              {
+                "node": "report-writer",
+                "errors": [
+                  "review_envelope_bounds_invalid"
+                ],
+                "rejected_candidates": []
+              }
+            ],
+            "bounded_measurement": "All nodes and up to two model failures per node are measured without model calls or execution. The original plan remains rejected until every contract passes.",
+            "source_capacity_preview": {
+              "version": "planner-source-preview-v1",
+              "status": "unavailable",
+              "scope": "diagnostic_only_no_plan_or_authority",
+              "reason": "invalid_source_projection"
+            },
+            "complete_capacity_preview": {
+              "version": "planner-capacity-preview-v23",
+              "status": "available",
+              "scope": "diagnostic_only_valid_nodes_original_formulas_no_allocation_or_authority",
+              "nodes": [
+                {
+                  "node": "research-evidence",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 32811,
+                      "future_source_bytes_bound": 0,
+                      "raw_packet_bytes": 45091,
+                      "growth_bound": 33121,
+                      "raw_packet_bound": 79236,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 112917,
+                      "correction_input_bound": 120215,
+                      "worker_input_bound": 49877,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 51925,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "architecture-compare",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 30178,
+                      "raw_packet_bytes": 12702,
+                      "growth_bound": 57251,
+                      "raw_packet_bound": 70977,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 131875,
+                      "correction_input_bound": 134830,
+                      "worker_input_bound": 76588,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 78636,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "report-writer",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 56354,
+                      "raw_packet_bytes": 12896,
+                      "growth_bound": 115474,
+                      "raw_packet_bound": 129394,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 248405,
+                      "correction_input_bound": 252836,
+                      "worker_input_bound": 130500,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 326760,
+                      "action_completion_calls": 1,
+                      "action_completion_total_bound": 194212,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                }
+              ],
+              "preserved_completed_keys": []
+            },
+            "allocation_mode": "core_measured"
+          }
+        },
+        {
+          "seq": 4,
+          "created_at": "2026-11-15T12:48:56.326251+00:00",
+          "planner_call_id": "call_96449633083f",
+          "response_sha256": "bc5707019e7a4d3abc9d2c2de2961e41ff73d93d30f8ddfa427ae338b14603f4",
+          "response_bytes": 3314,
+          "validation_errors": [
+            "No eligible model fits complete node capacity: research-evidence; Complete review/correction bounds exceed original limits: research-evidence"
+          ],
+          "capacity_diagnostics": {
+            "node": "research-evidence",
+            "rejected_candidates": [
+              {
+                "node": "research-evidence",
+                "known_source_bytes": 32811,
+                "future_source_bytes_bound": 0,
+                "declared_bounds": {
+                  "max_artifact_bytes": 1,
+                  "max_delivery_bytes": 6000,
+                  "max_source_receipt_bytes": 33835
+                },
+                "raw_packet_bytes": 44915,
+                "growth_bound": 7025,
+                "raw_packet_bound": 52964,
+                "raw_packet_limit": 65536,
+                "review_input_bound": 60549,
+                "correction_input_bound": 67300,
+                "worker_input_bound": 49154,
+                "model_context_limit": 65536,
+                "output_bound": 2048,
+                "allocated_tokens": 2050,
+                "input_acquisition_input_bound": 0,
+                "input_acquisition_total_bound": 0,
+                "initial_work_tokens": 51202,
+                "action_completion_calls": 0,
+                "action_completion_total_bound": 0,
+                "suggested_tight_bounds": {
+                  "max_source_receipt_bytes": 33835,
+                  "max_artifact_bytes": 1,
+                  "max_delivery_bytes": 3072
+                },
+                "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+              }
+            ],
+            "all_rejected_nodes": [
+              {
+                "node": "research-evidence",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: research-evidence"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "research-evidence",
+                    "known_source_bytes": 32811,
+                    "future_source_bytes_bound": 0,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 6000,
+                      "max_source_receipt_bytes": 33835
+                    },
+                    "raw_packet_bytes": 44915,
+                    "growth_bound": 7025,
+                    "raw_packet_bound": 52964,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 60549,
+                    "correction_input_bound": 67300,
+                    "worker_input_bound": 49154,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 51202,
+                    "action_completion_calls": 0,
+                    "action_completion_total_bound": 0,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 33835,
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              },
+              {
+                "node": "report-writer",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: report-writer"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "report-writer",
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 16354,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 20000,
+                      "max_delivery_bytes": 6000,
+                      "max_source_receipt_bytes": 19428
+                    },
+                    "raw_packet_bytes": 12648,
+                    "growth_bound": 45426,
+                    "raw_packet_bound": 59098,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 108217,
+                    "correction_input_bound": 111945,
+                    "worker_input_bound": 49705,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 145170,
+                    "action_completion_calls": 1,
+                    "action_completion_total_bound": 93417,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 17380,
+                      "max_artifact_bytes": 3072,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              }
+            ],
+            "bounded_measurement": "All nodes and up to two model failures per node are measured without model calls or execution. The original plan remains rejected until every contract passes.",
+            "allocation_mode": "core_measured"
+          }
+        }
+      ],
+      "worker_runs": 0,
+      "core_source_admissions": 0,
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T124831Z-L3-c7b618",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T124831Z-L3-c7b618/run.json",
+        "bytes": 58776,
+        "sha256": "676fe96a07cccc012288ca443d2d4a03baf94d732f1efc31db79a4decae3cf10"
+      },
+      "timestamps": {
+        "driver_started": "2026-11-15T12:48:31.919138+00:00",
+        "core_started": "2026-11-15T12:48:33.008901+00:00",
+        "quest_proposed": "2026-11-15T12:48:42.934165+00:00",
+        "final_plan_rejected": "2026-11-15T12:49:01.863148+00:00",
+        "planner_notice_dead": "2026-11-15T12:49:01.868784+00:00",
+        "driver_finished": "2026-11-15T12:49:02.950913+00:00"
+      },
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core_started",
+          "seconds": 1.089763
+        },
+        {
+          "from": "core_started",
+          "to": "quest_proposed",
+          "seconds": 9.925264
+        },
+        {
+          "from": "quest_proposed",
+          "to": "final_plan_rejected",
+          "seconds": 18.928983
+        },
+        {
+          "from": "final_plan_rejected",
+          "to": "planner_notice_dead",
+          "seconds": 0.005636
+        },
+        {
+          "from": "planner_notice_dead",
+          "to": "driver_finished",
+          "seconds": 1.082129
+        }
+      ],
+      "whole_driver_duration_seconds": 31.023,
+      "utc_wall_interval_seconds": 31.031775,
+      "transcript": [
+        {
+          "at": 2.85,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 11.04,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 11.6,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 31.02,
+          "label": "events",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.002,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "2d553b24e06b419e9282396063168894",
+          "call_id": "memory_call_976b0716765c",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 1018,
+          "output_charged": 25,
+          "created_at": 1794746916.2465847
+        },
+        {
+          "attempt_id": "56e2b7b627ae4878bac3db3eee554b89",
+          "call_id": "call_ff6408243e9e",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 3114,
+          "output_charged": 655,
+          "created_at": 1794746918.5371327
+        },
+        {
+          "attempt_id": "e17dbb54bdab4b17835457e8ae87be9a",
+          "call_id": "call_c34f5f246849",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6210,
+          "output_charged": 1723,
+          "created_at": 1794746924.563792
+        },
+        {
+          "attempt_id": "56929c5f7dbd46769889c060cf94c835",
+          "call_id": "call_5790cf0cbb66",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 9295,
+          "output_charged": 1723,
+          "created_at": 1794746934.1087687
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_known_gateway_tokens": 23763,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_b148ffd9cec1",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 2.382971999992151,
+          "ttft_seconds": null,
+          "output_tokens": 25,
+          "created_at": "2026-11-15T12:48:37.912878+00:00"
+        },
+        {
+          "id": "observation_3daab61ed2d7",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 4.991622799978359,
+          "ttft_seconds": null,
+          "output_tokens": 655,
+          "created_at": "2026-11-15T12:48:42.924267+00:00"
+        },
+        {
+          "id": "observation_663218510faa",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 9.660434400022496,
+          "ttft_seconds": null,
+          "output_tokens": 1723,
+          "created_at": "2026-11-15T12:48:53.499534+00:00"
+        },
+        {
+          "id": "observation_57a5f1bed45c",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 7.922383800003445,
+          "ttft_seconds": null,
+          "output_tokens": 1723,
+          "created_at": "2026-11-15T12:49:01.630906+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 4,
+        "sum_seconds": 24.95741299999645,
+        "mean_seconds": 6.2393532499991124,
+        "p95_seconds": 9.660434400022496
+      },
+      "retained_planner_rejections": [
+        {
+          "seq": 3,
+          "created_at": "2026-11-15T12:48:53.703927+00:00",
+          "planner_call_id": "call_c34f5f246849",
+          "response_sha256": "6e476af3e90a30c23ac67bc8b19c2468d49c77d5e11b79d9f7a2a868903a008c",
+          "response_bytes": 7197,
+          "validation_errors": [
+            "nodes.6: Value error, canonical_artifact_verifier_path_must_equal_expected_artifact"
+          ],
+          "capacity_diagnostics": {
+            "source_capacity_preview": {
+              "version": "planner-source-preview-v1",
+              "status": "unavailable",
+              "scope": "diagnostic_only_no_plan_or_authority",
+              "reason": "invalid_source_projection"
+            },
+            "complete_capacity_preview": {
+              "version": "planner-capacity-preview-v23",
+              "status": "available",
+              "scope": "diagnostic_only_valid_nodes_original_formulas_no_allocation_or_authority",
+              "nodes": [
+                {
+                  "node": "research",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 35444,
+                      "future_source_bytes_bound": 0,
+                      "raw_packet_bytes": 47753,
+                      "growth_bound": 5121,
+                      "raw_packet_bound": 53898,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 59909,
+                      "correction_input_bound": 68680,
+                      "worker_input_bound": 54342,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 56390,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "mathematics",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 6274,
+                      "raw_packet_bytes": 12586,
+                      "growth_bound": 11395,
+                      "raw_packet_bound": 25005,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 40249,
+                      "correction_input_bound": 42855,
+                      "worker_input_bound": 28517,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 30565,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": []
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "architecture",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 12546,
+                      "raw_packet_bytes": 12834,
+                      "growth_bound": 17667,
+                      "raw_packet_bound": 31525,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 53041,
+                      "correction_input_bound": 55939,
+                      "worker_input_bound": 41601,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 43649,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": []
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "coding",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 18818,
+                      "raw_packet_bytes": 13116,
+                      "growth_bound": 36226,
+                      "raw_packet_bound": 50366,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 90225,
+                      "correction_input_bound": 94843,
+                      "worker_input_bound": 55931,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 203608,
+                      "action_completion_calls": 2,
+                      "action_completion_total_bound": 145629,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "experiment",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 33794,
+                      "raw_packet_bytes": 12378,
+                      "growth_bound": 63490,
+                      "raw_packet_bound": 76892,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 144231,
+                      "correction_input_bound": 149260,
+                      "worker_input_bound": 85772,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 317713,
+                      "action_completion_calls": 2,
+                      "action_completion_total_bound": 229893,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "review",
+                  "status": "available",
+                  "candidates": [
+                    {
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 48258,
+                      "raw_packet_bytes": 12306,
+                      "growth_bound": 53379,
+                      "raw_packet_bound": 66709,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 123937,
+                      "correction_input_bound": 128367,
+                      "worker_input_bound": 114029,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2050,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 250253,
+                      "action_completion_calls": 1,
+                      "action_completion_total_bound": 134176,
+                      "native_envelope_fixed_point_iterations": 3,
+                      "violations": [
+                        "review_envelope_bounds_invalid",
+                        "selected_model_context_exceeded",
+                        "raw_review_packet_limit_exceeded"
+                      ]
+                    }
+                  ],
+                  "omitted_candidates": 0,
+                  "unmeasurable_candidates": 0
+                },
+                {
+                  "node": "report",
+                  "status": "unavailable",
+                  "reason": "invalid_criteria_node_not_measured"
+                }
+              ],
+              "preserved_completed_keys": []
+            },
+            "allocation_mode": "core_measured"
+          }
+        },
+        {
+          "seq": 4,
+          "created_at": "2026-11-15T12:49:01.863148+00:00",
+          "planner_call_id": "call_5790cf0cbb66",
+          "response_sha256": "31e6aa37020d782dd3a42a0a9b1cd6ac673fae49cd49997340369d0a8a6c98ed",
+          "response_bytes": 7194,
+          "validation_errors": [
+            "No eligible model fits complete node capacity: research; Complete review/correction exceeds selected model context: research"
+          ],
+          "capacity_diagnostics": {
+            "node": "research",
+            "rejected_candidates": [
+              {
+                "node": "research",
+                "known_source_bytes": 35444,
+                "future_source_bytes_bound": 0,
+                "declared_bounds": {
+                  "max_artifact_bytes": 1,
+                  "max_delivery_bytes": 2048,
+                  "max_source_receipt_bytes": 36468
+                },
+                "raw_packet_bytes": 47758,
+                "growth_bound": 3073,
+                "raw_packet_bound": 51855,
+                "raw_packet_limit": 65536,
+                "review_input_bound": 55818,
+                "correction_input_bound": 65099,
+                "worker_input_bound": 54857,
+                "model_context_limit": 65536,
+                "output_bound": 2048,
+                "allocated_tokens": 2050,
+                "input_acquisition_input_bound": 0,
+                "input_acquisition_total_bound": 0,
+                "initial_work_tokens": 56905,
+                "action_completion_calls": 0,
+                "action_completion_total_bound": 0,
+                "suggested_tight_bounds": {
+                  "max_source_receipt_bytes": 36468,
+                  "max_artifact_bytes": 1,
+                  "max_delivery_bytes": 3072
+                },
+                "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+              }
+            ],
+            "all_rejected_nodes": [
+              {
+                "node": "research",
+                "errors": [
+                  "Complete review/correction exceeds selected model context: research"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "research",
+                    "known_source_bytes": 35444,
+                    "future_source_bytes_bound": 0,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 2048,
+                      "max_source_receipt_bytes": 36468
+                    },
+                    "raw_packet_bytes": 47758,
+                    "growth_bound": 3073,
+                    "raw_packet_bound": 51855,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 55818,
+                    "correction_input_bound": 65099,
+                    "worker_input_bound": 54857,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 56905,
+                    "action_completion_calls": 0,
+                    "action_completion_total_bound": 0,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 36468,
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              },
+              {
+                "node": "coding",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: coding"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "coding",
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 12674,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 4096,
+                      "max_delivery_bytes": 2048,
+                      "max_source_receipt_bytes": 17796
+                    },
+                    "raw_packet_bytes": 13105,
+                    "growth_bound": 23938,
+                    "raw_packet_bound": 38067,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 65638,
+                    "correction_input_bound": 70256,
+                    "worker_input_bound": 43632,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 166711,
+                    "action_completion_calls": 2,
+                    "action_completion_total_bound": 121031,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 13700,
+                      "max_artifact_bytes": 3072,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              },
+              {
+                "node": "experiment",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: experiment"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "experiment",
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 25602,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 6144,
+                      "max_delivery_bytes": 2048,
+                      "max_source_receipt_bytes": 32772
+                    },
+                    "raw_packet_bytes": 12387,
+                    "growth_bound": 40962,
+                    "raw_packet_bound": 54373,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 99184,
+                    "correction_input_bound": 104213,
+                    "worker_input_bound": 69397,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 256300,
+                    "action_completion_calls": 2,
+                    "action_completion_total_bound": 184855,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 26628,
+                      "max_artifact_bytes": 3072,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              },
+              {
+                "node": "review",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: review"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "review",
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 33922,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 2048,
+                      "max_source_receipt_bytes": 34948
+                    },
+                    "raw_packet_bytes": 12309,
+                    "growth_bound": 36995,
+                    "raw_packet_bound": 50328,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 91172,
+                    "correction_input_bound": 95602,
+                    "worker_input_bound": 85360,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 188819,
+                    "action_completion_calls": 1,
+                    "action_completion_total_bound": 101411,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 34948,
+                      "max_artifact_bytes": 1,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              },
+              {
+                "node": "report",
+                "errors": [
+                  "Complete review/correction bounds exceed original limits: report"
+                ],
+                "rejected_candidates": [
+                  {
+                    "node": "report",
+                    "known_source_bytes": 2,
+                    "future_source_bytes_bound": 25346,
+                    "declared_bounds": {
+                      "max_artifact_bytes": 6144,
+                      "max_delivery_bytes": 2048,
+                      "max_source_receipt_bytes": 26372
+                    },
+                    "raw_packet_bytes": 12447,
+                    "growth_bound": 34562,
+                    "raw_packet_bound": 48033,
+                    "raw_packet_limit": 65536,
+                    "review_input_bound": 86444,
+                    "correction_input_bound": 91289,
+                    "worker_input_bound": 68761,
+                    "model_context_limit": 65536,
+                    "output_bound": 2048,
+                    "allocated_tokens": 2050,
+                    "input_acquisition_input_bound": 0,
+                    "input_acquisition_total_bound": 0,
+                    "initial_work_tokens": 155569,
+                    "action_completion_calls": 1,
+                    "action_completion_total_bound": 84760,
+                    "suggested_tight_bounds": {
+                      "max_source_receipt_bytes": 26372,
+                      "max_artifact_bytes": 3072,
+                      "max_delivery_bytes": 3072
+                    },
+                    "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                  }
+                ]
+              }
+            ],
+            "bounded_measurement": "All nodes and up to two model failures per node are measured without model calls or execution. The original plan remains rejected until every contract passes.",
+            "allocation_mode": "core_measured"
+          }
+        }
+      ],
+      "worker_runs": 0,
+      "core_source_admissions": 0,
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "interpretation_limits": [
+    "The observed stage intervals are durable event/driver timestamp differences and include intervening orchestration work; they are not exact per-call request timing.",
+    "Gateway observations do not persist call_id. They remain separate latency observations; no ordinal join is treated as exact attribution to an attempt. Gateway attempts lack settled_at, so exact historical settlement timing is unavailable.",
+    "Gateway success measures the local adapter response. It proves neither upstream model identity nor valid planning or task completion.",
+    "All three runs failed planning before any Worker, prefetch, independent content review or restart. Vacuous zero-source accounting is not live prefetch validation; goals 9/11 and Phase 2 remain unaccepted."
+  ],
+  "original_records_changed": false,
+  "phase2_complete": false
+}

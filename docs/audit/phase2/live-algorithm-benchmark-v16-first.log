@@ -1,0 +1,19 @@
+........................................................................ [ 67%]
+.................................F                                       [100%]
+================================== FAILURES ===================================
+_________ test_dynamic_recomposition_is_one_bounded_real_model_stage __________
+tests\test_live_algorithm_benchmark_phase2.py:273: in test_dynamic_recomposition_is_one_bounded_real_model_stage
+    body = json.loads(sent[1]["messages"][1]["content"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\json\decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\json\decoder.py:363: in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+=========================== short test summary info ===========================
+FAILED tests/test_live_algorithm_benchmark_phase2.py::test_dynamic_recomposition_is_one_bounded_real_model_stage
+1 failed, 105 passed in 42.05s

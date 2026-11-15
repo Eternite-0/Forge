@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="10.729" timestamp="2026-11-15T16:52:26.298080+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_adaptive_planning_v17" name="test_router_feedback_stages_a_source_bound_replan_request_without_approval" time="0.943" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[running]" time="0.577" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[no_completed]" time="0.453" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[different_source]" time="0.561" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[proposed_plan]" time="5.559"><failure message="sqlite3.OperationalError: database is locked">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-713/test_replan_offer_rejects_unsa3')
+mutation = 'proposed_plan'
+
+    @pytest.mark.parametrize(
+        "mutation", ["running", "no_completed", "different_source", "proposed_plan"]
+    )
+    def test_replan_offer_rejects_unsafe_or_duplicate_feedback(tmp_path, mutation):
+        store, quest, plan, raw, runs, event, _dispatcher = feedback(tmp_path)
+        source_id = event.id
+        with store.unit_of_work() as work:
+            if mutation == "running":
+                work.connection.execute(
+                    "UPDATE worker_runs SET state='running' WHERE id=?", (runs[1]["id"],)
+                )
+            elif mutation == "no_completed":
+                work.connection.execute(
+                    "UPDATE task_nodes SET status='blocked' WHERE plan_id=?", (plan["id"],)
+                )
+            elif mutation == "different_source":
+                source_id = "event_absent"
+            else:
+&gt;               QuestGraphService(store).propose_remaining(
+                    quest.id, copy.deepcopy(raw), expected_version=store.get_quest(quest.id)["version"]
+                )
+
+tests\test_adaptive_planning_v17.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\forge_core\quest_graph.py:513: in propose_remaining
+    return self.propose(
+src\forge_core\quest_graph.py:191: in propose
+    with self.store.unit_of_work() as work:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.store.UnitOfWork object at 0x0000021078BD30E0&gt;
+
+    def __enter__(self):
+        if self._entered:
+            raise RuntimeError("UnitOfWork is single-use")
+        self._entered = True
+        self._connection_context = self.store.connection()
+        connection = self._connection_context.__enter__()
+        try:
+&gt;           connection.execute("BEGIN IMMEDIATE")
+E           sqlite3.OperationalError: database is locked
+
+src\forge_core\store.py:365: OperationalError</failure></testcase><testcase classname="tests.test_adaptive_planning_v17" name="test_expired_adaptive_planner_cannot_stage_or_ack_a_new_attempt" time="0.887" /><testcase classname="tests.test_adaptive_planning_v17" name="test_background_planner_dispatches_feedback_in_remaining_mode" time="1.200" /></testsuite></testsuites>

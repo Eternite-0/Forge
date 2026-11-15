@@ -1,0 +1,218 @@
+{
+  "scope": "offline_recorded_Router_shapes_full_native_framing_not_live_acceptance",
+  "external_provider_calls_sent": 0,
+  "output_reserve": 8192,
+  "context_limit": 65536,
+  "cases": [
+    {
+      "level": 1,
+      "mode": "initial",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 27129,
+          "output_reserve": 8192,
+          "total": 35321,
+          "policy_bytes": 3199,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "complete_original_request": true,
+          "verified_input_count": 3
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "mode": "schema_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 27129,
+          "output_reserve": 8192,
+          "total": 35321,
+          "policy_bytes": 3199,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "complete_original_request": true,
+          "verified_input_count": 3
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 27973,
+          "output_reserve": 8192,
+          "total": 36165,
+          "policy_bytes": 3199,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "complete_original_request": true,
+          "verified_input_count": 3
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "mode": "independent_source_preview_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 27129,
+          "output_reserve": 8192,
+          "total": 35321,
+          "policy_bytes": 3199,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "complete_original_request": true,
+          "verified_input_count": 3
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 31853,
+          "output_reserve": 8192,
+          "total": 40045,
+          "policy_bytes": 3199,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "complete_original_request": true,
+          "verified_input_count": 3,
+          "preview_bytes": 1944,
+          "overflow_count": 2
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "mode": "initial",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28003,
+          "output_reserve": 8192,
+          "total": 36195,
+          "policy_bytes": 3199,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "mode": "schema_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28003,
+          "output_reserve": 8192,
+          "total": 36195,
+          "policy_bytes": 3199,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 28847,
+          "output_reserve": 8192,
+          "total": 37039,
+          "policy_bytes": 3199,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "mode": "independent_source_preview_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28003,
+          "output_reserve": 8192,
+          "total": 36195,
+          "policy_bytes": 3199,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 32769,
+          "output_reserve": 8192,
+          "total": 40961,
+          "policy_bytes": 3199,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "complete_original_request": true,
+          "verified_input_count": 4,
+          "preview_bytes": 1944,
+          "overflow_count": 2
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "mode": "initial",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28857,
+          "output_reserve": 8192,
+          "total": 37049,
+          "policy_bytes": 3199,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "mode": "schema_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28857,
+          "output_reserve": 8192,
+          "total": 37049,
+          "policy_bytes": 3199,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 29701,
+          "output_reserve": 8192,
+          "total": 37893,
+          "policy_bytes": 3199,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "mode": "independent_source_preview_repair",
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28857,
+          "output_reserve": 8192,
+          "total": 37049,
+          "policy_bytes": 3199,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "complete_original_request": true,
+          "verified_input_count": 4
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 33629,
+          "output_reserve": 8192,
+          "total": 41821,
+          "policy_bytes": 3199,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "complete_original_request": true,
+          "verified_input_count": 4,
+          "preview_bytes": 1944,
+          "overflow_count": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 171,
+  "decisions": 3,
+  "screenshots": [
+    "rebuild-forge-home-light",
+    "rebuild-forge-home-small",
+    "rebuild-forge-settings-disconnected-small",
+    "rebuild-forge-settings-disconnected",
+    "rebuild-forge-chat-light",
+    "rebuild-forge-chat-light-1280",
+    "rebuild-forge-chat-expanded",
+    "rebuild-forge-settings-general",
+    "rebuild-forge-settings-general-1280",
+    "rebuild-forge-settings-light",
+    "rebuild-forge-settings-dark",
+    "rebuild-forge-chat-dark",
+    "rebuild-forge-chat-small",
+    "rebuild-forge-settings-small"
+  ],
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

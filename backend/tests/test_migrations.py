@@ -86,7 +86,7 @@ def test_each_migration_step(legacy_database, tmp_path):
         migrate(connection, target_version=6)
         assert connection.execute("SELECT version FROM schema_meta").fetchall() == [(6,)]
         migrate(connection, target_version=7)
-        assert SCHEMA_VERSION == 9
+        assert SCHEMA_VERSION == 13
         assert connection.execute("SELECT version FROM schema_meta").fetchall() == [(7,)]
 
 
@@ -133,7 +133,7 @@ def test_concurrent_initialization_keeps_one_version_and_router(tmp_path, trial)
         assert connection.execute("SELECT COUNT(*) FROM schema_meta").fetchone()[0] == 1
 
 
-@pytest.mark.parametrize("failing_version", [1, 2, 3, 4, 5, 6, 7, 8, 9])
+@pytest.mark.parametrize("failing_version", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
 def test_each_migration_failure_rolls_back_a_fresh_database(tmp_path, failing_version):
     from forge_core.migrations import MIGRATIONS, migrate
 
@@ -161,7 +161,7 @@ def test_each_migration_failure_rolls_back_a_fresh_database(tmp_path, failing_ve
         migrate(connection, target_version=7)
         assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 7
         migrate(connection)
-        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 9
+        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 13
 
 
 @pytest.mark.parametrize(
@@ -207,4 +207,4 @@ def test_v8_component_failure_rolls_back_v7_data(tmp_path, monkeypatch, module_n
         assert connection.execute("SELECT content FROM messages").fetchone()[0] == "original"
         monkeypatch.setattr(module, function_name, original)
         migrate(connection)
-        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 9
+        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 13

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "verification_sha256": "3c016c3ef6df2b2316f4ef341ae7de8cae19312f8fd185a2960f81e79c0479d7",
+  "verified_file_references": 261,
+  "frozen_files": 167,
+  "v12_checkpoint_files": 10,
+  "current_copy_identical": true,
+  "backend_passed": 1031,
+  "published_runs": 53,
+  "current_source_accepted_levels": [],
+  "phase2_status": "incomplete",
+  "historical_unknown_attempts": null,
+  "known_historical_unknown_attempts_lower_bound": 9,
+  "historical_runs_missing_usage": 6
+}

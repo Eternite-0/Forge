@@ -1,88 +1,31 @@
-# Detailed Implementation Roadmap
+# FORGE 路线图
 
-## Continuous engineering milestones — 2026-11-15
+最新验收（2026-11-15）：V24 全套 1,734 项通过、1 个已有 warning / 465.71 秒；静态与原证据保留性检查通过。strict L1/L2/L3 均在 Planner 阶段失败，15 次真实调用全部结算 87,044 Token，无 Worker 或中途重启。三个补充探针也未进入 Worker。当前 V25 修复让模型明确选择容量档位，原预算、任务标准和审批不变。Phase 2 尚未完成，以下此前记录保留；最新证据见 [V24 历史边界](audit/phase2/acceptance-independent-v24-boundary.md)。
 
-- Milestone 1：数据可靠性本机验证完成，历史交付保留。
-- Milestone 2：治理、Core 本地信任边界、证据门槛基础及依赖锁通过阶段审查；当时的范围见 [报告](PHASE1_MILESTONE2_REPORT.md)。
-- Milestone 3：Provider Gateway、Persistent Router 和模型画像基础完成本机 Mock 协议测试；当时的范围见 [报告](PHASE1_MILESTONE3_REPORT.md)。后续有限真实供应商验证见 M5、M6 报告。
-- Milestone 4：Quest Graph、事件投递和应用生命周期接线已完成本机 Mock/SQLite 验证，详见 [报告](PHASE1_MILESTONE4_REPORT.md)。
-- Milestone 5：Native Worker、动态团队、固定工具治理与可信执行证据已完成本机冻结验收（282 项测试）；真实供应商通过有限的数值与 JSON 产物演示，范围见 [报告](PHASE1_MILESTONE5_REPORT.md)。
-- Milestone 6：Context 归档、来源 Recall 与 Gateway 模型调用统一预算通过本机验证（372 passed）；真实供应商一次有界连续任务恢复成功，前五次诊断失败保留。容量和范围见 [报告](PHASE1_MILESTONE6_REPORT.md)。
-- Milestone 7：桌面 Alpha 与 Tauri Core 生命周期正在集成；早期隔离原生启动已观察，最终原生联调、安装包和 Alpha 验收仍待完成。见 [报告草稿](PHASE1_MILESTONE7_REPORT.md)。
+更新：2026-11-15。当前主线是 Phase 2 Agent Intelligence，V23 修复中，最终冻结、全量测试与 strict live 尚未验证。V22 历史全套 1,592 项通过、3 项失败、1 个 warning / 352.37 秒，三层 strict 均失败；19 次调用最终结算 83,594 Token，最终未知 0。L1 三步、三次工具和两次修复后以 context_budget blocked，L2/L3 失败于 Planner；原时序失败标记保留。V21 历史全套 1,560 项通过、1 个 warning / 445.09 秒，三层 strict 均失败：L1 真实 Worker 三次只读工具后 blocked，L2/L3 失败于 Planner；18 次调用最终结算 83,527 Token，最终未知 0，原中途未结算失败标记保留。V20 历史全套 1,490 项通过、1 个 warning / 312.74 秒，三层 strict 均失败，22 次调用结算 108,458 Token，最终未知 0，均无 Worker。V19 已结束：1,448 项通过、1 个 warning / 321.62 秒，三层 strict 均在计划批准前失败；12 次调用结算 58,229 Token，未知 0，三层均无 Worker、审阅或重启。V18 全量 1,413 项通过、1 个 warning / 408.37 秒；37 次调用结算 270,119 Token，三层 strict 均失败且无 Worker。V17 全量 1,405 项通过，但三层 strict 全部在 Planner 模型请求前失败，原记录保存。Phase 2 未完成。下表区分实现和验收，不把接口、提案或局部通过当作完成。
 
-以下是原始目标清单，保留作为功能范围参考，而非当前完成状态的逐项核对；它的 Phase 编号与上述连续开发 Milestone 编号不同。具体已验证范围和剩余限制以上述报告及 [STATUS](STATUS.md) 为准。
+| Sprint | 已实现的范围 | 本轮验收状态 |
+| --- | --- | --- |
+| A：Provider 与 Agent Loop | 原生 Gateway、能力来源、逐调用预算账本、固定协议探针 | 有历史真实模型观察；最终源码三层任务待验 |
+| B：Router 与 Planner | 单一长期对话、来源目标、自动 Quest/DAG、反馈重规划提案、审批后 remaining DAG | 本地回归覆盖；复杂规划成功率待真实任务结果 |
+| C：动态团队 | 能力、预算和来源筛选，样本计数的运行观察，动态角色/替换，受限层次展开 | 合同与本地执行证据；单一可用真实模型不能证明模型多样性收益 |
+| D：Worker | 私有循环、真实本地工具、严格交付、有限修复、已有产物版本修订、受治理纯函数测试 | 有本地错误→修订→重测证据；复杂实际模型闭环待验 |
+| E：Reviewer | 当前节点独立上下文审查、完整来源包、当前 PASS 绑定、有限返工 | 同一模型的新上下文；不等于独立模型或任意正确性证明 |
+| F：上下文与记忆 | 原文归档/回读、来源约束、分层词法记忆、有限候选页模型语义选择 | 本地及单样本真实观察；完整复杂连续性待当前 strict live |
+| G：协调与恢复 | 十类 ACP v2 负载合同、来源身份、租约/去重、已知用量一次结算、证据保留 | 本地重开/恢复已测；未知外部效果继续保留预留并阻断 |
+| H：三层真实任务 | 原始 L1/L2/L3 驱动、持久证据重验、真实文件/独立审阅/重启检查 | V17–V22 历史失败；V23 尚未验证，任何失败均保存，不降低成功标准 |
+| I：算法与消融 | 固定多领域团队/压缩/治理基线、离线验证、90 行真实小样本及独立评分 | 探索性结果25/90成功；不宣称策略普遍优越 |
 
-## Phase 0 — Engineering audit
-- [ ] Inspect Python/Node/Rust/Tauri toolchain and repository.
-- [ ] Run tests and frontend build.
-- [ ] Create ADRs and architecture guardrails.
-- [ ] Confirm local startup scripts and deterministic DB location.
-- [ ] Add CI workflow and static checks.
-- [ ] Record real results in STATUS.
-Acceptance: clean environment can start API/UI; tests pass.
+V17 新增批准成功路径祖先的完整交付、原生工具 framing 预检和 serial-capacity-v1。后者在原任务总额内共享一次应急池并保留未来基础工作额度，不扩大总 Token、工具、步骤、时间或费用授权。只读 Core 读取使用严格原来源验证，不冒充文件回执。
 
-## Phase 1 — Persistent Router
-- [ ] Replace heuristic classifier with provider-backed Router Agent Loop.
-- [ ] Define structured RouterAction schema.
-- [ ] Implement intent and Quest reference resolution.
-- [ ] Persist Router capsule and event cursor.
-- [ ] Implement one unified conversation timeline.
-- [ ] Ensure restart recovery.
-Acceptance: multiple different topics and concurrent Quests remain in one user-visible conversation.
+本轮完成门槛是同一冻结源码上的全量回归、静态检查、依赖检查、保留性审计及当前 strict L1/L2/L3。复杂场景必须有实际产物、独立检查以及中途 Core 重启后的连续执行；预期的失败、返工、压缩、原文回读也必须在实际记录中观察到。缺失观察不能写成通过。
 
-## Phase 2 — Quest Graph and event relay
-- [ ] Add TaskNode, dependencies, cycle checks and DAG scheduler.
-- [ ] Add worker event inbox/outbox and idempotent consumers.
-- [ ] Add progress coalescing and important-event direct delivery.
-- [ ] Add Quest pause/resume/cancel/update.
-Acceptance: Worker progress/results appear in the same conversation; no separate user chat.
+V18 的原始失败与只读账本重建见 [独立历史边界](audit/phase2/acceptance-independent-v18-boundary.md)及[用量审计](audit/phase2/live-usage-v18-audit.md)。V19 见[独立失败边界](audit/phase2/acceptance-independent-v19-boundary.md)和[用量审计](audit/phase2/live-usage-v19-audit.md)。V20 的 210 文件历史归档与原 manifest 精确匹配，L1 计划批准后失败于 Composer，L2/L3 失败于 Planner，见[独立失败边界](audit/phase2/acceptance-independent-v20-boundary.md)和[用量审计](audit/phase2/live-usage-v20-audit.md)。V21 的 216 文件历史归档同样匹配，L1 没有独立审阅或 PASS，见[独立失败边界](audit/phase2/acceptance-independent-v21-boundary.md)、[用量审计](audit/phase2/live-usage-v21-audit.md)及[原失败与最终结算时序补充](audit/phase2/live-usage-v21-timing.md)。最终结算不能撤销较早失败标记或证明任务完成。
 
-## Phase 3 — Model Registry
-- [ ] Provider adapters for OpenAI-compatible and native APIs.
-- [ ] Secure OS credential vault.
-- [ ] Provider model discovery where supported.
-- [ ] Benchmark task definitions and versioning.
-- [ ] Benchmark runner and provenance.
-- [ ] Online performance statistics and user override.
-Acceptance: at least two real providers and auditable capability profiles.
+V22 的来源预览和准确反馈没有带来任务验收通过；完整套件暴露原 confidence 诊断 `path` 字段缺失的三项兼容失败，原断言均保留，见[独立失败边界](audit/phase2/acceptance-independent-v22-boundary.json)、[测试失败明细](audit/phase2/acceptance-independent-v22-test-failures.md)、[用量审计](audit/phase2/live-usage-v22-audit.md)和[时序补充](audit/phase2/live-usage-v22-timing.md)。219 文件历史归档、静态与保留性检查通过不替代失败的全套或 strict 任务。
 
-## Phase 4 — Native Runtime and tools
-- [ ] Streaming model gateway and retry/error mapping.
-- [ ] Agent Loop and structured tool-call parser.
-- [ ] Tool schemas and policy enforcement.
-- [ ] Sandboxed file and command tools.
-- [ ] Worker session persistence, cancellation and recovery.
-Acceptance: a Worker performs a bounded multi-step task using native runtime.
+V23 修复聚焦恢复原安全诊断字段，并根据真实来源/工具失败继续修复；继续保留原预算、65,536-byte 完整审阅上限、原成功标准与审批，实现本身不构成通过。V19 前文档原字节保存在[快照索引](audit/phase2/checkpoint-pre-v19-docs/index.json)，另有[V22 前四份文档快照](audit/phase2/checkpoint-pre-v22-owned-docs/index.json)及[本次更新前快照](audit/phase2/checkpoint-pre-v23-owned-docs/index.json)。
 
-## Phase 5 — Dynamic Team Composer
-- [ ] Role templates and bounded dynamic role synthesis.
-- [ ] Capability/confidence scoring.
-- [ ] Cost/latency/context/concurrency constraints.
-- [ ] Complementarity and coordination penalty.
-- [ ] Explainable team proposals and approval.
-- [ ] Dynamic re-composition on failure/blocker.
-Acceptance: Router builds and explains a suitable team for distinct task types.
+后续能力方向：更广泛任务质量评估、多模型选择与独立审阅模型、更多任务/难度的统计研究、受治理的通用代码编辑执行、真正的多模态输入链路。它们不应被现有局部实现或单模型样本提前宣布完成。
 
-## Phase 6 — Context and Chain of Recall
-- [ ] Task Capsule and compaction trigger.
-- [ ] Archive and restore conversation context.
-- [ ] Quest/project memory and evidence-linked retrieval.
-- [ ] Memory freshness, contradiction and invalidation.
-Acceptance: long task resumes after compaction/restart without losing constraints.
-
-## Phase 7 — Governance and evidence
-- [ ] Risk policy and exact-scope approvals.
-- [ ] Budget ledger and circuit breakers.
-- [ ] Evidence graph and artifact hashes.
-- [ ] Independent verification.
-Acceptance: unsafe actions blocked; completion supported by evidence.
-
-## Phase 8 — Desktop release
-- [ ] Tauri Rust bootstrap and Core lifecycle manager.
-- [ ] Single chat with embedded Quest cards.
-- [ ] Model Library, Agent activity, Memory and Approval views.
-- [ ] OS credential storage, backup/restore and Windows installer.
-Acceptance: end-to-end local desktop demo.
-
-## Definition of Done
-Every phase includes code, tests, docs, migration, error handling, logs, reproducible demo and STATUS update. No phase is complete based only on code generation.
+桌面 Alpha、Tauri 生命周期和发布继续按 Phase 1 Milestone 7 的独立范围推进；本 Sprint 不承担 UI 视觉重构、安装包和发布。Phase 1 Milestone 1–7 的原报告、原始路线图与所有历史验收结果在审计目录中保留，不追改其结论。

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="6.199" timestamp="2026-11-15T16:14:55.324949+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_worker_reads_original_receipt_and_completes_after_reopen" time="1.260" /><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[goal]" time="0.707" /><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[inherited_worker]" time="0.639" /><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[source_contract]" time="0.592" /><testcase classname="tests.test_worker_lineage_v16" name="test_original_receipts_remain_immutable_after_replanning" time="0.869"><failure message="forge_core.domain.DomainError: Receipt source failed validation">store = &lt;forge_core.store.Store object at 0x0000023777ACC650&gt;
+connection = &lt;sqlite3.Connection object at 0x0000023776C2E7A0&gt;
+run_id = 'run_9ef3291f3e6d', arguments = {'receipt_id': 'receipt_1c200da7b746'}
+
+    def _read_action_receipt(store, connection, run_id, arguments):
+        """Return one bounded upstream receipt under this run's approved tool scope."""
+        from .governance import parameter_digest
+    
+        if (
+            not isinstance(arguments, dict)
+            or set(arguments) != {"receipt_id"}
+            or not isinstance(arguments["receipt_id"], str)
+            or not arguments["receipt_id"]
+            or len(arguments["receipt_id"]) &gt; 128
+        ):
+            raise DomainError("Invalid receipt reference")
+        reader = connection.execute("SELECT * FROM worker_runs WHERE id=?", (run_id,)).fetchone()
+        if reader is None:
+            raise DomainError("Receipt reader missing")
+        quest = connection.execute("SELECT * FROM quests WHERE id=?", (reader["quest_id"],)).fetchone()
+        plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=?", (reader["plan_id"],)
+        ).fetchone()
+        node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?",
+            (reader["plan_id"], reader["node_key"]),
+        ).fetchone()
+        receipt = connection.execute(
+            """SELECT r.*,i.quest_id,i.plan_id,i.plan_revision,i.run_id,i.worker_id,i.call_id,
+            i.tool_name,i.parameters_json,i.parameter_digest,i.resource_scope,i.risk,i.approval_id,
+            i.state,i.execution_mode AS intent_mode
+            FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id WHERE r.id=?""",
+            (arguments["receipt_id"],),
+        ).fetchone()
+        if quest is None or plan is None or node is None or receipt is None:
+            raise DomainError("Receipt source unavailable")
+        source = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (receipt["run_id"],)
+        ).fetchone()
+        call = connection.execute(
+            "SELECT * FROM worker_tool_calls WHERE run_id=? AND call_id=?",
+            (receipt["run_id"], receipt["call_id"]),
+        ).fetchone()
+        try:
+            from .team_composition import TeamCompositionService
+    
+            team = TeamCompositionService(store).get_historical_approved(
+                reader["quest_id"],
+                reader["plan_revision"],
+                reader["team_digest"],
+                connection=connection,
+                run_id=run_id,
+            )
+            member = team["members"][reader["member_index"]]
+            allowed = json.loads(reader["allowed_tools_json"])
+            node_allowed = json.loads(node["allowed_tools"])
+            edge = connection.execute(
+                """SELECT n.status,n.worker_id FROM task_edges e JOIN task_nodes n
+                ON n.plan_id=e.plan_id AND n.node_key=e.source
+                WHERE e.plan_id=? AND e.target=? AND e.source=? AND e.condition='success'""",
+                (reader["plan_id"], reader["node_key"], source["node_key"] if source else ""),
+            ).fetchone()
+            reader_current = (
+                quest["plan_revision"] == reader["plan_revision"] and plan["status"] == "approved"
+            )
+            if not reader_current:
+                from .plan_lineage import validated_lineage_source
+    
+                current = connection.execute(
+                    "SELECT * FROM quest_plans WHERE quest_id=? AND revision=? AND status='approved'",
+                    (quest["id"], quest["plan_revision"]),
+                ).fetchone()
+                inherited = validated_lineage_source(
+                    connection, quest, current, reader["node_key"]
+                ) if current is not None else None
+                if inherited is None or inherited["source_run"]["id"] != reader["id"]:
+                    raise ValueError
+            source_current = source is not None and (
+                source["plan_id"] == reader["plan_id"]
+                and source["plan_revision"] == reader["plan_revision"]
+            )
+            if source is not None and not source_current:
+                from .plan_lineage import validated_lineage_source
+    
+                # A historical reader was itself proven above. Reconstruct only its
+                # original approved revision to verify its unchanged predecessor.
+                source_quest = dict(quest) | {"plan_revision": reader["plan_revision"]}
+                source_plan = dict(plan) | {"status": "approved"}
+                inherited = validated_lineage_source(
+                    connection, source_quest, source_plan, source["node_key"]
+                )
+                if inherited["source_run"]["id"] != source["id"]:
+                    raise ValueError
+            if (
+                "worker_read_action_receipt" not in allowed
+                or "worker_read_action_receipt" not in node_allowed
+                or "worker_read_action_receipt" not in member["tool_scope"]
+                or member["task_node_key"] != reader["node_key"]
+                or member["role_id"] != reader["role_id"]
+                or (
+                    quest["status"] not in {"running", "completed"}
+                    and (reader_current or quest["status"] not in {"approved", "queued", "reviewing"})
+                )
+                or plan["revision"] != reader["plan_revision"]
+                or plan["digest"] != reader["plan_digest"]
+                or receipt["quest_id"] != reader["quest_id"]
+                or source is None
+                or receipt["plan_id"] != source["plan_id"]
+                or receipt["plan_revision"] != source["plan_revision"]
+                or source["state"] != "succeeded"
+                or edge is None
+                or edge["status"] != "succeeded"
+                or edge["worker_id"] != source["worker_id"]
+                or source["quest_id"] != reader["quest_id"]
+                or receipt["worker_id"] != source["worker_id"]
+                or receipt["state"] != "succeeded"
+                or call is None
+                or call["state"] != "succeeded"
+                or call["receipt_id"] != receipt["id"]
+                or call["tool_name"] != receipt["tool_name"]
+                or receipt["execution_mode"] != receipt["intent_mode"]
+                or receipt["execution_mode"] != source["execution_mode"]
+                or parameter_digest(json.loads(receipt["parameters_json"]))
+                != receipt["parameter_digest"]
+                or parameter_digest(json.loads(call["arguments_json"])) != receipt["parameter_digest"]
+                or hashlib.sha256(receipt["result_json"].encode("utf-8")).hexdigest()
+                != receipt["result_digest"]
+                or len(receipt["result_json"].encode("utf-8")) &gt; 8192
+            ):
+&gt;               raise ValueError
+E               ValueError
+
+backend\src\forge_core\worker_runtime.py:212: ValueError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-680/test_original_receipts_remain_0')
+
+    def test_original_receipts_remain_immutable_after_replanning(tmp_path):
+        store, _, _, _, _, _, reader, receipts, _ = replan(tmp_path)
+        with pytest.raises(sqlite3.IntegrityError, match="immutable receipt"):
+            with store.unit_of_work() as work:
+                work.connection.execute("UPDATE action_receipts SET result_json='{}' WHERE id=?", (receipts["file_write"],))
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+&gt;           result = _read_action_receipt(store, connection, reader["id"], {"receipt_id": receipts["file_write"]})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x0000023777ACC650&gt;
+connection = &lt;sqlite3.Connection object at 0x0000023776C2E7A0&gt;
+run_id = 'run_9ef3291f3e6d', arguments = {'receipt_id': 'receipt_1c200da7b746'}
+
+    def _read_action_receipt(store, connection, run_id, arguments):
+        """Return one bounded upstream receipt under this run's approved tool scope."""
+        from .governance import parameter_digest
+    
+        if (
+            not isinstance(arguments, dict)
+            or set(arguments) != {"receipt_id"}
+            or not isinstance(arguments["receipt_id"], str)
+            or not arguments["receipt_id"]
+            or len(arguments["receipt_id"]) &gt; 128
+        ):
+            raise DomainError("Invalid receipt reference")
+        reader = connection.execute("SELECT * FROM worker_runs WHERE id=?", (run_id,)).fetchone()
+        if reader is None:
+            raise DomainError("Receipt reader missing")
+        quest = connection.execute("SELECT * FROM quests WHERE id=?", (reader["quest_id"],)).fetchone()
+        plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=?", (reader["plan_id"],)
+        ).fetchone()
+        node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?",
+            (reader["plan_id"], reader["node_key"]),
+        ).fetchone()
+        receipt = connection.execute(
+            """SELECT r.*,i.quest_id,i.plan_id,i.plan_revision,i.run_id,i.worker_id,i.call_id,
+            i.tool_name,i.parameters_json,i.parameter_digest,i.resource_scope,i.risk,i.approval_id,
+            i.state,i.execution_mode AS intent_mode
+            FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id WHERE r.id=?""",
+            (arguments["receipt_id"],),
+        ).fetchone()
+        if quest is None or plan is None or node is None or receipt is None:
+            raise DomainError("Receipt source unavailable")
+        source = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (receipt["run_id"],)
+        ).fetchone()
+        call = connection.execute(
+            "SELECT * FROM worker_tool_calls WHERE run_id=? AND call_id=?",
+            (receipt["run_id"], receipt["call_id"]),
+        ).fetchone()
+        try:
+            from .team_composition import TeamCompositionService
+    
+            team = TeamCompositionService(store).get_historical_approved(
+                reader["quest_id"],
+                reader["plan_revision"],
+                reader["team_digest"],
+                connection=connection,
+                run_id=run_id,
+            )
+            member = team["members"][reader["member_index"]]
+            allowed = json.loads(reader["allowed_tools_json"])
+            node_allowed = json.loads(node["allowed_tools"])
+            edge = connection.execute(
+                """SELECT n.status,n.worker_id FROM task_edges e JOIN task_nodes n
+                ON n.plan_id=e.plan_id AND n.node_key=e.source
+                WHERE e.plan_id=? AND e.target=? AND e.source=? AND e.condition='success'""",
+                (reader["plan_id"], reader["node_key"], source["node_key"] if source else ""),
+            ).fetchone()
+            reader_current = (
+                quest["plan_revision"] == reader["plan_revision"] and plan["status"] == "approved"
+            )
+            if not reader_current:
+                from .plan_lineage import validated_lineage_source
+    
+                current = connection.execute(
+                    "SELECT * FROM quest_plans WHERE quest_id=? AND revision=? AND status='approved'",
+                    (quest["id"], quest["plan_revision"]),
+                ).fetchone()
+                inherited = validated_lineage_source(
+                    connection, quest, current, reader["node_key"]
+                ) if current is not None else None
+                if inherited is None or inherited["source_run"]["id"] != reader["id"]:
+                    raise ValueError
+            source_current = source is not None and (
+                source["plan_id"] == reader["plan_id"]
+                and source["plan_revision"] == reader["plan_revision"]
+            )
+            if source is not None and not source_current:
+                from .plan_lineage import validated_lineage_source
+    
+                # A historical reader was itself proven above. Reconstruct only its
+                # original approved revision to verify its unchanged predecessor.
+                source_quest = dict(quest) | {"plan_revision": reader["plan_revision"]}
+                source_plan = dict(plan) | {"status": "approved"}
+                inherited = validated_lineage_source(
+                    connection, source_quest, source_plan, source["node_key"]
+                )
+                if inherited["source_run"]["id"] != source["id"]:
+                    raise ValueError
+            if (
+                "worker_read_action_receipt" not in allowed
+                or "worker_read_action_receipt" not in node_allowed
+                or "worker_read_action_receipt" not in member["tool_scope"]
+                or member["task_node_key"] != reader["node_key"]
+                or member["role_id"] != reader["role_id"]
+                or (
+                    quest["status"] not in {"running", "completed"}
+                    and (reader_current or quest["status"] not in {"approved", "queued", "reviewing"})
+                )
+                or plan["revision"] != reader["plan_revision"]
+                or plan["digest"] != reader["plan_digest"]
+                or receipt["quest_id"] != reader["quest_id"]
+                or source is None
+                or receipt["plan_id"] != source["plan_id"]
+                or receipt["plan_revision"] != source["plan_revision"]
+                or source["state"] != "succeeded"
+                or edge is None
+                or edge["status"] != "succeeded"
+                or edge["worker_id"] != source["worker_id"]
+                or source["quest_id"] != reader["quest_id"]
+                or receipt["worker_id"] != source["worker_id"]
+                or receipt["state"] != "succeeded"
+                or call is None
+                or call["state"] != "succeeded"
+                or call["receipt_id"] != receipt["id"]
+                or call["tool_name"] != receipt["tool_name"]
+                or receipt["execution_mode"] != receipt["intent_mode"]
+                or receipt["execution_mode"] != source["execution_mode"]
+                or parameter_digest(json.loads(receipt["parameters_json"]))
+                != receipt["parameter_digest"]
+                or parameter_digest(json.loads(call["arguments_json"])) != receipt["parameter_digest"]
+                or hashlib.sha256(receipt["result_json"].encode("utf-8")).hexdigest()
+                != receipt["result_digest"]
+                or len(receipt["result_json"].encode("utf-8")) &gt; 8192
+            ):
+                raise ValueError
+            output = json.loads(call["result_json"])
+            if (
+                not isinstance(output, dict)
+                or output.get("receipt_id") != receipt["id"]
+                or output.get("intent_id") != receipt["intent_id"]
+                or output.get("call_id") != receipt["call_id"]
+                or output.get("state") != "succeeded"
+                or output.get("output") != json.loads(receipt["result_json"])
+            ):
+                raise ValueError
+            messages = connection.execute(
+                "SELECT message_json FROM worker_messages WHERE run_id=? AND role='tool'",
+                (source["id"],),
+            ).fetchall()
+            if not any(
+                isinstance(message := json.loads(item["message_json"]), dict)
+                and message.get("tool_call_id") == call["model_call_id"]
+                and message.get("content") == _json(output["output"])
+                for item in messages
+            ):
+                raise ValueError
+        except (ValueError, TypeError, KeyError, IndexError) as exc:
+&gt;           raise DomainError("Receipt source failed validation") from exc
+E           forge_core.domain.DomainError: Receipt source failed validation
+
+backend\src\forge_core\worker_runtime.py:235: DomainError</failure></testcase><testcase classname="tests.test_worker_envelope_v16" name="test_oversized_artifact_repairs_before_any_file_or_intent" time="0.291" /><testcase classname="tests.test_worker_envelope_v16" name="test_undeclared_source_never_enters_a_tool_receipt" time="0.307" /><testcase classname="tests.test_worker_envelope_v16" name="test_actual_read_rechecks_identity_after_queued_batch_admission" time="0.596" /><testcase classname="tests.test_worker_envelope_v16" name="test_revised_worker_rejects_capsule_contract_tampering_before_another_model_call" time="0.359" /></testsuite></testsuites>

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "focused_checks_passed",
+  "change": {
+    "path": "backend/tests/test_workspace_backup_m7.py",
+    "test": "test_v7_snapshot_is_migrated_in_staging_before_publish",
+    "before_sha256": "ca4244d1f0096692f9b4980eab8e700673a788a1cab5edb0fd0a4ab2d2e33079",
+    "after_sha256": "103e268417777014e2c185e54702fc37ea81d18cfd21c3b07e20fbb900423eb7",
+    "added_line": "            \"worker_model_reservations\",",
+    "added_lines": 1,
+    "removed_lines": 0,
+    "location": "Existing tuple of post-v7 tables removed from the test-only archived database before declaring schema version 7",
+    "reason": "The synthetic older-schema fixture retained schema12's new table, so its subsequent real migration attempted to create an already-existing table.",
+    "exact_delta_verified_against_previous_sha256": true,
+    "all_original_assertion_asts_unchanged": true,
+    "runtime_code_changed": false,
+    "historical_or_user_database_changed": false,
+    "fixture_worker_started_or_executed_before_backup": false
+  },
+  "checks": {
+    "command": "backend/.venv/Scripts/python.exe -m pytest tests/test_migrations.py tests/test_worker_model_usage_migration_phase2.py tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget tests/test_workspace_backup_m7.py::test_v7_snapshot_is_migrated_in_staging_before_publish -q",
+    "working_directory": "backend",
+    "passed": 52,
+    "failed": 0,
+    "warnings": 1,
+    "warning": "Existing Starlette TestClient/httpx deprecation",
+    "duration_seconds": 5.47,
+    "junit": "docs/audit/phase2/worker-model-usage-migration-v15-backup-tests.xml",
+    "log": "docs/audit/phase2/worker-model-usage-migration-v15-backup-tests.log",
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "git_diff_check": "passed"
+  },
+  "preserved_evidence": [
+    "docs/audit/phase2/worker-model-usage-migration-v14.json",
+    "docs/audit/phase2/worker-model-usage-migration-v14.md",
+    "All prior focused and full-suite reports, including retained failures"
+  ],
+  "limits": [
+    "This is a necessary synthetic schema-cutover fixture update and focused regression result, not a new full-suite or live acceptance result.",
+    "No Provider was called and no historical reservation was inferred, removed or refunded."
+  ]
+}

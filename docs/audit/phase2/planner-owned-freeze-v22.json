@@ -1,0 +1,30 @@
+{
+  "scope": "V22_Planner_source_preview_owned_files_frozen_after_149_pass",
+  "files": [
+    {
+      "path": "backend/src/forge_core/planner_dataflow.py",
+      "bytes": 9877,
+      "sha256": "10fa1f704f3b38f9e9518ed628d829adcf4ece4a8d49308e92ba60d6aefaee20"
+    },
+    {
+      "path": "backend/src/forge_core/source_capacity.py",
+      "bytes": 6437,
+      "sha256": "ef918ac9d876fc15f69f9513df617e39a85c86c2020491b69d748d30d94bbb32"
+    },
+    {
+      "path": "backend/src/forge_core/planner_source_preview.py",
+      "bytes": 6340,
+      "sha256": "2d0e5ce32d128089f70820f10540839f90d6e7fa3b782f8c68697a8a6796ff6c"
+    },
+    {
+      "path": "backend/src/forge_core/quest_graph.py",
+      "bytes": 101806,
+      "sha256": "fb3e2be0a6a5b32b560a5a42f6c750a4464cd5a041b3aab601cce6cfdce7d9bf"
+    },
+    {
+      "path": "backend/tests/test_planner_source_preview_v22.py",
+      "bytes": 13659,
+      "sha256": "c0ef0e5d2796a3514e69ab8d91d718f638536141f75b4f2adb9fda4b404f8b28"
+    }
+  ]
+}

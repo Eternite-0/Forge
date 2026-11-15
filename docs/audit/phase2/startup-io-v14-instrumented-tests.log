@@ -1,0 +1,136 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___ test_core_launcher_restart_preserves_workspace_and_rejects_stale_state ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-628/test_core_launcher_restart_pre0')
+
+    def test_core_launcher_restart_preserves_workspace_and_rejects_stale_state(tmp_path):
+        workspace = tmp_path / "workspace"
+        workspace.mkdir()
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            port = listener.getsockname()[1]
+        (workspace / ".env").write_text(
+            f"FORGE_DB_PATH=state/core.sqlite3\nFORGE_PORT={port}\n", encoding="utf-8"
+        )
+        environment = {key: value for key, value in os.environ.items() if not key.startswith("FORGE_")}
+        # The explicit CLI option must win over a conflicting process setting.
+        environment["FORGE_WORKSPACE_ROOT"] = str(tmp_path / "wrong-workspace")
+        # Inject a labeled mock only in the child test process while exercising the real launcher.
+        hook = tmp_path / "test-injection"
+        hook.mkdir()
+        (hook / "sitecustomize.py").write_text(
+            """
+    import json
+    from forge_core.router import RouterService
+    _init = RouterService.__init__
+    class MockProvider:
+        execution_mode = "mock"
+        async def generate(self, request):
+            decision = {"intent":"create_quest","reply":"mock","title":"测试","goal":"测试","quest_id":None,"candidates":[]}
+            return type("MockResponse", (), {"text":json.dumps(decision),"tool_calls":[],"usage":{}})()
+    def init(self, *args, **kwargs):
+        kwargs.update(provider=MockProvider(), model_id="mock")
+        _init(self, *args, **kwargs)
+    RouterService.__init__ = init
+    """,
+            encoding="utf-8",
+        )
+        environment["PYTHONPATH"] = str(hook) + os.pathsep + environment.get("PYTHONPATH", "")
+        base_url = f"http://127.0.0.1:{port}"
+        token = None
+    
+        def request(path, payload=None):
+            data = None if payload is None else json.dumps(payload).encode()
+            headers = {"Content-Type": "application/json"}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            req = Request(base_url + path, data=data, headers=headers)
+            try:
+                response = urlopen(req, timeout=1)
+            except HTTPError as exc:
+                response = exc
+            with response:
+                return response.status, json.load(response)
+    
+        observations = []
+        quest_id = None
+        for name in ("cli-cwd", "desktop-cwd"):
+            secret = secrets.token_hex(32)
+            environment["FORGE_CORE_SECRET"] = secret
+            token = None
+            cwd = tmp_path / name
+            cwd.mkdir()
+            (cwd / ".env").write_text("FORGE_DB_PATH=wrong.sqlite3\n", encoding="utf-8")
+            with (tmp_path / f"{name}.log").open("w", encoding="utf-8") as log:
+                process = subprocess.Popen(
+                    [sys.executable, "-m", "forge_api", "--workspace-root", str(workspace)],
+                    cwd=cwd,
+                    env=environment,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                )
+                try:
+                    deadline = time.monotonic() + 15
+                    while True:
+                        assert process.poll() is None, (tmp_path / f"{name}.log").read_text()
+                        try:
+>                           status, health = request("/health")
+                                             ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_startup.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_startup.py:62: in request
+    response = urlopen(req, timeout=1)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\urllib\request.py:189: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\urllib\request.py:489: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\urllib\request.py:506: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+C:\Python313\Lib\urllib\request.py:466: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+C:\Python313\Lib\urllib\request.py:1348: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\urllib\request.py:1323: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+C:\Python313\Lib\http\client.py:1430: in getresponse
+    response.begin()
+C:\Python313\Lib\http\client.py:331: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\http\client.py:292: in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <socket.SocketIO object at 0x000001EABD4882E0>
+b = <memory at 0x000001EABD2C2800>
+
+    def readinto(self, b):
+        """Read up to len(b) bytes into the writable buffer *b* and return
+        the number of bytes read.  If the socket is non-blocking and no bytes
+        are available, None is returned.
+    
+        If *b* is non-empty, a 0 return value indicates that the connection
+        was shutdown at the other end.
+        """
+        self._checkClosed()
+        self._checkReadable()
+        if self._timeout_occurred:
+            raise OSError("cannot read from timed out object")
+        try:
+>           return self._sock.recv_into(b)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+E           ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
+
+C:\Python313\Lib\socket.py:719: ConnectionResetError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_startup.py::test_core_launcher_restart_preserves_workspace_and_rejects_stale_state
+1 failed in 2.91s

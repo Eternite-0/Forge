@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="7.728" timestamp="2026-11-15T16:14:10.463679+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_worker_reads_original_receipt_and_completes_after_reopen" time="1.990"><failure message="json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-678/test_remaining_worker_reads_or0')
+
+    def test_remaining_worker_reads_original_receipt_and_completes_after_reopen(tmp_path):
+        store, manager, model, quest, plan, producer, reader, receipts, original = replan(tmp_path)
+        model.responses.extend([
+            tool("worker_read_action_receipt", {"receipt_id": receipts["file_write"]}),
+            tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, ordinal=2),
+            response(delivery("Verified the preserved original receipt.")),
+        ])
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        first = model.requests[3]
+&gt;       task = json.loads(next(item["content"] for item in first.messages if item["role"] == "user"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\json\decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;json.decoder.JSONDecoder object at 0x000001F78DF34980&gt;
+s = 'Core remaining execution allowance (data, not new authority): {"instruction":"Use existing evidence. Do not repeatedl...:null,"raw_packet_cap":65536,"remaining_cumulative_tokens":30000,"settled_receipt_bytes":0,"settled_receipt_count":0}}'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+&gt;           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+C:\Python313\Lib\json\decoder.py:363: JSONDecodeError</failure></testcase><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[goal]" time="1.334" /><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[source_receipt]" time="1.194"><failure message="sqlite3.IntegrityError: immutable receipt">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-678/test_remaining_receipt_reader_1')
+mutation = 'source_receipt'
+
+    @pytest.mark.parametrize("mutation", ["goal", "source_receipt", "inherited_worker", "source_contract"])
+    def test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence(tmp_path, mutation):
+        store, manager, _, quest, plan, producer, reader, receipts, _ = replan(tmp_path)
+        with store.unit_of_work() as work:
+            c = work.connection
+            if mutation == "goal":
+                c.execute("UPDATE quests SET goal='different task' WHERE id=?", (quest.id,))
+            elif mutation == "source_receipt":
+&gt;               c.execute("UPDATE action_receipts SET result_json='{}' WHERE id=?", (receipts["file_write"],))
+E               sqlite3.IntegrityError: immutable receipt
+
+backend\tests\test_worker_lineage_v16.py:89: IntegrityError</failure></testcase><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[inherited_worker]" time="1.468" /><testcase classname="tests.test_worker_lineage_v16" name="test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[source_contract]" time="1.204" /></testsuite></testsuites>

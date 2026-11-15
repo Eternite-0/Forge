@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "requests": 2,
+  "requestIdReused": true,
+  "singleChat": true,
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

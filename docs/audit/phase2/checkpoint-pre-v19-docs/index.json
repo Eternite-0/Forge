@@ -1,0 +1,65 @@
+{
+  "reason": "Preserve current documentation/verification bytes before integrating current Phase 2 progress and eventual final acceptance.",
+  "files": [
+    {
+      "original_path": "docs/audit/phase2/verification.json",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/audit/phase2/verification.json",
+      "sha256": "3c016c3ef6df2b2316f4ef341ae7de8cae19312f8fd185a2960f81e79c0479d7",
+      "matches_v15": true
+    },
+    {
+      "original_path": "README.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/README.md",
+      "sha256": "b71bcafe8542085402d9fcbb41dafeebf9254855a21dab2ee21828a204dbd68f",
+      "matches_v15": false
+    },
+    {
+      "original_path": "docs/STATUS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/STATUS.md",
+      "sha256": "ecf69119520f9a3679d366637c70a694c9b52719e910e050f9f8e1a777fcd77d",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/QUALITY_GATES.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/QUALITY_GATES.md",
+      "sha256": "1062ad2d4b530938da5bd9c01847be4a2f7d92539f06dfc2de485a0dd8af137a",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/ROADMAP.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/ROADMAP.md",
+      "sha256": "6ed595a5da45ae6bcd76215815a2d9bb75a682da5c875b7d27f01e6fd12808fe",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "sha256": "bf8fb37912875d26b3092490a272cd7091d8a217cde75794168cf7162e44d36a",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/PHASE2_STATUS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/PHASE2_STATUS.md",
+      "sha256": "2a06facfd9d59221aa7fdf85d5657e08123458fc7f6ec625a6d745309815e179",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/PHASE2_EXPERIMENTS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/PHASE2_EXPERIMENTS.md",
+      "sha256": "5756f5eb0b22c6f4f17b80751a097c24a95328b5c0134e90b49fe56e51086ad5",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "sha256": "f6ba9ca1c2689a56262dc28b6be4192108f54b159cf2c5b6736b8bd842714f39",
+      "matches_v15": true
+    },
+    {
+      "original_path": "docs/audit/phase2/execution-chain-audit.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v19-docs/docs/audit/phase2/execution-chain-audit.md",
+      "sha256": "a5b9951b1e6381680883ce4a8d6d159702c84e7dc4ff11cd14417bb9368c01db",
+      "matches_v15": true
+    }
+  ]
+}

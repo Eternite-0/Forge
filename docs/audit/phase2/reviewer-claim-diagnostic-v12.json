@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "execution_mode": "offline_read_only_runtime_diagnostic; no Provider calls; not live acceptance",
+  "run_id": "20261115T063556Z-L3-14d6f5",
+  "review_claim": "Top-level Return fails ast.parse(mode=exec) before the allowlist and must not be used.",
+  "observed_ast_node": "Return",
+  "observed_interpretation": {
+    "result": 0,
+    "steps": 2,
+    "subset": "forge_numeric_ast_v1"
+  },
+  "conclusion": "This review revision claim is incorrect for the actual bounded interpreter. Python bytecode compilation rules are not the numeric AST interpreter contract. Fresh-context same-model review is fallible. The original run remains failed and unchanged.",
+  "source_sha256": "68e51f32732e6254db06fa155f68eb7dfc0ef61f8371ef07c716c6cdc1f75b99"
+}

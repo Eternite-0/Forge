@@ -1,0 +1,30 @@
+2026-11-15 — continuation acceptance, isolated development workspace
+
+Code: React/Vite frontend on http://127.0.0.1:5173; actual Tauri debug executable.
+Runtime: desktop/output/native-final-runtime, offline Python 3.13.17 target.
+Workspace: desktop/output/native-history-workspace, dedicated test-owned data.
+Model protocol: Mock; files, SQLite, governed ToolEngine receipts are real.
+No external provider request, user credential change or user workspace maintenance.
+
+Observed:
+- Windows registry AppliedDPI=120 (125%). No OS DPI settings changed.
+- Native WebView2 reports CSS viewport 1440×900, devicePixelRatio=1.25.
+- Core connected, real persistent main conversation and current workspace appeared.
+- Real file tree returned test-owned Markdown, source, PDF and invalid-UTF8 sample.
+- report.pdf: actual 19.4 KB bytes, owned Blob URL, native PDF body visibly rendered.
+- Screenshot: native-final-pdf.png, captured from the actual WebView2 page via CDP.
+- Fixed development URL mismatch: Vite binds IPv4; Tauri devUrl now uses the same
+  127.0.0.1 address, accepted only on debug port5173 by the navigation guard.
+
+Native Rust acceptance (all independent test directories):
+cargo +1.90.0 test --lib -- --include-ignored
+17 passed; 0 failed; 0 ignored; finished in13.39s.
+Includes embedded Core handshake/restart/exit, backup/restore/fence and child-job cleanup.
+Log: native-all-tests.log.
+
+The user pressed physical Escape during Computer Use. Further native window
+automation stopped. No later native page/resize/download/credential input was made.
+The complete seven-page/minimum-window/150%-OS-DPI/native-download matrix remains
+unverified. Browser DPR matrix is separate evidence and does not close this gap.
+Prior PDF toolbar/page/search observations remain in native-preview-evidence.txt;
+this continuation does not claim those controls were rechecked after the stop.

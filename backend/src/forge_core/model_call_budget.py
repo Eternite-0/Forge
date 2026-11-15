@@ -10,6 +10,7 @@ from contextlib import closing
 
 from .provider_pool import PriceBound
 from .runtime import ModelCallContext
+from .token_policy import token_budgets_enforced
 
 
 class BudgetExceeded(RuntimeError):
@@ -35,10 +36,15 @@ class ModelCallBudgetLedger:
         isolation_seconds=60,
         reconciled_historical_cost=None,
         remote_max_seconds=None,
+        enforce_token_budgets=None,
     ):
+        if enforce_token_budgets is None:
+            enforce_token_budgets = token_budgets_enforced()
+        if type(enforce_token_budgets) is not bool:
+            raise ValueError("Invalid token budget policy")
         if (
-            type(token_limit) is not int
-            or token_limit < 0
+            (token_limit is not None and (type(token_limit) is not int or token_limit < 0))
+            or (enforce_token_budgets and token_limit is None)
             or type(concurrency_limit) is not int
             or concurrency_limit < 1
         ):
@@ -57,7 +63,9 @@ class ModelCallBudgetLedger:
         ):
             raise ValueError("Invalid isolation period")
         self.path = str(path)
-        self.token_limit = token_limit
+        self.enforce_token_budgets = enforce_token_budgets
+        self.configured_token_limit = token_limit
+        self.token_limit = token_limit if enforce_token_budgets else None
         self.concurrency_limit = concurrency_limit
         self.cost_limit = cost_limit
         self.currency = currency
@@ -167,6 +175,44 @@ class ModelCallBudgetLedger:
         attempt_id = uuid.uuid4().hex
         with closing(self._connect()) as conn:
             conn.execute("BEGIN IMMEDIATE")
+            if context.purpose == "independent_reviewer":
+                # Fence a delayed reviewer before any HTTP admission. Claim release
+                # and this check share SQLite's write lock, so a refunded claim
+                # cannot later consume another owner's bounded review allowance.
+                claim = conn.execute(
+                    "SELECT payload FROM events WHERE event_type='review.started' "
+                    "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+                    (context.worker_run_id,),
+                ).fetchone()
+                result = conn.execute(
+                    "SELECT id FROM events WHERE event_type='worker.result' "
+                    "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+                    (context.worker_run_id,),
+                ).fetchone()
+                started = json.loads(claim[0]) if claim else {}
+                released = conn.execute(
+                    "SELECT 1 FROM events WHERE event_type='review.released' "
+                    "AND json_extract(payload,'$.call_id')=? "
+                    "AND json_extract(payload,'$.reservation_refunded')=1",
+                    (context.call_id,),
+                ).fetchone()
+                authorized = conn.execute(
+                    "SELECT 1 FROM worker_runs r JOIN quests q ON q.id=r.quest_id "
+                    "JOIN quest_plans p ON p.id=r.plan_id WHERE r.id=? "
+                    "AND r.state='review_pending' AND q.status='running' "
+                    "AND q.plan_revision=r.plan_revision AND p.revision=r.plan_revision "
+                    "AND p.status='approved' AND p.digest=r.plan_digest",
+                    (context.worker_run_id,),
+                ).fetchone()
+                if (
+                    not context.worker_run_id
+                    or authorized is None
+                    or started.get("call_id") != context.call_id
+                    or result is None
+                    or started.get("result_event_id") != result[0]
+                    or released
+                ):
+                    raise BudgetExceeded("Independent review claim is stale or refunded")
             if conn.execute(
                 "SELECT breached FROM model_budget_metadata WHERE singleton=1"
             ).fetchone()[0]:
@@ -402,7 +448,10 @@ class ModelCallBudgetLedger:
                     f"SELECT COALESCE(SUM(tokens),0) FROM model_budget_opening WHERE {predicate}",
                     parameters,
                 ).fetchone()[0]
-                if aggregate["charged"] + opening + input_tokens + output_tokens > token_limit:
+                if (
+                    self.enforce_token_budgets
+                    and aggregate["charged"] + opening + input_tokens + output_tokens > token_limit
+                ):
                     raise BudgetExceeded("Model budget exhausted")
                 if aggregate["active"] >= concurrency_limit:
                     raise ConcurrencyUnavailable("Model concurrency unavailable")

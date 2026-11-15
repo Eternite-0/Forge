@@ -1,0 +1,2 @@
+Rows are [machine_id, capacity, cost]:
+[[1,4,8],[2,8,5],[3,8,5]]

@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP and Tauri bridge only",
+  "checks": 32,
+  "mutations": [
+    {
+      "method": "PATCH",
+      "path": "/api/models/profile-save-fixture"
+    },
+    {
+      "method": "POST",
+      "path": "/api/settings"
+    }
+  ],
+  "credentialCommands": 1,
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

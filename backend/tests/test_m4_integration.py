@@ -11,6 +11,12 @@ from threading import Barrier, Event
 import httpx
 import pytest
 from fastapi.testclient import TestClient
+from planner_capacity_fixtures import (
+    NativePlannerMock,
+    capacity_graph,
+    configure_planner_capacity,
+    semantic_capacity_graph,
+)
 
 from forge_core.dispatcher import Dispatcher, LeaseError
 from forge_core.domain import DomainError, ForgeEvent, Quest, WorkerSession
@@ -199,7 +205,7 @@ def test_graph_planner_sends_strict_wire_schema_through_gateway(tmp_path):
                 {
                     "key": "a",
                     "objective": "Review",
-                    "success_criteria": ["Done"],
+                    "success_criteria": ["delivery_review"],
                     "budget_tokens": 100,
                     "required_capabilities": [],
                     "allowed_tools": [],
@@ -461,6 +467,8 @@ def test_notice_failures_back_off_persist_and_stop_after_limit(tmp_path, monkeyp
 def test_authenticated_graph_controls_survive_restart_without_running_worker(tmp_path, monkeypatch):
     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
+    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
     for name in (
         "FORGE_PROVIDER_ID",
         "FORGE_PROVIDER_KIND",
@@ -471,27 +479,10 @@ def test_authenticated_graph_controls_survive_restart_without_running_worker(tmp
     from forge_api import main
 
     importlib.reload(main)
+    configure_planner_capacity(main)
     quest = Quest(title="Controlled plan", goal="Prepare only")
     main.store.save_quest(quest)
-    graph = {
-        "nodes": [
-            {
-                "key": "one",
-                "objective": "Prepare",
-                "success_criteria": ["Ready"],
-                "budget_tokens": 100,
-                "required_capabilities": [],
-                "allowed_tools": [],
-                "expected_artifact": None,
-                "max_attempts": 1,
-            }
-        ],
-        "edges": [],
-        "max_total_tokens": 100,
-        "max_cost_microunits": None,
-        "max_duration_seconds": None,
-        "cost_currency": None,
-    }
+    graph = capacity_graph("one", "Prepare")
 
     class MockProvider:
         execution_mode = "mock"
@@ -501,7 +492,7 @@ def test_authenticated_graph_controls_survive_restart_without_running_worker(tmp
             data = graph if name == "quest_graph" else {"action": "silent", "reply": None}
             return type("Response", (), {"text": json.dumps(data), "usage": {}})()
 
-    main.router.provider = MockProvider()
+    configure_planner_capacity(main, MockProvider())
     main.router.model_id = "mock"
     token = {"Authorization": f"Bearer {main.guard._token}"}
     path = f"/api/quests/{quest.id}/plan"
@@ -584,6 +575,8 @@ def test_invalid_graph_never_changes_quest_or_outbox(tmp_path, edges):
 def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path, monkeypatch):
     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
+    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
     for name in (
         "FORGE_PROVIDER_ID",
         "FORGE_PROVIDER_KIND",
@@ -594,25 +587,8 @@ def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path,
     from forge_api import main
 
     importlib.reload(main)
-    graph = {
-        "nodes": [
-            {
-                "key": "a",
-                "objective": "Plan",
-                "success_criteria": ["Done"],
-                "budget_tokens": 100,
-                "required_capabilities": [],
-                "allowed_tools": [],
-                "expected_artifact": None,
-                "max_attempts": 1,
-            }
-        ],
-        "edges": [],
-        "max_total_tokens": 100,
-        "max_cost_microunits": None,
-        "max_duration_seconds": None,
-        "cost_currency": None,
-    }
+    configure_planner_capacity(main)
+    graph = semantic_capacity_graph("a", "Plan")
     decision = {
         "intent": "create_quest",
         "reply": "已登记",
@@ -622,7 +598,7 @@ def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path,
         "candidates": [],
     }
 
-    class MockProvider:
+    class MockProvider(NativePlannerMock):
         execution_mode = "mock"
         plan_calls = 0
 
@@ -638,7 +614,7 @@ def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path,
             return type("Response", (), {"text": json.dumps(data), "usage": {}})()
 
     mock = MockProvider()
-    main.router.provider = mock
+    configure_planner_capacity(main, mock)
     main.router.model_id = "mock"
     token = {"Authorization": f"Bearer {main.guard._token}"}
     with TestClient(main.app, base_url="http://127.0.0.1", client=("127.0.0.1", 12345)) as client:
@@ -689,7 +665,7 @@ def test_planner_cancelled_claims_survive_reload_and_stop_after_five(tmp_path, m
 
     wait_for(delivered)
 
-    class WaitingProvider:
+    class WaitingProvider(NativePlannerMock):
         execution_mode = "mock"
         calls = 0
 
@@ -698,9 +674,10 @@ def test_planner_cancelled_claims_survive_reload_and_stop_after_five(tmp_path, m
             await asyncio.Event().wait()
 
     provider = WaitingProvider()
+    configure_planner_capacity(main, provider)
 
     for attempt in range(1, 6):
-        main.router.provider = provider
+        configure_planner_capacity(main, provider)
         main.router.model_id = "mock"
         before = provider.calls
 
@@ -748,7 +725,7 @@ def test_planner_refuses_stale_quest_after_model_call(tmp_path):
             {
                 "key": "a",
                 "objective": "Plan",
-                "success_criteria": ["Done"],
+                "success_criteria": ["delivery_review"],
                 "budget_tokens": 100,
                 "required_capabilities": [],
                 "allowed_tools": [],

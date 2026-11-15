@@ -1,0 +1,216 @@
+{
+  "generated_at": "2026-11-15T13:36:22.434132+00:00",
+  "source_version": "v25",
+  "status": "historical_failed_boundary",
+  "phase2_complete": false,
+  "scope": "Historical frozen suite and strict live failures. Archived source is rehashed without extracting or treating it as current source. No tests, Provider calls, Store construction, credentials or runtime database access.",
+  "boundary_auditor": {
+    "path": ".local/phase2/audit_version_boundary_v2.py",
+    "bytes": 12224,
+    "sha256": "6ca7f070de5799ea3ef03302bc31a438019c2d7f6f28bfd64e4b7366f46dcfec"
+  },
+  "source_manifest": {
+    "path": "docs/audit/phase2/source-manifest-v25.json",
+    "bytes": 42520,
+    "sha256": "980b69350c9e317e0b543a9353090da324714093b3676dbe34e313668800f87c"
+  },
+  "canonical_manifest_sha256": "307dac007fc6abf3fd30c66eb0a83038db9115d34306d9580fc69313fe18668d",
+  "freeze_manifest_binding": {
+    "checks": {
+      "canonical_manifest_matches": true,
+      "declared_file_count_matches": true,
+      "unique_manifest_paths": true,
+      "freeze_source_version_matches": true,
+      "freeze_manifest_file_matches": true,
+      "freeze_canonical_manifest_matches": true,
+      "freeze_inventory_counts_match": true,
+      "freeze_source_checks_passed": true
+    },
+    "passed": true
+  },
+  "original_frozen_observation": {
+    "path": "docs/audit/phase2/acceptance-independent-v25-freeze-corrected.json",
+    "bytes": 6200,
+    "sha256": "c1be235bd6ee530864a2cb333856822c6a5f6b4f49db3f754d3ad099e3f156f3"
+  },
+  "original_failed_freeze_attempt": {
+    "path": "docs/audit/phase2/acceptance-independent-v25-freeze.json",
+    "bytes": 5654,
+    "sha256": "d85b802c9fb332a379d8f335cc78945600507d8897fdffdbbc487487c0571f18"
+  },
+  "captured_source_static_preservation_passed": true,
+  "historical_source_archive": {
+    "evidence": {
+      "path": ".local/phase2/source-snapshot-v25.zip",
+      "bytes": 845498,
+      "sha256": "e2296f9022692e96ae12914f4ffd4c6a09ceed33c60e8de37c2a37019494f338"
+    },
+    "entries": 237,
+    "expected_files": 237,
+    "differences": [],
+    "extras": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "full_tests": {
+    "evidence": [
+      {
+        "path": "docs/audit/phase2/frozen-tests-v25.xml",
+        "bytes": 264798,
+        "sha256": "674128db2eeb0e188f4d6384c6f7b7882116599c8c823ff691ad1f07db3e330e"
+      },
+      {
+        "path": "docs/audit/phase2/frozen-tests-v25.log",
+        "bytes": 2552,
+        "sha256": "7622d37484fcc6fb74df1803f23e1735c180ae6a52eb0b88d072bc918d8d4a2e"
+      }
+    ],
+    "tests": 1770,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "testcase_elements": 1770,
+    "console_passed": 1770,
+    "console_warnings": 1,
+    "console_seconds": 416.01,
+    "duplicate_test_identities": [],
+    "failed_test_identities": [],
+    "missing_frozen_modules": [],
+    "extra_junit_modules": [],
+    "passed": true
+  },
+  "static_checks": [
+    {
+      "name": "ruff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-ruff-v25.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "result": "All checks passed!",
+      "passed": true
+    },
+    {
+      "name": "format",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-format-v25.log",
+        "bytes": 28,
+        "sha256": "5b7e073bcd77fc6e9dfe15ddde44425e672f58513e0f61417db7579c8b7de481"
+      },
+      "result": "232 files already formatted",
+      "passed": true
+    },
+    {
+      "name": "pip",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-pip-v25.log",
+        "bytes": 31,
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      },
+      "result": "No broken requirements found.",
+      "passed": true
+    },
+    {
+      "name": "diff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-diff-v25.log",
+        "bytes": 25,
+        "sha256": "f6a7d2113895ff7c42d5ce1b8ed901898e65102abf499b98eebd4c7ba5a0c7a2"
+      },
+      "result": "git diff --check: passed",
+      "passed": true
+    }
+  ],
+  "preservation": {
+    "evidence": {
+      "path": "docs/audit/phase2/preservation-v25.json",
+      "bytes": 211779,
+      "sha256": "10cb78143a5a5ffed8ffa851741cf285ccff3aacb98c98d5693ad1af2781ce5a"
+    },
+    "phase1_evidence_checked": 355,
+    "phase1_reports_checked": 9,
+    "byte_mismatches": [],
+    "original_test_count": 364,
+    "missing_tests": [],
+    "changed_test_ast": [
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_composer_only_approved_plan_events",
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_planner_events_to_independent_consumer",
+      "backend/tests/test_live_context_probe_offline.py::test_probe_fixtures_restart_and_report_with_mock_gateway",
+      "backend/tests/test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt",
+      "backend/tests/test_m4_integration.py::test_authenticated_graph_controls_survive_restart_without_running_worker",
+      "backend/tests/test_m4_integration.py::test_graph_planner_sends_strict_wire_schema_through_gateway",
+      "backend/tests/test_m4_integration.py::test_planner_refuses_stale_quest_after_model_call",
+      "backend/tests/test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message",
+      "backend/tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database",
+      "backend/tests/test_migrations.py::test_each_migration_step",
+      "backend/tests/test_migrations.py::test_v8_component_failure_rolls_back_v7_data",
+      "backend/tests/test_worker_runtime.py::test_model_can_request_bounded_help_without_spawning_or_gaining_tools",
+      "backend/tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves",
+      "backend/tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget",
+      "backend/tests/test_workspace_backup_m7.py::test_v7_snapshot_is_migrated_in_staging_before_publish"
+    ],
+    "changed_test_ast_matches_disclosure": true,
+    "assertion_disclosure_mismatches": [],
+    "new_skip_or_xfail_decorators": [],
+    "passed": true
+  },
+  "usage_audit": {
+    "path": "docs/audit/phase2/live-usage-v25-audit.json",
+    "bytes": 34850,
+    "sha256": "98c2e5e206d33a864bb97875fa7d9f953ef906708923a30eed399b4893422508"
+  },
+  "usage_consistency_passed": true,
+  "strict_live_runs": [
+    {
+      "run_id": "20261115T132815Z-L1-7b526e",
+      "level": "L1",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 35.101,
+      "known_gateway_tokens": 27333,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 7
+      },
+      "planner_failure_diagnostics": [],
+      "worker_runs": 1,
+      "retained_planner_rejection_events": 0
+    },
+    {
+      "run_id": "20261115T132815Z-L2-8e9443",
+      "level": "L2",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 29.409,
+      "known_gateway_tokens": 22384,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "worker_runs": 0,
+      "retained_planner_rejection_events": 2
+    },
+    {
+      "run_id": "20261115T132815Z-L3-68cba2",
+      "level": "L3",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 34.858,
+      "known_gateway_tokens": 23852,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "worker_runs": 0,
+      "retained_planner_rejection_events": 2
+    }
+  ],
+  "evidence_consistency_passed": true,
+  "interpretation": "Original strict failures remain failed. Passing backend checks and later-version repairs never promote this historical boundary."
+}

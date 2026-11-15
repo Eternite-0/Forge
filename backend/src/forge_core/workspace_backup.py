@@ -595,13 +595,16 @@ def review_restore(root, *, expected_manifest_sha256, expected_rollback_director
                             f"SELECT 1 FROM {schema}.worker_tool_calls WHERE state IN ('pending','running','uncertain') LIMIT 1"
                         ).fetchone()
                         or connection.execute(
+                            f"SELECT 1 FROM {schema}.worker_core_source_reads WHERE state IN ('pending','running','failed','uncertain') LIMIT 1"
+                        ).fetchone()
+                        or connection.execute(
                             f"SELECT breached FROM {schema}.model_budget_metadata WHERE singleton=1"
                         ).fetchone()[0]
                     ):
                         raise BackupError(
                             "Unresolved execution or model reservation requires separate reconciliation"
                         )
-                for table in ("action_intents", "action_receipts"):
+                for table in ("action_intents", "action_receipts", "worker_core_source_reads"):
                     if (
                         connection.execute(
                             f"SELECT 1 FROM (SELECT * FROM main.{table} EXCEPT SELECT * FROM previous.{table}) LIMIT 1"

@@ -1,0 +1,138 @@
+{
+  "acceptance": {
+    "checks": {},
+    "failed_checks": [],
+    "passed": null,
+    "status": null,
+    "unknown_checks": []
+  },
+  "actual_final_status": "proposed",
+  "artifact_hashes": [],
+  "compaction": {
+    "archive_created": null,
+    "rebuilt_messages": null,
+    "source_count": null,
+    "source_readback_available": null
+  },
+  "context_archives": 0,
+  "conversation_count": 1,
+  "cost": null,
+  "driver_final_status": null,
+  "duration_seconds": 313.339,
+  "execution_mode": "live",
+  "failures": [
+    "planner_did_not_produce_plan"
+  ],
+  "inspection_error": null,
+  "level": "L2",
+  "model_attempts": [
+    {
+      "attempt_id": "d9ec2cf5bdad4430bb5f315c5a1596c7",
+      "call_id": "call_1d796f521edc",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2620,
+      "input_reserved": 13212,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 1254,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "7e92432f3151462a93716e58ae2545ee",
+      "call_id": "call_579b53fd6521",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3558,
+      "input_reserved": 17837,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 4096,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "3cd88b7bc7f04c78bd9aab3b3e09bec0",
+      "call_id": "call_1627e17cb223",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3558,
+      "input_reserved": 17837,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 4096,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "f9cca2f5fd174850ac3f252d1c485e51",
+      "call_id": "call_ab7ef784f899",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3558,
+      "input_reserved": 17837,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 4096,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "f3d84410d31241c88ea8ae7dff8345fa",
+      "call_id": "call_207168c1fd57",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3558,
+      "input_reserved": 17837,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 4096,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "9d156b22f38745e3965038a219de9b4c",
+      "call_id": "call_1cc97c1d55a2",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 3558,
+      "input_reserved": 17837,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 4096,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    }
+  ],
+  "model_attempts_omitted": 0,
+  "model_calls": 6,
+  "publication_scope": "Allowlisted summaries of already-redacted live-driver records. Prompt/reply/log/artifact content omitted; unknown usage/cost preserved. A completed Quest alone does not establish scenario acceptance.",
+  "restart": {
+    "after": null,
+    "initial_router_identity": null,
+    "restored_router_identity": null,
+    "router_identity_retained": null,
+    "same_workspace": null
+  },
+  "review_results": [],
+  "router_status": 200,
+  "run_id": "20261114T235634Z-L2-020787",
+  "scenario_id": "forge-phase2-level-2-v1",
+  "schema_version": 1,
+  "semantic_test_runs": 0,
+  "token_usage": {
+    "input": 20410,
+    "output": 21734,
+    "unknown_attempts": 0
+  },
+  "tool_calls": 0,
+  "tools": [],
+  "workers": []
+}

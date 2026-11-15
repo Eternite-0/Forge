@@ -1,0 +1,181 @@
+{
+  "context_cap": 16384,
+  "created_at": "2026-11-15T08:33:13.666168+00:00",
+  "dataset": [
+    {
+      "case_id": "code-1",
+      "constraints": [
+        "integer_arithmetic",
+        "preserve_input_order"
+      ],
+      "difficulty": 1,
+      "domain": "code_contract",
+      "prompt": "Evaluate select for every supplied input pair in order; return its integer outputs. Follow the exact branch order, including equality and negative values.",
+      "sources": [
+        {
+          "content": "def select(a, b):\n    if a < 0:\n        return -1\n    if a <= b:\n        return a + b\n    return a - b\n",
+          "lines": 6,
+          "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+          "source_id": "function"
+        },
+        {
+          "content": "Input pairs, in order:\n[[0,0],[2,5]]\n",
+          "lines": 2,
+          "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+          "source_id": "inputs"
+        }
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "constraints": [
+        "lowest_cost_then_id",
+        "explicit_no_candidate"
+      ],
+      "difficulty": 1,
+      "domain": "integer_scheduling",
+      "prompt": "For each job choose the eligible machine with the lowest cost. Eligibility means capacity >= job size. Ties select the smaller machine ID. Return machine IDs in job order, or -1 if none qualifies.",
+      "sources": [
+        {
+          "content": "Rows are [machine_id, capacity, cost]:\n[[1,4,8],[2,8,5],[3,8,5]]\n",
+          "lines": 2,
+          "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+          "source_id": "machines"
+        },
+        {
+          "content": "Job sizes, in order:\n[1,7,9]\n",
+          "lines": 2,
+          "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+          "source_id": "jobs"
+        }
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "constraints": [
+        "exact_identifier_binding",
+        "preserve_event_order"
+      ],
+      "difficulty": 1,
+      "domain": "approval_architecture",
+      "prompt": "Process each event stream from an empty set of approved IDs. approve adds its ID; revoke removes it. A write is admitted only if its ID is currently approved. Return the admitted-write count for each stream in order. A failed write never grants approval.",
+      "sources": [
+        {
+          "content": "approve and revoke affect only the same exact ID.\nRepeated approvals do not create extra authority.\nWriting does not consume or create approval.\n",
+          "lines": 3,
+          "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+          "source_id": "semantics"
+        },
+        {
+          "content": "Each stream is an ordered list of [event_type, id]:\n[[[\"write\",\"a\"],[\"approve\",\"a\"],[\"write\",\"a\"]],[[\"approve\",\"b\"],[\"revoke\",\"b\"],[\"write\",\"b\"]]]\n",
+          "lines": 2,
+          "sha256": "8c9e89efe72d5dbaa9b6cda4ff857d45c47eb45042cadfe9c73e3fc97ffa972f",
+          "source_id": "streams"
+        }
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "constraints": [
+        "integer_arithmetic",
+        "preserve_input_order"
+      ],
+      "difficulty": 2,
+      "domain": "code_contract",
+      "prompt": "Evaluate select for every supplied input pair in order; return its integer outputs. Follow the exact branch order, including equality and negative values.",
+      "sources": [
+        {
+          "content": "def select(a, b):\n    if a < 0:\n        return -1\n    if a <= b:\n        return a + b\n    return a - b\n",
+          "lines": 6,
+          "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+          "source_id": "function"
+        },
+        {
+          "content": "Input pairs, in order:\n[[-3,-4],[0,-2],[4,4],[7,3],[-1,8]]\n",
+          "lines": 2,
+          "sha256": "91eb257a8a6839dcca14fb49aebae2d3e1fac6e0a9390d78bcc04e835c9ac48c",
+          "source_id": "inputs"
+        }
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "constraints": [
+        "lowest_cost_then_id",
+        "explicit_no_candidate"
+      ],
+      "difficulty": 2,
+      "domain": "integer_scheduling",
+      "prompt": "For each job choose the eligible machine with the lowest cost. Eligibility means capacity >= job size. Ties select the smaller machine ID. Return machine IDs in job order, or -1 if none qualifies.",
+      "sources": [
+        {
+          "content": "Rows are [machine_id, capacity, cost]:\n[[9,0,0],[7,5,2],[3,5,2],[1,12,9]]\n",
+          "lines": 2,
+          "sha256": "aaa8e59b163d770542a78d34247e3b9891112bcc09fc3ba427d0920e1ed9c5f5",
+          "source_id": "machines"
+        },
+        {
+          "content": "Job sizes, in order:\n[0,5,6,13,1]\n",
+          "lines": 2,
+          "sha256": "c0c45f6bd6bbea8ed0fc94f9649c1c466ad02c4186a2b5ca3403ad583ee29a4f",
+          "source_id": "jobs"
+        }
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "constraints": [
+        "exact_identifier_binding",
+        "preserve_event_order"
+      ],
+      "difficulty": 2,
+      "domain": "approval_architecture",
+      "prompt": "Process each event stream from an empty set of approved IDs. approve adds its ID; revoke removes it. A write is admitted only if its ID is currently approved. Return the admitted-write count for each stream in order. A failed write never grants approval.",
+      "sources": [
+        {
+          "content": "approve and revoke affect only the same exact ID.\nRepeated approvals do not create extra authority.\nWriting does not consume or create approval.\n",
+          "lines": 3,
+          "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+          "source_id": "semantics"
+        },
+        {
+          "content": "Each stream is an ordered list of [event_type, id]:\n[[[\"approve\",\"a\"],[\"approve\",\"b\"],[\"write\",\"a\"],[\"revoke\",\"a\"],[\"write\",\"a\"],[\"write\",\"b\"]],[[\"approve\",\"x\"],[\"approve\",\"x\"],[\"write\",\"y\"],[\"write\",\"x\"],[\"revoke\",\"x\"],[\"write\",\"x\"]],[[\"write\",\"q\"],[\"revoke\",\"q\"],[\"approve\",\"q\"],[\"write\",\"q\"],[\"write\",\"q\"]]]\n",
+          "lines": 2,
+          "sha256": "1ac543284f687c986c5ee75d706476cef0487281c4bc165505ed54e36fcded3e",
+          "source_id": "streams"
+        }
+      ]
+    }
+  ],
+  "dataset_sha256": "632b78a94c3e60d13a535a057f041e3877e1f4e27aca2a6c4b11b14bc4b68701",
+  "design": "six fixed tasks; distinct row samples; original Gateway; hidden deterministic oracle never sent to candidate/reviewer",
+  "global_sum_of_row_caps": 1440000,
+  "http_retries": 0,
+  "limitations": [
+    "Exploratory small single-model microtasks; no statistical generalization.",
+    "Single available model makes model-choice assignments identical; strategy quality or model diversity is not established.",
+    "This controlled policy ablation is not autonomous Quest acceptance; no runtime completion events are manufactured.",
+    "Evidence gate covers the fixed scoring specification only; its low false acceptance is not proof of unseen correctness.",
+    "Unknown cost remains null; configured context/output ceilings are not measured provider maxima."
+  ],
+  "model_id": "deepseek-v4.1-flash",
+  "oracle_sha256": "c9e8e4b2166755b23f2438156871a25cfbc2f3e4c80f929446ab90426981049a",
+  "output_cap": 512,
+  "per_row_token_cap": 16000,
+  "provider_id": "wb-local",
+  "rows": 90,
+  "run_id": "20261115T083313Z-study-4ebf5c",
+  "source_files": [
+    {
+      "bytes": 29815,
+      "path": "live_algorithm_benchmark.py",
+      "sha256": "021bf1cd07efd8e36669835bf9e1cf5864e6b58ce5e5105d5a70e077c1e66cb2"
+    },
+    {
+      "bytes": 10670,
+      "path": "algorithm_study_cases.py",
+      "sha256": "de456cb7df4a78b05ff2fcfc9b0b0227f9ca0d02446e92b94edf4b38ff775dee"
+    }
+  ],
+  "suite": "forge-live-algorithm-microstudy-v1"
+}

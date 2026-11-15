@@ -1,0 +1,635 @@
+FFFFF...........................................                         [100%]
+================================== FAILURES ===================================
+___ test_remaining_worker_reads_original_receipt_and_completes_after_reopen ___
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-681/test_remaining_worker_reads_or0')
+
+    def test_remaining_worker_reads_original_receipt_and_completes_after_reopen(tmp_path):
+>       store, manager, model, quest, plan, producer, reader, receipts, original = replan(tmp_path)
+                                                                                   ^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_worker_lineage_v16.py:34: in replan
+    service.approve(quest.id, pending["digest"], pending["plan_revision"], expected_version=store.get_quest(quest.id)["version"], actor="local_user")
+backend\src\forge_core\quest_graph.py:522: in approve
+    validate_pending_lineage(work.connection, quest, row)
+backend\src\forge_core\plan_lineage.py:196: in validate_pending_lineage
+    _source(connection, quest, newplan, entry["node_key"], require_approved=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000146101BA5C0>
+quest = {'id': 'quest_834fc5845461', 'conversation_id': 'main', 'title': 'Receipt repair fixture', 'goal': 'Inspect the reviewed predecessor artifact.', ...}
+newplan = <sqlite3.Row object at 0x0000014610217910>, node_key = 'producer'
+require_approved = False
+
+    def _source(connection, quest, newplan, node_key, *, require_approved):
+        graph = _graph(newplan)
+        lineage = graph.get("revision_lineage")
+        if not isinstance(lineage, dict) or lineage.get("version") != "remaining-dag-v1":
+            raise DomainError("Completed revision lineage unavailable")
+        if require_approved and (
+            newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
+        ):
+            raise DomainError("Current approved revision lineage required")
+        if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+            raise DomainError("Current lineage plan lacks user approval")
+        if lineage.get("quest_goal_sha256") != hashlib.sha256(
+            quest["goal"].encode()
+        ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
+            raise DomainError("Lineage original goal/source binding changed")
+        binding = request_binding(quest)
+        for key, hash_key in (("original_request_message_id", "original_request_sha256"), ("goal_update_message_id", "goal_update_sha256")):
+            if binding[key]:
+                source = connection.execute("SELECT content FROM messages WHERE id=? AND role='user' AND conversation_id='main'", (binding[key],)).fetchone()
+                if source is None or hashlib.sha256(source[0].encode()).hexdigest() != binding[hash_key]:
+                    raise DomainError("Lineage original request content integrity failed")
+        entries = [
+            item for item in lineage.get("completed_nodes", []) if item.get("node_key") == node_key
+        ]
+        if len(entries) != 1:
+            raise DomainError("Completed lineage identity is ambiguous")
+        entry = entries[0]
+        source_plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=? AND quest_id=?",
+            (entry["source_plan_id"], quest["id"]),
+        ).fetchone()
+        if (
+            source_plan is None
+            or source_plan["revision"] != entry["source_revision"]
+            or source_plan["digest"] != entry["source_plan_digest"]
+            or not source_plan["approved_at"]
+            or source_plan["approved_by"] != "local_user"
+        ):
+            raise DomainError("Completed lineage source approval is invalid")
+        source_graph = _graph(source_plan)
+        if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
+            raise DomainError("Completed lineage execution constraints changed")
+        old_nodes = [item for item in source_graph["nodes"] if item["key"] == node_key]
+        new_nodes = [item for item in graph["nodes"] if item["key"] == node_key]
+        if (
+            len(old_nodes) != 1
+            or len(new_nodes) != 1
+            or old_nodes[0] != new_nodes[0]
+            or digest(old_nodes[0]) != entry["contract_sha256"]
+        ):
+            raise DomainError("Completed lineage node contract changed")
+        old_inventory = {item["path"]: item for item in source_graph.get("capacity_contract", {}).get("input_inventory", [])}
+        new_inventory = {item["path"]: item for item in graph.get("capacity_contract", {}).get("input_inventory", [])}
+        if any(old_inventory.get(path) != new_inventory.get(path) for path in old_nodes[0].get("required_input_paths", [])):
+            raise DomainError("Completed lineage verified input identity changed")
+        source_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (source_plan["id"], node_key)
+        ).fetchone()
+        source_run = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=? AND quest_id=?", (entry["run_id"], quest["id"])
+        ).fetchone()
+        new_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (newplan["id"], node_key)
+        ).fetchone()
+        if not _node_matches(source_node, old_nodes[0]) or not _node_matches(new_node, new_nodes[0]):
+            raise DomainError("Completed lineage task row differs from its immutable graph contract")
+        if (
+            source_node is None
+            or source_run is None
+            or source_node["status"] != "succeeded"
+            or source_run["state"] != "succeeded"
+            or source_run["plan_id"] != source_plan["id"]
+            or source_run["node_key"] != node_key
+            or source_run["plan_digest"] != source_plan["digest"]
+            or source_run["plan_revision"] != source_plan["revision"]
+            or source_node["worker_id"] != entry["worker_id"]
+            or source_run["worker_id"] != entry["worker_id"]
+            or json.loads(source_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage source run/evidence changed")
+        if new_node is not None and (
+            new_node["status"] != "succeeded"
+            or new_node["worker_id"] != entry["worker_id"]
+            or json.loads(new_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage target state differs from its source")
+        team = connection.execute("SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?", (quest["id"], source_run["plan_revision"], source_run["team_digest"])).fetchone()
+        if team is None or team["approved_by"] != "local_user" or not team["approved_at"] or team["status"] not in {"approved", "superseded"} or source_run["created_at"] < team["approved_at"]:
+            raise DomainError("Completed lineage original team approval is invalid")
+        body = json.loads(team["body_json"])
+        if digest(body) != source_run["team_digest"] or body.get("plan_digest") != source_plan["digest"]:
+            raise DomainError("Completed lineage team digest changed")
+        members = body.get("members", [])
+        if not 0 <= source_run["member_index"] < len(members):
+            raise DomainError("Completed lineage member binding is invalid")
+        member = members[source_run["member_index"]]
+        if member.get("task_node_key") != node_key or member.get("provider_id") != source_run["provider_id"] or member.get("model_id") != source_run["model_id"] or member.get("id") != source_run["role_id"]:
+>           raise DomainError("Completed lineage selected member identity changed")
+E           forge_core.domain.DomainError: Completed lineage selected member identity changed
+
+backend\src\forge_core\plan_lineage.py:150: DomainError
+_ test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[goal] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-681/test_remaining_receipt_reader_0')
+mutation = 'goal'
+
+    @pytest.mark.parametrize("mutation", ["goal", "inherited_worker", "source_contract"])
+    def test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence(tmp_path, mutation):
+>       store, _manager, _, quest, plan, producer, reader, receipts, _ = replan(tmp_path)
+                                                                         ^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_worker_lineage_v16.py:34: in replan
+    service.approve(quest.id, pending["digest"], pending["plan_revision"], expected_version=store.get_quest(quest.id)["version"], actor="local_user")
+backend\src\forge_core\quest_graph.py:522: in approve
+    validate_pending_lineage(work.connection, quest, row)
+backend\src\forge_core\plan_lineage.py:196: in validate_pending_lineage
+    _source(connection, quest, newplan, entry["node_key"], require_approved=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000146101BAB60>
+quest = {'id': 'quest_bfb4f0171458', 'conversation_id': 'main', 'title': 'Receipt repair fixture', 'goal': 'Inspect the reviewed predecessor artifact.', ...}
+newplan = <sqlite3.Row object at 0x00000146112B30A0>, node_key = 'producer'
+require_approved = False
+
+    def _source(connection, quest, newplan, node_key, *, require_approved):
+        graph = _graph(newplan)
+        lineage = graph.get("revision_lineage")
+        if not isinstance(lineage, dict) or lineage.get("version") != "remaining-dag-v1":
+            raise DomainError("Completed revision lineage unavailable")
+        if require_approved and (
+            newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
+        ):
+            raise DomainError("Current approved revision lineage required")
+        if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+            raise DomainError("Current lineage plan lacks user approval")
+        if lineage.get("quest_goal_sha256") != hashlib.sha256(
+            quest["goal"].encode()
+        ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
+            raise DomainError("Lineage original goal/source binding changed")
+        binding = request_binding(quest)
+        for key, hash_key in (("original_request_message_id", "original_request_sha256"), ("goal_update_message_id", "goal_update_sha256")):
+            if binding[key]:
+                source = connection.execute("SELECT content FROM messages WHERE id=? AND role='user' AND conversation_id='main'", (binding[key],)).fetchone()
+                if source is None or hashlib.sha256(source[0].encode()).hexdigest() != binding[hash_key]:
+                    raise DomainError("Lineage original request content integrity failed")
+        entries = [
+            item for item in lineage.get("completed_nodes", []) if item.get("node_key") == node_key
+        ]
+        if len(entries) != 1:
+            raise DomainError("Completed lineage identity is ambiguous")
+        entry = entries[0]
+        source_plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=? AND quest_id=?",
+            (entry["source_plan_id"], quest["id"]),
+        ).fetchone()
+        if (
+            source_plan is None
+            or source_plan["revision"] != entry["source_revision"]
+            or source_plan["digest"] != entry["source_plan_digest"]
+            or not source_plan["approved_at"]
+            or source_plan["approved_by"] != "local_user"
+        ):
+            raise DomainError("Completed lineage source approval is invalid")
+        source_graph = _graph(source_plan)
+        if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
+            raise DomainError("Completed lineage execution constraints changed")
+        old_nodes = [item for item in source_graph["nodes"] if item["key"] == node_key]
+        new_nodes = [item for item in graph["nodes"] if item["key"] == node_key]
+        if (
+            len(old_nodes) != 1
+            or len(new_nodes) != 1
+            or old_nodes[0] != new_nodes[0]
+            or digest(old_nodes[0]) != entry["contract_sha256"]
+        ):
+            raise DomainError("Completed lineage node contract changed")
+        old_inventory = {item["path"]: item for item in source_graph.get("capacity_contract", {}).get("input_inventory", [])}
+        new_inventory = {item["path"]: item for item in graph.get("capacity_contract", {}).get("input_inventory", [])}
+        if any(old_inventory.get(path) != new_inventory.get(path) for path in old_nodes[0].get("required_input_paths", [])):
+            raise DomainError("Completed lineage verified input identity changed")
+        source_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (source_plan["id"], node_key)
+        ).fetchone()
+        source_run = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=? AND quest_id=?", (entry["run_id"], quest["id"])
+        ).fetchone()
+        new_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (newplan["id"], node_key)
+        ).fetchone()
+        if not _node_matches(source_node, old_nodes[0]) or not _node_matches(new_node, new_nodes[0]):
+            raise DomainError("Completed lineage task row differs from its immutable graph contract")
+        if (
+            source_node is None
+            or source_run is None
+            or source_node["status"] != "succeeded"
+            or source_run["state"] != "succeeded"
+            or source_run["plan_id"] != source_plan["id"]
+            or source_run["node_key"] != node_key
+            or source_run["plan_digest"] != source_plan["digest"]
+            or source_run["plan_revision"] != source_plan["revision"]
+            or source_node["worker_id"] != entry["worker_id"]
+            or source_run["worker_id"] != entry["worker_id"]
+            or json.loads(source_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage source run/evidence changed")
+        if new_node is not None and (
+            new_node["status"] != "succeeded"
+            or new_node["worker_id"] != entry["worker_id"]
+            or json.loads(new_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage target state differs from its source")
+        team = connection.execute("SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?", (quest["id"], source_run["plan_revision"], source_run["team_digest"])).fetchone()
+        if team is None or team["approved_by"] != "local_user" or not team["approved_at"] or team["status"] not in {"approved", "superseded"} or source_run["created_at"] < team["approved_at"]:
+            raise DomainError("Completed lineage original team approval is invalid")
+        body = json.loads(team["body_json"])
+        if digest(body) != source_run["team_digest"] or body.get("plan_digest") != source_plan["digest"]:
+            raise DomainError("Completed lineage team digest changed")
+        members = body.get("members", [])
+        if not 0 <= source_run["member_index"] < len(members):
+            raise DomainError("Completed lineage member binding is invalid")
+        member = members[source_run["member_index"]]
+        if member.get("task_node_key") != node_key or member.get("provider_id") != source_run["provider_id"] or member.get("model_id") != source_run["model_id"] or member.get("id") != source_run["role_id"]:
+>           raise DomainError("Completed lineage selected member identity changed")
+E           forge_core.domain.DomainError: Completed lineage selected member identity changed
+
+backend\src\forge_core\plan_lineage.py:150: DomainError
+_ test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[inherited_worker] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-681/test_remaining_receipt_reader_1')
+mutation = 'inherited_worker'
+
+    @pytest.mark.parametrize("mutation", ["goal", "inherited_worker", "source_contract"])
+    def test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence(tmp_path, mutation):
+>       store, _manager, _, quest, plan, producer, reader, receipts, _ = replan(tmp_path)
+                                                                         ^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_worker_lineage_v16.py:34: in replan
+    service.approve(quest.id, pending["digest"], pending["plan_revision"], expected_version=store.get_quest(quest.id)["version"], actor="local_user")
+backend\src\forge_core\quest_graph.py:522: in approve
+    validate_pending_lineage(work.connection, quest, row)
+backend\src\forge_core\plan_lineage.py:196: in validate_pending_lineage
+    _source(connection, quest, newplan, entry["node_key"], require_approved=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000146101BAE30>
+quest = {'id': 'quest_8d5907bc356c', 'conversation_id': 'main', 'title': 'Receipt repair fixture', 'goal': 'Inspect the reviewed predecessor artifact.', ...}
+newplan = <sqlite3.Row object at 0x00000146101CDF60>, node_key = 'producer'
+require_approved = False
+
+    def _source(connection, quest, newplan, node_key, *, require_approved):
+        graph = _graph(newplan)
+        lineage = graph.get("revision_lineage")
+        if not isinstance(lineage, dict) or lineage.get("version") != "remaining-dag-v1":
+            raise DomainError("Completed revision lineage unavailable")
+        if require_approved and (
+            newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
+        ):
+            raise DomainError("Current approved revision lineage required")
+        if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+            raise DomainError("Current lineage plan lacks user approval")
+        if lineage.get("quest_goal_sha256") != hashlib.sha256(
+            quest["goal"].encode()
+        ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
+            raise DomainError("Lineage original goal/source binding changed")
+        binding = request_binding(quest)
+        for key, hash_key in (("original_request_message_id", "original_request_sha256"), ("goal_update_message_id", "goal_update_sha256")):
+            if binding[key]:
+                source = connection.execute("SELECT content FROM messages WHERE id=? AND role='user' AND conversation_id='main'", (binding[key],)).fetchone()
+                if source is None or hashlib.sha256(source[0].encode()).hexdigest() != binding[hash_key]:
+                    raise DomainError("Lineage original request content integrity failed")
+        entries = [
+            item for item in lineage.get("completed_nodes", []) if item.get("node_key") == node_key
+        ]
+        if len(entries) != 1:
+            raise DomainError("Completed lineage identity is ambiguous")
+        entry = entries[0]
+        source_plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=? AND quest_id=?",
+            (entry["source_plan_id"], quest["id"]),
+        ).fetchone()
+        if (
+            source_plan is None
+            or source_plan["revision"] != entry["source_revision"]
+            or source_plan["digest"] != entry["source_plan_digest"]
+            or not source_plan["approved_at"]
+            or source_plan["approved_by"] != "local_user"
+        ):
+            raise DomainError("Completed lineage source approval is invalid")
+        source_graph = _graph(source_plan)
+        if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
+            raise DomainError("Completed lineage execution constraints changed")
+        old_nodes = [item for item in source_graph["nodes"] if item["key"] == node_key]
+        new_nodes = [item for item in graph["nodes"] if item["key"] == node_key]
+        if (
+            len(old_nodes) != 1
+            or len(new_nodes) != 1
+            or old_nodes[0] != new_nodes[0]
+            or digest(old_nodes[0]) != entry["contract_sha256"]
+        ):
+            raise DomainError("Completed lineage node contract changed")
+        old_inventory = {item["path"]: item for item in source_graph.get("capacity_contract", {}).get("input_inventory", [])}
+        new_inventory = {item["path"]: item for item in graph.get("capacity_contract", {}).get("input_inventory", [])}
+        if any(old_inventory.get(path) != new_inventory.get(path) for path in old_nodes[0].get("required_input_paths", [])):
+            raise DomainError("Completed lineage verified input identity changed")
+        source_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (source_plan["id"], node_key)
+        ).fetchone()
+        source_run = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=? AND quest_id=?", (entry["run_id"], quest["id"])
+        ).fetchone()
+        new_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (newplan["id"], node_key)
+        ).fetchone()
+        if not _node_matches(source_node, old_nodes[0]) or not _node_matches(new_node, new_nodes[0]):
+            raise DomainError("Completed lineage task row differs from its immutable graph contract")
+        if (
+            source_node is None
+            or source_run is None
+            or source_node["status"] != "succeeded"
+            or source_run["state"] != "succeeded"
+            or source_run["plan_id"] != source_plan["id"]
+            or source_run["node_key"] != node_key
+            or source_run["plan_digest"] != source_plan["digest"]
+            or source_run["plan_revision"] != source_plan["revision"]
+            or source_node["worker_id"] != entry["worker_id"]
+            or source_run["worker_id"] != entry["worker_id"]
+            or json.loads(source_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage source run/evidence changed")
+        if new_node is not None and (
+            new_node["status"] != "succeeded"
+            or new_node["worker_id"] != entry["worker_id"]
+            or json.loads(new_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage target state differs from its source")
+        team = connection.execute("SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?", (quest["id"], source_run["plan_revision"], source_run["team_digest"])).fetchone()
+        if team is None or team["approved_by"] != "local_user" or not team["approved_at"] or team["status"] not in {"approved", "superseded"} or source_run["created_at"] < team["approved_at"]:
+            raise DomainError("Completed lineage original team approval is invalid")
+        body = json.loads(team["body_json"])
+        if digest(body) != source_run["team_digest"] or body.get("plan_digest") != source_plan["digest"]:
+            raise DomainError("Completed lineage team digest changed")
+        members = body.get("members", [])
+        if not 0 <= source_run["member_index"] < len(members):
+            raise DomainError("Completed lineage member binding is invalid")
+        member = members[source_run["member_index"]]
+        if member.get("task_node_key") != node_key or member.get("provider_id") != source_run["provider_id"] or member.get("model_id") != source_run["model_id"] or member.get("id") != source_run["role_id"]:
+>           raise DomainError("Completed lineage selected member identity changed")
+E           forge_core.domain.DomainError: Completed lineage selected member identity changed
+
+backend\src\forge_core\plan_lineage.py:150: DomainError
+_ test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[source_contract] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-681/test_remaining_receipt_reader_2')
+mutation = 'source_contract'
+
+    @pytest.mark.parametrize("mutation", ["goal", "inherited_worker", "source_contract"])
+    def test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence(tmp_path, mutation):
+>       store, _manager, _, quest, plan, producer, reader, receipts, _ = replan(tmp_path)
+                                                                         ^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_worker_lineage_v16.py:34: in replan
+    service.approve(quest.id, pending["digest"], pending["plan_revision"], expected_version=store.get_quest(quest.id)["version"], actor="local_user")
+backend\src\forge_core\quest_graph.py:522: in approve
+    validate_pending_lineage(work.connection, quest, row)
+backend\src\forge_core\plan_lineage.py:196: in validate_pending_lineage
+    _source(connection, quest, newplan, entry["node_key"], require_approved=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000146101BBA60>
+quest = {'id': 'quest_c6fd2481c7f6', 'conversation_id': 'main', 'title': 'Receipt repair fixture', 'goal': 'Inspect the reviewed predecessor artifact.', ...}
+newplan = <sqlite3.Row object at 0x0000014610227D00>, node_key = 'producer'
+require_approved = False
+
+    def _source(connection, quest, newplan, node_key, *, require_approved):
+        graph = _graph(newplan)
+        lineage = graph.get("revision_lineage")
+        if not isinstance(lineage, dict) or lineage.get("version") != "remaining-dag-v1":
+            raise DomainError("Completed revision lineage unavailable")
+        if require_approved and (
+            newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
+        ):
+            raise DomainError("Current approved revision lineage required")
+        if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+            raise DomainError("Current lineage plan lacks user approval")
+        if lineage.get("quest_goal_sha256") != hashlib.sha256(
+            quest["goal"].encode()
+        ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
+            raise DomainError("Lineage original goal/source binding changed")
+        binding = request_binding(quest)
+        for key, hash_key in (("original_request_message_id", "original_request_sha256"), ("goal_update_message_id", "goal_update_sha256")):
+            if binding[key]:
+                source = connection.execute("SELECT content FROM messages WHERE id=? AND role='user' AND conversation_id='main'", (binding[key],)).fetchone()
+                if source is None or hashlib.sha256(source[0].encode()).hexdigest() != binding[hash_key]:
+                    raise DomainError("Lineage original request content integrity failed")
+        entries = [
+            item for item in lineage.get("completed_nodes", []) if item.get("node_key") == node_key
+        ]
+        if len(entries) != 1:
+            raise DomainError("Completed lineage identity is ambiguous")
+        entry = entries[0]
+        source_plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=? AND quest_id=?",
+            (entry["source_plan_id"], quest["id"]),
+        ).fetchone()
+        if (
+            source_plan is None
+            or source_plan["revision"] != entry["source_revision"]
+            or source_plan["digest"] != entry["source_plan_digest"]
+            or not source_plan["approved_at"]
+            or source_plan["approved_by"] != "local_user"
+        ):
+            raise DomainError("Completed lineage source approval is invalid")
+        source_graph = _graph(source_plan)
+        if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
+            raise DomainError("Completed lineage execution constraints changed")
+        old_nodes = [item for item in source_graph["nodes"] if item["key"] == node_key]
+        new_nodes = [item for item in graph["nodes"] if item["key"] == node_key]
+        if (
+            len(old_nodes) != 1
+            or len(new_nodes) != 1
+            or old_nodes[0] != new_nodes[0]
+            or digest(old_nodes[0]) != entry["contract_sha256"]
+        ):
+            raise DomainError("Completed lineage node contract changed")
+        old_inventory = {item["path"]: item for item in source_graph.get("capacity_contract", {}).get("input_inventory", [])}
+        new_inventory = {item["path"]: item for item in graph.get("capacity_contract", {}).get("input_inventory", [])}
+        if any(old_inventory.get(path) != new_inventory.get(path) for path in old_nodes[0].get("required_input_paths", [])):
+            raise DomainError("Completed lineage verified input identity changed")
+        source_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (source_plan["id"], node_key)
+        ).fetchone()
+        source_run = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=? AND quest_id=?", (entry["run_id"], quest["id"])
+        ).fetchone()
+        new_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (newplan["id"], node_key)
+        ).fetchone()
+        if not _node_matches(source_node, old_nodes[0]) or not _node_matches(new_node, new_nodes[0]):
+            raise DomainError("Completed lineage task row differs from its immutable graph contract")
+        if (
+            source_node is None
+            or source_run is None
+            or source_node["status"] != "succeeded"
+            or source_run["state"] != "succeeded"
+            or source_run["plan_id"] != source_plan["id"]
+            or source_run["node_key"] != node_key
+            or source_run["plan_digest"] != source_plan["digest"]
+            or source_run["plan_revision"] != source_plan["revision"]
+            or source_node["worker_id"] != entry["worker_id"]
+            or source_run["worker_id"] != entry["worker_id"]
+            or json.loads(source_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage source run/evidence changed")
+        if new_node is not None and (
+            new_node["status"] != "succeeded"
+            or new_node["worker_id"] != entry["worker_id"]
+            or json.loads(new_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage target state differs from its source")
+        team = connection.execute("SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?", (quest["id"], source_run["plan_revision"], source_run["team_digest"])).fetchone()
+        if team is None or team["approved_by"] != "local_user" or not team["approved_at"] or team["status"] not in {"approved", "superseded"} or source_run["created_at"] < team["approved_at"]:
+            raise DomainError("Completed lineage original team approval is invalid")
+        body = json.loads(team["body_json"])
+        if digest(body) != source_run["team_digest"] or body.get("plan_digest") != source_plan["digest"]:
+            raise DomainError("Completed lineage team digest changed")
+        members = body.get("members", [])
+        if not 0 <= source_run["member_index"] < len(members):
+            raise DomainError("Completed lineage member binding is invalid")
+        member = members[source_run["member_index"]]
+        if member.get("task_node_key") != node_key or member.get("provider_id") != source_run["provider_id"] or member.get("model_id") != source_run["model_id"] or member.get("id") != source_run["role_id"]:
+>           raise DomainError("Completed lineage selected member identity changed")
+E           forge_core.domain.DomainError: Completed lineage selected member identity changed
+
+backend\src\forge_core\plan_lineage.py:150: DomainError
+__________ test_original_receipts_remain_immutable_after_replanning ___________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-681/test_original_receipts_remain_0')
+
+    def test_original_receipts_remain_immutable_after_replanning(tmp_path):
+>       store, manager, _, _, _, _, reader, receipts, _ = replan(tmp_path)
+                                                          ^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lineage_v16.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_worker_lineage_v16.py:34: in replan
+    service.approve(quest.id, pending["digest"], pending["plan_revision"], expected_version=store.get_quest(quest.id)["version"], actor="local_user")
+backend\src\forge_core\quest_graph.py:522: in approve
+    validate_pending_lineage(work.connection, quest, row)
+backend\src\forge_core\plan_lineage.py:196: in validate_pending_lineage
+    _source(connection, quest, newplan, entry["node_key"], require_approved=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x000001461135C6D0>
+quest = {'id': 'quest_7bb181bdb0b0', 'conversation_id': 'main', 'title': 'Receipt repair fixture', 'goal': 'Inspect the reviewed predecessor artifact.', ...}
+newplan = <sqlite3.Row object at 0x00000146102194B0>, node_key = 'producer'
+require_approved = False
+
+    def _source(connection, quest, newplan, node_key, *, require_approved):
+        graph = _graph(newplan)
+        lineage = graph.get("revision_lineage")
+        if not isinstance(lineage, dict) or lineage.get("version") != "remaining-dag-v1":
+            raise DomainError("Completed revision lineage unavailable")
+        if require_approved and (
+            newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
+        ):
+            raise DomainError("Current approved revision lineage required")
+        if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+            raise DomainError("Current lineage plan lacks user approval")
+        if lineage.get("quest_goal_sha256") != hashlib.sha256(
+            quest["goal"].encode()
+        ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
+            raise DomainError("Lineage original goal/source binding changed")
+        binding = request_binding(quest)
+        for key, hash_key in (("original_request_message_id", "original_request_sha256"), ("goal_update_message_id", "goal_update_sha256")):
+            if binding[key]:
+                source = connection.execute("SELECT content FROM messages WHERE id=? AND role='user' AND conversation_id='main'", (binding[key],)).fetchone()
+                if source is None or hashlib.sha256(source[0].encode()).hexdigest() != binding[hash_key]:
+                    raise DomainError("Lineage original request content integrity failed")
+        entries = [
+            item for item in lineage.get("completed_nodes", []) if item.get("node_key") == node_key
+        ]
+        if len(entries) != 1:
+            raise DomainError("Completed lineage identity is ambiguous")
+        entry = entries[0]
+        source_plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE id=? AND quest_id=?",
+            (entry["source_plan_id"], quest["id"]),
+        ).fetchone()
+        if (
+            source_plan is None
+            or source_plan["revision"] != entry["source_revision"]
+            or source_plan["digest"] != entry["source_plan_digest"]
+            or not source_plan["approved_at"]
+            or source_plan["approved_by"] != "local_user"
+        ):
+            raise DomainError("Completed lineage source approval is invalid")
+        source_graph = _graph(source_plan)
+        if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
+            raise DomainError("Completed lineage execution constraints changed")
+        old_nodes = [item for item in source_graph["nodes"] if item["key"] == node_key]
+        new_nodes = [item for item in graph["nodes"] if item["key"] == node_key]
+        if (
+            len(old_nodes) != 1
+            or len(new_nodes) != 1
+            or old_nodes[0] != new_nodes[0]
+            or digest(old_nodes[0]) != entry["contract_sha256"]
+        ):
+            raise DomainError("Completed lineage node contract changed")
+        old_inventory = {item["path"]: item for item in source_graph.get("capacity_contract", {}).get("input_inventory", [])}
+        new_inventory = {item["path"]: item for item in graph.get("capacity_contract", {}).get("input_inventory", [])}
+        if any(old_inventory.get(path) != new_inventory.get(path) for path in old_nodes[0].get("required_input_paths", [])):
+            raise DomainError("Completed lineage verified input identity changed")
+        source_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (source_plan["id"], node_key)
+        ).fetchone()
+        source_run = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=? AND quest_id=?", (entry["run_id"], quest["id"])
+        ).fetchone()
+        new_node = connection.execute(
+            "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (newplan["id"], node_key)
+        ).fetchone()
+        if not _node_matches(source_node, old_nodes[0]) or not _node_matches(new_node, new_nodes[0]):
+            raise DomainError("Completed lineage task row differs from its immutable graph contract")
+        if (
+            source_node is None
+            or source_run is None
+            or source_node["status"] != "succeeded"
+            or source_run["state"] != "succeeded"
+            or source_run["plan_id"] != source_plan["id"]
+            or source_run["node_key"] != node_key
+            or source_run["plan_digest"] != source_plan["digest"]
+            or source_run["plan_revision"] != source_plan["revision"]
+            or source_node["worker_id"] != entry["worker_id"]
+            or source_run["worker_id"] != entry["worker_id"]
+            or json.loads(source_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage source run/evidence changed")
+        if new_node is not None and (
+            new_node["status"] != "succeeded"
+            or new_node["worker_id"] != entry["worker_id"]
+            or json.loads(new_node["evidence_refs"]) != entry["evidence_refs"]
+        ):
+            raise DomainError("Completed lineage target state differs from its source")
+        team = connection.execute("SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?", (quest["id"], source_run["plan_revision"], source_run["team_digest"])).fetchone()
+        if team is None or team["approved_by"] != "local_user" or not team["approved_at"] or team["status"] not in {"approved", "superseded"} or source_run["created_at"] < team["approved_at"]:
+            raise DomainError("Completed lineage original team approval is invalid")
+        body = json.loads(team["body_json"])
+        if digest(body) != source_run["team_digest"] or body.get("plan_digest") != source_plan["digest"]:
+            raise DomainError("Completed lineage team digest changed")
+        members = body.get("members", [])
+        if not 0 <= source_run["member_index"] < len(members):
+            raise DomainError("Completed lineage member binding is invalid")
+        member = members[source_run["member_index"]]
+        if member.get("task_node_key") != node_key or member.get("provider_id") != source_run["provider_id"] or member.get("model_id") != source_run["model_id"] or member.get("id") != source_run["role_id"]:
+>           raise DomainError("Completed lineage selected member identity changed")
+E           forge_core.domain.DomainError: Completed lineage selected member identity changed
+
+backend\src\forge_core\plan_lineage.py:150: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_lineage_v16.py::test_remaining_worker_reads_original_receipt_and_completes_after_reopen
+FAILED backend\tests\test_worker_lineage_v16.py::test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[goal]
+FAILED backend\tests\test_worker_lineage_v16.py::test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[inherited_worker]
+FAILED backend\tests\test_worker_lineage_v16.py::test_remaining_receipt_reader_rejects_changed_lineage_or_original_evidence[source_contract]
+FAILED backend\tests\test_worker_lineage_v16.py::test_original_receipts_remain_immutable_after_replanning
+5 failed, 43 passed in 21.04s

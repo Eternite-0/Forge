@@ -1,0 +1,749 @@
+{
+  "audit_version": 1,
+  "source_version": "v18",
+  "generated_at": "2026-11-15T09:46:47.647951+00:00",
+  "read_mode": "sqlite URI mode=ro; PRAGMA query_only=ON; explicit BEGIN read snapshot",
+  "scope": "Only explicitly named finished V18 live runs. No Store construction, Provider calls, credential access, database mutation, product source edits, or historical evidence changes.",
+  "frozen_manifest_sha256": "794621474be2b8bbfba2bb807e7c2944a46645c34913b5741b973f2505be3347",
+  "frozen_manifest_file_sha256": "ac91d0391af31a3676344d141afa6ef2b673aefc29ff8391a2b0372693f449d5",
+  "audit_script_sha256": "709b2d7c674aad5c3ec260372c21a864979836e3ffd1d207fd10899ed714c98d",
+  "runs": [
+    {
+      "run_id": "20261115T093857Z-L1-598df5",
+      "level": "L1",
+      "started_at": "2026-11-15T09:38:57.227529+00:00",
+      "finished_at": "2026-11-15T09:45:20.349932+00:00",
+      "duration_seconds": 383.096,
+      "driver_record_path": ".local/phase2/runs/20261115T093857Z-L1-598df5/run.json",
+      "driver_record_sha256": "c38edbc3b4fcc87ffc8c96484975ac37a7fa23e85728d56e58554aef87a646eb",
+      "database_path": ".local/phase2/ws-20261115T093857Z-L1-598df5/data/forge.sqlite3",
+      "database_sha256": "b85e457a8c497cae5ae0659bcb051a0025080d4c11cb612498c2563c3ddcfb39",
+      "driver_code_snapshot_sha256": "6d78ffe9c9edb466aaa8bbad0e4c220b16e13f8df91e282c1f020bbc75c6f4fb",
+      "driver_source_file_count": 86,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:one_worker",
+        "acceptance_unknown:readonly_tool_receipts",
+        "acceptance_unknown:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_unknown:independent_delivery_review"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "one_worker",
+        "readonly_tool_receipts",
+        "three_ranked_findings_or_explicit_insufficient_evidence",
+        "independent_delivery_review"
+      ],
+      "schema_version": 12,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_e6da06f09c3f",
+          "planner_call_id": "call_6ecf29cb2166",
+          "response_sha256": "233306a90a914b48cf35b48694189def11ac32517d8f8f10d5261d820cceda87",
+          "validation_errors_sha256": "d86d143406c5b73ea90241b03bd55bccd99a9165a783a5649d37ac53f99f3ce0",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_5179bc128fef",
+          "planner_call_id": "call_506d073c4a2b",
+          "response_sha256": "a4e17a727bb322bff1144e20a42daed434624d174524889dc9a246a670b5ae4c",
+          "validation_errors_sha256": "9c3724301195032174dfd38d09d5a77c62db88e211a073d4b540e853d73519cd",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 5,
+          "event_id": "evt_b44549cc897a",
+          "planner_call_id": "call_f3d949da088f",
+          "response_sha256": "d3274c81722f330173522344e822436a7d51559e9d46716f8bd54c66aeff592b",
+          "validation_errors_sha256": "838e8e8ea4c21a41674a26bca177fbfd2426b658a0c0a50be761987f6e4e7a2a",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 6,
+          "event_id": "evt_7e41c8294866",
+          "planner_call_id": "call_7b9123192e39",
+          "response_sha256": "e05fce67850f397839aa867d7ebb89d97e1809bc5889a63c4e2c07f3ec4c8981",
+          "validation_errors_sha256": "9c3724301195032174dfd38d09d5a77c62db88e211a073d4b540e853d73519cd",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 7,
+          "event_id": "evt_50353ec5ac5d",
+          "planner_call_id": "call_4d74d323828a",
+          "response_sha256": "fc50f12dcaada299b05b79928e87d7590a8c51abe99415d9d7a419ba365c5c5f",
+          "validation_errors_sha256": "1b401388688a5b31c1310e391f7a06d2e4b3181181eefc7e69ef5ac5482db6c1",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 8,
+          "event_id": "evt_d7bb3dcecd7d",
+          "planner_call_id": "call_d52404334702",
+          "response_sha256": "b9a967b34777fda44e752d46659476a7330dfd1819fc6539ac07037e3f78d798",
+          "validation_errors_sha256": "9c3724301195032174dfd38d09d5a77c62db88e211a073d4b540e853d73519cd",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 9,
+          "event_id": "evt_d8dd1f4a1cdc",
+          "planner_call_id": "call_ed84a37c08b2",
+          "response_sha256": "cc2b08b9cc0a0465c87805d090333c7272a328aef24a529cffb150b40d3c1d05",
+          "validation_errors_sha256": "9c3724301195032174dfd38d09d5a77c62db88e211a073d4b540e853d73519cd",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 10,
+          "event_id": "evt_87dda00ff8d5",
+          "planner_call_id": "call_738ccab96444",
+          "response_sha256": "f590e0bf281418487c79ff4a148a0807fd1d5060a060d52952409509505db956",
+          "validation_errors_sha256": "859f4ca4bc4820c568ded4706a81136d6c9673f8c9d839bc10e978580a499818",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 11,
+          "event_id": "evt_4a3176491088",
+          "planner_call_id": "call_0a34cb2aae94",
+          "response_sha256": "a2b8523e4308bc3aabf55b1fb6bf84d8abb94bdccaac7088d979b94325c4e41a",
+          "validation_errors_sha256": "fb6db55306286d81a15d9aa76ab9f2f5b00ec997c3762f21e6e4f975af5e088a",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 12,
+          "event_id": "evt_0a916e442a5e",
+          "planner_call_id": "call_881f96423004",
+          "response_sha256": "963c1caa98d4a1de269be17931eabd36e38089f1e00bd917ae9b3769691b0224",
+          "validation_errors_sha256": "9c3724301195032174dfd38d09d5a77c62db88e211a073d4b540e853d73519cd",
+          "capacity_diagnostics_present": true
+        }
+      ],
+      "quests": [
+        {
+          "id": "quest_928c8cb82d25",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 1,
+        "max_members": 1,
+        "max_concurrency": 1,
+        "max_depth": 1,
+        "max_total_tokens": 180000,
+        "max_duration_seconds": 600,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 180000,
+        "model_concurrency_limit": 1
+      },
+      "gateway_attempt_count": 13,
+      "final_gateway_state_counts": {
+        "settled": 13
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 80013,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 80013,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 801,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 10,
+          "state_counts": {
+            "settled": 10
+          },
+          "known_tokens": 72829,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 6383,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 180000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 5,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T09:40:14.540373+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T093857Z-L2-bd6e94",
+      "level": "L2",
+      "started_at": "2026-11-15T09:38:57.276654+00:00",
+      "finished_at": "2026-11-15T09:45:14.636645+00:00",
+      "duration_seconds": 377.332,
+      "driver_record_path": ".local/phase2/runs/20261115T093857Z-L2-bd6e94/run.json",
+      "driver_record_sha256": "831bb964a9dc8c8edc8ba800285c6ed2293a68207b7b688f43b6abe97b325105",
+      "database_path": ".local/phase2/ws-20261115T093857Z-L2-bd6e94/data/forge.sqlite3",
+      "database_sha256": "3c594c856fc0dba113e5edf3730120c2f006d0b4a167417404cc82c7880eebae",
+      "driver_code_snapshot_sha256": "6d78ffe9c9edb466aaa8bbad0e4c220b16e13f8df91e282c1f020bbc75c6f4fb",
+      "driver_source_file_count": 86,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:three_or_four_specialist_workers",
+        "acceptance_unknown:real_source_citations",
+        "acceptance_unknown:artifact_receipt_hashes",
+        "acceptance_unknown:independent_content_review"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "model_generated_dag",
+        "three_or_four_specialist_workers",
+        "real_source_citations",
+        "artifact_receipt_hashes",
+        "independent_content_review"
+      ],
+      "schema_version": 12,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_b238b68ea3d0",
+          "planner_call_id": "call_d92b72f8ccd3",
+          "response_sha256": "0eee814888cac168918f127f5d2dbe9e08b51c3f43c6685159a65d932d8ea21a",
+          "validation_errors_sha256": "78270be267ba479c282e1ef099dddd0b0915192795cf97f5209f4a678d7548a2",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_e44ac9135631",
+          "planner_call_id": "call_13460496c30d",
+          "response_sha256": "2a30784d449b895e4ebb5860f4dfbd8b5d994245a1c1fd1d9887258e8db24192",
+          "validation_errors_sha256": "ef1bac779b7ba06c5efb9a61d0f5880bcc8f61e9355ec0a6c3af9950959874f7",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 5,
+          "event_id": "evt_cbb945316a6d",
+          "planner_call_id": "call_2315154707c2",
+          "response_sha256": "0ed744fb2be2e8aefd85d88b0318d4bc48d3d02ded2ce4bc7868662b395abd87",
+          "validation_errors_sha256": "78270be267ba479c282e1ef099dddd0b0915192795cf97f5209f4a678d7548a2",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 6,
+          "event_id": "evt_1d9b1ceb6695",
+          "planner_call_id": "call_0b10ac4a4404",
+          "response_sha256": "604881f0a996acd5467001ee7f00afd2324805ff50232c6410394d29cf353039",
+          "validation_errors_sha256": "4ec6ffcd6c1424bcf25f1b05efc65ddc82642467392c304dcca57286c5e978b8",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 7,
+          "event_id": "evt_5c80ecf19b64",
+          "planner_call_id": "call_928717d73f34",
+          "response_sha256": "ca4309e3cdf21f8c190cf86709155448bd3eb1f58713692cbc8b7e244a038640",
+          "validation_errors_sha256": "7b3203146ecbaf228eaa2495fc238832ae3a81c2b9ab067abba26afcc1b51c21",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 8,
+          "event_id": "evt_b14e26cbee27",
+          "planner_call_id": "call_5038693a2a49",
+          "response_sha256": "e36f02c34713dc8696baee27d384f98548ea0959f70f3f88fc00a963c7a81d9c",
+          "validation_errors_sha256": "28a1ae28f68a424e617386424e9739b3287da236905e030f080ba0cf5f5b1d1f",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 9,
+          "event_id": "evt_dfe340a3334e",
+          "planner_call_id": "call_9f4894ae1929",
+          "response_sha256": "ccabed6a3c389332f0a770408ab77ef408e03102e2e2b5160d75389c02f1ac91",
+          "validation_errors_sha256": "26ac0ec768daf157a56bba880f0373ce8296976ca324e8dcaf81613e35c1b06e",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 10,
+          "event_id": "evt_b1010049e8a1",
+          "planner_call_id": "call_a9a13abdfb79",
+          "response_sha256": "94893f4a116cbab301fd38c6b0c166641856074268151c074cd95fe08a3c6c0b",
+          "validation_errors_sha256": "26ac0ec768daf157a56bba880f0373ce8296976ca324e8dcaf81613e35c1b06e",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 11,
+          "event_id": "evt_34360a83f8d2",
+          "planner_call_id": "call_b1c67263bafd",
+          "response_sha256": "dd391974f999c732ad7e51ab5fe6d7eb0daa5174fa85a0fa593f3f1d64ed8ba8",
+          "validation_errors_sha256": "ef0e86dee7f1b40a57947bcf5690c9617f1930eab6b2dd9def03408a0361564c",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 12,
+          "event_id": "evt_ccfac40eab83",
+          "planner_call_id": "call_e2d075dc4126",
+          "response_sha256": "4e53423a20fa22dc9c3bae38424225e05961db6371caedd593ddfadc663ec1d4",
+          "validation_errors_sha256": "ef0e86dee7f1b40a57947bcf5690c9617f1930eab6b2dd9def03408a0361564c",
+          "capacity_diagnostics_present": false
+        }
+      ],
+      "quests": [
+        {
+          "id": "quest_bf86f10ce5ea",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 4,
+        "max_members": 4,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_total_tokens": 360000,
+        "max_duration_seconds": 1200,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 360000,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 12,
+      "final_gateway_state_counts": {
+        "settled": 12
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 87717,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 87717,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 883,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 10,
+          "state_counts": {
+            "settled": 10
+          },
+          "known_tokens": 83375,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3459,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 360000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 5,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T09:40:33.549491+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T093857Z-L3-0b7788",
+      "level": "L3",
+      "started_at": "2026-11-15T09:38:57.150474+00:00",
+      "finished_at": "2026-11-15T09:45:15.568113+00:00",
+      "duration_seconds": 378.376,
+      "driver_record_path": ".local/phase2/runs/20261115T093857Z-L3-0b7788/run.json",
+      "driver_record_sha256": "4a6aca2f70dd40f92c0ffec67b4b43749a5f331f97c7f52df09e4ccae98fac25",
+      "database_path": ".local/phase2/ws-20261115T093857Z-L3-0b7788/data/forge.sqlite3",
+      "database_sha256": "fa84df2da1ef112ae7473bf93ded13ee06babc10983fbab1a39898386827d660",
+      "driver_code_snapshot_sha256": "6d78ffe9c9edb466aaa8bbad0e4c220b16e13f8df91e282c1f020bbc75c6f4fb",
+      "driver_source_file_count": 86,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "model_generated_dag",
+        "research_math_architecture_coding_experiment_review",
+        "real_numeric_ast_receipts",
+        "independent_fixed_semantic_suite",
+        "artifact_hashes",
+        "core_restart_continuity",
+        "context_compaction_continuity"
+      ],
+      "schema_version": 12,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_c83ae56f6653",
+          "planner_call_id": "call_9e04b495b4c7",
+          "response_sha256": "b1126bfc2e60de5b144e106e1966bc822343bef0919fdcc9ae35082a077cd20c",
+          "validation_errors_sha256": "9b116e1798ef5c0d295419a9e3eb8b6e275279075e10f1d0f72080a641629721",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_a1112a26334c",
+          "planner_call_id": "call_7c13690ae94d",
+          "response_sha256": "9c203a6b573bf8c836c4175619c1607b7f859d3dbdf05bfd2209cb41b4bd1362",
+          "validation_errors_sha256": "7151bd73ed76da4d13e9544ccccbf2131eb1cbb00c0bb166c6235ebb2474b329",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 5,
+          "event_id": "evt_e4afd147e254",
+          "planner_call_id": "call_8b32f43eb82b",
+          "response_sha256": "b65ef55beb9d855c5a0e6c6243b6674cc085e3c74c67e43acee4c0f847947abf",
+          "validation_errors_sha256": "fe023e274cd7c99fe34836c50a437f9efd76c23701ecbe477204d1df9cf1ca94",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 6,
+          "event_id": "evt_aba84652974f",
+          "planner_call_id": "call_b8df2e3d1275",
+          "response_sha256": "38c8286053ea96748573bbbc79e4447435e05fa4325c77ac25b7997496eee9ab",
+          "validation_errors_sha256": "fe023e274cd7c99fe34836c50a437f9efd76c23701ecbe477204d1df9cf1ca94",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 7,
+          "event_id": "evt_5f94d9badc67",
+          "planner_call_id": "call_216abcc3a125",
+          "response_sha256": "02b8c37fd0a302f30e6064f6abb2ffdd6508bcd0ed281663e06dd63909af1998",
+          "validation_errors_sha256": "120c47f625e2ddde07fd5f5524567f55997f0bce7e57764fc6f56707daef680d",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 8,
+          "event_id": "evt_c4e76d67d012",
+          "planner_call_id": "call_93f9d02a88dd",
+          "response_sha256": "30a40dfa245dd3cf7a6f5edd4688a30231d7a334653500c91070ada1eda72cb8",
+          "validation_errors_sha256": "120c47f625e2ddde07fd5f5524567f55997f0bce7e57764fc6f56707daef680d",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 9,
+          "event_id": "evt_c6bb4d75fa66",
+          "planner_call_id": "call_3978863a6ed6",
+          "response_sha256": "5fe6bae43f06abb021c853877932e346dd1f926acbb98b067950edddf0d4fc88",
+          "validation_errors_sha256": "9afb0a0959134855b5016dbac44b9f66008993bed9e4a0a07cd62c5a9ce27c17",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 10,
+          "event_id": "evt_544df0aec94b",
+          "planner_call_id": "call_63d9db34937c",
+          "response_sha256": "e668324b6b9084ef51dfd4dfc9ecea299d4f8c66fa711d152e15a4fe53e7040c",
+          "validation_errors_sha256": "9afb0a0959134855b5016dbac44b9f66008993bed9e4a0a07cd62c5a9ce27c17",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 11,
+          "event_id": "evt_1457361b4178",
+          "planner_call_id": "call_de1ba46faf87",
+          "response_sha256": "c34678bb889cdbe4a29f4d82bdbdca21e36ea2c8f60aeec64ec5d39f16db6b88",
+          "validation_errors_sha256": "072987a0fa0f4fee6ebcd5016413836dadee5a6ea341726c62916002e6df95bf",
+          "capacity_diagnostics_present": false
+        },
+        {
+          "seq": 12,
+          "event_id": "evt_ed36f19dd1a7",
+          "planner_call_id": "call_85815e53b4af",
+          "response_sha256": "c5585e6b39cc402d519722a4fd5232c64fa83f04d423e961a13cb50db14595c7",
+          "validation_errors_sha256": "f0e73eb9de6bac15b43fd161dec716a2306aecceb742ca47cab9ac071858e850",
+          "capacity_diagnostics_present": false
+        }
+      ],
+      "quests": [
+        {
+          "id": "quest_eb22de0f18ca",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 7,
+        "max_members": 7,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_total_tokens": 630000,
+        "max_duration_seconds": 1800,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 630000,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 12,
+      "final_gateway_state_counts": {
+        "settled": 12
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 102389,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 102389,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 1073,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 10,
+          "state_counts": {
+            "settled": 10
+          },
+          "known_tokens": 97545,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3771,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 630000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 5,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T09:40:55.839657+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "current_frozen_source_mismatches": [],
+  "interpretation_limits": [
+    "Final Gateway settlement and exact local accounting do not establish task success or strict acceptance.",
+    "Planner invalid proposals are not retained as raw model responses. An Invalid_graph_proposal diagnostic alone cannot establish a specific schema, capacity, or model-quality root cause.",
+    "No absence of a Gateway attempt is treated as permission to refund a reservation. Refunded records are checked only against their existing durable terminal state.",
+    "Review PASS is accepted only by rebuilding the complete packet and running the existing live provenance/hash binding checks.",
+    "Unknown usage and unconfigured monetary costs are never converted into zero. Rejected HTTP attempts without usage still retain their full reservations.",
+    "Shared serial reserves are reconstructed once per Quest/accounting scope from every started Worker and the final durable markers. Stored start snapshots are checked against prior Gateway calls and opening balances; settled_at timestamps are unavailable, so historical settlement timing cannot be proved from the final ledger alone."
+  ]
+}

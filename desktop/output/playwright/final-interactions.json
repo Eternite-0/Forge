@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 82,
+  "screenshots": [
+    "rebuild-forge-interactions-task-filters",
+    "rebuild-forge-interactions-settings-validation",
+    "rebuild-forge-interactions-project-groups"
+  ],
+  "mutations": 0,
+  "requests": 105,
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

@@ -1,0 +1,200 @@
+{
+  "checks": 62,
+  "screenshots": 11,
+  "data": "real File API imports; two-page PDF",
+  "previewGeometry": [
+    {
+      "state": "split preview 1440",
+      "viewport": 1440,
+      "previewWidth": 658.78125,
+      "documentWidth": 438.78125,
+      "treeWidth": 220,
+      "tab": {
+        "font": 14,
+        "line": null,
+        "height": 30
+      },
+      "breadcrumb": {
+        "font": 14,
+        "line": 22,
+        "height": 32
+      },
+      "toolbar": {
+        "font": 14,
+        "line": null,
+        "height": 48
+      },
+      "tree": {
+        "font": 13,
+        "line": 21,
+        "height": 30
+      },
+      "markdown": {
+        "font": 16,
+        "line": 24,
+        "height": 3432
+      }
+    },
+    {
+      "state": "split preview 1280",
+      "viewport": 1280,
+      "previewWidth": 658.90625,
+      "documentWidth": 438.90625,
+      "treeWidth": 220,
+      "tab": {
+        "font": 14,
+        "line": null,
+        "height": 30
+      },
+      "breadcrumb": {
+        "font": 14,
+        "line": 22,
+        "height": 32
+      },
+      "toolbar": {
+        "font": 14,
+        "line": null,
+        "height": 48
+      },
+      "tree": {
+        "font": 13,
+        "line": 21,
+        "height": 30
+      },
+      "markdown": {
+        "font": 16,
+        "line": 24,
+        "height": 3432
+      }
+    },
+    {
+      "state": "expanded preview 1440",
+      "viewport": 1440,
+      "previewWidth": 1382,
+      "documentWidth": 1022,
+      "treeWidth": 360,
+      "tab": {
+        "font": 14,
+        "line": null,
+        "height": 30
+      },
+      "breadcrumb": {
+        "font": 14,
+        "line": 22,
+        "height": 32
+      },
+      "toolbar": {
+        "font": 14,
+        "line": null,
+        "height": 48
+      },
+      "tree": {
+        "font": 13,
+        "line": 21,
+        "height": 30
+      },
+      "markdown": {
+        "font": 16,
+        "line": 24,
+        "height": 3432
+      }
+    },
+    {
+      "state": "expanded preview 1280",
+      "viewport": 1280,
+      "previewWidth": 1222,
+      "documentWidth": 879.84375,
+      "treeWidth": 342.15625,
+      "tab": {
+        "font": 14,
+        "line": null,
+        "height": 30
+      },
+      "breadcrumb": {
+        "font": 14,
+        "line": 22,
+        "height": 32
+      },
+      "toolbar": {
+        "font": 14,
+        "line": null,
+        "height": 48
+      },
+      "tree": {
+        "font": 13,
+        "line": 21,
+        "height": 30
+      },
+      "markdown": {
+        "font": 16,
+        "line": 24,
+        "height": 3432
+      }
+    }
+  ],
+  "results": [
+    "preview opens on demand with a genuine browser import entry",
+    "preview opening passes through intermediate measured widths",
+    "Markdown renders the imported content",
+    "split preview 1440: preview tabs and breadcrumb use readable 14px UI text",
+    "split preview 1440: preview toolbar retains its 48px reading rhythm",
+    "split preview 1440: file tree uses 13px text and 30px rows",
+    "split preview 1440: Markdown uses 16px text with 24px line height",
+    "split preview 1280: preview tabs and breadcrumb use readable 14px UI text",
+    "split preview 1280: preview toolbar retains its 48px reading rhythm",
+    "split preview 1280: file tree uses 13px text and 30px rows",
+    "split preview 1280: Markdown uses 16px text with 24px line height",
+    "Markdown HTML does not execute",
+    "Markdown never loads external images",
+    "dangerous links are never rendered as anchors",
+    "Markdown source is readable with line numbers",
+    "source/preview switching retains Markdown scroll",
+    "relative document links open another tab in the same workspace",
+    "large source is virtualized",
+    "virtual source reaches later lines",
+    "tab switching preserves source reading position",
+    "source search locates a virtualized line",
+    "first search Enter goes to the first match",
+    "refresh keeps the source reading position",
+    "reopening a file reuses its tab",
+    "splitter supports keyboard resizing",
+    "splitter supports pointer resizing",
+    "expanding the preview fills its workspace and hides split resizing",
+    "full-width preview retains the conversation and draft while excluding chat from keyboard interaction",
+    "expanding a file retains its source DOM and reading position",
+    "expanded preview 1440: preview tabs and breadcrumb use readable 14px UI text",
+    "expanded preview 1440: preview toolbar retains its 48px reading rhythm",
+    "expanded preview 1440: file tree uses 13px text and 30px rows",
+    "expanded preview 1440: Markdown uses 16px text with 24px line height",
+    "expanded preview 1280: preview tabs and breadcrumb use readable 14px UI text",
+    "expanded preview 1280: preview toolbar retains its 48px reading rhythm",
+    "expanded preview 1280: file tree uses 13px text and 30px rows",
+    "expanded preview 1280: Markdown uses 16px text with 24px line height",
+    "checking expanded Markdown leaves source reading position intact",
+    "closing a full-width preview restores the same conversation and draft",
+    "reopening a full-width preview restores its expanded state and exact file reading position",
+    "restoring the preview returns to the exact prior split width",
+    "restoring the split preserves the same source document and reading position",
+    "PDF receives actual imported bytes through an owned Blob URL",
+    "PDF provides a real downloadable document",
+    "unsupported text encoding has an explicit error",
+    "preview exit keeps the mounted document through intermediate widths",
+    "closing preview immediately removes its controls from keyboard interaction and eventually hides it",
+    "animated close and reopen retain the document reading position",
+    "narrow windows show one readable file workspace",
+    "the 1136px single-panel breakpoint excludes the hidden conversation from keyboard interaction",
+    "narrow layout hides the split drag handle",
+    "a 640px file workspace stays readable without exposing hidden chat controls or overflowing the window",
+    "closing preview restores the original draft",
+    "closing preview restores chat and its keyboard interaction",
+    "closing and reopening preview retains tabs",
+    "explicit tree refresh reloads the actual directory entries",
+    "directory imports strip the shared root and preserve relative file references",
+    "a rapid close/open reverses the transition and restores keyboard interaction",
+    "reduced motion closes preview in the next rendered frame",
+    "reduced motion opens preview immediately",
+    "file workspace never overflows the window",
+    "preview persists no browser storage"
+  ],
+  "uncaughtPageErrors": 0
+}

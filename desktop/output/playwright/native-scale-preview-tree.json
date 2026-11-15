@@ -1,0 +1,160 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP and Tauri file source only",
+  "checks": 39,
+  "nativeReads": 25,
+  "writes": 0,
+  "previewGeometry": [
+    {
+      "viewport": 1152,
+      "preview": 658.78125,
+      "document": 438.78125,
+      "tree": 220,
+      "navigation": 52,
+      "overflow": 0,
+      "shortNames": [
+        {
+          "path": "src/nested/deep.ts",
+          "available": 75,
+          "text": 75
+        },
+        {
+          "path": "README.md",
+          "available": 103,
+          "text": 103
+        },
+        {
+          "path": "src/nested/deep.ts",
+          "available": 129,
+          "text": 129
+        },
+        {
+          "path": "README.md",
+          "available": 157,
+          "text": 157
+        }
+      ]
+    },
+    {
+      "viewport": 1280,
+      "preview": 658.90625,
+      "document": 438.90625,
+      "tree": 220,
+      "navigation": 52,
+      "overflow": 0,
+      "shortNames": [
+        {
+          "path": "src/nested/deep.ts",
+          "available": 75,
+          "text": 75
+        },
+        {
+          "path": "README.md",
+          "available": 103,
+          "text": 103
+        },
+        {
+          "path": "src/nested/deep.ts",
+          "available": 129,
+          "text": 129
+        },
+        {
+          "path": "README.md",
+          "available": 157,
+          "text": 157
+        }
+      ]
+    },
+    {
+      "viewport": 1400,
+      "preview": 659.015625,
+      "document": 439.015625,
+      "tree": 220,
+      "navigation": 52,
+      "overflow": 0,
+      "shortNames": [
+        {
+          "path": "src/nested/deep.ts",
+          "available": 75,
+          "text": 75
+        },
+        {
+          "path": "README.md",
+          "available": 103,
+          "text": 103
+        },
+        {
+          "path": "src/nested/deep.ts",
+          "available": 129,
+          "text": 129
+        },
+        {
+          "path": "README.md",
+          "available": 157,
+          "text": 157
+        }
+      ]
+    },
+    {
+      "viewport": 1440,
+      "preview": 658.78125,
+      "document": 438.78125,
+      "tree": 220,
+      "navigation": 340,
+      "overflow": 0,
+      "shortNames": [
+        {
+          "path": "src/nested/deep.ts",
+          "available": 75,
+          "text": 75
+        },
+        {
+          "path": "README.md",
+          "available": 103,
+          "text": 103
+        },
+        {
+          "path": "src/nested/deep.ts",
+          "available": 129,
+          "text": 129
+        },
+        {
+          "path": "README.md",
+          "available": 157,
+          "text": 157
+        }
+      ]
+    },
+    {
+      "viewport": 1920,
+      "preview": 659.15625,
+      "document": 439.15625,
+      "tree": 220,
+      "navigation": 340,
+      "overflow": 0,
+      "shortNames": [
+        {
+          "path": "src/nested/deep.ts",
+          "available": 75,
+          "text": 75
+        },
+        {
+          "path": "README.md",
+          "available": 103,
+          "text": 103
+        },
+        {
+          "path": "src/nested/deep.ts",
+          "available": 129,
+          "text": 129
+        },
+        {
+          "path": "README.md",
+          "available": 157,
+          "text": 157
+        }
+      ]
+    }
+  ],
+  "uncaughtPageErrors": 0
+}

@@ -1,0 +1,1219 @@
+{
+  "generated_at": "2026-11-15T13:36:22.271188+00:00",
+  "source_version": "v25",
+  "scope": "Immutable original driver and read-only event/latency interpretation. SQLite URI mode=ro, query_only, explicit BEGIN. No Store, Provider calls, credentials, source edits or original record changes.",
+  "timing_auditor": {
+    "path": ".local/phase2/audit_timing_version.py",
+    "bytes": 10334,
+    "sha256": "3931258bcd2291f4d334500aea8973dfd6a62a00a7395d3f4437c9dab5706c09"
+  },
+  "usage_audit": {
+    "path": "docs/audit/phase2/live-usage-v25-audit.json",
+    "bytes": 34850,
+    "sha256": "98c2e5e206d33a864bb97875fa7d9f953ef906708923a30eed399b4893422508"
+  },
+  "runs": [
+    {
+      "run_id": "20261115T132815Z-L1-7b526e",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T132815Z-L1-7b526e/run.json",
+        "bytes": 130945,
+        "sha256": "e7f21aef15ae7693973428f25cc653df74a608769ee1157512d7893b55fbf53f"
+      },
+      "whole_driver_duration_seconds": 35.101,
+      "utc_wall_interval_seconds": 35.152641,
+      "stages": [
+        {
+          "stage": "driver_started",
+          "created_at": "2026-11-15T13:28:15.330408+00:00"
+        },
+        {
+          "stage": "core.started",
+          "created_at": "2026-11-15T13:28:16.743735+00:00",
+          "event_id": "evt_1c1445073c75",
+          "seq": 1
+        },
+        {
+          "stage": "quest.proposed",
+          "created_at": "2026-11-15T13:28:28.150633+00:00",
+          "event_id": "evt_645c2411e88c",
+          "seq": 2
+        },
+        {
+          "stage": "quest.plan_proposed",
+          "created_at": "2026-11-15T13:28:34.044497+00:00",
+          "event_id": "evt_b1f45d02ab67",
+          "seq": 3
+        },
+        {
+          "stage": "team.proposed",
+          "created_at": "2026-11-15T13:28:39.408057+00:00",
+          "event_id": "evt_c95febf909c7",
+          "seq": 5
+        },
+        {
+          "stage": "driver_finished",
+          "created_at": "2026-11-15T13:28:50.483049+00:00"
+        }
+      ],
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core.started",
+          "seconds": 1.413327
+        },
+        {
+          "from": "core.started",
+          "to": "quest.proposed",
+          "seconds": 11.406898
+        },
+        {
+          "from": "quest.proposed",
+          "to": "quest.plan_proposed",
+          "seconds": 5.893864
+        },
+        {
+          "from": "quest.plan_proposed",
+          "to": "team.proposed",
+          "seconds": 5.36356
+        },
+        {
+          "from": "team.proposed",
+          "to": "driver_finished",
+          "seconds": 11.074992
+        }
+      ],
+      "transcript": [
+        {
+          "at": 3.19,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 12.85,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 14.92,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 20.28,
+          "label": "plan_approve",
+          "status": 200
+        },
+        {
+          "at": 25.6,
+          "label": "team_approve",
+          "status": 200
+        },
+        {
+          "at": 30.53,
+          "label": "activity",
+          "status": 200
+        },
+        {
+          "at": 31.1,
+          "label": "quest_final",
+          "status": 200
+        },
+        {
+          "at": 31.64,
+          "label": "budget",
+          "status": 200
+        },
+        {
+          "at": 32.57,
+          "label": "timeline",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:readonly_tool_receipts",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 2.53,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "5585eeb45ba34d1088a268dfdb2cb7d4",
+          "call_id": "memory_call_eec73ec75e1d",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 780,
+          "output_charged": 23,
+          "created_at": 1794749300.5022182
+        },
+        {
+          "attempt_id": "7156814b019d4f41963410fa531994a8",
+          "call_id": "call_162fcfd5a1ad",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 2870,
+          "output_charged": 593,
+          "created_at": 1794749303.6597028
+        },
+        {
+          "attempt_id": "63267727292745dba41febcd97ba79eb",
+          "call_id": "call_4a0e201dcb78",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6553,
+          "output_charged": 350,
+          "created_at": 1794749309.9692886
+        },
+        {
+          "attempt_id": "950571c608e04455aece0ac36cbb01d9",
+          "call_id": "call_5b849f66a751",
+          "purpose": "team_composer",
+          "state": "settled",
+          "input_charged": 3990,
+          "output_charged": 237,
+          "created_at": 1794749316.7923245
+        },
+        {
+          "attempt_id": "70a0c88c3dae4366bebdbbc5f7e24909",
+          "call_id": "model_call_6d7226a46e5d",
+          "purpose": "worker",
+          "state": "settled",
+          "input_charged": 6961,
+          "output_charged": 98,
+          "created_at": 1794749322.44938
+        },
+        {
+          "attempt_id": "83d4a828786b43aead303e58f1b98e96",
+          "call_id": "call_3d84e5e045af",
+          "purpose": "router_notice",
+          "state": "settled",
+          "input_charged": 2338,
+          "output_charged": 10,
+          "created_at": 1794749325.4188876
+        },
+        {
+          "attempt_id": "59a6f7eef869413ebdf71f209b62e700",
+          "call_id": "call_8e2217df7198",
+          "purpose": "router_notice",
+          "state": "settled",
+          "input_charged": 2425,
+          "output_charged": 105,
+          "created_at": 1794749327.8479414
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 1,
+        "team_composer": 1,
+        "worker": 1,
+        "router_notice": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 7
+      },
+      "final_known_gateway_tokens": 27333,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_cce775d082f1",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.167272899998352,
+          "ttft_seconds": null,
+          "output_tokens": 23,
+          "created_at": "2026-11-15T13:28:22.769093+00:00"
+        },
+        {
+          "id": "observation_ddfda6dfe526",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.344676000007894,
+          "ttft_seconds": null,
+          "output_tokens": 593,
+          "created_at": "2026-11-15T13:28:28.134446+00:00"
+        },
+        {
+          "id": "observation_bc2006210a87",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 4.6995470999972895,
+          "ttft_seconds": null,
+          "output_tokens": 350,
+          "created_at": "2026-11-15T13:28:33.682647+00:00"
+        },
+        {
+          "id": "observation_49ac5bf5e85d",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.1304810000001453,
+          "ttft_seconds": null,
+          "output_tokens": 237,
+          "created_at": "2026-11-15T13:28:39.310943+00:00"
+        },
+        {
+          "id": "observation_682680435904",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.3255623999866657,
+          "ttft_seconds": null,
+          "output_tokens": 98,
+          "created_at": "2026-11-15T13:28:45.298035+00:00"
+        },
+        {
+          "id": "observation_7d8711ef3d19",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 2.263258599996334,
+          "ttft_seconds": null,
+          "output_tokens": 10,
+          "created_at": "2026-11-15T13:28:46.770530+00:00"
+        },
+        {
+          "id": "observation_d63c65bbbdcf",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.041749500000151,
+          "ttft_seconds": null,
+          "output_tokens": 105,
+          "created_at": "2026-11-15T13:28:50.353984+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 7,
+        "sum_seconds": 24.97254749998683,
+        "mean_seconds": 3.5675067857124043,
+        "p95_seconds": 5.344676000007894
+      },
+      "retained_planner_rejections": [],
+      "router_replan_events": [],
+      "planner_inbox_diagnostics": [],
+      "worker_runs": 1,
+      "core_source_admissions": 3,
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T132815Z-L2-8e9443",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T132815Z-L2-8e9443/run.json",
+        "bytes": 48993,
+        "sha256": "8f5af632ea490198e144d946813c2a7b24c8a853d98124af9baeba561f6c50de"
+      },
+      "whole_driver_duration_seconds": 29.409,
+      "utc_wall_interval_seconds": 29.417161,
+      "stages": [
+        {
+          "stage": "driver_started",
+          "created_at": "2026-11-15T13:28:15.375955+00:00"
+        },
+        {
+          "stage": "core.started",
+          "created_at": "2026-11-15T13:28:16.743646+00:00",
+          "event_id": "evt_27e7f5e15921",
+          "seq": 1
+        },
+        {
+          "stage": "quest.proposed",
+          "created_at": "2026-11-15T13:28:27.888800+00:00",
+          "event_id": "evt_3a08320ef46f",
+          "seq": 2
+        },
+        {
+          "stage": "quest.plan_rejected",
+          "created_at": "2026-11-15T13:28:37.957894+00:00",
+          "event_id": "evt_d82a3dd925c5",
+          "seq": 3
+        },
+        {
+          "stage": "quest.plan_rejected",
+          "created_at": "2026-11-15T13:28:43.920407+00:00",
+          "event_id": "evt_d3f997758575",
+          "seq": 4
+        },
+        {
+          "stage": "driver_finished",
+          "created_at": "2026-11-15T13:28:44.793116+00:00"
+        }
+      ],
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core.started",
+          "seconds": 1.367691
+        },
+        {
+          "from": "core.started",
+          "to": "quest.proposed",
+          "seconds": 11.145154
+        },
+        {
+          "from": "quest.proposed",
+          "to": "quest.plan_rejected",
+          "seconds": 10.069094
+        },
+        {
+          "from": "quest.plan_rejected",
+          "to": "quest.plan_rejected",
+          "seconds": 5.962513
+        },
+        {
+          "from": "quest.plan_rejected",
+          "to": "driver_finished",
+          "seconds": 0.872709
+        }
+      ],
+      "transcript": [
+        {
+          "at": 3.09,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 12.54,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 13.43,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 29.4,
+          "label": "events",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:three_or_four_specialist_workers",
+        "acceptance_unknown:real_source_citations",
+        "acceptance_unknown:artifact_receipt_hashes",
+        "acceptance_unknown:independent_content_review"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.002,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "80f295acc241448f8ec049456660b82e",
+          "call_id": "memory_call_0c5404250fd6",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 845,
+          "output_charged": 26,
+          "created_at": 1794749300.2754295
+        },
+        {
+          "attempt_id": "406deb1b684b4449bf80544f70291ee7",
+          "call_id": "call_a0e2b5c0e7d6",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 2931,
+          "output_charged": 547,
+          "created_at": 1794749303.6653266
+        },
+        {
+          "attempt_id": "f4cfd9517900419a8b1ffd38d5a16c24",
+          "call_id": "call_1d87ab738f1d",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6580,
+          "output_charged": 1216,
+          "created_at": 1794749310.0738235
+        },
+        {
+          "attempt_id": "4457c32eebbd4867aff54e9fdda0a40b",
+          "call_id": "call_49c7a6feb025",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 9023,
+          "output_charged": 1216,
+          "created_at": 1794749318.6254318
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_known_gateway_tokens": 22384,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_2d42b9cd42ae",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.4154713000170887,
+          "ttft_seconds": null,
+          "output_tokens": 26,
+          "created_at": "2026-11-15T13:28:22.775664+00:00"
+        },
+        {
+          "id": "observation_ce166768847a",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.072607299982337,
+          "ttft_seconds": null,
+          "output_tokens": 547,
+          "created_at": "2026-11-15T13:28:27.870373+00:00"
+        },
+        {
+          "id": "observation_a442f0fa6a74",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 8.561640300002182,
+          "ttft_seconds": null,
+          "output_tokens": 1216,
+          "created_at": "2026-11-15T13:28:37.587620+00:00"
+        },
+        {
+          "id": "observation_c03c2b939ce6",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.954092200001469,
+          "ttft_seconds": null,
+          "output_tokens": 1216,
+          "created_at": "2026-11-15T13:28:43.916336+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 4,
+        "sum_seconds": 23.003811100003077,
+        "mean_seconds": 5.750952775000769,
+        "p95_seconds": 8.561640300002182
+      },
+      "retained_planner_rejections": [
+        {
+          "event_id": "evt_d82a3dd925c5",
+          "seq": 3,
+          "created_at": "2026-11-15T13:28:37.957894+00:00",
+          "data": {
+            "planner_call_id": "call_1d87ab738f1d",
+            "response_sha256": "e8df4254c44d818d68f8f3b79a45515b7c4cf7105d9ae81f0e3846bbb1dd3605",
+            "response_bytes": 5221,
+            "validation_errors": [
+              "nodes.2: Value error, canonical_artifact_verifier_path_must_equal_expected_artifact"
+            ],
+            "capacity_diagnostics": {
+              "source_capacity_preview": {
+                "version": "planner-source-preview-v23",
+                "status": "available",
+                "scope": "diagnostic_only_complete_selected_sources_not_plan_or_authority",
+                "nodes": [
+                  {
+                    "node": "source-audit",
+                    "known_source_bytes": 32811,
+                    "future_source_bytes_bound": 0,
+                    "required_source_receipt_bytes": 32811,
+                    "action_evidence_allowance_bytes": 0,
+                    "metadata_reserve_bytes": 1024,
+                    "max_source_receipt_bytes": 33835,
+                    "source_headroom_bytes": 31701,
+                    "future_contributions": []
+                  },
+                  {
+                    "node": "architecture-analysis",
+                    "known_source_bytes": 32811,
+                    "future_source_bytes_bound": 4226,
+                    "required_source_receipt_bytes": 37037,
+                    "action_evidence_allowance_bytes": 0,
+                    "metadata_reserve_bytes": 1024,
+                    "max_source_receipt_bytes": 38061,
+                    "source_headroom_bytes": 27475,
+                    "future_contributions": [
+                      {
+                        "kind": "delivery",
+                        "producer": "source-audit",
+                        "declared_bound": 2048,
+                        "bytes": 4224
+                      }
+                    ]
+                  },
+                  {
+                    "node": "report-writer",
+                    "known_source_bytes": 32811,
+                    "future_source_bytes_bound": 8450,
+                    "required_source_receipt_bytes": 41261,
+                    "action_evidence_allowance_bytes": 0,
+                    "metadata_reserve_bytes": 1024,
+                    "max_source_receipt_bytes": 42285,
+                    "source_headroom_bytes": 23251,
+                    "future_contributions": [
+                      {
+                        "kind": "delivery",
+                        "producer": "source-audit",
+                        "declared_bound": 2048,
+                        "bytes": 4224
+                      },
+                      {
+                        "kind": "delivery",
+                        "producer": "architecture-analysis",
+                        "declared_bound": 2048,
+                        "bytes": 4224
+                      }
+                    ]
+                  },
+                  {
+                    "node": "report-review",
+                    "known_source_bytes": 32811,
+                    "future_source_bytes_bound": 10370,
+                    "required_source_receipt_bytes": 43181,
+                    "action_evidence_allowance_bytes": 0,
+                    "metadata_reserve_bytes": 1024,
+                    "max_source_receipt_bytes": 44205,
+                    "source_headroom_bytes": 21331,
+                    "future_contributions": [
+                      {
+                        "kind": "artifact",
+                        "producer": "report-writer",
+                        "path": "work/l2-report.json",
+                        "declared_bound": 3072,
+                        "bytes": 6656
+                      },
+                      {
+                        "kind": "delivery",
+                        "producer": "report-writer",
+                        "declared_bound": 1536,
+                        "bytes": 3712
+                      }
+                    ]
+                  }
+                ],
+                "inventory_owners": {
+                  "inputs/scenario-2/01-router.json": [
+                    "source-audit",
+                    "architecture-analysis",
+                    "report-writer",
+                    "report-review"
+                  ],
+                  "inputs/scenario-2/02-worker_runtime.json": [
+                    "source-audit",
+                    "architecture-analysis",
+                    "report-writer",
+                    "report-review"
+                  ],
+                  "inputs/scenario-2/03-team_composition.json": [
+                    "source-audit",
+                    "architecture-analysis",
+                    "report-writer",
+                    "report-review"
+                  ],
+                  "inputs/scenario-2/manifest.json": [
+                    "source-audit",
+                    "architecture-analysis",
+                    "report-writer",
+                    "report-review"
+                  ]
+                },
+                "unselected_inventory_paths": [],
+                "inventory_note": "Coverage is descriptive. Model must preserve every task-required source; no automatic assignment, omission or authority is inferred."
+              },
+              "complete_capacity_preview": {
+                "version": "planner-capacity-preview-v25",
+                "status": "available",
+                "scope": "diagnostic_only_original_profiles_and_formulas_no_allocation_or_authority",
+                "columns": [
+                  "profile_index",
+                  "artifact_bytes",
+                  "delivery_bytes",
+                  "action_evidence_bytes",
+                  "known_source_bytes",
+                  "future_source_bytes",
+                  "source_bound_bytes",
+                  "raw_packet_bound",
+                  "raw_headroom",
+                  "review_input",
+                  "review_headroom",
+                  "correction_input",
+                  "correction_headroom",
+                  "initial_work_tokens",
+                  "review_cycle_reserve_tokens",
+                  "minimum_node_tokens",
+                  "policy_cycle_calls",
+                  "violation_indices"
+                ],
+                "profiles": [
+                  "deepseek-v4.1-flash"
+                ],
+                "violation_codes": [
+                  "review_envelope_bounds_invalid",
+                  "selected_model_context_exceeded"
+                ],
+                "nodes": [
+                  {
+                    "node": "source-audit",
+                    "status": "available",
+                    "rows": [
+                      [
+                        0,
+                        1,
+                        2048,
+                        0,
+                        32811,
+                        0,
+                        33835,
+                        48443,
+                        17093,
+                        52076,
+                        12436,
+                        59300,
+                        4188,
+                        51106,
+                        167548,
+                        218654,
+                        4,
+                        []
+                      ]
+                    ],
+                    "omitted_candidates": 0,
+                    "unmeasurable_candidates": 0
+                  },
+                  {
+                    "node": "architecture-analysis",
+                    "status": "available",
+                    "rows": [
+                      [
+                        0,
+                        1,
+                        2048,
+                        0,
+                        32811,
+                        4226,
+                        38061,
+                        52942,
+                        12594,
+                        60803,
+                        3709,
+                        70485,
+                        -6997,
+                        62291,
+                        196187,
+                        258478,
+                        4,
+                        [
+                          0,
+                          1
+                        ]
+                      ]
+                    ],
+                    "omitted_candidates": 0,
+                    "unmeasurable_candidates": 0
+                  },
+                  {
+                    "node": "report-writer",
+                    "status": "unavailable",
+                    "reason": "invalid_criteria_node_not_measured",
+                    "omitted_candidates": 0,
+                    "unmeasurable_candidates": 0
+                  },
+                  {
+                    "node": "report-review",
+                    "status": "available",
+                    "rows": [
+                      [
+                        0,
+                        1,
+                        2048,
+                        0,
+                        32811,
+                        10370,
+                        44205,
+                        59126,
+                        6410,
+                        73133,
+                        -8621,
+                        83155,
+                        -19667,
+                        74961,
+                        233517,
+                        308478,
+                        4,
+                        [
+                          0,
+                          1
+                        ]
+                      ]
+                    ],
+                    "omitted_candidates": 0,
+                    "unmeasurable_candidates": 0
+                  }
+                ],
+                "aggregate_policy_projection": {
+                  "status": "unknown",
+                  "reason": "not_every_pending_node_measurable"
+                },
+                "preserved_completed_keys": []
+              },
+              "allocation_mode": "core_measured"
+            }
+          }
+        },
+        {
+          "event_id": "evt_d3f997758575",
+          "seq": 4,
+          "created_at": "2026-11-15T13:28:43.920407+00:00",
+          "data": {
+            "planner_call_id": "call_49c7a6feb025",
+            "response_sha256": "7007d3638d5788f30f821dfb65c08451c39d9c9c1bf20a7bbd65293e7138673f",
+            "response_bytes": 5220,
+            "validation_errors": [
+              "nodes.2: Value error, mixed_artifact_verifier_encodings"
+            ]
+          }
+        }
+      ],
+      "router_replan_events": [],
+      "planner_inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 1,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T13:28:43.924015+00:00",
+          "processed_at": null
+        }
+      ],
+      "worker_runs": 0,
+      "core_source_admissions": 0,
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T132815Z-L3-68cba2",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T132815Z-L3-68cba2/run.json",
+        "bytes": 50887,
+        "sha256": "c72abfb8d023a57c8e173af324f0d56b1aded52bb3b647ee444218b645501979"
+      },
+      "whole_driver_duration_seconds": 34.858,
+      "utc_wall_interval_seconds": 34.865757,
+      "stages": [
+        {
+          "stage": "driver_started",
+          "created_at": "2026-11-15T13:28:15.375811+00:00"
+        },
+        {
+          "stage": "core.started",
+          "created_at": "2026-11-15T13:28:16.743243+00:00",
+          "event_id": "evt_1e46268c2c5d",
+          "seq": 1
+        },
+        {
+          "stage": "quest.proposed",
+          "created_at": "2026-11-15T13:28:28.205586+00:00",
+          "event_id": "evt_1a9f48b93cbc",
+          "seq": 2
+        },
+        {
+          "stage": "quest.plan_rejected",
+          "created_at": "2026-11-15T13:28:39.311027+00:00",
+          "event_id": "evt_14aab6a18254",
+          "seq": 3
+        },
+        {
+          "stage": "quest.plan_rejected",
+          "created_at": "2026-11-15T13:28:47.717995+00:00",
+          "event_id": "evt_fe68300cd4db",
+          "seq": 4
+        },
+        {
+          "stage": "driver_finished",
+          "created_at": "2026-11-15T13:28:50.241568+00:00"
+        }
+      ],
+      "observed_stage_intervals": [
+        {
+          "from": "driver_started",
+          "to": "core.started",
+          "seconds": 1.367432
+        },
+        {
+          "from": "core.started",
+          "to": "quest.proposed",
+          "seconds": 11.462343
+        },
+        {
+          "from": "quest.proposed",
+          "to": "quest.plan_rejected",
+          "seconds": 11.105441
+        },
+        {
+          "from": "quest.plan_rejected",
+          "to": "quest.plan_rejected",
+          "seconds": 8.406968
+        },
+        {
+          "from": "quest.plan_rejected",
+          "to": "driver_finished",
+          "seconds": 2.523573
+        }
+      ],
+      "transcript": [
+        {
+          "at": 3.1,
+          "label": "register_model",
+          "status": 200
+        },
+        {
+          "at": 12.85,
+          "label": "message",
+          "status": 200
+        },
+        {
+          "at": 14.86,
+          "label": "quest_initial",
+          "status": 200
+        },
+        {
+          "at": 34.85,
+          "label": "events",
+          "status": 200
+        }
+      ],
+      "original_acceptance_status": "failed",
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.002,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "attempt_admissions": [
+        {
+          "attempt_id": "c6530c58f5834a23997cfad6d92f09e9",
+          "call_id": "memory_call_6c2088680ea2",
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "input_charged": 1029,
+          "output_charged": 26,
+          "created_at": 1794749300.3631098
+        },
+        {
+          "attempt_id": "343364777ef14712995840790d7695fb",
+          "call_id": "call_004035e75e98",
+          "purpose": "router",
+          "state": "settled",
+          "input_charged": 3117,
+          "output_charged": 557,
+          "created_at": 1794749303.5864332
+        },
+        {
+          "attempt_id": "a947e9dcbf8e4b018e88d282eb7f9684",
+          "call_id": "call_fd05cc54c6b3",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 6754,
+          "output_charged": 1787,
+          "created_at": 1794749310.001968
+        },
+        {
+          "attempt_id": "3ed67cd8c1ce48cea2d8221993002348",
+          "call_id": "call_2e8f9d06ded7",
+          "purpose": "planner",
+          "state": "settled",
+          "input_charged": 8771,
+          "output_charged": 1811,
+          "created_at": 1794749319.9833455
+        }
+      ],
+      "purpose_counts": {
+        "memory_semantic_retrieval": 1,
+        "router": 1,
+        "planner": 2
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_known_gateway_tokens": 23852,
+      "final_unknown_reserved_tokens": 0,
+      "gateway_observations": [
+        {
+          "id": "observation_825cec3dd70f",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 3.361731899989536,
+          "ttft_seconds": null,
+          "output_tokens": 26,
+          "created_at": "2026-11-15T13:28:22.708592+00:00"
+        },
+        {
+          "id": "observation_413b14e44f65",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 5.462108899984742,
+          "ttft_seconds": null,
+          "output_tokens": 557,
+          "created_at": "2026-11-15T13:28:28.193476+00:00"
+        },
+        {
+          "id": "observation_aa5362d1cc6f",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 10.27685220001149,
+          "ttft_seconds": null,
+          "output_tokens": 1787,
+          "created_at": "2026-11-15T13:28:39.285866+00:00"
+        },
+        {
+          "id": "observation_c66db6428097",
+          "model_id": "deepseek-v4.1-flash",
+          "provider_id": "wb-local",
+          "mode": "live",
+          "outcome": "success",
+          "latency_seconds": 8.19472530001076,
+          "ttft_seconds": null,
+          "output_tokens": 1811,
+          "created_at": "2026-11-15T13:28:47.510079+00:00"
+        }
+      ],
+      "observation_latency_summary": {
+        "count": 4,
+        "sum_seconds": 27.295418299996527,
+        "mean_seconds": 6.823854574999132,
+        "p95_seconds": 10.27685220001149
+      },
+      "retained_planner_rejections": [
+        {
+          "event_id": "evt_14aab6a18254",
+          "seq": 3,
+          "created_at": "2026-11-15T13:28:39.311027+00:00",
+          "data": {
+            "planner_call_id": "call_fd05cc54c6b3",
+            "response_sha256": "87be44a031cdc9adba3bee87f9e37f4deeacf2e66d3c7d2ec3fdd8af46626953",
+            "response_bytes": 7240,
+            "validation_errors": [
+              "nodes.1: Value error, completed_deliveries_require_explicit_read_tool",
+              "nodes.2: Value error, completed_deliveries_require_explicit_read_tool",
+              "nodes.3: Value error, completed_deliveries_require_explicit_read_tool"
+            ],
+            "capacity_diagnostics": {
+              "source_capacity_preview": {
+                "version": "planner-source-preview-v23",
+                "status": "unavailable",
+                "reason": "invalid_source_projection"
+              },
+              "complete_capacity_preview": {
+                "version": "planner-capacity-preview-v23",
+                "status": "unavailable",
+                "reason": "invalid_noncriterion_projection"
+              },
+              "allocation_mode": "core_measured"
+            }
+          }
+        },
+        {
+          "event_id": "evt_fe68300cd4db",
+          "seq": 4,
+          "created_at": "2026-11-15T13:28:47.717995+00:00",
+          "data": {
+            "planner_call_id": "call_2e8f9d06ded7",
+            "response_sha256": "f5e0c6de3c8039ad0c15a41ed578594fba3b27cc4d9c34558dd38a4726387155",
+            "response_bytes": 7338,
+            "validation_errors": [
+              "No eligible model fits complete node capacity: report; Complete review/correction bounds exceed original limits: report"
+            ],
+            "capacity_diagnostics": {
+              "node": "report",
+              "rejected_candidates": [
+                {
+                  "node": "report",
+                  "known_source_bytes": 2,
+                  "future_source_bytes_bound": 16770,
+                  "declared_bounds": {
+                    "max_artifact_bytes": 3072,
+                    "max_delivery_bytes": 1536,
+                    "max_source_receipt_bytes": 18820
+                  },
+                  "raw_packet_bytes": 11834,
+                  "growth_bound": 23426,
+                  "raw_packet_bound": 36284,
+                  "raw_packet_limit": 65536,
+                  "review_input_bound": 63563,
+                  "correction_input_bound": 68461,
+                  "worker_input_bound": 51053,
+                  "model_context_limit": 65536,
+                  "output_bound": 2048,
+                  "allocated_tokens": 2049,
+                  "input_acquisition_input_bound": 0,
+                  "input_acquisition_total_bound": 0,
+                  "initial_work_tokens": 114009,
+                  "action_completion_calls": 1,
+                  "action_completion_total_bound": 60908,
+                  "suggested_tight_bounds": {
+                    "max_source_receipt_bytes": 17796,
+                    "max_artifact_bytes": 3072,
+                    "max_delivery_bytes": 3072
+                  },
+                  "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                }
+              ],
+              "all_rejected_nodes": [
+                {
+                  "node": "report",
+                  "errors": [
+                    "Complete review/correction bounds exceed original limits: report"
+                  ],
+                  "rejected_candidates": [
+                    {
+                      "node": "report",
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 16770,
+                      "declared_bounds": {
+                        "max_artifact_bytes": 3072,
+                        "max_delivery_bytes": 1536,
+                        "max_source_receipt_bytes": 18820
+                      },
+                      "raw_packet_bytes": 11834,
+                      "growth_bound": 23426,
+                      "raw_packet_bound": 36284,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 63563,
+                      "correction_input_bound": 68461,
+                      "worker_input_bound": 51053,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2049,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 114009,
+                      "action_completion_calls": 1,
+                      "action_completion_total_bound": 60908,
+                      "suggested_tight_bounds": {
+                        "max_source_receipt_bytes": 17796,
+                        "max_artifact_bytes": 3072,
+                        "max_delivery_bytes": 3072
+                      },
+                      "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                    }
+                  ]
+                },
+                {
+                  "node": "review",
+                  "errors": [
+                    "Complete review/correction bounds exceed original limits: review"
+                  ],
+                  "rejected_candidates": [
+                    {
+                      "node": "review",
+                      "known_source_bytes": 2,
+                      "future_source_bytes_bound": 22914,
+                      "declared_bounds": {
+                        "max_artifact_bytes": 1,
+                        "max_delivery_bytes": 2048,
+                        "max_source_receipt_bytes": 24964
+                      },
+                      "raw_packet_bytes": 11753,
+                      "growth_bound": 27011,
+                      "raw_packet_bound": 39788,
+                      "raw_packet_limit": 65536,
+                      "review_input_bound": 70650,
+                      "correction_input_bound": 74989,
+                      "worker_input_bound": 62699,
+                      "model_context_limit": 65536,
+                      "output_bound": 2048,
+                      "allocated_tokens": 2049,
+                      "input_acquisition_input_bound": 0,
+                      "input_acquisition_total_bound": 0,
+                      "initial_work_tokens": 64747,
+                      "action_completion_calls": 0,
+                      "action_completion_total_bound": 0,
+                      "suggested_tight_bounds": {
+                        "max_source_receipt_bytes": 23940,
+                        "max_artifact_bytes": 1,
+                        "max_delivery_bytes": 3072
+                      },
+                      "suggestion_note": "Explicit policy suggestions, not executed results. Preserve complete task output; use the smallest sufficient bounds and short contracts, then Core remeasures."
+                    }
+                  ]
+                }
+              ],
+              "bounded_measurement": "All nodes and up to two model failures per node are measured without model calls or execution. The original plan remains rejected until every contract passes.",
+              "allocation_mode": "core_measured"
+            }
+          }
+        }
+      ],
+      "router_replan_events": [],
+      "planner_inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 1,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T13:28:47.720844+00:00",
+          "processed_at": null
+        }
+      ],
+      "worker_runs": 0,
+      "core_source_admissions": 0,
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "interpretation_limits": [
+    "Durable stage timestamp intervals include intervening orchestration work; they are not exact request timings. Gateway observations lack call_id and are not joined ordinally to attempts. Attempts lack settled_at, so exact historical settlement timing is unavailable.",
+    "Every actual Planner attempt remains counted even when a new Router notice invokes planning; no attempt is removed or reclassified as a free retry.",
+    "Local Gateway success does not establish upstream identity, correct planning, task success or Phase 2 acceptance. A run with no Workers provides no live Core prefetch, review, repair or restart proof.",
+    "All failures and unknown usage remain original observations; monetary cost remains unknown when prices are unconfigured."
+  ],
+  "original_records_changed": false
+}

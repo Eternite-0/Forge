@@ -1,0 +1,248 @@
+{
+  "generated_at": "2026-11-15T10:21:16.712937+00:00",
+  "scope": "Actual final V20 L1 records plus counterfactual admission measurements from the verified V20 source ZIP; measurements are not executed teams or rejected model responses.",
+  "auditor": {
+    "path": "docs/audit/phase2/audit-composer-capacity-v20.py",
+    "bytes": 11962,
+    "sha256": "bf48ed02100eac306c8a0ff5f9ef2e3570905fd7e8776813f52d8ed059c9f658"
+  },
+  "manifest": {
+    "path": "docs/audit/phase2/source-manifest-v20.json",
+    "bytes": 37606,
+    "sha256": "e7aebc274d8f7557fdd96353d7848a3fe6f6b7dfe15b502bbbd19bdfdc7c0c5c"
+  },
+  "archive": {
+    "path": ".local/phase2/source-snapshot-v20.zip",
+    "bytes": 748788,
+    "sha256": "19a70d332257bff4afd4e106fea87f2751ccd3bff549f75eb9491282b50b539a"
+  },
+  "driver_record": {
+    "path": ".local/phase2/runs/20261115T101049Z-L1-6b5894/run.json",
+    "bytes": 71918,
+    "sha256": "2d98ceb5dff5f1015beba5f53c3230588567c26b21607faf418aa72df771439f"
+  },
+  "database": {
+    "path": ".local/phase2/ws-20261115T101049Z-L1-6b5894/data/forge.sqlite3",
+    "bytes": 798720,
+    "sha256": "d0055565f0da2d81c81b02a33dc4e1ea1aa74213ddd5e96e15e38e7965e6baa9"
+  },
+  "run_id": "20261115T101049Z-L1-6b5894",
+  "actual_plan_status": "approved",
+  "actual_node_allocation": 153902,
+  "actual_planner_measurement": {
+    "criterion_mode": "independent_model_review",
+    "feedback_bytes_policy": 2048,
+    "future_input_bytes_bound": 0,
+    "initial_work_tokens": 27998,
+    "initial_worker_request_measurement": {
+      "input_reservation": 23902,
+      "native_input_reservation": 23902,
+      "output_reservation": 2048,
+      "total_reservation": 25950
+    },
+    "known_receipt_bytes": 13916,
+    "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+    "minimum_node_tokens": 149806,
+    "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens.",
+    "native_envelope_fixed_point_iterations": 3,
+    "profile_id": "deepseek-v4.1-flash",
+    "review_cycle_reserve": 121808,
+    "review_envelope": {
+      "correction_calls": 1,
+      "correction_input_tokens": 38240,
+      "correction_output_tokens": 2048,
+      "max_artifact_bytes": 1,
+      "max_delivery_bytes": 3072,
+      "max_review_input_tokens": 39736,
+      "max_source_bytes": 14940,
+      "verdict_tokens": 1024,
+      "version": "review-envelope-v1"
+    },
+    "upstream_reference_bytes_policy": 0,
+    "worker_input_policy": 25950
+  },
+  "actual_plan_bytes": 5095,
+  "actual_capacity_contract_bytes": 3079,
+  "actual_team_count": 0,
+  "actual_worker_count": 0,
+  "actual_composer_inbox": [
+    {
+      "notice_attempts": 5,
+      "notice_error": "composition_failed:DomainError:Invalid_team_proposal:_:_Invalid_JSON:_expected_value_at_line_1_column_1",
+      "notice_dead_at": "2026-11-15T10:12:07.815481+00:00",
+      "processed_at": null
+    }
+  ],
+  "actual_composer_attempts": [
+    {
+      "call_id": "call_946db342c070",
+      "state": "settled",
+      "input_reserved": 23871,
+      "output_reserved": 8192,
+      "input_charged": 4596,
+      "output_charged": 275
+    },
+    {
+      "call_id": "call_e218ea26c7b3",
+      "state": "settled",
+      "input_reserved": 24308,
+      "output_reserved": 8192,
+      "input_charged": 4688,
+      "output_charged": 268
+    },
+    {
+      "call_id": "call_86b06a24a3b0",
+      "state": "settled",
+      "input_reserved": 23871,
+      "output_reserved": 8192,
+      "input_charged": 4596,
+      "output_charged": 458
+    },
+    {
+      "call_id": "call_0d4ee6c663a5",
+      "state": "settled",
+      "input_reserved": 24226,
+      "output_reserved": 8192,
+      "input_charged": 4662,
+      "output_charged": 274
+    },
+    {
+      "call_id": "call_e216d58e5ac9",
+      "state": "settled",
+      "input_reserved": 23871,
+      "output_reserved": 8192,
+      "input_charged": 4596,
+      "output_charged": 275
+    },
+    {
+      "call_id": "call_67a9622e1c54",
+      "state": "settled",
+      "input_reserved": 24308,
+      "output_reserved": 8192,
+      "input_charged": 4688,
+      "output_charged": 271
+    },
+    {
+      "call_id": "call_30476816622f",
+      "state": "settled",
+      "input_reserved": 23871,
+      "output_reserved": 8192,
+      "input_charged": 4596,
+      "output_charged": 280
+    },
+    {
+      "call_id": "call_b23aea347d1e",
+      "state": "settled",
+      "input_reserved": 24308,
+      "output_reserved": 8192,
+      "input_charged": 4688,
+      "output_charged": 478
+    },
+    {
+      "call_id": "call_7c887c365623",
+      "state": "settled",
+      "input_reserved": 23871,
+      "output_reserved": 8192,
+      "input_charged": 4596,
+      "output_charged": 261
+    },
+    {
+      "call_id": "call_029051e3e443",
+      "state": "settled",
+      "input_reserved": 24308,
+      "output_reserved": 8192,
+      "input_charged": 4688,
+      "output_charged": 1818
+    }
+  ],
+  "actual_max_composer_context_reservation": 32500,
+  "counterfactual_measurements": [
+    {
+      "role_output_tokens": 2048,
+      "role_schema": "planner_legacy_default",
+      "minimum_node_tokens": 149806,
+      "allocation": 153902,
+      "allocation_minus_requirement": 4096,
+      "initial_work_tokens": 27998,
+      "review_cycle_reserve": 121808,
+      "correction_output_tokens": 2048
+    },
+    {
+      "role_output_tokens": 2048,
+      "role_schema": "composer_displayed_strict",
+      "minimum_node_tokens": 150394,
+      "allocation": 153902,
+      "allocation_minus_requirement": 3508,
+      "initial_work_tokens": 28145,
+      "review_cycle_reserve": 122249,
+      "correction_output_tokens": 2048
+    },
+    {
+      "role_output_tokens": 3072,
+      "role_schema": "planner_legacy_default",
+      "minimum_node_tokens": 151854,
+      "allocation": 153902,
+      "allocation_minus_requirement": 2048,
+      "initial_work_tokens": 29022,
+      "review_cycle_reserve": 122832,
+      "correction_output_tokens": 3072
+    },
+    {
+      "role_output_tokens": 3072,
+      "role_schema": "composer_displayed_strict",
+      "minimum_node_tokens": 152442,
+      "allocation": 153902,
+      "allocation_minus_requirement": 1460,
+      "initial_work_tokens": 29169,
+      "review_cycle_reserve": 123273,
+      "correction_output_tokens": 3072
+    },
+    {
+      "role_output_tokens": 4096,
+      "role_schema": "planner_legacy_default",
+      "minimum_node_tokens": 153902,
+      "allocation": 153902,
+      "allocation_minus_requirement": 0,
+      "initial_work_tokens": 30046,
+      "review_cycle_reserve": 123856,
+      "correction_output_tokens": 4096
+    },
+    {
+      "role_output_tokens": 4096,
+      "role_schema": "composer_displayed_strict",
+      "minimum_node_tokens": 154490,
+      "allocation": 153902,
+      "allocation_minus_requirement": -588,
+      "initial_work_tokens": 30193,
+      "review_cycle_reserve": 124297,
+      "correction_output_tokens": 4096
+    },
+    {
+      "role_output_tokens": 8192,
+      "role_schema": "planner_legacy_default",
+      "minimum_node_tokens": 162094,
+      "allocation": 153902,
+      "allocation_minus_requirement": -8192,
+      "initial_work_tokens": 34142,
+      "review_cycle_reserve": 127952,
+      "correction_output_tokens": 8192
+    },
+    {
+      "role_output_tokens": 8192,
+      "role_schema": "composer_displayed_strict",
+      "minimum_node_tokens": 162682,
+      "allocation": 153902,
+      "allocation_minus_requirement": -8780,
+      "initial_work_tokens": 34289,
+      "review_cycle_reserve": 128393,
+      "correction_output_tokens": 8192
+    }
+  ],
+  "read_snapshot_total_changes": 0,
+  "limitations": [
+    "Rejected raw Composer responses and earlier overwritten inbox errors are unavailable; no actual rejected role output ceiling is inferred.",
+    "ProviderGateway was instantiated with a placeholder configuration solely for native serialization; generate/stream/credential access were not invoked.",
+    "Measurements preserve complete source/delivery bounds and all original review/correction obligations. No proposed team, budget mutation or approval occurred.",
+    "A finite admission requirement is not a usage forecast or task correctness claim; the original strict V20 failure remains failed."
+  ]
+}

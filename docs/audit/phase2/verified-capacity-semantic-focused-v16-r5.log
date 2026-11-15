@@ -1,0 +1,26 @@
+...............................F.                                        [100%]
+================================== FAILURES ===================================
+____________ test_semantic_task_identity_can_reopen_an_older_quest ____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-664/test_semantic_task_identity_ca0')
+
+    def test_semantic_task_identity_can_reopen_an_older_quest(tmp_path):
+        provider = RouterSelector("placeholder")
+        store, router = prepared(tmp_path, provider)
+        target = Quest(title="Nebula", goal="Construct a safe priority queue")
+        store.save_quest(target)
+        for index in range(22):
+            store.save_quest(Quest(title=f"Recent unrelated {index}", goal="Other work"))
+        router._sync_memory()
+        provider.selected = "quest:" + target.id
+        provider.final = decision("continue_quest", quest_id=target.id, candidates=[target.id])
+        query = "Resume the starvation resistant scheduling exploration"
+        with store.connection() as connection:
+>           assert target.id not in {row["id"] for row in router._snapshot(connection, query)["quests"]}
+E           AssertionError: assert 'quest_4c2bd59409b1' not in {'quest_0bb7ca802c53', 'quest_14580c59d4b5', 'quest_149b49b72869', 'quest_3310e401f1bd', 'quest_3ae1b83c716b', 'quest_3d0baf85680a', ...}
+E            +  where 'quest_4c2bd59409b1' = Quest(id='quest_4c2bd59409b1', title='Nebula', goal='Construct a safe priority queue', status=<QuestStatus.PROPOSED: '... priority=3, created_at='2026-11-15T08:05:23.967763+00:00', updated_at='2026-11-15T08:05:23.967774+00:00', metadata={}).id
+
+backend\tests\test_router_semantic_recall_v16.py:80: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_router_semantic_recall_v16.py::test_semantic_task_identity_can_reopen_an_older_quest
+1 failed, 32 passed in 2.93s

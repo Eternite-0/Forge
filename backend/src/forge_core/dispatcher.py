@@ -9,7 +9,10 @@ import math
 import re
 import secrets
 import time
+from dataclasses import asdict
 
+from .agent_protocol import COORDINATION_EVENTS, AgentMessage
+from .domain import DomainError
 from .event_domain import URGENT_EVENTS, WORKER_COMMANDS, WORKER_FACTS, DeliveryLease, EventEnvelope
 
 _URGENT_PLACEHOLDERS = ",".join("?" for _ in URGENT_EVENTS)
@@ -145,7 +148,11 @@ class Dispatcher:
     def _routable(connection, consumer, row):
         is_command = row["event_type"].startswith("worker.command.")
         if consumer["id"] == "planner" and consumer["kind"] == "router":
-            return row["event_type"] == "quest.proposed"
+            return row["event_type"] in {
+                "quest.proposed",
+                "quest.proposal_updated",
+                "quest.replan_requested",
+            }
         if consumer["id"] == "composer" and consumer["kind"] == "router":
             return row["event_type"] in {"quest.plan_approved", "worker.help_requested"}
         if consumer["kind"] == "worker":
@@ -235,6 +242,39 @@ class Dispatcher:
             raise LeaseError("Delivery lease is stale")
         return row
 
+    @staticmethod
+    def _agent_protocol(connection, row, payload):
+        if row["event_type"] not in COORDINATION_EVENTS:
+            return {}
+        native = any(name in payload for name in ("run_id", "plan_id", "task_node_key"))
+        if not native:
+            return {"execution_protocol": "legacy_nonexecution", "agent_message": None}
+        try:
+            event = {**dict(row), "id": row["event_id"]}
+            message = AgentMessage.from_event(event, payload)
+            run_id = payload.get("run_id")
+            if run_id is not None and (not isinstance(run_id, str) or not 1 <= len(run_id) <= 256):
+                raise ValueError("Invalid Agent run identity")
+            run = connection.execute(
+                "SELECT * FROM worker_runs WHERE worker_id=? AND quest_id=? AND plan_id=? AND node_key=? "
+                + ("AND id=?" if run_id is not None else "ORDER BY created_at DESC LIMIT 1"),
+                (
+                    message.sender_id if message.receiver_id == "router" else message.receiver_id,
+                    message.quest_id,
+                    message.plan_id,
+                    message.task_node_key,
+                    *([run_id] if run_id is not None else []),
+                ),
+            ).fetchone()
+            if (
+                run is None
+                or payload.get("message_type", message.message_type) != message.message_type
+            ):
+                raise ValueError("Agent protocol association does not match a native assignment")
+            return {"execution_protocol": "native", "agent_message": asdict(message)}
+        except (DomainError, TypeError, KeyError) as exc:
+            raise ValueError("Invalid native Agent protocol envelope") from exc
+
     def deliver(self, lease, *, handler=None):
         with self.store.unit_of_work() as work:
             now = self._now()
@@ -245,6 +285,7 @@ class Dispatcher:
             except (ValueError, TypeError):
                 raise ValueError("Invalid event payload") from None
             envelope = EventEnvelope.from_row(row, payload)
+            coordination = self._agent_protocol(connection, row, payload)
             if row["event_type"] in WORKER_COMMANDS | WORKER_FACTS:
                 worker = connection.execute(
                     "SELECT w.quest_id,q.conversation_id FROM workers w JOIN quests q ON q.id=w.quest_id WHERE w.id=?",
@@ -278,6 +319,7 @@ class Dispatcher:
                 "task_node_id": envelope.task_node_id,
                 "correlation_id": envelope.correlation_id,
                 "payload": payload,
+                **coordination,
             }
             connection.execute(
                 """INSERT INTO event_inbox(consumer_id,event_id,seq,event_type,conversation_id,quest_id,worker_id,payload,received_at)
@@ -397,7 +439,14 @@ class Dispatcher:
             rows = connection.execute(
                 query + " ORDER BY seq LIMIT ?", (consumer_id, after_seq, limit)
             ).fetchall()
-            return [{**dict(row), "payload": json.loads(row["payload"])} for row in rows]
+            return [
+                {
+                    **dict(row),
+                    "payload": (payload := json.loads(row["payload"])),
+                    **self._agent_protocol(connection, row, payload),
+                }
+                for row in rows
+            ]
 
     def dead_letters(self, consumer_id):
         with self.store.connection() as connection:

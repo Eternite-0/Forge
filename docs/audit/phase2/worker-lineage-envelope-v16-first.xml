@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="38" time="14.109" timestamp="2026-11-15T16:12:09.389052+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_envelope_v16" name="test_oversized_artifact_repairs_before_any_file_or_intent" time="0.279" /><testcase classname="tests.test_worker_envelope_v16" name="test_undeclared_source_never_enters_a_tool_receipt" time="0.241" /><testcase classname="tests.test_worker_envelope_v16" name="test_actual_read_rechecks_identity_after_queued_batch_admission" time="0.248"><failure message="AssertionError: assert 'blocked' == 'review_pending'&#10;  &#10;  - review_pending&#10;  + blocked">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-673/test_actual_read_rechecks_iden0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3BA5DDEB0&gt;
+
+    def test_actual_read_rechecks_identity_after_queued_batch_admission(tmp_path, monkeypatch):
+        original = ToolEngine._perform
+        changed = []
+    
+        def perform(self, intent, cancelled):
+            if intent["tool_name"] == "file_read" and not changed:
+                changed.append(True)
+                (tmp_path / "work/input.txt").write_text("CHANGED_SOURCE_SENTINEL", encoding="utf-8")
+            return original(self, intent, cancelled)
+    
+        monkeypatch.setattr(ToolEngine, "_perform", perform)
+&gt;       store, manager, model, worker = new_pending(
+            tmp_path,
+            monkeypatch,
+            responses=[tool("file_read", {"path": "work/input.txt"}), response(delivery())],
+        )
+
+backend\tests\test_worker_envelope_v16.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-673/test_actual_read_rechecks_iden0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B3BA5DDEB0&gt;
+env = {'version': 'review-envelope-v1', 'max_source_bytes': 10000, 'max_artifact_bytes': 3072, 'max_delivery_bytes': 1536, ...}
+responses = [ModelResponse(text='', tool_calls=[{'id': 'tool-1', 'name': 'file_read', 'arguments': {'path': 'work/input.txt'}}], u..._tokens': 15}, provider_id=None, model_id=None, finish_reason='stop', provider_request_id=None, cost=None, content=[])]
+tools = None, criteria = None, budget = 59000
+
+    def new_pending(
+        tmp_path, monkeypatch, *, env=None, responses=None, tools=None, criteria=None, budget=59000
+    ):
+        env = envelope() if env is None else env
+        original_candidate = TeamComposerEngine._candidate
+        original_propose = TeamCompositionService.propose
+        from forge_core.quest_graph import QuestGraphService
+    
+        original_plan = QuestGraphService.propose
+    
+        def plan(self, quest_id, graph, **kwargs):
+            graph = copy.deepcopy(graph)
+            graph["max_total_tokens"] = max(60000, budget)
+            graph["nodes"][0]["budget_tokens"] = max(60000, budget)
+            return original_plan(self, quest_id, graph, **kwargs)
+    
+        def candidate(self, *args, **kwargs):
+            result = original_candidate(self, *args, **kwargs)
+            result["review_envelope"] = copy.deepcopy(env)
+            source = (tmp_path / "work/input.txt").read_bytes()
+            result["required_input_paths"] = ["work/input.txt"]
+            result["verified_input_inventory"] = [
+                {
+                    "path": "work/input.txt",
+                    "bytes": len(source),
+                    "sha256": hashlib.sha256(source).hexdigest(),
+                }
+            ]
+            return result
+    
+        def propose(self, quest_id, roles, limits, **kwargs):
+            # A new normal proposal binds the envelope before digest/approval.
+            # New approval chooses its original allowance before any execution.
+            # No existing run, historical evidence, or live scenario cap is changed.
+            roles = copy.deepcopy(roles)
+            for role in roles:
+                role["input_tokens"] = budget - role["output_tokens"]
+            limits = {**limits, "max_total_tokens": budget}
+            return original_propose(self, quest_id, roles, limits, **kwargs)
+    
+        monkeypatch.setattr(TeamComposerEngine, "_candidate", candidate)
+        monkeypatch.setattr(TeamCompositionService, "propose", propose)
+        monkeypatch.setattr(QuestGraphService, "propose", plan)
+        store, manager, model, worker = prepared(
+            tmp_path,
+            responses or [tool("file_read", {"path": "work/input.txt"}), response(delivery())],
+            tools=tools,
+            criteria=criteria,
+        )
+&gt;       assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+E       AssertionError: assert 'blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked
+
+backend\tests\test_review_envelope_phase2.py:107: AssertionError</failure></testcase><testcase classname="tests.test_worker_envelope_v16" name="test_revised_worker_rejects_capsule_contract_tampering_before_another_model_call" time="0.617" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_plan_id_mistake_repairs_to_new_real_receipt_call_and_passes_actual_gate" time="0.951" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_large_receipt_rejection_uses_short_artifact_receipt_and_governed_full_file" time="1.187" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_repeated_receipt_errors_stop_at_original_bound_without_reader_actions" time="0.725" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_receipt_repair_does_not_allow_reusing_failed_model_call_id" time="0.622" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_failed_receipt_read_requires_untampered_core_no_effect_proof[arguments]" time="0.788" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_failed_receipt_read_requires_untampered_core_no_effect_proof[no_effect]" time="0.691" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_failed_receipt_read_requires_untampered_core_no_effect_proof[tool_reply]" time="0.785" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_local_receipt_repair_never_grants_cross_scope_or_revoked_access[nonedge]" time="0.626" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_local_receipt_repair_never_grants_cross_scope_or_revoked_access[wrong_quest]" time="0.686" /><testcase classname="tests.test_receipt_read_repair_phase2" name="test_local_receipt_repair_never_grants_cross_scope_or_revoked_access[revoked_team]" time="0.826" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[missing]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[unknown]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[bool]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[negative]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[version]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[context]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[small_verdict]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_cycle_policy_counts_remaining_stages_without_charging" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_lossless_projection_handles_unicode_escaping_and_hostile_reference_objects" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_legacy_wire_and_packet_keep_the_same_fields_and_hash" time="0.234" /><testcase classname="tests.test_review_envelope_phase2" name="test_packet_limits_count_complete_sources_artifacts_and_delivery_in_bytes" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_unparsed_artifact_size_is_explicit_and_unknown_is_rejected" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_new_envelope_never_shrinks_its_complete_verdict_allowance" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_input_bound_rejects_before_call_admission_or_counter_change" time="0.264" /><testcase classname="tests.test_review_envelope_phase2" name="test_malformed_artifact_new_contract_counts_complete_bytes_and_keeps_syntax_repair" time="0.290" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_artifact_revision_and_delivery_consume_two_bounded_correction_calls" time="0.677" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_review_then_revision_then_fresh_pass_within_original_cycle" time="0.525" /><testcase classname="tests.test_review_envelope_phase2" name="test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review" time="0.318" /><testcase classname="tests.test_review_envelope_phase2" name="test_unsent_review_release_retains_cycle_stage_without_resetting_usage" time="0.319" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[None]" time="0.378" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[goal]" time="0.304" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[inherited_state]" time="0.280" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[source_state]" time="0.309" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[preview]" time="0.273" /></testsuite></testsuites>

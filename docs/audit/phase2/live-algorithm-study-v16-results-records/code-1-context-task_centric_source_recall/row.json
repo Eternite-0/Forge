@@ -1,0 +1,109 @@
+{
+  "actual_router_archives": 1,
+  "actual_source_readbacks": 1,
+  "candidate": {
+    "answers": [
+      0,
+      7
+    ],
+    "citations": [
+      {
+        "line_end": 6,
+        "line_start": 1,
+        "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+        "source_id": "function"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+        "source_id": "inputs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "integer_arithmetic",
+      "preserve_input_order"
+    ]
+  },
+  "case_id": "code-1",
+  "context_cap": 16384,
+  "context_records_sha256": "aa553f5a05566d36fba685efd8d8c0a0d51b14624de412830896a6468fad841b",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "code_contract",
+  "duration_seconds": 2.6424523000023328,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": true,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": true,
+    "violations": []
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_7d7b04216637",
+      "receipt_id": "receipt_f5e5a3fc00d1",
+      "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+      "source_id": "function"
+    },
+    {
+      "intent_id": "action_addc7779f96d",
+      "receipt_id": "receipt_6ee0f117ebe9",
+      "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+      "source_id": "inputs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_36fa89da79e8",
+      "duration_seconds": 2.231136599992169,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "125ecda07fc3937dd41baa4eb0c6887668563f222c81a28ae25e7eb6a9a9e981",
+      "response_sha256": "8ea163e2dd5fa5eb738c76694afb64b2914d50dadf6c94fbe14bf68880f5642c",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 1185,
+        "output_tokens": 146
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_36fa89da79e8",
+        "cost_charged": null,
+        "input_charged": 1185,
+        "input_reserved": 5390,
+        "output_charged": 146,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1185,
+    "known_input_tokens": 1185,
+    "known_output_tokens": 146,
+    "model_calls": 1,
+    "output_tokens": 146,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "task_centric_source_recall"
+}

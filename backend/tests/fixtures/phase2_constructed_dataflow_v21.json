@@ -1,0 +1,870 @@
+[
+  {
+    "level": 1,
+    "scope": "constructed_semantic_fixture_not_live_model_output",
+    "graph": {
+      "nodes": [
+        {
+          "key": "analysis",
+          "objective": "Analyze the complete original_request: substantiate and rank weaknesses, small fixes and meaningful checks, with exact citations and limitations.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 149496,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "directory_list",
+            "file_read"
+          ],
+          "required_input_paths": [
+            "inputs/scenario-1/01-registry.json",
+            "inputs/scenario-1/02-model_intelligence.json",
+            "inputs/scenario-1/manifest.json"
+          ],
+          "required_predecessor_deliveries": [],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 14922,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 3072
+          }
+        }
+      ],
+      "edges": [],
+      "max_total_tokens": 180000,
+      "coordination_reserve_tokens": 18000,
+      "max_cost_microunits": null,
+      "cost_currency": null,
+      "max_duration_seconds": 600,
+      "execution_constraints": {
+        "version": "source-execution-limits-v1",
+        "source_message_id": "msg_e24d85f6fadd",
+        "source_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+        "source_spans": [
+          {
+            "start": 1568,
+            "end": 1757,
+            "text": "{\"max_nodes\":1,\"max_members\":1,\"max_concurrency\":1,\"max_depth\":1,\"max_total_tokens\":180000,\"max_duration_seconds\":600,\"max_worker_steps\":16,\"max_worker_tool_calls\":16,\"max_review_rounds\":3}"
+          }
+        ],
+        "limits": {
+          "max_nodes": 1,
+          "max_members": 1,
+          "max_concurrency": 1,
+          "max_depth": 1,
+          "max_total_tokens": 180000,
+          "max_duration_seconds": 600,
+          "max_worker_steps": 16,
+          "max_worker_tool_calls": 16,
+          "max_review_rounds": 3
+        }
+      },
+      "capacity_contract": {
+        "version": "verified-capacity-v1",
+        "input_inventory": [
+          {
+            "path": "inputs/scenario-1/01-registry.json",
+            "bytes": 4895,
+            "sha256": "eb393960d5b158607c5f046404b2fe2cb416b620f7ac47bc3199d78362b90174"
+          },
+          {
+            "path": "inputs/scenario-1/02-model_intelligence.json",
+            "bytes": 5947,
+            "sha256": "cf7d12770a4071066ada2bafefbee10174afaca9fbd1d6839287671af5c89170"
+          },
+          {
+            "path": "inputs/scenario-1/manifest.json",
+            "bytes": 870,
+            "sha256": "3fde1e41fb11984a32a4a98477aa3843157d901d9313ed7461363e85a98dc3c1"
+          }
+        ],
+        "nodes": {
+          "analysis": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 14922,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 3072,
+              "max_review_input_tokens": 38519,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 37254,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 13898,
+            "future_input_bytes_bound": 0,
+            "worker_input_policy": 24964,
+            "review_cycle_reserve": 118388,
+            "initial_worker_request_measurement": {
+              "input_reservation": 22916,
+              "output_reservation": 2048,
+              "total_reservation": 24964,
+              "native_input_reservation": 22916
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 0,
+            "minimum_node_tokens": 145400,
+            "initial_work_tokens": 27012,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          }
+        },
+        "budget_snapshot": {
+          "remaining": 180000,
+          "scopes": [
+            {
+              "scope": "quest",
+              "limit": 180000,
+              "charged_or_reserved": 0,
+              "opening": 0,
+              "remaining": 180000
+            }
+          ],
+          "declared_total_coordination_tokens": 18000,
+          "coordination_already_settled": 0,
+          "future_coordination_reserve_tokens": 18000,
+          "max_worker_allocations_now": 162000,
+          "max_allocations_plus_future_coordination": 180000,
+          "accounting": "Remaining already subtracts settled/opening/unresolved usage. Only fully settled, identified coordination reduces the future part of the declared total reserve; unknown/opening amounts never do. No charge or reservation is refunded."
+        }
+      }
+    }
+  },
+  {
+    "level": 2,
+    "scope": "constructed_semantic_fixture_not_live_model_output",
+    "graph": {
+      "nodes": [
+        {
+          "key": "research",
+          "objective": "Research Router responsibilities, boundaries, recovery and evidence. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 27841,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_read"
+          ],
+          "required_input_paths": [
+            "inputs/scenario-2/01-router.json",
+            "inputs/scenario-2/manifest.json"
+          ],
+          "required_predecessor_deliveries": [],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 14595,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 3072
+          }
+        },
+        {
+          "key": "architect",
+          "objective": "Compare Worker and Composer with researched Router; provide at least two cross-component risks and prioritized verifiable recommendations. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 48414,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_read",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [
+            "inputs/scenario-2/02-worker_runtime.json",
+            "inputs/scenario-2/03-team_composition.json"
+          ],
+          "required_predecessor_deliveries": [
+            "research"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 25866,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 4096
+          }
+        },
+        {
+          "key": "writer",
+          "objective": "Synthesize the complete technical JSON report, including citations, responsibility comparison, risks, recommendations and acceptance criteria. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "json_review:work/l2-report.json"
+          ],
+          "budget_tokens": 28337,
+          "required_capabilities": {},
+          "expected_artifact": "work/l2-report.json",
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_revise",
+            "file_write",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [],
+          "required_predecessor_deliveries": [
+            "architect"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 7300,
+            "max_artifact_bytes": 4096,
+            "max_delivery_bytes": 2048
+          }
+        }
+      ],
+      "edges": [
+        {
+          "source": "research",
+          "target": "architect",
+          "condition": "success"
+        },
+        {
+          "source": "architect",
+          "target": "writer",
+          "condition": "success"
+        }
+      ],
+      "max_total_tokens": 360000,
+      "coordination_reserve_tokens": 36000,
+      "max_cost_microunits": null,
+      "cost_currency": null,
+      "max_duration_seconds": 1200,
+      "execution_constraints": {
+        "version": "source-execution-limits-v1",
+        "source_message_id": "msg_f624ea512f07",
+        "source_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+        "source_spans": [
+          {
+            "start": 1875,
+            "end": 2065,
+            "text": "{\"max_nodes\":4,\"max_members\":4,\"max_concurrency\":2,\"max_depth\":1,\"max_total_tokens\":360000,\"max_duration_seconds\":1200,\"max_worker_steps\":16,\"max_worker_tool_calls\":16,\"max_review_rounds\":3}"
+          }
+        ],
+        "limits": {
+          "max_nodes": 4,
+          "max_members": 4,
+          "max_concurrency": 2,
+          "max_depth": 1,
+          "max_total_tokens": 360000,
+          "max_duration_seconds": 1200,
+          "max_worker_steps": 16,
+          "max_worker_tool_calls": 16,
+          "max_review_rounds": 3
+        }
+      },
+      "serial_capacity_policy": {
+        "version": "serial-capacity-v1",
+        "shared_reserve_tokens": 183986
+      },
+      "capacity_contract": {
+        "version": "verified-capacity-v1",
+        "input_inventory": [
+          {
+            "path": "inputs/scenario-2/01-router.json",
+            "bytes": 10723,
+            "sha256": "dce54646147bbb508505f06240b4258c5bc3cfedbed2bdfe0b2d5b06bf012b09"
+          },
+          {
+            "path": "inputs/scenario-2/02-worker_runtime.json",
+            "bytes": 6537,
+            "sha256": "d6883052c98a5a95016892a0d76272fe1335e8a3f3beea18dc26b27e38f7fbb4"
+          },
+          {
+            "path": "inputs/scenario-2/03-team_composition.json",
+            "bytes": 11012,
+            "sha256": "015af8e635e854399be91a4b4a529c90eb1625c2f9039a1849240a2a2c9f151c"
+          },
+          {
+            "path": "inputs/scenario-2/manifest.json",
+            "bytes": 1267,
+            "sha256": "c1d720fc8fcca7300c1de760adfd52f8290406ead524483d062c208cb7495ea8"
+          }
+        ],
+        "nodes": {
+          "research": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 14595,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 3072,
+              "max_review_input_tokens": 38645,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 37115,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 13543,
+            "future_input_bytes_bound": 0,
+            "worker_input_policy": 24769,
+            "review_cycle_reserve": 118501,
+            "initial_worker_request_measurement": {
+              "input_reservation": 22721,
+              "output_reservation": 2048,
+              "total_reservation": 24769,
+              "native_input_reservation": 22721
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 0,
+            "minimum_node_tokens": 145318,
+            "initial_work_tokens": 26817,
+            "execution_token_limit": 211827,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "architect": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 25866,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 4096,
+              "max_review_input_tokens": 57404,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 59736,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 19564,
+            "future_input_bytes_bound": 5250,
+            "worker_input_policy": 45342,
+            "review_cycle_reserve": 178640,
+            "initial_worker_request_measurement": {
+              "input_reservation": 30746,
+              "output_reservation": 2048,
+              "total_reservation": 32794,
+              "native_input_reservation": 30746
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 226030,
+            "initial_work_tokens": 47390,
+            "execution_token_limit": 232400,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "writer": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 7300,
+              "max_artifact_bytes": 4096,
+              "max_delivery_bytes": 2048,
+              "max_review_input_tokens": 43176,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 43697,
+              "correction_output_tokens": 2048,
+              "correction_calls": 2
+            },
+            "known_receipt_bytes": 2,
+            "future_input_bytes_bound": 6274,
+            "worker_input_policy": 25265,
+            "review_cycle_reserve": 179890,
+            "initial_worker_request_measurement": {
+              "input_reservation": 8621,
+              "output_reservation": 2048,
+              "total_reservation": 10669,
+              "native_input_reservation": 8621
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 207203,
+            "initial_work_tokens": 27313,
+            "execution_token_limit": 212323,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          }
+        },
+        "budget_snapshot": {
+          "remaining": 360000,
+          "scopes": [
+            {
+              "scope": "quest",
+              "limit": 360000,
+              "charged_or_reserved": 0,
+              "opening": 0,
+              "remaining": 360000
+            }
+          ],
+          "declared_total_coordination_tokens": 36000,
+          "coordination_already_settled": 0,
+          "future_coordination_reserve_tokens": 36000,
+          "max_worker_allocations_now": 324000,
+          "max_allocations_plus_future_coordination": 360000,
+          "accounting": "Remaining already subtracts settled/opening/unresolved usage. Only fully settled, identified coordination reduces the future part of the declared total reserve; unknown/opening amounts never do. No charge or reservation is refunded."
+        }
+      }
+    }
+  },
+  {
+    "level": 3,
+    "scope": "constructed_semantic_fixture_not_live_model_output",
+    "graph": {
+      "nodes": [
+        {
+          "key": "research",
+          "objective": "Research the actual numeric harness and permitted execution subset, state source limitations and carry exact citations. Preserve complete original_request requirements for downstream roles.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 30842,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "directory_list",
+            "file_read"
+          ],
+          "required_input_paths": [
+            "inputs/scenario-3/01-numeric_harness.json",
+            "inputs/scenario-3/manifest.json"
+          ],
+          "required_predecessor_deliveries": [],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 16827,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 3072
+          }
+        },
+        {
+          "key": "math",
+          "objective": "Derive and verify eligibility-first minimum-cost selection with tie-A mathematically, enumerate boundaries. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 26544,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [],
+          "required_predecessor_deliveries": [
+            "research"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 6276,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 2048
+          }
+        },
+        {
+          "key": "architect",
+          "objective": "Define permitted AST interface, exact inputs/output, dependency and test design from research and math. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 47932,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_read",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [
+            "inputs/scenario-3/02-tool_domain.json",
+            "inputs/scenario-3/03-team_composition.json"
+          ],
+          "required_predecessor_deliveries": [
+            "math"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 24866,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 2048
+          }
+        },
+        {
+          "key": "coding",
+          "objective": "Implement complete scheduler source. Execute numeric_ast on in-memory candidate before create-only write; preserve semantic criterion and exact references. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "semantic_numeric:scheduler-v1:work/l3-scheduler.py"
+          ],
+          "budget_tokens": 24649,
+          "required_capabilities": {},
+          "expected_artifact": "work/l3-scheduler.py",
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_revise",
+            "file_write",
+            "numeric_ast",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [],
+          "required_predecessor_deliveries": [
+            "architect"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 5252,
+            "max_artifact_bytes": 2048,
+            "max_delivery_bytes": 2048
+          }
+        },
+        {
+          "key": "experiment",
+          "objective": "Read approved scheduler artifact and run varied boundary experiments through numeric_ast, analyze actual receipts and outcomes. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "delivery_review"
+          ],
+          "budget_tokens": 34184,
+          "required_capabilities": {},
+          "expected_artifact": null,
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_read",
+            "numeric_ast",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [
+            "work/l3-scheduler.py"
+          ],
+          "required_predecessor_deliveries": [
+            "coding"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 9860,
+            "max_artifact_bytes": 1,
+            "max_delivery_bytes": 3072
+          }
+        },
+        {
+          "key": "reviewer",
+          "objective": "Independently assess all research/math/architecture/code/experiment conclusions and fixed semantic results; create full JSON research/experiment report with evidence and limitations. Preserve full original_request requirements, precise sources and evidence. Deliver all eight fields.",
+          "success_criteria": [
+            "json_review:work/l3-report.json"
+          ],
+          "budget_tokens": 26432,
+          "required_capabilities": {},
+          "expected_artifact": "work/l3-report.json",
+          "max_attempts": 1,
+          "allowed_tools": [
+            "file_revise",
+            "file_write",
+            "worker_read_completed_delivery"
+          ],
+          "required_input_paths": [],
+          "required_predecessor_deliveries": [
+            "experiment"
+          ],
+          "capacity_bounds": {
+            "max_source_receipt_bytes": 6276,
+            "max_artifact_bytes": 4096,
+            "max_delivery_bytes": 2048
+          }
+        }
+      ],
+      "edges": [
+        {
+          "source": "research",
+          "target": "math",
+          "condition": "success"
+        },
+        {
+          "source": "math",
+          "target": "architect",
+          "condition": "success"
+        },
+        {
+          "source": "architect",
+          "target": "coding",
+          "condition": "success"
+        },
+        {
+          "source": "coding",
+          "target": "experiment",
+          "condition": "success"
+        },
+        {
+          "source": "experiment",
+          "target": "reviewer",
+          "condition": "success"
+        }
+      ],
+      "max_total_tokens": 630000,
+      "coordination_reserve_tokens": 63000,
+      "max_cost_microunits": null,
+      "cost_currency": null,
+      "max_duration_seconds": 1800,
+      "execution_constraints": {
+        "version": "source-execution-limits-v1",
+        "source_message_id": "msg_4d49d85eab69",
+        "source_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+        "source_spans": [
+          {
+            "start": 2665,
+            "end": 2855,
+            "text": "{\"max_nodes\":7,\"max_members\":7,\"max_concurrency\":2,\"max_depth\":1,\"max_total_tokens\":630000,\"max_duration_seconds\":1800,\"max_worker_steps\":16,\"max_worker_tool_calls\":16,\"max_review_rounds\":3}"
+          }
+        ],
+        "limits": {
+          "max_nodes": 7,
+          "max_members": 7,
+          "max_concurrency": 2,
+          "max_depth": 1,
+          "max_total_tokens": 630000,
+          "max_duration_seconds": 1800,
+          "max_worker_steps": 16,
+          "max_worker_tool_calls": 16,
+          "max_review_rounds": 3
+        }
+      },
+      "serial_capacity_policy": {
+        "version": "serial-capacity-v1",
+        "shared_reserve_tokens": 178074
+      },
+      "capacity_contract": {
+        "version": "verified-capacity-v1",
+        "input_inventory": [
+          {
+            "path": "inputs/scenario-3/01-numeric_harness.json",
+            "bytes": 12817,
+            "sha256": "22795d84d2f1c0f462368e0ada5c40cd76cb3ee29379bbfac1a9b458ee4e49c3"
+          },
+          {
+            "path": "inputs/scenario-3/02-tool_domain.json",
+            "bytes": 9839,
+            "sha256": "cd9790dcc4324d054cc7cac5b7bf8b31c48daa287e0b7e90756a1ad0b564900e"
+          },
+          {
+            "path": "inputs/scenario-3/03-team_composition.json",
+            "bytes": 6992,
+            "sha256": "e2fa6be137ca7ece2215be92faac5d6ea9f923ad90bb2fb82f60c17577b12a51"
+          },
+          {
+            "path": "inputs/scenario-3/manifest.json",
+            "bytes": 1278,
+            "sha256": "aab97ad785c53fb586f0bd95426b78dfa738c6cf8b2598fef48645069e4304b3"
+          }
+        ],
+        "nodes": {
+          "research": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 16827,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 3072,
+              "max_review_input_tokens": 41875,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 40060,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 15803,
+            "future_input_bytes_bound": 0,
+            "worker_input_policy": 27770,
+            "review_cycle_reserve": 127906,
+            "initial_worker_request_measurement": {
+              "input_reservation": 25722,
+              "output_reservation": 2048,
+              "total_reservation": 27770,
+              "native_input_reservation": 25722
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 0,
+            "minimum_node_tokens": 157724,
+            "initial_work_tokens": 29818,
+            "execution_token_limit": 208916,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "math": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 6276,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 2048,
+              "max_review_input_tokens": 33671,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 33714,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 2,
+            "future_input_bytes_bound": 5250,
+            "worker_input_policy": 23472,
+            "review_cycle_reserve": 105152,
+            "initial_worker_request_measurement": {
+              "input_reservation": 8876,
+              "output_reservation": 2048,
+              "total_reservation": 10924,
+              "native_input_reservation": 8876
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 130672,
+            "initial_work_tokens": 25520,
+            "execution_token_limit": 204618,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "architect": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 24866,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 2048,
+              "max_review_input_tokens": 52157,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 55098,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 19618,
+            "future_input_bytes_bound": 4226,
+            "worker_input_policy": 44860,
+            "review_cycle_reserve": 163508,
+            "initial_worker_request_measurement": {
+              "input_reservation": 32312,
+              "output_reservation": 2048,
+              "total_reservation": 34360,
+              "native_input_reservation": 32312
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 210416,
+            "initial_work_tokens": 46908,
+            "execution_token_limit": 226006,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "coding": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "worker-capacity-v1",
+              "max_source_bytes": 5252,
+              "max_artifact_bytes": 2048,
+              "max_delivery_bytes": 2048,
+              "correction_input_tokens": 35913,
+              "correction_output_tokens": 2048,
+              "correction_calls": 2
+            },
+            "known_receipt_bytes": 2,
+            "future_input_bytes_bound": 4226,
+            "worker_input_policy": 21577,
+            "review_cycle_reserve": 75922,
+            "initial_worker_request_measurement": {
+              "input_reservation": 9029,
+              "output_reservation": 2048,
+              "total_reservation": 11077,
+              "native_input_reservation": 9029
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 99547,
+            "initial_work_tokens": 23625,
+            "execution_token_limit": 202723,
+            "criterion_mode": "fixed_verification",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "experiment": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 9860,
+              "max_artifact_bytes": 1,
+              "max_delivery_bytes": 3072,
+              "max_review_input_tokens": 42745,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 43402,
+              "correction_output_tokens": 2048,
+              "correction_calls": 1
+            },
+            "known_receipt_bytes": 2,
+            "future_input_bytes_bound": 8834,
+            "worker_input_policy": 31112,
+            "review_cycle_reserve": 132988,
+            "initial_worker_request_measurement": {
+              "input_reservation": 9348,
+              "output_reservation": 2048,
+              "total_reservation": 11396,
+              "native_input_reservation": 9348
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 166148,
+            "initial_work_tokens": 33160,
+            "execution_token_limit": 212258,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          },
+          "reviewer": {
+            "profile_id": "deepseek-v4.1-flash",
+            "review_envelope": {
+              "version": "review-envelope-v1",
+              "max_source_bytes": 6276,
+              "max_artifact_bytes": 4096,
+              "max_delivery_bytes": 2048,
+              "max_review_input_tokens": 42125,
+              "verdict_tokens": 1024,
+              "correction_input_tokens": 41792,
+              "correction_output_tokens": 2048,
+              "correction_calls": 2
+            },
+            "known_receipt_bytes": 2,
+            "future_input_bytes_bound": 5250,
+            "worker_input_policy": 23360,
+            "review_cycle_reserve": 173978,
+            "initial_worker_request_measurement": {
+              "input_reservation": 8764,
+              "output_reservation": 2048,
+              "total_reservation": 10812,
+              "native_input_reservation": 8764
+            },
+            "native_envelope_fixed_point_iterations": 3,
+            "feedback_bytes_policy": 2048,
+            "upstream_reference_bytes_policy": 2048,
+            "minimum_node_tokens": 199386,
+            "initial_work_tokens": 25408,
+            "execution_token_limit": 204506,
+            "criterion_mode": "independent_model_review",
+            "measurement": "synthetic_policy_envelope_not_execution_or_usage_prediction",
+            "minimum_node_tokens_meaning": "Admission requirement under this chosen worst-case two-review/correction policy; not a necessary lower bound on task usage or model tokens."
+          }
+        },
+        "budget_snapshot": {
+          "remaining": 630000,
+          "scopes": [
+            {
+              "scope": "quest",
+              "limit": 630000,
+              "charged_or_reserved": 0,
+              "opening": 0,
+              "remaining": 630000
+            }
+          ],
+          "declared_total_coordination_tokens": 63000,
+          "coordination_already_settled": 0,
+          "future_coordination_reserve_tokens": 63000,
+          "max_worker_allocations_now": 567000,
+          "max_allocations_plus_future_coordination": 630000,
+          "accounting": "Remaining already subtracts settled/opening/unresolved usage. Only fully settled, identified coordination reduces the future part of the declared total reserve; unknown/opening amounts never do. No charge or reservation is refunded."
+        }
+      }
+    }
+  }
+]

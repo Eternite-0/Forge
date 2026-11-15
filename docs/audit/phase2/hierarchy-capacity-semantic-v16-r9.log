@@ -1,0 +1,46 @@
+.....................FFF.......................                          [100%]
+================================== FAILURES ===================================
+_ test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[1] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-684/test_real_seeded_scenario_mani0')
+level = 1
+
+    @pytest.mark.parametrize("level", [1, 2, 3])
+    def test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess(
+        tmp_path, level
+    ):
+>       from scripts.phase2.acceptance_scenarios import seed_scenario
+E       ModuleNotFoundError: No module named 'scripts.phase2'
+
+backend\tests\test_verified_capacity_v16.py:155: ModuleNotFoundError
+_ test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[2] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-684/test_real_seeded_scenario_mani1')
+level = 2
+
+    @pytest.mark.parametrize("level", [1, 2, 3])
+    def test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess(
+        tmp_path, level
+    ):
+>       from scripts.phase2.acceptance_scenarios import seed_scenario
+E       ModuleNotFoundError: No module named 'scripts.phase2'
+
+backend\tests\test_verified_capacity_v16.py:155: ModuleNotFoundError
+_ test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[3] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-684/test_real_seeded_scenario_mani2')
+level = 3
+
+    @pytest.mark.parametrize("level", [1, 2, 3])
+    def test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess(
+        tmp_path, level
+    ):
+>       from scripts.phase2.acceptance_scenarios import seed_scenario
+E       ModuleNotFoundError: No module named 'scripts.phase2'
+
+backend\tests\test_verified_capacity_v16.py:155: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_verified_capacity_v16.py::test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[1]
+FAILED backend\tests\test_verified_capacity_v16.py::test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[2]
+FAILED backend\tests\test_verified_capacity_v16.py::test_real_seeded_scenario_manifest_wrapper_is_verified_without_full_source_size_guess[3]
+3 failed, 44 passed in 6.04s

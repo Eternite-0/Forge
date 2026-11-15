@@ -266,6 +266,8 @@ class ProviderGateway:
             "max_tokens": request.max_output_tokens,
             "stream": streaming,
         }
+        if self.config.reasoning_effort is not None:
+            payload["reasoning_effort"] = self.config.reasoning_effort
         if request.temperature is not None:
             payload["temperature"] = request.temperature
         if request.tools:
@@ -654,7 +656,7 @@ class ProviderGateway:
                 self._semaphore,
                 httpx.AsyncClient(
                     transport=self._transport,
-                    timeout=self.config.timeout_seconds,
+                    timeout=request.timeout_seconds or self.config.timeout_seconds,
                     follow_redirects=False,
                     trust_env=False,
                 ) as client,
@@ -740,7 +742,7 @@ class ProviderGateway:
                 self._semaphore,
                 httpx.AsyncClient(
                     transport=self._transport,
-                    timeout=self.config.timeout_seconds,
+                    timeout=request.timeout_seconds or self.config.timeout_seconds,
                     follow_redirects=False,
                     trust_env=False,
                 ) as client,

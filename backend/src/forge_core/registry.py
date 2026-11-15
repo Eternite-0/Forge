@@ -14,13 +14,13 @@ DEFAULT_ROLES = [
         id="math",
         name="Math",
         description="Formal reasoning and quantitative analysis",
-        required_capabilities={"math": 80, "reasoning": 75},
+        required_capabilities={"mathematics": 80, "planning": 75},
     ),
     RoleTemplate(
         id="coding",
         name="Coding",
         description="Implement and debug software",
-        required_capabilities={"coding": 80, "tool_use": 65},
+        required_capabilities={"coding": 80, "tool_calling": 65},
     ),
     RoleTemplate(
         id="design",
@@ -32,7 +32,7 @@ DEFAULT_ROLES = [
         id="review",
         name="Reviewer",
         description="Independent verification",
-        required_capabilities={"reasoning": 75, "instruction_following": 75},
+        required_capabilities={"planning": 75, "instruction_following": 75},
     ),
 ]
 

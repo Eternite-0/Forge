@@ -42,6 +42,14 @@ target/
 desktop/.playwright-cli/
 desktop/src-tauri/gen/schemas/
 
+# Desktop validation evidence is versioned; copied runtimes/workspaces stay local.
+desktop/output/native-*/
+desktop/output/reference-dsh/
+desktop/output/.forge-*
+desktop/output/*-polish.css
+desktop/output/task-navigation.css
+desktop/output/native-final-process.txt
+
 # Imported FORGE release runtime data and Python packaging artifacts.
 data/
 *.sqlite3

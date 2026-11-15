@@ -1,6 +1,11 @@
 """Independent real-SQLite M4 adversarial regression tests."""
 
 import pytest
+from planner_capacity_fixtures import (
+    NativePlannerMock,
+    configure_planner_capacity,
+    semantic_capacity_graph,
+)
 
 from forge_core.domain import DomainError, Quest, QuestStatus
 from forge_core.quest_graph import QuestGraphService
@@ -212,10 +217,13 @@ def test_expired_planner_attempt_cannot_modify_new_attempt(tmp_path, monkeypatch
     monkeypatch.setattr(time, "time", lambda: now[0])
     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
+    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
     monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "planner.sqlite3"))
     from forge_api import main
 
     importlib.reload(main)
+    configure_planner_capacity(main)
     quest = Quest(title="q", goal="plan")
     main.store.save_quest(quest)
     event = ForgeEvent(event_type="quest.proposed", quest_id=quest.id, payload={"source": "router"})
@@ -228,10 +236,11 @@ def test_expired_planner_attempt_cannot_modify_new_attempt(tmp_path, monkeypatch
             (event.id,),
         )
 
-    class Provider:
+    class Provider(NativePlannerMock):
         execution_mode = "mock"
 
         def __init__(self):
+            super().__init__()
             self.started = [asyncio.Event(), asyncio.Event()]
             self.release = [asyncio.Event(), asyncio.Event()]
             self.calls = 0
@@ -243,34 +252,18 @@ def test_expired_planner_attempt_cannot_modify_new_attempt(tmp_path, monkeypatch
             await self.release[index].wait()
             if index == 0 and old_fails:
                 raise RuntimeError("stale failure")
-            graph = {
-                "nodes": [
-                    {
-                        "key": "a",
-                        "objective": "work",
-                        "success_criteria": ["done"],
-                        "budget_tokens": 10,
-                        "required_capabilities": [],
-                        "allowed_tools": [],
-                        "expected_artifact": None,
-                        "max_attempts": 1,
-                    }
-                ],
-                "edges": [],
-                "max_total_tokens": 1000,
-                "max_cost_microunits": None,
-                "max_duration_seconds": None,
-                "cost_currency": None,
-            }
+            graph = semantic_capacity_graph("a", "work")
             return type("Response", (), {"text": json.dumps(graph), "usage": {}})()
 
     async def race():
         provider = Provider()
-        main.router.provider = provider
+        configure_planner_capacity(main, provider)
         main.router.model_id = "mock"
         first = asyncio.create_task(main.process_pending_plan())
         await provider.started[0].wait()
-        now[0] += 61
+        # Stage leases cover both bounded generation/repair calls. Expire the
+        # actual persisted lease instead of assuming the historical 60 seconds.
+        now[0] = main.dispatcher.inbox("planner")[0]["notice_next_attempt"] + 1
         second = asyncio.create_task(main.process_pending_plan())
         await provider.started[1].wait()
         provider.release[0].set()

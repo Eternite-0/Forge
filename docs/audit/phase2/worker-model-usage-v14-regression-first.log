@@ -1,0 +1,249 @@
+......................................FF................................ [ 43%]
+........................................................................ [ 86%]
+......................                                                   [100%]
+================================== FAILURES ===================================
+__________ test_v7_worker_opening_migrates_once_with_known_reserves ___________
+
+graph = (<forge_core.store.Store object at 0x00000161B6A91BB0>, Quest(id='quest_c7da48bc3a57', title='Task', goal='Implement t...quest_c7da48bc3a57', 'revision': 1, 'digest': 'a0aaf41c85ecb3df0c9e75cbbcfeb5ec9e1d6232e6df35e2f27b0f487edaab20', ...})
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-637/test_v7_worker_opening_migrate0')
+
+    def test_v7_worker_opening_migrates_once_with_known_reserves(graph, tmp_path):
+        import sqlite3
+    
+        from forge_core.migrations import migrate
+        from forge_core.provider_pool import PriceBound
+    
+        store, quest, plan = graph
+        bound = PriceBound("mock-provider", "mock-model", "USD", 1000, 2000, "v1", True, True)
+        manager = WorkerManager(
+            store,
+            ProviderPool({"mock-provider": ScriptedMock()}),
+            MockToolEngine(),
+            team_authority=MockApprovedTeam(plan, cost_cap=100),
+            price_bounds={("mock-provider", "mock-model"): bound},
+        )
+        session = manager.start(quest.id, plan["id"], "n", team_digest="team", member_index=0)
+        with store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE worker_runs SET token_spent=12,cost_spent_microunits=3 WHERE id=?",
+                (session["id"],),
+            )
+        path = tmp_path / "v7-copy.sqlite"
+        with store.connection() as source, sqlite3.connect(path, isolation_level=None) as target:
+            source.backup(target)
+            for table in (
+                "model_budget_attempts",
+                "model_budget_metadata",
+                "model_budget_opening",
+                "model_provider_cooldowns",
+                "model_budget_legacy_quests",
+                "model_budget_scope_reconciliations",
+                "context_archive_heads",
+                "context_archive_sources",
+                "context_archives",
+                "memories",
+                "revoked_memory_sources",
+                "memory_source_index",
+                "memory_source_cursor",
+                "memory_terms",
+                "restore_reviews",
+                "model_budget_worker_teams",
+                "semantic_test_runs",
+                "constraint_records",
+                "constraint_message_index",
+                "constraint_index_cursor",
+            ):
+                target.execute(f"DROP TABLE {table}")
+            for column in (
+                "output_limit",
+                "model_max_output_tokens",
+                "model_context_window",
+                "next_attempt_at",
+                "repairs",
+            ):
+                target.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
+            target.execute("UPDATE schema_meta SET version=7")
+>           migrate(target)
+
+backend\tests\test_worker_runtime.py:1151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\migrations.py:363: in migrate
+    steps[version](connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000161B6A40D60>
+
+    def _worker_model_reservations(connection):
+        """Track only new local admissions; historical reservations cannot be inferred."""
+>       connection.execute("""CREATE TABLE worker_model_reservations (
+            call_id TEXT PRIMARY KEY NOT NULL,
+            run_id TEXT NOT NULL REFERENCES worker_runs(id),
+            generation INTEGER NOT NULL CHECK(typeof(generation)='integer' AND generation>=0),
+            lease_token TEXT NOT NULL,
+            provider_id TEXT NOT NULL, model_id TEXT NOT NULL,
+            execution_mode TEXT NOT NULL CHECK(execution_mode IN ('mock','live')),
+            context_json TEXT NOT NULL,
+            reserved_tokens INTEGER NOT NULL CHECK(typeof(reserved_tokens)='integer' AND reserved_tokens>0),
+            output_limit INTEGER NOT NULL CHECK(typeof(output_limit)='integer' AND output_limit>0 AND output_limit<=reserved_tokens),
+            reserved_cost_microunits INTEGER CHECK(reserved_cost_microunits IS NULL OR (typeof(reserved_cost_microunits)='integer' AND reserved_cost_microunits>=0)),
+            currency TEXT, price_bounds_json TEXT, cost_scopes_json TEXT NOT NULL,
+            state TEXT NOT NULL DEFAULT 'reserved' CHECK(state IN ('reserved','settled','refunded')),
+            input_tokens INTEGER, output_tokens INTEGER, actual_cost_microunits INTEGER,
+            created_at TEXT NOT NULL, settled_at TEXT,
+            CHECK(reserved_cost_microunits IS NULL OR (currency IS NOT NULL AND length(currency)=3 AND price_bounds_json IS NOT NULL)),
+            CHECK(
+                (state='reserved' AND input_tokens IS NULL AND output_tokens IS NULL AND actual_cost_microunits IS NULL AND settled_at IS NULL)
+                OR
+                (state='settled' AND typeof(input_tokens)='integer' AND input_tokens>=0 AND input_tokens<=reserved_tokens-output_limit
+                    AND typeof(output_tokens)='integer' AND output_tokens>=0 AND output_tokens<=output_limit AND settled_at IS NOT NULL
+                    AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                        OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits>=0 AND actual_cost_microunits<=reserved_cost_microunits)))
+                OR
+                (state='refunded' AND typeof(input_tokens)='integer' AND input_tokens=0
+                    AND typeof(output_tokens)='integer' AND output_tokens=0 AND settled_at IS NOT NULL
+                    AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                        OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits=0)))
+            ))""")
+E       sqlite3.OperationalError: table worker_model_reservations already exists
+
+backend\src\forge_core\migrations.py:267: OperationalError
+_ test_v8_active_worker_enters_output_review_without_changing_team_or_budget __
+
+graph = (<forge_core.store.Store object at 0x00000161B6B3AED0>, Quest(id='quest_4eebfd3ad77c', title='Task', goal='Implement t...quest_4eebfd3ad77c', 'revision': 1, 'digest': 'a0aaf41c85ecb3df0c9e75cbbcfeb5ec9e1d6232e6df35e2f27b0f487edaab20', ...})
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-637/test_v8_active_worker_enters_o0')
+
+    def test_v8_active_worker_enters_output_review_without_changing_team_or_budget(graph, tmp_path):
+        import sqlite3
+    
+        from forge_core.domain import ModelProfile
+        from forge_core.migrations import migrate
+        from forge_core.team_composition import TeamCompositionService, _digest
+    
+        store, quest, plan = graph
+        store.save_model(
+            ModelProfile(
+                id="legacy-profile",
+                provider="mock-provider",
+                model_id="mock-model",
+                display_name="Legacy",
+                context_window=16000,
+                max_output_tokens=1000,
+            )
+        )
+        teams = TeamCompositionService(store)
+        team = teams.propose(
+            quest.id,
+            [{"id": "coding", "task_node_key": "n", "input_tokens": 2500, "output_tokens": 500}],
+            {"max_members": 1, "max_depth": 1, "max_concurrency": 1, "max_total_tokens": 4000},
+            strategy="greedy",
+            expected_version=2,
+        )
+        teams.approve(
+            quest.id,
+            plan["plan_revision"],
+            team["proposal_digest"],
+            expected_version=2,
+            actor="local_user",
+        )
+        manager = WorkerManager(
+            store,
+            ProviderPool({"mock-provider": ScriptedMock()}),
+            MockToolEngine(),
+            team_authority=teams,
+        )
+        session = manager.start(
+            quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0
+        )
+        path = tmp_path / "v8.sqlite"
+        with (
+            store.connection() as source,
+            closing(sqlite3.connect(path, isolation_level=None)) as target,
+        ):
+            source.backup(target)
+            original = target.execute(
+                "SELECT id,body_json FROM team_proposals WHERE proposal_digest=?",
+                (team["proposal_digest"],),
+            ).fetchone()
+            body = json.loads(original[1])
+            for member in body["members"]:
+                for key in ("output_tokens", "model_max_output_tokens", "model_context_window"):
+                    member.pop(key)
+            digest = _digest(body)
+            legacy_body = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+            target.execute(
+                "UPDATE team_proposals SET body_json=?,proposal_digest=? WHERE id=?",
+                (legacy_body, digest, original[0]),
+            )
+            target.execute(
+                "UPDATE worker_runs SET team_digest=?,token_spent=123 WHERE id=?",
+                (digest, session["id"]),
+            )
+            for column in (
+                "output_limit",
+                "model_max_output_tokens",
+                "model_context_window",
+                "next_attempt_at",
+                "repairs",
+            ):
+                target.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
+            target.execute("DROP TABLE restore_reviews")
+            target.execute("DROP TABLE model_budget_worker_teams")
+            target.execute("DROP TABLE semantic_test_runs")
+            target.execute("DROP TABLE constraint_records")
+            target.execute("DROP TABLE constraint_message_index")
+            target.execute("DROP TABLE constraint_index_cursor")
+            target.execute("UPDATE schema_meta SET version=8")
+>           migrate(target)
+
+backend\tests\test_worker_runtime.py:1242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\migrations.py:363: in migrate
+    steps[version](connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x00000161B6A423E0>
+
+    def _worker_model_reservations(connection):
+        """Track only new local admissions; historical reservations cannot be inferred."""
+>       connection.execute("""CREATE TABLE worker_model_reservations (
+            call_id TEXT PRIMARY KEY NOT NULL,
+            run_id TEXT NOT NULL REFERENCES worker_runs(id),
+            generation INTEGER NOT NULL CHECK(typeof(generation)='integer' AND generation>=0),
+            lease_token TEXT NOT NULL,
+            provider_id TEXT NOT NULL, model_id TEXT NOT NULL,
+            execution_mode TEXT NOT NULL CHECK(execution_mode IN ('mock','live')),
+            context_json TEXT NOT NULL,
+            reserved_tokens INTEGER NOT NULL CHECK(typeof(reserved_tokens)='integer' AND reserved_tokens>0),
+            output_limit INTEGER NOT NULL CHECK(typeof(output_limit)='integer' AND output_limit>0 AND output_limit<=reserved_tokens),
+            reserved_cost_microunits INTEGER CHECK(reserved_cost_microunits IS NULL OR (typeof(reserved_cost_microunits)='integer' AND reserved_cost_microunits>=0)),
+            currency TEXT, price_bounds_json TEXT, cost_scopes_json TEXT NOT NULL,
+            state TEXT NOT NULL DEFAULT 'reserved' CHECK(state IN ('reserved','settled','refunded')),
+            input_tokens INTEGER, output_tokens INTEGER, actual_cost_microunits INTEGER,
+            created_at TEXT NOT NULL, settled_at TEXT,
+            CHECK(reserved_cost_microunits IS NULL OR (currency IS NOT NULL AND length(currency)=3 AND price_bounds_json IS NOT NULL)),
+            CHECK(
+                (state='reserved' AND input_tokens IS NULL AND output_tokens IS NULL AND actual_cost_microunits IS NULL AND settled_at IS NULL)
+                OR
+                (state='settled' AND typeof(input_tokens)='integer' AND input_tokens>=0 AND input_tokens<=reserved_tokens-output_limit
+                    AND typeof(output_tokens)='integer' AND output_tokens>=0 AND output_tokens<=output_limit AND settled_at IS NOT NULL
+                    AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                        OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits>=0 AND actual_cost_microunits<=reserved_cost_microunits)))
+                OR
+                (state='refunded' AND typeof(input_tokens)='integer' AND input_tokens=0
+                    AND typeof(output_tokens)='integer' AND output_tokens=0 AND settled_at IS NOT NULL
+                    AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                        OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits=0)))
+            ))""")
+E       sqlite3.OperationalError: table worker_model_reservations already exists
+
+backend\src\forge_core\migrations.py:267: OperationalError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves
+FAILED backend\tests\test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget
+2 failed, 164 passed, 1 warning in 35.87s

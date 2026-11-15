@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 26,
+  "writes": 0,
+  "receiptReads": 3,
+  "uncaughtPageErrors": 0
+}

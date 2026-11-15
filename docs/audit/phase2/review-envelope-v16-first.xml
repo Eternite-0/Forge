@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="1.016" timestamp="2026-11-15T15:56:53.552085+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="" name="tests.test_review_envelope_phase2" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Competition_this\Agent\backend\tests\test_review_envelope_phase2.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_review_envelope_phase2.py:35: in &lt;module&gt;
+    from forge_core.team_composition import TeamComposer, TeamCompositionService
+E   ImportError: cannot import name 'TeamComposer' from 'forge_core.team_composition' (D:\Competition_this\Agent\backend\src\forge_core\team_composition.py)</error></testcase></testsuite></testsuites>

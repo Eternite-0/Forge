@@ -1,0 +1,114 @@
+...........FFF                                                           [100%]
+================================== FAILURES ===================================
+___ test_native_review_then_revision_then_fresh_pass_within_original_cycle ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-656/test_native_review_then_revisi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001676C71F490>
+
+    def test_native_review_then_revision_then_fresh_pass_within_original_cycle(tmp_path, monkeypatch):
+>       store, manager, _model, worker = new_pending(tmp_path, monkeypatch)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_review_envelope_phase2.py:74: in new_pending
+    store, manager, model, worker = prepared(
+backend\tests\test_worker_intelligence_phase2.py:143: in prepared
+    worker = manager.start(
+backend\src\forge_core\worker_runtime.py:465: in start
+    review_envelope = verify_worker_envelope(self.store, member)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = <forge_core.store.Store object at 0x000001676C7C4410>
+member = {'acceptance_criteria': ['delivery_review'], 'capabilities': {}, 'capability_confidence': {}, 'capability_sources': {'tools': 'test_fixture'}, ...}
+
+    def verify_worker_envelope(store, member):
+        envelope = member.get("review_envelope")
+        if envelope is None:
+            return None
+        from .capacity_preflight import verify_input_inventory
+    
+        envelope = validate_review_envelope(envelope)
+        if not isinstance(member.get("required_input_paths"), list):
+>           raise DomainError("Approved review envelope lacks declared inputs")
+E           forge_core.domain.DomainError: Approved review envelope lacks declared inputs
+
+backend\src\forge_core\worker_envelope.py:35: DomainError
+_ test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-656/test_budget_for_one_review_can0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001676C71F360>
+
+    def test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review(
+        tmp_path, monkeypatch
+    ):
+>       store, manager, model, worker = new_pending(tmp_path, monkeypatch)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:266: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_review_envelope_phase2.py:74: in new_pending
+    store, manager, model, worker = prepared(
+backend\tests\test_worker_intelligence_phase2.py:143: in prepared
+    worker = manager.start(
+backend\src\forge_core\worker_runtime.py:465: in start
+    review_envelope = verify_worker_envelope(self.store, member)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = <forge_core.store.Store object at 0x000001676C7C5310>
+member = {'acceptance_criteria': ['delivery_review'], 'capabilities': {}, 'capability_confidence': {}, 'capability_sources': {'tools': 'test_fixture'}, ...}
+
+    def verify_worker_envelope(store, member):
+        envelope = member.get("review_envelope")
+        if envelope is None:
+            return None
+        from .capacity_preflight import verify_input_inventory
+    
+        envelope = validate_review_envelope(envelope)
+        if not isinstance(member.get("required_input_paths"), list):
+>           raise DomainError("Approved review envelope lacks declared inputs")
+E           forge_core.domain.DomainError: Approved review envelope lacks declared inputs
+
+backend\src\forge_core\worker_envelope.py:35: DomainError
+___ test_unsent_review_release_retains_cycle_stage_without_resetting_usage ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-656/test_unsent_review_release_ret0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001676C779B50>
+
+    def test_unsent_review_release_retains_cycle_stage_without_resetting_usage(tmp_path, monkeypatch):
+>       store, manager, _model, worker = new_pending(tmp_path, monkeypatch)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:288: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_review_envelope_phase2.py:74: in new_pending
+    store, manager, model, worker = prepared(
+backend\tests\test_worker_intelligence_phase2.py:143: in prepared
+    worker = manager.start(
+backend\src\forge_core\worker_runtime.py:465: in start
+    review_envelope = verify_worker_envelope(self.store, member)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = <forge_core.store.Store object at 0x000001676C71F490>
+member = {'acceptance_criteria': ['delivery_review'], 'capabilities': {}, 'capability_confidence': {}, 'capability_sources': {'tools': 'test_fixture'}, ...}
+
+    def verify_worker_envelope(store, member):
+        envelope = member.get("review_envelope")
+        if envelope is None:
+            return None
+        from .capacity_preflight import verify_input_inventory
+    
+        envelope = validate_review_envelope(envelope)
+        if not isinstance(member.get("required_input_paths"), list):
+>           raise DomainError("Approved review envelope lacks declared inputs")
+E           forge_core.domain.DomainError: Approved review envelope lacks declared inputs
+
+backend\src\forge_core\worker_envelope.py:35: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_review_envelope_phase2.py::test_native_review_then_revision_then_fresh_pass_within_original_cycle
+FAILED backend\tests\test_review_envelope_phase2.py::test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review
+FAILED backend\tests\test_review_envelope_phase2.py::test_unsent_review_release_retains_cycle_stage_without_resetting_usage
+3 failed, 11 passed in 1.30s

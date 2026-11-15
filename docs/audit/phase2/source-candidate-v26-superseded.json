@@ -1,0 +1,12 @@
+{
+  "source_version": "v26",
+  "status": "superseded_before_full_suite_and_provider_runs",
+  "manifest_path": "docs/audit/phase2/source-manifest-v26.json",
+  "archive_path": ".local/phase2/source-snapshot-v26.zip",
+  "manifest_sha256": "7881c9f65dd3de8ced79ebe2e0690fb7ad2a3ddfe63ed217e4faa917eae17654",
+  "executable_sha256": "1ca5706f478f4eca2ccc50292323a8d9d9551a7155254e42fb3f0288de05039d",
+  "reason": "The final independent fixture review found that the shared background lifecycle mock still omitted V26's required explicit empty hypothesis_read_paths list. The original manifest/archive are preserved; the fixture correction will be frozen in a new candidate.",
+  "full_suite_run": false,
+  "provider_calls": 0,
+  "phase2_complete": false
+}

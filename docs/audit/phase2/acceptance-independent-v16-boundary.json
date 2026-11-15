@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "source_version": "v16",
+  "generated_at": "2026-11-15T09:00:03.789136+00:00",
+  "status": "historical_frozen_round_failed",
+  "phase2_complete": false,
+  "scope": "Formal historical boundary derived from preserved V16 JUnit/log, manifest and independent final live-usage audit. Current source has advanced to V17 and is not represented as byte-identical V16.",
+  "inspection": {
+    "provider_calls": 0,
+    "runtime_databases_opened_by_this_boundary_writer": 0,
+    "application_code_imports": 0,
+    "credentials_read": false,
+    "historical_evidence_modified": false
+  },
+  "source_manifest": {
+    "path": "docs/audit/phase2/source-manifest-v16.json",
+    "bytes": 34457,
+    "sha256": "d281c051aa066ab9cc8f418aaf28ca5a1df12e3ba54180381556942c208fa9d4",
+    "manifest_sha256": "e069c337d3d4cb5554181ef79a0f3803700b6e5d7f6c5a117dcb35d17c3f9cad",
+    "file_count": 188,
+    "scope": "Python sources, scripts, tests, test JSON fixtures and dependency lock/config; documentation/evidence excluded"
+  },
+  "backend_suite": {
+    "tests": 1309,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1304,
+    "warnings": 1,
+    "duration_seconds": 328.69,
+    "failed_cases": [
+      {
+        "classname": "tests.test_m4_adversarial",
+        "name": "test_expired_planner_attempt_cannot_modify_new_attempt[False]"
+      },
+      {
+        "classname": "tests.test_m4_adversarial",
+        "name": "test_expired_planner_attempt_cannot_modify_new_attempt[True]"
+      },
+      {
+        "classname": "tests.test_m4_integration",
+        "name": "test_graph_planner_sends_strict_wire_schema_through_gateway"
+      },
+      {
+        "classname": "tests.test_m4_integration",
+        "name": "test_authenticated_graph_controls_survive_restart_without_running_worker"
+      },
+      {
+        "classname": "tests.test_m4_integration",
+        "name": "test_user_turn_automatically_plans_once_without_extra_user_message"
+      }
+    ],
+    "evidence": [
+      {
+        "path": "docs/audit/phase2/frozen-tests-v16.xml",
+        "bytes": 216970,
+        "sha256": "1b9dc7d054994ce2f0ccf514ac57940bc017e8f8288a95f25b2b62d63e7b6b67"
+      },
+      {
+        "path": "docs/audit/phase2/frozen-tests-v16.log",
+        "bytes": 26792,
+        "sha256": "242cf89da408920836301fd22574bf986d116b43d43b229e98f1f2dde33d59a8"
+      }
+    ]
+  },
+  "strict_live": {
+    "accepted_levels": [],
+    "run_count": 3,
+    "total_gateway_attempts": 36,
+    "known_gateway_tokens": 236094,
+    "unknown_attempts": 0,
+    "runs": [
+      {
+        "run_id": "20261115T082953Z-L1-16b57e",
+        "level": "L1",
+        "duration_seconds": 193.361,
+        "known_gateway_tokens": 66428,
+        "independent_failure_path": "planner_dead_after_invalid_graph_proposals_before_plan_approval_or_worker_execution",
+        "acceptance_passed": false,
+        "independent_review_pass_count": 0,
+        "read_snapshot_total_changes": 0
+      },
+      {
+        "run_id": "20261115T082953Z-L2-a68109",
+        "level": "L2",
+        "duration_seconds": 312.402,
+        "known_gateway_tokens": 78872,
+        "independent_failure_path": "planner_dead_after_invalid_graph_proposals_before_plan_approval_or_worker_execution",
+        "acceptance_passed": false,
+        "independent_review_pass_count": 0,
+        "read_snapshot_total_changes": 0
+      },
+      {
+        "run_id": "20261115T083313Z-L3-673598",
+        "level": "L3",
+        "duration_seconds": 373.787,
+        "known_gateway_tokens": 90794,
+        "independent_failure_path": "planner_dead_after_invalid_graph_proposals_before_plan_approval_or_worker_execution",
+        "acceptance_passed": false,
+        "independent_review_pass_count": 0,
+        "read_snapshot_total_changes": 0
+      }
+    ],
+    "evidence": [
+      {
+        "path": "docs/audit/phase2/live-usage-v16-audit.json",
+        "bytes": 17091,
+        "sha256": "f0ec151f8b461314872318699adbf0b58b368b928190c2f5cfb6a09a9a98fd8d"
+      },
+      {
+        "path": "docs/audit/phase2/live-usage-v16-audit.md",
+        "bytes": 2216,
+        "sha256": "63c11449242119f5efa4cdcbcefc46591efdab63f70ddfced321de05eb785343"
+      }
+    ]
+  },
+  "preservation_record": {
+    "path": "docs/audit/phase2/preservation-v16.json",
+    "bytes": 211779,
+    "sha256": "b54d3d4db28d223ecefd42da46cbebb68a935e4613709f10998891c50e038291"
+  },
+  "limitations": [
+    "Five frozen-suite failures and three strict live failures are retained; later V17 repairs never promote this V16 round to accepted.",
+    "Each live run ended in Invalid_graph_proposal before approved plan or Worker execution. Detailed rejected model drafts were not persisted, so the exact validation/model failure cannot be independently recovered.",
+    "All 36 actual Gateway attempts settled. Zero Worker reservations/reviews is absence of execution, not successful Worker accounting or Review PASS.",
+    "No mid-execution restart, archive/readback or autonomous task completion was observed.",
+    "Monetary cost remains unknown. The controlled 90-row historical algorithm study is separate from strict autonomous Quest acceptance."
+  ]
+}

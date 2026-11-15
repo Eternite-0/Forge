@@ -11,14 +11,18 @@ import re
 import shutil
 import socket
 import ssl
+import stat
 import subprocess
 import sys
+import tempfile
 import threading
 import time
+from contextlib import suppress
 from datetime import UTC, datetime
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from .artifact_revision import verify_file_revision_chain
 from .domain import DomainError, ForgeEvent, new_id, now_iso
 from .governance import POLICY_VERSION, GovernanceService, parameter_digest
 from .tool_domain import CONTRACTS
@@ -175,6 +179,8 @@ class ToolEngine:
                     raise DomainError("Invalid tool parameter")
                 if "enum" in rule and value not in rule["enum"]:
                     raise DomainError("Unknown diagnostic operation")
+                if "pattern" in rule and re.fullmatch(rule["pattern"], value) is None:
+                    raise DomainError("Invalid tool parameter")
             elif rule["type"] == "object" and not isinstance(value, dict):
                 raise DomainError("Invalid tool parameter")
         try:
@@ -191,7 +197,7 @@ class ToolEngine:
             core = Path(__file__).resolve().parent.parent
             target = Path(scope)
             protected = (core, Path(sys.prefix).resolve(), Path(sys.base_prefix).resolve())
-            if name in {"file_write", "directory_create"} and any(
+            if name in {"file_write", "file_revise", "directory_create"} and any(
                 target.is_relative_to(root) or root.is_relative_to(target) for root in protected
             ):
                 raise DomainError("Core installation is protected")
@@ -286,6 +292,12 @@ class ToolEngine:
         call = work.connection.execute(
             "SELECT * FROM worker_tool_calls WHERE run_id=? AND call_id=?", (run_id, call_id)
         ).fetchone()
+        if call is None:
+            from .worker_prefetch import core_tool_reservation
+
+            call = core_tool_reservation(
+                self.store, work.connection, row, call_id, tool_name, parameters
+            )
         if (
             call is None
             or call["tool_name"] != tool_name
@@ -341,6 +353,8 @@ class ToolEngine:
                 ):
                     raise DomainError("Tool call ID is already bound")
                 return dict(existing)
+            if tool_name == "file_revise":
+                self._revision_source(work.connection, run_id, scope, parameters)
             if spec.risk == "R1":
                 grants = work.connection.execute(
                     "SELECT resource_scope FROM task_grants WHERE quest_id=? AND workspace_id=? AND plan_revision=? AND revoked_at IS NULL",
@@ -480,6 +494,14 @@ class ToolEngine:
                     raise DomainError("Approval is no longer valid")
             if intent["state"] != "prepared":
                 return dict(intent), False
+            if intent["tool_name"] == "file_revise":
+                self._revision_source(
+                    work.connection,
+                    intent["run_id"],
+                    intent["resource_scope"],
+                    parameters,
+                    intent_id=intent_id,
+                )
             changed = work.connection.execute(
                 "UPDATE action_intents SET state='executing',updated_at=? WHERE id=? AND state='prepared'",
                 (now_iso(), intent_id),
@@ -503,6 +525,107 @@ class ToolEngine:
         except (ValueError, OSError) as exc:
             raise DomainError("Network target is not allowed") from exc
         return parsed
+
+    @staticmethod
+    def _read_revision_target(path):
+        if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+            raise DomainError("Artifact revision target is not a regular file")
+        descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+        with os.fdopen(descriptor, "rb") as stream:
+            metadata = os.fstat(stream.fileno())
+            if not stat.S_ISREG(metadata.st_mode) or metadata.st_nlink != 1:
+                raise DomainError("Artifact revision target is not a private regular file")
+            data = stream.read(_MAX_BYTES + 1)
+        if len(data) > _MAX_BYTES:
+            raise DomainError("Artifact revision target exceeds size limit")
+        return data, (metadata.st_dev, metadata.st_ino, metadata.st_size, metadata.st_mtime_ns)
+
+    def _revision_source(self, connection, run_id, scope, parameters, *, intent_id=None):
+        source = verify_file_revision_chain(connection, run_id, parameters["prior_receipt_id"])
+        latest = connection.execute(
+            "SELECT r.id FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id "
+            "WHERE i.run_id=? AND i.resource_scope=? AND i.tool_name IN ('file_write','file_revise') "
+            "AND i.state='succeeded' ORDER BY r.rowid DESC LIMIT 1",
+            (run_id, scope),
+        ).fetchone()
+        unsettled = connection.execute(
+            "SELECT 1 FROM action_intents WHERE run_id=? AND resource_scope=? "
+            "AND state IN ('prepared','executing','uncertain') AND id<>? LIMIT 1",
+            (run_id, scope, intent_id or ""),
+        ).fetchone()
+        if (
+            source["path"] != scope
+            or source["sha256"] != parameters["expected_sha256"]
+            or latest is None
+            or latest[0] != source["receipt_id"]
+            or unsettled is not None
+        ):
+            raise DomainError("Artifact revision source is stale or unresolved")
+        data, identity = self._read_revision_target(Path(scope))
+        if hashlib.sha256(data).hexdigest() != source["sha256"]:
+            raise DomainError("Artifact revision content changed outside its receipt chain")
+        return source, identity
+
+    def _perform_revision(self, intent, parameters, lease_token, cancelled):
+        path = Path(intent["resource_scope"])
+        data = parameters["content"].encode("utf-8")
+        if len(data) > _MAX_BYTES:
+            raise DomainError("File exceeds write limit")
+        descriptor, temporary = tempfile.mkstemp(prefix=".forge-revise-", dir=path.parent)
+        temporary = Path(temporary)
+        try:
+            with os.fdopen(descriptor, "wb") as stream:
+                stream.write(data)
+                stream.flush()
+                os.fsync(stream.fileno())
+            # Core mutation/authorization and the final expected-content check share
+            # one write lock. Every earlier version is already retained in immutable
+            # intent parameters and the prior receipt chain before replacement.
+            with self.store.unit_of_work() as work:
+                self._context(
+                    work,
+                    intent["quest_id"],
+                    intent["worker_id"],
+                    intent["run_id"],
+                    lease_token,
+                    "file_revise",
+                    intent["call_id"],
+                    parameters,
+                )
+                if self._scope("file_revise", parameters) != str(path):
+                    raise DomainError("Artifact revision target changed")
+                grants = work.connection.execute(
+                    "SELECT resource_scope FROM task_grants WHERE quest_id=? AND workspace_id=? "
+                    "AND plan_revision=? AND revoked_at IS NULL",
+                    (intent["quest_id"], self.store.workspace.id, intent["plan_revision"]),
+                ).fetchall()
+                if not any(path.is_relative_to(Path(grant[0])) for grant in grants):
+                    raise DomainError("Workspace grant was revoked")
+                source, identity = self._revision_source(
+                    work.connection,
+                    intent["run_id"],
+                    str(path),
+                    parameters,
+                    intent_id=intent["id"],
+                )
+                current_data, current_identity = self._read_revision_target(path)
+                if (
+                    cancelled.is_set()
+                    or current_identity != identity
+                    or hashlib.sha256(current_data).hexdigest() != source["sha256"]
+                ):
+                    raise DomainError("Artifact revision target or authorization changed")
+                os.replace(temporary, path)
+            return {
+                "path": str(path),
+                "sha256": hashlib.sha256(data).hexdigest(),
+                "bytes": len(data),
+                "prior_receipt_id": source["receipt_id"],
+                "prior_sha256": source["sha256"],
+            }
+        finally:
+            with suppress(OSError):
+                temporary.unlink(missing_ok=True)
 
     def _public_url(self, url, cancelled, deadline=None):
         parsed = self._allowed_url(url)
@@ -776,6 +899,14 @@ class ToolEngine:
                 data = stream.read(_MAX_BYTES + 1)
             if len(data) > _MAX_BYTES:
                 raise DomainError("File exceeds read limit")
+            from .worker_envelope import verify_read_identity
+
+            with self.store.connection() as connection:
+                connection.execute("BEGIN")
+                run = connection.execute(
+                    "SELECT * FROM worker_runs WHERE id=?", (intent["run_id"],)
+                ).fetchone()
+                verify_read_identity(self.store, connection, run, path, data)
             return {"content": data.decode("utf-8"), "sha256": hashlib.sha256(data).hexdigest()}
         if name == "file_write":
             data = parameters["content"].encode("utf-8")
@@ -792,6 +923,8 @@ class ToolEngine:
                 "sha256": hashlib.sha256(data).hexdigest(),
                 "bytes": len(data),
             }
+        if name == "file_revise":
+            return self._perform_revision(intent, parameters, lease_token, cancelled)
         if name == "directory_list":
             entries = []
             with os.scandir(path) as iterator:
@@ -804,7 +937,7 @@ class ToolEngine:
         if name == "directory_create":
             path.mkdir(parents=False, exist_ok=False)
             return {"path": str(path)}
-        if name in {"shell_inspect", "git_status", "python_compile", "numeric_ast"}:
+        if name in {"shell_inspect", "git_status", "python_compile", "numeric_ast", "python_test"}:
             data = None
             if name == "shell_inspect":
                 argv = [sys.executable, "-I", "--version"]
@@ -830,6 +963,26 @@ class ToolEngine:
                 ).encode("utf-8")
                 if len(data) > 65536:
                     raise DomainError("Numeric input exceeds limit")
+            elif name == "python_test":
+                with path.open("rb") as stream:
+                    candidate = stream.read(16001)
+                if len(candidate) > 16000:
+                    raise DomainError("Test source exceeds limit")
+                argv = [
+                    sys.executable,
+                    "-I",
+                    str(Path(__file__).with_name("code_test_harness.py").resolve()),
+                ]
+                cwd = str(self.store.workspace.root)
+                data = _json(
+                    {
+                        "source": candidate.decode("utf-8"),
+                        "function": parameters["function"],
+                        "suite": parameters["suite"],
+                    }
+                ).encode("utf-8")
+                if len(data) > 65536:
+                    raise DomainError("Test input exceeds limit")
             else:
                 binary = shutil.which("git")
                 if binary is None:
@@ -876,6 +1029,17 @@ class ToolEngine:
                     input_sha256=hashlib.sha256(
                         _json(parameters["inputs"]).encode("utf-8")
                     ).hexdigest(),
+                )
+            elif name == "python_test":
+                output = json.loads(result["stdout"]) if result["exit_code"] in {0, 2} else None
+                result.update(
+                    path=str(path),
+                    source_sha256=hashlib.sha256(candidate).hexdigest(),
+                    suite_sha256=hashlib.sha256(_json(parameters["suite"]).encode()).hexdigest(),
+                    passed=output["passed"] if output else 0,
+                    failed=output["failed"] if output else 0,
+                    result_json=_json(output) if output else "",
+                    subset="forge_pure_function_tests_v1",
                 )
             return result
         if name in {"browser_get", "mcp_call"}:
@@ -1087,8 +1251,27 @@ class ToolEngine:
             cancelled.set()
             self._mark_uncertain(intent["id"])
             raise
-        except Exception:  # noqa: BLE001 - side effects may have occurred before failure
+        except Exception as exc:  # noqa: BLE001 - side effects may have occurred before failure
             cancelled.set()
+            if tool_name in {"file_read", "directory_list"} and isinstance(
+                exc, (OSError, UnicodeError, DomainError)
+            ):
+                # These fixed local reads cannot mutate an external resource.
+                # Record a real failure receipt so a Worker can correct a path;
+                # _finish still downgrades stale authorization to uncertain.
+                code = (
+                    "resource_unavailable"
+                    if isinstance(exc, FileNotFoundError)
+                    else "resource_denied"
+                    if isinstance(exc, PermissionError)
+                    else "resource_not_utf8"
+                    if isinstance(exc, UnicodeError)
+                    else "read_policy_rejected"
+                    if isinstance(exc, DomainError)
+                    else "resource_read_failed"
+                )
+                with suppress(Exception):
+                    return self._finish(intent["id"], "failed", {"error_code": code}, lease_token)
             self._mark_uncertain(intent["id"])
             return {
                 "call_id": call_id,

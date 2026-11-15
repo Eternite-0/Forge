@@ -1,0 +1,78 @@
+...F.........F....                                                       [100%]
+================================== FAILURES ===================================
+_ test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-710/test_real_core_read_tool_messa0')
+
+    def test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage(tmp_path):
+        store, manager, model, quest, plan, _, reader, expected = prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool(TOOL_NAME, {"node_key": "producer"}),
+                tool(
+                    "file_write", {"path": "work/review.json", "content": '{"checked":true}'}, ordinal=2
+                ),
+                response(delivery("Read the complete predecessor.")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            call = connection.execute(
+                "SELECT * FROM worker_tool_calls WHERE run_id=? AND tool_name=?",
+                (reader["id"], TOOL_NAME),
+            ).fetchone()
+            assert _verify_worker_context_call(store, connection, reader["id"], call)
+            assert json.loads(call["result_json"])["delivery"] == expected
+        assert NodeVerifier(store).verify(quest.id, "reader")["status"] == "completed"
+        original = read(store, reader, historical=True)
+>       successor(store, manager, quest, plan, new_reader=False)
+
+backend\tests\test_predecessor_delivery_v17.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:188: in successor
+    proposal = graphs.propose_remaining(
+backend\src\forge_core\quest_graph.py:406: in propose_remaining
+    parent = self._remaining_parent(connection, quest)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x000001A5F920F2E0>
+quest = <sqlite3.Row object at 0x000001A5F92FD8A0>
+
+    @staticmethod
+    def _remaining_parent(connection, quest):
+        from .worker_recovery import unresolved_calls
+    
+        parent = connection.execute(
+            "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+            (quest["id"], quest["plan_revision"]),
+        ).fetchone()
+        if (
+            parent is None
+            or parent["status"] not in {"approved", "paused"}
+            or quest["status"]
+            not in {"approved", "queued", "paused", "blocked", "needs_input", "running"}
+        ):
+>           raise DomainError("Remaining DAG requires an approved parent plan")
+E           forge_core.domain.DomainError: Remaining DAG requires an approved parent plan
+
+backend\src\forge_core\quest_graph.py:356: DomainError
+________ test_whole_delivery_over_bound_is_rejected_without_truncation ________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-710/test_whole_delivery_over_bound0')
+
+    def test_whole_delivery_over_bound_is_rejected_without_truncation(tmp_path):
+        store, manager, _, _, _, _, reader, _ = prepared(tmp_path, summary="x" * 3000)
+        manager._claim(reader["id"])
+>       with pytest.raises(DomainError, match="approved byte bound"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'approved byte bound'
+E         Actual message: 'Completed-delivery source failed validation'
+
+backend\tests\test_predecessor_delivery_v17.py:330: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_whole_delivery_over_bound_is_rejected_without_truncation
+2 failed, 16 passed in 12.00s

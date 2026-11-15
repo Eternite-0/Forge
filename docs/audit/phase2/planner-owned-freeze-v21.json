@@ -1,0 +1,40 @@
+{
+  "scope": "V21_Planner_owned_files_frozen_after_119_pass",
+  "files": [
+    {
+      "path": "backend/src/forge_core/planner_dataflow.py",
+      "bytes": 9506,
+      "sha256": "d82598e996687273f8bae152d3c9c08eb086cb6bc250e3aa58efe483c64cb8a1"
+    },
+    {
+      "path": "backend/src/forge_core/quest_graph.py",
+      "bytes": 100669,
+      "sha256": "1867b54056a43db05acca506dce17e33a20e4f13a2aeecf6db6a854b0e602151"
+    },
+    {
+      "path": "backend/tests/planner_capacity_fixtures.py",
+      "bytes": 4915,
+      "sha256": "81effaeb5bc916acc75e7b55916469659d5f086daed44b83f11e404fa8f6d331"
+    },
+    {
+      "path": "backend/tests/test_planner_dataflow_v21.py",
+      "bytes": 20054,
+      "sha256": "f2bb0e80e39ad466716d86dc8f02700a24f67ed1fad35ef95fd47b081563f6b0"
+    },
+    {
+      "path": "backend/tests/test_core_measured_planner_v19.py",
+      "bytes": 14821,
+      "sha256": "092b2ed2b0496b153866ed2f218e7843f36081c8a0a50a30376dc18f25dfa8cb"
+    },
+    {
+      "path": "backend/tests/test_typed_planner_v20.py",
+      "bytes": 8801,
+      "sha256": "dc64cf6d721c0acbc5e38552db161ba5cf0e7405d1e3af5e9eed8e27892f29be"
+    },
+    {
+      "path": "backend/tests/fixtures/phase2_constructed_dataflow_v21.json",
+      "bytes": 35051,
+      "sha256": "305df734c0259885bcf611ea187604d26037370076c487543be5d5136eb142aa"
+    }
+  ]
+}

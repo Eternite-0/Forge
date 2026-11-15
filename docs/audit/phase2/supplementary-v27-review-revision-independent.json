@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "source_version": "v27",
+  "generated_at": "2026-11-15T14:30:37.534600+00:00",
+  "mode": "review-revision",
+  "scope": "Independent read-only wrapper for finished supplementary goal probes.\n\nThe goal auditor checks actual exchange chains. A separate SQL/hash auditor\nreconstructs Core-origin evidence and current reviewer packets. This wrapper\nnever constructs Store, starts Core, reads credentials or calls a Provider.\n",
+  "independent_auditor": {
+    "path": ".local/phase2/audit_supplement_version.py",
+    "bytes": 15734,
+    "sha256": "5bd79323f1e45e1be67a29c6c078e002f85be311e5bf808ea33538dc5b616641"
+  },
+  "driver_record": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-review-revision-2ce8a5/run.json",
+    "bytes": 129317,
+    "sha256": "05f79dc399cf105b472e4a24029817893a5f4252581319a393ae45086a69c59e"
+  },
+  "original_spec": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-review-revision-2ce8a5/spec.json",
+    "bytes": 21479,
+    "sha256": "304dcb1692be850512327d9502d2bb8dcfbc11cc574e95ad733eb274c60d9603"
+  },
+  "saved_evidence": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-review-revision-2ce8a5/evidence.json",
+    "bytes": 39409,
+    "sha256": "ffc3c9a62eb10bf621c669aa02d963e7c388dffcefe969c95f318a89c1118b6b"
+  },
+  "reservation_samples": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-review-revision-2ce8a5/reservation-samples.jsonl",
+    "bytes": 30101,
+    "sha256": "7c1410f3fc9c44d313fb9690d8b5c1badeedb99c472b36f9fa39d6c1f842389d"
+  },
+  "goal_auditor": {
+    "path": ".local/phase2/goal-probes-v23/audit.py",
+    "bytes": 50343,
+    "sha256": "317e9037388ff8cb03aff495db4f69bb966ef3508a8737583714445802cd0932"
+  },
+  "core_auditor": {
+    "path": ".local/phase2/audit_live_usage_v23.py",
+    "bytes": 92288,
+    "sha256": "4d714cdf29d49150ee31fb357c9927a9d3a24c1caceb8c936dc0f4af2fc4a963"
+  },
+  "frozen_manifest_sha256": "54aeb64f231cb8f0d7ce9c4ad785c7272d8986003f5d7d2471557c429400d8dc",
+  "frozen_executable_sha256": "1ca5706f478f4eca2ccc50292323a8d9d9551a7155254e42fb3f0288de05039d",
+  "finished_driver_passed": false,
+  "finished_driver_failures": [
+    "actual_model_revision_then_fresh_pass_not_observed"
+  ],
+  "original_spec_matches": true,
+  "code_snapshots_match": true,
+  "driver_snapshots_match": true,
+  "saved_evidence_matches_recollection": true,
+  "independent_passes_reconstructed": true,
+  "reconstructed_passes": [
+    {
+      "run_id": "run_a84c4bc2f32d",
+      "packet_sha256": "30ac2e5b076126e2c4e6a42b88aa216d228e97606cdb08bb1c3b531978106055",
+      "raw_packet_bytes": 15951,
+      "reconstructed_review_passes": {
+        "delivery_review": true
+      },
+      "current_live_node_matches": true,
+      "passed": true
+    }
+  ],
+  "worker_token_step_counters": [
+    {
+      "run_id": "run_a84c4bc2f32d",
+      "token_spent": 8701,
+      "expected_tokens": 8701,
+      "steps": 2,
+      "expected_steps": 2,
+      "tokens_exact": true,
+      "steps_exact": true,
+      "actual_settled_local_gateway_binding": true
+    }
+  ],
+  "held_allocation_audit": {
+    "passed": true,
+    "original_scenario_cap": 180000,
+    "original_cap_preserved": true,
+    "serial_worker_starts": [],
+    "expected_serial_marker_count": 0,
+    "held_worker_budget_ledgers": [
+      {
+        "scope": "global",
+        "scope_id": "global",
+        "token_limit": 1000000,
+        "tokens_allocated": 96522,
+        "tool_limit": 1000,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 96522,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      },
+      {
+        "scope": "quest",
+        "scope_id": "quest_216b87d7cb31",
+        "token_limit": 180000,
+        "tokens_allocated": 96522,
+        "tool_limit": 1000,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 96522,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      },
+      {
+        "scope": "team",
+        "scope_id": "d00582d4204654f67662d546cd378aaa03dc0f3eaa636e1cae46a8be7e8420f7",
+        "token_limit": 96522,
+        "tokens_allocated": 96522,
+        "tool_limit": 4,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 96522,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      }
+    ],
+    "missing_ledgers": [],
+    "errors": [],
+    "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+  },
+  "known_usage_within_original_caps": true,
+  "known_gateway_tokens": 36362,
+  "unknown_attempt_ids": [],
+  "goal_exchange_bindings_valid": false,
+  "goal_audit": {
+    "passed": false,
+    "failures": [
+      "actual_model_revision_then_fresh_pass_not_observed"
+    ],
+    "independent_passes": {
+      "run_a84c4bc2f32d": {
+        "review_event_id": "evt_95656f7422b4",
+        "result_event_id": "evt_8c6e2ffce5d5",
+        "call_id": "review_call_a82248cc3ccb",
+        "packet_sha256": "30ac2e5b076126e2c4e6a42b88aa216d228e97606cdb08bb1c3b531978106055"
+      }
+    },
+    "goal_evidence": {
+      "passed": false,
+      "reason": "actual_model_revision_then_fresh_pass_not_observed",
+      "exchange_binding_errors": []
+    },
+    "input_checks": [
+      {
+        "path": "inputs/review-record.json",
+        "unchanged": true
+      }
+    ],
+    "receipt_failures": [],
+    "usage": {
+      "known_total_tokens": 36362,
+      "unknown_attempt_ids": []
+    },
+    "identity_limit": "Configured proxy/model identity; physical upstream identity is unverified.",
+    "parallel_limit": "Overlapping Gateway admission windows, not physical upstream scheduling."
+  },
+  "core_declared_source_audit": {
+    "table_present": true,
+    "origin": "core-declared-source-prefetch-v1",
+    "source_count": 1,
+    "state_counts": {
+      "succeeded": 1
+    },
+    "worker_inventories": [
+      {
+        "run_id": "run_a84c4bc2f32d",
+        "origin": "core-declared-source-prefetch-v1",
+        "declared_source_count": 1,
+        "admitted_source_count": 1,
+        "admission_inventory_complete": true,
+        "approved_assignment_valid": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "core_source_d9e54c1fd2801b911f816b402fa1f74b",
+        "run_id": "run_a84c4bc2f32d",
+        "ordinal": 0,
+        "tool_name": "file_read",
+        "state": "succeeded",
+        "receipt_id": "receipt_56ea8eac12b6",
+        "message_ordinal": 2,
+        "origin": "core-declared-source-prefetch-v1",
+        "admission_binding_valid": true,
+        "settled_source_valid": true,
+        "no_model_reservation_or_gateway_attempt": true,
+        "binding_sha256": "ca05b9b7e725bde40386b6f5331478c608445f260d61295c156bb57c87571aac",
+        "admission_event_id": "evt_4a154a9ad9f0",
+        "admission_precedes_first_model_reservation": true,
+        "source_kind": "verified_input_inventory",
+        "file_bytes": 134,
+        "file_sha256": "0e1980d02273b76ab37eb4e14ac494a9b46b25e6b589f7ee4a8d983aa38fbdd1",
+        "native_receipt_valid": true,
+        "producer_run_id": null,
+        "producer_reconstructed_review_passes": {},
+        "result_sha256": "37a5e69c0bca7c0a571cd52a5b740a7927ec6d141222db56bc4dcd9e9ba466ad",
+        "complete_user_message_valid": true,
+        "user_message_sha256": "c33545b2b9714336c791c355d62729b0ac2c265de0432b5959de309dd6d89d3d",
+        "user_message_precedes_first_assistant": true
+      }
+    ],
+    "completed_delivery_handoffs": [],
+    "tool_counters": [
+      {
+        "run_id": "run_a84c4bc2f32d",
+        "tool_spent": 1,
+        "model_selected_admitted_calls": 0,
+        "core_admitted_source_reads": 1,
+        "model_selection_bindings_valid": true,
+        "expected_tool_spent": 1,
+        "unattributed_tool_spend": 0,
+        "tools_exact": true,
+        "help_calls_are_not_inferred_from_events": true
+      }
+    ],
+    "tool_accounting_checks_passed": true,
+    "source_evidence_checks_passed": true,
+    "orphan_admission_event_ids": [],
+    "errors": [],
+    "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+  },
+  "read_snapshot_total_changes": 0,
+  "claim_boundary": "Actual goal-specific durable exchange chains plus independent Core SQL/hash and original current PASS reconstruction. Unique settled call windows are not raw HTTP request/response provenance. Controlled challenges do not replace strict acceptance.",
+  "passed": false
+}

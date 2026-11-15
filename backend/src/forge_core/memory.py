@@ -24,6 +24,23 @@ def _index_terms(db, ref, text):
     )
 
 
+def _query_terms(text):
+    """Bounded bilingual lexical expansion; this is not embedding retrieval."""
+    terms = set(_terms(text))
+    lowered = text.casefold()
+    for aliases in (
+        ("budget", "spending", "预算", "成本", "费用"),
+        ("deadline", "due date", "截止", "期限"),
+        ("retain", "preserve", "keep", "保留"),
+        ("delete", "remove", "删除"),
+        ("implementation", "coding", "代码", "实现"),
+    ):
+        if any(alias in lowered for alias in aliases):
+            for alias in aliases:
+                terms.update(_terms(alias))
+    return sorted(terms)[:128]
+
+
 def _kind_selected(item, kinds):
     return (
         not kinds
@@ -36,6 +53,17 @@ class MemoryService:
     def __init__(self, store):
         self.store = store
         self.path = str(getattr(store, "path", store))
+
+    async def retrieve_semantic_context(self, query, **options):
+        """One budgeted semantic selection over verified, bounded source candidates.
+
+        Lexical retrieval remains independently available. Semantic results retain
+        their original trust labels and are revalidated after the model returns.
+        The cursor reports the scanned candidate page, not an exhaustive search.
+        """
+        from .semantic_memory import retrieve_semantic_context
+
+        return await retrieve_semantic_context(self, query, **options)
 
     @contextmanager
     def _connection(self, connection=None):
@@ -149,6 +177,9 @@ class MemoryService:
         with self._connection(connection) as db:
             if connection is None:
                 db.execute("BEGIN IMMEDIATE")
+            from .constraints import ConstraintService
+
+            constraint_sync = ConstraintService(self.store).index_messages(connection=db)
             event_cursor, quest_cursor, evidence_cursor = db.execute(
                 "SELECT event_seq,quest_rowid,evidence_rowid FROM memory_source_cursor WHERE singleton=1"
             ).fetchone()
@@ -308,7 +339,10 @@ class MemoryService:
                 db.commit()
             return {
                 "event_seq": events[-1][0] if events else event_cursor,
-                "has_more": len(events) == 256 or len(new_quests) == 256 or len(evidence) == 256,
+                "has_more": constraint_sync["has_more"]
+                or len(events) == 256
+                or len(new_quests) == 256
+                or len(evidence) == 256,
             }
 
     def retrieve_context(
@@ -322,16 +356,36 @@ class MemoryService:
         cursor=None,
         kinds=(),
         layers=(),
+        created_after=None,
+        created_before=None,
+        source_types=(),
+        exact_source_refs=False,
     ):
-        """Read at most 512 indexed candidates; cursor continues in stable ref order."""
+        """Read bounded indexed candidates, optionally only the exact source refs.
+
+        Exact reads retain all source validity and filter checks, while suppressing
+        lexical and Quest-based candidate expansion. They never substitute a
+        similarly named source for an absent or invalid requested identity.
+        """
         if not isinstance(query, str) or len(query.encode()) > 8192:
             raise ValueError("Invalid query")
         if not 1 <= limit <= 100 or not 0 <= max_bytes <= 65536:
             raise ValueError("Invalid recall bounds")
+        if type(exact_source_refs) is not bool:
+            raise ValueError("Invalid exact source selector")
         quests, refs = list(quest_ids), list(source_refs)
         kinds, layers = set(kinds), set(layers)
+        source_types = set(source_types)
         if len(kinds) > 16 or len(layers) > 4:
             raise ValueError("Invalid recall filters")
+        if len(source_types) > 16 or any(not isinstance(x, str) for x in source_types):
+            raise ValueError("Invalid recall source filter")
+        after = datetime.fromisoformat(created_after) if created_after else None
+        before = datetime.fromisoformat(created_before) if created_before else None
+        if any(value is not None and value.tzinfo is None for value in (after, before)):
+            raise ValueError("Recall time filters must include timezone")
+        if after and before and after > before:
+            raise ValueError("Invalid recall time range")
         if (
             len(quests) > 32
             or len(refs) > 32
@@ -343,12 +397,15 @@ class MemoryService:
             raise ValueError("Invalid recall selectors")
         if cursor is not None and (not isinstance(cursor, str) or len(cursor) > 600):
             raise ValueError("Invalid recall cursor")
-        words = _terms(" ".join([query, *quests, *refs]))
+        words = [] if exact_source_refs else _query_terms(" ".join([query, *quests, *refs]))
         if not words and not quests and not refs:
             return {"items": [], "omitted": 0, "bytes": 0, "cursor": None}
         items, used, omitted, next_cursor = [], 2, 0, None
         now = datetime.now(UTC)
         with self._connection(connection) as db:
+            from .constraints import ConstraintService
+
+            constraints = ConstraintService(self.store)
             # Bound each indexed range independently; a popular term cannot force
             # an unbounded DISTINCT/sort over the entire database.
             candidate_set = set()
@@ -360,7 +417,7 @@ class MemoryService:
                         (word, cursor or ""),
                     )
                 )
-            for quest_id in quests:
+            for quest_id in () if exact_source_refs else quests:
                 candidate_set.update(
                     row[0]
                     for row in db.execute(
@@ -368,6 +425,15 @@ class MemoryService:
                         (quest_id, cursor or ""),
                     )
                 )
+                if constraints.available(db):
+                    candidate_set.update(
+                        "constraint:" + row[0]
+                        for row in db.execute(
+                            """SELECT id FROM constraint_records WHERE quest_id=? AND status='active'
+                            AND ('constraint:' || id)>? ORDER BY id LIMIT 513""",
+                            (quest_id, cursor or ""),
+                        )
+                    )
             candidate_set.update(ref for ref in refs if ref > (cursor or ""))
             candidates = sorted(candidate_set)[:513]
             previous = cursor or ""
@@ -378,7 +444,11 @@ class MemoryService:
                     break
                 previous = ref
                 item = None
-                if ref.startswith("memory:"):
+                if ref.startswith(("constraint:", "message:")):
+                    item = constraints.read_indexed(ref, connection=db)
+                    if item is None:
+                        continue
+                elif ref.startswith("memory:"):
                     row = db.execute(
                         "SELECT id,statement,kind,layer,status,source_refs,created_at,valid_until,related_quest_ids,memory_key FROM memories WHERE id=?",
                         (ref[7:],),
@@ -490,6 +560,12 @@ class MemoryService:
                             layers and item["layer"] not in layers
                         ):
                             continue
+                        if source_types and item.get("source_type") not in source_types:
+                            continue
+                        if after or before:
+                            # Workspace identity has no event timestamp and
+                            # cannot satisfy a caller's bounded time range.
+                            continue
                         size = len(
                             json.dumps(item, ensure_ascii=False, separators=(",", ":")).encode(
                                 "utf-8"
@@ -581,6 +657,19 @@ class MemoryService:
                     }
                 if not _kind_selected(item, kinds) or (layers and item["layer"] not in layers):
                     continue
+                if source_types and item.get("source_type") not in source_types:
+                    continue
+                if after or before:
+                    try:
+                        created = datetime.fromisoformat(item["created_at"])
+                    except (TypeError, ValueError):
+                        continue
+                    if (
+                        created.tzinfo is None
+                        or (after and created < after)
+                        or (before and created > before)
+                    ):
+                        continue
                 size = len(
                     json.dumps(item, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
                 ) + bool(items)

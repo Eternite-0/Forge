@@ -1,0 +1,119 @@
+{
+  "candidate": {
+    "answers": [
+      9,
+      7,
+      7,
+      -1,
+      9
+    ],
+    "citations": [
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "aaa8e59b163d770542a78d34247e3b9891112bcc09fc3ba427d0920e1ed9c5f5",
+        "source_id": "machines"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "c0c45f6bd6bbea8ed0fc94f9649c1c466ad02c4186a2b5ca3403ad583ee29a4f",
+        "source_id": "jobs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "lowest_cost_then_id",
+      "explicit_no_candidate"
+    ]
+  },
+  "case_id": "schedule-2",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 2,
+  "domain": "integer_scheduling",
+  "duration_seconds": 2.6305177999893203,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "math"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_6b63caff54d3",
+      "receipt_id": "receipt_fa83047e12a8",
+      "sha256": "aaa8e59b163d770542a78d34247e3b9891112bcc09fc3ba427d0920e1ed9c5f5",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_42b97241998c",
+      "receipt_id": "receipt_6198ecf886a1",
+      "sha256": "c0c45f6bd6bbea8ed0fc94f9649c1c466ad02c4186a2b5ca3403ad583ee29a4f",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_83e596e0e8d1",
+      "duration_seconds": 2.409877800004324,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "1626396873f6227196f0301cd512f64d155fe3b5ca9e1ac99d4ed7da330b45d5",
+      "response_sha256": "6fcdb142f7acf79fe7ed748ec3d4620971513e7f7ac1bfdc6a76fc58cf9d2193",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 524,
+        "output_tokens": 161
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_83e596e0e8d1",
+        "cost_charged": null,
+        "input_charged": 524,
+        "input_reserved": 3103,
+        "output_charged": 161,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 524,
+    "known_input_tokens": 524,
+    "known_output_tokens": 161,
+    "model_calls": 1,
+    "output_tokens": 161,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "single_model"
+}

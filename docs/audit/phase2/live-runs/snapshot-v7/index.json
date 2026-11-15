@@ -1,0 +1,1406 @@
+{
+  "limitations": "Historical snapshots preserve their then-current evidence; later code changes do not retroactively promote failed or unaccepted runs. No Provider requests were made by publication.",
+  "run_count": 53,
+  "runs": [
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 2026,
+        "path": "20261114T215236Z-L1.json",
+        "sha256": "09b3f2694405b9a9afd763d8414950983f8a26307f2633fa5c1d2804d01f001e"
+      },
+      "run_id": "20261114T215236Z-L1",
+      "source_snapshot": {
+        "bytes": 14114,
+        "path": "20261114T215236Z-L1/run.json",
+        "sha256": "46bbb747981971e4c37b183c57545f3321fba5f5de1bfe169d80481517a1f2df"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 2026,
+        "path": "20261114T215614Z-L1.json",
+        "sha256": "a96bc41693673e032bf11f6db2604684935c0e540c2e6c09ed806e554bc67f77"
+      },
+      "run_id": "20261114T215614Z-L1",
+      "source_snapshot": {
+        "bytes": 11943,
+        "path": "20261114T215614Z-L1/run.json",
+        "sha256": "facb7514b9fb7c3e5cd7ddb788f173a1c8a0a815e6aed8ad130189a2e661e3c0"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 2027,
+        "path": "20261114T220018Z-L1.json",
+        "sha256": "28a92752fe863b963f7bace09f1f04c5415d8239b8d22b7662b1e04bd33e5de9"
+      },
+      "run_id": "20261114T220018Z-L1",
+      "source_snapshot": {
+        "bytes": 27372,
+        "path": "20261114T220018Z-L1/run.json",
+        "sha256": "0505a5197b02064492b01df3e85c448b639184257a959487453ac38391407e00"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 2027,
+        "path": "20261114T220634Z-L1.json",
+        "sha256": "78a444dd7880ebcc1c3f32e18ff48b4c40fb8f0c066aa3d9a27d8e23676ace95"
+      },
+      "run_id": "20261114T220634Z-L1",
+      "source_snapshot": {
+        "bytes": 26095,
+        "path": "20261114T220634Z-L1/run.json",
+        "sha256": "136166f40e015be7cf0f8cad5f9bb0ebdd8bb3c076e4961d990168c629a67e2c"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 2027,
+        "path": "20261114T220838Z-L1.json",
+        "sha256": "1a62e59ed9121eede080135d8406a482512497c595244ecab7f4b01417c19fe7"
+      },
+      "run_id": "20261114T220838Z-L1",
+      "source_snapshot": {
+        "bytes": 27258,
+        "path": "20261114T220838Z-L1/run.json",
+        "sha256": "c4e1ce3be68beae84c16d8f3724a197cef4fa4ccbc1671663b4ef90024939af1"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 2034,
+        "path": "20261114T233731Z-L1-c53b2d.json",
+        "sha256": "1081bf8f7eb1fcdf2ca498d78cb5c1cf4210fd15d041f8814e4081116a3300fe"
+      },
+      "run_id": "20261114T233731Z-L1-c53b2d",
+      "source_snapshot": {
+        "bytes": 18941,
+        "path": "20261114T233731Z-L1-c53b2d/run.json",
+        "sha256": "844cac25eca2789b01a1f8f4db303b8a862930960f169b755ca4b41ab784f0f0"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state"
+      ],
+      "published_snapshot": {
+        "bytes": 4932,
+        "path": "20261114T234309Z-L1-238a52.json",
+        "sha256": "f2312434135c630d05e667208dc1963f8a72e7e5a247ba0692cfe21b4e5be9dc"
+      },
+      "run_id": "20261114T234309Z-L1-238a52",
+      "source_snapshot": {
+        "bytes": 62905,
+        "path": "20261114T234309Z-L1-238a52/run.json",
+        "sha256": "2564b387b678ee5aa0f73e248fb73deb16228f96a566f261faa50cd0769974f7"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "approved",
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 3686,
+        "path": "20261114T235101Z-L1-3318e2.json",
+        "sha256": "22406a0ba2d18fffe9c680e07e5d75693175a85e2aaef7170cd9ea774166ba6e"
+      },
+      "run_id": "20261114T235101Z-L1-3318e2",
+      "source_snapshot": {
+        "bytes": 30719,
+        "path": "20261114T235101Z-L1-3318e2/run.json",
+        "sha256": "6d07785ec8865f3314080ed12c495c340227c15d9661ce905e5a0526a30462aa"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state"
+      ],
+      "published_snapshot": {
+        "bytes": 7095,
+        "path": "20261114T235512Z-L1-71b513.json",
+        "sha256": "285f438f7a4e2f6a651446eb56bfbe46308e7c734ec6d038ef3663d6cf928ceb"
+      },
+      "run_id": "20261114T235512Z-L1-71b513",
+      "source_snapshot": {
+        "bytes": 90435,
+        "path": "20261114T235512Z-L1-71b513/run.json",
+        "sha256": "6426529a824893bd0adb29ce3185ac6ba0a58bc7e45daa6beb5c7fc39caf541d"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "proposed",
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 4487,
+        "path": "20261114T235634Z-L2-020787.json",
+        "sha256": "157f322ecdfbe403bfee5128acc9af8bc0c1e7ed4f63c53751f909aec47b4252"
+      },
+      "run_id": "20261114T235634Z-L2-020787",
+      "source_snapshot": {
+        "bytes": 27913,
+        "path": "20261114T235634Z-L2-020787/run.json",
+        "sha256": "223c49061ff881d9b2a7a5bc48e539f329fcb37f44a7e564b98661f164fe7724"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 9321,
+        "path": "20261115T000018Z-L1-639362.json",
+        "sha256": "e0dc37bf430e4a33e33d4fe75a9be400b180ab9a337206acfbcd452c14f21ab2"
+      },
+      "run_id": "20261115T000018Z-L1-639362",
+      "source_snapshot": {
+        "bytes": 90473,
+        "path": "20261115T000018Z-L1-639362/run.json",
+        "sha256": "9d38e9784b50b713c345056ca27f5fe41d7117b49e1c3240d0600e64b8950ec8"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "workspace_grant_rejected",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:real_provider_calls",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:input_sources_read",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:accounted_model_usage"
+      ],
+      "published_snapshot": {
+        "bytes": 8711,
+        "path": "20261115T000207Z-L2-4616aa.json",
+        "sha256": "2250e1ed6dbb8507307da87af975dff2f346eb763f00ef570b2e22dc4caa1ae9"
+      },
+      "run_id": "20261115T000207Z-L2-4616aa",
+      "source_snapshot": {
+        "bytes": 181063,
+        "path": "20261115T000207Z-L2-4616aa/run.json",
+        "sha256": "39ee3771519ddbd1bdd6dca7afda493c76ef457067923a0067c07663b124c9f6"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "approved",
+      "failures": [
+        "composer_did_not_propose_team",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:real_provider_calls",
+        "acceptance_failed:bounded_approved_team",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:input_sources_read",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:one_worker",
+        "acceptance_failed:readonly_tool_receipts",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:accounted_model_usage"
+      ],
+      "published_snapshot": {
+        "bytes": 8835,
+        "path": "20261115T000606Z-L1-859214.json",
+        "sha256": "e2db7954fb3601ff24824793e630df47cfe03f9aab0c33311ee157266abaa71d"
+      },
+      "run_id": "20261115T000606Z-L1-859214",
+      "source_snapshot": {
+        "bytes": 38565,
+        "path": "20261115T000606Z-L1-859214/run.json",
+        "sha256": "6064a31706aea3cd02637305d2417c2d5596936760309a4c4e715ce2685c58ea"
+      }
+    },
+    {
+      "acceptance_status": "unknown",
+      "actual_final_status": "no_quest",
+      "failures": [
+        "router_did_not_create_quest",
+        "acceptance_unknown:completed_quest",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 4004,
+        "path": "20261115T000717Z-L3-ac5000.json",
+        "sha256": "18367f4a9fa267d182b73b3db08f0e471d518581eb736506038595b69bd4f9b9"
+      },
+      "run_id": "20261115T000717Z-L3-ac5000",
+      "source_snapshot": {
+        "bytes": 16635,
+        "path": "20261115T000717Z-L3-ac5000/run.json",
+        "sha256": "b76c1f1992dad9a2b1dd7e65e85a4d3c66cd632436873ac9ec533e21e4c35432"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:accounted_model_usage"
+      ],
+      "published_snapshot": {
+        "bytes": 10878,
+        "path": "20261115T001324Z-L1-70d6a4.json",
+        "sha256": "6a9124aecb5c75f71f2e84471b4774c1bbf1047e53255843a649a3dae21b9d5b"
+      },
+      "run_id": "20261115T001324Z-L1-70d6a4",
+      "source_snapshot": {
+        "bytes": 85554,
+        "path": "20261115T001324Z-L1-70d6a4/run.json",
+        "sha256": "816209427ea6a17ea85f54598ec63eaf7377af48f4ebd292da7f49c630c2ceed"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "workspace_grant_rejected",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:real_provider_calls",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:input_sources_read",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:accounted_model_usage",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 6704,
+        "path": "20261115T001347Z-L3-792eeb.json",
+        "sha256": "b646322cfc2179254e5a5a36ca2983a40c8d2aefae55330d2035b8d2c4849741"
+      },
+      "run_id": "20261115T001347Z-L3-792eeb",
+      "source_snapshot": {
+        "bytes": 99035,
+        "path": "20261115T001347Z-L3-792eeb/run.json",
+        "sha256": "f56addd0fa5d0cc117af1849d73032a9ccef498d177f0cd8f8aa249d6f4189ff"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 13061,
+        "path": "20261115T002247Z-L1-d51cae.json",
+        "sha256": "a55502c1e8d9bea55c125a9ee1ad853f251853e54f03c72a8142d36f4d3eea09"
+      },
+      "run_id": "20261115T002247Z-L1-d51cae",
+      "source_snapshot": {
+        "bytes": 86103,
+        "path": "20261115T002247Z-L1-d51cae/run.json",
+        "sha256": "7826a6bd69ff48ba9a2e2839db471e7b76cd94fc2808ffc7b86e8b070591daa8"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 10823,
+        "path": "20261115T004249Z-L1-d64679.json",
+        "sha256": "4fd9e48200c098fec243dfa950e10ea28deb4e5dcb38820880c8ee007947cee5"
+      },
+      "run_id": "20261115T004249Z-L1-d64679",
+      "source_snapshot": {
+        "bytes": 95434,
+        "path": "20261115T004249Z-L1-d64679/run.json",
+        "sha256": "76fff5b8f779e37a4a9d286798ecf0a9065c10b7855e091afea628c20c5de9ed"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 13779,
+        "path": "20261115T004902Z-L1-2370de.json",
+        "sha256": "a88ca36bd481fad46efb00239bcbdca594fe847c5a0911fbe3bc737a90cd495e"
+      },
+      "run_id": "20261115T004902Z-L1-2370de",
+      "source_snapshot": {
+        "bytes": 101978,
+        "path": "20261115T004902Z-L1-2370de/run.json",
+        "sha256": "610f382abf82877f9a6e3e8622298b624ade4aa42e1296afdd1b2ff5964e7fbc"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_duration_budget",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 13009,
+        "path": "20261115T004902Z-L2-7bc427.json",
+        "sha256": "9dcf3d7cf24337bdf2d2b540a6a7a8147baf1ba892888b27e25ae8f54bd8562f"
+      },
+      "run_id": "20261115T004902Z-L2-7bc427",
+      "source_snapshot": {
+        "bytes": 199748,
+        "path": "20261115T004902Z-L2-7bc427/run.json",
+        "sha256": "be9a72b6c37f5dad8e58a7dd3bc827eb41a93340ba7bb4c6df87cccb213c1b90"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 9320,
+        "path": "20261115T010128Z-L1-94968c.json",
+        "sha256": "68dc5d3a8446de32e859ffc2f8ed76405edca97a4c60d1e400260ed2ba40eb39"
+      },
+      "run_id": "20261115T010128Z-L1-94968c",
+      "source_snapshot": {
+        "bytes": 99250,
+        "path": "20261115T010128Z-L1-94968c/run.json",
+        "sha256": "b1dcd3983ce33d7ceb2eec5ac366603b02435f429f3f2cd14b6d3ee3dad3d26d"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_duration_budget",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 11561,
+        "path": "20261115T010151Z-L2-07090a.json",
+        "sha256": "6d48edff3753fb309dead4ea248a5c903362d3b7872a751219c3d2cce6c1c01a"
+      },
+      "run_id": "20261115T010151Z-L2-07090a",
+      "source_snapshot": {
+        "bytes": 198751,
+        "path": "20261115T010151Z-L2-07090a/run.json",
+        "sha256": "6463f61b2d4d7f4643ef3044fc99e490537caf9499a7c773050be86cd9c45708"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unknown_remote_outcome",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 13051,
+        "path": "20261115T010950Z-L1-2d8619.json",
+        "sha256": "5ddc0a524879c409afe0fdfa4102afc9f5ac926675da92929cee23dbb3730fc9"
+      },
+      "run_id": "20261115T010950Z-L1-2d8619",
+      "source_snapshot": {
+        "bytes": 104701,
+        "path": "20261115T010950Z-L1-2d8619/run.json",
+        "sha256": "04fcd500e94cddbedafb35ae0bfedec35a214a98e7e47a2fd814808dba6149a2"
+      }
+    },
+    {
+      "acceptance_status": "passed",
+      "actual_final_status": "completed",
+      "failures": [],
+      "published_snapshot": {
+        "bytes": 13378,
+        "path": "20261115T012115Z-L1-2a34ad.json",
+        "sha256": "7e0934ff222afa8585c7d781987b01e15252b0ace500e6d4b11d56f31fc499b7"
+      },
+      "run_id": "20261115T012115Z-L1-2a34ad",
+      "source_snapshot": {
+        "bytes": 107007,
+        "path": "20261115T012115Z-L1-2a34ad/run.json",
+        "sha256": "ddb46cc53e04422bfbff10242944c22308a3e09859812dbf09fe8650346d4246"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 14091,
+        "path": "20261115T012115Z-L2-8e64f5.json",
+        "sha256": "8b6721f9e07ef8a2b03cc7bac39af3c9b127921886ac2818906a486cff85a607"
+      },
+      "run_id": "20261115T012115Z-L2-8e64f5",
+      "source_snapshot": {
+        "bytes": 169245,
+        "path": "20261115T012115Z-L2-8e64f5/run.json",
+        "sha256": "f944a316410c8500fe9a680b305270918f1db8481ebb8ffe16cd98648ad96017"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "approved",
+      "failures": [
+        "composer_did_not_propose_team",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:real_provider_calls",
+        "acceptance_failed:bounded_approved_team",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:input_sources_read",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 10276,
+        "path": "20261115T012340Z-L3-17c603.json",
+        "sha256": "3af4fa5ee903dac2034120b2c225ee32a014706a5b3ecd9e3f0b8f16b7eea51b"
+      },
+      "run_id": "20261115T012340Z-L3-17c603",
+      "source_snapshot": {
+        "bytes": 74548,
+        "path": "20261115T012340Z-L3-17c603/run.json",
+        "sha256": "188a84faf15682e3c156529410415089c2c6605dab7b7e6186bc567c2db32bf3"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_worker_concurrency",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 12998,
+        "path": "20261115T013328Z-L2-fed968.json",
+        "sha256": "b896c899be87d81aebf154b1df784ef5345709aec7dbc0de56ca81b07c29bfab"
+      },
+      "run_id": "20261115T013328Z-L2-fed968",
+      "source_snapshot": {
+        "bytes": 168207,
+        "path": "20261115T013328Z-L2-fed968/run.json",
+        "sha256": "0c167430df01258d8c2a095374fca2e6cceba30afe62e8bce2dea7ef04b23117"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 15673,
+        "path": "20261115T013328Z-L3-4e61d3.json",
+        "sha256": "d43ed07413b21100f32398554a1ab9fd697348017b78de2aaa9cfc56e2fd7def"
+      },
+      "run_id": "20261115T013328Z-L3-4e61d3",
+      "source_snapshot": {
+        "bytes": 294831,
+        "path": "20261115T013328Z-L3-4e61d3/run.json",
+        "sha256": "84a5804ab20ea7e4b8023e784eecebf038e803d306c5a67bdbcb859fb97720e3"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 11994,
+        "path": "20261115T014735Z-L1-b48614.json",
+        "sha256": "b16e7b0782f746f0460a566a31a32dc034850369485ad9d1814bc59f402eab4a"
+      },
+      "run_id": "20261115T014735Z-L1-b48614",
+      "source_snapshot": {
+        "bytes": 103135,
+        "path": "20261115T014735Z-L1-b48614/run.json",
+        "sha256": "f851d9d275f1291c87a25dd7aa47959456fd82bf2400e35bf6de2f309ccdb09d"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 11511,
+        "path": "20261115T014735Z-L2-cd59cb.json",
+        "sha256": "212c991be4f6ef1253f2427833e397799c5bf0e0a8e7561fb1dd64fca67e317d"
+      },
+      "run_id": "20261115T014735Z-L2-cd59cb",
+      "source_snapshot": {
+        "bytes": 191529,
+        "path": "20261115T014735Z-L2-cd59cb/run.json",
+        "sha256": "e829b27e90304bf9e58d121a378f4fb578a76c8a57aed90fd7dc0db457670493"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 18358,
+        "path": "20261115T014735Z-L3-4ce51e.json",
+        "sha256": "6576020ce0c004680fae68107b676b124f7f6196c3b4c8392ab97cc856a90865"
+      },
+      "run_id": "20261115T014735Z-L3-4ce51e",
+      "source_snapshot": {
+        "bytes": 303566,
+        "path": "20261115T014735Z-L3-4ce51e/run.json",
+        "sha256": "fc6047b6201edb1abe73b7a26d03762788de9277b4f6948bf801888bedb5136e"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 12115,
+        "path": "20261115T015415Z-L1-d9dedd.json",
+        "sha256": "99cd24200111fd58d4afa1e209af91ddfa4153ae7845737bcaf1587c6aa7e4ab"
+      },
+      "run_id": "20261115T015415Z-L1-d9dedd",
+      "source_snapshot": {
+        "bytes": 99844,
+        "path": "20261115T015415Z-L1-d9dedd/run.json",
+        "sha256": "5edc057ae4ad3c886bff517c1f9bea292403521b65b2533f6ddde8c3047839b9"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 14060,
+        "path": "20261115T015415Z-L2-b0e9f0.json",
+        "sha256": "e27ae2021c38f6a14a44ed695a3b7b48b0fc20f903a9627d936244ed085e5318"
+      },
+      "run_id": "20261115T015415Z-L2-b0e9f0",
+      "source_snapshot": {
+        "bytes": 137724,
+        "path": "20261115T015415Z-L2-b0e9f0/run.json",
+        "sha256": "e32d9a27c072abbbda400f881749773c30379381eb28e3dc3a9aed0f5e36995a"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 17722,
+        "path": "20261115T015415Z-L3-2732f0.json",
+        "sha256": "1cea1c7920ed74bba672bbe1895449b487fbe91422f4e42902fdc4a072650baf"
+      },
+      "run_id": "20261115T015415Z-L3-2732f0",
+      "source_snapshot": {
+        "bytes": 267736,
+        "path": "20261115T015415Z-L3-2732f0/run.json",
+        "sha256": "9d32e156fe533066c741eeb32a9d1b3fedfcf6ac89977551d30042039ecdae73"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:readonly_tool_receipts",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:scenario_total_token_budget",
+        "acceptance_unknown:accounted_model_usage"
+      ],
+      "published_snapshot": {
+        "bytes": 17767,
+        "path": "20261115T020604Z-L1-dceb58.json",
+        "sha256": "06ec09a126d682d1e7c1bc78e549ae11e3f9c0a38cdd0d62c5c3f92983063998"
+      },
+      "run_id": "20261115T020604Z-L1-dceb58",
+      "source_snapshot": {
+        "bytes": 128663,
+        "path": "20261115T020604Z-L1-dceb58/run.json",
+        "sha256": "691abbcaf915aedd91aec7ec2fb24944560e1048f076e909b7bae1f1ecf262ea"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:input_sources_read",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:scenario_total_token_budget",
+        "acceptance_unknown:accounted_model_usage"
+      ],
+      "published_snapshot": {
+        "bytes": 19062,
+        "path": "20261115T020604Z-L2-7f6370.json",
+        "sha256": "c487ce89ebf0ab492145d62d72fcf8ca7895de8d3c5ba516a76437065f063155"
+      },
+      "run_id": "20261115T020604Z-L2-7f6370",
+      "source_snapshot": {
+        "bytes": 230153,
+        "path": "20261115T020604Z-L2-7f6370/run.json",
+        "sha256": "bcb8f426aa96c949c6ed88410bb11b84e18c8fa3825d6da2cf1d8db8a139a618"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 14165,
+        "path": "20261115T020604Z-L3-30acf0.json",
+        "sha256": "ef2516022fc0592230129d9e5be9a80641b2ae6d8f6aa4a13da81b3e9b5eafe7"
+      },
+      "run_id": "20261115T020604Z-L3-30acf0",
+      "source_snapshot": {
+        "bytes": 297138,
+        "path": "20261115T020604Z-L3-30acf0/run.json",
+        "sha256": "799a3a7a93c0ee7cd68bbbe507fb7f251431b9d527a2a8038fa74a32c16433b8"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 13221,
+        "path": "20261115T021801Z-L2-b11011.json",
+        "sha256": "eb4f2cd4d5e170383f2812d198ff2382189ef9e0427cc368184f1e3c8f901128"
+      },
+      "run_id": "20261115T021801Z-L2-b11011",
+      "source_snapshot": {
+        "bytes": 177045,
+        "path": "20261115T021801Z-L2-b11011/run.json",
+        "sha256": "6969e447417b37a2a5ffc3690e1c218843f4cbfd4e22e1b20701c4ee019d545e"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:scenario_total_token_budget",
+        "acceptance_unknown:accounted_model_usage",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 14581,
+        "path": "20261115T021801Z-L3-290b7f.json",
+        "sha256": "9a57613fc1de75f0bca9deac11b27dad8a918622a7388296d468d4ab39b9ab27"
+      },
+      "run_id": "20261115T021801Z-L3-290b7f",
+      "source_snapshot": {
+        "bytes": 294274,
+        "path": "20261115T021801Z-L3-290b7f/run.json",
+        "sha256": "8c920efdad7e89565c1afa6b9ea825f7d84f58c60a7b8df90b9f5952d1a6b8d8"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 10088,
+        "path": "20261115T061513Z-L1-c94230.json",
+        "sha256": "c0cbd5e0c9394e16e5776aaf6f6ee659e2365b6f7c5837aac5929cc49cc1adc4"
+      },
+      "run_id": "20261115T061513Z-L1-c94230",
+      "source_snapshot": {
+        "bytes": 93722,
+        "path": "20261115T061513Z-L1-c94230/run.json",
+        "sha256": "27e62e16ce012fed0df66476ce08ff4c849e38794718127213107bf4e7dfe7aa"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_worker_depth",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:receipt_integrity",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 14637,
+        "path": "20261115T061513Z-L2-62b044.json",
+        "sha256": "71f7ff30fed71cd6fc9be65a47cbe7e87fbfc6fff635b2bfe3a14bb6116ac88f"
+      },
+      "run_id": "20261115T061513Z-L2-62b044",
+      "source_snapshot": {
+        "bytes": 214950,
+        "path": "20261115T061513Z-L2-62b044/run.json",
+        "sha256": "eb1926d0ba23c6a92cdcc5d36ff94d9bbfedf59ea3604d9f6ac61f7206a2cc49"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 18140,
+        "path": "20261115T061513Z-L3-8fdef4.json",
+        "sha256": "999ef41c9607d8a76ddd95b9f312b6b4b9abac6ec3ed15e59de1f6bd150ada31"
+      },
+      "run_id": "20261115T061513Z-L3-8fdef4",
+      "source_snapshot": {
+        "bytes": 309012,
+        "path": "20261115T061513Z-L3-8fdef4/run.json",
+        "sha256": "9748a3ccba05768e0ec7f149896923b77bd8e26abf14bdae968a16d2fb3fd289"
+      }
+    },
+    {
+      "acceptance_status": "passed",
+      "actual_final_status": "completed",
+      "failures": [],
+      "published_snapshot": {
+        "bytes": 13439,
+        "path": "20261115T062445Z-L1-e6498c.json",
+        "sha256": "2cd97b9220ccdee4d6271cc4eacdd7151d29dc6748e0783e67a0f06a6706d7be"
+      },
+      "run_id": "20261115T062445Z-L1-e6498c",
+      "source_snapshot": {
+        "bytes": 112378,
+        "path": "20261115T062445Z-L1-e6498c/run.json",
+        "sha256": "554840a5a31894750e18e1dcab8fa3172a68a178c2bb5acbab2c49052b303418"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:receipt_integrity",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 25681,
+        "path": "20261115T062445Z-L2-b7e197.json",
+        "sha256": "53c78b0df443611d828ad9e819f533972aaaf5d5e1bd4b0dea611d36f6238f58"
+      },
+      "run_id": "20261115T062445Z-L2-b7e197",
+      "source_snapshot": {
+        "bytes": 228856,
+        "path": "20261115T062445Z-L2-b7e197/run.json",
+        "sha256": "5ee41bee59524f27e2484d3cec46ef928497165493e3e3185fbd134839690b59"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 14072,
+        "path": "20261115T062445Z-L3-ba6bb7.json",
+        "sha256": "63e1abb491643b6854bf13ec6e5a1399ab27f91c0f9a63d207cc51422fe286cc"
+      },
+      "run_id": "20261115T062445Z-L3-ba6bb7",
+      "source_snapshot": {
+        "bytes": 275211,
+        "path": "20261115T062445Z-L3-ba6bb7/run.json",
+        "sha256": "9c4f1dfdc5e21fa4d400321a2390d6e1a921e4a36e80a7d32d5ec43b7c234992"
+      }
+    },
+    {
+      "acceptance_status": "passed",
+      "actual_final_status": "completed",
+      "failures": [],
+      "published_snapshot": {
+        "bytes": 11675,
+        "path": "20261115T063556Z-L1-1e03cf.json",
+        "sha256": "d3ddb5239d69301cc6e157fb6280b9e6f1faa3291d6dfdbf985a434c660257a1"
+      },
+      "run_id": "20261115T063556Z-L1-1e03cf",
+      "source_snapshot": {
+        "bytes": 102302,
+        "path": "20261115T063556Z-L1-1e03cf/run.json",
+        "sha256": "d25198911feb33674a760ae75f6cfcec2121b8a548306b0b6df29e5fa90405cf"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:receipt_integrity",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 17195,
+        "path": "20261115T063556Z-L2-a3ad74.json",
+        "sha256": "cb645d2b207dcf68c04f3e2217c06328d5ea4cf282782db0652124a59354324d"
+      },
+      "run_id": "20261115T063556Z-L2-a3ad74",
+      "source_snapshot": {
+        "bytes": 197044,
+        "path": "20261115T063556Z-L2-a3ad74/run.json",
+        "sha256": "64699a9c4915e5e0097e11da9e22b36b9a439285d5de0a1c8b558f7abd58e70e"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 16459,
+        "path": "20261115T063556Z-L3-14d6f5.json",
+        "sha256": "588eea22de3957b9efe208392dd8e6c5c152b1fe48f958855f129c2e5724fb02"
+      },
+      "run_id": "20261115T063556Z-L3-14d6f5",
+      "source_snapshot": {
+        "bytes": 296478,
+        "path": "20261115T063556Z-L3-14d6f5/run.json",
+        "sha256": "433f17e174dab88c72bed92b621e145e0dd18399089b424f149febc6fd11a97d"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 19511,
+        "path": "20261115T064204Z-L2-3f89c4.json",
+        "sha256": "6f35c5a2d1fec8093ae84a39ac54185bc286d87e65038bfd92dab57e44aecba9"
+      },
+      "run_id": "20261115T064204Z-L2-3f89c4",
+      "source_snapshot": {
+        "bytes": 220637,
+        "path": "20261115T064204Z-L2-3f89c4/run.json",
+        "sha256": "1734274dae3875484f5e5cba441f51ba4db05468b8b33ec8d03d404a0ca45f68"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:receipt_integrity",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 17204,
+        "path": "20261115T064204Z-L3-1288e8.json",
+        "sha256": "afc92c6de053ceb2d70922fbc9a8733c5600864b6597d765f68045fd20e2bbbc"
+      },
+      "run_id": "20261115T064204Z-L3-1288e8",
+      "source_snapshot": {
+        "bytes": 329172,
+        "path": "20261115T064204Z-L3-1288e8/run.json",
+        "sha256": "3821cd2b86726fd1bfd4c19e03098132935c80a6b0f75e2fd2bf0520551fbf7e"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_worker_concurrency",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 9549,
+        "path": "20261115T073729Z-L1-1be482.json",
+        "sha256": "8a10a000246422e633094a541be9bcfeb23332aa776900f61fc1745a5052a700"
+      },
+      "run_id": "20261115T073729Z-L1-1be482",
+      "source_snapshot": {
+        "bytes": 94314,
+        "path": "20261115T073729Z-L1-1be482/run.json",
+        "sha256": "40106c3502a7161c8927bcf956b7b91e9c8880cb497e0950c9cedfeda4c448d8"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "published_snapshot": {
+        "bytes": 11546,
+        "path": "20261115T073745Z-L2-00761c.json",
+        "sha256": "5f72d52551882fd769e0ddeb5710d80a31c6819dac27a3d7dc69d44a8a2b3c92"
+      },
+      "run_id": "20261115T073745Z-L2-00761c",
+      "source_snapshot": {
+        "bytes": 196459,
+        "path": "20261115T073745Z-L2-00761c/run.json",
+        "sha256": "492765a757f01b12d0f2a9113805ce49d633bd6df40dcf87c9d0cbd1d846afd0"
+      }
+    },
+    {
+      "acceptance_status": "failed",
+      "actual_final_status": "running",
+      "failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:research_math_architecture_coding_experiment_review",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:real_numeric_ast_receipts",
+        "acceptance_failed:experiment_specialist_execution",
+        "acceptance_failed:coding_specialist_artifact",
+        "acceptance_failed:independent_fixed_semantic_suite",
+        "acceptance_failed:router_completion_summary",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "published_snapshot": {
+        "bytes": 16633,
+        "path": "20261115T073825Z-L3-29cb09.json",
+        "sha256": "2642cfb924612a794f4b32e5c8066b310940fc915e13636fae4d627b74d8d0fc"
+      },
+      "run_id": "20261115T073825Z-L3-29cb09",
+      "source_snapshot": {
+        "bytes": 240238,
+        "path": "20261115T073825Z-L3-29cb09/run.json",
+        "sha256": "fc24b07b6e802f55767111d27f1c1cb859d288facbd441d954de4d5bec825b09"
+      }
+    }
+  ],
+  "schema_version": 1
+}

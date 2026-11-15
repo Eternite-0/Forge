@@ -1,0 +1,120 @@
+{
+  "generated_at": "2026-11-15T09:10:38.642762+00:00",
+  "audit_script_sha256": "97e257781c0623e08339991c47277c7af157e5aadee11e5b38472e088fcfad1c",
+  "read_mode": "SQLite URI mode=ro; PRAGMA query_only=ON; explicit BEGIN",
+  "read_snapshot_total_changes": 0,
+  "original_result_sha256": "b4b9eebedf5d686192528c44e6dee565c4e7082fc5221f56d594f0b79b520c08",
+  "fixed_input_sha256": "cc22e95155f4aa28663c703e909f6103561ed2a98a2a375ddd3a3250957bc4f5",
+  "database_sha256": "1a90ff44edaa46cb6c2fbc0028644e64130c4a6e79115951924159b41ccf3e00",
+  "original_probe_passed": false,
+  "independent_source_retrieval_checks_passed": true,
+  "checks": {
+    "original_probe_result_preserved_false": true,
+    "candidate_rows_valid": true,
+    "all_candidates_on_original_bounded_index_page": true,
+    "six_candidate_snapshot_exact": true,
+    "all_four_fixture_snapshots_unchanged": true,
+    "all_three_selected_items_exact_target_sources": true,
+    "source_messages_exact_row_bytes_and_hashes": true,
+    "both_seeded_quests_still_proposed": true,
+    "lexical_index_has_no_match": true,
+    "one_settled_call_with_exact_usage": true,
+    "read_snapshot_never_mutated": true
+  },
+  "original_oracle_defect": "Fixture candidate_snapshots/expected_refs enumerate four manually seeded refs. sync_sources also indexed two literal global constraints. Semantic selection used the actual six-item page; the selected target global constraint was absent from the fixture map and converted to null by verify().",
+  "candidate_snapshot_sha256": "713287d72f61f2db2664a222409c7a3c515a97e6c65ddd9e52f346cc66697789",
+  "fixture_candidate_count": 4,
+  "actual_candidate_count": 6,
+  "refs_omitted_from_fixture": [
+    "constraint:04fb50f401cbddfb9d5613b23f94b9d131b2f66bea7318362ff5b74f34b08489",
+    "constraint:353e6b242f49bfcc5405e9d9fecd6c2e6d7cd338cd332755297c314339143460"
+  ],
+  "returned_refs_independently_resolved": [
+    "constraint:f90d75a04e5748f672352038df5c7f008645029dd0842cb0dd534c728f08f740",
+    "constraint:04fb50f401cbddfb9d5613b23f94b9d131b2f66bea7318362ff5b74f34b08489",
+    "memory:cf3d2fcbcbf24069b4e06e5a5faa1e3c"
+  ],
+  "selected_checks": [
+    {
+      "ref": "constraint:f90d75a04e5748f672352038df5c7f008645029dd0842cb0dd534c728f08f740",
+      "exact_reconstructed_item": true,
+      "target_source_only": true,
+      "row_sha256": "46c87bac0da4909bd238ece847e37bd8e99fac4ad3392348380f8364be5dfbb2"
+    },
+    {
+      "ref": "constraint:04fb50f401cbddfb9d5613b23f94b9d131b2f66bea7318362ff5b74f34b08489",
+      "exact_reconstructed_item": true,
+      "target_source_only": true,
+      "row_sha256": "da9370bc398711cca51c427d3700244fa5532a7e370d79aa7bf30de2565fd3fc"
+    },
+    {
+      "ref": "memory:cf3d2fcbcbf24069b4e06e5a5faa1e3c",
+      "exact_reconstructed_item": true,
+      "target_source_only": true,
+      "row_sha256": "d6bf1adebb914716527670cde4bbb9f7ba9d0e19acf38c3fb0d87674f875c2cc"
+    }
+  ],
+  "candidate_provenance": [
+    {
+      "ref": "constraint:f90d75a04e5748f672352038df5c7f008645029dd0842cb0dd534c728f08f740",
+      "source_message_id": "msg_ec00309135e2",
+      "source_row_sha256": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+      "source_row_bytes": 248,
+      "constraint_row_sha256": "46c87bac0da4909bd238ece847e37bd8e99fac4ad3392348380f8364be5dfbb2",
+      "valid": true
+    },
+    {
+      "ref": "constraint:13303f7220252cd0b58dd7f73b2a753f4831e549254a0c0181028259515cce3c",
+      "source_message_id": "msg_f8b147ff3ccd",
+      "source_row_sha256": "cff4573818292e61fd27f24d86fda079490ea399426f473ec97e900ee2b5d601",
+      "source_row_bytes": 217,
+      "constraint_row_sha256": "af5b05cb65fdd98c2850d880ac0a48bfab9341cbb1f05678c5ebfde15fd9feef",
+      "valid": true
+    },
+    {
+      "ref": "constraint:04fb50f401cbddfb9d5613b23f94b9d131b2f66bea7318362ff5b74f34b08489",
+      "source_message_id": "msg_ec00309135e2",
+      "source_row_sha256": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+      "source_row_bytes": 248,
+      "constraint_row_sha256": "da9370bc398711cca51c427d3700244fa5532a7e370d79aa7bf30de2565fd3fc",
+      "valid": true
+    },
+    {
+      "ref": "constraint:353e6b242f49bfcc5405e9d9fecd6c2e6d7cd338cd332755297c314339143460",
+      "source_message_id": "msg_f8b147ff3ccd",
+      "source_row_sha256": "cff4573818292e61fd27f24d86fda079490ea399426f473ec97e900ee2b5d601",
+      "source_row_bytes": 217,
+      "constraint_row_sha256": "ecd643988cffb5047bc93b6f64d449f3af207cdd3be52c69459bb486811ca550",
+      "valid": true
+    },
+    {
+      "ref": "memory:cf3d2fcbcbf24069b4e06e5a5faa1e3c",
+      "source_message_id": "msg_ec00309135e2",
+      "source_row_sha256": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+      "source_row_bytes": 248,
+      "memory_row_sha256": "d6bf1adebb914716527670cde4bbb9f7ba9d0e19acf38c3fb0d87674f875c2cc",
+      "valid": true
+    },
+    {
+      "ref": "memory:a267b82834c04731b636a5eeb55a86bd",
+      "source_message_id": "msg_f8b147ff3ccd",
+      "source_row_sha256": "cff4573818292e61fd27f24d86fda079490ea399426f473ec97e900ee2b5d601",
+      "source_row_bytes": 217,
+      "memory_row_sha256": "b77d145e2f25b6ee7514c55152b9245bd21910b9c8cccb27ca37f806ebe0ad5c",
+      "valid": true
+    }
+  ],
+  "source_message_checks": {
+    "msg_ec00309135e2": true,
+    "msg_f8b147ff3ccd": true
+  },
+  "quest_states": {
+    "quest_b05d4a0bc6ef": "proposed",
+    "quest_513005281789": "proposed"
+  },
+  "limitations": [
+    "This new independent interpretation preserves the original false verdict and does not rewrite or relabel it.",
+    "One bounded live semantic-selection sample with two seeded proposed Quests; no successful autonomous execution, multi-Quest execution, generalized retrieval quality or upstream model identity is established.",
+    "Semantic ranking returns duplicate representations of the same source. Distinct IDs are valid, but no source-diversity or deduplication claim is made."
+  ]
+}

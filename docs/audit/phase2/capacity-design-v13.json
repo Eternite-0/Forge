@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "status": "design_only_no_planner_preflight_implementation",
+  "scope": "Read-only analysis of retained v12 failures; v13 implementation is limited to a separately reviewed capacity preview.",
+  "observation_method": {
+    "sqlite": "URI mode=ro with explicit BEGIN; no Store initialization",
+    "packet": "Existing _capacity_packet and _review_messages with a read-only Store facade; no Provider generation or payload admission",
+    "cost_unit": "UTF-8 bytes; model usage counters are reported tokens and are not byte estimates",
+    "wire_measurement": "Compact JSON of _review_messages using the literal placeholder system content SYSTEM; excludes the actual review policy, schema and Provider payload framing"
+  },
+  "runs": [
+    {
+      "level": 2,
+      "workspace": ".local/phase2/ws-20261115T063556Z-L2-a3ad74",
+      "run_id": "run_7932f0527e66",
+      "node_key": "draft-report",
+      "packet_sha256": "29cb5b35d1ac9f431064d9ffa137d92aa8c0717edebf51690725207f411f3575",
+      "packet_bytes": 54421,
+      "wire_placeholder_system_bytes": 51017,
+      "raw_field_bytes": {
+        "receipts": 23997,
+        "artifacts": 12699,
+        "delivery": 4038,
+        "user_constraints": 7998,
+        "original_request": 2381,
+        "original_goal": 722,
+        "objective": 406,
+        "contract": 1454
+      },
+      "projected_field_bytes": {"receipts": 1332, "user_constraints": 2997},
+      "artifact_file_bytes": 12784,
+      "artifact_canonical_content_bytes": 12461,
+      "artifact_content_components": {
+        "report_id": 17,
+        "scope": 152,
+        "sources": 1558,
+        "responsibility_comparison": 3768,
+        "cross_component_risks": 3606,
+        "recommendations": 2448,
+        "limitations": 790
+      },
+      "delivery_components": {
+        "summary": 632,
+        "findings": 1634,
+        "decisions": 463,
+        "artifacts": 29,
+        "evidence_references": 273,
+        "unresolved_issues": 499,
+        "confidence": 4,
+        "next_actions": 380
+      },
+      "exact_long_string_duplicate_ideal_saving_bytes": 406,
+      "delivery_strings_at_least_64_bytes_found_exactly_or_as_substrings_in_artifact": 0,
+      "json_string_encoding_extra_bytes": {"artifact": 384, "delivery": 74},
+      "original_goal_equals_or_is_substring_of_original_request": false,
+      "input_inventory": {"manifest_bytes": 1267, "source_file_bytes": 28101, "source_file_count": 3},
+      "planner_budget": {
+        "global_cap": 360000,
+        "node_allocations": {"source-analysis": 130000, "draft-report": 90000, "final-report": 90000},
+        "node_sum": 310000,
+        "unallocated_coordination_allowance": 50000
+      },
+      "execution": {
+        "source_analysis_worker_reported_tokens": 26244,
+        "source_analysis_review_reported_tokens": 13625,
+        "draft_worker_reported_tokens": 37510,
+        "draft_local_token_spent": 52939,
+        "draft_local_remaining": 37061,
+        "draft_local_counter_difference_from_worker_reported_tokens": 15429,
+        "counter_difference_explanation_status": "not established by this read-only analysis; do not infer an unsettled Gateway attempt",
+        "blocked_event_seq": 46,
+        "blocked_reason": "review_contract_or_budget_failed",
+        "fresh_model_review_started_for_draft": false,
+        "json_validator_evidence_recorded": true
+      }
+    },
+    {
+      "level": 3,
+      "workspace": ".local/phase2/ws-20261115T063556Z-L3-14d6f5",
+      "run_id": "run_035942f959d8",
+      "node_key": "research",
+      "packet_sha256": "f6d0fd266015410da021b87f4e9e8d9c91c005a3aef626e12b011ee29f15005a",
+      "packet_bytes": 68149,
+      "raw_packet_cap": 65536,
+      "wire_placeholder_system_bytes": 65302,
+      "raw_field_bytes": {
+        "receipts": 34631,
+        "artifacts": 12563,
+        "delivery": 6953,
+        "user_constraints": 7725,
+        "original_request": 3177,
+        "original_goal": 812,
+        "objective": 411,
+        "contract": 1159
+      },
+      "projected_field_bytes": {"receipts": 4851, "user_constraints": 2991},
+      "artifact_file_bytes": 12593,
+      "artifact_canonical_content_bytes": 12329,
+      "artifact_content_components": {
+        "summary": 730,
+        "findings": 6962,
+        "decisions": 955,
+        "artifacts": 25,
+        "evidence_references": 1855,
+        "unresolved_issues": 937,
+        "confidence": 3,
+        "next_actions": 738
+      },
+      "delivery_components": {
+        "summary": 844,
+        "findings": 3020,
+        "decisions": 586,
+        "artifacts": 25,
+        "evidence_references": 1086,
+        "unresolved_issues": 697,
+        "confidence": 3,
+        "next_actions": 568
+      },
+      "exact_long_string_duplicate_ideal_saving_bytes": 532,
+      "delivery_strings_at_least_64_bytes_found_exactly_or_as_substrings_in_artifact": 0,
+      "json_string_encoding_extra_bytes": {"artifact": 108, "delivery": 74},
+      "original_goal_equals_or_is_substring_of_original_request": false,
+      "input_inventory": {"manifest_bytes": 1278, "source_file_bytes": 27481, "source_file_count": 3},
+      "planner_budget": {
+        "global_cap": 630000,
+        "node_allocations": {"research": 120000, "math": 55000, "architecture": 50000, "coding": 110000, "experiment": 90000, "report": 85000, "review": 65000},
+        "node_sum": 575000,
+        "unallocated_coordination_allowance": 55000,
+        "coordination_fraction_below_prompt_ten_percent": true
+      },
+      "execution": {
+        "worker_reported_tokens": 62626,
+        "review_reported_tokens": 17136,
+        "local_token_spent": 79762,
+        "local_remaining": 40238,
+        "fresh_review_verdict": "NEEDS_REVISION",
+        "revision_delivery_recorded": true,
+        "capacity_blocked_event_seq": 42,
+        "capacity_blocked_reason": "review_capacity_unrepairable",
+        "fixed_packet_floor": 48871,
+        "fixed_input_floor": 48956,
+        "revision_receipt_allowance": 1125,
+        "minimum_verdict_tokens": 1024,
+        "actual_capacity_revision_started": false
+      }
+    }
+  ],
+  "findings": [
+    "Existing constraint projection already removes about five kilobytes of duplicate representation in each run.",
+    "The original goal is distinct text, so deleting it by treating the original request as an exact substitute is not lossless.",
+    "Artifact and delivery prose overlap semantically but no measured delivery string of at least 64 bytes occurs exactly or as a substring in the artifact. Removing such prose would change evidence content.",
+    "The ideal duplicate-string savings are upper bounds before reference metadata; they are too small to resolve the retained L3 capacity deficit.",
+    "The raw packet cap is checked before wire projection; improving only _review_messages does not remove a raw-packet rejection.",
+    "A future artifact-writing contract can place complete conclusions once in the artifact and keep the delivery to concise status and exact artifact/receipt references. Historical content must remain intact."
+  ],
+  "planner_preflight_design": {
+    "implementation_status": "not implemented; explicitly deferred beyond the current preview scope",
+    "current_gap": "Planner sees original request text and model inventory, but not verified input-file byte metadata or structured per-node source assignments.",
+    "required_new_contract": "Optional required_input_paths on new node proposals, defaulting to an empty list for legacy/manual compatibility; new autonomous plans bind paths to a verified inventory or declared predecessor artifacts.",
+    "inventory": "Collect bounded local paths explicitly supplied by the user; apply the existing workspace/sensitive-path/file limits; compute actual bytes, canonical JSON-string bytes and SHA-256. Treat manifest path/bytes/hash entries as untrusted claims and recheck them. Do not use repository source_bytes as the size of an excerpt input.",
+    "node_checks": [
+      "Calculate an immutable review-input floor using the same representation and Provider payload accounting as runtime; include original contracts, selected source receipts and tool/schema framing.",
+      "Require a complete Worker admission envelope plus initial review and, when the approved contract permits a correction, one revision-request envelope and a second complete review. Report each component. This is a declared planning reserve policy, not a theorem about unknown model usage.",
+      "Reject a projected single request that cannot fit the selected context. Return the numeric violation through the existing one-repair Planner loop; do not silently shrink assigned requirements or increase an allowance.",
+      "Resolve output sizes only from explicit new artifact/delivery contracts. Unknown sizes remain unknown; do not invent compactness guarantees or truncate required final reports.",
+      "Recheck against the selected approved model and role contract at composition/admission because Planner inventory alone does not choose the final model."
+    ],
+    "global_checks": [
+      "For each applicable Gateway scope, compute charged plus unresolved reserved plus opening tokens using the existing ledger accounting; remaining is the minimum residual scope allowance.",
+      "Require all declared node allocations plus an explicit coordination reserve to fit the remaining approved plan/operator cap. Already incurred Planner/Composer/Router cost cannot be treated as free.",
+      "If the envelopes do not fit, reject/replan within the same original cap. Preserve explicitly requested specializations and obtain the existing plan/team approvals for every changed contract.",
+      "The runtime Gateway remains the authoritative transactional admission check; preview or preflight grants no budget, tool scope or PASS."
+    ],
+    "meaningful_tests": [
+      "Changing input Unicode/quote/backslash bytes changes the computed cost through actual Provider serialization rather than character count.",
+      "Tampered manifests, mismatched sizes/hashes, path escape and sensitive paths fail without a Provider call or proposal write.",
+      "An underfunded source-heavy node is rejected despite a valid global sum; a corrected allocation within the same cap succeeds after exactly one bounded Planner repair.",
+      "Unknown output sizes and future predecessor artifacts are reported as unknown, never zero or guaranteed feasible.",
+      "Model-window reduction between plan and composition invalidates the feasibility result without modifying historical approved contracts.",
+      "Concurrent unresolved Gateway reservations count against the global floor; no reservation is refunded, settled or increased by read-only estimation.",
+      "Legacy/manual proposals and historical PASS packet hashes remain byte-for-byte compatible when the new contract is absent."
+    ]
+  },
+  "preview_refactor_review": {
+    "status": "read_only_checks_passed_at_observed_source_state; not an implementation approval or task acceptance",
+    "scope": "Shared assignment, receipt, artifact and request-shape collectors plus Worker feedback integration",
+    "retained_v12_packets": [
+      {"level": 2, "raw_packet_hash_unchanged": true, "configured_gateway_native_input_bytes": 54123, "sqlite_total_changes": 0},
+      {"level": 3, "raw_packet_hash_unchanged": true, "configured_gateway_native_input_bytes": 68412, "sqlite_total_changes": 0}
+    ],
+    "gateway_measurement_configuration": "Local payload construction only: openai_compatible, supports_json_schema=true, reasoning_effort=none, placeholder example.invalid base URL and credential reference. No credential resolution, Provider generate, admission or HTTP call occurred. These reproduce shape accounting, not a new live execution.",
+    "checks": [
+      "Refactored complete _capacity_packet preserved both previously captured raw hashes.",
+      "Configured Gateway payload bytes equal preview native-input bytes for both complete retained failures.",
+      "Real SQLite URI mode=ro BEGIN prohibited writes; total_changes remained zero after packet and preview calls.",
+      "Running preview uses a separate current-approved assignment path and null delivery/event placeholders; complete _packet keeps its original result provenance and state gates.",
+      "Unsettled tools/intents/model usage make preview unavailable rather than usable capacity; complete review still performs independent admission.",
+      "Worker feedback contains numeric/advisory measurements and is serialized before the existing complete-request reservation calculation."
+    ],
+    "findings": [],
+    "limitations": "This independent review did not execute or duplicate the in-progress focused/full suites and does not replace those checks. Running preview estimates are explicitly neither lower nor upper bounds, since later content can switch the wire representation."
+  },
+  "limitations": [
+    "Component byte counts serialize each value independently and omit its parent key/separator overhead; component sums are not full packet totals.",
+    "Duplicate scanning considers exact string leaves of at least 64 UTF-8 bytes after the existing wire projection. It is not a semantic equivalence claim or a general compression bound.",
+    "The placeholder-system wire totals are comparative diagnostics, not exact Provider admission reservations.",
+    "No original source bodies, user request bodies, credentials, or live response prose are copied into this report.",
+    "This report does not establish task acceptance or make any retained failure pass."
+  ]
+}

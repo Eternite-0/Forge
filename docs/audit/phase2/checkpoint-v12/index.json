@@ -1,0 +1,55 @@
+{
+  "reason": "Preserve byte-identical v12 verification and documentation before the authorized continued acceptance round. Original artifacts and verification remain in place.",
+  "files": [
+    {
+      "original_path": "docs/audit/phase2/verification.json",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/audit/phase2/verification.json",
+      "sha256": "1e6e36e35cb5b2934e06727a517c95bc3d6d1d6929cdc3c3808318d44a251536"
+    },
+    {
+      "original_path": "README.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/README.md",
+      "sha256": "0aabb2e9104858dbf54fd32380ec16278c880d6d21cb2e15b50341d84ab9072f"
+    },
+    {
+      "original_path": "docs/STATUS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/STATUS.md",
+      "sha256": "222f4e8111fc16a6000aafac4a07a1747607b458ca39ec6c97934035e5c357ac"
+    },
+    {
+      "original_path": "docs/QUALITY_GATES.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/QUALITY_GATES.md",
+      "sha256": "6f93e133d157f7bb3b3b063acc146cc4abeaf5e58bb05e3594d852080c0de38a"
+    },
+    {
+      "original_path": "docs/ROADMAP.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/ROADMAP.md",
+      "sha256": "2c80fb19642ab8ab93e40a647c953246e8f901624ec1ae404598e8c29bf42b84"
+    },
+    {
+      "original_path": "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "sha256": "c64f98c820dd36c1b20b86a66e2d41e50a5fdb1c139bdac67d9274f222780410"
+    },
+    {
+      "original_path": "docs/PHASE2_STATUS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/PHASE2_STATUS.md",
+      "sha256": "9d5a6a5503ba649ffb2eb362f9ad0c432545418be1b8ed5fc10fb3bab88d0fb7"
+    },
+    {
+      "original_path": "docs/PHASE2_EXPERIMENTS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/PHASE2_EXPERIMENTS.md",
+      "sha256": "44fd05df9534291c287705b997b98e6b7d4eae1d318d1c06e349cc735cdb58d5"
+    },
+    {
+      "original_path": "docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "sha256": "2a06a5ae3aa9c697a7b8b3e7b9c0af7459fd41f5db90df9948f4825a27bf5562"
+    },
+    {
+      "original_path": "docs/audit/phase2/execution-chain-audit.md",
+      "saved_path": "docs/audit/phase2/checkpoint-v12/docs/audit/phase2/execution-chain-audit.md",
+      "sha256": "a7892368aec900312a8573785fbb286841444abca8b36fcba27ef334d0f4a565"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.23s
+     Running unittests src\lib.rs (target\debug\deps\forge_desktop-4af82aa8518e5f5a.exe)
+
+running 17 tests
+test core_host::tests::isolated_embedded_core_handshake_restart_and_exit ... ignored, requires packaged runtime and isolated root
+test core_host::tests::owned_job_terminates_descendant_process ... ignored, requires packaged runtime and isolated root
+test core_host::tests::hmac_matches_rfc4231 ... ok
+test tests::bootstrap_rejects_unscoped_credentials ... ok
+test tests::framed_messages_roundtrip_and_reject_oversized ... ok
+test tests::external_url_restricts_scheme_and_userinfo ... ok
+test core_host::tests::normalization_does_not_create_missing_workspace ... ok
+test core_host::tests::interrupted_maintenance_remains_unknown_after_restart ... ok
+test workspace_files::tests::refuses_links_and_preserves_image_and_pdf_bytes ... ok
+test core_host::tests::owned_job_termination_waits_for_active_processes ... ok
+test workspace_files::tests::confines_paths_and_handles_text_binary_and_limits ... ok
+test core_host::tests::acknowledgement_preserves_unknown_outcome_and_audit ... ok
+test tests::temporary_windows_credential_roundtrip ... ok
+test workspace_files::tests::diffs_initial_staged_untracked_and_binary_files_from_actual_content ... ok
+test workspace_files::tests::reads_git_changes_without_mutating_index_and_handles_rename ... ok
+test workspace_files::tests::preserves_staged_diff_when_worktree_matches_head_without_mutating_index ... ok
+test workspace_files::tests::scopes_nested_workspace_and_uses_literal_file_paths ... ok
+
+test result: ok. 15 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 2.19s

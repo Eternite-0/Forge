@@ -1,0 +1,210 @@
+{
+  "provenance": "Recorded actual Router decisions from preserved failed V17 strict runs; replayed only as offline regression fixtures. No live Planner acceptance is implied.",
+  "cases": [
+    {
+      "level": 1,
+      "observed_run": "ws-20261115T092655Z-L1-c3a404",
+      "decision": {
+        "rationale": "Request needs governed file reads plus a review acceptance step and exceeds single chat answer; one background Worker suffices per user's explicit scope. No existing quests match, so create_quest with tight experiment limits preserved.",
+        "confidence": 0.93,
+        "constraints": [
+          "read-only analysis; do not modify inputs",
+          "use only supplied local input files and successful governed tools as evidence",
+          "no network or shell commands",
+          "cite source_path, exact line numbers and source_sha256",
+          "state limitations instead of inventing missing behavior; note truncated=true excerpts",
+          "any new output paths only under work/; file_write is create-only",
+          "include file_revise in any writing node needing review corrections",
+          "never revise inputs or predecessor files",
+          "do not claim a model summary proves task completion",
+          "one background Worker, not an expanded team"
+        ],
+        "next_action": "Planner: create the single-Worker analysis Quest starting at manifest.json, with delivery_review acceptance and the stated limits.",
+        "needs_user_help": false,
+        "task_kind": "single_step",
+        "blockers": [],
+        "intent": "create_quest",
+        "reply": "New read-only Quest: I'll run one background Worker to analyze the model-registry inventory and online observation implementation, then use delivery_review for independent acceptance. It will start from inputs/scenario-1/manifest.json, cite exact source_path/line/sha256 evidence, rank the top substantiated weaknesses (distinguishing confirmed defects from design limitations), and return the eight structured delivery fields. No files will be written unless you want an artifact.",
+        "title": "Analyze model-registry inventory and online observation for top weaknesses",
+        "goal": "Read-only analysis of inputs/scenario-1/01-registry.json and 02-model_intelligence.json (starting from manifest.json): identify the three highest-priority substantiated weaknesses, rank practical impact, propose a small fix and meaningful verification for each, distinguish confirmed defects from design limitations, and report fewer than three if not substantiated. Deliver via structured result with real evidence references (source_path, exact line numbers, source_sha256) and independent delivery_review; no file write required.",
+        "quest_id": null,
+        "candidates": []
+      }
+    },
+    {
+      "level": 2,
+      "observed_run": "ws-20261115T092655Z-L2-350db9",
+      "decision": {
+        "rationale": "New multi-step research/writing/review task with no existing Quest to continue; requires governed file reads and artifact creation, so it warrants a Quest rather than a chat answer.",
+        "confidence": 0.93,
+        "constraints": [
+          "Use only the supplied local input files and successful governed tools as evidence",
+          "Keep inputs unchanged; do not use network or shell commands",
+          "Only create new output paths under work/",
+          "file_write is create-only: inspect/compute before writing",
+          "Explicitly include file_revise in any writing node that may need review corrections; it can revise only that same run's own artifact",
+          "Never revise inputs or predecessor files",
+          "Return all eight structured delivery fields and real evidence references",
+          "Do not claim a model summary proves task completion",
+          "Final JSON report must be work/l2-report.json; intermediate reports need distinct paths",
+          "Use json_review:<actual-output-path> for report artifacts and delivery_review for read-only analysis nodes"
+        ],
+        "next_action": "Planner should design 3-4 nodes (research/architecture, writing, independent review) within the stated limits, starting with inputs/scenario-2/manifest.json and citing lines plus SHA-256.",
+        "needs_user_help": false,
+        "task_kind": "multi_step",
+        "blockers": [],
+        "intent": "create_quest",
+        "reply": "Creating a durable Quest for the Level 2 analysis: read inputs/scenario-2/manifest.json first, then the Router, Worker runtime and team-composition excerpts, and deliver work/l2-report.json with citations, responsibility comparison, ≥2 cross-component risks and prioritized recommendations with acceptance criteria. Up to 4 nodes, 2 concurrent, depth 1, 1200s and 360k tokens; read-only inputs, create-only writes under work/.",
+        "title": "L2 cross-component architecture analysis of FORGE Router, Worker and team composition",
+        "goal": "Research the supplied FORGE Router, Worker and team-composition source excerpts and compare their architectural responsibilities, execution/approval boundaries, recovery behavior and evidence requirements; produce a technical JSON analysis report with source citations, a responsibility comparison, at least two concrete cross-component risks or limitations, and prioritized recommendations with verifiable acceptance criteria, written to work/l2-report.json with any intermediate reports at distinct paths.",
+        "quest_id": null,
+        "candidates": []
+      }
+    },
+    {
+      "level": 3,
+      "observed_run": "ws-20261115T092655Z-L3-bf61b1",
+      "decision": {
+        "rationale": "A durable multi-step build with tool use, artifacts and independent review, so a new Quest is required; no existing Quest matches and the target is unambiguous.",
+        "confidence": 0.9,
+        "constraints": [
+          "Use only the supplied local input files and successful governed tools as evidence",
+          "Cite source_path, exact line numbers and source_sha256",
+          "Keep inputs unchanged; no network or shell commands; stay within approved tool scopes",
+          "Only create new output paths under work/",
+          "file_write is create-only: inspect/compute before writing",
+          "Include file_revise in any writing node that may need review corrections; never revise inputs or predecessor files",
+          "Do not claim a model summary proves task completion",
+          "Return all eight structured delivery fields and real evidence references",
+          "No imports, Boolean and/or, function definitions or arbitrary Python execution in numeric_ast",
+          "Run numeric_ast against in-memory candidate source before create-only file_write; carry source/evidence references across Worker dependencies"
+        ],
+        "next_action": "Planner drafts the <=7-node DAG across the six Worker specializations, then Dispatch begins research from manifest.json.",
+        "needs_user_help": false,
+        "task_kind": "multi_step",
+        "blockers": [],
+        "intent": "create_quest",
+        "reply": "Starting a new Quest for the capability-aware scheduler task: a 6-specialization DAG (research, mathematics, architecture, coding, experiment, independent review) within your limits (max 7 nodes/members, concurrency 2, depth 1, 630k tokens, 1800s, 16 steps/tool calls, 3 review rounds), producing work/l3-scheduler.py, work/l3-report.json and distinct work/l3-* intermediates.",
+        "title": "Bounded capability-aware scheduler for two candidates",
+        "goal": "Read inputs/scenario-3/manifest.json first, then the local source files 01-numeric_harness.json, 02-tool_domain.json and 03-team_composition.json. Study the real numeric_harness implementation and tool contracts, derive eligible/cost selection logic (0 for A, 1 for B, -1 for neither; minimize cost among eligible; tie goes to A), define the artifact/interface, implement it in the permitted numeric_ast subset only, run varied boundary experiments via numeric_ast with real receipts, and analyze results. Deliver source work/l3-scheduler.py (top-level result assignment or return, not a function) with semantic_numeric:scheduler-v1 tag, work/l3-report.json final JSON report, and distinct work/l3-* intermediates; plan the DAG across research, mathematics, architecture, coding, experiment and independent review with no more than seven execution nodes.",
+        "quest_id": null,
+        "candidates": []
+      }
+    }
+  ],
+  "model_profile": {
+    "id": "deepseek-v4.1-flash",
+    "provider": "wb-local",
+    "display_name": "DeepSeek-V4.1-Flash (local wb-in)",
+    "enabled": true,
+    "model_id": "deepseek-v4.1-flash",
+    "version": "wb-in",
+    "endpoint": null,
+    "capabilities": {},
+    "capability_measurements": {
+      "coding": {
+        "value": 70.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "mathematics": {
+        "value": 65.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "architecture": {
+        "value": 68.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "research": {
+        "value": 62.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "planning": {
+        "value": 66.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "writing": {
+        "value": 68.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "design": {
+        "value": 50.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "tool_calling": {
+        "value": 70.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      },
+      "instruction_following": {
+        "value": 70.0,
+        "source": "user_override",
+        "benchmark_version": null,
+        "n_samples": null,
+        "observed_at": null,
+        "confidence": null
+      }
+    },
+    "performance_measurements": {},
+    "context_window": 65536,
+    "max_output_tokens": 8192,
+    "tool_calling_support": {
+      "supported": true,
+      "source": "user_override"
+    },
+    "structured_output_support": {
+      "supported": true,
+      "source": "user_override"
+    },
+    "input_cost_per_million": null,
+    "output_cost_per_million": null,
+    "cached_input_cost_per_million": null,
+    "currency": null,
+    "tokens_per_second": null,
+    "ttft_seconds": null,
+    "latency_p50_seconds": null,
+    "latency_p95_seconds": null,
+    "reliability": null,
+    "timeout_rate": null,
+    "health": null,
+    "custom_attributes": {
+      "limits_source": "operator_ceiling_not_actual_maximum",
+      "capability_source": "exploratory_prior_not_model_evaluation"
+    },
+    "quarantined_raw": null,
+    "quarantine_reason": null,
+    "provenance": {
+      "source": "user_override"
+    }
+  }
+}

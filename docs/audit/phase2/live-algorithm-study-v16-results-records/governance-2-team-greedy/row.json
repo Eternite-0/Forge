@@ -1,0 +1,148 @@
+{
+  "candidate": {
+    "answers": [
+      1,
+      1,
+      2
+    ],
+    "citations": [
+      {
+        "line_end": 3,
+        "line_start": 1,
+        "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+        "source_id": "semantics"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "1ac543284f687c986c5ee75d706476cef0487281c4bc165505ed54e36fcded3e",
+        "source_id": "streams"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "exact_identifier_binding",
+      "preserve_event_order"
+    ]
+  },
+  "case_id": "governance-2",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 2,
+  "domain": "approval_architecture",
+  "duration_seconds": 4.532413499982795,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "architect"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_09f6527448e8",
+      "receipt_id": "receipt_36c6fc393a31",
+      "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+      "source_id": "semantics"
+    },
+    {
+      "intent_id": "action_10a38bf94b69",
+      "receipt_id": "receipt_53635028a60b",
+      "sha256": "1ac543284f687c986c5ee75d706476cef0487281c4bc165505ed54e36fcded3e",
+      "source_id": "streams"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_e0fc30445b3b",
+      "duration_seconds": 2.249834499991266,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "b4c4303409a919dce4c330ccfad6d1cf685019e06b07ed77ac2e3bb1992dd700",
+      "response_sha256": "f7984217a756c565352de0cf966a1fafb09bd3b6de6a15bac9a53abfb50737c4",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 512,
+        "input_tokens": 666,
+        "output_tokens": 149
+      }
+    },
+    {
+      "call_id": "study_call_15f7c66c87c2",
+      "duration_seconds": 2.0738109000085387,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "ac19189d4e626927f284c4559c8c27ceddacb57fd28f440562eb8b1d24953be9",
+      "response_sha256": "94793029d5e8772bd2ccad1d9a536ac2a648041a5a3edb82cb866f98605f4346",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 843,
+        "output_tokens": 149
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_e0fc30445b3b",
+        "cost_charged": null,
+        "input_charged": 666,
+        "input_reserved": 3723,
+        "output_charged": 149,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_15f7c66c87c2",
+        "cost_charged": null,
+        "input_charged": 843,
+        "input_reserved": 4312,
+        "output_charged": 149,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1509,
+    "known_input_tokens": 1509,
+    "known_output_tokens": 298,
+    "model_calls": 2,
+    "output_tokens": 298,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "greedy"
+}

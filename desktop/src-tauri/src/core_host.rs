@@ -279,6 +279,7 @@ pub struct CoreHost {
     shared: Arc<Mutex<Shared>>,
     control: mpsc::Sender<Control>,
     pub namespace: String,
+    pub workspace_root: PathBuf,
     operation_dir: PathBuf,
     _app_mutex: OwnedHandle,
 }
@@ -322,11 +323,13 @@ impl CoreHost {
         let copy = shared.clone();
         let ns_copy = ns.clone();
         let operations_copy = operation_dir.clone();
+        let workspace_root = root.clone();
         thread::spawn(move || supervise(runtime, root, ns_copy, operations_copy, copy, rx));
         Ok(Self {
             shared,
             control: tx,
             namespace: ns,
+            workspace_root,
             operation_dir,
             _app_mutex: guard,
         })
@@ -1245,6 +1248,7 @@ mod tests {
             shared,
             control: tx,
             namespace: ns.clone(),
+            workspace_root: dir.clone(),
             operation_dir: dir.clone(),
             _app_mutex: app_mutex(&ns).unwrap(),
         };

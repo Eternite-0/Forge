@@ -1,0 +1,155 @@
+{
+  "candidate": {
+    "answers": [
+      1,
+      3,
+      -1
+    ],
+    "citations": [
+      {
+        "line_end": 2,
+        "line_start": 2,
+        "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+        "source_id": "machines"
+      },
+      {
+        "line_end": 2,
+        "line_start": 2,
+        "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+        "source_id": "jobs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "lowest_cost_then_id",
+      "explicit_no_candidate"
+    ]
+  },
+  "case_id": "schedule-1",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 1,
+  "domain": "integer_scheduling",
+  "duration_seconds": 6.075280999997631,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 1,
+  "remaining_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "math"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_366524da3574",
+      "receipt_id": "receipt_33ce068bf42f",
+      "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_a2fad909a8ab",
+      "receipt_id": "receipt_d5cc380cbe34",
+      "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_820362fbc1fd",
+      "duration_seconds": 2.6708625000028405,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "dde040f582e937b8945a2e11d2751e9ca103b218812c28ac9eb9cca07793f9c7",
+      "response_sha256": "1d783925a24ace23ffebc6462478f1c324d6bdc0973ba2bd46eaff5bce3e6c47",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 256,
+        "input_tokens": 511,
+        "output_tokens": 155
+      }
+    },
+    {
+      "call_id": "study_call_578bbcd73ca1",
+      "duration_seconds": 2.7125919999962207,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "d849147bb464366b26419399c5dca5c9992189c746beea62c90a07d87a7249f1",
+      "response_sha256": "68886ddd9eb2e7654846377e653105630942a8b8e680decabfc6c8cd54cbc715",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 698,
+        "output_tokens": 154
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_820362fbc1fd",
+        "cost_charged": null,
+        "input_charged": 511,
+        "input_reserved": 3089,
+        "output_charged": 155,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_578bbcd73ca1",
+        "cost_charged": null,
+        "input_charged": 698,
+        "input_reserved": 3672,
+        "output_charged": 154,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1209,
+    "known_input_tokens": 1209,
+    "known_output_tokens": 309,
+    "model_calls": 2,
+    "output_tokens": 309,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "dynamic_recomposition"
+}

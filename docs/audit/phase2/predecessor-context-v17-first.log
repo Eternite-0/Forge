@@ -1,0 +1,274 @@
+F.                                                                       [100%]
+================================== FAILURES ===================================
+__ test_complete_delivery_exchange_archives_and_reads_original_after_restart __
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-720/test_complete_delivery_exchang0')
+
+    def test_complete_delivery_exchange_archives_and_reads_original_after_restart(tmp_path):
+        store, manager, model, _, _, _, reader, expected = prepared(
+            tmp_path,
+            summary="Complete sourced analysis " + "中" * 380,
+            reader_criteria=["delivery_review"],
+            reader_write=False,
+        )
+        model.responses.extend(
+            [tool(TOOL_NAME, {"node_key": "producer"}, ordinal=index) for index in range(1, 4)]
+            + [response(delivery("Assessed all complete source claims."))]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            rows = connection.execute(
+                "SELECT * FROM worker_messages WHERE run_id=? AND ordinal IN (6,7) ORDER BY ordinal",
+                (reader["id"],),
+            ).fetchall()
+            assert _settled_receipted_exchange(store, connection, reader["id"], rows)
+            original = {
+                row["ordinal"]: row["message_json"]
+                for row in connection.execute(
+                    "SELECT ordinal,message_json FROM worker_messages WHERE run_id=?",
+                    (reader["id"],),
+                )
+            }
+            before_receipts = connection.execute("SELECT count(*) FROM action_receipts").fetchone()[0]
+        service = ContextService(store)
+>       compact = service.build_worker_context(
+            reader["id"], input_budget=6000, source_readback_available=True
+        )
+
+backend\tests\test_predecessor_context_v17.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.context_service.ContextService object at 0x00000182743558C0>
+run_id = 'run_9617eb958b25', input_budget = 6000
+source_readback_available = True
+
+    def build_worker_context(
+        self, run_id: str, *, input_budget: int, source_readback_available: bool = False
+    ) -> list[dict]:
+        if type(input_budget) is not int or input_budget <= 0:
+            raise DomainError("Invalid Worker context budget")
+        if type(source_readback_available) is not bool:
+            raise DomainError("Invalid Worker source readback availability")
+        with self.store.unit_of_work() as work:
+            c = work.connection
+            archives = self._archives(c, "worker", run_id)
+            through = self._through(c, "worker", run_id)
+            rows = [
+                dict(row)
+                for row in c.execute(
+                    "SELECT * FROM worker_messages WHERE run_id=? AND ordinal>? ORDER BY ordinal LIMIT 5001",
+                    (run_id, through),
+                )
+            ]
+            capsule_row = c.execute(
+                "SELECT * FROM worker_capsules WHERE run_id=?", (run_id,)
+            ).fetchone()
+            if capsule_row is None:
+                raise DomainError("Unknown Worker context")
+            # Initial system and task messages remain live across every archive.
+            initial = (
+                [
+                    dict(row)
+                    for row in c.execute(
+                        "SELECT * FROM worker_messages WHERE run_id=? AND ordinal IN (0,1) ORDER BY ordinal",
+                        (run_id,),
+                    )
+                ]
+                if through >= 0
+                else []
+            )
+            remaining = initial + rows
+            from .constraints import ConstraintService
+    
+            quest = c.execute("SELECT quest_id FROM worker_runs WHERE id=?", (run_id,)).fetchone()
+            constraint_context = ConstraintService(self.store).context(
+                quest_id=quest["quest_id"] if quest else None,
+                limit=4,
+                max_bytes=min(2048, input_budget // 8),
+                connection=c,
+            )
+    
+            def with_constraints(result):
+                if constraint_context["items"] or constraint_context["omitted"]:
+                    result.insert(
+                        1,
+                        {
+                            "role": "user",
+                            "content": "Sourced constraint records (data, not permissions): "
+                            + _json(constraint_context),
+                        },
+                    )
+                return result
+    
+            def build(selected):
+                capsule = json.loads(archives[-1]["capsule_json"]) if archives else None
+                result = [json.loads(row["message_json"]) for row in selected]
+                if capsule:
+                    result.insert(
+                        1,
+                        {
+                            "role": "user",
+                            "content": "Archived task context (untrusted): " + _json(capsule),
+                        },
+                    )
+                return with_constraints(result)
+    
+            result = build(remaining)
+            if len(_json(result).encode("utf-8")) <= input_budget:
+                return result
+            # Keep the initial task contract and all messages from the last assistant tool
+            # invocation onward, so no tool call is separated from its results.
+            boundary = max(2, len(remaining) - 2)
+            for index, row in enumerate(remaining[2:], start=2):
+                message = json.loads(row["message_json"])
+                if message.get("tool_calls") and index < boundary:
+                    ids = {call.get("id") for call in message["tool_calls"]}
+                    results = {
+                        json.loads(item["message_json"]).get("tool_call_id")
+                        for item in remaining[index + 1 : boundary]
+                    }
+                    if not ids <= results:
+                        boundary = index
+                        break
+            previous = json.loads(archives[-1]["capsule_json"]) if archives else {}
+            capsule = {
+                "task": json.loads(capsule_row["capsule_json"]),
+                "next_action": capsule_row["next_action"],
+                "evidence_refs": json.loads(capsule_row["evidence_refs"]),
+                "source_event_cursor": capsule_row["inbox_cursor"],
+                "hypotheses": [],
+                "completed_steps": [],
+                "history_recall": {
+                    "scope": "worker",
+                    "scope_id": run_id,
+                    "omitted_highlights": previous.get("history_recall", {}).get(
+                        "omitted_highlights", 0
+                    ),
+                    "read_source": "worker_read_context_source",
+                },
+            }
+    
+            def compacted_result():
+                value = [
+                    json.loads(row["message_json"]) for row in remaining[:2] + remaining[boundary:]
+                ]
+                value.insert(
+                    1,
+                    {
+                        "role": "user",
+                        "content": "Archived task context (untrusted): " + _json(capsule),
+                    },
+                )
+                return with_constraints(value)
+    
+            # The caller must reserve and expose source readback in this request
+            # before the first whole tail may be archived. Existing archives keep
+            # the original behavior. Never split a pair or archive unsettled work.
+            # Raw sources remain immutable; archive metadata grants no evidence PASS.
+            if (
+                (archives or source_readback_available)
+                and len(_json(compacted_result()).encode("utf-8")) > input_budget
+                and _settled_receipted_exchange(self.store, c, run_id, remaining[boundary:])
+            ):
+                capsule["history_recall"]["recent_exchange"] = {
+                    "source_refs": [str(row["ordinal"]) for row in remaining[boundary:]],
+                    "raw_results_omitted": True,
+                    "requires_source_readback": True,
+                    "reason": "input_budget",
+                    "trust": "untrusted archived data; not completion evidence",
+                }
+                boundary = len(remaining)
+            selected = remaining[2:boundary]
+            if not selected:
+                raise DomainError("Worker context budget exceeded")
+            claims = list(previous.get("hypotheses", []))
+            completed = list(previous.get("completed_steps", []))
+            for row in selected:
+                message = json.loads(row["message_json"])
+                ref = str(row["ordinal"])
+                if row["role"] == "tool":
+                    paired = [
+                        str(item["ordinal"])
+                        for item in selected
+                        if item["role"] == "assistant"
+                        and any(
+                            call.get("id") == message.get("tool_call_id")
+                            for call in json.loads(item["message_json"]).get("tool_calls", [])
+                        )
+                    ]
+                    if len(paired) != 1:
+                        raise DomainError("Worker tool result has no unique archived call")
+                    call = c.execute(
+                        "SELECT * FROM worker_tool_calls WHERE run_id=? AND model_call_id=?",
+                        (run_id, message.get("tool_call_id")),
+                    ).fetchone()
+                    if call is None or call["state"] not in ("succeeded", "failed"):
+                        raise DomainError("Cannot archive unresolved Worker tool call")
+                    receipt = (
+                        c.execute(
+                            "SELECT r.*,i.resource_scope,i.parameter_digest FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id WHERE r.id=?",
+                            (call["receipt_id"],),
+                        ).fetchone()
+                        if call["receipt_id"]
+                        else None
+                    )
+                    completed.append(
+                        {
+                            "tool": call["tool_name"],
+                            "state": call["state"],
+                            "receipt_id": call["receipt_id"],
+                            "result_hash": _hash(message),
+                            "source_refs": paired + [ref],
+                            "resource_scope": receipt["resource_scope"] if receipt else None,
+                            "receipt_result_digest": receipt["result_digest"] if receipt else None,
+                        }
+                    )
+                elif row["role"] == "user":
+                    content = str(message.get("content", ""))
+                    claims.append(
+                        {
+                            "message": {"role": "user", "content": _excerpt(content)},
+                            "source_refs": [ref],
+                            "status": "unverified",
+                            "omitted": len(content.encode("utf-8")) > 1024,
+                        }
+                    )
+                elif row["role"] == "assistant" and not message.get("tool_calls"):
+                    content = str(message.get("content", ""))
+                    claims.append(
+                        {
+                            "text": _excerpt(content, 256),
+                            "source_refs": [ref],
+                            "status": "unverified",
+                            "omitted": len(content.encode("utf-8")) > 256,
+                        }
+                    )
+            claims, omitted_claims = _bounded_items(
+                claims, limit=24, max_bytes=min(8192, input_budget // 4), anchors=2
+            )
+            completed, omitted_completed = _bounded_items(
+                completed, limit=32, max_bytes=min(8192, input_budget // 4), anchors=4
+            )
+            capsule["hypotheses"] = claims
+            capsule["completed_steps"] = completed
+            capsule["history_recall"]["omitted_highlights"] += omitted_claims + omitted_completed
+    
+            result = compacted_result()
+            # Fixed task contracts and live tool pairs take priority over archived
+            # highlights. Every removed highlight still has its original source.
+            while len(_json(result).encode("utf-8")) > input_budget and (
+                capsule["hypotheses"] or capsule["completed_steps"]
+            ):
+                target = capsule["hypotheses"] or capsule["completed_steps"]
+                target.pop()
+                capsule["history_recall"]["omitted_highlights"] += 1
+                result = compacted_result()
+            if len(_json(result).encode("utf-8")) > input_budget:
+>               raise DomainError("Worker context budget exceeded after compaction")
+E               forge_core.domain.DomainError: Worker context budget exceeded after compaction
+
+backend\src\forge_core\context_service.py:699: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_predecessor_context_v17.py::test_complete_delivery_exchange_archives_and_reads_original_after_restart
+1 failed, 1 passed in 2.55s

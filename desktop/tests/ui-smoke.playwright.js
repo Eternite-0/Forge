@@ -57,9 +57,12 @@ async (page) => {
   await draft.evaluate((element) => element.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true })));
   await page.waitForTimeout(100);
   if (sent.length !== 2 || await draft.inputValue() !== 'next draft') throw new Error('IME composition submitted a message');
-  await page.getByText(/读取了文件/).waitFor();
-  await page.getByText(/读取了文件/).scrollIntoViewIfNeeded();
-  await page.getByText(/读取了文件/).click();
+  const activity = page.locator('.event-group > summary').filter({ hasText: '已读取文件' });
+  await activity.waitFor();
+  await activity.scrollIntoViewIfNeeded();
+  await activity.click();
+  await page.locator('.event-line > summary').filter({ hasText: 'input.txt' }).click();
+  await page.locator('.event-line').filter({ hasText: 'input.txt' }).locator('.event-record > summary').click();
   await page.getByText('结果摘要').waitFor();
   const timeline = page.getByLabel('对话历史');
   const position = await timeline.evaluate((element) => element.scrollTop);
@@ -73,7 +76,17 @@ async (page) => {
   if (await page.locator('.markdown img, .markdown script, .markdown a[href^="javascript:"]').count()) throw new Error('unsafe Markdown content rendered');
   if (externalRequests || await page.evaluate(() => window.bad === true)) throw new Error('untrusted Markdown executed or loaded an external image');
   for (const label of ['后台任务','运行活动','模型库','任务团队','记忆中心','审批中心','设置','对话']) {
-    await page.getByRole('button', { name: label, exact: true }).click();
+    const rail = page.getByLabel('主导航');
+    if (label === '模型库') await page.keyboard.press('Control+,');
+    if (['运行活动','任务团队','审批中心'].includes(label)) {
+      await rail.getByRole('button', { name: '后台任务', exact: true }).click();
+    }
+    const destination = label === '模型库'
+      ? page.locator('.settings-nav').getByRole('button', { name: label, exact: true })
+      : ['运行活动','任务团队','审批中心'].includes(label)
+        ? page.locator('.workspace-tabs').getByRole('button', { name: label, exact: true })
+        : rail.getByRole('button', { name: label, exact: true });
+    await destination.click();
     if (await page.locator('textarea[aria-label="消息内容"]').count() !== 1) throw new Error(`chat missing in ${label}`);
   }
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));

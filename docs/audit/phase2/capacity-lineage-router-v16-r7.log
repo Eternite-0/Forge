@@ -1,0 +1,32 @@
+.F................................................................       [100%]
+================================== FAILURES ===================================
+____________ test_semantic_task_identity_can_reopen_an_older_quest ____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-677/test_semantic_task_identity_ca0')
+
+    def test_semantic_task_identity_can_reopen_an_older_quest(tmp_path):
+        provider = RouterSelector("placeholder")
+        store, router = prepared(tmp_path, provider)
+        target = Quest(title="Nebula", goal="Construct a safe priority queue")
+        store.save_quest(target)
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='completed' WHERE id=?", (target.id,))
+        for index in range(22):
+            store.save_quest(Quest(title=f"Recent unrelated {index}", goal="Other work"))
+        router._sync_memory()
+        provider.selected = "quest:" + target.id
+        provider.final = decision("continue_quest", quest_id=target.id, candidates=[target.id])
+        query = "Resume the starvation resistant scheduling exploration"
+        with store.connection() as connection:
+            assert target.id not in {row["id"] for row in router._snapshot(connection, query)["quests"]}
+        result = asyncio.run(router.handle_user_message(query, request_id="old-semantic"))
+>       assert result["intent"] == "continue_quest" and result["quest_id"] == target.id
+E       AssertionError: assert ('ambiguous' == 'continue_quest'
+E         
+E         - continue_quest
+E         + ambiguous)
+
+backend\tests\test_router_semantic_recall_v16.py:84: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_router_semantic_recall_v16.py::test_semantic_task_identity_can_reopen_an_older_quest
+1 failed, 65 passed in 19.56s

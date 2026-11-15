@@ -1,0 +1,133 @@
+{
+  "candidate": {
+    "answers": [
+      0,
+      7
+    ],
+    "citations": [
+      {
+        "line_end": 6,
+        "line_start": 1,
+        "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+        "source_id": "function"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+        "source_id": "inputs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "integer_arithmetic",
+      "preserve_input_order"
+    ]
+  },
+  "case_id": "code-1",
+  "context_cap": 16384,
+  "context_records_sha256": "677abf8d8786f926f6fda2d3de0547cdca2e774844712103aeb8cbccb5bb93cd",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "code_contract",
+  "duration_seconds": 5.572848899988458,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": true,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": true,
+    "violations": []
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_d477ad3d3778",
+      "receipt_id": "receipt_0c00fa56eec9",
+      "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+      "source_id": "function"
+    },
+    {
+      "intent_id": "action_9260ccaa0652",
+      "receipt_id": "receipt_d8cf927e4b47",
+      "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+      "source_id": "inputs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_cc94dd9b9848",
+      "duration_seconds": 2.9528543000051286,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "a9924966a5546bc02a13cc93fbb9f1cb4d4fa37fea60d05f6616b78a3e145d2a",
+      "response_sha256": "9e7aaa85583b24389b1cf92480b1f4c2cd742259b7845081b2253ef03c5c1313",
+      "schema_valid": true,
+      "stage": "summary",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 0,
+        "input_tokens": 770,
+        "output_tokens": 226
+      }
+    },
+    {
+      "call_id": "study_call_5d1c1a998c2d",
+      "duration_seconds": 2.3220291000034194,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "3a9b130ca95fcc37ab5d2fea6ad5ae88c86b2edce4a02d18fa9243d5612f61c6",
+      "response_sha256": "8ea163e2dd5fa5eb738c76694afb64b2914d50dadf6c94fbe14bf68880f5642c",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 571,
+        "output_tokens": 146
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_cc94dd9b9848",
+        "cost_charged": null,
+        "input_charged": 770,
+        "input_reserved": 3375,
+        "output_charged": 226,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_summary",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_5d1c1a998c2d",
+        "cost_charged": null,
+        "input_charged": 571,
+        "input_reserved": 3366,
+        "output_charged": 146,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1341,
+    "known_input_tokens": 1341,
+    "known_output_tokens": 372,
+    "model_calls": 2,
+    "output_tokens": 372,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "conventional_summary"
+}

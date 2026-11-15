@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="22" time="6.699" timestamp="2026-11-15T15:13:48.655819+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_startup" name="test_core_launcher_restart_preserves_workspace_and_rejects_stale_state" time="2.334"><failure message="sqlite3.OperationalError: disk I/O error">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-627/test_core_launcher_restart_pre0')
+
+    def test_core_launcher_restart_preserves_workspace_and_rejects_stale_state(tmp_path):
+        workspace = tmp_path / "workspace"
+        workspace.mkdir()
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            port = listener.getsockname()[1]
+        (workspace / ".env").write_text(
+            f"FORGE_DB_PATH=state/core.sqlite3\nFORGE_PORT={port}\n", encoding="utf-8"
+        )
+        environment = {key: value for key, value in os.environ.items() if not key.startswith("FORGE_")}
+        # The explicit CLI option must win over a conflicting process setting.
+        environment["FORGE_WORKSPACE_ROOT"] = str(tmp_path / "wrong-workspace")
+        # Inject a labeled mock only in the child test process while exercising the real launcher.
+        hook = tmp_path / "test-injection"
+        hook.mkdir()
+        (hook / "sitecustomize.py").write_text(
+            """
+    import json
+    from forge_core.router import RouterService
+    _init = RouterService.__init__
+    class MockProvider:
+        execution_mode = "mock"
+        async def generate(self, request):
+            decision = {"intent":"create_quest","reply":"mock","title":"测试","goal":"测试","quest_id":None,"candidates":[]}
+            return type("MockResponse", (), {"text":json.dumps(decision),"tool_calls":[],"usage":{}})()
+    def init(self, *args, **kwargs):
+        kwargs.update(provider=MockProvider(), model_id="mock")
+        _init(self, *args, **kwargs)
+    RouterService.__init__ = init
+    """,
+            encoding="utf-8",
+        )
+        environment["PYTHONPATH"] = str(hook) + os.pathsep + environment.get("PYTHONPATH", "")
+        base_url = f"http://127.0.0.1:{port}"
+        token = None
+    
+        def request(path, payload=None):
+            data = None if payload is None else json.dumps(payload).encode()
+            headers = {"Content-Type": "application/json"}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+            req = Request(base_url + path, data=data, headers=headers)
+            try:
+                response = urlopen(req, timeout=1)
+            except HTTPError as exc:
+                response = exc
+            with response:
+                return response.status, json.load(response)
+    
+        observations = []
+        quest_id = None
+        for name in ("cli-cwd", "desktop-cwd"):
+            secret = secrets.token_hex(32)
+            environment["FORGE_CORE_SECRET"] = secret
+            token = None
+            cwd = tmp_path / name
+            cwd.mkdir()
+            (cwd / ".env").write_text("FORGE_DB_PATH=wrong.sqlite3\n", encoding="utf-8")
+            with (tmp_path / f"{name}.log").open("w", encoding="utf-8") as log:
+                process = subprocess.Popen(
+                    [sys.executable, "-m", "forge_api", "--workspace-root", str(workspace)],
+                    cwd=cwd,
+                    env=environment,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                )
+                try:
+                    deadline = time.monotonic() + 15
+                    while True:
+                        assert process.poll() is None, (tmp_path / f"{name}.log").read_text()
+                        try:
+                            status, health = request("/health")
+                            assert status == 200
+                            token = hmac.new(
+                                bytes.fromhex(secret), health["session"].encode(), hashlib.sha256
+                            ).hexdigest()
+                            break
+                        except (URLError, TimeoutError):
+                            assert time.monotonic() &lt; deadline, "Core did not start"
+                            time.sleep(0.05)
+                    if quest_id is None:
+                        status, _result = request(
+                            "/api/conversation/message", {"content": "帮我开发数据层"}
+                        )
+                        assert status == 200
+                        status, quests = request("/api/quests")
+                        assert status == 200
+                        quest_id = quests[0]["id"]
+                        status, rejected = request(
+                            f"/api/quests/{quest_id}/transition",
+                            {
+                                "status": "rejected",
+                                "expected_version": 0,
+                            },
+                        )
+                        assert status == 200
+                        assert rejected["version"] == 1
+                    status, conflict = request(
+                        f"/api/quests/{quest_id}/transition",
+                        {
+                            "status": "awaiting_approval",
+                            "expected_version": 0,
+                        },
+                    )
+                    assert status == 409
+                    assert "version" in conflict["detail"].lower()
+                    status, illegal = request(
+                        f"/api/quests/{quest_id}/transition",
+                        {
+                            "status": "running",
+                            "expected_version": 1,
+                        },
+                    )
+                    assert status == 409
+                    assert "Illegal Quest transition" in illegal["detail"]
+                    status, conversation = request("/api/conversation")
+                    assert status == 200
+                    assert len(conversation["messages"]) == 2
+                    observations.append(
+                        {
+                            "cwd": str(cwd),
+                            "router": conversation["router"]["router_session_id"],
+                            "messages": 2,
+                            "stale_http": 409,
+                            "illegal_http": 409,
+                        }
+                    )
+                finally:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
+            assert not (cwd / "wrong.sqlite3").exists()
+            log_text = (tmp_path / f"{name}.log").read_text(encoding="utf-8")
+            assert secret not in log_text and token not in log_text
+        assert observations[0]["router"] == observations[1]["router"]
+&gt;       store = Store(workspace=Workspace.from_path(workspace), path="state/core.sqlite3")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_startup.py:157: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\store.py:220: in __init__
+    self._initialize()
+backend\src\forge_core\store.py:265: in _initialize
+    with self.connection() as connection:
+         ^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:141: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+backend\src\forge_core\store.py:258: in connection
+    connection = self._connect()
+                 ^^^^^^^^^^^^^^^
+backend\src\forge_core\store.py:232: in _connect
+    self._enable_wal(connection)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.store.Store object at 0x00000251C538DA90&gt;
+connection = &lt;sqlite3.Connection object at 0x00000251C563CF40&gt;
+
+    def _enable_wal(self, connection):
+        # A concurrent journal-mode lock upgrade can return BUSY without invoking
+        # SQLite's busy handler. Bound retries by the same connection timeout.
+        deadline = time.monotonic() + self.busy_timeout_ms / 1000
+        while True:
+            try:
+&gt;               mode = connection.execute("PRAGMA journal_mode=WAL").fetchone()[0]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               sqlite3.OperationalError: disk I/O error
+
+backend\src\forge_core\store.py:245: OperationalError</failure></testcase><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_keeps_immutable_version_chain_and_review_uses_latest_artifact" time="0.584" /><testcase classname="tests.test_file_revise_phase2" name="test_invalid_json_gets_bounded_parser_feedback_then_owned_revision_and_model_review" time="0.540" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rejects_unowned_stale_or_unknown_source_without_overwrite[user_file]" time="0.242" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rejects_unowned_stale_or_unknown_source_without_overwrite[unknown_receipt]" time="0.264" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rejects_unowned_stale_or_unknown_source_without_overwrite[wrong_hash]" time="0.260" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rejects_unowned_stale_or_unknown_source_without_overwrite[changed_content]" time="0.225" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rejects_unowned_stale_or_unknown_source_without_overwrite[unknown_outcome]" time="0.331" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_cannot_expand_an_existing_create_only_contract" time="0.282" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_unknown_replace_result_blocks_replay_and_retains_previous_bytes" time="0.262" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rechecks_authority_and_target_immediately_before_replace[grant_revoked]" time="0.249" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rechecks_authority_and_target_immediately_before_replace[owner_paused]" time="0.253" /><testcase classname="tests.test_file_revise_phase2" name="test_file_revise_rechecks_authority_and_target_immediately_before_replace[content_changed]" time="0.331" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[0]" time="0.001" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[-1]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[nan]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[inf]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[601]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[invalid]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_rejects_invalid_bound[]" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_worker_lease_configuration_explicit_default_and_operator_bound" time="0.000" /><testcase classname="tests.test_file_revise_phase2" name="test_configured_provider_timeout_stays_below_longer_worker_lease" time="0.125" /></testsuite></testsuites>

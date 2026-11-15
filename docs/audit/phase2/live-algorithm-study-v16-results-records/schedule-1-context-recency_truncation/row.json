@@ -1,0 +1,99 @@
+{
+  "candidate": {
+    "answers": [],
+    "citations": [],
+    "completed": false,
+    "retained_constraints": [
+      "Eligibility means capacity >= job size.",
+      "For each job choose the eligible machine with the lowest cost.",
+      "Ties select the smaller machine ID.",
+      "Return machine IDs in job order, or -1 if none qualifies.",
+      "Sources not present must not be guessed."
+    ]
+  },
+  "case_id": "schedule-1",
+  "context_cap": 16384,
+  "context_records_sha256": "219d2a1ae235146e3b8df4836a6b0afa807835b9047aa5b74f647d0d7dad1c19",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "integer_scheduling",
+  "duration_seconds": 2.4606532999896444,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": false,
+    "obligations_retained": 0,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer",
+      "source_evidence",
+      "lost_obligation",
+      "not_completed"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_f9b439fd9e76",
+      "receipt_id": "receipt_7959b8ccfa90",
+      "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_f0abf38e1eed",
+      "receipt_id": "receipt_613c5fa3e042",
+      "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_3a86b4a44bd5",
+      "duration_seconds": 2.0346344000136014,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "879f318793211b40659b3a3bedab1fde7bd75d4a8d5ce7f32ce38222ce8d8a76",
+      "response_sha256": "03fc87fa3709f9277b14e3fa99404abcc7d8dcece1a364700df6e46c5046c459",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 464,
+        "output_tokens": 76
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_3a86b4a44bd5",
+        "cost_charged": null,
+        "input_charged": 464,
+        "input_reserved": 3155,
+        "output_charged": 76,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 464,
+    "known_input_tokens": 464,
+    "known_output_tokens": 76,
+    "model_calls": 1,
+    "output_tokens": 76,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "recency_truncation"
+}

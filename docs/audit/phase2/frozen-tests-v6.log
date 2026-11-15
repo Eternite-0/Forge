@@ -1,0 +1,123 @@
+........................................................................ [  8%]
+........................................................................ [ 16%]
+........................................................................ [ 25%]
+............................................................F........... [ 33%]
+........................................................................ [ 42%]
+........................................................................ [ 50%]
+........................................................................ [ 59%]
+........................................................................ [ 67%]
+........................................................................ [ 76%]
+........................................................................ [ 84%]
+........................................................................ [ 93%]
+.........................................................                [100%]
+================================== FAILURES ===================================
+_______ test_actual_lifespan_schedules_parallel_dag_verifies_and_relays _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-580/test_actual_lifespan_schedules0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000027271FDBE00>
+
+    def test_actual_lifespan_schedules_parallel_dag_verifies_and_relays(tmp_path, monkeypatch):
+        main = load_main(tmp_path, monkeypatch)
+        quest = Quest(title="Offline lifecycle integration", goal="Create three valid JSON artifacts")
+        main.store.save_quest(quest)
+        keys = ["a", "b", "c"]
+        nodes = [
+            {
+                "key": key,
+                "objective": "Create " + key,
+                "success_criteria": ["json_valid:" + str(tmp_path / "work" / (key + ".json"))],
+                "budget_tokens": 16000,
+                "allowed_tools": ["file_write"],
+            }
+            for key in keys
+        ]
+        plan = main.quest_graph.propose(
+            quest.id,
+            {
+                "nodes": nodes,
+                "edges": [{"source": "a", "target": "c", "condition": "success"}],
+                "max_total_tokens": 48000,
+            },
+            expected_version=0,
+        )
+        main.quest_graph.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        for key in keys:
+            main.store.save_model(
+                ModelProfile(
+                    id=key,
+                    provider="fixture",
+                    model_id=key,
+                    display_name="Scripted test provenance stub",
+                    context_window=32000,
+                    max_output_tokens=4000,
+                    tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+                )
+            )
+        # A capability requirement per node distinguishes the otherwise identical models.
+        from forge_core.domain import Measurement
+    
+        for key in keys:
+            model = next(item for item in main.store.list_models() if item.id == key)
+            model.capability_measurements = {key: Measurement(value=100, source="test_fixture")}
+            main.store.save_model(model)
+        roles = [
+            {
+                "id": "coding_" + key,
+                "dynamic": True,
+                "responsibility": "Create JSON",
+                "input_contract": ["goal"],
+                "output_schema": DEFAULT_OUTPUT_SCHEMA,
+                "acceptance_criteria": ["json_valid:" + str(tmp_path / "work" / (key + ".json"))],
+                "task_node_key": key,
+                "required_capabilities": {key: 1},
+                "tools": ["file_write"],
+                "input_tokens": 9000,
+                "output_tokens": 3000,
+                "max_steps": 3,
+                "max_tool_calls": 1,
+                "max_duration_seconds": 60,
+            }
+            for key in keys
+        ]
+>       team = main.team_service.propose(
+            quest.id,
+            roles,
+            {
+                "max_members": 3,
+                "max_depth": 0,
+                "max_concurrency": 2,
+                "max_total_tokens": 36000,
+                "max_total_tool_calls": 3,
+                "allowed_tools": ["file_write"],
+            },
+            strategy="greedy",
+            expected_version=2,
+        )
+
+backend\tests\test_m5_lifespan_execution.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\team_composition.py:614: in propose
+    self._check_operator_concurrency(limits)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x000002727261B230>
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=2, max_total_tokens=36000, max_total_tool_calls=3, max_cost_microunits=None, currency=None, allowed_tools=['file_write'])
+
+    def _check_operator_concurrency(self, limits):
+        if (
+            self.operator_max_concurrency is not None
+            and limits.max_concurrency > self.operator_max_concurrency
+        ):
+>           raise DomainError("Team concurrency exceeds operator limit")
+E           forge_core.domain.DomainError: Team concurrency exceeds operator limit
+
+backend\src\forge_core\team_composition.py:572: DomainError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_schedules_parallel_dag_verifies_and_relays
+1 failed, 848 passed, 1 warning in 283.77s (0:04:43)

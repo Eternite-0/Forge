@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "status": "defect_confirmed_correction_pending",
+  "scope": "One v12 L2 Worker run; accounting diagnosis only, no historical correction or live rerun",
+  "record": {
+    "path": ".local/phase2/runs/20261115T063556Z-L2-a3ad74/run.json",
+    "sha256": "64699a9c4915e5e0097e11da9e22b36b9a439285d5de0a1c8b558f7abd58e70e",
+    "source_snapshot_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+    "worker_runtime_sha256_at_run": "c149cd8ad294c100fb8d072984344cbfc8fb159e1507e3dc91f721b0c1eebd24",
+    "workspace": ".local/phase2/ws-20261115T063556Z-L2-a3ad74",
+    "database": ".local/phase2/ws-20261115T063556Z-L2-a3ad74/data/forge.sqlite3",
+    "workspace_id": "09a1ba8165b6941a4268911c",
+    "quest_id": "quest_86258ade1ea7",
+    "plan_id": "plan_f07f20d58a53",
+    "node_key": "draft-report",
+    "worker_id": "worker_457b0e6e32da",
+    "worker_run_id": "run_7932f0527e66",
+    "execution_mode": "live",
+    "provider_id": "wb-local",
+    "model_id": "deepseek-v4.1-flash"
+  },
+  "read_only_inspection": {
+    "sqlite_uri_mode": "ro",
+    "explicit_read_transaction": "BEGIN",
+    "connection_total_changes": 0,
+    "provider_calls_made": 0,
+    "original_records_modified": false,
+    "request_response_or_credential_bodies_included": false
+  },
+  "timeline": [
+    {"kind": "gateway_attempt_admitted", "attempt_id": "d9ddc5ed7bb9410ab57a7b6f57824652", "call_id": "model_call_fa2eb9e94492", "created_at_epoch": 1794724623.258059, "created_at_utc": "2026-11-15T06:37:03.258059+00:00"},
+    {"seq": 28, "id": "evt_4741959b2c21", "event_type": "quest.plan_pause", "created_at": "2026-11-15T06:37:04.390312+00:00"},
+    {"seq": 29, "id": "evt_ecbb9d28b2a7", "event_type": "worker.command.pause", "created_at": "2026-11-15T06:37:04.390606+00:00"},
+    {"seq": 30, "id": "evt_3e3c7f71d370", "event_type": "core.started", "created_at": "2026-11-15T06:37:06.803479+00:00"},
+    {"seq": 31, "id": "evt_f9e928cc8cef", "event_type": "quest.plan_resume", "created_at": "2026-11-15T06:37:09.425094+00:00"},
+    {"seq": 32, "id": "evt_381ee1fe8432", "event_type": "worker.command.resume", "created_at": "2026-11-15T06:37:09.425464+00:00"}
+  ],
+  "restart_snapshots": {
+    "before": {
+      "worker_counters": [
+        {"id": "run_7932f0527e66", "token_spent": 18234, "steps": 1, "tool_spent": 0},
+        {"id": "run_892295fe24fd", "token_spent": 39869, "steps": 5, "tool_spent": 4}
+      ],
+      "affected_attempt": {"attempt_id": "d9ddc5ed7bb9410ab57a7b6f57824652", "state": "settled", "input_charged": 2695, "output_charged": 110},
+      "unsettled_model_attempts": 0,
+      "unsettled_actions": 0,
+      "running_workers": 0
+    },
+    "after_start": {
+      "worker_counters": [
+        {"id": "run_7932f0527e66", "token_spent": 18234, "steps": 1, "tool_spent": 0},
+        {"id": "run_892295fe24fd", "token_spent": 39869, "steps": 5, "tool_spent": 4}
+      ],
+      "affected_attempt": {"attempt_id": "d9ddc5ed7bb9410ab57a7b6f57824652", "state": "settled", "input_charged": 2695, "output_charged": 110},
+      "unsettled_model_attempts": 0,
+      "unsettled_actions": 0,
+      "running_workers": 0
+    },
+    "same_workspace": true,
+    "router_identity_retained": true,
+    "settled_attempts_retained": true,
+    "worker_budget_counters_retained": true,
+    "resume_status": 200
+  },
+  "worker_gateway_attempts": [
+    {"attempt_id": "d9ddc5ed7bb9410ab57a7b6f57824652", "call_id": "model_call_fa2eb9e94492", "purpose": "worker", "state": "settled", "gateway_input_reserved": 10294, "gateway_output_reserved": 8192, "input_charged": 2695, "output_charged": 110, "actual_total": 2805},
+    {"attempt_id": "83550fa1ee2f4811ac3f953cbe47e21d", "call_id": "model_call_699d137203fe", "purpose": "worker", "state": "settled", "gateway_input_reserved": 10969, "gateway_output_reserved": 8192, "input_charged": 2860, "output_charged": 110, "actual_total": 2970},
+    {"attempt_id": "9a0c1dd09ec4471d88b28f2f8049ad6d", "call_id": "model_call_afd2b51d7a26", "purpose": "worker", "state": "settled", "gateway_input_reserved": 25772, "gateway_output_reserved": 8192, "input_charged": 6553, "output_charged": 83, "actual_total": 6636},
+    {"attempt_id": "a749a43103ff41738805e6a1e8058d86", "call_id": "model_call_ee2ff25ebd33", "purpose": "worker", "state": "settled", "gateway_input_reserved": 51634, "gateway_output_reserved": 8192, "input_charged": 12382, "output_charged": 3415, "actual_total": 15797},
+    {"attempt_id": "e350369e8338455aa4a6d4d7a4d8272f", "call_id": "model_call_9dcb197027b5", "purpose": "worker", "state": "settled", "gateway_input_reserved": 32234, "gateway_output_reserved": 8192, "input_charged": 8302, "output_charged": 1000, "actual_total": 9302}
+  ],
+  "arithmetic": {
+    "first_local_reserve": 18234,
+    "first_gateway_reserve": 18486,
+    "first_gateway_actual": 2805,
+    "post_resume_gateway_actual_total": 34705,
+    "all_worker_gateway_actual_total": 37510,
+    "observed_final_local_token_spent": 52939,
+    "unreconciled_first_local_reserve_plus_later_actual": 52939,
+    "confirmed_excess": 15429,
+    "identity": "18234 - 2805 = 52939 - 37510 = 15429",
+    "gateway_reserve_must_not_replace_local_reserve": true,
+    "final_steps": 5,
+    "final_tool_spent": 5
+  },
+  "mechanism": {
+    "old_settlement_order": "Validate response usage, then _fenced, then replace local reservation with actual usage",
+    "pause_effect": "Pause changes generation and clears the lease token, rejecting the previous owner",
+    "defect": "Ownership fencing also rejects known-usage accounting settlement, leaving the full local reservation charged after the Gateway attempt is settled",
+    "missing_durability": "Schema 11 has no per-call local reservation or idempotent local settlement marker; restart cannot safely reconstruct the original local reservation from the Gateway reserve",
+    "retained_security_boundary": "A stale response must remain unable to persist response messages, execute tools, change execution ownership or establish PASS"
+  },
+  "proof_limits": [
+    "Gateway settled status and usage are durable; the exact settlement wall-clock time is not stored in the inspected schema and is not inferred.",
+    "The original restart.before snapshot proves the attempt was already settled before the recorded Core restart, while the local counter still held the complete first reservation.",
+    "This diagnosis establishes the exact excess for this one bound Worker run. It does not infer refunds for historical calls without a durable local reservation record.",
+    "Unknown, missing, ambiguous, overrun or foreign-bound Gateway attempts remain ineligible for automatic refunds.",
+    "No corrected live outcome, capacity improvement, broader restart acceptance or completion claim is made by this evidence."
+  ],
+  "planned_correction": "Schema 12 records each new local reservation atomically with admission; idempotent settlement applies only a proven original-reserve-to-actual delta and keeps response ownership checks separate. No historical backfill."
+}

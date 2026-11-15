@@ -1,0 +1,2 @@
+Input pairs, in order:
+[[0,0],[2,5]]

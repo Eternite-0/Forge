@@ -1,0 +1,1100 @@
+.FFFFFF............................                                      [100%]
+================================== FAILURES ===================================
+_ test_explicit_success_path_ancestor_retains_the_full_original_delivery[False] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_explicit_success_path_anc0')
+historical = False
+
+    @pytest.mark.parametrize("historical", [False, True])
+    def test_explicit_success_path_ancestor_retains_the_full_original_delivery(tmp_path, historical):
+>       store, manager, _, _, plan, producer, reader, expected = prepared(
+            tmp_path, ancestor_bridge=True
+        )
+
+backend\tests\test_predecessor_delivery_v17.py:323: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE6D65700>
+quest_id = 'quest_ca275171b70d'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+_ test_explicit_success_path_ancestor_retains_the_full_original_delivery[True] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_explicit_success_path_anc1')
+historical = True
+
+    @pytest.mark.parametrize("historical", [False, True])
+    def test_explicit_success_path_ancestor_retains_the_full_original_delivery(tmp_path, historical):
+>       store, manager, _, _, plan, producer, reader, expected = prepared(
+            tmp_path, ancestor_bridge=True
+        )
+
+backend\tests\test_predecessor_delivery_v17.py:323: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE6C5E170>
+quest_id = 'quest_f31b00785296'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+_ test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[nonancestor] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_ancestor_handoff_rejects_0')
+mutation = 'nonancestor'
+
+    @pytest.mark.parametrize(
+        "mutation", ["nonancestor", "failure_path", "unfinished_intermediate", "persisted_edge"]
+    )
+    def test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths(tmp_path, mutation):
+>       store, manager, _, _, plan, _, reader, _ = prepared(tmp_path, ancestor_bridge=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE6E649B0>
+quest_id = 'quest_e41c4558c8e4'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+_ test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[failure_path] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_ancestor_handoff_rejects_1')
+mutation = 'failure_path'
+
+    @pytest.mark.parametrize(
+        "mutation", ["nonancestor", "failure_path", "unfinished_intermediate", "persisted_edge"]
+    )
+    def test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths(tmp_path, mutation):
+>       store, manager, _, _, plan, _, reader, _ = prepared(tmp_path, ancestor_bridge=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE7F956D0>
+quest_id = 'quest_98834fabb9ac'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+_ test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[unfinished_intermediate] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_ancestor_handoff_rejects_2')
+mutation = 'unfinished_intermediate'
+
+    @pytest.mark.parametrize(
+        "mutation", ["nonancestor", "failure_path", "unfinished_intermediate", "persisted_edge"]
+    )
+    def test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths(tmp_path, mutation):
+>       store, manager, _, _, plan, _, reader, _ = prepared(tmp_path, ancestor_bridge=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE6DF0C50>
+quest_id = 'quest_5722cecf97e9'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+_ test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[persisted_edge] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-751/test_ancestor_handoff_rejects_3')
+mutation = 'persisted_edge'
+
+    @pytest.mark.parametrize(
+        "mutation", ["nonancestor", "failure_path", "unfinished_intermediate", "persisted_edge"]
+    )
+    def test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths(tmp_path, mutation):
+>       store, manager, _, _, plan, _, reader, _ = prepared(tmp_path, ancestor_bridge=True)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:342: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:141: in prepared
+    team = propose_team(store, teams, quest, plan, include_producer=True, reader_write=reader_write)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_predecessor_delivery_v17.py:232: in propose_team
+    team = teams.propose(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000013BE7FD4350>
+quest_id = 'quest_a5df0a82f808'
+roles = [RoleSpec(id='coding', task_node_key='producer', required_capabilities={}, tools=['file_read', 'file_write'], input_to...conds=120, depth=0, dynamic=False, responsibility=None, input_contract=[], output_schema=None, acceptance_criteria=[])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=1, max_total_tokens=105000, max_total_tool_calls=18, max_cost_microunits=None, currency=None, allowed_tools=['file_read', 'file_write', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            from .budget_policy import node_execution_limit, validate_serial_policy
+    
+            serial_policy = validate_serial_policy(graph)
+            if serial_policy and (
+                limits.max_concurrency != 1
+                or limits.max_cost_microunits is not None
+                or limits.currency is not None
+            ):
+                raise DomainError(
+                    "Serial capacity team requires concurrency one and token-only limits"
+                )
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+>                   raise DomainError("Role exceeds approved task tool scope")
+E                   forge_core.domain.DomainError: Role exceeds approved task tool scope
+
+backend\src\forge_core\team_composition.py:806: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_explicit_success_path_ancestor_retains_the_full_original_delivery[False]
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_explicit_success_path_ancestor_retains_the_full_original_delivery[True]
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[nonancestor]
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[failure_path]
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[unfinished_intermediate]
+FAILED backend\tests\test_predecessor_delivery_v17.py::test_ancestor_handoff_rejects_nonancestor_non_success_or_unfinished_paths[persisted_edge]
+6 failed, 29 passed in 23.12s

@@ -1,0 +1,613 @@
+{
+  "audit_version": 2,
+  "baseline_auditor_sha256": "e626d7a6666df3c30949e92d7fd1bd077041999a1f4f4e56a8849b3b30be3ec6",
+  "baseline_auditor_preserved": true,
+  "source_version": "v23",
+  "generated_at": "2026-11-15T12:56:02.550100+00:00",
+  "read_mode": "sqlite URI mode=ro; PRAGMA query_only=ON; explicit BEGIN read snapshot",
+  "scope": "Only explicitly named finished V23 live runs. No Store construction, Provider calls, credential access, database mutation, product source edits, or historical evidence changes.",
+  "frozen_manifest_sha256": "c8aaa3cc2d43ac522d09114f70bc07e5fa005ce188b83376b850c7b6965e41ac",
+  "frozen_manifest_file_sha256": "b7508ef3ba7a8d4bfe47ce3b2516ac9acbf69b514a784f151c7c3c4433ec3169",
+  "audit_script_sha256": "4d714cdf29d49150ee31fb357c9927a9d3a24c1caceb8c936dc0f4af2fc4a963",
+  "runs": [
+    {
+      "run_id": "20261115T124831Z-L1-e59339",
+      "level": "L1",
+      "started_at": "2026-11-15T12:48:31.876270+00:00",
+      "finished_at": "2026-11-15T12:48:53.530421+00:00",
+      "duration_seconds": 21.647,
+      "driver_record_path": ".local/phase2/runs/20261115T124831Z-L1-e59339/run.json",
+      "driver_record_sha256": "6e51ab977eac79904a6374803af90789c50930cdee3ca0827a2992965e39ed77",
+      "database_path": ".local/phase2/ws-20261115T124831Z-L1-e59339/data/forge.sqlite3",
+      "database_sha256": "57ac38351ed6aa37e2607be68b0f023b35ea4f856323c0348b81eca47053b365",
+      "driver_code_snapshot_sha256": "1a8e8dcdcbe88e6b2da04ca781c537212f9cb444c231faaec450df7591e2c736",
+      "driver_source_file_count": 97,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:one_worker",
+        "acceptance_unknown:readonly_tool_receipts",
+        "acceptance_unknown:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_unknown:independent_delivery_review"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "one_worker",
+        "readonly_tool_receipts",
+        "three_ranked_findings_or_explicit_insufficient_evidence",
+        "independent_delivery_review"
+      ],
+      "schema_version": 13,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_0d37783c1424",
+          "planner_call_id": "call_39f0c0aedad6",
+          "response_sha256": "ee800b07f1362ec19b5c7f162de0948a6645ab11783e860e76f6e6d8d9e8b5d7",
+          "validation_errors_sha256": "198004bbaece48fd96498df6bd486743e7a03ffb7752293cbed5443129f8cb5f",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_efb4b473de16",
+          "planner_call_id": "call_9af341782e34",
+          "response_sha256": "4fa06d3b8661f5e8d62ca5a60c4701d8411bea13ba3916250ebe4ab4032ae86e",
+          "validation_errors_sha256": "fe660301e6095750e476a901da9eb824de630bf6f2c4bcdead8fa02cb14e55c9",
+          "capacity_diagnostics_present": true
+        }
+      ],
+      "worker_model_response_rejections": [],
+      "quests": [
+        {
+          "id": "quest_2f8e81e29a31",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 1,
+        "max_members": 1,
+        "max_concurrency": 1,
+        "max_depth": 1,
+        "max_total_tokens": 180000,
+        "max_duration_seconds": 600,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 180000,
+        "model_concurrency_limit": 1
+      },
+      "gateway_attempt_count": 4,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 17772,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 17772,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 819,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 13498,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3455,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 180000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 0,
+        "state_counts": {},
+        "worker_inventories": [],
+        "sources": [],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 1,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T12:48:52.074412+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T124831Z-L2-f05578",
+      "level": "L2",
+      "started_at": "2026-11-15T12:48:31.957808+00:00",
+      "finished_at": "2026-11-15T12:48:58.250151+00:00",
+      "duration_seconds": 26.283,
+      "driver_record_path": ".local/phase2/runs/20261115T124831Z-L2-f05578/run.json",
+      "driver_record_sha256": "14e38adf7cfdf4e0ab257e8186ee2cb08420f9b051f25cfbaf8443178e3d322d",
+      "database_path": ".local/phase2/ws-20261115T124831Z-L2-f05578/data/forge.sqlite3",
+      "database_sha256": "cbfa0060401d368fad0ae9d2eca68ab2628208fd0afe56050c99dc27f18bc140",
+      "driver_code_snapshot_sha256": "1a8e8dcdcbe88e6b2da04ca781c537212f9cb444c231faaec450df7591e2c736",
+      "driver_source_file_count": 97,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:three_or_four_specialist_workers",
+        "acceptance_unknown:real_source_citations",
+        "acceptance_unknown:artifact_receipt_hashes",
+        "acceptance_unknown:independent_content_review"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "model_generated_dag",
+        "three_or_four_specialist_workers",
+        "real_source_citations",
+        "artifact_receipt_hashes",
+        "independent_content_review"
+      ],
+      "schema_version": 13,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_78be0c960aac",
+          "planner_call_id": "call_27fb465e4e30",
+          "response_sha256": "ac1fa65245ef29f9a11b4b48001a603f95552409212b7f6e66da8e8bdf270fed",
+          "validation_errors_sha256": "b017737f334541f81f26c69266639e7cc98d08758125f33c40a5ce53d5301fa4",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_f73de4b6f5c9",
+          "planner_call_id": "call_96449633083f",
+          "response_sha256": "bc5707019e7a4d3abc9d2c2de2961e41ff73d93d30f8ddfa427ae338b14603f4",
+          "validation_errors_sha256": "784fb57baf66ce0ed9bae9a667b38ac665c824ca3d325438d774666b4c27b3c3",
+          "capacity_diagnostics_present": true
+        }
+      ],
+      "worker_model_response_rejections": [],
+      "quests": [
+        {
+          "id": "quest_0534de6bc52d",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 4,
+        "max_members": 4,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_total_tokens": 360000,
+        "max_duration_seconds": 1200,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 360000,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 4,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 20196,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 20196,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 873,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 15685,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3638,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 360000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 0,
+        "state_counts": {},
+        "worker_inventories": [],
+        "sources": [],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 1,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T12:48:56.329776+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T124831Z-L3-c7b618",
+      "level": "L3",
+      "started_at": "2026-11-15T12:48:31.919138+00:00",
+      "finished_at": "2026-11-15T12:49:02.950913+00:00",
+      "duration_seconds": 31.023,
+      "driver_record_path": ".local/phase2/runs/20261115T124831Z-L3-c7b618/run.json",
+      "driver_record_sha256": "676fe96a07cccc012288ca443d2d4a03baf94d732f1efc31db79a4decae3cf10",
+      "database_path": ".local/phase2/ws-20261115T124831Z-L3-c7b618/data/forge.sqlite3",
+      "database_sha256": "088d63052e935da9c817e6006de3ebb84d7b6e5f667184eaa30166363e1eb3b4",
+      "driver_code_snapshot_sha256": "1a8e8dcdcbe88e6b2da04ca781c537212f9cb444c231faaec450df7591e2c736",
+      "driver_source_file_count": 97,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "model_generated_dag",
+        "research_math_architecture_coding_experiment_review",
+        "real_numeric_ast_receipts",
+        "independent_fixed_semantic_suite",
+        "artifact_hashes",
+        "core_restart_continuity",
+        "context_compaction_continuity"
+      ],
+      "schema_version": 13,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_5c5563cd3f01",
+          "planner_call_id": "call_c34f5f246849",
+          "response_sha256": "6e476af3e90a30c23ac67bc8b19c2468d49c77d5e11b79d9f7a2a868903a008c",
+          "validation_errors_sha256": "016cae8deff9521820dc62a97fc9ee8f239bb65a6caa3a5ee65e9ba61411da0f",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_fa4c5bc88298",
+          "planner_call_id": "call_5790cf0cbb66",
+          "response_sha256": "31e6aa37020d782dd3a42a0a9b1cd6ac673fae49cd49997340369d0a8a6c98ed",
+          "validation_errors_sha256": "aefe2db9267e8f1b13c619911db8c4509f9dd2b996646fe4ba43de0369e38018",
+          "capacity_diagnostics_present": true
+        }
+      ],
+      "worker_model_response_rejections": [],
+      "quests": [
+        {
+          "id": "quest_2fbabb7a1af7",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 7,
+        "max_members": 7,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_total_tokens": 630000,
+        "max_duration_seconds": 1800,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "model_token_limit": 630000,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 4,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 23763,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 23763,
+      "gateway_tokens_within_original_scenario_limit": true,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 1043,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 18951,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3769,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": true,
+        "original_scenario_cap": 630000,
+        "original_cap_preserved": true,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 0,
+        "state_counts": {},
+        "worker_inventories": [],
+        "sources": [],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 1,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T12:49:01.868784+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "current_frozen_source_mismatches": [],
+  "interpretation_limits": [
+    "Final Gateway settlement and exact local accounting do not establish task success or strict acceptance.",
+    "Planner invalid proposals are not retained as raw model responses. An Invalid_graph_proposal diagnostic alone cannot establish a specific schema, capacity, or model-quality root cause.",
+    "No absence of a Gateway attempt is treated as permission to refund a reservation. Refunded records are checked only against their existing durable terminal state.",
+    "Review PASS is accepted only by rebuilding the complete packet and running the existing live provenance/hash binding checks.",
+    "Core source rows are independently joined to approved graph/team/capsule bindings, immutable admission events, complete user-message bytes and native receipts or the predecessor's original delivery and reconstructed PASS/fixed verification. No worker_prefetch verified flag is accepted as proof.",
+    "Core admission IDs must have no model reservation, Gateway attempt or assistant/tool selection. Tool counters count each persisted model-selected admission and each Core admission exactly once; unpersisted help-call spend remains an explicit unproven difference and fails exact accounting.",
+    "Core source evidence validity is reported separately from token/tool accounting. A settled ledger can coexist with failed, incomplete or unverifiable task execution. Persisted source-message order proves the block precedes the first saved assistant response; the final SQL ledger alone does not retain every transmitted request body.",
+    "Unknown usage and unconfigured monetary costs are never converted into zero. Rejected HTTP attempts without usage still retain their full reservations.",
+    "Shared serial reserves are reconstructed once per Quest/accounting scope from every started Worker and the final durable markers. Stored start snapshots are checked against prior Gateway calls and opening balances; settled_at timestamps are unavailable, so historical settlement timing cannot be proved from the final ledger alone."
+  ]
+}

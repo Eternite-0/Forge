@@ -1,0 +1,145 @@
+{
+  "candidate": {
+    "answers": [
+      1,
+      0
+    ],
+    "citations": [
+      {
+        "line_end": 3,
+        "line_start": 1,
+        "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+        "source_id": "semantics"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "8c9e89efe72d5dbaa9b6cda4ff857d45c47eb45042cadfe9c73e3fc97ffa972f",
+        "source_id": "streams"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "exact_identifier_binding",
+      "preserve_event_order"
+    ]
+  },
+  "case_id": "governance-1",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 1,
+  "domain": "approval_architecture",
+  "duration_seconds": 4.780286900000647,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": true,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": true,
+    "violations": []
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "architect"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_6b4ff833e298",
+      "receipt_id": "receipt_7c03936879a0",
+      "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+      "source_id": "semantics"
+    },
+    {
+      "intent_id": "action_b20d13baeed5",
+      "receipt_id": "receipt_ba57edc18936",
+      "sha256": "8c9e89efe72d5dbaa9b6cda4ff857d45c47eb45042cadfe9c73e3fc97ffa972f",
+      "source_id": "streams"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_0dddd539141d",
+      "duration_seconds": 1.967092299979413,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "802d9f5565d74015af2d386dbf1907037bd4d0e8cda2557994af613c9fe35a33",
+      "response_sha256": "0adb86ceb583762bf915e495bc699feecab2ddf3390370d084cfa5d1a895aa0b",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 384,
+        "input_tokens": 578,
+        "output_tokens": 153
+      }
+    },
+    {
+      "call_id": "study_call_89022da365a5",
+      "duration_seconds": 2.532448799989652,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "7984579d2d158f547c89c76aed01375acb05f7c475eb749d28c4f5d8a4a7c372",
+      "response_sha256": "0adb86ceb583762bf915e495bc699feecab2ddf3390370d084cfa5d1a895aa0b",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 759,
+        "output_tokens": 153
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_0dddd539141d",
+        "cost_charged": null,
+        "input_charged": 578,
+        "input_reserved": 3427,
+        "output_charged": 153,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_89022da365a5",
+        "cost_charged": null,
+        "input_charged": 759,
+        "input_reserved": 4014,
+        "output_charged": 153,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1337,
+    "known_input_tokens": 1337,
+    "known_output_tokens": 306,
+    "model_calls": 2,
+    "output_tokens": 306,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "coverage"
+}

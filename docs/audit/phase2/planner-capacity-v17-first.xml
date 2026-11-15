@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="0.765" timestamp="2026-11-15T16:54:49.781158+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_planner_capacity_v17" name="test_all_exposed_wire_properties_are_required_without_defaults[GraphWire]" time="0.006" /><testcase classname="tests.test_planner_capacity_v17" name="test_all_exposed_wire_properties_are_required_without_defaults[CapacityGraphWire]" time="0.003" /><testcase classname="tests.test_planner_capacity_v17" name="test_handoff_contract_requires_direct_success_edge_and_explicit_tool[missing_edge]" time="0.002" /><testcase classname="tests.test_planner_capacity_v17" name="test_handoff_contract_requires_direct_success_edge_and_explicit_tool[failure_edge]" time="0.000" /><testcase classname="tests.test_planner_capacity_v17" name="test_handoff_contract_requires_direct_success_edge_and_explicit_tool[duplicate]" time="0.002" /><testcase classname="tests.test_planner_capacity_v17" name="test_handoff_contract_requires_direct_success_edge_and_explicit_tool[missing_tool]" time="0.000" /><testcase classname="tests.test_planner_capacity_v17" name="test_full_handoff_is_measured_as_source_and_bound_to_approved_member" time="0.205"><failure message="forge_core.domain.DomainError: Invalid role count or duplicate roles">self = &lt;forge_core.team_composition.TeamCompositionService object at 0x000001D3EBDF9D30&gt;
+quest_id = 'quest_97f8f3638dd1'
+roles = [RoleSpec(id='research', task_node_key='n0', required_capabilities={}, tools=['directory_list', 'file_read'], input_to...'}, 'default': []}}, 'required': ['summary'], 'additionalProperties': False}, acceptance_criteria=['delivery_review'])]
+limits = CompositionLimits(max_members=2, max_depth=1, max_concurrency=1, max_total_tokens=280000, max_total_tool_calls=64, max_cost_microunits=None, currency=None, allowed_tools=['directory_list', 'file_read', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) &gt; 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt&gt;?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt&gt;?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens &gt; graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) &gt; plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits &gt; plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+                    raise DomainError("Role exceeds approved task tool scope")
+                if role.acceptance_criteria and not set(node["success_criteria"]).issubset(
+                    role.acceptance_criteria
+                ):
+                    raise DomainError("Role weakens approved task acceptance criteria")
+                roles[index] = role.model_copy(
+                    update={
+                        "responsibility": role.responsibility
+                        or PRESET_RESPONSIBILITIES.get(role.id),
+                        "input_contract": role.input_contract or [node["objective"]],
+                        "output_schema": role.output_schema or DEFAULT_OUTPUT_SCHEMA,
+                        "acceptance_criteria": role.acceptance_criteria or node["success_criteria"],
+                    }
+                )
+                if any(
+                    role.required_capabilities.get(name, -1) &lt; minimum
+                    for name, minimum in node.get("required_capabilities", {}).items()
+                ):
+                    raise DomainError("Role weakens approved task capability requirements")
+                used[role.task_node_key] = (
+                    used.get(role.task_node_key, 0) + role.input_tokens + role.output_tokens
+                )
+                if used[role.task_node_key] &gt; node["budget_tokens"]:
+                    raise DomainError("Team token budget exceeds task budget")
+            rows = work.connection.execute(
+                "SELECT id,profile FROM models ORDER BY id LIMIT 101"
+            ).fetchall()
+            if len(rows) &gt; 100:
+                raise DomainError("Too many model profiles for bounded composition")
+            from .model_intelligence import decode_profile
+            from .model_performance import performance_snapshot
+    
+            profiles = [decode_profile(row["profile"], row["id"]) for row in rows]
+            snapshots = {
+                model.id: performance_snapshot(work.connection, model.provider, model.model_id)
+                for model in profiles
+                if model.enabled and model.model_id and not model.quarantine_reason
+            }
+            try:
+&gt;               body = self.engine.compose(
+                    roles, profiles, limits, strategy=strategy, online_snapshots=snapshots
+                )
+
+src\forge_core\team_composition.py:834: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.team_composition.TeamComposerEngine object at 0x000001D3EC284E10&gt;
+roles = [RoleSpec(id='research', task_node_key='n0', required_capabilities={}, tools=['directory_list', 'file_read'], input_to...'}, 'default': []}}, 'required': ['summary'], 'additionalProperties': False}, acceptance_criteria=['delivery_review'])]
+profiles = [ModelProfile(id='big', provider='p', display_name='Big', enabled=True, model_id='big', version=None, endpoint=None, c...ne, timeout_rate=None, health=None, custom_attributes={}, quarantined_raw=None, quarantine_reason=None, provenance={})]
+limits = CompositionLimits(max_members=2, max_depth=1, max_concurrency=1, max_total_tokens=280000, max_total_tool_calls=64, max_cost_microunits=None, currency=None, allowed_tools=['directory_list', 'file_read', 'worker_read_completed_delivery'])
+strategy = 'greedy'
+online_snapshots = {'big': {'provider_id': 'p', 'model_id': 'big', 'execution_mode': 'live', 'source': 'core_execution_observation', ...}}
+
+    def compose(
+        self,
+        roles,
+        profiles,
+        limits,
+        *,
+        strategy: Literal["single_model", "greedy", "coverage", "complementarity"],
+        online_snapshots=None,
+    ):
+        roles = [RoleSpec.model_validate(item) for item in roles]
+        profiles = [
+            model if model.quarantine_reason else ModelProfile.model_validate(model.model_dump())
+            for model in profiles
+        ]
+        limits = CompositionLimits.model_validate(limits)
+        if strategy not in {"single_model", "greedy", "coverage", "complementarity"}:
+            raise ValueError("Unknown composition strategy")
+        if (
+            not roles
+            or len(roles) &gt; limits.max_members
+            or len({role.id for role in roles}) != len(roles)
+        ):
+&gt;           raise ValueError("Invalid role count or duplicate roles")
+E           ValueError: Invalid role count or duplicate roles
+
+src\forge_core\team_composition.py:437: ValueError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-724/test_full_handoff_is_measured_0')
+
+    def test_full_handoff_is_measured_as_source_and_bound_to_approved_member(tmp_path):
+        store, quest = prepared(
+            tmp_path,
+            content='Assess inputs/unicode.json. Task execution limits: {"max_total_tokens":360000,"max_nodes":2,"max_members":2}',
+        )
+        graph = handoff_graph()
+        service = QuestGraphService(store)
+        plan = generate(store, quest, ScriptedMock(graph))
+        measured = plan["capacity_contract"]["nodes"]["reader"]
+        producer_bound = graph["nodes"][0]["capacity_bounds"]["max_delivery_bytes"]
+        assert measured["future_input_bytes_bound"] &gt;= producer_bound + 2048
+        assert measured["known_receipt_bytes"] == 2
+        assert plan["nodes"][1]["required_input_paths"] == []
+        service.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        teams = TeamCompositionService(store, capacity_providers=ProviderPool({"p": ScriptedMock({})}))
+        tools = sorted({tool for node in graph["nodes"] for tool in node["allowed_tools"]})
+        roles = [
+            {
+                "id": "research",
+                "task_node_key": node["key"],
+                "tools": node["allowed_tools"],
+                "input_tokens": 137952,
+                "output_tokens": 2048,
+            }
+            for node in graph["nodes"]
+        ]
+&gt;       team = teams.propose(
+            quest.id,
+            roles,
+            {
+                "max_members": 2,
+                "max_depth": 1,
+                "max_concurrency": 1,
+                "max_total_tokens": 280000,
+                "allowed_tools": tools,
+            },
+            strategy="greedy",
+            expected_version=2,
+        )
+
+tests\test_planner_capacity_v17.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.team_composition.TeamCompositionService object at 0x000001D3EBDF9D30&gt;
+quest_id = 'quest_97f8f3638dd1'
+roles = [RoleSpec(id='research', task_node_key='n0', required_capabilities={}, tools=['directory_list', 'file_read'], input_to...'}, 'default': []}}, 'required': ['summary'], 'additionalProperties': False}, acceptance_criteria=['delivery_review'])]
+limits = CompositionLimits(max_members=2, max_depth=1, max_concurrency=1, max_total_tokens=280000, max_total_tool_calls=64, max_cost_microunits=None, currency=None, allowed_tools=['directory_list', 'file_read', 'worker_read_completed_delivery'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        self._check_operator_concurrency(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) &gt; 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt&gt;?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt&gt;?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            self._check_task_limits(work.connection, quest_id, graph, limits, roles)
+            if limits.max_total_tokens &gt; graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) &gt; plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits &gt; plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            role_nodes = [role.task_node_key for role in roles]
+            required_nodes = set(nodes)
+            if reassignment_run_id is not None or graph.get("revision_lineage"):
+                required_nodes -= {
+                    row["node_key"]
+                    for row in work.connection.execute(
+                        "SELECT node_key FROM task_nodes WHERE plan_id=? AND status='succeeded'",
+                        (plan["id"],),
+                    )
+                }
+            if (
+                len(role_nodes) != len(set(role_nodes))
+                or not required_nodes.issubset(role_nodes)
+                or not set(role_nodes).issubset(nodes)
+                or (graph.get("revision_lineage") and set(role_nodes) != required_nodes)
+            ):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if graph.get("hierarchical_expansions"):
+                    from .hierarchical_plans import node_depth
+    
+                    if role.depth != node_depth(graph, role.task_node_key):
+                        raise DomainError(
+                            "Role depth must match its approved hierarchical child contract"
+                        )
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+                    raise DomainError("Role exceeds approved task tool scope")
+                if role.acceptance_criteria and not set(node["success_criteria"]).issubset(
+                    role.acceptance_criteria
+                ):
+                    raise DomainError("Role weakens approved task acceptance criteria")
+                roles[index] = role.model_copy(
+                    update={
+                        "responsibility": role.responsibility
+                        or PRESET_RESPONSIBILITIES.get(role.id),
+                        "input_contract": role.input_contract or [node["objective"]],
+                        "output_schema": role.output_schema or DEFAULT_OUTPUT_SCHEMA,
+                        "acceptance_criteria": role.acceptance_criteria or node["success_criteria"],
+                    }
+                )
+                if any(
+                    role.required_capabilities.get(name, -1) &lt; minimum
+                    for name, minimum in node.get("required_capabilities", {}).items()
+                ):
+                    raise DomainError("Role weakens approved task capability requirements")
+                used[role.task_node_key] = (
+                    used.get(role.task_node_key, 0) + role.input_tokens + role.output_tokens
+                )
+                if used[role.task_node_key] &gt; node["budget_tokens"]:
+                    raise DomainError("Team token budget exceeds task budget")
+            rows = work.connection.execute(
+                "SELECT id,profile FROM models ORDER BY id LIMIT 101"
+            ).fetchall()
+            if len(rows) &gt; 100:
+                raise DomainError("Too many model profiles for bounded composition")
+            from .model_intelligence import decode_profile
+            from .model_performance import performance_snapshot
+    
+            profiles = [decode_profile(row["profile"], row["id"]) for row in rows]
+            snapshots = {
+                model.id: performance_snapshot(work.connection, model.provider, model.model_id)
+                for model in profiles
+                if model.enabled and model.model_id and not model.quarantine_reason
+            }
+            try:
+                body = self.engine.compose(
+                    roles, profiles, limits, strategy=strategy, online_snapshots=snapshots
+                )
+            except ValueError as exc:
+&gt;               raise DomainError(str(exc)) from exc
+E               forge_core.domain.DomainError: Invalid role count or duplicate roles
+
+src\forge_core\team_composition.py:838: DomainError</failure></testcase><testcase classname="tests.test_planner_capacity_v17" name="test_paid_coordination_reduces_future_reserve_without_refunding_usage" time="0.085" /><testcase classname="tests.test_planner_capacity_v17" name="test_legacy_graph_canonical_bytes_do_not_gain_handoff_fields" time="0.000" /></testsuite></testsuites>

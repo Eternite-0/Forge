@@ -1,0 +1,145 @@
+{
+  "candidate": {
+    "answers": [
+      0,
+      7
+    ],
+    "citations": [
+      {
+        "line_end": 6,
+        "line_start": 1,
+        "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+        "source_id": "function"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+        "source_id": "inputs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "integer_arithmetic",
+      "preserve_input_order"
+    ]
+  },
+  "case_id": "code-1",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 1,
+  "domain": "code_contract",
+  "duration_seconds": 5.204168500000378,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": true,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": true,
+    "violations": []
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "coding"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_260848262379",
+      "receipt_id": "receipt_cc1ac30c978d",
+      "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+      "source_id": "function"
+    },
+    {
+      "intent_id": "action_7d9b566b8668",
+      "receipt_id": "receipt_efb51292b127",
+      "sha256": "e5c37e8496a00bf9b85a29a7a7630846228c6486291cdda5888a05dde260fda5",
+      "source_id": "inputs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_cf590d8fc8c2",
+      "duration_seconds": 2.2239816000219434,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "a5049b93ba1118e3f60e43da7101e68f926923437c1ba104a6af28ca5274ab3b",
+      "response_sha256": "8ea163e2dd5fa5eb738c76694afb64b2914d50dadf6c94fbe14bf68880f5642c",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 256,
+        "input_tokens": 501,
+        "output_tokens": 146
+      }
+    },
+    {
+      "call_id": "study_call_05a2ffe94558",
+      "duration_seconds": 2.4688901999907102,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "e3ec11ae99c1acf51cdedce1a8a4568ec50f6c664b12a42a229550fd6042cc0e",
+      "response_sha256": "8ea163e2dd5fa5eb738c76694afb64b2914d50dadf6c94fbe14bf68880f5642c",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 512,
+        "input_tokens": 675,
+        "output_tokens": 146
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_cf590d8fc8c2",
+        "cost_charged": null,
+        "input_charged": 501,
+        "input_reserved": 3101,
+        "output_charged": 146,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_05a2ffe94558",
+        "cost_charged": null,
+        "input_charged": 675,
+        "input_reserved": 3680,
+        "output_charged": 146,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1176,
+    "known_input_tokens": 1176,
+    "known_output_tokens": 292,
+    "model_calls": 2,
+    "output_tokens": 292,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "greedy"
+}

@@ -1,0 +1,3 @@
+approve and revoke affect only the same exact ID.
+Repeated approvals do not create extra authority.
+Writing does not consume or create approval.

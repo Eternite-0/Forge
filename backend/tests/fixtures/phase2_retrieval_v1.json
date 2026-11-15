@@ -1,0 +1,29 @@
+{
+  "version": "phase2-retrieval-v1",
+  "execution_mode": "synthetic",
+  "recorded_at": "2026-11-15T00:00:00+00:00",
+  "description": "Fixed source-identity retrieval cases, not a semantic similarity or model quality benchmark.",
+  "messages": [
+    {"id": "msg_eval_budget", "content": "预算不得超过12000 tokens", "quest": "research"},
+    {"id": "msg_eval_retention", "content": "Do not delete raw-results.csv", "quest": "research"},
+    {"id": "msg_eval_language", "content": "必须用中文撰写报告", "quest": "research"},
+    {"id": "msg_eval_deadline", "content": "Deadline is 2026-12-01", "quest": "software"},
+    {"id": "msg_eval_artifact", "content": "The decoder implementation file is src/atlas_decoder.py", "quest": "software"},
+    {"id": "msg_eval_decision", "content": "Decision: use a bounded queue with FIFO ordering", "quest": "software"}
+  ],
+  "quests": [
+    {"key": "research", "id": "quest_eval_research", "title": "Zephyr Agent Architecture", "goal": "Compare the Zephyr agent architecture and preserve measurements"},
+    {"key": "software", "id": "quest_eval_software", "title": "Atlas Decoder", "goal": "Implement and validate a Python decoder"}
+  ],
+  "cases": [
+    {"id": "budget-bilingual", "query": "spending", "expected_sources": ["message:msg_eval_budget"], "source_types": ["user_instruction"]},
+    {"id": "retention-bilingual", "query": "删除", "expected_sources": ["message:msg_eval_retention"], "source_types": ["user_instruction"]},
+    {"id": "language-keyword", "query": "中文", "expected_sources": ["message:msg_eval_language"], "source_types": ["user_instruction"]},
+    {"id": "deadline-bilingual", "query": "截止", "expected_sources": ["message:msg_eval_deadline"], "source_types": ["user_instruction"]},
+    {"id": "path-exact", "query": "src/atlas_decoder.py", "expected_sources": ["message:msg_eval_artifact"], "source_types": ["user_message"]},
+    {"id": "decision-record", "query": "FIFO", "expected_sources": ["message:msg_eval_decision"], "source_types": ["user_message"]},
+    {"id": "quest-identity", "query": "Zephyr", "expected_sources": ["quest:quest_eval_research"], "source_types": ["core_record"]},
+    {"id": "quest-constraint-link", "query": "", "quest_ids": ["quest_eval_software"], "expected_sources": ["message:msg_eval_deadline"], "source_types": ["user_instruction"]},
+    {"id": "time-exclusion", "query": "spending", "created_before": "2000-01-01T00:00:00+00:00", "expected_sources": [], "expect_empty": true}
+  ]
+}

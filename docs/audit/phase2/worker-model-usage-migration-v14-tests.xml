@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="16" failures="2" skipped="0" tests="46" time="3.253" timestamp="2026-11-15T15:18:09.262682+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_migrations" name="test_schema_version_is_singleton_after_reopening" time="0.072" /><testcase classname="tests.test_migrations" name="test_legacy_upgrade_preserves_every_entity" time="0.130" /><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions0]" time="0.071" /><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions1]" time="0.063" /><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions0]" time="0.058" /><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions1]" time="0.059" /><testcase classname="tests.test_migrations" name="test_each_migration_step" time="0.079" /><testcase classname="tests.test_migrations" name="test_migration_failure_rolls_back_ddl_data_and_version" time="0.079" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[0]" time="0.095" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[1]" time="0.076" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[2]" time="0.071" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[3]" time="0.100" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[4]" time="0.078" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[1]" time="0.036" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[2]" time="0.037" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[3]" time="0.032" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[4]" time="0.033" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[5]" time="0.037" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[6]" time="0.036" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[7]" time="0.042" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[8]" time="0.042" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[9]" time="0.042" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[10]" time="0.044" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[11]" time="0.041" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[12]" time="0.049" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[context_schema-migrate_context]" time="0.041" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[memory_schema-migrate_memory]" time="0.034" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[model_budget_schema-migrate_model_budget]" time="0.035" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_v11_cutover_preserves_all_history_and_does_not_backfill" time="0.068"><failure message="sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_v11_cutover_preserves_all0/legacy.sqlite3')
+
+    def test_v11_cutover_preserves_all_history_and_does_not_backfill(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:155: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D325B3D0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</failure></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_v12_failure_rolls_back_new_table_and_preserves_v11" time="0.064"><failure message="sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_v12_failure_rolls_back_ne0/legacy.sqlite3')
+
+    def test_v12_failure_rolls_back_new_table_and_preserves_v11(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D325B2E0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</failure></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_reservation_and_worker_admission_share_rollback_boundary" time="0.065"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_reservation_and_worker_ad0/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D325B4C0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_reservation_requires_existing_run_and_unique_call" time="0.064"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_reservation_requires_exis0/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334C220&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes0]" time="0.067"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se0/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334D030&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes1]" time="0.068"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se1/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334DC60&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes2]" time="0.065"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se2/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D325B6A0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes3]" time="0.062"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se3/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334DA80&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes4]" time="0.064"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se4/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334CF40&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes5]" time="0.068"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se5/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334E4D0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes6]" time="0.067"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se6/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334F100&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes7]" time="0.066"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se7/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D334FF10&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes8]" time="0.073"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se8/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D3364D60&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes9]" time="0.065"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se9/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D3365990&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes10]" time="0.061"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se10/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D33665C0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes11]" time="0.071"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_invalid_reservation_or_se11/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D33671F0&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_original_binding_and_terminal_settlement_cannot_be_rewritten" time="0.067"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_original_binding_and_term0/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D3367E20&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_cost_settlement_is_bounded_and_unsent_refund_is_terminal" time="0.064"><error message="failed on setup with &quot;sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied&quot;">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-632/test_cost_settlement_is_bounde0/legacy.sqlite3')
+
+    @pytest.fixture
+    def reservation_db(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+&gt;           _seed_v11(connection)
+
+tests\test_worker_model_usage_migration_phase2.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x00000215D3354A90&gt;
+
+    def _seed_v11(connection):
+        migrate(connection, target_version=11)
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.execute("INSERT INTO workspace VALUES (1,'workspace-old','D:/old')")
+&gt;       connection.execute(
+            "INSERT INTO quest_plans VALUES ('plan-old','quest-old',1,'plan-digest','approved','{}','then',NULL,NULL)"
+        )
+E       sqlite3.OperationalError: table quest_plans has 10 columns but 9 values were supplied
+
+tests\test_worker_model_usage_migration_phase2.py:24: OperationalError</error></testcase></testsuite></testsuites>

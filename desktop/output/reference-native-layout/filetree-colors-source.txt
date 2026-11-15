@@ -1,0 +1,142 @@
+Native right file tree — source and screenshot color audit
+Date: 2026-11-16
+Scope: static source reads and local PNG pixel inspection. No bundle execution,
+image generation, dependency installation, API/backend change, or native automation.
+
+Sources
+  D:/crack/chatgpt-ui/mirror/webview/assets/async/172613.062b16766b.js
+    SHA256 8e9c7b9ede84254a1f63655ff161d5334fb39c8562ed5b1f436d206bb9041dea
+  D:/crack/chatgpt-ui/mirror/webview/assets/async/66582da7ee6b.css
+    SHA256 2d854de60f44d2f236a4bf789cb26ff050fc3c3d44b6ec3b8889b066247cc440
+  D:/crack/chatgpt-ui/live/conversation.json, decoded html field
+    decoded HTML UTF8 SHA256 b87161abcfd6e45ff430495d1ff22f50f0ac2ebc4d2eaa0f814bfad5029ad4ce
+Offsets below are zero-based UTF16 offsets into the decoded source/HTML field.
+For the quoted CSS and JS excerpts, Python code-point and UTF16 offsets coincide.
+The decoded HTML field offsets do not refer to byte positions in the JSON wrapper.
+
+1. WORKSPACE TREE HAS A SECTIONED MODIFIED-COLOR OVERRIDE
+
+172613.062b16766b.js rI destructures sectioned:eN around202300.
+Offset202676:
+  eU=void 0!==eN&&eN
+Offset204340 (UTF8 byte204354):
+  e3=eU?"var(--color-blue)":"var(--color-codex-git-modified)"
+Offset205984 (UTF8 byte205998), injected component CSS:
+  :host {
+    --trees-bg-override: ${e5};
+    --trees-bg-muted-override: var(--color-background-secondary-ghost-hover);
+    --trees-border-color-override: var(--color-border);
+    --trees-fg-override: var(--color-text);
+    --trees-font-size-override: 13px;
+    --trees-focus-ring-color-override: var(--color-ring);
+    --trees-git-added-color-override: var(--color-codex-git-added);
+    --trees-git-deleted-color-override: var(--color-codex-git-deleted);
+    --trees-git-ignored-color-override: var(--color-codex-git-ignored);
+    --trees-git-lane-width-override: 20px;
+    --trees-git-modified-color-override: ${e3};
+    --trees-git-renamed-color-override: ${e3};
+    --trees-git-untracked-color-override: var(--color-codex-git-added);
+    ...
+    --trees-selected-bg-override: var(--color-background-primary-soft-active);
+    --trees-selected-fg-override: var(--color-text-emphasis);
+    ...
+  }
+The selected-background declaration begins207038 (UTF8 byte207052).
+
+Therefore the sectioned workspace tree uses blue for modified/renamed rows, even
+though the general-purpose color-codex-git-modified semantic token defaults to
+decoration-modified/orange in the global stylesheet. Copying only the global Git
+token mapping would miss this component override.
+
+66582da7ee6b.css:
+  offset21937:  --blue-400:#0285ff;
+  offset141203: --color-blue:var(--blue-400);
+  offset148469: --color-codex-git-added:var(--app-color-decoration-added);
+  offset148527: --color-codex-git-deleted:var(--app-color-decoration-deleted);
+  offset148589: --color-codex-git-modified:var(--app-color-decoration-modified);
+  offset148653: --color-codex-git-ignored:var(--app-color-decoration-modified);
+
+2. ACTUAL NATIVE PRESET BEATS GENERIC FALLBACK COLORS
+
+live/conversation.json decoded html field includes the captured native theme style.
+Its light and dark branches explicitly contain the same Git added/deleted colors:
+  offset23702 light: --app-color-decoration-added:#00a240;
+  offset30398 dark:  --app-color-decoration-added:#00a240;
+  offset23740 light: --app-color-decoration-deleted:#e02e2a;
+  offset30436 dark:  --app-color-decoration-deleted:#e02e2a;
+The generic stylesheet fallback's green300/red400 dark mapping is not the resolved
+captured native theme, so the previous FORGE pastel dark Git colors were unsupported
+for this supplied preset. The code-diff renderer may use its own override colors;
+this change concerns the workspace tree/status color tokens only.
+
+3. SELECTED/HOVER/BACKGROUND/TEXT/BORDER
+
+Global alias chain in66582da7ee6b.css:
+  offset145515:
+    --color-background-primary-soft-active:var(--app-color-background-button-secondary);
+  offset134657:
+    --color-text-emphasis:var(--app-color-text-foreground,var(--color-text));
+  offset143629: --color-surface:var(--app-color-background-surface);
+  offset147387: --color-border:var(--app-color-border,var(--app-color-text-foreground));
+
+Captured native resolved theme, decoded html offsets:
+  22030: --app-color-background-button-secondary:rgba(13, 13, 13, 0.049);
+  28739: --app-color-background-button-secondary:rgba(252, 252, 252, 0.052);
+  22167: --app-color-background-button-secondary-hover:rgba(13, 13, 13, 0.053);
+  28881: --app-color-background-button-secondary-hover:rgba(252, 252, 252, 0.078);
+  23306: --app-color-background-surface:#ffffff;
+  29988: --app-color-background-surface:#111111;
+  23392: --app-color-border:rgba(13, 13, 13, 0.078);
+  30074: --app-color-border:rgba(252, 252, 252, 0.084);
+  23591: --app-color-border-light:rgba(13, 13, 13, 0.049);
+  30281: --app-color-border-light:rgba(252, 252, 252, 0.042);
+  24406: --app-color-text-foreground-secondary:rgba(13, 13, 13, 0.695);
+  31160: --app-color-text-foreground-secondary:rgba(252, 252, 252, 0.71);
+  24000: --app-color-icon-tertiary:rgba(13, 13, 13, 0.495);
+  30728: --app-color-icon-tertiary:rgba(252, 252, 252, 0.51);
+
+The plain selected foreground is emphasis/text, not link/accent blue. Git status
+overrides can still color the individual status/file rows. File-type icon artwork
+has its own original multicolor fills; treating every SVG as currentColor loses
+those colors. A separate integration agent is handling the actual original SVGs.
+
+Existing FORGE white tree background, semantic default/light border tokens and
+hover token already match these captured values; no subjective replacement was
+needed. Secondary text previously used .65 in both themes; native is .695/.71.
+
+4. USER SCREENSHOT PIXEL CROSS-CHECKS
+
+Files read locally, never modified:
+  C:/Users/msi/AppData/Local/Temp/codex-clipboard-4584b10e-bcaf-4d5e-a4f9-22b633b19903.png
+    1171x1337 pixels.
+  C:/Users/msi/AppData/Local/Temp/codex-clipboard-d6281acc-a3d8-450f-9a19-11d28ce73529.png
+    1176x1249 pixels.
+
+The d628 screenshot's tree crop x658..1160,y40..550 contains:
+  RGB(0,162,64) #00a240:1185 exact pixels (e.g.1123,203).
+  RGB(2,133,255) #0285ff:417 exact pixels (e.g.1123,448).
+  RGB(13,13,13) #0d0d0d: normal text (e.g.704,101).
+  RGB(236,236,236) #ececec: horizontal rule (e.g.660,43).
+Its hovered backend row interior, crop654..1145,858..895, contains16589 exact
+RGB(242,242,242) #f2f2f2 pixels. Its tree background is overwhelmingly white.
+The4584 screenshot's selected final-npm-build.txt row interior contains15951 exact
+RGB(244,244,244) #f4f4f4 pixels in crop650..1140,590..660. Screenshot quantization,
+blend space, selected-vs-hover state and fractional zoom can affect neutral shades;
+the implementation uses native source RGBA values instead of fitting arbitrary
+new opacity values to these screenshots.
+
+The screenshot geometry appears approximately125% relative to native logical CSS
+sizes. Pixel inspection here is used only for colors, not to scale UI font/row size.
+
+5. IMPLEMENTED ROOT TOKEN CHANGES
+
+desktop/src/style.css root color definitions only:
+  light/dark added: previous#008b35/#7dcb95 ->#00a240.
+  light/dark deleted: previous#cf342e/#f49a96 ->#e02e2a.
+  new light/dark --color-git-modified:#0285ff, separate from text-accent.
+  new selected background: lightrgba(13,13,13,.049), darkrgba(252,252,252,.052).
+  new selected foreground:var(--color-text).
+  secondary text light.65->.695, dark.65->.71.
+No tree/toolbar selectors, component behavior, dimensions, roles, or accessible names
+were edited in this color patch. A separate agent connects tree selectors to the new
+Git/selection tokens and preserves original multicolor file-type icons.

@@ -3,10 +3,10 @@
   "productName": "FORGE",
   "version": "0.2.0",
   "identifier": "com.forge.agent",
-  "build": {"beforeDevCommand": "npm run dev", "devUrl": "http://localhost:5173", "beforeBuildCommand": "npm run build", "frontendDist": "../dist"},
+  "build": {"beforeDevCommand": "npm run dev", "devUrl": "http://127.0.0.1:5173", "beforeBuildCommand": "npm run build", "frontendDist": "../dist"},
   "app": {
     "windows": [{"label": "main", "title": "FORGE", "width": 1440, "height": 900, "minWidth": 900, "minHeight": 600, "theme": "light"}],
-    "security": {"csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:*"}
+    "security": {"csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data: blob:; frame-src 'self' blob:; object-src blob:; connect-src 'self' ipc: http://ipc.localhost http://127.0.0.1:*"}
   },
   "bundle": {"active": true, "targets": ["nsis"], "icon": ["icons/icon.ico"]}
 }

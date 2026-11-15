@@ -3,7 +3,7 @@
 import sqlite3
 from collections.abc import Callable, Mapping
 
-SCHEMA_VERSION = 9
+SCHEMA_VERSION = 13
 Migration = Callable[[sqlite3.Connection], None]
 
 
@@ -249,6 +249,87 @@ def _worker_output_contract(connection):
         )
 
 
+def _worker_repairs(connection):
+    """Bounded self-repair counter for the native Worker loop (Phase 2)."""
+    connection.execute(
+        "ALTER TABLE worker_runs ADD COLUMN repairs INTEGER NOT NULL DEFAULT 0 CHECK(repairs>=0)"
+    )
+
+
+def _constraint_index(connection):
+    from .constraint_schema import migrate_constraints
+
+    migrate_constraints(connection)
+
+
+def _worker_model_reservations(connection):
+    """Track only new local admissions; historical reservations cannot be inferred."""
+    connection.execute("""CREATE TABLE worker_model_reservations (
+        call_id TEXT PRIMARY KEY NOT NULL,
+        run_id TEXT NOT NULL REFERENCES worker_runs(id),
+        generation INTEGER NOT NULL CHECK(typeof(generation)='integer' AND generation>=0),
+        lease_token TEXT NOT NULL,
+        provider_id TEXT NOT NULL, model_id TEXT NOT NULL,
+        execution_mode TEXT NOT NULL CHECK(execution_mode IN ('mock','live')),
+        context_json TEXT NOT NULL,
+        reserved_tokens INTEGER NOT NULL CHECK(typeof(reserved_tokens)='integer' AND reserved_tokens>0),
+        output_limit INTEGER NOT NULL CHECK(typeof(output_limit)='integer' AND output_limit>0 AND output_limit<=reserved_tokens),
+        reserved_cost_microunits INTEGER CHECK(reserved_cost_microunits IS NULL OR (typeof(reserved_cost_microunits)='integer' AND reserved_cost_microunits>=0)),
+        currency TEXT, price_bounds_json TEXT, cost_scopes_json TEXT NOT NULL,
+        state TEXT NOT NULL DEFAULT 'reserved' CHECK(state IN ('reserved','settled','refunded')),
+        input_tokens INTEGER, output_tokens INTEGER, actual_cost_microunits INTEGER,
+        created_at TEXT NOT NULL, settled_at TEXT,
+        CHECK(reserved_cost_microunits IS NULL OR (currency IS NOT NULL AND length(currency)=3 AND price_bounds_json IS NOT NULL)),
+        CHECK(
+            (state='reserved' AND input_tokens IS NULL AND output_tokens IS NULL AND actual_cost_microunits IS NULL AND settled_at IS NULL)
+            OR
+            (state='settled' AND typeof(input_tokens)='integer' AND input_tokens>=0 AND input_tokens<=reserved_tokens-output_limit
+                AND typeof(output_tokens)='integer' AND output_tokens>=0 AND output_tokens<=output_limit AND settled_at IS NOT NULL
+                AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                    OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits>=0 AND actual_cost_microunits<=reserved_cost_microunits)))
+            OR
+            (state='refunded' AND typeof(input_tokens)='integer' AND input_tokens=0
+                AND typeof(output_tokens)='integer' AND output_tokens=0 AND settled_at IS NOT NULL
+                AND ((reserved_cost_microunits IS NULL AND actual_cost_microunits IS NULL)
+                    OR (reserved_cost_microunits IS NOT NULL AND typeof(actual_cost_microunits)='integer' AND actual_cost_microunits=0)))
+        ))""")
+    connection.execute(
+        "CREATE INDEX idx_worker_model_reservations_pending ON worker_model_reservations(run_id,state,created_at,call_id)"
+    )
+    # REPLACE's implicit delete need not fire delete triggers in SQLite's
+    # default recursive_triggers mode. Reject replacement before that delete.
+    connection.execute("""CREATE TRIGGER worker_model_reservations_no_replace
+        BEFORE INSERT ON worker_model_reservations
+        WHEN EXISTS(SELECT 1 FROM worker_model_reservations WHERE call_id=NEW.call_id)
+        BEGIN SELECT RAISE(ABORT,'Worker model reservation call_id is UNIQUE'); END""")
+    connection.execute("""CREATE TRIGGER worker_model_reservations_identity_immutable
+        BEFORE UPDATE ON worker_model_reservations
+        WHEN NEW.call_id IS NOT OLD.call_id OR NEW.run_id IS NOT OLD.run_id
+            OR NEW.generation IS NOT OLD.generation OR NEW.lease_token IS NOT OLD.lease_token
+            OR NEW.provider_id IS NOT OLD.provider_id OR NEW.model_id IS NOT OLD.model_id
+            OR NEW.execution_mode IS NOT OLD.execution_mode OR NEW.context_json IS NOT OLD.context_json
+            OR NEW.reserved_tokens IS NOT OLD.reserved_tokens OR NEW.output_limit IS NOT OLD.output_limit
+            OR NEW.reserved_cost_microunits IS NOT OLD.reserved_cost_microunits OR NEW.currency IS NOT OLD.currency
+            OR NEW.price_bounds_json IS NOT OLD.price_bounds_json OR NEW.cost_scopes_json IS NOT OLD.cost_scopes_json
+            OR NEW.created_at IS NOT OLD.created_at
+        BEGIN SELECT RAISE(ABORT,'Worker model reservation identity is immutable'); END""")
+    connection.execute("""CREATE TRIGGER worker_model_reservations_terminal_immutable
+        BEFORE UPDATE ON worker_model_reservations
+        WHEN OLD.state!='reserved' AND (NEW.state IS NOT OLD.state
+            OR NEW.input_tokens IS NOT OLD.input_tokens OR NEW.output_tokens IS NOT OLD.output_tokens
+            OR NEW.actual_cost_microunits IS NOT OLD.actual_cost_microunits OR NEW.settled_at IS NOT OLD.settled_at)
+        BEGIN SELECT RAISE(ABORT,'Worker model reservation settlement is immutable'); END""")
+    connection.execute("""CREATE TRIGGER worker_model_reservations_no_delete
+        BEFORE DELETE ON worker_model_reservations
+        BEGIN SELECT RAISE(ABORT,'Worker model reservations cannot be deleted'); END""")
+
+
+def _core_source_prefetch(connection):
+    from .worker_prefetch import migrate
+
+    migrate(connection)
+
+
 MIGRATIONS: Mapping[int, Migration] = {
     1: _initial_schema,
     2: _reliable_state,
@@ -259,6 +340,10 @@ MIGRATIONS: Mapping[int, Migration] = {
     7: _worker_team_tools,
     8: _context_memory_budget,
     9: _worker_output_contract,
+    10: _worker_repairs,
+    11: _constraint_index,
+    12: _worker_model_reservations,
+    13: _core_source_prefetch,
 }
 
 

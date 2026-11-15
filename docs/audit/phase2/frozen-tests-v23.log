@@ -1,0 +1,94 @@
+........................................................................ [  4%]
+........................................................................ [  8%]
+........................................................................ [ 12%]
+........................................................................ [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 25%]
+........................................................................ [ 29%]
+..............................FF............F........................... [ 33%]
+........................................................................ [ 37%]
+........................................................................ [ 41%]
+........................................................................ [ 46%]
+........................................................................ [ 50%]
+........................................................................ [ 54%]
+........................................................................ [ 58%]
+........................................................................ [ 62%]
+........................................................................ [ 67%]
+........................................................................ [ 71%]
+........................................................................ [ 75%]
+........................................................................ [ 79%]
+........................................................................ [ 83%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+............................FF.......................................... [ 96%]
+...........................................................              [100%]
+================================== FAILURES ===================================
+________ test_expired_planner_attempt_cannot_modify_new_attempt[False] ________
+backend\tests\test_m4_adversarial.py:271: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\tests\test_m4_adversarial.py:269: in race
+    assert await second
+E   assert False
+________ test_expired_planner_attempt_cannot_modify_new_attempt[True] _________
+backend\tests\test_m4_adversarial.py:271: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\tests\test_m4_adversarial.py:269: in race
+    assert await second
+E   assert False
+_____ test_user_turn_automatically_plans_once_without_extra_user_message ______
+backend\tests\test_m4_integration.py:628: in test_user_turn_automatically_plans_once_without_extra_user_message
+    wait_for(lambda: client.get(path, headers=token).status_code == 200)
+backend\tests\test_m4_integration.py:31: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state
+__________ test_v7_worker_opening_migrates_once_with_known_reserves ___________
+backend\tests\test_worker_runtime.py:1152: in test_v7_worker_opening_migrates_once_with_known_reserves
+    migrate(target)
+backend\src\forge_core\migrations.py:370: in migrate
+    steps[version](connection)
+backend\src\forge_core\migrations.py:330: in _core_source_prefetch
+    migrate(connection)
+backend\src\forge_core\worker_prefetch.py:43: in migrate
+    connection.execute("""CREATE TABLE worker_core_source_reads(
+E   sqlite3.OperationalError: table worker_core_source_reads already exists
+_ test_v8_active_worker_enters_output_review_without_changing_team_or_budget __
+backend\tests\test_worker_runtime.py:1244: in test_v8_active_worker_enters_output_review_without_changing_team_or_budget
+    migrate(target)
+backend\src\forge_core\migrations.py:370: in migrate
+    steps[version](connection)
+backend\src\forge_core\migrations.py:330: in _core_source_prefetch
+    migrate(connection)
+backend\src\forge_core\worker_prefetch.py:43: in migrate
+    connection.execute("""CREATE TABLE worker_core_source_reads(
+E   sqlite3.OperationalError: table worker_core_source_reads already exists
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt[False]
+FAILED backend\tests\test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt[True]
+FAILED backend\tests\test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message
+FAILED backend\tests\test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves
+FAILED backend\tests\test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget
+5 failed, 1710 passed, 1 warning in 412.81s (0:06:52)

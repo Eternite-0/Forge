@@ -1,0 +1,152 @@
+Native file tree — source and FORGE adaptation
+2026-11-16. Static reading only; no bundle execution or image generation.
+
+Source: D:\crack\chatgpt-ui\mirror\webview\assets\async\172613.062b16766b.js
+SHA256: 8E9C7B9EDE84254A1F63655FF161D5334FB39C8562ED5B1F436D206BB9041DEA
+Offsets are zero-based UTF16 code units and UTF8 bytes, as used in preview-source.txt.
+
+Implemented source values
+- Default density row30px; font13px/400; glyph16px; radius6px.
+- BaseFileTree overrides row horizontal padding3px, row gap5px, level gap0px, row margin0, and git lane20px.
+- The native guide override halves indentation, with adjacent spacing calculation5 + (16-1)/4 =8.75px. FORGE recursive rows now use that same level increment.
+- Native guides are1px, color-mix(in lab,muted25%,transparent), default opacity0, hover opacity.75, opacity transition150ms. FORGE also exposes them on focus-within for keyboard use.
+- Native directory glyph is the chevron alone. No extra folder glyph in tree rows.
+-20 native DMvp file glyphs are embedded as JSX paths, with the native per-type light/dark palette. They do not load external assets.
+- Added/deleted/modified use exact native20px glyph path data, with outlined square plus/minus/dot. Directory change markers use6px dots, opacity.5.
+- Sectioned native tree uses modified/renamed blue; FORGE points to the independently ported --color-git-modified token, and selected normal text uses --color-filetree-selected-text.
+- Changed/all groups stay normal text rows; the previous scope background slab was removed.
+- Shared250px width/min200/max60% algorithm and30px row size are unchanged by these visual edits. User screenshots show approximately125% scale; their enlarged pixel measurements were not copied into CSS defaults.
+
+FORGE adaptations and bounds
+- FORGE uses its existing recursive DOM rather than the native flattened virtualized tree. The guide origins and root section indentation are mapped into that existing structure; the native8.75px level increment is retained. No virtualization/dependency was added.
+- Existing text chevron is retained to keep all current button names intact. The generic non-tree FileIcon in tabs/empty state is untouched.
+- Common20 icon types are mapped; remaining types fall back to the native default filled-page glyph. This is a subset of the original complete sprite and filename mapping, not a claim of complete extension parity.
+- Native added/deleted count decorations are visually omitted in the supplied screenshots. FORGE's actual +N/−N counts stay in sr-only text so accessible names and supplied information are preserved while the right edge matches the status glyph layout.
+- New all-files status glyphs are aria-hidden, preserving the existing file-row accessible names. Existing changed-file status text remains sr-only so that existing names remain unchanged.
+- Native guide display on hover is also enabled for focus-within, so keyboard navigation exposes the same hierarchy.
+- Data loading, refresh, polling, expansion state, button aria-label/role, preview APIs, safety rules and resize formulas were not changed by this tree styling task.
+
+Validation
+npx tsc --noEmit: exit0, no stdout/stderr.
+Browser preview/tree checks are run by the parent task after integration.
+
+Native icon anchors (original symbol, SHA256):
+default: UTF16 249998; byte 250016; SHA256 0EE289A083D0C47074DA3D9AA5671E879E5B142589E7242C746DE883C4DB5601
+text: UTF16 259861; byte 259879; SHA256 9C0F83EA1FE2A2F59F01AD5D27E6F41A6EAF8D45ACDC9B3FB5DC6C62831DA342
+json: UTF16 253595; byte 253613; SHA256 949FCB61E269CC9052EA98D1429F8197411D5F145724021BCA122E0E38CF7DFE
+markdown: UTF16 254347; byte 254365; SHA256 6E659C4E58A37BE7DF8F71D9E586153B280B3B08FE17EA9D2A3E0F053E83C399
+python: UTF16 255397; byte 255415; SHA256 41B83289C4D49345805D1F5941AAF84EA37457E3625E075C23FFEC44A9B1A282
+git: UTF16 250842; byte 250860; SHA256 A1BF2687F176744D3CEADB422467DAE116B83D366C2DCD2B7C2271C6344C8FA2
+image: UTF16 252613; byte 252631; SHA256 6A98E1FE1F7A12F6A791A8AFD64725EEF2E61563B7ABDC8D58A35938B32A8EBA
+typescript: UTF16 260308; byte 260326; SHA256 F3FA4A3D469917022BD25BAD083B1C3896F2EA1FB2A6C47D850C2ED09992AF9B
+javascript: UTF16 252969; byte 252987; SHA256 BA67F38450365D6858CA9F34B2B7E8F74B7848CADAD9E04430044030B5CBC387
+react: UTF16 236693; byte 236711; SHA256 73176AE56C398A178B7E6822E82ED022863837B0F932221E2A7F5E32F8488CE2
+css: UTF16 247668; byte 247686; SHA256 880FBB84C4FC3092E9CF40795B96C6E61573ED29882461B053C3EB360CFBE535
+html: UTF16 252066; byte 252084; SHA256 EAE57C1FB14DE035C9E10DFEFD1EF35F653C6D27C42C28E87F462A22D6FFF1F5
+yml: UTF16 245075; byte 245093; SHA256 099C6C7671EC1FC3CA3FF23163A35B0CA2A3530FF008CFB473B509BB5D6261C3
+table: UTF16 259378; byte 259396; SHA256 E3DA873A81B7AAF33A1AF4DD2D74F156765C12D72ECCE993EF6ACB504C5098AA
+rust: UTF16 256934; byte 256952; SHA256 A978B1B9D5A3ADE59F7565A2D718616147635E9B1C363E3CEAD64CD359A660AB
+zip: UTF16 260860; byte 260878; SHA256 8EA1B4B824287D48E4FF2C2E267B9884AFE8973B6A6565830041A5A90DA15810
+bash: UTF16 246000; byte 246018; SHA256 13FA2CC86738B181EC0E0D5A8F1A631C261CA00DC0702DE36A671C331815B8AA
+c: UTF16 246648; byte 246666; SHA256 1A676D9D54CBC064E101FB56CB62F747E13137FB4F2B5A5F3DF39C8DEDC7E478
+cpp: UTF16 247157; byte 247175; SHA256 A0E343AFD3E15F51D49054332554EABBDDB0EDD75C4056C02642F8D62AB7DBF6
+go: UTF16 251249; byte 251267; SHA256 F2A32B45FCD79A01DE6F9A753DD6D8D82E76A7A3F30799F738300117F99CEAE0
+
+Bounded original source excerpts:
+
+[1] UTF16 777; byte 777
+m={compact:{itemHeight:24,factor:.8},default:{itemHeight:30,factor:1},relaxed:{itemHeight:36,factor:1.2}},g=m.default.itemHeight,v="@layer base, unsafe;";function b(e){return`${v}
+@laye
+
+[2] UTF16 206210; byte 206224
+--trees-font-size-override: 13px;
+        --trees-focus-ring-color-override: var(--color-ring);
+        --trees-git-added-color-override: var(--color-codex-git-added);
+        --trees-git-deleted-color-override: var(--color-codex-git-deleted);
+        --trees-git-ignored-color-override: var(--color-codex-git-ignored);
+        --trees-git-lane-width-override: 20px;
+        --trees-git-modified-color-override: ${e3};
+        --trees-git-renamed-color-override: ${e3};
+        --trees-git-untracked-color-override: var(--color-codex-git-added);
+        --trees-item-padding-x-override: 3px;
+        --trees-item-margin-x-override: 0px;
+        --trees-level-gap-override: 0px;
+        --trees-padding-inline-override: 0
+
+[3] UTF16 207238; byte 207252
+/* Halve indentation while keeping guides aligned with full-size icon centers. */
+      [data-item-section='spacing']:not(:empty) {
+        margin-right: calc((1px - var(--trees-icon-width)) / 4);
+      }
+
+      [data-item-section='spacing-item'] + [data-item-section='spacing-item'] {
+        margin-left: calc(var(--trees-item-row-gap) + (var(--trees-icon-width) - 1px) / 4);
+      }
+
+      [data-item-type='file'] > [data-item-section='spacing']:not(:empty) {
+        margin-right: 0;
+      }
+
+      [data-file-tree-sticky-overlay-content='true'],
+      [data-file-tree-sticky-row='true'] {
+        background-color: ${e5};
+      }
+
+
+[4] UTF16 39761; byte 39765
+[data-item-section='spacing-item'] {\n    transform: translateX(-0.25px);\n    display: inline-block;\n    border-left: 1px solid var(--trees-indent-guide-bg);\n    height: 100%;\n    margin-right: calc(var(--trees-level-gap) - 1px);\n    opacity: 0;\n    transition: opacity 150ms ease;\n\n    & + & {\n      margin-left: calc(\n        var(--trees-item-row-gap) + calc(var(--trees-icon-width) / 2) - 0.5px\n      );\n    }\n  }\n\n  :host(:hover) [data-item-section='spacing-item'] {\n    opacity: 0.75;\n  }\n\n  /* Git status indicator */\n\n  /* This is a folder that contains a git change */\n  [data-ite
+
+[5] UTF16 209313; byte 209327
+[data-item-git-status='added'] > [data-item-section='git'] > span,
+      [data-item-git-status='deleted'] > [data-item-section='git'] > span,
+      [data-item-git-status='modified'] > [data-item-section='git'] > span {
+        font-size: 0;
+      }
+
+      [data-item-git-status='added'] > [data-item-section='git'] > span::before,
+      [data-item-git-status='deleted'] > [data-item-section='git'] > span::before,
+      [data-item-git-status='modified'] > [data-item-section='git'] > span::before {
+        width: 20px;
+        height: 20px;
+        background-color: currentColor;
+        content: '';
+        mask: var(--base-file-tree-git-status-icon) center / contain no-repeat;
+      }
+
+      [data-item-git-status='added'] > [data-item-section='git'] > span::before {
+        --base-file-tree-git-status-icon: url("${rw}");
+      }
+
+      [data-item-git-status='deleted'] > [data-item-section='git'] > span::before {
+        --base-file-tree-git-status-icon: url("${rx}");
+      }
+
+      [data-item-git-status='modified'] > [data-item-section='git'] > span::before {
+        --base-file-tree-git-status-icon: url("${rC}");
+      }
+
+      /* Filter out @pierre/truncate's subpixel one-line overflow false positives. */
+      @container measure (height <= calc(1lh + 1px)) {
+        [data-truncate-marker] {
+          opacity: 0;
+        }
+      }
+
+      ${eF??""}
+    `;ec[44]!==e2||ec[45]!==eR||ec[46]!==eg||ec[47]!==ti||ec[48]!==ey||ec[49]!==eO||ec[50]!==to||ec[5
+
+[6] UTF16 254347; byte 254365
+<symbol id="file-tree-builtin-markdown" viewBox="0 0 16 16">
+  <path fill="currentColor" d="M1 12V4h2l2 2.5L7 4h2v8H7V7.5l-2 2-2-2V12zm9-3 3 3.5L16 9h-2V4h-2v5z"/>
+</symbol>`,`<symbol id="file-tree-builtin-mcp" viewBox="0 0 16 16"
+
+[7] UTF16 252613; byte 252631
+<symbol id="file-tree-builtin-image" viewBox="0 0 16 16">
+  <path fill="currentColor" d="M12.5 2A2.5 2.5 0 0 1 15 4.5v4.67l-4.05-3.54-4.08 4.08-3-2L1 10.6V4.5A2.5 2.5 0 0 1 3.5 2z" opacity=".3"/>
+  <path fill="currentColor" d="M15 10.5v1a2.5 2.5 0 0 1-2.5 2.5h-9a2.5 2.5 0 0 1-2.46-2.04L4 9l3 2 4-4zm-7-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+</symbol>`,`<symbol id="file-tree-builtin-javascript" viewBox="0 0 16 16">
+  <path fill="currentColor" d="M8 1C2.24 1 1 2.24 1 8s1.24 7 7 7 7-1.24 7-7-1.24-7-7-7" class="bg" opacity=".2"/>
+  <path fill="cur
+
+[8] UTF16 194588; byte 194602
+let rw=rE('<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">\n  <path d="M10 6.41797C10.367 6.41815 10.6649 6.71599 10.665 7.08301V9.33496H12.916C13.2832 9.33496 13.5809 9.63287 13.5811 10C13.5809 10.3671 13.2832 10.665 12.916 10.665H10.665V12.916C10.665 13.2832 10.3671 13.5809 10 13.5811C9.63284 13.5809 9.33496 13.2832 9.33496 12.916V10.665H7.08301C6.71596 10.6649 6.41815 10.367 6.41797 10C6.41813 9.63295 6.71595 9.33509 7.08301 9.33496H9.33496V7.08301C9.33513 6.71596 9.63295 6.4181 10 6.41797Z" fill="currentColor" />\n  <path d="M12.666 2.66797C13.3549 2.66797 13.9121 2.66735 14.3623 2.7041C14.8202 2.74151 15.2268 2.82084 15.6035 3.0127C16.1989 3.31608 16.6829 3.8

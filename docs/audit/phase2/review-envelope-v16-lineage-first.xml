@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="24" time="4.748" timestamp="2026-11-15T16:10:38.579845+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[missing]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[unknown]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[bool]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[negative]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[version]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[context]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[small_verdict]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_cycle_policy_counts_remaining_stages_without_charging" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_lossless_projection_handles_unicode_escaping_and_hostile_reference_objects" time="0.002" /><testcase classname="tests.test_review_envelope_phase2" name="test_legacy_wire_and_packet_keep_the_same_fields_and_hash" time="0.320" /><testcase classname="tests.test_review_envelope_phase2" name="test_packet_limits_count_complete_sources_artifacts_and_delivery_in_bytes" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_unparsed_artifact_size_is_explicit_and_unknown_is_rejected" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_new_envelope_never_shrinks_its_complete_verdict_allowance" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_input_bound_rejects_before_call_admission_or_counter_change" time="0.305" /><testcase classname="tests.test_review_envelope_phase2" name="test_malformed_artifact_new_contract_counts_complete_bytes_and_keeps_syntax_repair" time="0.328" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_artifact_revision_and_delivery_consume_two_bounded_correction_calls" time="0.691" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_review_then_revision_then_fresh_pass_within_original_cycle" time="0.519" /><testcase classname="tests.test_review_envelope_phase2" name="test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review" time="0.296" /><testcase classname="tests.test_review_envelope_phase2" name="test_unsent_review_release_retains_cycle_stage_without_resetting_usage" time="0.257" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[None]" time="0.288"><failure message="forge_core.domain.DomainError: Approved current plan required">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-668/test_approved_completed_lineag0')
+mutation = None
+
+    @pytest.mark.parametrize("mutation", [None, "goal", "inherited_state", "source_state", "preview"])
+    def test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards(
+        tmp_path, mutation
+    ):
+        store, manager, _model, worker = prepared(
+            tmp_path, [tool("file_read", {"path": "work/input.txt"}), response(delivery())]
+        )
+        asyncio.run(manager.run(worker["id"]))
+        # A state fixture isolates read-only lineage reconstruction. Mock execution
+        # is deliberately never accepted as live completed-task or PASS evidence.
+        with store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE worker_runs SET state='succeeded' WHERE id=?", (worker["id"],)
+            )
+            work.connection.execute(
+                "UPDATE task_nodes SET status='succeeded' WHERE plan_id=?", (worker["plan_id"],)
+            )
+            work.connection.execute(
+                "UPDATE workers SET status='succeeded' WHERE id=?", (worker["worker_id"],)
+            )
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            original_hash = _hash(_packet(store, connection, row))
+            original_run = dict(row)
+            original_graph = json.loads(
+                connection.execute(
+                    "SELECT graph_json FROM quest_plans WHERE id=?", (worker["plan_id"],)
+                ).fetchone()[0]
+            )
+            version = connection.execute(
+                "SELECT version FROM quests WHERE id=?", (worker["quest_id"],)
+            ).fetchone()[0]
+        graphs = QuestGraphService(store)
+        proposed = graphs.propose_remaining(
+            worker["quest_id"], original_graph, expected_version=version
+        )
+        with store.connection() as connection:
+            assert (
+                connection.execute(
+                    "SELECT plan_revision FROM quests WHERE id=?", (worker["quest_id"],)
+                ).fetchone()[0]
+                == worker["plan_revision"]
+            )
+            version = connection.execute(
+                "SELECT version FROM quests WHERE id=?", (worker["quest_id"],)
+            ).fetchone()[0]
+        graphs.approve(
+            worker["quest_id"],
+            proposed["digest"],
+            proposed["plan_revision"],
+            expected_version=version,
+            actor="local_user",
+        )
+        with store.unit_of_work() as work:
+            if mutation == "goal":
+                work.connection.execute(
+                    "UPDATE quests SET goal='changed overall goal' WHERE id=?", (worker["quest_id"],)
+                )
+            elif mutation == "inherited_state":
+                work.connection.execute(
+                    "UPDATE task_nodes SET status='failed' WHERE plan_id=?", (proposed["id"],)
+                )
+            elif mutation == "source_state":
+                work.connection.execute(
+                    "UPDATE worker_runs SET state='review_pending' WHERE id=?", (worker["id"],)
+                )
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            if mutation == "preview":
+                with pytest.raises(DomainError):
+                    _review_assignment(store, connection, row, preview=True)
+            elif mutation:
+                with pytest.raises(DomainError):
+                    _packet(store, connection, row)
+            else:
+&gt;               assert _hash(_packet(store, connection, row)) == original_hash
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:613: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\independent_review.py:366: in _packet
+    assignment = _review_assignment(store, connection, run)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:305: in _review_assignment
+    else authority.get_historical_approved(
+backend\src\forge_core\team_composition.py:1235: in get_historical_approved
+    _, row, body = self._checked(
+backend\src\forge_core\team_composition.py:948: in _checked
+    quest, plan = self._current_plan(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x0000018B5F14B010&gt;
+quest_id = 'quest_10f79b13404c', plan_revision = 1
+plan_digest = '6bd27cc7e661095d84819bb0fa89fd37fe1e04a4958c883c0e26b587b15d576b'
+allow_running = True, historical = True
+
+    @staticmethod
+    def _current_plan(
+        connection, quest_id, plan_revision, plan_digest, *, allow_running=False, historical=False
+    ):
+        quest = connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
+        plan = connection.execute(
+            "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?", (quest_id, plan_revision)
+        ).fetchone()
+        if (
+            quest is None
+            or plan is None
+            or quest["plan_revision"] != plan_revision
+            or quest["status"]
+            not in (
+                {"approved", "queued", "running", "completed"}
+                if historical
+                else (
+                    {"approved", "queued", "running"} if allow_running else {"approved", "queued"}
+                )
+            )
+            or plan["status"] != "approved"
+            or plan["digest"] != plan_digest
+        ):
+&gt;           raise DomainError("Approved current plan required")
+E           forge_core.domain.DomainError: Approved current plan required
+
+backend\src\forge_core\team_composition.py:636: DomainError</failure></testcase><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[goal]" time="0.273" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[inherited_state]" time="0.269" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[source_state]" time="0.281" /><testcase classname="tests.test_review_envelope_phase2" name="test_approved_completed_lineage_rebuilds_exact_old_packet_with_normal_hash_guards[preview]" time="0.308" /></testsuite></testsuites>

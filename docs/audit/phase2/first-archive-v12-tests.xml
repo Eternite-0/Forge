@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="12" time="2.423" timestamp="2026-11-15T14:34:19.102276+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_real_oversized_batch_archives_then_reads_own_source_with_full_reservation" time="0.458" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_registry_reduction_preserves_tiny_request_tool_set_after_first_step" time="0.113"><failure message="forge_core.domain.DomainError: Team proposal is stale or invalid">self = &lt;forge_core.team_composition.TeamCompositionService object at 0x000001EF8AB7EE40&gt;
+connection = &lt;sqlite3.Connection object at 0x000001EF8B86A890&gt;
+quest_id = 'quest_fbad531a3809', plan_revision = 1
+proposal_digest = 'a59827d0e51260b0afbf673b13b5ea8e1d91db3b0f64202edb72a16c7fd38823'
+status = 'approved', allow_running = False, validate_profiles = True
+historical = False
+
+    def _checked(
+        self,
+        connection,
+        quest_id,
+        plan_revision,
+        proposal_digest,
+        *,
+        status,
+        allow_running=False,
+        validate_profiles=True,
+        historical=False,
+    ):
+        row = connection.execute(
+            "SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?",
+            (quest_id, plan_revision, proposal_digest),
+        ).fetchone()
+        if row is None or row["status"] != status:
+            raise DomainError("Team approval unavailable")
+        quest, plan = self._current_plan(
+            connection,
+            quest_id,
+            plan_revision,
+            row["plan_digest"],
+            allow_running=allow_running or status == "approved",
+            historical=historical,
+        )
+        try:
+            if _digest(json.loads(plan["graph_json"])) != row["plan_digest"]:
+                raise ValueError
+            body = json.loads(row["body_json"])
+            if (
+                _digest(body) != proposal_digest
+                or body["quest_id"] != quest_id
+                or body["plan_revision"] != plan_revision
+                or body["plan_digest"] != row["plan_digest"]
+            ):
+                raise ValueError
+            for model_id, expected in body["profile_hashes"].items() if validate_profiles else []:
+                model = connection.execute(
+                    "SELECT profile FROM models WHERE id=?", (model_id,)
+                ).fetchone()
+                if (
+                    model is None
+                    or hashlib.sha256(model["profile"].encode("utf-8")).hexdigest() != expected
+                ):
+&gt;                   raise ValueError
+E                   ValueError
+
+src\forge_core\team_composition.py:898: ValueError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-619/test_registry_reduction_preser0')
+
+    def test_registry_reduction_preserves_tiny_request_tool_set_after_first_step(tmp_path):
+        store, manager, model, worker = prepared(
+            tmp_path, [response({"summary": "incomplete"}), response(delivery())]
+        )
+        original_generate = model.generate
+    
+        async def shrink_registry(request):
+            assert [item["name"] for item in request.tools] == ["file_read"]
+            if not model.requests:
+                with store.unit_of_work() as work:
+                    profile = json.loads(
+                        work.connection.execute("SELECT profile FROM models").fetchone()[0]
+                    )
+                    profile["context_window"] = 7000
+                    work.connection.execute("UPDATE models SET profile=?", (_json(profile),))
+            else:
+                assert request.context_limit == 7000
+            return await original_generate(request)
+    
+        model.generate = shrink_registry
+&gt;       result = asyncio.run(manager.run(worker["id"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_worker_first_archive_phase2.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+src\forge_core\worker_runtime.py:1517: in run
+    return await self._run(run_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\worker_runtime.py:2267: in _run
+    if not self._settle_model_usage(
+src\forge_core\worker_runtime.py:1272: in _settle_model_usage
+    self._fenced(c, run_id, token)
+src\forge_core\worker_runtime.py:1154: in _fenced
+    team = self._team(connection, row["quest_id"], row["plan_revision"], row["team_digest"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\worker_runtime.py:295: in _team
+    return self.team_authority.get_approved(
+src\forge_core\team_composition.py:1068: in get_approved
+    _, row, body = self._checked(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.team_composition.TeamCompositionService object at 0x000001EF8AB7EE40&gt;
+connection = &lt;sqlite3.Connection object at 0x000001EF8B86A890&gt;
+quest_id = 'quest_fbad531a3809', plan_revision = 1
+proposal_digest = 'a59827d0e51260b0afbf673b13b5ea8e1d91db3b0f64202edb72a16c7fd38823'
+status = 'approved', allow_running = False, validate_profiles = True
+historical = False
+
+    def _checked(
+        self,
+        connection,
+        quest_id,
+        plan_revision,
+        proposal_digest,
+        *,
+        status,
+        allow_running=False,
+        validate_profiles=True,
+        historical=False,
+    ):
+        row = connection.execute(
+            "SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?",
+            (quest_id, plan_revision, proposal_digest),
+        ).fetchone()
+        if row is None or row["status"] != status:
+            raise DomainError("Team approval unavailable")
+        quest, plan = self._current_plan(
+            connection,
+            quest_id,
+            plan_revision,
+            row["plan_digest"],
+            allow_running=allow_running or status == "approved",
+            historical=historical,
+        )
+        try:
+            if _digest(json.loads(plan["graph_json"])) != row["plan_digest"]:
+                raise ValueError
+            body = json.loads(row["body_json"])
+            if (
+                _digest(body) != proposal_digest
+                or body["quest_id"] != quest_id
+                or body["plan_revision"] != plan_revision
+                or body["plan_digest"] != row["plan_digest"]
+            ):
+                raise ValueError
+            for model_id, expected in body["profile_hashes"].items() if validate_profiles else []:
+                model = connection.execute(
+                    "SELECT profile FROM models WHERE id=?", (model_id,)
+                ).fetchone()
+                if (
+                    model is None
+                    or hashlib.sha256(model["profile"].encode("utf-8")).hexdigest() != expected
+                ):
+                    raise ValueError
+        except (ValueError, KeyError, TypeError) as exc:
+&gt;           raise DomainError("Team proposal is stale or invalid") from exc
+E           forge_core.domain.DomainError: Team proposal is stale or invalid
+
+src\forge_core\team_composition.py:900: DomainError</failure></testcase><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_preserves_originals_and_execution_authority" time="0.122" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_cannot_hide_unsettled_or_incomplete_tail[pending]" time="0.107" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_cannot_hide_unsettled_or_incomplete_tail[uncertain]" time="0.120" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_cannot_hide_unsettled_or_incomplete_tail[missing_receipt]" time="0.162" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_cannot_hide_unsettled_or_incomplete_tail[missing_reply]" time="0.134" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_availability_requires_actual_boolean[None]" time="0.108" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_availability_requires_actual_boolean[0]" time="0.103" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_availability_requires_actual_boolean[1]" time="0.111" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_availability_requires_actual_boolean[true]" time="0.101" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_first_archive_opt_in_still_requires_initial_contract_to_fit" time="0.096" /></testsuite></testsuites>

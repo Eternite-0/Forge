@@ -24,11 +24,19 @@ class ProviderConfig:
     cached_input_price_per_million: float | None = None
     output_price_per_million: float | None = None
     currency: str | None = None
+    reasoning_effort: str | None = None
 
     def __post_init__(self):
         parsed = urlsplit(self.base_url)
         if self.kind not in {"openai_compatible", "deepseek", "anthropic"}:
             raise ValueError("Unknown provider kind")
+        if self.reasoning_effort is not None and (
+            self.kind not in {"openai_compatible", "deepseek"}
+            or not isinstance(self.reasoning_effort, str)
+            or self.reasoning_effort
+            not in {"none", "minimal", "low", "medium", "high", "xhigh", "max"}
+        ):
+            raise ValueError("Invalid provider reasoning effort configuration")
         numeric_loopback = parsed.hostname in {"127.0.0.1", "::1"}
         if (
             (
@@ -110,9 +118,12 @@ class ProviderConfig:
 
         return cls(
             *values,
+            timeout_seconds=float(os.environ.get("FORGE_PROVIDER_TIMEOUT_SECONDS", "30")),
+            max_retries=int(os.environ.get("FORGE_PROVIDER_MAX_RETRIES", "1")),
             supports_tools=flag("FORGE_PROVIDER_SUPPORTS_TOOLS"),
             supports_json_schema=flag("FORGE_PROVIDER_SUPPORTS_JSON_SCHEMA"),
             allow_insecure_loopback=flag("FORGE_PROVIDER_ALLOW_INSECURE_LOOPBACK"),
+            reasoning_effort=os.environ.get("FORGE_PROVIDER_REASONING_EFFORT"),
         )
 
 

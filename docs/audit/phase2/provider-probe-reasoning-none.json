@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "source_snapshot": {
+    "path": ".local/phase2/provider/20261115T005858Z-7ae2c8/report.json",
+    "sha256": "b384debd2dd99abbc2d0df8fa3fea8bd1886ffab2979db9dbc2c9f958e3368e4",
+    "bytes": 9276
+  },
+  "run_id": "20261115T005858Z-7ae2c8",
+  "execution_mode": "live",
+  "provider_alias": "wb-local",
+  "proxy_reported_model_id": "deepseek-v4.1-flash",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "reasoning_effort": "none",
+  "reasoning_limit": "Explicit request setting advertised by the local proxy implementation. Transmission and acceptance do not independently establish the upstream model's internal reasoning behavior.",
+  "operator_limits": {
+    "context_ceiling": 65536,
+    "output_probe_ceiling": 1024,
+    "total_token_budget": 300000,
+    "concurrency_limit": 2
+  },
+  "actual_limits": {
+    "context_maximum": null,
+    "output_maximum": null,
+    "rate_limit": null,
+    "cost": null
+  },
+  "protocol_cases": [
+    {"name": "minimal_dialogue", "correct": false, "input_tokens": 19, "output_tokens": 4, "response_sha256": "c3f886c4b0e40ab4a97d8242251e6bffd2dcecdcc279a59f1a09e82b0db84592"},
+    {"name": "router_schema_1", "correct": true, "input_tokens": 635, "output_tokens": 28},
+    {"name": "router_schema_2", "correct": true, "input_tokens": 635, "output_tokens": 28},
+    {"name": "router_schema_3", "correct": true, "input_tokens": 635, "output_tokens": 28},
+    {"name": "tool_call_1", "correct": true, "input_tokens": 291, "output_tokens": 38},
+    {"name": "tool_call_2", "correct": true, "input_tokens": 291, "output_tokens": 38},
+    {"name": "tool_call_3", "correct": true, "input_tokens": 291, "output_tokens": 38},
+    {"name": "bounded_context_recall", "correct": true, "input_tokens": 2552, "output_tokens": 9},
+    {"name": "concurrency_1", "correct": true, "input_tokens": 15, "output_tokens": 1},
+    {"name": "concurrency_2", "correct": true, "input_tokens": 15, "output_tokens": 1},
+    {"name": "streaming", "correct": true, "input_tokens": 24, "output_tokens": 9, "ttft_seconds": 1.353, "chunks": 9}
+  ],
+  "passed_cases": 10,
+  "total_cases": 11,
+  "failure": "A proxy/model response was received for the minimal dialogue case, but it failed exact expected-text equality. The response hash is retained; content is not published. No rerun replaced this failure.",
+  "discovery": {"returned_model_ids": 11, "target_available": true},
+  "usage": {"gateway_attempts": 11, "settled_attempts": 11, "input_tokens": 5403, "output_tokens": 222},
+  "duration_seconds": 20.21,
+  "finished_at": "2026-11-15T00:59:18.947666+00:00",
+  "publication_scope": "Allowlisted measured fields from the existing sanitized report. No credential, base URL, request/response content or logs. Protocol success is not Quest acceptance or a task-quality benchmark. This publication made no Provider request. The earlier default-mode 11/11 probe remains separate."
+}

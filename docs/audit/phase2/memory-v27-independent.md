@@ -1,0 +1,5 @@
+# Independent completed cross-Quest memory observation
+
+Passed: False. Read-only changes: 0. Failures: ['completed_distinct_source_and_target_quests', 'selected_context_in_later_actual_request', 'target_original_file_read_and_fresh_pass', 'source_and_target_independent_passes_reconstructed', 'known_usage_within_original_caps', 'completed_source_compaction_target_order_valid', 'original_and_recollected_actual_probe_required', 'two_distinct_completed_actual_tasks_required', 'unique_persisted_target_retrieval_binding_required', 'original_known_actual_usage_required', 'two_exact_tool_counters_required', 'two_exact_token_step_counters_required', 'original_or_recollected_actual_probe_failed'].
+
+One controlled completed cross-Quest sample. Exact original user-scoped rule remains a hypothesis; later actual original file reads and fresh current PASS are required. Unique settled persisted call windows and Router retrieval metadata are protocol evidence, not raw HTTP request/response provenance. Lexical, semantic and compacted context contributions are not causally separated. Restart between completed tasks does not fulfill goal 14.

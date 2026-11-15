@@ -1,6 +1,7 @@
 pub mod core_host;
 pub mod credential_vault;
 pub mod protocol;
+pub mod workspace_files;
 pub fn normalized_external_url(value: &str) -> Option<String> {
     if value.len() > 2048
         || value

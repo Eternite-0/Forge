@@ -1,0 +1,132 @@
+{
+  "acceptance": {
+    "checks": {
+      "artifact_hashes": "unknown",
+      "completed_quest": "unknown",
+      "context_compaction_continuity": "unknown",
+      "core_restart_continuity": "unknown",
+      "database_evidence": "passed",
+      "independent_fixed_semantic_suite": "unknown",
+      "model_generated_dag": "unknown",
+      "real_numeric_ast_receipts": "unknown",
+      "research_math_architecture_coding_experiment_review": "unknown"
+    },
+    "failed_checks": [],
+    "passed": false,
+    "status": "unknown",
+    "unknown_checks": [
+      "completed_quest",
+      "model_generated_dag",
+      "research_math_architecture_coding_experiment_review",
+      "real_numeric_ast_receipts",
+      "independent_fixed_semantic_suite",
+      "artifact_hashes",
+      "core_restart_continuity",
+      "context_compaction_continuity"
+    ]
+  },
+  "actual_final_status": "no_quest",
+  "artifact_hashes": [],
+  "code_snapshot_sha256": null,
+  "compaction": {
+    "archive_created": null,
+    "rebuilt_messages": null,
+    "source_count": null,
+    "source_readback_available": null
+  },
+  "context_archives": 0,
+  "conversation_count": 1,
+  "cost": null,
+  "driver_final_status": null,
+  "duration_seconds": 23.056,
+  "execution_mode": "live",
+  "failures": [
+    "router_did_not_create_quest",
+    "acceptance_unknown:completed_quest",
+    "acceptance_unknown:model_generated_dag",
+    "acceptance_unknown:research_math_architecture_coding_experiment_review",
+    "acceptance_unknown:real_numeric_ast_receipts",
+    "acceptance_unknown:independent_fixed_semantic_suite",
+    "acceptance_unknown:artifact_hashes",
+    "acceptance_unknown:core_restart_continuity",
+    "acceptance_unknown:context_compaction_continuity"
+  ],
+  "inspection_error": null,
+  "level": "L3",
+  "model_attempts": [
+    {
+      "attempt_id": "d91f7649e9cb4f31b7d73dd1c6844134",
+      "call_id": "call_27213065be75",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2603,
+      "input_reserved": 13442,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 1105,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "da4d7a9dd1b84d1886a9e8930dc1ed35",
+      "call_id": "call_46d91922b68d",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2103,
+      "input_reserved": 12177,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 2048,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_reflect",
+      "state": "settled"
+    }
+  ],
+  "model_attempts_omitted": 0,
+  "model_calls": 2,
+  "model_settlement_wait": {
+    "timeout_seconds": null,
+    "unsettled_attempts": null,
+    "waited_seconds": null
+  },
+  "publication_scope": "Allowlisted summaries of already-redacted live-driver records. Prompt/reply/log/artifact content omitted; unknown usage/cost preserved. A completed Quest alone does not establish scenario acceptance.",
+  "restart": {
+    "after": null,
+    "initial_router_identity": null,
+    "restored_router_identity": null,
+    "router_identity_retained": null,
+    "same_workspace": null
+  },
+  "retry_accounting": null,
+  "retry_breakdown": {
+    "background_notice_retries": null,
+    "provider_http_retries": null,
+    "review_revision_requests": null,
+    "worker_self_repairs": null
+  },
+  "retry_count": 0,
+  "review_results": [],
+  "router_status": 503,
+  "run_id": "20261115T000717Z-L3-ac5000",
+  "runtime_settings": {
+    "model_concurrency_limit": null,
+    "model_token_limit": null,
+    "provider_max_retries": null,
+    "provider_timeout_seconds": null,
+    "reasoning_effort": null,
+    "review_max_rounds": null,
+    "worker_lease_seconds": null
+  },
+  "scenario_id": "forge-phase2-level-3-v1",
+  "schema_version": 1,
+  "semantic_test_runs": 0,
+  "token_usage": {
+    "input": 4706,
+    "output": 3153,
+    "unknown_attempts": 0
+  },
+  "tool_calls": 0,
+  "tools": [],
+  "workers": []
+}

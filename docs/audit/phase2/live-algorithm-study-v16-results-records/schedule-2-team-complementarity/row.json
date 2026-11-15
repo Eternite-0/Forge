@@ -1,0 +1,150 @@
+{
+  "candidate": {
+    "answers": [
+      3,
+      -1,
+      3,
+      3,
+      3
+    ],
+    "citations": [
+      {
+        "line_end": 2,
+        "line_start": 2,
+        "sha256": "aaa8e59b163d770542a78d34247e3b9891112bcc09fc3ba427d0920e1ed9c5f5",
+        "source_id": "machines"
+      },
+      {
+        "line_end": 2,
+        "line_start": 2,
+        "sha256": "c0c45f6bd6bbea8ed0fc94f9649c1c466ad02c4186a2b5ca3403ad583ee29a4f",
+        "source_id": "jobs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "lowest_cost_then_id",
+      "explicit_no_candidate"
+    ]
+  },
+  "case_id": "schedule-2",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 2,
+  "domain": "integer_scheduling",
+  "duration_seconds": 4.746002900006715,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "math"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_b20736c78f4b",
+      "receipt_id": "receipt_7846c7dbcc5f",
+      "sha256": "aaa8e59b163d770542a78d34247e3b9891112bcc09fc3ba427d0920e1ed9c5f5",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_3ada8e73ec91",
+      "receipt_id": "receipt_cd3c593e8dcf",
+      "sha256": "c0c45f6bd6bbea8ed0fc94f9649c1c466ad02c4186a2b5ca3403ad583ee29a4f",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_68155c29dfcc",
+      "duration_seconds": 2.175933199992869,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "1626396873f6227196f0301cd512f64d155fe3b5ca9e1ac99d4ed7da330b45d5",
+      "response_sha256": "fa31b25a984bfed1657d1ce7b7686d558df8cef833a1daa6924fbe2136504f27",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 384,
+        "input_tokens": 524,
+        "output_tokens": 162
+      }
+    },
+    {
+      "call_id": "study_call_a4bb8c69832b",
+      "duration_seconds": 2.3505478000151925,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "35c2163e1b3a498870c28deda542a0e76ce0c84d0ecd86ddbf08d769a5327cf9",
+      "response_sha256": "5ff84e56042326994ae1b66fcd7f658c4bae0328210f77f6e36ee1a5b3dec221",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 714,
+        "output_tokens": 161
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_68155c29dfcc",
+        "cost_charged": null,
+        "input_charged": 524,
+        "input_reserved": 3103,
+        "output_charged": 162,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_a4bb8c69832b",
+        "cost_charged": null,
+        "input_charged": 714,
+        "input_reserved": 3690,
+        "output_charged": 161,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1238,
+    "known_input_tokens": 1238,
+    "known_output_tokens": 323,
+    "model_calls": 2,
+    "output_tokens": 323,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "complementarity"
+}

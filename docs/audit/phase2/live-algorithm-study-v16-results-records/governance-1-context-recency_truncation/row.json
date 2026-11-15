@@ -1,0 +1,100 @@
+{
+  "candidate": {
+    "answers": [],
+    "citations": [],
+    "completed": false,
+    "retained_constraints": [
+      "Process each event stream from an empty set of approved IDs",
+      "approve adds its ID",
+      "revoke removes it",
+      "A write is admitted only if its ID is currently approved",
+      "Return the admitted-write count for each stream in order",
+      "A failed write never grants approval"
+    ]
+  },
+  "case_id": "governance-1",
+  "context_cap": 16384,
+  "context_records_sha256": "b258e6d58d043b1c707288765163d61c581a768d97ef924f494fa07a0b74d7d6",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "approval_architecture",
+  "duration_seconds": 2.3280762000067625,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": false,
+    "obligations_retained": 0,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer",
+      "source_evidence",
+      "lost_obligation",
+      "not_completed"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_461890f4fb12",
+      "receipt_id": "receipt_56f8a3270fe9",
+      "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+      "source_id": "semantics"
+    },
+    {
+      "intent_id": "action_20c8eaaa66dc",
+      "receipt_id": "receipt_25d22fb981b1",
+      "sha256": "8c9e89efe72d5dbaa9b6cda4ff857d45c47eb45042cadfe9c73e3fc97ffa972f",
+      "source_id": "streams"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_fa3dbbe3c40f",
+      "duration_seconds": 2.051536799990572,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "afceb6fb4007d49b8f648c292faf2fdf7ab43c414900a5aad9818e30bac1d93f",
+      "response_sha256": "6607f94dd15872bb463415e260a4f1fe0d340a49f5ac8da4ebdc8634f254ee51",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 472,
+        "output_tokens": 75
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_fa3dbbe3c40f",
+        "cost_charged": null,
+        "input_charged": 472,
+        "input_reserved": 3213,
+        "output_charged": 75,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 472,
+    "known_input_tokens": 472,
+    "known_output_tokens": 75,
+    "model_calls": 1,
+    "output_tokens": 75,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "recency_truncation"
+}

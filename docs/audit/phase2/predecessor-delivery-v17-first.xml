@@ -1,0 +1,1100 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="17" skipped="0" tests="18" time="9.722" timestamp="2026-11-15T16:48:47.517756+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_predecessor_delivery_v17" name="test_full_original_delivery_reads_without_mutation_and_uses_declared_bound" time="0.587"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_full_original_delivery_re0')
+
+    def test_full_original_delivery_reads_without_mutation_and_uses_declared_bound(tmp_path):
+&gt;       store, manager, _, _, _, producer, reader, expected = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_full_original_delivery_re0')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_current_reader_modes_do_not_authorize_execution_after_delivery" time="0.451"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_current_reader_modes_do_n0')
+
+    def test_current_reader_modes_do_not_authorize_execution_after_delivery(tmp_path):
+&gt;       store, manager, _, _, _, _, reader, _ = prepared(tmp_path)
+                                                ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:146: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_current_reader_modes_do_n0')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_running_successor_reads_exact_preserved_producer_after_remaining_dag" time="0.479"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_running_successor_reads_e0')
+
+    def test_running_successor_reads_exact_preserved_producer_after_remaining_dag(tmp_path):
+&gt;       store, manager, _, quest, plan, producer, _, expected = prepared(tmp_path)
+                                                                ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_running_successor_reads_e0')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage" time="0.517"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_real_core_read_tool_messa0')
+
+    def test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage(tmp_path):
+&gt;       store, manager, model, quest, plan, _, reader, expected = prepared(tmp_path)
+                                                                  ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_real_core_read_tool_messa0')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[artifact]" time="0.511"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut0')
+mutation = 'artifact'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut0')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[suite_evidence]" time="0.439"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut1')
+mutation = 'suite_evidence'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut1')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[source_state]" time="0.454"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut2')
+mutation = 'source_state'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut2')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[source_result]" time="0.545"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut3')
+mutation = 'source_result'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut3')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[reader_scope]" time="0.445"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut4')
+mutation = 'reader_scope'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut4')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[reader_contract]" time="0.494"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut5')
+mutation = 'reader_contract'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut5')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[edge]" time="0.616"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut6')
+mutation = 'edge'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut6')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[current_approval]" time="0.530"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut7')
+mutation = 'current_approval'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut7')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[lineage_goal]" time="0.518"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut8')
+mutation = 'lineage_goal'
+
+    @pytest.mark.parametrize("mutation", ["artifact", "suite_evidence", "source_state", "source_result", "reader_scope", "reader_contract", "edge", "current_approval", "lineage_goal"])
+    def test_read_rejects_tampered_authority_lineage_or_original_evidence(tmp_path, mutation):
+&gt;       store, manager, _, quest, plan, producer, reader, _ = prepared(tmp_path)
+                                                              ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_read_rejects_tampered_aut8')
+summary = 'Whole original analysis: 中文 and evidence.', reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_whole_delivery_over_bound_is_rejected_without_truncation" time="0.431"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_whole_delivery_over_bound0')
+
+    def test_whole_delivery_over_bound_is_rejected_without_truncation(tmp_path):
+&gt;       store, manager, _, _, _, _, reader, _ = prepared(tmp_path, summary="x" * 3000)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_whole_delivery_over_bound0')
+summary = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+reader_criteria = None
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[None]" time="0.432"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c0')
+mutation = None
+
+    @pytest.mark.parametrize("mutation", [None, "tool_result", "tool_message"])
+    def test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass(tmp_path, mutation):
+&gt;       store, manager, model, _, _, _, reader, expected = prepared(tmp_path, reader_criteria=["delivery_review"])
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c0')
+summary = 'Whole original analysis: 中文 and evidence.'
+reader_criteria = ['delivery_review']
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[tool_result]" time="0.663"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c1')
+mutation = 'tool_result'
+
+    @pytest.mark.parametrize("mutation", [None, "tool_result", "tool_message"])
+    def test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass(tmp_path, mutation):
+&gt;       store, manager, model, _, _, _, reader, expected = prepared(tmp_path, reader_criteria=["delivery_review"])
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c1')
+summary = 'Whole original analysis: 中文 and evidence.'
+reader_criteria = ['delivery_review']
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[tool_message]" time="0.481"><failure message="AssertionError: assert 'running' == 'completed'&#10;  &#10;  - completed&#10;  + running">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c2')
+mutation = 'tool_message'
+
+    @pytest.mark.parametrize("mutation", [None, "tool_result", "tool_message"])
+    def test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass(tmp_path, mutation):
+&gt;       store, manager, model, _, _, _, reader, expected = prepared(tmp_path, reader_criteria=["delivery_review"])
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_predecessor_delivery_v17.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-709/test_review_packet_preserves_c2')
+summary = 'Whole original analysis: 中文 and evidence.'
+reader_criteria = ['delivery_review']
+
+    def prepared(tmp_path, *, summary="Whole original analysis: 中文 and evidence.", reader_criteria=None):
+        store = Store(tmp_path / "core.sqlite3", workspace=Workspace.from_path(tmp_path))
+        (tmp_path / "work").mkdir()
+        (tmp_path / "work/input.json").write_text('{"source":"original"}', encoding="utf-8")
+        quest = Quest(title="Completed delivery fixture", goal="Read the complete verified predecessor.")
+        store.save_quest(quest)
+        graphs = QuestGraphService(store)
+        raw = {
+            "nodes": [
+                {
+                    "key": "producer", "objective": "Read the actual source and produce an analysis.",
+                    "success_criteria": ["json_valid:work/source.json"], "budget_tokens": 60000,
+                    "allowed_tools": ["file_read", "file_write"],
+                    "capacity_bounds": {"max_source_receipt_bytes": 4096, "max_artifact_bytes": 4096, "max_delivery_bytes": 2048},
+                },
+                {
+                    "key": "reader", "objective": "Read all predecessor claims and write a checked summary.",
+                    "success_criteria": reader_criteria or ["json_valid:work/review.json"], "budget_tokens": 60000,
+                    "allowed_tools": [TOOL_NAME, "file_write"],
+                    "required_predecessor_deliveries": ["producer"],
+                },
+            ],
+            "edges": [{"source": "producer", "target": "reader", "condition": "success"}],
+            "max_total_tokens": 120000,
+        }
+        plan = graphs.propose(quest.id, raw, expected_version=0)
+        graphs.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        store.save_model(ModelProfile(
+            id="protocol", provider="protocol", model_id="fixture", display_name="Offline handoff fixture",
+            context_window=65536, max_output_tokens=4000,
+            tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
+        ))
+        teams = TeamCompositionService(store)
+        team = propose_team(store, teams, quest, plan, include_producer=True)
+        GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+        expected = delivery(summary)
+        expected["findings"] = ["UNTRUSTED_SOURCE_SENTINEL", "Retain every finding."]
+        model = Protocol([
+            tool("file_read", {"path": "work/input.json"}),
+            tool("file_write", {"path": "work/source.json", "content": '{"analysis":"evidence"}'}, ordinal=2),
+            response(expected),
+        ])
+        manager = WorkerManager(store, ProviderPool({"protocol": model}), ToolEngine(store), team_authority=teams)
+        producer = manager.start(quest.id, plan["id"], "producer", team_digest=team["proposal_digest"], member_index=0)
+        assert asyncio.run(manager.run(producer["id"]))["state"] == "review_pending"
+&gt;       assert NodeVerifier(store).verify(quest.id, "producer")["status"] == "completed"
+E       AssertionError: assert 'running' == 'completed'
+E         
+E         - completed
+E         + running
+
+backend\tests\test_predecessor_delivery_v17.py:83: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_predecessor_source_bytes_count_all_fields_in_review_envelope" time="0.001" /></testsuite></testsuites>

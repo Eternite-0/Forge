@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="2.283" timestamp="2026-11-15T17:08:33.243184+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_serial_runtime_v17" name="test_native_serial_two_nodes_reopen_keep_one_pool_and_original_cap[False]" time="0.732"><failure message="AttributeError: 'ProviderGateway' object has no attribute 'budget_ledger'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-739/test_native_serial_two_nodes_r0')
+tamper = False
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_native_serial_two_nodes_reopen_keep_one_pool_and_original_cap(tmp_path, tamper):
+        store, quest, plan, team, _roles, _limits, _teams, _ledger = serial_team(tmp_path)
+        GovernanceService(store).grant_workspace(quest.id, "inputs", "local_user")
+        first_delivery = delivery("Complete original producer findings and source reference.")
+        first_delivery["findings"] = [
+            "中文 source is retained whole; no model result substitutes evidence."
+        ]
+    
+        def responder(body, ordinal):
+            if ordinal in {1, 4}:
+                name = "file_read" if ordinal == 1 else "worker_read_completed_delivery"
+                arguments = {"path": "inputs/unicode.json"} if ordinal == 1 else {"node_key": "n0"}
+                return {
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": f"native-{ordinal}",
+                            "type": "function",
+                            "function": {"name": name, "arguments": canonical(arguments)},
+                        }
+                    ],
+                }
+            if ordinal in {2, 5}:
+                return {
+                    "content": canonical(
+                        first_delivery
+                        if ordinal == 2
+                        else delivery("Independently checked predecessor findings.")
+                    )
+                }
+            assert ordinal in {3, 6} and not body.get("tools")
+            return {
+                "content": canonical(
+                    {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+                )
+            }
+    
+        with offline_loopback_gateway(store, responder) as (gateway, requests):
+            # Reuse the native local HTTP server without overriding execution mode
+            # or manufacturing attempts/settlements. Match the approved fixture ID.
+            gateway.config = replace(gateway.config, id="p")
+            gateway._budget_ledger = ModelCallBudgetLedger(
+                store.path, token_limit=180000, concurrency_limit=1
+            )
+            assert gateway.execution_mode == "live"
+            providers = ProviderPool({"p": gateway})
+            teams = TeamCompositionService(
+&gt;               store, capacity_providers=providers, budget_ledger=gateway.budget_ledger
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+            )
+E           AttributeError: 'ProviderGateway' object has no attribute 'budget_ledger'
+
+tests\test_serial_runtime_v17.py:76: AttributeError</failure></testcase><testcase classname="tests.test_serial_runtime_v17" name="test_native_serial_two_nodes_reopen_keep_one_pool_and_original_cap[True]" time="0.736"><failure message="AttributeError: 'ProviderGateway' object has no attribute 'budget_ledger'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-739/test_native_serial_two_nodes_r1')
+tamper = True
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_native_serial_two_nodes_reopen_keep_one_pool_and_original_cap(tmp_path, tamper):
+        store, quest, plan, team, _roles, _limits, _teams, _ledger = serial_team(tmp_path)
+        GovernanceService(store).grant_workspace(quest.id, "inputs", "local_user")
+        first_delivery = delivery("Complete original producer findings and source reference.")
+        first_delivery["findings"] = [
+            "中文 source is retained whole; no model result substitutes evidence."
+        ]
+    
+        def responder(body, ordinal):
+            if ordinal in {1, 4}:
+                name = "file_read" if ordinal == 1 else "worker_read_completed_delivery"
+                arguments = {"path": "inputs/unicode.json"} if ordinal == 1 else {"node_key": "n0"}
+                return {
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": f"native-{ordinal}",
+                            "type": "function",
+                            "function": {"name": name, "arguments": canonical(arguments)},
+                        }
+                    ],
+                }
+            if ordinal in {2, 5}:
+                return {
+                    "content": canonical(
+                        first_delivery
+                        if ordinal == 2
+                        else delivery("Independently checked predecessor findings.")
+                    )
+                }
+            assert ordinal in {3, 6} and not body.get("tools")
+            return {
+                "content": canonical(
+                    {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+                )
+            }
+    
+        with offline_loopback_gateway(store, responder) as (gateway, requests):
+            # Reuse the native local HTTP server without overriding execution mode
+            # or manufacturing attempts/settlements. Match the approved fixture ID.
+            gateway.config = replace(gateway.config, id="p")
+            gateway._budget_ledger = ModelCallBudgetLedger(
+                store.path, token_limit=180000, concurrency_limit=1
+            )
+            assert gateway.execution_mode == "live"
+            providers = ProviderPool({"p": gateway})
+            teams = TeamCompositionService(
+&gt;               store, capacity_providers=providers, budget_ledger=gateway.budget_ledger
+                                                                   ^^^^^^^^^^^^^^^^^^^^^
+            )
+E           AttributeError: 'ProviderGateway' object has no attribute 'budget_ledger'
+
+tests\test_serial_runtime_v17.py:76: AttributeError</failure></testcase></testsuite></testsuites>

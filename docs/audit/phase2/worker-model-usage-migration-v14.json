@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "migration_focused_checks_passed_runtime_validation_separate",
+  "database_schema_before": 11,
+  "database_schema_after": 12,
+  "new_table": "worker_model_reservations",
+  "historical_backfill": false,
+  "historical_live_database_mutations": 0,
+  "new_dependencies": [],
+  "files": [
+    {"path": "backend/src/forge_core/migrations.py", "sha256": "485d9be2e7efdf270dae4e4ed42f028dce9f77fd86ea0697f0e81590b0d1a63c"},
+    {"path": "backend/tests/test_migrations.py", "sha256": "e19ada02830fc8e84ba4676d222464732526edfc83c63bd8a6af917320cf19b2"},
+    {"path": "backend/tests/test_worker_model_usage_migration_phase2.py", "sha256": "2f4cdfaaa1f51fa28065d77067e15c3be76cb6444a86fdac55a0e550256526db"},
+    {"path": "backend/tests/test_worker_runtime.py", "sha256": "4056d8f77388bc8dc047bc8bd552b1297258d3254b09e851bc30e6e8079fee4f"}
+  ],
+  "authorized_existing_test_changes": [
+    {"test": "test_each_migration_step", "before": "assert SCHEMA_VERSION == 11", "after": "assert SCHEMA_VERSION == 12", "meaning_changed": false},
+    {"test": "test_each_migration_failure_rolls_back_a_fresh_database", "before": "failing_version in [1,2,3,4,5,6,7,8,9,10,11]", "after": "failing_version in [1,2,3,4,5,6,7,8,9,10,11,12]", "meaning_changed": false},
+    {"test": "test_each_migration_failure_rolls_back_a_fresh_database", "before": "final schema version == 11", "after": "final schema version == 12", "meaning_changed": false},
+    {"test": "test_v8_component_failure_rolls_back_v7_data", "before": "final schema version == 11", "after": "final schema version == 12", "meaning_changed": false}
+  ],
+  "authorized_existing_cutover_fixture_changes": [
+    {"file": "backend/tests/test_worker_runtime.py", "test": "test_v7_worker_opening_migrates_once_with_known_reserves", "change": "Add worker_model_reservations to the existing tuple of post-v7 tables dropped from the test-only SQLite backup before setting schema version 7.", "assertions_changed": false},
+    {"file": "backend/tests/test_worker_runtime.py", "test": "test_v8_active_worker_enters_output_review_without_changing_team_or_budget", "change": "Add DROP TABLE worker_model_reservations beside the existing post-v8 table drops in the test-only SQLite backup before setting schema version 8.", "assertions_changed": false}
+  ],
+  "preservation": {
+    "legacy_sql_fixture_modified": false,
+    "existing_test_ids_or_semantics_rewritten": false,
+    "migration_12_inserts_into_historical_tables": false,
+    "migration_12_updates_historical_rows": false,
+    "new_table_empty_after_v11_cutover": true,
+    "all_preexisting_table_values_utf8_bytes_preserved_in_test": true,
+    "all_preexisting_sqlite_schema_definitions_preserved_in_test": true,
+    "settled_unknown_reserved_legacy_gateway_attempts_retained": true,
+    "historical_worker_reserve_18234_retained": true
+  },
+  "checks": {
+    "command": "backend/.venv/Scripts/python.exe -m pytest tests/test_migrations.py tests/test_worker_model_usage_migration_phase2.py tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget -q",
+    "working_directory": "backend",
+    "final_passed": 51,
+    "final_failed": 0,
+    "final_errors": 0,
+    "final_duration_seconds": 5.11,
+    "final_junit": "docs/audit/phase2/worker-model-usage-migration-v14-cutover-tests.xml",
+    "ruff_check": "passed",
+    "ruff_format_check": "passed_4_files",
+    "git_diff_check": "passed",
+    "diagnosis_json_arithmetic_and_restart_snapshot_check": "passed"
+  },
+  "retained_test_history": [
+    {"junit": "docs/audit/phase2/worker-model-usage-migration-v14-tests.xml", "passed": 28, "failed": 2, "errors": 16, "duration_seconds": 3.30, "cause": "New fixture used positional quest_plans INSERT predating its tenth column; corrected to explicit columns."},
+    {"junit": "docs/audit/phase2/worker-model-usage-migration-v14-fixed-tests.xml", "passed": 44, "failed": 2, "errors": 0, "duration_seconds": 3.42, "cause": "New preservation helper assumed rowid on FTS virtual tables; corrected to full-row stable JSON ordering."},
+    {"junit": "docs/audit/phase2/worker-model-usage-migration-v14-fixed2-tests.xml", "passed": 46, "failed": 0, "errors": 0, "duration_seconds": 4.45},
+    {"junit": "docs/audit/phase2/worker-model-usage-migration-v14-replace-tests.xml", "passed": 49, "failed": 0, "errors": 0, "duration_seconds": 4.45, "change": "Independent review identified SQLite INSERT OR REPLACE's implicit deletion bypass when recursive_triggers is off. Added a duplicate-call BEFORE INSERT rejection and reserved/settled/refunded replacement tests; no global PRAGMA change."},
+    {"junit": "docs/audit/phase2/worker-model-usage-v14-regression-first.xml", "passed": 164, "failed": 2, "errors": 0, "duration_seconds": 35.87, "owner": "worker_review", "cause": "Existing v7/v8 test-only downgrade fixtures retained the new schema12 table before rerunning migrations; only their existing post-version table-drop construction was extended."},
+    {"junit": "docs/audit/phase2/worker-model-usage-migration-v14-cutover-tests.xml", "passed": 51, "failed": 0, "errors": 0, "duration_seconds": 5.11, "change": "The 49 migration checks plus both unchanged legacy cutover tests pass after adding the two required test-only table drops."}
+  ],
+  "coverage": [
+    "v11-to-v12 preservation of all preexisting table values and schema definitions, no backfill, foreign_key_check and integrity_check",
+    "Repeated migration is inert and failure after real v12 DDL restores the complete v11 schema/data/version",
+    "Local admission counter and reservation insert roll back together",
+    "Run foreign key, unique call identity, valid integer reservation and settlement bounds",
+    "NULL terminal usage and expected non-NULL cost are rejected despite SQLite three-valued CHECK logic",
+    "Original binding, reserve, prices/scopes and creation identity are immutable; terminal settlement cannot be revised or deleted",
+    "Cost settlement stays within original reservation and proven-unsent refund remains terminal",
+    "INSERT OR REPLACE cannot overwrite reserved, settled or refunded call identity when recursive_triggers is off"
+  ],
+  "limits": [
+    "These focused tests establish migration and table invariants only. Runtime settlement, stale-owner response fencing and restart reconciliation are validated separately.",
+    "No Provider request, historical live-database correction, new live acceptance result or Phase 2 completion is claimed."
+  ]
+}

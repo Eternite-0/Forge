@@ -1,0 +1,371 @@
+.........FFFFFFFFFFFFF.                                                  [100%]
+================================== FAILURES ===================================
+___ test_inventory_uses_actual_wrapper_bytes_and_detects_tampered_manifest ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_inventory_uses_actual_wra0')
+
+    def test_inventory_uses_actual_wrapper_bytes_and_detects_tampered_manifest(tmp_path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:136: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_____ test_inventory_obeys_existing_workspace_governance[../outside.json] _____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_inventory_obeys_existing_0')
+path = '../outside.json'
+
+    @pytest.mark.parametrize(
+        "path", ["../outside.json", "inputs/../../outside.json", ".env", "data/operator-settings.json"]
+    )
+    def test_inventory_obeys_existing_workspace_governance(tmp_path, path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ test_inventory_obeys_existing_workspace_governance[inputs/../../outside.json] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_inventory_obeys_existing_1')
+path = 'inputs/../../outside.json'
+
+    @pytest.mark.parametrize(
+        "path", ["../outside.json", "inputs/../../outside.json", ".env", "data/operator-settings.json"]
+    )
+    def test_inventory_obeys_existing_workspace_governance(tmp_path, path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+__________ test_inventory_obeys_existing_workspace_governance[.env] ___________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_inventory_obeys_existing_2')
+path = '.env'
+
+    @pytest.mark.parametrize(
+        "path", ["../outside.json", "inputs/../../outside.json", ".env", "data/operator-settings.json"]
+    )
+    def test_inventory_obeys_existing_workspace_governance(tmp_path, path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_ test_inventory_obeys_existing_workspace_governance[data/operator-settings.json] _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_inventory_obeys_existing_3')
+path = 'data/operator-settings.json'
+
+    @pytest.mark.parametrize(
+        "path", ["../outside.json", "inputs/../../outside.json", ".env", "data/operator-settings.json"]
+    )
+    def test_inventory_obeys_existing_workspace_governance(tmp_path, path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_______ test_output_reference_remains_unknown_until_a_producer_contract _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_output_reference_remains_0')
+
+    def test_output_reference_remains_unknown_until_a_producer_contract(tmp_path):
+>       store, _ = prepared(tmp_path)
+                   ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+________ test_new_planner_repairs_underfunded_node_once_with_same_cap _________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_new_planner_repairs_under0')
+
+    def test_new_planner_repairs_underfunded_node_once_with_same_cap(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+______________ test_undeclared_future_input_is_not_assumed_zero _______________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_undeclared_future_input_i0')
+
+    def test_undeclared_future_input_is_not_assumed_zero(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+__________ test_input_change_blocks_approval_without_rewriting_plan ___________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_input_change_blocks_appro0')
+
+    def test_input_change_blocks_approval_without_rewriting_plan(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+________ test_team_hard_task_concurrency_independent_of_operator_limit ________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_team_hard_task_concurrenc0')
+
+    def test_team_hard_task_concurrency_independent_of_operator_limit(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_____________ test_composer_actual_selected_model_context_recheck _____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_composer_actual_selected_0')
+
+    def test_composer_actual_selected_model_context_recheck(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:234: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+_________ test_unknown_model_profile_cannot_pass_capacity_by_omission _________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_unknown_model_profile_can0')
+
+    def test_unknown_model_profile_cannot_pass_capacity_by_omission(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+______ test_scope_residual_includes_opening_and_unresolved_reservations _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-659/test_scope_residual_includes_o0')
+
+    def test_scope_residual_includes_opening_and_unresolved_reservations(tmp_path):
+>       store, quest = prepared(tmp_path)
+                       ^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_verified_capacity_v16.py:273: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_verified_capacity_v16.py:30: in prepared
+    (root / "inputs").mkdir(exist_ok=True)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/FORGE/workspaces/default/inputs')
+mode = 511, parents = False, exist_ok = True
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'C:\\Users\\msi\\AppData\\Local\\FORGE\\workspaces\\default\\inputs'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_verified_capacity_v16.py::test_inventory_uses_actual_wrapper_bytes_and_detects_tampered_manifest
+FAILED backend\tests\test_verified_capacity_v16.py::test_inventory_obeys_existing_workspace_governance[../outside.json]
+FAILED backend\tests\test_verified_capacity_v16.py::test_inventory_obeys_existing_workspace_governance[inputs/../../outside.json]
+FAILED backend\tests\test_verified_capacity_v16.py::test_inventory_obeys_existing_workspace_governance[.env]
+FAILED backend\tests\test_verified_capacity_v16.py::test_inventory_obeys_existing_workspace_governance[data/operator-settings.json]
+FAILED backend\tests\test_verified_capacity_v16.py::test_output_reference_remains_unknown_until_a_producer_contract
+FAILED backend\tests\test_verified_capacity_v16.py::test_new_planner_repairs_underfunded_node_once_with_same_cap
+FAILED backend\tests\test_verified_capacity_v16.py::test_undeclared_future_input_is_not_assumed_zero
+FAILED backend\tests\test_verified_capacity_v16.py::test_input_change_blocks_approval_without_rewriting_plan
+FAILED backend\tests\test_verified_capacity_v16.py::test_team_hard_task_concurrency_independent_of_operator_limit
+FAILED backend\tests\test_verified_capacity_v16.py::test_composer_actual_selected_model_context_recheck
+FAILED backend\tests\test_verified_capacity_v16.py::test_unknown_model_profile_cannot_pass_capacity_by_omission
+FAILED backend\tests\test_verified_capacity_v16.py::test_scope_residual_includes_opening_and_unresolved_reservations
+13 failed, 10 passed in 1.30s

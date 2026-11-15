@@ -1,0 +1,4074 @@
+{
+  "additional_diagnostics": [
+    {
+      "bytes": 783,
+      "path": "docs/audit/phase2/reviewer-claim-diagnostic-v12.json",
+      "sha256": "b91403fd544d13598eed0bc7ce65dcbde4e59a536d7fa6b39c0dcddd0f77218c"
+    },
+    {
+      "bytes": 897,
+      "path": "docs/audit/phase2/first-archive-v12-intermediate-failures.md",
+      "sha256": "ad21f7a7f7e0eafec27c7e4e5a24c652e89a4940c1cab65c3bb3a92e67149c48"
+    }
+  ],
+  "backend_tests": {
+    "command": "backend/.venv/Scripts/python.exe -m pytest backend/tests -c backend/pyproject.toml -q --junitxml=docs/audit/phase2/frozen-tests-v12.xml",
+    "console_summary": "955 passed, 1 warning in 251.43s (0:04:11)",
+    "errors": 0,
+    "evidence": [
+      {
+        "bytes": 135480,
+        "path": "docs/audit/phase2/frozen-tests-v12.xml",
+        "sha256": "0e28c0653bfbf5f6fdd1c181bbf3e1fe2f79c06c28492ce7e57d817a67bf2286"
+      },
+      {
+        "bytes": 1660,
+        "path": "docs/audit/phase2/frozen-tests-v12.log",
+        "sha256": "bd107faeba3bf843f0903510c751ae72a1f7d655f503ed71f3d344d2453229f7"
+      }
+    ],
+    "execution_mode": "local_tests; Mock Provider fixtures are not live results",
+    "failures": 0,
+    "junit_seconds": 251.352,
+    "passed": 955,
+    "skipped": 0,
+    "tests": 955,
+    "warning": "Existing Starlette/httpx TestClient deprecation"
+  },
+  "base_commit": "bcc3592bfa820054079419456f3ba24afc81f785",
+  "branch": "codex/phase1-continuous",
+  "checks": {
+    "diff": {
+      "evidence": {
+        "bytes": 25,
+        "path": "docs/audit/phase2/frozen-diff-v12.log",
+        "sha256": "f6a7d2113895ff7c42d5ce1b8ed901898e65102abf499b98eebd4c7ba5a0c7a2"
+      },
+      "status": "passed"
+    },
+    "format": {
+      "evidence": {
+        "bytes": 29,
+        "path": "docs/audit/phase2/frozen-format-v12.log",
+        "sha256": "ebbb132725f012b75faa25d92e3aba74d327b50c2cd1aaf6f393c3f8ff1894dd"
+      },
+      "status": "passed"
+    },
+    "pip": {
+      "evidence": {
+        "bytes": 31,
+        "path": "docs/audit/phase2/frozen-pip-v12.log",
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      },
+      "status": "passed"
+    },
+    "ruff": {
+      "evidence": {
+        "bytes": 20,
+        "path": "docs/audit/phase2/frozen-ruff-v12.log",
+        "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+      },
+      "status": "passed"
+    }
+  },
+  "committed_or_pushed_by_this_task": false,
+  "completion_claim": false,
+  "documentation": [
+    {
+      "bytes": 55955,
+      "path": "README.md",
+      "sha256": "0aabb2e9104858dbf54fd32380ec16278c880d6d21cb2e15b50341d84ab9072f"
+    },
+    {
+      "bytes": 29517,
+      "path": "docs/STATUS.md",
+      "sha256": "222f4e8111fc16a6000aafac4a07a1747607b458ca39ec6c97934035e5c357ac"
+    },
+    {
+      "bytes": 47408,
+      "path": "docs/QUALITY_GATES.md",
+      "sha256": "6f93e133d157f7bb3b3b063acc146cc4abeaf5e58bb05e3594d852080c0de38a"
+    },
+    {
+      "bytes": 13571,
+      "path": "docs/ROADMAP.md",
+      "sha256": "2c80fb19642ab8ab93e40a647c953246e8f901624ec1ae404598e8c29bf42b84"
+    },
+    {
+      "bytes": 65165,
+      "path": "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "sha256": "c64f98c820dd36c1b20b86a66e2d41e50a5fdb1c139bdac67d9274f222780410"
+    },
+    {
+      "bytes": 29875,
+      "path": "docs/PHASE2_STATUS.md",
+      "sha256": "9d5a6a5503ba649ffb2eb362f9ad0c432545418be1b8ed5fc10fb3bab88d0fb7"
+    },
+    {
+      "bytes": 63593,
+      "path": "docs/PHASE2_EXPERIMENTS.md",
+      "sha256": "44fd05df9534291c287705b997b98e6b7d4eae1d318d1c06e349cc735cdb58d5"
+    },
+    {
+      "bytes": 36617,
+      "path": "docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "sha256": "2a06a5ae3aa9c697a7b8b3e7b9c0af7459fd41f5db90df9948f4825a27bf5562"
+    },
+    {
+      "bytes": 51114,
+      "path": "docs/audit/phase2/execution-chain-audit.md",
+      "sha256": "a7892368aec900312a8573785fbb286841444abca8b36fcba27ef334d0f4a565"
+    }
+  ],
+  "earlier_requirement_gap_audit": {
+    "bytes": 12136,
+    "path": "docs/audit/phase2/unverified-requirements-v6.json",
+    "sha256": "a93f271bb0d8075de1e29ac000bca100034618990e8198e5827635a61b413d22"
+  },
+  "evidence_builder": {
+    "bytes": 14651,
+    "path": "docs/audit/phase2/build_verification.py",
+    "sha256": "fdafb1aa850228bb2704058a3ca17caba6efc1de3a129a0628848259ef05e999"
+  },
+  "generated_at": "2026-11-15T06:50:38.910515+00:00",
+  "integration_owner": "root",
+  "live": {
+    "accepted_current_source_runs_by_level": {
+      "L1": [
+        "20261115T063556Z-L1-1e03cf"
+      ],
+      "L2": [],
+      "L3": []
+    },
+    "accepted_runs_by_level": {
+      "L1": [
+        "20261115T012115Z-L1-2a34ad",
+        "20261115T062445Z-L1-e6498c",
+        "20261115T063556Z-L1-1e03cf"
+      ],
+      "L2": [],
+      "L3": []
+    },
+    "all_three_levels_ever_accepted": false,
+    "cost": null,
+    "cost_reason": "No trusted upstream pricing; unknown is not zero.",
+    "credential_selection": "enabled local WorkBuddy WB_IN; no credential value recorded",
+    "execution_mode": "live native FORGE Gateway and governed local tools",
+    "known_unknown_attempts": 9,
+    "limitations": "Failed and historical runs retain their original outcomes and source identities. An accepted earlier run does not certify later source. These totals exclude separate protocol probes and external diagnostics.",
+    "provider": "wb-local",
+    "publication": {
+      "bytes": 52741,
+      "path": "docs/audit/phase2/live-runs/snapshot-v6/index.json",
+      "sha256": "85f92cc5acf2b34e11ada20e1a14d2081c11a090be8adb4734644343c5c97dd1"
+    },
+    "reported_input_tokens": 3117968,
+    "reported_output_tokens": 711814,
+    "requested_model": "deepseek-v4.1-flash",
+    "retry_metric_note": "Historical snapshots without disjoint_event_counts_v2 retain recorded overlapping repair/review counts; do not interpret their sum as distinct retries. New v2 driver counters use separate durable events.",
+    "run_count": 50,
+    "runs": [
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2026,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T215236Z-L1.json",
+          "sha256": "09b3f2694405b9a9afd763d8414950983f8a26307f2633fa5c1d2804d01f001e"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "46bbb747981971e4c37b183c57545f3321fba5f5de1bfe169d80481517a1f2df",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T215236Z-L1",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2026,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T215614Z-L1.json",
+          "sha256": "a96bc41693673e032bf11f6db2604684935c0e540c2e6c09ed806e554bc67f77"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "facb7514b9fb7c3e5cd7ddb788f173a1c8a0a815e6aed8ad130189a2e661e3c0",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T215614Z-L1",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2027,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T220018Z-L1.json",
+          "sha256": "28a92752fe863b963f7bace09f1f04c5415d8239b8d22b7662b1e04bd33e5de9"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "0505a5197b02064492b01df3e85c448b639184257a959487453ac38391407e00",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T220018Z-L1",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2027,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T220634Z-L1.json",
+          "sha256": "78a444dd7880ebcc1c3f32e18ff48b4c40fb8f0c066aa3d9a27d8e23676ace95"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "136166f40e015be7cf0f8cad5f9bb0ebdd8bb3c076e4961d990168c629a67e2c",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T220634Z-L1",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2027,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T220838Z-L1.json",
+          "sha256": "1a62e59ed9121eede080135d8406a482512497c595244ecab7f4b01417c19fe7"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "c4e1ce3be68beae84c16d8f3724a197cef4fa4ccbc1671663b4ef90024939af1",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T220838Z-L1",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": null,
+        "evidence": {
+          "bytes": 2034,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T233731Z-L1-c53b2d.json",
+          "sha256": "1081bf8f7eb1fcdf2ca498d78cb5c1cf4210fd15d041f8814e4081116a3300fe"
+        },
+        "failed_checks": [],
+        "final_status": null,
+        "level": "L1",
+        "model_calls": null,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "844cac25eca2789b01a1f8f4db303b8a862930960f169b755ca4b41ab784f0f0",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": null,
+        "review_verdicts": {},
+        "run_id": "20261114T233731Z-L1-c53b2d",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": null,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": null,
+          "output": null,
+          "unknown_attempts": null
+        },
+        "tool_calls": null,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 279.642,
+        "evidence": {
+          "bytes": 4932,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T234309Z-L1-238a52.json",
+          "sha256": "f2312434135c630d05e667208dc1963f8a72e7e5a247ba0692cfe21b4e5be9dc"
+        },
+        "failed_checks": [],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 5,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "2564b387b678ee5aa0f73e248fb73deb16228f96a566f261faa50cd0769974f7",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261114T234309Z-L1-238a52",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": 16576,
+          "output": 3491,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 2,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 146.716,
+        "evidence": {
+          "bytes": 3686,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T235101Z-L1-3318e2.json",
+          "sha256": "22406a0ba2d18fffe9c680e07e5d75693175a85e2aaef7170cd9ea774166ba6e"
+        },
+        "failed_checks": [],
+        "final_status": "approved",
+        "level": "L1",
+        "model_calls": 4,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "6d07785ec8865f3314080ed12c495c340227c15d9661ce905e5a0526a30462aa",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261114T235101Z-L1-3318e2",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": 6087,
+          "output": 2534,
+          "unknown_attempts": 2
+        },
+        "tool_calls": 0,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 651.37,
+        "evidence": {
+          "bytes": 7095,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T235512Z-L1-71b513.json",
+          "sha256": "285f438f7a4e2f6a651446eb56bfbe46308e7c734ec6d038ef3663d6cf928ceb"
+        },
+        "failed_checks": [],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 9,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "6426529a824893bd0adb29ce3185ac6ba0a58bc7e45daa6beb5c7fc39caf541d",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261114T235512Z-L1-71b513",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": 51513,
+          "output": 7260,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 313.339,
+        "evidence": {
+          "bytes": 4487,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261114T235634Z-L2-020787.json",
+          "sha256": "157f322ecdfbe403bfee5128acc9af8bc0c1e7ed4f63c53751f909aec47b4252"
+        },
+        "failed_checks": [],
+        "final_status": "proposed",
+        "level": "L2",
+        "model_calls": 6,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "223c49061ff881d9b2a7a5bc48e539f329fcb37f44a7e564b98661f164fe7724",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261114T235634Z-L2-020787",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": null,
+        "token_usage": {
+          "input": 20410,
+          "output": 21734,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 0,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 573.398,
+        "evidence": {
+          "bytes": 9321,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T000018Z-L1-639362.json",
+          "sha256": "e0dc37bf430e4a33e33d4fe75a9be400b180ab9a337206acfbcd452c14f21ab2"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 11,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "9d38e9784b50b713c345056ca27f5fe41d7117b49e1c3240d0600e64b8950ec8",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T000018Z-L1-639362",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 30966,
+          "output": 20127,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 310.969,
+        "evidence": {
+          "bytes": 8711,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T000207Z-L2-4616aa.json",
+          "sha256": "2250e1ed6dbb8507307da87af975dff2f346eb763f00ef570b2e22dc4caa1ae9"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "real_provider_calls",
+          "structured_deliveries",
+          "input_sources_read",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 11,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "39ee3771519ddbd1bdd6dca7afda493c76ef457067923a0067c07663b124c9f6",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T000207Z-L2-4616aa",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 32315,
+          "output": 57666,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 0,
+        "unknown_checks": [
+          "accounted_model_usage"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 328.447,
+        "evidence": {
+          "bytes": 8835,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T000606Z-L1-859214.json",
+          "sha256": "e2db7954fb3601ff24824793e630df47cfe03f9aab0c33311ee157266abaa71d"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "real_provider_calls",
+          "bounded_approved_team",
+          "structured_deliveries",
+          "input_sources_read",
+          "independent_content_review",
+          "one_worker",
+          "readonly_tool_receipts",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "router_completion_summary"
+        ],
+        "final_status": "approved",
+        "level": "L1",
+        "model_calls": 12,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "6064a31706aea3cd02637305d2417c2d5596936760309a4c4e715ce2685c58ea",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T000606Z-L1-859214",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 30507,
+          "output": 49147,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 0,
+        "unknown_checks": [
+          "accounted_model_usage"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 23.056,
+        "evidence": {
+          "bytes": 4004,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T000717Z-L3-ac5000.json",
+          "sha256": "18367f4a9fa267d182b73b3db08f0e471d518581eb736506038595b69bd4f9b9"
+        },
+        "failed_checks": [],
+        "final_status": "no_quest",
+        "level": "L3",
+        "model_calls": 2,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "b76c1f1992dad9a2b1dd7e65e85a4d3c66cd632436873ac9ec533e21e4c35432",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": null,
+          "provider_http_retries": null,
+          "review_revision_requests": null,
+          "worker_self_repairs": null
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T000717Z-L3-ac5000",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "unknown",
+        "token_usage": {
+          "input": 4706,
+          "output": 3153,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 0,
+        "unknown_checks": [
+          "completed_quest",
+          "model_generated_dag",
+          "research_math_architecture_coding_experiment_review",
+          "real_numeric_ast_receipts",
+          "independent_fixed_semantic_suite",
+          "artifact_hashes",
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 547.28,
+        "evidence": {
+          "bytes": 10878,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T001324Z-L1-70d6a4.json",
+          "sha256": "6a9124aecb5c75f71f2e84471b4774c1bbf1047e53255843a649a3dae21b9d5b"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 14,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "816209427ea6a17ea85f54598ec63eaf7377af48f4ebd292da7f49c630c2ceed",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T001324Z-L1-70d6a4",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 38807,
+          "output": 16241,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 5,
+        "unknown_checks": [
+          "accounted_model_usage"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 110.179,
+        "evidence": {
+          "bytes": 6704,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T001347Z-L3-792eeb.json",
+          "sha256": "b646322cfc2179254e5a5a36ca2983a40c8d2aefae55330d2035b8d2c4849741"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "real_provider_calls",
+          "structured_deliveries",
+          "input_sources_read",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 5,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "f56addd0fa5d0cc117af1849d73032a9ccef498d177f0cd8f8aa249d6f4189ff",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T001347Z-L3-792eeb",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 13068,
+          "output": 18480,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 0,
+        "unknown_checks": [
+          "accounted_model_usage",
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 569.452,
+        "evidence": {
+          "bytes": 13061,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T002247Z-L1-d51cae.json",
+          "sha256": "a55502c1e8d9bea55c125a9ee1ad853f251853e54f03c72a8142d36f4d3eea09"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 19,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "7826a6bd69ff48ba9a2e2839db471e7b76cd94fc2808ffc7b86e8b070591daa8",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 2
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "BLOCKED": 1
+        },
+        "run_id": "20261115T002247Z-L1-d51cae",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": null,
+        "status": "failed",
+        "token_usage": {
+          "input": 69612,
+          "output": 39596,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 5,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 558.397,
+        "evidence": {
+          "bytes": 10823,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T004249Z-L1-d64679.json",
+          "sha256": "4fd9e48200c098fec243dfa950e10ea28deb4e5dcb38820880c8ee007947cee5"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 13,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "76fff5b8f779e37a4a9d286798ecf0a9065c10b7855e091afea628c20c5de9ed",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T004249Z-L1-d64679",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "e0234d3e9a5916b0b2d0177ea482c184d705cdbbceb905f790d37321f8c8025e",
+        "status": "failed",
+        "token_usage": {
+          "input": 38168,
+          "output": 26453,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 316.379,
+        "evidence": {
+          "bytes": 13779,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T004902Z-L1-2370de.json",
+          "sha256": "a88ca36bd481fad46efb00239bcbdca594fe847c5a0911fbe3bc737a90cd495e"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 20,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "610f382abf82877f9a6e3e8622298b624ade4aa42e1296afdd1b2ff5964e7fbc",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 2,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "BLOCKED": 1
+        },
+        "run_id": "20261115T004902Z-L1-2370de",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "225c33641652c7cf4ea9b5e3e96acd91e1fc2082ffde7a6c0617d04f44c527f8",
+        "status": "failed",
+        "token_usage": {
+          "input": 71461,
+          "output": 54579,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 1335.763,
+        "evidence": {
+          "bytes": 13009,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T004902Z-L2-7bc427.json",
+          "sha256": "9dcf3d7cf24337bdf2d2b540a6a7a8147baf1ba892888b27e25ae8f54bd8562f"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "scenario_duration_budget",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 15,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "be9a72b6c37f5dad8e58a7dd3bc827eb41a93340ba7bb4c6df87cccb213c1b90",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T004902Z-L2-7bc427",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "225c33641652c7cf4ea9b5e3e96acd91e1fc2082ffde7a6c0617d04f44c527f8",
+        "status": "failed",
+        "token_usage": {
+          "input": 53686,
+          "output": 23619,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 10,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 504.511,
+        "evidence": {
+          "bytes": 9320,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T010128Z-L1-94968c.json",
+          "sha256": "68dc5d3a8446de32e859ffc2f8ed76405edca97a4c60d1e400260ed2ba40eb39"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 10,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "b1dcd3983ce33d7ceb2eec5ac366603b02435f429f3f2cd14b6d3ee3dad3d26d",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T010128Z-L1-94968c",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "11bfb047ab72a62235f8b60252f3ad38fe78057b3c14250ad5faf1c72832cb3d",
+        "status": "failed",
+        "token_usage": {
+          "input": 28829,
+          "output": 3886,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 1245.735,
+        "evidence": {
+          "bytes": 11561,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T010151Z-L2-07090a.json",
+          "sha256": "6d48edff3753fb309dead4ea248a5c903362d3b7872a751219c3d2cce6c1c01a"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "scenario_duration_budget",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 14,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "6463f61b2d4d7f4643ef3044fc99e490537caf9499a7c773050be86cd9c45708",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T010151Z-L2-07090a",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "11bfb047ab72a62235f8b60252f3ad38fe78057b3c14250ad5faf1c72832cb3d",
+        "status": "failed",
+        "token_usage": {
+          "input": 44975,
+          "output": 7894,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 5,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 90.667,
+        "evidence": {
+          "bytes": 13051,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T010950Z-L1-2d8619.json",
+          "sha256": "5ddc0a524879c409afe0fdfa4102afc9f5ac926675da92929cee23dbb3730fc9"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 17,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "04fcd500e94cddbedafb35ae0bfedec35a214a98e7e47a2fd814808dba6149a2",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 2,
+          "worker_self_repairs": 2
+        },
+        "retry_count": 4,
+        "review_verdicts": {
+          "NEEDS_REVISION": 2,
+          "no_verdict": 1
+        },
+        "run_id": "20261115T010950Z-L1-2d8619",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": null,
+          "provider_timeout_seconds": null,
+          "reasoning_effort": null,
+          "review_max_rounds": null,
+          "worker_lease_seconds": null
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "cef784914997e08f386c0fd878273e998bf963fcb51bb924a78bc1e75531416c",
+        "status": "failed",
+        "token_usage": {
+          "input": 76423,
+          "output": 10086,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 103.621,
+        "evidence": {
+          "bytes": 13378,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T012115Z-L1-2a34ad.json",
+          "sha256": "7e0934ff222afa8585c7d781987b01e15252b0ace500e6d4b11d56f31fc499b7"
+        },
+        "failed_checks": [],
+        "final_status": "completed",
+        "level": "L1",
+        "model_calls": 19,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "ddb46cc53e04422bfbff10242944c22308a3e09859812dbf09fe8650346d4246",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 2,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1,
+          "PASS": 1
+        },
+        "run_id": "20261115T012115Z-L1-2a34ad",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "c5e1674f38345a24a26aaf37473ebad97ed67f41fe445ef6f14d7a3c375c9134",
+        "status": "passed",
+        "token_usage": {
+          "input": 87788,
+          "output": 10429,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 96.416,
+        "evidence": {
+          "bytes": 14091,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T012115Z-L2-8e64f5.json",
+          "sha256": "8b6721f9e07ef8a2b03cc7bac39af3c9b127921886ac2818906a486cff85a607"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 19,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "f944a316410c8500fe9a680b305270918f1db8481ebb8ffe16cd98648ad96017",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1,
+          "no_verdict": 1
+        },
+        "run_id": "20261115T012115Z-L2-8e64f5",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "c5e1674f38345a24a26aaf37473ebad97ed67f41fe445ef6f14d7a3c375c9134",
+        "status": "failed",
+        "token_usage": {
+          "input": 92916,
+          "output": 10436,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 447.913,
+        "evidence": {
+          "bytes": 10276,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T012340Z-L3-17c603.json",
+          "sha256": "3af4fa5ee903dac2034120b2c225ee32a014706a5b3ecd9e3f0b8f16b7eea51b"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "real_provider_calls",
+          "bounded_approved_team",
+          "structured_deliveries",
+          "input_sources_read",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "approved",
+        "level": "L3",
+        "model_calls": 13,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "188a84faf15682e3c156529410415089c2c6605dab7b7e6186bc567c2db32bf3",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 4,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 4,
+        "review_verdicts": {},
+        "run_id": "20261115T012340Z-L3-17c603",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "c5e1674f38345a24a26aaf37473ebad97ed67f41fe445ef6f14d7a3c375c9134",
+        "status": "failed",
+        "token_usage": {
+          "input": 47614,
+          "output": 18720,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 0,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 80.711,
+        "evidence": {
+          "bytes": 12998,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T013328Z-L2-fed968.json",
+          "sha256": "b896c899be87d81aebf154b1df784ef5345709aec7dbc0de56ca81b07c29bfab"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "scenario_worker_concurrency",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 16,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "0c167430df01258d8c2a095374fca2e6cceba30afe62e8bce2dea7ef04b23117",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T013328Z-L2-fed968",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "03ebc502773bc4fb67444efe1834000e52256441ad422739e17dc487d8d86f13",
+        "status": "failed",
+        "token_usage": {
+          "input": 54597,
+          "output": 9558,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 151.834,
+        "evidence": {
+          "bytes": 15673,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T013328Z-L3-4e61d3.json",
+          "sha256": "d43ed07413b21100f32398554a1ab9fd697348017b78de2aaa9cfc56e2fd7def"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 21,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "84a5804ab20ea7e4b8023e784eecebf038e803d306c5a67bdbcb859fb97720e3",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 4,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 4,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T013328Z-L3-4e61d3",
+        "runtime_settings": {
+          "model_concurrency_limit": null,
+          "model_token_limit": null,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "03ebc502773bc4fb67444efe1834000e52256441ad422739e17dc487d8d86f13",
+        "status": "failed",
+        "token_usage": {
+          "input": 91162,
+          "output": 22775,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 122.096,
+        "evidence": {
+          "bytes": 11994,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T014735Z-L1-b48614.json",
+          "sha256": "b16e7b0782f746f0460a566a31a32dc034850369485ad9d1814bc59f402eab4a"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 15,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "f851d9d275f1291c87a25dd7aa47959456fd82bf2400e35bf6de2f309ccdb09d",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 2
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "NEEDS_REVISION": 2
+        },
+        "run_id": "20261115T014735Z-L1-b48614",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "474d4e11edc773ade91419fc8668ec18b8a365937faa06d8f6e177bf36581c13",
+        "status": "failed",
+        "token_usage": {
+          "input": 67356,
+          "output": 11709,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 84.678,
+        "evidence": {
+          "bytes": 11511,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T014735Z-L2-cd59cb.json",
+          "sha256": "212c991be4f6ef1253f2427833e397799c5bf0e0a8e7561fb1dd64fca67e317d"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 14,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "e829b27e90304bf9e58d121a378f4fb578a76c8a57aed90fd7dc0db457670493",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T014735Z-L2-cd59cb",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "474d4e11edc773ade91419fc8668ec18b8a365937faa06d8f6e177bf36581c13",
+        "status": "failed",
+        "token_usage": {
+          "input": 48105,
+          "output": 8295,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 5,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 165.77,
+        "evidence": {
+          "bytes": 18358,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T014735Z-L3-4ce51e.json",
+          "sha256": "6576020ce0c004680fae68107b676b124f7f6196c3b4c8392ab97cc856a90865"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 27,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "fc6047b6201edb1abe73b7a26d03762788de9277b4f6948bf801888bedb5136e",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 4,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 4,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T014735Z-L3-4ce51e",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "474d4e11edc773ade91419fc8668ec18b8a365937faa06d8f6e177bf36581c13",
+        "status": "failed",
+        "token_usage": {
+          "input": 123506,
+          "output": 22569,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 7,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 98.792,
+        "evidence": {
+          "bytes": 12115,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T015415Z-L1-d9dedd.json",
+          "sha256": "99cd24200111fd58d4afa1e209af91ddfa4153ae7845737bcaf1587c6aa7e4ab"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 16,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "5edc057ae4ad3c886bff517c1f9bea292403521b65b2533f6ddde8c3047839b9",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 2
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T015415Z-L1-d9dedd",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dabcf69804a9f43b30ba10902ec6e781cdc27077bf374ac9f51927593b710de1",
+        "status": "failed",
+        "token_usage": {
+          "input": 57113,
+          "output": 7877,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 93.078,
+        "evidence": {
+          "bytes": 14060,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T015415Z-L2-b0e9f0.json",
+          "sha256": "e27ae2021c38f6a14a44ed695a3b7b48b0fc20f903a9627d936244ed085e5318"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 19,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "e32d9a27c072abbbda400f881749773c30379381eb28e3dc3a9aed0f5e36995a",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T015415Z-L2-b0e9f0",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dabcf69804a9f43b30ba10902ec6e781cdc27077bf374ac9f51927593b710de1",
+        "status": "failed",
+        "token_usage": {
+          "input": 78714,
+          "output": 11191,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 99.483,
+        "evidence": {
+          "bytes": 17722,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T015415Z-L3-2732f0.json",
+          "sha256": "1cea1c7920ed74bba672bbe1895449b487fbe91422f4e42902fdc4a072650baf"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 24,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "9d32e156fe533066c741eeb32a9d1b3fedfcf6ac89977551d30042039ecdae73",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 2
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T015415Z-L3-2732f0",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dabcf69804a9f43b30ba10902ec6e781cdc27077bf374ac9f51927593b710de1",
+        "status": "failed",
+        "token_usage": {
+          "input": 127932,
+          "output": 11268,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 9,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 136.466,
+        "evidence": {
+          "bytes": 17767,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T020604Z-L1-dceb58.json",
+          "sha256": "06ec09a126d682d1e7c1bc78e549ae11e3f9c0a38cdd0d62c5c3f92983063998"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "independent_content_review",
+          "readonly_tool_receipts",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 23,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "691abbcaf915aedd91aec7ec2fb24944560e1048f076e909b7bae1f1ecf262ea",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 15,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 17,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T020604Z-L1-dceb58",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "8480f4f9c4f88a28d3d41047e5b1dbf90f424f9cc7892d0302c13758433c40ff",
+        "status": "failed",
+        "token_usage": {
+          "input": 128890,
+          "output": 14443,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 14,
+        "unknown_checks": [
+          "scenario_total_token_budget",
+          "accounted_model_usage"
+        ]
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 99.597,
+        "evidence": {
+          "bytes": 19062,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T020604Z-L2-7f6370.json",
+          "sha256": "c487ce89ebf0ab492145d62d72fcf8ca7895de8d3c5ba516a76437065f063155"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "input_sources_read",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 25,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "bcb8f426aa96c949c6ed88410bb11b84e18c8fa3825d6da2cf1d8db8a139a618",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 2,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T020604Z-L2-7f6370",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "8480f4f9c4f88a28d3d41047e5b1dbf90f424f9cc7892d0302c13758433c40ff",
+        "status": "failed",
+        "token_usage": {
+          "input": 109862,
+          "output": 9567,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 15,
+        "unknown_checks": [
+          "scenario_total_token_budget",
+          "accounted_model_usage"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 103.132,
+        "evidence": {
+          "bytes": 14165,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T020604Z-L3-30acf0.json",
+          "sha256": "ef2516022fc0592230129d9e5be9a80641b2ae6d8f6aa4a13da81b3e9b5eafe7"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 18,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "799a3a7a93c0ee7cd68bbbe507fb7f251431b9d527a2a8038fa74a32c16433b8",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 1
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T020604Z-L3-30acf0",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "8480f4f9c4f88a28d3d41047e5b1dbf90f424f9cc7892d0302c13758433c40ff",
+        "status": "failed",
+        "token_usage": {
+          "input": 84067,
+          "output": 12506,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 80.141,
+        "evidence": {
+          "bytes": 13221,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T021801Z-L2-b11011.json",
+          "sha256": "eb4f2cd4d5e170383f2812d198ff2382189ef9e0427cc368184f1e3c8f901128"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 17,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "6969e447417b37a2a5ffc3690e1c218843f4cbfd4e22e1b20701c4ee019d545e",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T021801Z-L2-b11011",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "624f0ac7cb1873163e2e0a5b1849642bb363d553aedab4331096a0286b134db8",
+        "status": "failed",
+        "token_usage": {
+          "input": 65607,
+          "output": 9348,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 97.584,
+        "evidence": {
+          "bytes": 14581,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T021801Z-L3-290b7f.json",
+          "sha256": "9a57613fc1de75f0bca9deac11b27dad8a918622a7388296d468d4ab39b9ab27"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 18,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "8c920efdad7e89565c1afa6b9ea825f7d84f58c60a7b8df90b9f5952d1a6b8d8",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": null,
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "no_verdict": 1
+        },
+        "run_id": "20261115T021801Z-L3-290b7f",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "624f0ac7cb1873163e2e0a5b1849642bb363d553aedab4331096a0286b134db8",
+        "status": "failed",
+        "token_usage": {
+          "input": 71908,
+          "output": 14522,
+          "unknown_attempts": 1
+        },
+        "tool_calls": 6,
+        "unknown_checks": [
+          "scenario_total_token_budget",
+          "accounted_model_usage",
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 59.801,
+        "evidence": {
+          "bytes": 10088,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T061513Z-L1-c94230.json",
+          "sha256": "c0cbd5e0c9394e16e5776aaf6f6ee659e2365b6f7c5837aac5929cc49cc1adc4"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "structured_deliveries",
+          "independent_content_review",
+          "independent_delivery_review",
+          "three_ranked_findings_or_explicit_insufficient_evidence",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L1",
+        "model_calls": 11,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 1.055
+        },
+        "original_sanitized_snapshot_sha256": "27e62e16ce012fed0df66476ce08ff4c849e38794718127213107bf4e7dfe7aa",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {},
+        "run_id": "20261115T061513Z-L1-c94230",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "f822b94b68dfa6e682f71fc1930d30054aa47bf41dfc27ef75a984e66f432c40",
+        "status": "failed",
+        "token_usage": {
+          "input": 32806,
+          "output": 3291,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 5,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": true,
+          "rebuilt_messages": 1,
+          "source_count": 2,
+          "source_readback_available": true
+        },
+        "cost": null,
+        "duration_seconds": 80.284,
+        "evidence": {
+          "bytes": 14637,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T061513Z-L2-62b044.json",
+          "sha256": "71f7ff30fed71cd6fc9be65a47cbe7e87fbfc6fff635b2bfe3a14bb6116ac88f"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "scenario_worker_depth",
+          "successful_worker_nodes",
+          "receipt_integrity",
+          "structured_deliveries",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 17,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.003
+        },
+        "original_sanitized_snapshot_sha256": "eb1926d0ba23c6a92cdcc5d36ff94d9bbfedf59ea3604d9f6ac61f7206a2cc49",
+        "restart": {
+          "after": "completed_nodes_with_remaining_execution",
+          "initial_router_identity": "router_374a3a0917f7",
+          "restored_router_identity": "router_374a3a0917f7",
+          "router_identity_retained": true,
+          "same_workspace": true
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {
+          "PASS": 1
+        },
+        "run_id": "20261115T061513Z-L2-62b044",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "f822b94b68dfa6e682f71fc1930d30054aa47bf41dfc27ef75a984e66f432c40",
+        "status": "failed",
+        "token_usage": {
+          "input": 75382,
+          "output": 6207,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 9,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 120.099,
+        "evidence": {
+          "bytes": 18140,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T061513Z-L3-8fdef4.json",
+          "sha256": "999ef41c9607d8a76ddd95b9f312b6b4b9abac6ec3ed15e59de1f6bd150ada31"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 25,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.255
+        },
+        "original_sanitized_snapshot_sha256": "9748a3ccba05768e0ec7f149896923b77bd8e26abf14bdae968a16d2fb3fd289",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 2,
+        "review_verdicts": {
+          "BLOCKED": 1,
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T061513Z-L3-8fdef4",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "f822b94b68dfa6e682f71fc1930d30054aa47bf41dfc27ef75a984e66f432c40",
+        "status": "failed",
+        "token_usage": {
+          "input": 134215,
+          "output": 15831,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 8,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 111.975,
+        "evidence": {
+          "bytes": 13439,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T062445Z-L1-e6498c.json",
+          "sha256": "2cd97b9220ccdee4d6271cc4eacdd7151d29dc6748e0783e67a0f06a6706d7be"
+        },
+        "failed_checks": [],
+        "final_status": "completed",
+        "level": "L1",
+        "model_calls": 19,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "554840a5a31894750e18e1dcab8fa3172a68a178c2bb5acbab2c49052b303418",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 2,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 2,
+        "review_verdicts": {
+          "NEEDS_REVISION": 2,
+          "PASS": 1
+        },
+        "run_id": "20261115T062445Z-L1-e6498c",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dc73aec124a2fc9637e568940a4adfa29b407092d6bcad31ffb11c37839ac520",
+        "status": "passed",
+        "token_usage": {
+          "input": 102134,
+          "output": 12157,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 5,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 2,
+        "compaction": {
+          "archive_created": true,
+          "rebuilt_messages": 1,
+          "source_count": 1,
+          "source_readback_available": true
+        },
+        "cost": null,
+        "duration_seconds": 177.094,
+        "evidence": {
+          "bytes": 25681,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T062445Z-L2-b7e197.json",
+          "sha256": "53c78b0df443611d828ad9e819f533972aaaf5d5e1bd4b0dea611d36f6238f58"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "receipt_integrity",
+          "structured_deliveries",
+          "independent_content_review",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 37,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.001
+        },
+        "original_sanitized_snapshot_sha256": "5ee41bee59524f27e2484d3cec46ef928497165493e3e3185fbd134839690b59",
+        "restart": {
+          "after": "completed_nodes_with_remaining_execution",
+          "initial_router_identity": "router_e3a9b02b873c",
+          "restored_router_identity": "router_e3a9b02b873c",
+          "router_identity_retained": true,
+          "same_workspace": true
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 2,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 3,
+        "review_verdicts": {
+          "NEEDS_REVISION": 2,
+          "PASS": 2
+        },
+        "run_id": "20261115T062445Z-L2-b7e197",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dc73aec124a2fc9637e568940a4adfa29b407092d6bcad31ffb11c37839ac520",
+        "status": "failed",
+        "token_usage": {
+          "input": 199677,
+          "output": 25402,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 16,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 95.121,
+        "evidence": {
+          "bytes": 14072,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T062445Z-L3-ba6bb7.json",
+          "sha256": "63e1abb491643b6854bf13ec6e5a1399ab27f91c0f9a63d207cc51422fe286cc"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 17,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.002
+        },
+        "original_sanitized_snapshot_sha256": "9c4f1dfdc5e21fa4d400321a2390d6e1a921e4a36e80a7d32d5ec43b7c234992",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 1,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "BLOCKED": 1
+        },
+        "run_id": "20261115T062445Z-L3-ba6bb7",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "dc73aec124a2fc9637e568940a4adfa29b407092d6bcad31ffb11c37839ac520",
+        "status": "failed",
+        "token_usage": {
+          "input": 73147,
+          "output": 13283,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 6,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 0,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 102.934,
+        "evidence": {
+          "bytes": 11675,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T063556Z-L1-1e03cf.json",
+          "sha256": "d3ddb5239d69301cc6e157fb6280b9e6f1faa3291d6dfdbf985a434c660257a1"
+        },
+        "failed_checks": [],
+        "final_status": "completed",
+        "level": "L1",
+        "model_calls": 16,
+        "model_settlement_wait": {
+          "timeout_seconds": null,
+          "unsettled_attempts": null,
+          "waited_seconds": null
+        },
+        "original_sanitized_snapshot_sha256": "d25198911feb33674a760ae75f6cfcec2121b8a548306b0b6df29e5fa90405cf",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "NEEDS_REVISION": 1,
+          "PASS": 1
+        },
+        "run_id": "20261115T063556Z-L1-1e03cf",
+        "runtime_settings": {
+          "model_concurrency_limit": 1,
+          "model_token_limit": 180000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+        "status": "passed",
+        "token_usage": {
+          "input": 66279,
+          "output": 8829,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 4,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": true,
+          "rebuilt_messages": 1,
+          "source_count": 1,
+          "source_readback_available": true
+        },
+        "cost": null,
+        "duration_seconds": 109.832,
+        "evidence": {
+          "bytes": 17195,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T063556Z-L2-a3ad74.json",
+          "sha256": "cb645d2b207dcf68c04f3e2217c06328d5ea4cf282782db0652124a59354324d"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "receipt_integrity",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 23,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.003
+        },
+        "original_sanitized_snapshot_sha256": "64699a9c4915e5e0097e11da9e22b36b9a439285d5de0a1c8b558f7abd58e70e",
+        "restart": {
+          "after": "completed_nodes_with_remaining_execution",
+          "initial_router_identity": "router_23b6cf1a507f",
+          "restored_router_identity": "router_23b6cf1a507f",
+          "router_identity_retained": true,
+          "same_workspace": true
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {
+          "PASS": 1,
+          "no_verdict": 1
+        },
+        "run_id": "20261115T063556Z-L2-a3ad74",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+        "status": "failed",
+        "token_usage": {
+          "input": 104306,
+          "output": 10744,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 9,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 115.371,
+        "evidence": {
+          "bytes": 16459,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T063556Z-L3-14d6f5.json",
+          "sha256": "588eea22de3957b9efe208392dd8e6c5c152b1fe48f958855f129c2e5724fb02"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 21,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.759
+        },
+        "original_sanitized_snapshot_sha256": "433f17e174dab88c72bed92b621e145e0dd18399089b424f149febc6fd11a97d",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 1,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 1,
+        "review_verdicts": {
+          "BLOCKED": 1,
+          "NEEDS_REVISION": 1
+        },
+        "run_id": "20261115T063556Z-L3-14d6f5",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+        "status": "failed",
+        "token_usage": {
+          "input": 105632,
+          "output": 15238,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 8,
+        "unknown_checks": [
+          "core_restart_continuity",
+          "context_compaction_continuity"
+        ]
+      },
+      {
+        "artifact_count": 1,
+        "compaction": {
+          "archive_created": null,
+          "rebuilt_messages": null,
+          "source_count": null,
+          "source_readback_available": null
+        },
+        "cost": null,
+        "duration_seconds": 115.488,
+        "evidence": {
+          "bytes": 19511,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T064204Z-L2-3f89c4.json",
+          "sha256": "6f35c5a2d1fec8093ae84a39ac54185bc286d87e65038bfd92dab57e44aecba9"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "artifact_hashes",
+          "independent_content_review",
+          "three_or_four_specialist_workers",
+          "artifact_receipt_hashes",
+          "real_source_citations",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L2",
+        "model_calls": 29,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.758
+        },
+        "original_sanitized_snapshot_sha256": "1734274dae3875484f5e5cba441f51ba4db05468b8b33ec8d03d404a0ca45f68",
+        "restart": {
+          "after": null,
+          "initial_router_identity": null,
+          "restored_router_identity": null,
+          "router_identity_retained": null,
+          "same_workspace": null
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 2,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 2,
+        "review_verdicts": {
+          "BLOCKED": 1,
+          "NEEDS_REVISION": 2
+        },
+        "run_id": "20261115T064204Z-L2-3f89c4",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 360000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+        "status": "failed",
+        "token_usage": {
+          "input": 154973,
+          "output": 15583,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 9,
+        "unknown_checks": []
+      },
+      {
+        "artifact_count": 2,
+        "compaction": {
+          "archive_created": true,
+          "rebuilt_messages": 1,
+          "source_count": 1,
+          "source_readback_available": true
+        },
+        "cost": null,
+        "duration_seconds": 111.105,
+        "evidence": {
+          "bytes": 17204,
+          "path": "docs/audit/phase2/live-runs/snapshot-v6/20261115T064204Z-L3-1288e8.json",
+          "sha256": "afc92c6de053ceb2d70922fbc9a8733c5600864b6597d765f68045fd20e2bbbc"
+        },
+        "failed_checks": [
+          "completed_quest",
+          "successful_worker_nodes",
+          "receipt_integrity",
+          "artifact_hashes",
+          "independent_content_review",
+          "research_math_architecture_coding_experiment_review",
+          "real_source_citations",
+          "real_numeric_ast_receipts",
+          "experiment_specialist_execution",
+          "coding_specialist_artifact",
+          "independent_fixed_semantic_suite",
+          "router_completion_summary"
+        ],
+        "final_status": "running",
+        "level": "L3",
+        "model_calls": 21,
+        "model_settlement_wait": {
+          "timeout_seconds": 30,
+          "unsettled_attempts": 0,
+          "waited_seconds": 0.002
+        },
+        "original_sanitized_snapshot_sha256": "3821cd2b86726fd1bfd4c19e03098132935c80a6b0f75e2fd2bf0520551fbf7e",
+        "restart": {
+          "after": "completed_nodes_with_remaining_execution",
+          "initial_router_identity": "router_125b99c18f88",
+          "restored_router_identity": "router_125b99c18f88",
+          "router_identity_retained": true,
+          "same_workspace": true
+        },
+        "retry_accounting": "disjoint_event_counts_v2",
+        "retry_breakdown": {
+          "background_notice_retries": 0,
+          "provider_http_retries": 0,
+          "review_revision_requests": 0,
+          "worker_self_repairs": 0
+        },
+        "retry_count": 0,
+        "review_verdicts": {
+          "PASS": 1,
+          "no_verdict": 1
+        },
+        "run_id": "20261115T064204Z-L3-1288e8",
+        "runtime_settings": {
+          "model_concurrency_limit": 2,
+          "model_token_limit": 630000,
+          "provider_max_retries": 0,
+          "provider_timeout_seconds": 120.0,
+          "reasoning_effort": "none",
+          "review_max_rounds": 3,
+          "worker_lease_seconds": 150.0
+        },
+        "semantic_test_runs": 0,
+        "source_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+        "status": "failed",
+        "token_usage": {
+          "input": 104171,
+          "output": 14090,
+          "unknown_attempts": 0
+        },
+        "tool_calls": 9,
+        "unknown_checks": []
+      }
+    ],
+    "unknown_attempts": null,
+    "unknown_usage_run_count": 6,
+    "unknown_usage_runs": [
+      "20261114T215236Z-L1",
+      "20261114T215614Z-L1",
+      "20261114T220018Z-L1",
+      "20261114T220634Z-L1",
+      "20261114T220838Z-L1",
+      "20261114T233731Z-L1-c53b2d"
+    ],
+    "upstream_identity": "proxy-reported; independently unverified",
+    "usage_aggregation_note": "Reported token sums include only supplied charged values. Missing run statistics and unknown remote attempts prevent a complete usage total. The known unknown-attempt count is a lower bound when historical run statistics are missing; missing values are never proof of zero usage."
+  },
+  "offline_algorithm_benchmark": {
+    "evidence": {
+      "bytes": 70116,
+      "path": "docs/audit/phase2/benchmark-final-v12.json",
+      "sha256": "35864ac6ef542f090b495fa5141025b91aef783e7a021c01de6ed2e2b3896a88"
+    },
+    "execution_mode": "offline_synthetic",
+    "limitations": "Small fixed deterministic mechanism comparisons; no real task-quality/statistical generalization claim.",
+    "live_provider_calls": 0
+  },
+  "phase": "Phase 2 Agent Intelligence",
+  "preservation": {
+    "evidence": {
+      "bytes": 212475,
+      "path": "docs/audit/phase2/preservation-v12.json",
+      "sha256": "60cb50f0d7cc90ee5ef1b502993f925976583f4c27a4d4a3c740f5a0bd33b37b"
+    },
+    "original_tests": "364/364 function identities retained; exact AST/assertion changes disclosed in the audit, not claimed byte-identical",
+    "phase1_evidence": "355/355 original evidence files byte-identical (340 earlier subset plus 15 hardening records)"
+  },
+  "provider_protocol_probes": [
+    {
+      "evidence": {
+        "bytes": 2795,
+        "path": "docs/audit/phase2/provider-probe.json",
+        "sha256": "1cff494b738a70918c200f87b0422ae1fe4dafaa0f9b0fde7879594f73a31378"
+      },
+      "execution_mode": "live",
+      "result": {
+        "actual_limits": {
+          "context_maximum": null,
+          "cost": null,
+          "limitation": "Configured ceilings are operator safety bounds. The largest observed input was 2580 reported input tokens; no maximum-context or maximum-output boundary was measured. Two successful overlapping calls do not establish a service rate limit. No price evidence was supplied.",
+          "output_maximum": null,
+          "rate_limit": null
+        },
+        "discovery": {
+          "returned_model_ids": 11,
+          "target_available": true
+        },
+        "duration_seconds": 26.712,
+        "execution_mode": "live",
+        "finished_at": "2026-11-14T23:31:52.232198+00:00",
+        "identity_limit": "The local OpenAI-compatible proxy returned this model/provider identity. The probe does not independently verify which upstream model served the request.",
+        "operator_limits": {
+          "concurrency_limit": 2,
+          "context_ceiling": 65536,
+          "output_probe_ceiling": 1024,
+          "total_token_budget": 300000
+        },
+        "protocol_cases": [
+          {
+            "correct": true,
+            "input_tokens": 44,
+            "name": "minimal_dialogue",
+            "output_tokens": 19
+          },
+          {
+            "correct": true,
+            "input_tokens": 581,
+            "name": "router_schema_1",
+            "output_tokens": 108
+          },
+          {
+            "correct": true,
+            "input_tokens": 581,
+            "name": "router_schema_2",
+            "output_tokens": 85
+          },
+          {
+            "correct": true,
+            "input_tokens": 581,
+            "name": "router_schema_3",
+            "output_tokens": 116
+          },
+          {
+            "correct": true,
+            "input_tokens": 316,
+            "name": "tool_call_1",
+            "output_tokens": 57
+          },
+          {
+            "correct": true,
+            "input_tokens": 316,
+            "name": "tool_call_2",
+            "output_tokens": 58
+          },
+          {
+            "correct": true,
+            "input_tokens": 316,
+            "name": "tool_call_3",
+            "output_tokens": 64
+          },
+          {
+            "correct": true,
+            "input_tokens": 2580,
+            "name": "bounded_context_recall",
+            "output_tokens": 65
+          },
+          {
+            "correct": true,
+            "input_tokens": 40,
+            "name": "concurrency_1",
+            "output_tokens": 18
+          },
+          {
+            "correct": true,
+            "input_tokens": 40,
+            "name": "concurrency_2",
+            "output_tokens": 19
+          },
+          {
+            "chunks": 9,
+            "correct": true,
+            "input_tokens": 49,
+            "name": "streaming",
+            "output_tokens": 28,
+            "ttft_seconds": 1.921
+          }
+        ],
+        "provider_alias": "wb-local",
+        "proxy_reported_model_id": "deepseek-v4.1-flash",
+        "publication_scope": "Allowlisted measured fields from the existing sanitized report. No credential source, base URL, request content, response content, or logs are published. Protocol success is not Quest acceptance or a task-quality benchmark. This publication made no Provider request.",
+        "run_id": "20261114T233125Z-d07064",
+        "schema_version": 1,
+        "source_snapshot": {
+          "bytes": 9257,
+          "path": ".local/phase2/provider/20261114T233125Z-d07064/report.json",
+          "sha256": "8ca1d329d1f9e4efc8a4d35f78852623f19bf0475be1f5d85f11f627bf65f6c2"
+        },
+        "upstream_identity": "unverified_proxy_reported_identity",
+        "usage": {
+          "gateway_attempts": 11,
+          "input_tokens": 5444,
+          "output_tokens": 637,
+          "settled_attempts": 11
+        }
+      }
+    },
+    {
+      "evidence": {
+        "bytes": 2923,
+        "path": "docs/audit/phase2/provider-probe-reasoning-none.json",
+        "sha256": "051a101ae5604dcf89cef3195d73b7189d831a280ddaaeb04cfcc1e47e30a7a3"
+      },
+      "execution_mode": "live",
+      "result": {
+        "actual_limits": {
+          "context_maximum": null,
+          "cost": null,
+          "output_maximum": null,
+          "rate_limit": null
+        },
+        "discovery": {
+          "returned_model_ids": 11,
+          "target_available": true
+        },
+        "duration_seconds": 20.21,
+        "execution_mode": "live",
+        "failure": "A proxy/model response was received for the minimal dialogue case, but it failed exact expected-text equality. The response hash is retained; content is not published. No rerun replaced this failure.",
+        "finished_at": "2026-11-15T00:59:18.947666+00:00",
+        "operator_limits": {
+          "concurrency_limit": 2,
+          "context_ceiling": 65536,
+          "output_probe_ceiling": 1024,
+          "total_token_budget": 300000
+        },
+        "passed_cases": 10,
+        "protocol_cases": [
+          {
+            "correct": false,
+            "input_tokens": 19,
+            "name": "minimal_dialogue",
+            "output_tokens": 4,
+            "response_sha256": "c3f886c4b0e40ab4a97d8242251e6bffd2dcecdcc279a59f1a09e82b0db84592"
+          },
+          {
+            "correct": true,
+            "input_tokens": 635,
+            "name": "router_schema_1",
+            "output_tokens": 28
+          },
+          {
+            "correct": true,
+            "input_tokens": 635,
+            "name": "router_schema_2",
+            "output_tokens": 28
+          },
+          {
+            "correct": true,
+            "input_tokens": 635,
+            "name": "router_schema_3",
+            "output_tokens": 28
+          },
+          {
+            "correct": true,
+            "input_tokens": 291,
+            "name": "tool_call_1",
+            "output_tokens": 38
+          },
+          {
+            "correct": true,
+            "input_tokens": 291,
+            "name": "tool_call_2",
+            "output_tokens": 38
+          },
+          {
+            "correct": true,
+            "input_tokens": 291,
+            "name": "tool_call_3",
+            "output_tokens": 38
+          },
+          {
+            "correct": true,
+            "input_tokens": 2552,
+            "name": "bounded_context_recall",
+            "output_tokens": 9
+          },
+          {
+            "correct": true,
+            "input_tokens": 15,
+            "name": "concurrency_1",
+            "output_tokens": 1
+          },
+          {
+            "correct": true,
+            "input_tokens": 15,
+            "name": "concurrency_2",
+            "output_tokens": 1
+          },
+          {
+            "chunks": 9,
+            "correct": true,
+            "input_tokens": 24,
+            "name": "streaming",
+            "output_tokens": 9,
+            "ttft_seconds": 1.353
+          }
+        ],
+        "provider_alias": "wb-local",
+        "proxy_reported_model_id": "deepseek-v4.1-flash",
+        "publication_scope": "Allowlisted measured fields from the existing sanitized report. No credential, base URL, request/response content or logs. Protocol success is not Quest acceptance or a task-quality benchmark. This publication made no Provider request. The earlier default-mode 11/11 probe remains separate.",
+        "reasoning_effort": "none",
+        "reasoning_limit": "Explicit request setting advertised by the local proxy implementation. Transmission and acceptance do not independently establish the upstream model's internal reasoning behavior.",
+        "run_id": "20261115T005858Z-7ae2c8",
+        "schema_version": 1,
+        "source_snapshot": {
+          "bytes": 9276,
+          "path": ".local/phase2/provider/20261115T005858Z-7ae2c8/report.json",
+          "sha256": "b384debd2dd99abbc2d0df8fa3fea8bd1886ffab2979db9dbc2c9f958e3368e4"
+        },
+        "total_cases": 11,
+        "upstream_identity": "unverified_proxy_reported_identity",
+        "usage": {
+          "gateway_attempts": 11,
+          "input_tokens": 5403,
+          "output_tokens": 222,
+          "settled_attempts": 11
+        }
+      }
+    }
+  ],
+  "reason": "Strict live acceptance is reported per run; remaining requested capabilities and evaluation gaps prevent an overall completion claim.",
+  "remaining_limitations": [
+    "General autonomous replanning of the remaining running DAG and hierarchical expansion remain incomplete.",
+    "Memory retrieval is lexical with bilingual aliases, not learned semantic retrieval.",
+    "Coding/experiments support fixed syntax/numeric tools and own-artifact revision, not arbitrary repository patch/test execution.",
+    "The independent reviewer uses the same approved model in a separate context; no model-diversity quality claim is made.",
+    "Complete message-specific ACP payload contracts and several online quality metrics remain incomplete.",
+    "Algorithm comparisons are fixed exploratory offline mechanism benchmarks, not equal-budget live task-quality gains.",
+    "Actual upstream model identity, context/output/rate maxima and prices remain unknown; configured ceilings are not measurements of service maxima.",
+    "Unknown in-flight remote outcomes remain fenced; they are never silently replayed or declared successful."
+  ],
+  "schema_version": 1,
+  "scope_exclusions": [
+    "UI expansion",
+    "desktop packaging",
+    "automatic push or merge"
+  ],
+  "source": {
+    "current_files_match": true,
+    "file_count": 162,
+    "live_executable_snapshot_sha256": "de228407cdb822110db71de4c2ffda7a0a2c351ea02284b4a7e60fcd17d369d4",
+    "manifest": {
+      "bytes": 28809,
+      "path": "docs/audit/phase2/source-manifest-v12.json",
+      "sha256": "626af04c500761e0d37b0ed6cec64b1efda2bff6c66d1296e3095bd20106d675"
+    },
+    "manifest_sha256": "ccc5efe69b4493dd77093b4a62f6f6851f09c63ca1f2806298f2e59e80d7f8d7",
+    "version": "v12"
+  },
+  "status": "incomplete"
+}

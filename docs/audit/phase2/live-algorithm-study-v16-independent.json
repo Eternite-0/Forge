@@ -1,0 +1,3309 @@
+{
+  "cases": [
+    {
+      "answer_distribution": {
+        "[0, 7]": 14,
+        "[]": 1
+      },
+      "case_id": "code-1",
+      "difficulty": 1,
+      "domain": "code_contract",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "rows": 15,
+      "task_successes": 14
+    },
+    {
+      "answer_distribution": {
+        "[-1, 2, 3]": 2,
+        "[-1, 3, 3]": 1,
+        "[1, -1, -1]": 1,
+        "[1, -1, 2]": 1,
+        "[1, 1, 1]": 1,
+        "[1, 2, -1]": 2,
+        "[1, 2, 2]": 1,
+        "[1, 2, 3]": 1,
+        "[1, 3, -1]": 3,
+        "[]": 2
+      },
+      "case_id": "schedule-1",
+      "difficulty": 1,
+      "domain": "integer_scheduling",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "rows": 15,
+      "task_successes": 0
+    },
+    {
+      "answer_distribution": {
+        "[1, 0]": 10,
+        "[1, 1]": 2,
+        "[2, 1]": 2,
+        "[]": 1
+      },
+      "case_id": "governance-1",
+      "difficulty": 1,
+      "domain": "approval_architecture",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "rows": 15,
+      "task_successes": 9
+    },
+    {
+      "answer_distribution": {
+        "[-1, -1, 8, 4, -1]": 1,
+        "[-1, -2, 0, 4, -1]": 1,
+        "[-1, -2, 8, 4, -1]": 10,
+        "[-1, 0, 8, 4, -1]": 1,
+        "[-7, 2, 8, 4, 7]": 1,
+        "[]": 1
+      },
+      "case_id": "code-2",
+      "difficulty": 2,
+      "domain": "code_contract",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "rows": 15,
+      "task_successes": 0
+    },
+    {
+      "answer_distribution": {
+        "[-1, 3, 3, -1, 3]": 1,
+        "[-1, 7, 7, -1, 9]": 2,
+        "[3, -1, 3, 3, 3]": 1,
+        "[7, 7, 1, -1, 1]": 1,
+        "[7, 7, 3, -1, 1]": 1,
+        "[7, 7, 7, -1, 7]": 2,
+        "[9, -1, 7, 1, 9]": 1,
+        "[9, 7, 3, 1, 3]": 1,
+        "[9, 7, 3, 7, 7]": 1,
+        "[9, 7, 7, -1, 9]": 2,
+        "[]": 2
+      },
+      "case_id": "schedule-2",
+      "difficulty": 2,
+      "domain": "integer_scheduling",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "rows": 15,
+      "task_successes": 0
+    },
+    {
+      "answer_distribution": {
+        "[1, 1, 0]": 1,
+        "[1, 1, 1]": 2,
+        "[1, 1, 2]": 5,
+        "[1, 2, 0]": 1,
+        "[1, 2, 2]": 1,
+        "[2, 1, 1]": 1,
+        "[2, 1, 2]": 2,
+        "[2, 2, 2]": 1,
+        "[]": 1
+      },
+      "case_id": "governance-2",
+      "difficulty": 2,
+      "domain": "approval_architecture",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "rows": 15,
+      "task_successes": 2
+    }
+  ],
+  "consistency": {
+    "case_count": 6,
+    "consistency_errors": [],
+    "declared_sum_row_caps": 1440000,
+    "evidence": [
+      {
+        "bytes": 370071,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results.json",
+        "sha256": "7a937f023c1902335d7b2dc1ace925d5d65fed7e75ecbbd1741643097a8d1567"
+      },
+      {
+        "bytes": 7946,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/manifest.json",
+        "sha256": "13db7bd4e382ba40ac014e2c60ece30de6f014523021ebb480a12f8355c32cdd"
+      }
+    ],
+    "failed_model_or_budget_rows": 0,
+    "limitations": [
+      "Exploratory small single-model microtasks; no statistical generalization.",
+      "Single available model makes model-choice assignments identical; strategy quality or model diversity is not established.",
+      "This controlled policy ablation is not autonomous Quest acceptance; no runtime completion events are manufactured.",
+      "Evidence gate covers the fixed scoring specification only; its low false acceptance is not proof of unseen correctness.",
+      "Unknown cost remains null; configured context/output ceilings are not measured provider maxima."
+    ],
+    "over_budget_rows": [],
+    "passed": true,
+    "policy_variants": 15,
+    "row_file_mismatches": [],
+    "rows": 90,
+    "score_mismatches": [],
+    "status": "completed",
+    "suite": "forge-live-algorithm-microstudy-v1",
+    "summary_mismatches": [],
+    "task_successes": 25,
+    "unknown_attempts": 0
+  },
+  "generated_at": "2026-11-15T08:48:02.845960+00:00",
+  "independent_errors": [],
+  "inspection": {
+    "application_imports": 0,
+    "credentials_read": false,
+    "original_results_modified": false,
+    "provider_calls": 0,
+    "resampling": false,
+    "runtime_databases_opened": 0
+  },
+  "limitations": [
+    "Exploratory six fixed microtasks and one sample per case/variant; no statistical/general-task superiority claim.",
+    "All strategies use the same real model inventory. No diverse-model choice advantage is measured.",
+    "Variants generate independent candidates; governance differences therefore combine policy and sample variation.",
+    "The benchmark controller performs approved source-tool reads; it does not prove autonomous tool selection or full Quest execution.",
+    "Dynamic recomposition gets deterministic failed-check labels and one correction stage, while single-model does not; its outcome cannot isolate composition from feedback/call count.",
+    "Evidence-gated acceptance uses this fixed deterministic oracle. Zero false accepts covers this specification, not unseen-task correctness.",
+    "A schema-valid answer and real source citation/receipt can coexist with wrong arithmetic or logic. Source identity/range checks do not prove the citation entails the answer.",
+    "Proxy-reported model identity is not independently verified; upstream model internals are outside this audit.",
+    "Unknown price remains null. Common caps are equal maxima; observed token usage and call counts differ."
+  ],
+  "original_report": {
+    "bytes": 370071,
+    "path": "docs/audit/phase2/live-algorithm-study-v16-results.json",
+    "sha256": "7a937f023c1902335d7b2dc1ace925d5d65fed7e75ecbbd1741643097a8d1567"
+  },
+  "phase2_acceptance_claim": false,
+  "rows": [
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 501,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3026,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-single_model/row.json",
+        "sha256": "1816f9cbd13ba1f9a765936424a970a1f3a2439cffce170101c5aa2d56e5bbcf"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1176,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4037,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-static_team/row.json",
+        "sha256": "08a0bcdb28f1081708da0596a918d0c81d435e13b3117295432685b0440efe70"
+      },
+      "original_task_success": true,
+      "output_tokens": 292,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1176,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4032,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-greedy/row.json",
+        "sha256": "f67984e780a94f1f888fdad9447deffe7b13ca81ecab2b54aaf7978a30652c7b"
+      },
+      "original_task_success": true,
+      "output_tokens": 292,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1176,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4034,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-coverage/row.json",
+        "sha256": "ff5b1e004378cba9b9dce000aa46519dc7b60996b63b4c72f5568c99b736e041"
+      },
+      "original_task_success": true,
+      "output_tokens": 292,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1176,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4038,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-complementarity/row.json",
+        "sha256": "d81bd945f3d91c95cbb94b1c67ba2590b9ec4bc5bbf091c28c4232940d7d504e"
+      },
+      "original_task_success": true,
+      "output_tokens": 292,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 501,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3163,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-team-dynamic_recomposition/row.json",
+        "sha256": "93cae313324e0d9b3bfd07809aba221bf0d7ad833f7842e65dd712bf9e08d33f"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 917,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2945,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-context-full_context/row.json",
+        "sha256": "b63c2925cc9700dede49908b58562172148ec7ede2319ed859d29502cfb6fade"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 443,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2598,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-context-recency_truncation/row.json",
+        "sha256": "13c3b889fca9f6c2a9245de5ae01c78e881c4cce6aa49d45fcd5a0232fffad4c"
+      },
+      "original_task_success": false,
+      "output_tokens": 21,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 1341,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3815,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-context-conventional_summary/row.json",
+        "sha256": "1bd0b8d620c045b4ef34c641aa4a2e7a5caa40599b6af409182e4588e3cacd00"
+      },
+      "original_task_success": true,
+      "output_tokens": 372,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 919,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3007,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-context-task_centric/row.json",
+        "sha256": "7be8a068c0e0f351ea2975e02de6c44acad7e693b6acd772869ca71a54f2ee6d"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 1185,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3025,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-context-task_centric_source_recall/row.json",
+        "sha256": "a10d0daa0bb8d0655486ca1824c56580306ed653f0d1194d20a555cfdb25197e"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": null,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 501,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2941,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-governance-model_claim_only/row.json",
+        "sha256": "ddb31d51ec2f668aea424aab802caff1f272eb1533d479a8af4f623b0efe0013"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": true,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 501,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2950,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-governance-tool_receipt_verification/row.json",
+        "sha256": "bac34e6a5e0ab918e9e01fffa4b5675ba6460107aaaf426d2a1cdcd3e99ce19c"
+      },
+      "original_task_success": true,
+      "output_tokens": 146,
+      "policy_acceptance": true,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": false,
+      "false_rejection": true,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 1118,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3841,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-governance-independent_reviewer/row.json",
+        "sha256": "2f7f04c26be39887491f3a3577606a637fc3243d1d94ca681761cc7a3e55d462"
+      },
+      "original_task_success": true,
+      "output_tokens": 239,
+      "policy_acceptance": false,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": "NEEDS_REVISION",
+      "variant": "independent_reviewer",
+      "violations": []
+    },
+    {
+      "case_id": "code-1",
+      "expected_answers": [
+        0,
+        7
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 1118,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3836,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-1-governance-evidence_gated_completion/row.json",
+        "sha256": "8a8b39d677e88de49513090e47bfe30a1d4bbbba05e1e88a7c04ccedf3d155c8"
+      },
+      "original_task_success": true,
+      "output_tokens": 158,
+      "policy_acceptance": true,
+      "returned_answers": [
+        0,
+        7
+      ],
+      "review_verdict": "PASS",
+      "variant": "evidence_gated_completion",
+      "violations": []
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 511,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3072,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-single_model/row.json",
+        "sha256": "a23b62ba5176a3342b90577c1614864fe2c472bde2386685d52aac6325bd061b"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        3,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1204,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4076,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-static_team/row.json",
+        "sha256": "8b35b039b913426cc069458363d23ace3379bdc48f1a1433628f5ef943fde067"
+      },
+      "original_task_success": false,
+      "output_tokens": 308,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        2,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1204,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4073,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-greedy/row.json",
+        "sha256": "31c0390c5bab49341fddb7460b9c082df8bcb9da7cf47155aa2dc691224de6a3"
+      },
+      "original_task_success": false,
+      "output_tokens": 308,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        3,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1204,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4075,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-coverage/row.json",
+        "sha256": "99de4f3c032a15cd3936bb27222a4bf864f956252eddc37f858a58050b9ac261"
+      },
+      "original_task_success": false,
+      "output_tokens": 308,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1205,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4084,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-complementarity/row.json",
+        "sha256": "2893fea3f4fdea27a8d3534b87e825e59c9b0d94c0a4cce906eaab2940740599"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        2,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1209,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4248,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-team-dynamic_recomposition/row.json",
+        "sha256": "dd44815d6f3a41264b28ab21b4dbd63dbf62b48a59531a4cd5b5a7c3f9088e93"
+      },
+      "original_task_success": false,
+      "output_tokens": 309,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        3,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 930,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2989,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-context-full_context/row.json",
+        "sha256": "b930342ff6dcd897546b6377af37829efc003db4ac322c0a807e44cd0383e5a5"
+      },
+      "original_task_success": false,
+      "output_tokens": 154,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        -1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 464,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2892,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-context-recency_truncation/row.json",
+        "sha256": "32d985c02d886faf95fe7bf5822cf54cb2c2a07fb1156fa6163a6c1ff7ccb782"
+      },
+      "original_task_success": false,
+      "output_tokens": 76,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1376,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3471,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-context-conventional_summary/row.json",
+        "sha256": "9c236f7d326d2f2a86f88cbb7856196d8bfd4fe5ac3934ead4a551855c94a5b4"
+      },
+      "original_task_success": false,
+      "output_tokens": 280,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 930,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3052,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-context-task_centric/row.json",
+        "sha256": "cf99514e3a6f271e0022230f53b8e5beebc81ffd4920979b798d58838ff2d6d1"
+      },
+      "original_task_success": false,
+      "output_tokens": 154,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        2,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1192,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3071,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-context-task_centric_source_recall/row.json",
+        "sha256": "68a93e3ca9d266020ef3f113427472b1b2931e70a19365e6f4f2d355469fd21e"
+      },
+      "original_task_success": false,
+      "output_tokens": 154,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        2,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 511,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2983,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-governance-model_claim_only/row.json",
+        "sha256": "8fcc3623163abff39f53e25fb63966577cc877a43b2c160b9d2170bbb43098d0"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": true,
+      "returned_answers": [
+        -1,
+        2,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 511,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2994,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-governance-tool_receipt_verification/row.json",
+        "sha256": "7d5e0938ed82da290d564f281d95ced026aa3f9f6e5d2d61aac2ab05984a157f"
+      },
+      "original_task_success": false,
+      "output_tokens": 154,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        2,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1146,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3875,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-governance-independent_reviewer/row.json",
+        "sha256": "e185097eb4ad4bee954972c7e2ed3418df69f514c11e677bca9ece709eeee8b5"
+      },
+      "original_task_success": false,
+      "output_tokens": 166,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        3,
+        -1
+      ],
+      "review_verdict": "PASS",
+      "variant": "independent_reviewer",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-1",
+      "expected_answers": [
+        2,
+        2,
+        -1
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1146,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3884,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-1-governance-evidence_gated_completion/row.json",
+        "sha256": "3955971faa4c9221742ab4b1ce8e4a8924abee6180df0aed513f65dd64dad5fe"
+      },
+      "original_task_success": false,
+      "output_tokens": 166,
+      "policy_acceptance": false,
+      "returned_answers": [
+        1,
+        -1,
+        -1
+      ],
+      "review_verdict": "PASS",
+      "variant": "evidence_gated_completion",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 578,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3084,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-single_model/row.json",
+        "sha256": "d7a2b29302099a0682c694f5d873a0775058b9ed15e7d10c172550aca52bea31"
+      },
+      "original_task_success": false,
+      "output_tokens": 153,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1337,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4063,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-static_team/row.json",
+        "sha256": "b64b4b579ba0fd2cf67d2c436dea4325335b026969845fbc0f2861abcadfda27"
+      },
+      "original_task_success": true,
+      "output_tokens": 306,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1337,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4087,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-greedy/row.json",
+        "sha256": "969f8793847b3498ba3a56b62c9b9018f07d87cb770866159c29850fc5ee7d8b"
+      },
+      "original_task_success": false,
+      "output_tokens": 306,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 1337,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4059,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-coverage/row.json",
+        "sha256": "7d5494d5f7ab0982df6e95e860d3965bf87cc2dc996889004755e386204c9743"
+      },
+      "original_task_success": true,
+      "output_tokens": 306,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1337,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4095,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-complementarity/row.json",
+        "sha256": "778f085be518fde51fbc833e841c5ecc922252a783d3693a526b5fc7d88b1842"
+      },
+      "original_task_success": false,
+      "output_tokens": 306,
+      "policy_acceptance": null,
+      "returned_answers": [
+        2,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 578,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3189,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-team-dynamic_recomposition/row.json",
+        "sha256": "e891e5abedcba8734fec4757fe10d79fc63b0e6c6a54216151f491597d4cc795"
+      },
+      "original_task_success": true,
+      "output_tokens": 153,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1015,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3001,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-context-full_context/row.json",
+        "sha256": "eaaf164462fc9b5f5f2c17a87d61f84bf06770426f466154f2eec6b425d940fe"
+      },
+      "original_task_success": false,
+      "output_tokens": 153,
+      "policy_acceptance": null,
+      "returned_answers": [
+        2,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 472,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2920,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-context-recency_truncation/row.json",
+        "sha256": "d8bd6ece6fdf82db7262c483ff682bfdaee013e78d0fe4c35a6660912c727138"
+      },
+      "original_task_success": false,
+      "output_tokens": 75,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1411,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3996,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-context-conventional_summary/row.json",
+        "sha256": "ce782ee6f929f26aeb3752868fb14d30b468364815153d0bbf27c7945067f3c1"
+      },
+      "original_task_success": false,
+      "output_tokens": 440,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": [
+        "source_evidence"
+      ]
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 1019,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3036,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-context-task_centric/row.json",
+        "sha256": "893a3a16945c3029e890e381d600a6b30c43a06e853bb303d583ed80a47a3b6d"
+      },
+      "original_task_success": true,
+      "output_tokens": 153,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": true,
+      "input_tokens": 1369,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3049,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-context-task_centric_source_recall/row.json",
+        "sha256": "dccabfdfa00865dc77276688917bb11882f7f241b39e84f14f49dff596a10923"
+      },
+      "original_task_success": true,
+      "output_tokens": 153,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 578,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2965,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-governance-model_claim_only/row.json",
+        "sha256": "a7e711687c353ee0fa72c43e771e7991c120a11c8f98ae57ae9ee7b56143518e"
+      },
+      "original_task_success": true,
+      "output_tokens": 153,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 578,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2974,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-governance-tool_receipt_verification/row.json",
+        "sha256": "5a9454b17a3abed7e1aeb8f9a507ce61cbed5f5a3173883aec63964f5c225d45"
+      },
+      "original_task_success": true,
+      "output_tokens": 153,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": false,
+      "false_rejection": true,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 1279,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3867,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-governance-independent_reviewer/row.json",
+        "sha256": "2324e27a3cae3393a6a76af4847b7abdbb819cd9c0106db0d192f05705598420"
+      },
+      "original_task_success": true,
+      "output_tokens": 289,
+      "policy_acceptance": false,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": "NEEDS_REVISION",
+      "variant": "independent_reviewer",
+      "violations": []
+    },
+    {
+      "case_id": "governance-1",
+      "expected_answers": [
+        1,
+        0
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 1279,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3863,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-1-governance-evidence_gated_completion/row.json",
+        "sha256": "6f32362f5ce01b71875f0a0146c27098084fbc755e8baca940d0be21996be530"
+      },
+      "original_task_success": true,
+      "output_tokens": 217,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        0
+      ],
+      "review_verdict": "PASS",
+      "variant": "evidence_gated_completion",
+      "violations": []
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 517,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3086,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-single_model/row.json",
+        "sha256": "70a60bb30c0d14fec3c06f342f279296c2f3bb7d0e9a9b9ac4d320b94b19c598"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1217,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4093,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-static_team/row.json",
+        "sha256": "b9865fd24744d7f995a75ad62ebc304c8ae543a86aefd4dd53331dca77f6272d"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1217,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4089,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-greedy/row.json",
+        "sha256": "438872c98837b70ad381372a954c8536b5081917dfd93539d9bcfb9c5464d44f"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1217,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4092,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-coverage/row.json",
+        "sha256": "835bed1253e67c4e552229c4e5288a652de96abe45b86247fd05a207f78ed28a"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1217,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4097,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-complementarity/row.json",
+        "sha256": "e72df9d2c9de0545545f185153ded9461c5a5797fe5f497bc22452f36b77f7b9"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1221,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4264,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-team-dynamic_recomposition/row.json",
+        "sha256": "9d34acca4a5feaba8755ff60f7af65ec409b65b7b0f318c7bf9bd537c9e4a4b5"
+      },
+      "original_task_success": false,
+      "output_tokens": 310,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 933,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3002,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-context-full_context/row.json",
+        "sha256": "34ac27c80036b561ce24697729f143f5cc9fc9e068c5eaff3c2dac706cf282e1"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        0,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 444,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2824,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-context-recency_truncation/row.json",
+        "sha256": "b622f06cd491863f5a25d5e2b3e36e6ec3061d2dd18b1856a1567b5508764bc6"
+      },
+      "original_task_success": false,
+      "output_tokens": 58,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1357,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3873,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-context-conventional_summary/row.json",
+        "sha256": "04435a9b122725a3b8428cd69afbcc45f251f7704a82c54323ab22c1be1aaf7e"
+      },
+      "original_task_success": false,
+      "output_tokens": 383,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -2,
+        0,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 936,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3063,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-context-task_centric/row.json",
+        "sha256": "d1855f9e213826a69b20447b3faf8e666a527a5761a6eff782c721618c6f658d"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -7,
+        2,
+        8,
+        4,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1228,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3083,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-context-task_centric_source_recall/row.json",
+        "sha256": "c1f21376b4830acc4af6b9ce9f667e7db1c309543fa77a8de878717f579102e2"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        -1,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 517,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2998,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-governance-model_claim_only/row.json",
+        "sha256": "f0dfdc771680240ed42c7134e14fa4c1f48fa02c1a6ce95339d9bd75ae71b9ea"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": true,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 517,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3007,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-governance-tool_receipt_verification/row.json",
+        "sha256": "711c4a70ba73009e7f770c9c9b38c18032aa173701a3afabed9775d361730345"
+      },
+      "original_task_success": false,
+      "output_tokens": 155,
+      "policy_acceptance": true,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1159,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3887,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-governance-independent_reviewer/row.json",
+        "sha256": "cde2bc49e7336c75ca8e232ac5468841f021ce982e0825ccb6e1ce089bf966d8"
+      },
+      "original_task_success": false,
+      "output_tokens": 229,
+      "policy_acceptance": true,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": "PASS",
+      "variant": "independent_reviewer",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "code-2",
+      "expected_answers": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1159,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3909,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/code-2-governance-evidence_gated_completion/row.json",
+        "sha256": "be7f1ad6fcb652be8a31685519ceb73a64bc80806ebeaf02201a1c64f09e00b5"
+      },
+      "original_task_success": false,
+      "output_tokens": 321,
+      "policy_acceptance": false,
+      "returned_answers": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "review_verdict": "NEEDS_REVISION",
+      "variant": "evidence_gated_completion",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 524,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3089,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-single_model/row.json",
+        "sha256": "d84bcb488bfa56d274cb28502311040242ab3ecf6f8789dc552b82a3b72d77ba"
+      },
+      "original_task_success": false,
+      "output_tokens": 161,
+      "policy_acceptance": null,
+      "returned_answers": [
+        9,
+        7,
+        7,
+        -1,
+        9
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1237,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4095,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-static_team/row.json",
+        "sha256": "1db3f65e6cb44eb048dbde54f50ba9e1ac8ba77aa1f9f30ef873341678a08843"
+      },
+      "original_task_success": false,
+      "output_tokens": 322,
+      "policy_acceptance": null,
+      "returned_answers": [
+        7,
+        7,
+        3,
+        -1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1237,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4094,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-greedy/row.json",
+        "sha256": "53ef222f57ab31cb952e67d2d7cdf2cb15b5aa3372667362d04d3f1c0c19362c"
+      },
+      "original_task_success": false,
+      "output_tokens": 323,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        7,
+        7,
+        -1,
+        9
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1237,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4094,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-coverage/row.json",
+        "sha256": "973565e0999f10d039766bbaccb44e363af28d96826168b7907d84e4199e7872"
+      },
+      "original_task_success": false,
+      "output_tokens": 322,
+      "policy_acceptance": null,
+      "returned_answers": [
+        9,
+        7,
+        7,
+        -1,
+        9
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1238,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4101,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-complementarity/row.json",
+        "sha256": "001934094f8e31fd78b212661677b82f12f5732505740a557c2f028f55d3e6e8"
+      },
+      "original_task_success": false,
+      "output_tokens": 323,
+      "policy_acceptance": null,
+      "returned_answers": [
+        3,
+        -1,
+        3,
+        3,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1242,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4265,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-team-dynamic_recomposition/row.json",
+        "sha256": "619ad2d243e63018db1d0df3a8bfe46cdce23cea81e68c96f6fb4e5e97db43d5"
+      },
+      "original_task_success": false,
+      "output_tokens": 323,
+      "policy_acceptance": null,
+      "returned_answers": [
+        9,
+        7,
+        3,
+        1,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 936,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3008,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-context-full_context/row.json",
+        "sha256": "59822192d26d3c00bcc58ff15312025036f0a8dd638735c0b44a0ef4f54b7c94"
+      },
+      "original_task_success": false,
+      "output_tokens": 162,
+      "policy_acceptance": null,
+      "returned_answers": [
+        -1,
+        3,
+        3,
+        -1,
+        3
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 460,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2892,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-context-recency_truncation/row.json",
+        "sha256": "8425b9af6d8bfaf86acc033bd35f452a39c587805d06fec5ea05b1b3cfef24d5"
+      },
+      "original_task_success": false,
+      "output_tokens": 70,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1324,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3509,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-context-conventional_summary/row.json",
+        "sha256": "90665d96449c815d96d55b8da9035f8b5d757209f4a5539d19efa44329cd1c5c"
+      },
+      "original_task_success": false,
+      "output_tokens": 225,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 943,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3071,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-context-task_centric/row.json",
+        "sha256": "b26e9da59e728498bde000a0ff13b3d5849670b1b59380072785125ab395cf26"
+      },
+      "original_task_success": false,
+      "output_tokens": 161,
+      "policy_acceptance": null,
+      "returned_answers": [
+        7,
+        7,
+        1,
+        -1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1222,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3088,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-context-task_centric_source_recall/row.json",
+        "sha256": "03b938d7aa8d23ef89480f0131296da6af3d4f9305a2a606dfd6cd65ffe1a273"
+      },
+      "original_task_success": false,
+      "output_tokens": 161,
+      "policy_acceptance": null,
+      "returned_answers": [
+        7,
+        7,
+        7,
+        -1,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 524,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3001,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-governance-model_claim_only/row.json",
+        "sha256": "ede70c62028d78ef0233f41ff7da9d9920390ea5874ffbb50ac72bc46dfd27e8"
+      },
+      "original_task_success": false,
+      "output_tokens": 161,
+      "policy_acceptance": true,
+      "returned_answers": [
+        9,
+        7,
+        3,
+        7,
+        7
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 524,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3013,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-governance-tool_receipt_verification/row.json",
+        "sha256": "1525d490347ce63c70400b0263703f4856d1150cffa3fb228f9577b3f87ed575"
+      },
+      "original_task_success": false,
+      "output_tokens": 162,
+      "policy_acceptance": true,
+      "returned_answers": [
+        -1,
+        7,
+        7,
+        -1,
+        9
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1179,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3906,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-governance-independent_reviewer/row.json",
+        "sha256": "a17202f7710d45cac8cde875fb6adb9b86f300da6965bd155a70ea1d02435d53"
+      },
+      "original_task_success": false,
+      "output_tokens": 258,
+      "policy_acceptance": false,
+      "returned_answers": [
+        9,
+        -1,
+        7,
+        1,
+        9
+      ],
+      "review_verdict": "NEEDS_REVISION",
+      "variant": "independent_reviewer",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "schedule-2",
+      "expected_answers": [
+        9,
+        3,
+        1,
+        -1,
+        3
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1179,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3903,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/schedule-2-governance-evidence_gated_completion/row.json",
+        "sha256": "e0f6d73ba645e34cd684a061b0fff583e0285272f4d3eec8c0c3263c9caf9ce5"
+      },
+      "original_task_success": false,
+      "output_tokens": 332,
+      "policy_acceptance": false,
+      "returned_answers": [
+        7,
+        7,
+        7,
+        -1,
+        7
+      ],
+      "review_verdict": "REJECT",
+      "variant": "evidence_gated_completion",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 666,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3093,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-single_model/row.json",
+        "sha256": "7b8cbd650a94ab80893eddf35dff875baebdba73c77e9faa36ce1ade8c0cd94e"
+      },
+      "original_task_success": false,
+      "output_tokens": 149,
+      "policy_acceptance": null,
+      "returned_answers": [
+        2,
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "single_model",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1509,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4100,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-static_team/row.json",
+        "sha256": "d6db769b01ec5117ff1a928d546164a4924b64cbe9fe052f66be66c4f8f7195c"
+      },
+      "original_task_success": false,
+      "output_tokens": 298,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "static_team",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1509,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4095,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-greedy/row.json",
+        "sha256": "c83c8564f969d9be060a13963decd645f08a17b800b22a80dfcae2e10a752d07"
+      },
+      "original_task_success": false,
+      "output_tokens": 298,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "greedy",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1509,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4098,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-coverage/row.json",
+        "sha256": "396c2d596baaf9e8b5601a2e148cee4362a5da4031dad5515bc444da229e268f"
+      },
+      "original_task_success": false,
+      "output_tokens": 298,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "coverage",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": false,
+      "input_tokens": 1509,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 4104,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-complementarity/row.json",
+        "sha256": "99466fb411d42a4a78124f2a60e89758fac3250535a5f49c4b43aab591dba3d2"
+      },
+      "original_task_success": false,
+      "output_tokens": 298,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        2,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "complementarity",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "team",
+      "independent_task_success": true,
+      "input_tokens": 666,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3382,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-team-dynamic_recomposition/row.json",
+        "sha256": "a1630f5bf046c9adbdc8b2183fb0cfd7103069b346bc1d25b49c0a78e05315bc"
+      },
+      "original_task_success": true,
+      "output_tokens": 207,
+      "policy_acceptance": null,
+      "returned_answers": [
+        2,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "dynamic_recomposition",
+      "violations": []
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1134,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3009,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-context-full_context/row.json",
+        "sha256": "00ff2b90278f886764998aca2b2d71d22dd054ff3d49304b171a6f1bd605bc58"
+      },
+      "original_task_success": false,
+      "output_tokens": 149,
+      "policy_acceptance": null,
+      "returned_answers": [
+        2,
+        2,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "full_context",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 472,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2612,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-context-recency_truncation/row.json",
+        "sha256": "bbed9dfc78ba5b625e076a8ef7978a38c257b4d8eebe2229a0e3204fe55614da"
+      },
+      "original_task_success": false,
+      "output_tokens": 21,
+      "policy_acceptance": null,
+      "returned_answers": [],
+      "review_verdict": null,
+      "variant": "recency_truncation",
+      "violations": [
+        "wrong_answer",
+        "source_evidence",
+        "lost_obligation",
+        "not_completed"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1688,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3877,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-context-conventional_summary/row.json",
+        "sha256": "79e87c0cb07e3cee5751e38a697cbcdc1791325416de44afe7c9b587aa23b8b6"
+      },
+      "original_task_success": false,
+      "output_tokens": 505,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        2,
+        0
+      ],
+      "review_verdict": null,
+      "variant": "conventional_summary",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1136,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3072,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-context-task_centric/row.json",
+        "sha256": "1d6740a50215aaa51b80afe91d149abedce9bd919032b580f54af48155640048"
+      },
+      "original_task_success": false,
+      "output_tokens": 149,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "task_centric",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": null,
+      "false_rejection": null,
+      "family": "context",
+      "independent_task_success": false,
+      "input_tokens": 1597,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3086,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-context-task_centric_source_recall/row.json",
+        "sha256": "df95a58611d8f7795e5eae722cfec6f39d16288f072324d559700a6c07aa53fa"
+      },
+      "original_task_success": false,
+      "output_tokens": 149,
+      "policy_acceptance": null,
+      "returned_answers": [
+        1,
+        1,
+        1
+      ],
+      "review_verdict": null,
+      "variant": "task_centric_source_recall",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 666,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 3000,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-governance-model_claim_only/row.json",
+        "sha256": "332c6701bf0f0d6c9f85627b8fd798bcb5a15e906450fd75042825c1d74fcd94"
+      },
+      "original_task_success": false,
+      "output_tokens": 149,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "model_claim_only",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": true,
+      "input_tokens": 666,
+      "model_calls": 1,
+      "original_row": {
+        "bytes": 2982,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-governance-tool_receipt_verification/row.json",
+        "sha256": "1e9a851e5934cbc98b3c6474e087866d2c6eec6f4dba37b6a317fa35daba0cca"
+      },
+      "original_task_success": true,
+      "output_tokens": 149,
+      "policy_acceptance": true,
+      "returned_answers": [
+        2,
+        1,
+        2
+      ],
+      "review_verdict": null,
+      "variant": "tool_receipt_verification",
+      "violations": []
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": true,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1451,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3894,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-governance-independent_reviewer/row.json",
+        "sha256": "ffbaaa9ded7f7f1dfb2a9f85562326eb519edabcbbc2277eea4702fc4f6d96e3"
+      },
+      "original_task_success": false,
+      "output_tokens": 253,
+      "policy_acceptance": true,
+      "returned_answers": [
+        1,
+        1,
+        2
+      ],
+      "review_verdict": "PASS",
+      "variant": "independent_reviewer",
+      "violations": [
+        "wrong_answer"
+      ]
+    },
+    {
+      "case_id": "governance-2",
+      "expected_answers": [
+        2,
+        1,
+        2
+      ],
+      "false_acceptance": false,
+      "false_rejection": false,
+      "family": "governance",
+      "independent_task_success": false,
+      "input_tokens": 1451,
+      "model_calls": 2,
+      "original_row": {
+        "bytes": 3903,
+        "path": "docs/audit/phase2/live-algorithm-study-v16-results-records/governance-2-governance-evidence_gated_completion/row.json",
+        "sha256": "e807d84cd383650dfbb817387be0579605069651d0ccc53a0f85e98eb4414081"
+      },
+      "original_task_success": false,
+      "output_tokens": 294,
+      "policy_acceptance": false,
+      "returned_answers": [
+        1,
+        1,
+        0
+      ],
+      "review_verdict": "REJECT",
+      "variant": "evidence_gated_completion",
+      "violations": [
+        "wrong_answer"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "status": "original_study_scores_independently_verified",
+  "summary": [
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 3297,
+      "model_calls": 6,
+      "output_tokens": 919,
+      "task_successes": 1,
+      "variant": "single_model"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 7680,
+      "model_calls": 12,
+      "output_tokens": 1836,
+      "task_successes": 2,
+      "variant": "static_team"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 7680,
+      "model_calls": 12,
+      "output_tokens": 1837,
+      "task_successes": 1,
+      "variant": "greedy"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 7680,
+      "model_calls": 12,
+      "output_tokens": 1836,
+      "task_successes": 2,
+      "variant": "coverage"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 7682,
+      "model_calls": 12,
+      "output_tokens": 1839,
+      "task_successes": 1,
+      "variant": "complementarity"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "team",
+      "input_tokens": 5417,
+      "model_calls": 9,
+      "output_tokens": 1448,
+      "task_successes": 3,
+      "variant": "dynamic_recomposition"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "context",
+      "input_tokens": 5865,
+      "model_calls": 6,
+      "output_tokens": 919,
+      "task_successes": 1,
+      "variant": "full_context"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "context",
+      "input_tokens": 2755,
+      "model_calls": 6,
+      "output_tokens": 321,
+      "task_successes": 0,
+      "variant": "recency_truncation"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "context",
+      "input_tokens": 8497,
+      "model_calls": 12,
+      "output_tokens": 2205,
+      "task_successes": 1,
+      "variant": "conventional_summary"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "context",
+      "input_tokens": 5883,
+      "model_calls": 6,
+      "output_tokens": 918,
+      "task_successes": 2,
+      "variant": "task_centric"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "context",
+      "input_tokens": 7793,
+      "model_calls": 6,
+      "output_tokens": 918,
+      "task_successes": 2,
+      "variant": "task_centric_source_recall"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 4,
+      "false_rejections": 0,
+      "family": "governance",
+      "input_tokens": 3297,
+      "model_calls": 6,
+      "output_tokens": 919,
+      "task_successes": 2,
+      "variant": "model_claim_only"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 3,
+      "false_rejections": 0,
+      "family": "governance",
+      "input_tokens": 3297,
+      "model_calls": 6,
+      "output_tokens": 919,
+      "task_successes": 3,
+      "variant": "tool_receipt_verification"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 3,
+      "false_rejections": 2,
+      "family": "governance",
+      "input_tokens": 7332,
+      "model_calls": 12,
+      "output_tokens": 1434,
+      "task_successes": 2,
+      "variant": "independent_reviewer"
+    },
+    {
+      "cases": 6,
+      "false_acceptances": 0,
+      "false_rejections": 0,
+      "family": "governance",
+      "input_tokens": 7332,
+      "model_calls": 12,
+      "output_tokens": 1488,
+      "task_successes": 2,
+      "variant": "evidence_gated_completion"
+    }
+  ],
+  "totals": {
+    "cost": null,
+    "input_tokens": 91487,
+    "model_calls": 135,
+    "output_tokens": 19756,
+    "rows": 90,
+    "sum_row_token_caps": 1440000,
+    "task_failures": 65,
+    "task_successes": 25,
+    "unknown_attempts": 0
+  },
+  "verified_examples": [
+    {
+      "actual": [
+        -1,
+        -2,
+        8,
+        4,
+        -1
+      ],
+      "case_id": "code-2",
+      "expected": [
+        -1,
+        2,
+        8,
+        4,
+        -1
+      ],
+      "reason": "For input (0,-2), a is nonnegative and a<=b is false; a-b is 2.",
+      "variant": "single_model"
+    },
+    {
+      "actual": [
+        -1,
+        3,
+        3
+      ],
+      "case_id": "schedule-1",
+      "expected": [
+        2,
+        2,
+        -1
+      ],
+      "reason": "Machine2 has minimum cost and wins the equal-cost ID tie for sizes1/7; size9 has no eligible machine.",
+      "variant": "single_model"
+    },
+    {
+      "actual": [
+        1,
+        1
+      ],
+      "case_id": "governance-1",
+      "expected": [
+        1,
+        0
+      ],
+      "reason": "The second stream revokes b before writing b, so its write count is zero.",
+      "variant": "single_model"
+    }
+  ],
+  "violation_counts": {
+    "lost_obligation": 7,
+    "not_completed": 8,
+    "source_evidence": 9,
+    "wrong_answer": 64
+  }
+}

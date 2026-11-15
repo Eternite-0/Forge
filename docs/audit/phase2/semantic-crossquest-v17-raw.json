@@ -1,0 +1,137 @@
+{
+  "sample_id": "semantic-crossquest-v17-fixed-01",
+  "execution_mode": "live",
+  "experiment": "One fixed exploratory model semantic retrieval across two seeded proposed Quests; not complex-task E2E, model diversity, generalized quality, or multi-Quest execution evidence.",
+  "provider_id": "wb-local",
+  "model_id": "deepseek-v4.1-flash",
+  "retry_policy": "No script retries and Gateway max_retries=0; failures retained, no resampling.",
+  "passed": false,
+  "result": {
+    "items": [
+      {
+        "id": "constraint:f90d75a04e5748f672352038df5c7f008645029dd0842cb0dd534c728f08f740",
+        "statement": "Never put passwords or authentication tokens into application logs; redact them before writing diagnostics.",
+        "kind": "constraint",
+        "layer": "L1",
+        "status": "hypothesis",
+        "confirmation_status": "explicit_user",
+        "source_refs": [
+          "message:msg_ec00309135e2"
+        ],
+        "source_hash": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+        "created_at": "2026-11-15T09:07:41.349445+00:00",
+        "valid_until": null,
+        "related_quest_ids": [
+          "quest_b05d4a0bc6ef"
+        ],
+        "key": "budget",
+        "freshness": "unknown",
+        "conflicted": false,
+        "source_type": "user_instruction",
+        "trust_scope": "user instruction only; no tool permission or domain truth"
+      },
+      {
+        "id": "constraint:04fb50f401cbddfb9d5613b23f94b9d131b2f66bea7318362ff5b74f34b08489",
+        "statement": "Never put passwords or authentication tokens into application logs",
+        "kind": "constraint",
+        "layer": "L2",
+        "status": "hypothesis",
+        "confirmation_status": "explicit_user",
+        "source_refs": [
+          "message:msg_ec00309135e2"
+        ],
+        "source_hash": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+        "created_at": "2026-11-15T09:07:41.414718+00:00",
+        "valid_until": null,
+        "related_quest_ids": [],
+        "key": "budget",
+        "freshness": "unknown",
+        "conflicted": false,
+        "source_type": "user_instruction",
+        "trust_scope": "user instruction only; no tool permission or domain truth"
+      },
+      {
+        "id": "cf3d2fcbcbf24069b4e06e5a5faa1e3c",
+        "statement": "Never put passwords or authentication tokens into application logs; redact them before writing diagnostics.",
+        "kind": "decision",
+        "layer": "L2",
+        "status": "hypothesis",
+        "source_refs": [
+          "message:msg_ec00309135e2"
+        ],
+        "created_at": "2026-11-15T09:07:41.357934+00:00",
+        "valid_until": null,
+        "related_quest_ids": [
+          "quest_b05d4a0bc6ef"
+        ],
+        "key": null,
+        "freshness": "unknown",
+        "conflicted": false
+      }
+    ],
+    "bytes": 1756,
+    "omitted": 3,
+    "cursor": null,
+    "semantic": {
+      "status": "selected",
+      "method": "model_semantic_selection",
+      "execution_mode": "live",
+      "call_id": "memory_call_864ea67d1495",
+      "candidates": 6,
+      "selected": 3,
+      "dropped_changed": 0,
+      "source_snapshot_sha256": "713287d72f61f2db2664a222409c7a3c515a97e6c65ddd9e52f346cc66697789",
+      "scope": "one bounded indexed candidate page; original source trust unchanged",
+      "input_reservation": 6453
+    }
+  },
+  "validation": {
+    "checks": {
+      "semantic_selected": true,
+      "recalled_target_without_unrelated_records": false,
+      "exact_source_snapshot_and_reread": false,
+      "original_message_hashes_unchanged": true,
+      "no_false_completed_quest": true,
+      "no_lexical_match": true,
+      "trust_preserved": false
+    },
+    "passed": false,
+    "returned_refs": [
+      "constraint:f90d75a04e5748f672352038df5c7f008645029dd0842cb0dd534c728f08f740",
+      null,
+      "memory:cf3d2fcbcbf24069b4e06e5a5faa1e3c"
+    ],
+    "quest_states": {
+      "quest_b05d4a0bc6ef": "proposed",
+      "quest_513005281789": "proposed"
+    },
+    "original_message_hashes": {
+      "msg_ec00309135e2": "f76de77fee7da466a13e93a9bde679f6d594e292223dacddd9783f171c345832",
+      "msg_f8b147ff3ccd": "cff4573818292e61fd27f24d86fda079490ea399426f473ec97e900ee2b5d601"
+    }
+  },
+  "duration_seconds": 2.6439160000008997,
+  "model_calls": 1,
+  "attempts": [
+    {
+      "attempt_id": "38920baf7ee94a9e90780da2acb01144",
+      "call_id": "memory_call_864ea67d1495",
+      "purpose": "memory_semantic_retrieval",
+      "provider_id": "wb-local",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "settled",
+      "input_reserved": 6453,
+      "output_reserved": 512,
+      "input_charged": 1713,
+      "output_charged": 113,
+      "cost_charged": null,
+      "currency": null
+    }
+  ],
+  "token_usage": {
+    "input": 1713,
+    "output": 113,
+    "unknown_attempts": 0
+  },
+  "cost": null
+}

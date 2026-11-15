@@ -1,0 +1,136 @@
+{
+  "candidate": {
+    "answers": [
+      1,
+      2,
+      0
+    ],
+    "citations": [
+      {
+        "line_end": 3,
+        "line_start": 1,
+        "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+        "source_id": "semantics"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "1ac543284f687c986c5ee75d706476cef0487281c4bc165505ed54e36fcded3e",
+        "source_id": "streams"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "exact_identifier_binding",
+      "preserve_event_order"
+    ]
+  },
+  "case_id": "governance-2",
+  "context_cap": 16384,
+  "context_records_sha256": "38c7198705208b6baf7baaa7e7b2f7def56b1527e17778a6fc26a9949d469578",
+  "cost": null,
+  "difficulty": 2,
+  "domain": "approval_architecture",
+  "duration_seconds": 5.4734441000036895,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_7d6dc64a7ebe",
+      "receipt_id": "receipt_94de556f8826",
+      "sha256": "d7721aaeb46356499a458272a7699ec7f96e2ea2a365e9241513d5bb3d3d2d21",
+      "source_id": "semantics"
+    },
+    {
+      "intent_id": "action_be9029ec692a",
+      "receipt_id": "receipt_1e80c1f9c20f",
+      "sha256": "1ac543284f687c986c5ee75d706476cef0487281c4bc165505ed54e36fcded3e",
+      "source_id": "streams"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_352cdc50593b",
+      "duration_seconds": 3.1604405000107363,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "b4a4a6a27bcdf63f06469109df5d3ca5e64517a41cc5cd9e26a44442ab3117ca",
+      "response_sha256": "e1fc82aa1766352b4df978f9dc2d8014ae2a864bf44da82a5dc46fcf29dd2fe0",
+      "schema_valid": true,
+      "stage": "summary",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 0,
+        "input_tokens": 961,
+        "output_tokens": 356
+      }
+    },
+    {
+      "call_id": "study_call_6f29acf84679",
+      "duration_seconds": 2.0425868000020273,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "7bff78b3575157566e1713c4f0a4560c6058b6bd02be650084095f3ece2cf602",
+      "response_sha256": "1018f445f22706b7cb7ce7e3a2d49f78a880b48d04ac5932790b7fd5ad1e753d",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 727,
+        "output_tokens": 149
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_352cdc50593b",
+        "cost_charged": null,
+        "input_charged": 961,
+        "input_reserved": 4163,
+        "output_charged": 356,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_summary",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_6f29acf84679",
+        "cost_charged": null,
+        "input_charged": 727,
+        "input_reserved": 3886,
+        "output_charged": 149,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1688,
+    "known_input_tokens": 1688,
+    "known_output_tokens": 505,
+    "model_calls": 2,
+    "output_tokens": 505,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "conventional_summary"
+}

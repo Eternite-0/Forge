@@ -1,0 +1,170 @@
+--- /dev/null
++++ b/backend/tests/planner_capacity_fixtures.py
+@@ -0,0 +1,30 @@
++"""Real capacity-aware fixtures for legacy Planner transport/lifecycle tests.
++
++These are explicit Mock model/operator contracts; no production gate is patched.
++"""
++
++from forge_core.domain import ModelProfile, ProtocolSupport
++
++
++def configure_planner_capacity(main):
++    main.store.save_model(ModelProfile(
++        id="planner-capacity-fixture", provider="planner-fixture", model_id="mock",
++        display_name="Explicit Mock Planner fixture", context_window=65536,
++        max_output_tokens=4096,
++        tool_calling_support=ProtocolSupport(supported=True, source="test_fixture"),
++        structured_output_support=ProtocolSupport(supported=True, source="test_fixture"),
++    ))
++    main.router.provider_id = "planner-fixture"
++    main.router.context_limit = 65536
++
++
++def capacity_graph(key, objective):
++    return {
++        "nodes": [{"key": key, "objective": objective, "success_criteria": ["delivery_review"],
++                   "budget_tokens": 150000, "required_capabilities": [], "allowed_tools": [],
++                   "expected_artifact": None, "max_attempts": 1, "required_input_paths": [],
++                   "capacity_bounds": {"max_source_receipt_bytes": 2048,
++                                       "max_artifact_bytes": 3072, "max_delivery_bytes": 1536}}],
++        "edges": [], "max_total_tokens": 180000, "coordination_reserve_tokens": 18000,
++        "max_cost_microunits": None, "max_duration_seconds": None, "cost_currency": None,
++    }
+--- a/backend/tests/test_m4_adversarial.py
++++ b/backend/tests/test_m4_adversarial.py
+@@ -1,6 +1,7 @@
+ """Independent real-SQLite M4 adversarial regression tests."""
+ 
+ import pytest
++from planner_capacity_fixtures import capacity_graph, configure_planner_capacity
+ 
+ from forge_core.domain import DomainError, Quest, QuestStatus
+ from forge_core.quest_graph import QuestGraphService
+@@ -212,10 +213,13 @@
+     monkeypatch.setattr(time, "time", lambda: now[0])
+     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
++    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
++    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
+     monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "planner.sqlite3"))
+     from forge_api import main
+ 
+     importlib.reload(main)
++    configure_planner_capacity(main)
+     quest = Quest(title="q", goal="plan")
+     main.store.save_quest(quest)
+     event = ForgeEvent(event_type="quest.proposed", quest_id=quest.id, payload={"source": "router"})
+@@ -243,25 +247,7 @@
+             await self.release[index].wait()
+             if index == 0 and old_fails:
+                 raise RuntimeError("stale failure")
+-            graph = {
+-                "nodes": [
+-                    {
+-                        "key": "a",
+-                        "objective": "work",
+-                        "success_criteria": ["delivery_review"],
+-                        "budget_tokens": 10,
+-                        "required_capabilities": [],
+-                        "allowed_tools": [],
+-                        "expected_artifact": None,
+-                        "max_attempts": 1,
+-                    }
+-                ],
+-                "edges": [],
+-                "max_total_tokens": 1000,
+-                "max_cost_microunits": None,
+-                "max_duration_seconds": None,
+-                "cost_currency": None,
+-            }
++            graph = capacity_graph('a', 'work')
+             return type("Response", (), {"text": json.dumps(graph), "usage": {}})()
+ 
+     async def race():
+--- a/backend/tests/test_m4_integration.py
++++ b/backend/tests/test_m4_integration.py
+@@ -10,6 +10,7 @@
+ 
+ import httpx
+ import pytest
++from planner_capacity_fixtures import capacity_graph, configure_planner_capacity
+ from fastapi.testclient import TestClient
+ 
+ from forge_core.dispatcher import Dispatcher, LeaseError
+@@ -461,6 +462,8 @@
+ def test_authenticated_graph_controls_survive_restart_without_running_worker(tmp_path, monkeypatch):
+     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
++    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
++    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
+     for name in (
+         "FORGE_PROVIDER_ID",
+         "FORGE_PROVIDER_KIND",
+@@ -471,27 +474,10 @@
+     from forge_api import main
+ 
+     importlib.reload(main)
++    configure_planner_capacity(main)
+     quest = Quest(title="Controlled plan", goal="Prepare only")
+     main.store.save_quest(quest)
+-    graph = {
+-        "nodes": [
+-            {
+-                "key": "one",
+-                "objective": "Prepare",
+-                "success_criteria": ["delivery_review"],
+-                "budget_tokens": 100,
+-                "required_capabilities": [],
+-                "allowed_tools": [],
+-                "expected_artifact": None,
+-                "max_attempts": 1,
+-            }
+-        ],
+-        "edges": [],
+-        "max_total_tokens": 100,
+-        "max_cost_microunits": None,
+-        "max_duration_seconds": None,
+-        "cost_currency": None,
+-    }
++    graph = capacity_graph('one', 'Prepare')
+ 
+     class MockProvider:
+         execution_mode = "mock"
+@@ -584,6 +570,8 @@
+ def test_user_turn_automatically_plans_once_without_extra_user_message(tmp_path, monkeypatch):
+     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
++    monkeypatch.setenv("FORGE_MODEL_TOKEN_LIMIT", "180000")
++    monkeypatch.setenv("FORGE_ROUTER_CONTEXT_LIMIT", "65536")
+     for name in (
+         "FORGE_PROVIDER_ID",
+         "FORGE_PROVIDER_KIND",
+@@ -594,25 +582,8 @@
+     from forge_api import main
+ 
+     importlib.reload(main)
+-    graph = {
+-        "nodes": [
+-            {
+-                "key": "a",
+-                "objective": "Plan",
+-                "success_criteria": ["delivery_review"],
+-                "budget_tokens": 100,
+-                "required_capabilities": [],
+-                "allowed_tools": [],
+-                "expected_artifact": None,
+-                "max_attempts": 1,
+-            }
+-        ],
+-        "edges": [],
+-        "max_total_tokens": 100,
+-        "max_cost_microunits": None,
+-        "max_duration_seconds": None,
+-        "cost_currency": None,
+-    }
++    configure_planner_capacity(main)
++    graph = capacity_graph('a', 'Plan')
+     decision = {
+         "intent": "create_quest",
+         "reply": "已登记",

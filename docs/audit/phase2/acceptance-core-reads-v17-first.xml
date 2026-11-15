@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="4" time="4.397" timestamp="2026-11-15T16:56:17.306411+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt[False]" time="1.174"><failure message="KeyError: 'required_final_artifacts'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-728/test_evaluator_revalidates_com0')
+tamper = False
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt(
+        tmp_path, tamper
+    ):
+        store, manager, model, quest, _plan, producer, reader, _expected = completed_prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool("worker_read_completed_delivery", {"node_key": "producer"}),
+                tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, 2),
+                response(delivery("Read the full original predecessor")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        NodeVerifier(store).verify(quest.id, "reader")
+        if tamper:
+            with store.unit_of_work() as work:
+                work.connection.execute(
+                    "UPDATE events SET payload=json_set(payload,'$.claim','{}') "
+                    "WHERE event_type='worker.result' AND worker_id=?",
+                    (producer["worker_id"],),
+                )
+        report = evaluated(store, tmp_path)
+        expected = "failed" if tamper else "passed"
+        assert report["checks"]["receipt_integrity"]["status"] == expected
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == expected
+        if not tamper:
+            assert len(core["evidence"]["verified"]) == 1
+            assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_completed_delivery"
+        # Core reads do not satisfy seeded file source, required final artifact or
+        # independently reviewed final-report requirements of strict L3.
+&gt;       assert report["checks"]["required_final_artifacts"]["status"] != "passed"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'required_final_artifacts'
+
+tests\test_acceptance_core_reads_v17.py:59: KeyError</failure></testcase><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt[True]" time="1.171"><failure message="KeyError: 'required_final_artifacts'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-728/test_evaluator_revalidates_com1')
+tamper = True
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt(
+        tmp_path, tamper
+    ):
+        store, manager, model, quest, _plan, producer, reader, _expected = completed_prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool("worker_read_completed_delivery", {"node_key": "producer"}),
+                tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, 2),
+                response(delivery("Read the full original predecessor")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        NodeVerifier(store).verify(quest.id, "reader")
+        if tamper:
+            with store.unit_of_work() as work:
+                work.connection.execute(
+                    "UPDATE events SET payload=json_set(payload,'$.claim','{}') "
+                    "WHERE event_type='worker.result' AND worker_id=?",
+                    (producer["worker_id"],),
+                )
+        report = evaluated(store, tmp_path)
+        expected = "failed" if tamper else "passed"
+        assert report["checks"]["receipt_integrity"]["status"] == expected
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == expected
+        if not tamper:
+            assert len(core["evidence"]["verified"]) == 1
+            assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_completed_delivery"
+        # Core reads do not satisfy seeded file source, required final artifact or
+        # independently reviewed final-report requirements of strict L3.
+&gt;       assert report["checks"]["required_final_artifacts"]["status"] != "passed"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'required_final_artifacts'
+
+tests\test_acceptance_core_reads_v17.py:59: KeyError</failure></testcase><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_accepts_verified_receipt_read_without_counting_it_as_file_source" time="0.928"><failure message="KeyError: 'input_sources_read'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-728/test_evaluator_accepts_verifie0')
+
+    def test_evaluator_accepts_verified_receipt_read_without_counting_it_as_file_source(tmp_path):
+        store, manager, model, quest, _, _, _, reader, receipts, _ = dependent(tmp_path)
+        model.responses.extend(
+            [
+                tool("worker_read_action_receipt", {"receipt_id": receipts["file_write"]}),
+                tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, 2),
+                response(delivery()),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        NodeVerifier(store).verify(quest.id, "reader")
+        report = evaluated(store, tmp_path)
+        assert report["checks"]["receipt_integrity"]["status"] == "passed"
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == "passed"
+        assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_action_receipt"
+&gt;       assert report["checks"]["input_sources_read"]["status"] != "passed"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'input_sources_read'
+
+tests\test_acceptance_core_reads_v17.py:79: KeyError</failure></testcase><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_accepts_actual_archive_source_and_rejects_changed_source_hash" time="0.499" /></testsuite></testsuites>

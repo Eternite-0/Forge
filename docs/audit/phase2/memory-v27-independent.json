@@ -1,0 +1,565 @@
+{
+  "schema": "independent-completed-crossquest-memory-v1",
+  "source_version": "v27",
+  "generated_at": "2026-11-15T14:33:58.972569+00:00",
+  "independent_auditor": {
+    "path": ".local/phase2/audit_memory_version.py",
+    "bytes": 46839,
+    "sha256": "959874e24bd6180b897e05442d0e37d5f1eda721dfda11d4c8dc6f4c6bfceddd"
+  },
+  "driver_record": {
+    "path": ".local/phase2/memory-reuse-v24/runs/20261115T142214Z-memory-b041d9/run.json",
+    "bytes": 314609,
+    "sha256": "18e34cc3fc38340fc2c77f98a130ab22949e3116c6f94b02c0ede19d84aba114"
+  },
+  "original_spec": {
+    "path": ".local/phase2/memory-reuse-v24/runs/20261115T142214Z-memory-b041d9/spec.json",
+    "bytes": 23282,
+    "sha256": "457aa7c058f0729ffaae3af1e5aba11affe52fc06d5039961f9c1d047e4a8a9c"
+  },
+  "memory_driver": {
+    "path": ".local/phase2/memory-reuse-v24/driver_v26.py",
+    "bytes": 41765,
+    "sha256": "ff35af68c2adbe6fdbe2a85ec852bfa513b6ca156b8557cd42c3bf7c5e0df768"
+  },
+  "goal_auditor": {
+    "path": ".local/phase2/goal-probes-v23/audit.py",
+    "bytes": 50343,
+    "sha256": "317e9037388ff8cb03aff495db4f69bb966ef3508a8737583714445802cd0932"
+  },
+  "core_auditor": {
+    "path": ".local/phase2/audit_live_usage_v23.py",
+    "bytes": 92288,
+    "sha256": "4d714cdf29d49150ee31fb357c9927a9d3a24c1caceb8c936dc0f4af2fc4a963"
+  },
+  "saved_evidence": [
+    {
+      "path": ".local/phase2/memory-reuse-v24/runs/20261115T142214Z-memory-b041d9/evidence-task1.json",
+      "bytes": 48464,
+      "sha256": "0e88295a6aa759f31162cbc00a9e22b09c07010f725a1f3fd01c012302f2d26c"
+    },
+    {
+      "path": ".local/phase2/memory-reuse-v24/runs/20261115T142214Z-memory-b041d9/evidence-task2.json",
+      "bytes": 13886,
+      "sha256": "29c5baa0d7305c85a5a60a149c378dad2bfb55264b1f6785a8e7597b385cc6c0"
+    }
+  ],
+  "frozen_manifest_sha256": "54aeb64f231cb8f0d7ce9c4ad785c7272d8986003f5d7d2471557c429400d8dc",
+  "frozen_executable_sha256": "1ca5706f478f4eca2ccc50292323a8d9d9551a7155254e42fb3f0288de05039d",
+  "original_spec_matches": true,
+  "code_snapshots_match": true,
+  "driver_snapshots_match": true,
+  "saved_evidence_matches_recollection": true,
+  "completed_distinct_source_and_target_quests": false,
+  "exact_eligible_memory_sources_revalidated": true,
+  "selected_context_in_later_actual_request": false,
+  "target_original_file_read_and_fresh_pass": false,
+  "source_and_target_independent_passes_reconstructed": false,
+  "known_usage_within_original_caps": false,
+  "original_inputs_unchanged": true,
+  "same_persistent_router_conversation": true,
+  "completed_source_compaction_target_order_valid": false,
+  "tasks": [
+    {
+      "quest_id": "quest_f1cea708efa4",
+      "run_id": "run_90f628536578",
+      "state": "completed",
+      "current_pass": {
+        "run_id": "run_90f628536578",
+        "packet_sha256": "67ff60ceb52d9021fe6216e24f7ba1cb62bba5523a598f831a59b057644bc6e7",
+        "raw_packet_bytes": 15469,
+        "reconstructed_review_passes": {
+          "delivery_review": true
+        },
+        "passed": true
+      },
+      "original_source_receipt_ids": [
+        "receipt_64bf7241e476"
+      ],
+      "model_selected_source_calls": [],
+      "exchange_error": null,
+      "oracle_matches": true
+    }
+  ],
+  "memory_source_proofs": [
+    {
+      "source_ref": "constraint:6d113d45a67c89d69b4aefc740f9067dcdf7b0193b18d4073851cae8aa327ddb",
+      "item_id": "constraint:6d113d45a67c89d69b4aefc740f9067dcdf7b0193b18d4073851cae8aa327ddb",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "ac24c75dbd13f2c55a6337a72e5d4f6b55dfdab2d336539c235b3b40fd401fc6",
+      "raw_sha256": "cc55ddb0621cea0019832d49c7a6841d7ba058f674c9652a8d3e1e6520c06bae",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "Compute total and explicitly choose hypothesis_read_paths=[]."
+    },
+    {
+      "source_ref": "constraint:758ca6f22a4a52942b3dc5fe673d11a83ce90733846c57598a56756b2bf30858",
+      "item_id": "constraint:758ca6f22a4a52942b3dc5fe673d11a83ce90733846c57598a56756b2bf30858",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "362502346b30d6c521bb99d434a8ef6cd3c1a9230d97e4611e063eb542e12cb6",
+      "raw_sha256": "62cc5ac86693588d17204b8ca09bf5082566be11b7d034017714bfbfe62351d4",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "Read inputs/aster-release.json."
+    },
+    {
+      "source_ref": "constraint:99bc5040cc26dc3bd7452cb3842a72cfe55491f10c4901053a99c352397b7f64",
+      "item_id": "constraint:99bc5040cc26dc3bd7452cb3842a72cfe55491f10c4901053a99c352397b7f64",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "3dd62a2dd732cdef94cc23429f284dcb59ac5406f5ebdaa8cf2df385c479d246",
+      "raw_sha256": "1e5f9152131d7ddf95c2b7404a9445f7fb33e9ceab1cfffd7fc90e2947ddc730",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "All eight delivery fields complete within at most 2048 UTF-8 bytes."
+    },
+    {
+      "source_ref": "constraint:c47b15ea45dffa78f77570c865e89ebe2a6f511510c9e951162e289dfa91e872",
+      "item_id": "constraint:c47b15ea45dffa78f77570c865e89ebe2a6f511510c9e951162e289dfa91e872",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "4b601cf4450deb5ae7c07c263543dd5542fd61c87fd318209f6626a194bb499b",
+      "raw_sha256": "9c45d0ad818ee754f0fba035580881195f385e078f0a35ee5979617c4ea587b3",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "Do not fabricate values."
+    },
+    {
+      "source_ref": "constraint:cc82889b6265a5cf6fbe8627704d4d8df71e92c1df6d06264a2d0be4a34f3dab",
+      "item_id": "constraint:cc82889b6265a5cf6fbe8627704d4d8df71e92c1df6d06264a2d0be4a34f3dab",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "6e27abcf0a5d78ab0fdbe27b12922df36e46ac42f787089f350bce7ed6a46abc",
+      "raw_sha256": "1214a7c3c315fe38fea2bebb517e8c067a90521bf3db2c61b87648357ce8fd74",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "Cite exact source path/SHA-256; keep hypotheses distinct from tool observations; include the source limitation."
+    },
+    {
+      "source_ref": "constraint:f631651dc083c18b05428045d7398bd7c3dd1c85d2ade45b9a58e8180c3a67ac",
+      "item_id": "constraint:f631651dc083c18b05428045d7398bd7c3dd1c85d2ade45b9a58e8180c3a67ac",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "cac511b177a6cd1979be92571729ac503ba27aa0276874ebc0a18d95db4f581c",
+      "raw_sha256": "0199a372c6e84054ef3375e51c2054fa5d44a5fddcac272bf61e7793ff1daa22",
+      "source_type": "user_instruction",
+      "status": "hypothesis",
+      "statement": "Use core-declared-source-prefetch-v1."
+    },
+    {
+      "source_ref": "memory:0cc561f9c13147bb89d0e621fa87cad8",
+      "item_id": "0cc561f9c13147bb89d0e621fa87cad8",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "145f4c7716cd223f5f976aa748be26c83e09dbcd3b46c4e82946e6732e1de6c4",
+      "raw_sha256": "32d55987b520dc987f5734ff655379fd620b9bf4cc0aae9bdd9ac21adff2de96",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Use core-declared-source-prefetch-v1."
+    },
+    {
+      "source_ref": "memory:177ef5d82ed94671894587ead7698f62",
+      "item_id": "177ef5d82ed94671894587ead7698f62",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "6614a097d3dd8c77ca50007b075ce9a7d2e2f3f557f327c91c670ec3eee7ffc7",
+      "raw_sha256": "a8195800f4cdbc039ab9c32ca83d102bd03987dbbb02f003aa065deb2cb085b7",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Do not fabricate values."
+    },
+    {
+      "source_ref": "memory:2a96cb22021944b9b4fe3e891d265eee",
+      "item_id": "2a96cb22021944b9b4fe3e891d265eee",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "137af36a71f76d5bf94e71a22a12c36f3c0033ab7a756a9b11be17a5500c2e13",
+      "raw_sha256": "7caf1087a13914be16590933bd0e3ac9e32696b8eac4d12917bdf776af7bdcf9",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Read inputs/aster-release.json."
+    },
+    {
+      "source_ref": "memory:4c6cdfce42c74341a1aa61e66f386490",
+      "item_id": "4c6cdfce42c74341a1aa61e66f386490",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "b89d77d15f4087055562665ce1440dcaeddb01f5f643bcb5b89f6bc7ac5a5c57",
+      "raw_sha256": "4cb977269dd015c3712e52ea3235abab88de6fef082869bff2a8de9732a44b6f",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "For Aster release decisions, only recommend shipment when failed checks equal zero and unit plus integration checks total at least fifteen (scoped decision rule, not a claim the file satisfies it)."
+    },
+    {
+      "source_ref": "memory:52272098ce244bc890b85bda0e06c1eb",
+      "item_id": "52272098ce244bc890b85bda0e06c1eb",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "ccccf82b5b54e6ff1f9c0455e73d9c624cf18965a910e35cb62191d6d7be6b3f",
+      "raw_sha256": "fe5742a7a03bde47e22940616430f01a44f110ac89350c9257cb28bc6ae923a3",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Only file_read in both plan allowed_tools and Worker tool_scope; no additional tools, no artifact or write grant."
+    },
+    {
+      "source_ref": "memory:54b5be8dfc234bac8d88d8cdce8d40ca",
+      "item_id": "54b5be8dfc234bac8d88d8cdce8d40ca",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "4eb62ea891c8d3b9d72f7d68cc007538c47896a755ad3c409b372041742ab4cc",
+      "raw_sha256": "7b667d15d843de4be39a6006d90cfc64f51b2511c57de9d62d2d5dd6c83777be",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Cite exact source path/SHA-256; keep hypotheses distinct from tool observations; include the source limitation."
+    },
+    {
+      "source_ref": "memory:9482d6d56b30439f9d4be78650df894c",
+      "item_id": "9482d6d56b30439f9d4be78650df894c",
+      "original_user_message_id": "msg_f7fd418a9c47",
+      "passed": true,
+      "item_sha256": "3c90ab66370367e53d6cb860ca4c3aac3bdd9fd4d6e254f79578a5d6c638f684",
+      "raw_sha256": "7c82437b9cb59142926acee2bf3d918c419bf46130561ecf03497f7d720177d4",
+      "source_type": null,
+      "status": "hypothesis",
+      "statement": "Exactly one JSON-object string in findings with keys release, unit, integration, failed, total, recommend_shipment (boolean), limitation, source_path, source_sha256; populate only after the actual read."
+    }
+  ],
+  "target_router_binding": {
+    "persisted_assistant_message_id": "msg_77d1404c1414",
+    "router_attempt_ids": [
+      "fce5bb3a7e704133a10debfefaafbbb6"
+    ],
+    "semantic_attempt_ids": [
+      "27cf7c2f2d7a4a6b8df166d45abe9f8e"
+    ],
+    "retrieved_source_ids": [
+      "constraint:3cd83cc3b551218439bac30c4bed1ddefeca5964e5710adc0f0689c893e317eb",
+      "constraint:6d113d45a67c89d69b4aefc740f9067dcdf7b0193b18d4073851cae8aa327ddb",
+      "constraint:758ca6f22a4a52942b3dc5fe673d11a83ce90733846c57598a56756b2bf30858",
+      "constraint:8bf6c96be0c33dc344fe4fac5e4479cc8afb8ef7cb88475777ccb03a5b4778db",
+      "constraint:99bc5040cc26dc3bd7452cb3842a72cfe55491f10c4901053a99c352397b7f64",
+      "constraint:9d3e056282c794153f56dcb7ee903bc7555abc1b5e1dcf7dc05dd5425c1fe67f",
+      "constraint:af02383e71d472c35c2dd4db277a49613a1f49a540672739e5a0358e742baca3",
+      "constraint:c47b15ea45dffa78f77570c865e89ebe2a6f511510c9e951162e289dfa91e872",
+      "constraint:cc82889b6265a5cf6fbe8627704d4d8df71e92c1df6d06264a2d0be4a34f3dab",
+      "constraint:d3f4099b12ab29b25e19e23b968d42ac15dc8c250f522caafea17238eaee2918",
+      "constraint:f631651dc083c18b05428045d7398bd7c3dd1c85d2ade45b9a58e8180c3a67ac",
+      "event:evt_4ec5ef1629d5",
+      "evidence:evidence_a4fbc1edb439",
+      "0cc561f9c13147bb89d0e621fa87cad8",
+      "177ef5d82ed94671894587ead7698f62",
+      "2a96cb22021944b9b4fe3e891d265eee",
+      "4c6cdfce42c74341a1aa61e66f386490",
+      "52272098ce244bc890b85bda0e06c1eb",
+      "54b5be8dfc234bac8d88d8cdce8d40ca",
+      "9482d6d56b30439f9d4be78650df894c"
+    ],
+    "hypothesis_constraint_ids": [
+      "00717c4cd6824bc8098deaea358b443c49cf9948548b0d55717d1ba04667f8fe",
+      "0c7ae4e4a683f6d986ab5137ce2bea66e4cd124723ccde54bcfe2f464f3a9c0f",
+      "14dea645f967b027d825b77eba6b42c9fed81922472480bff1e87dc73e9395f0",
+      "232035d58cb98ea508b46066957cdfb57cb0482b2c3cc14d7e92d5465eaf84b8",
+      "25ab553d4927de7e2c7541573560edfe70f849207b5742372123b33a263e5edc",
+      "52424391880d81ad00a6693882368d2074b2b7ca04d3708aee804a378fe0c528",
+      "570af1990d795458c4221bbc02a17b517c024b644cc2c794549caaea5d5fc639",
+      "9478731189e02482811e253dfc1d3dabac2c119106412400117d9bf75e36532f",
+      "cdc91a4b07c9e8fc7ae5589d38f3effb919565a88f4e53d3c587b9502064f3f8",
+      "f2bd22e0db4443e861f164a0d9c561378ec1f7a011423855a95fc6ffd36163e0"
+    ],
+    "passed": false
+  },
+  "core_declared_source_audit": {
+    "table_present": true,
+    "origin": "core-declared-source-prefetch-v1",
+    "source_count": 1,
+    "state_counts": {
+      "succeeded": 1
+    },
+    "worker_inventories": [
+      {
+        "run_id": "run_90f628536578",
+        "origin": "core-declared-source-prefetch-v1",
+        "declared_source_count": 1,
+        "admitted_source_count": 1,
+        "admission_inventory_complete": true,
+        "approved_assignment_valid": true
+      }
+    ],
+    "sources": [
+      {
+        "id": "core_source_869c51737d6b4b812cf6934180d08e27",
+        "run_id": "run_90f628536578",
+        "ordinal": 0,
+        "tool_name": "file_read",
+        "state": "succeeded",
+        "receipt_id": "receipt_64bf7241e476",
+        "message_ordinal": 2,
+        "origin": "core-declared-source-prefetch-v1",
+        "admission_binding_valid": true,
+        "settled_source_valid": true,
+        "no_model_reservation_or_gateway_attempt": true,
+        "binding_sha256": "cb78b4058300bcec2efda448cc8b227b36724d9d07755d0bc0628e87514fedc2",
+        "admission_event_id": "evt_1c59d7d4eeff",
+        "admission_precedes_first_model_reservation": true,
+        "source_kind": "verified_input_inventory",
+        "file_bytes": 163,
+        "file_sha256": "c68ec3c7130c94759af5933a231173f5bcab4818028ba30b90e1da3c9422c45d",
+        "native_receipt_valid": true,
+        "producer_run_id": null,
+        "producer_reconstructed_review_passes": {},
+        "result_sha256": "1f3348f1f5e52b9c9cd949ef2ada74e46ba3966189dd36f8aea26d2c40da9ac8",
+        "complete_user_message_valid": true,
+        "user_message_sha256": "e88cbde98fc07fa565b3680f0deb9e914507123164c4bd61530d55e2cb78a3ef",
+        "user_message_precedes_first_assistant": true
+      }
+    ],
+    "completed_delivery_handoffs": [],
+    "tool_counters": [
+      {
+        "run_id": "run_90f628536578",
+        "tool_spent": 1,
+        "model_selected_admitted_calls": 0,
+        "core_admitted_source_reads": 1,
+        "model_selection_bindings_valid": true,
+        "expected_tool_spent": 1,
+        "unattributed_tool_spend": 0,
+        "tools_exact": true,
+        "help_calls_are_not_inferred_from_events": true
+      }
+    ],
+    "tool_accounting_checks_passed": true,
+    "source_evidence_checks_passed": true,
+    "orphan_admission_event_ids": [],
+    "errors": [],
+    "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+  },
+  "worker_token_step_counters": [
+    {
+      "run_id": "run_90f628536578",
+      "expected_tokens": 13227,
+      "token_spent": 13227,
+      "expected_steps": 3,
+      "steps": 3,
+      "tokens_exact": true,
+      "steps_exact": true,
+      "actual_settled_local_gateway_binding": true
+    }
+  ],
+  "held_allocation_audit": {
+    "passed": true,
+    "original_scenario_cap": 360000,
+    "original_cap_preserved": true,
+    "serial_worker_starts": [],
+    "expected_serial_marker_count": 0,
+    "held_worker_budget_ledgers": [
+      {
+        "scope": "global",
+        "scope_id": "global",
+        "token_limit": 1000000,
+        "tokens_allocated": 94036,
+        "tool_limit": 1000,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 94036,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      },
+      {
+        "scope": "quest",
+        "scope_id": "quest_f1cea708efa4",
+        "token_limit": 180000,
+        "tokens_allocated": 94036,
+        "tool_limit": 1000,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 94036,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      },
+      {
+        "scope": "team",
+        "scope_id": "d41c127daa66405621e01c83507234a4f0229ede010123a6cbf2d53e25c57ca6",
+        "token_limit": 94036,
+        "tokens_allocated": 94036,
+        "tool_limit": 4,
+        "tools_allocated": 4,
+        "expected_tokens_allocated": 94036,
+        "expected_tools_allocated": 4,
+        "held_allocation_matches": true,
+        "within_declared_limits": true,
+        "marker_amount_unchanged": null
+      }
+    ],
+    "missing_ledgers": [],
+    "errors": [],
+    "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+  },
+  "usage": {
+    "passed": false,
+    "known_total_tokens": 83155,
+    "known_tokens_by_quest": {
+      "quest_f1cea708efa4": 39618,
+      "quest_e27ef6761fba": 15652
+    },
+    "settled_attempt_count": 16,
+    "unknown_attempt_ids": []
+  },
+  "read_snapshot_total_changes": 0,
+  "recollected_memory_audit": {
+    "passed": false,
+    "failures": [
+      "both_actual_quests_must_complete",
+      "actual_current_independent_pass_or_notice_missing:quest_e27ef6761fba",
+      "actual_original_source_read_missing:quest_e27ef6761fba",
+      "target_model_selected_original_source_read_missing",
+      "exact_current_source_oracle_mismatch:quest_e27ef6761fba",
+      "original_eligible_hypothesis_not_used_by_target_router",
+      "recovered_reference_rule_missing_from_target_goal",
+      "recovered_rule_not_retained_as_sourced_hypothesis"
+    ],
+    "tasks": [
+      {
+        "quest_id": "quest_f1cea708efa4",
+        "passes": {
+          "run_90f628536578": {
+            "review_event_id": "evt_3210d33cae57",
+            "result_event_id": "evt_e6abe7db7824",
+            "call_id": "review_call_1afb8260a8fc",
+            "packet_sha256": "67ff60ceb52d9021fe6216e24f7ba1cb62bba5523a598f831a59b057644bc6e7"
+          }
+        },
+        "verified_original_source_receipts": [
+          "receipt_64bf7241e476"
+        ],
+        "model_selected_source_calls": [],
+        "delivery": {
+          "summary": "inputs/aster-release.json (sha256 c68ec3c7130c94759af5933a231173f5bcab4818028ba30b90e1da3c9422c45d): Aster 0.7, failed 0, unit 12, integration 3, total 15. User's scoped rule (failed=0 and unit+integration>=15) gives recommend_shipment true as applied to observed counts, not a file claim.",
+          "findings": [
+            "{\"release\":\"0.7\",\"unit\":12,\"integration\":3,\"failed\":0,\"total\":15,\"recommend_shipment\":true,\"limitation\":\"A controlled fixture does not establish production reliability.\",\"source_path\":\"inputs/aster-release.json\",\"source_sha256\":\"c68ec3c7130c94759af5933a231173f5bcab4818028ba30b90e1da3c9422c45d\"}",
+            "Tool observation: checks.failed=0, checks.integration=3, checks.unit=12; total=15 by addition.",
+            "Hypothesis, not file evidence: the scoped shipment rule governs Aster decisions; the file asserts no such policy. Read-only, no artifact."
+          ],
+          "decisions": [
+            "Applied scoped rule to observed counts -> recommend_shipment true; reported as rule application only.",
+            "hypothesis_read_paths=[] since a declared source exists.",
+            "Only file_read used via prefetch; no writes."
+          ],
+          "artifacts": [],
+          "evidence_references": [
+            "inputs/aster-release.json",
+            "sha256:c68ec3c7130c94759af5933a231173f5bcab4818028ba30b90e1da3c9422c45d",
+            "receipt:receipt_64bf7241e476"
+          ],
+          "unresolved_issues": [
+            "Source limitation: controlled fixture does not establish production reliability; counts rest on this one read."
+          ],
+          "confidence": 0.9,
+          "next_actions": [
+            "Preserve source path and scoped rule in Quest goal/constraints for later work."
+          ]
+        },
+        "read_only_changes": 0
+      },
+      {
+        "quest_id": "quest_e27ef6761fba",
+        "passes": {},
+        "verified_original_source_receipts": [],
+        "model_selected_source_calls": [],
+        "delivery": {},
+        "read_only_changes": 0
+      }
+    ],
+    "used_original_memory": [],
+    "retrieved_source_ids": [
+      "constraint:3cd83cc3b551218439bac30c4bed1ddefeca5964e5710adc0f0689c893e317eb",
+      "constraint:6d113d45a67c89d69b4aefc740f9067dcdf7b0193b18d4073851cae8aa327ddb",
+      "constraint:758ca6f22a4a52942b3dc5fe673d11a83ce90733846c57598a56756b2bf30858",
+      "constraint:8bf6c96be0c33dc344fe4fac5e4479cc8afb8ef7cb88475777ccb03a5b4778db",
+      "constraint:99bc5040cc26dc3bd7452cb3842a72cfe55491f10c4901053a99c352397b7f64",
+      "constraint:9d3e056282c794153f56dcb7ee903bc7555abc1b5e1dcf7dc05dd5425c1fe67f",
+      "constraint:af02383e71d472c35c2dd4db277a49613a1f49a540672739e5a0358e742baca3",
+      "constraint:c47b15ea45dffa78f77570c865e89ebe2a6f511510c9e951162e289dfa91e872",
+      "constraint:cc82889b6265a5cf6fbe8627704d4d8df71e92c1df6d06264a2d0be4a34f3dab",
+      "constraint:d3f4099b12ab29b25e19e23b968d42ac15dc8c250f522caafea17238eaee2918",
+      "constraint:f631651dc083c18b05428045d7398bd7c3dd1c85d2ade45b9a58e8180c3a67ac",
+      "event:evt_4ec5ef1629d5",
+      "evidence:evidence_a4fbc1edb439",
+      "0cc561f9c13147bb89d0e621fa87cad8",
+      "177ef5d82ed94671894587ead7698f62",
+      "2a96cb22021944b9b4fe3e891d265eee",
+      "4c6cdfce42c74341a1aa61e66f386490",
+      "52272098ce244bc890b85bda0e06c1eb",
+      "54b5be8dfc234bac8d88d8cdce8d40ca",
+      "9482d6d56b30439f9d4be78650df894c"
+    ],
+    "target_semantic_attempts": [
+      {
+        "attempt_id": "27cf7c2f2d7a4a6b8df166d45abe9f8e",
+        "call_id": "memory_call_b9de6189de7a",
+        "purpose": "memory_semantic_retrieval",
+        "workspace_id": "20e9422966a983524fbea3aa",
+        "quest_id": null,
+        "worker_run_id": null,
+        "provider_id": "wb-local",
+        "model_id": "deepseek-v4.1-flash",
+        "state": "settled",
+        "created_at": 1794752593.2125962,
+        "recover_after": null,
+        "input_reserved": 25102,
+        "output_reserved": 512,
+        "input_charged": 7155,
+        "output_charged": 314,
+        "cost_charged": null,
+        "currency": null
+      }
+    ],
+    "target_router_attempt_ids": [
+      "fce5bb3a7e704133a10debfefaafbbb6"
+    ],
+    "target_goal": "New independent follow-up Quest (not a continuation or reopening of completed quest_f1cea708efa4): apply the earlier product's dispatch-readiness decision to its saved check ledger. Recover the prior scoped rule and original source reference from persistent memory (no asking the user). Carry that recovered reference and rule into the goal/constraints as sourced hypotheses. The single Worker reopens the original ledger with file_read and independently recomputes the tally and recommendation, returning release, each check count, total, decision, exact limitation and original source hash.",
+    "target_delivery": {},
+    "target_hypothesis_constraint_ids": [],
+    "usage": {
+      "known_total_tokens": 83155,
+      "known_tokens_by_quest": {
+        "quest_f1cea708efa4": 39618,
+        "quest_e27ef6761fba": 15652
+      },
+      "unknown_attempt_ids": []
+    },
+    "read_only_changes": 0,
+    "limitations": [
+      "Single controlled cross-task sample; no general memory reliability claim.",
+      "Lexical recall, semantic recall and compacted context may coexist; no causal attribution to semantic recall alone.",
+      "Same configured model in fresh Reviewer context; physical upstream identity unverified.",
+      "Restart between completed tasks does not fulfill mid-execution restart goal 14.",
+      "Memory is a sourced hypothesis; actual original tool reads and fresh independent PASS remain required.",
+      "The reused rule is a user-scoped policy preserved by normal Router extraction, not an autonomously learned model decision. No memory creation API or database injection is used."
+    ]
+  },
+  "finished_driver_passed": false,
+  "finished_driver_failures": [
+    "ValueError:Terminal Planner failure"
+  ],
+  "claim_boundary": "One controlled completed cross-Quest sample. Exact original user-scoped rule remains a hypothesis; later actual original file reads and fresh current PASS are required. Unique settled persisted call windows and Router retrieval metadata are protocol evidence, not raw HTTP request/response provenance. Lexical, semantic and compacted context contributions are not causally separated. Restart between completed tasks does not fulfill goal 14.",
+  "passed": false,
+  "failures": [
+    "completed_distinct_source_and_target_quests",
+    "selected_context_in_later_actual_request",
+    "target_original_file_read_and_fresh_pass",
+    "source_and_target_independent_passes_reconstructed",
+    "known_usage_within_original_caps",
+    "completed_source_compaction_target_order_valid",
+    "original_and_recollected_actual_probe_required",
+    "two_distinct_completed_actual_tasks_required",
+    "unique_persisted_target_retrieval_binding_required",
+    "original_known_actual_usage_required",
+    "two_exact_tool_counters_required",
+    "two_exact_token_step_counters_required",
+    "original_or_recollected_actual_probe_failed"
+  ]
+}

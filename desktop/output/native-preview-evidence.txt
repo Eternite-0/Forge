@@ -1,0 +1,25 @@
+2026-11-15 — isolated native debug acceptance
+
+Executable: desktop/src-tauri/target/debug/forge-desktop.exe
+Frontend URL observed in WebView2 accessibility: http://localhost:5173/
+Workspace: desktop/output/native-preview-workspace
+Runtime: dedicated missing runtime path; no production Core, provider or credentials used.
+
+Observed through Windows Computer Use on the actual FORGE window:
+- File tree returned README.md, report.pdf and source.tsx through the Tauri read-only bridge.
+- Opened report.pdf; returned file size 19.4 KB.
+- Object labelled "report.pdf PDF 预览" loaded a blob:http://localhost:5173/ URL.
+- Embedded WebView2 viewer URL: chrome-extension://mhjfbmdgcfjbbpaeojofohoefgiehjai/edge_pdf/index.html
+- PDF toolbar exposed zoom-out, zoom-in, page selector (1–2), view options and find.
+- View menu visibly offered page-fit, rotation and page view options.
+- PDF accessibility exposed both actual page regions and text:
+  第 1 页 — FORGE native preview / WebView2 PDF verification, page one.
+  第 2 页 — Page two / Two pages, read-only bytes.
+- Screenshot visibly showed both pages and the viewer toolbar.
+- Ctrl+, opened the native settings page with only icon rail + settings categories.
+- Test window closed; no workspace write/approval/credential/maintenance action was submitted.
+
+Not established by this check: packaged release behavior, native download save completion,
+full Core/bootstrap/provider flow, controlled Windows 125%/150% DPI, credential writes,
+backup/restore end-to-end acceptance. The browser preview test separately verified
+download events and filename using actual PDF bytes.

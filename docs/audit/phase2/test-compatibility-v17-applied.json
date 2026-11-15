@@ -1,0 +1,23 @@
+{
+  "assert_ast_unchanged": true,
+  "base_commit": "bcc3592bfa820054079419456f3ba24afc81f785",
+  "files": [
+    {
+      "changed_original_assertion_functions": [],
+      "current_assert_count": 13,
+      "original_assert_count": 13,
+      "path": "backend/tests/test_m4_adversarial.py",
+      "sha256": "fb4afddba4c757f6e1803ddb2bad6db0b604b74c21c0405fba27f7c2c0d02f6c"
+    },
+    {
+      "changed_original_assertion_functions": [],
+      "current_assert_count": 76,
+      "original_assert_count": 76,
+      "path": "backend/tests/test_m4_integration.py",
+      "sha256": "a73521113d205bee7f92123bce4cf802852c8ab093147bf3cecb6891335f38e5"
+    }
+  ],
+  "mechanism": "Explicit registered Mock model/provider in native lifespan pool and finite capacity contracts; no production gate monkeypatch.",
+  "regression": "docs/audit/phase2/test-compatibility-capacity-v17-regression.xml",
+  "result": "114 passed; 1 existing warning; 16.00 seconds"
+}

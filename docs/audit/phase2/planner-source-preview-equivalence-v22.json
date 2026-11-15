@@ -1,0 +1,103 @@
+{
+  "scope": "V22_readonly_diagnostics_regression_against_immutable_V21_archive",
+  "full_production_schema_unchanged": true,
+  "schema_sha256": "30cf8babc2b4026dbc94bf31f1a91ee0e8c4b76a47b5a11fb6b11c1dfdbb3cc0",
+  "cases": [
+    {
+      "level": 1,
+      "canonical_semantics_edges_paths_resources_unchanged": true,
+      "measurements": [
+        {
+          "node": "analysis",
+          "known_source_bytes": 13907,
+          "future_source_bytes_bound": 0,
+          "required_source_receipt_bytes": 13907,
+          "unchanged": true
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "canonical_semantics_edges_paths_resources_unchanged": true,
+      "measurements": [
+        {
+          "node": "research",
+          "known_source_bytes": 13549,
+          "future_source_bytes_bound": 0,
+          "required_source_receipt_bytes": 13549,
+          "unchanged": true
+        },
+        {
+          "node": "architect",
+          "known_source_bytes": 19570,
+          "future_source_bytes_bound": 5250,
+          "required_source_receipt_bytes": 24820,
+          "unchanged": true
+        },
+        {
+          "node": "writer",
+          "known_source_bytes": 2,
+          "future_source_bytes_bound": 6274,
+          "required_source_receipt_bytes": 6276,
+          "unchanged": true
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "canonical_semantics_edges_paths_resources_unchanged": true,
+      "measurements": [
+        {
+          "node": "research",
+          "known_source_bytes": 15809,
+          "future_source_bytes_bound": 0,
+          "required_source_receipt_bytes": 15809,
+          "unchanged": true
+        },
+        {
+          "node": "math",
+          "known_source_bytes": 2,
+          "future_source_bytes_bound": 5250,
+          "required_source_receipt_bytes": 5252,
+          "unchanged": true
+        },
+        {
+          "node": "architect",
+          "known_source_bytes": 19624,
+          "future_source_bytes_bound": 4226,
+          "required_source_receipt_bytes": 23850,
+          "unchanged": true
+        },
+        {
+          "node": "coding",
+          "known_source_bytes": 2,
+          "future_source_bytes_bound": 4226,
+          "required_source_receipt_bytes": 4228,
+          "unchanged": true
+        },
+        {
+          "node": "experiment",
+          "known_source_bytes": 2,
+          "future_source_bytes_bound": 8834,
+          "required_source_receipt_bytes": 8836,
+          "unchanged": true
+        },
+        {
+          "node": "reviewer",
+          "known_source_bytes": 2,
+          "future_source_bytes_bound": 5250,
+          "required_source_receipt_bytes": 5252,
+          "unchanged": true
+        }
+      ]
+    }
+  ],
+  "existing_tests_byte_identical": {
+    "backend/tests/test_planner_dataflow_v21.py": "f2bb0e80e39ad466716d86dc8f02700a24f67ed1fad35ef95fd47b081563f6b0",
+    "backend/tests/test_typed_planner_v20.py": "dc64cf6d721c0acbc5e38552db161ba5cf0e7405d1e3af5e9eed8e27892f29be",
+    "backend/tests/test_core_measured_planner_v19.py": "092b2ed2b0496b153866ed2f218e7843f36081c8a0a50a30376dc18f25dfa8cb",
+    "backend/tests/test_source_capacity_v20.py": "7ffa3899ecc60fc58a19a63dbe4d5569dc11b006b0e380b67f25c33b4028f4da",
+    "backend/tests/test_m4_integration.py": "30eeab442590765ed3852e3eb815f1ad347ae4b62b0f0d03f3c568e26f112721",
+    "backend/tests/test_m4_adversarial.py": "39b48e6cc6e5a2120c199a0bd708a370766ea1a62695656712dc0e0eda1f5047"
+  }
+}

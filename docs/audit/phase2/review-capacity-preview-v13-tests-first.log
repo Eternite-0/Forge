@@ -1,0 +1,210 @@
+..FF.............................................................        [100%]
+================================== FAILURES ===================================
+_ test_complete_measurement_matches_native_payload_and_settled_model_review[True] _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000020BA950EC90>
+connection = <sqlite3.Connection object at 0x0000020BA94FE5C0>
+quest_id = 'quest_edb412f6450c', plan_revision = 1
+proposal_digest = '3a83319f1893ed1df3914d7970db496e5a753d5488cdb75fc01796998feb701e'
+status = 'approved', allow_running = False, validate_profiles = True
+historical = False
+
+    def _checked(
+        self,
+        connection,
+        quest_id,
+        plan_revision,
+        proposal_digest,
+        *,
+        status,
+        allow_running=False,
+        validate_profiles=True,
+        historical=False,
+    ):
+        row = connection.execute(
+            "SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?",
+            (quest_id, plan_revision, proposal_digest),
+        ).fetchone()
+        if row is None or row["status"] != status:
+            raise DomainError("Team approval unavailable")
+        quest, plan = self._current_plan(
+            connection,
+            quest_id,
+            plan_revision,
+            row["plan_digest"],
+            allow_running=allow_running or status == "approved",
+            historical=historical,
+        )
+        try:
+            if _digest(json.loads(plan["graph_json"])) != row["plan_digest"]:
+                raise ValueError
+            body = json.loads(row["body_json"])
+            if (
+                _digest(body) != proposal_digest
+                or body["quest_id"] != quest_id
+                or body["plan_revision"] != plan_revision
+                or body["plan_digest"] != row["plan_digest"]
+            ):
+                raise ValueError
+            for model_id, expected in body["profile_hashes"].items() if validate_profiles else []:
+                model = connection.execute(
+                    "SELECT profile FROM models WHERE id=?", (model_id,)
+                ).fetchone()
+                if (
+                    model is None
+                    or hashlib.sha256(model["profile"].encode("utf-8")).hexdigest() != expected
+                ):
+>                   raise ValueError
+E                   ValueError
+
+backend\src\forge_core\team_composition.py:898: ValueError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-624/test_complete_measurement_matc1')
+structured = True
+
+    @pytest.mark.parametrize("structured", [False, True])
+    def test_complete_measurement_matches_native_payload_and_settled_model_review(tmp_path, structured):
+        store, manager, _model, worker, _content = report(tmp_path)
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        if structured:
+            profile = store.list_models()[0]
+            profile.structured_output_support = ProtocolSupport(supported=True, source="test_fixture")
+            store.save_model(profile)
+        posted = []
+    
+        def handle(request):
+            posted.append(json.loads(request.content))
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [{"message": {"content": _json(PASS)}, "finish_reason": "stop"}],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ProviderGateway(
+            ProviderConfig(
+                id="protocol",
+                kind="openai_compatible",
+                base_url="https://example.invalid/v1",
+                credential_ref="FORGE_PROVIDER_KEY_TEST",
+                supports_tools=True,
+                supports_json_schema=structured,
+            ),
+            credential_resolver=lambda _: "fixture",
+            transport=httpx.MockTransport(handle),
+            budget_ledger=ModelCallBudgetLedger(store.path, token_limit=100000, concurrency_limit=1),
+        )
+        measured = preview(store, worker, gateway)
+        assert measured["available"] and measured["complete"] and not posted
+        manager.providers = ProviderPool({"protocol": gateway})
+>       verdict = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_capacity_preview_phase2.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1501: in review
+    manager._team(c, row["quest_id"], row["plan_revision"], row["team_digest"])
+backend\src\forge_core\worker_runtime.py:295: in _team
+    return self.team_authority.get_approved(
+backend\src\forge_core\team_composition.py:1068: in get_approved
+    _, row, body = self._checked(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000020BA950EC90>
+connection = <sqlite3.Connection object at 0x0000020BA94FE5C0>
+quest_id = 'quest_edb412f6450c', plan_revision = 1
+proposal_digest = '3a83319f1893ed1df3914d7970db496e5a753d5488cdb75fc01796998feb701e'
+status = 'approved', allow_running = False, validate_profiles = True
+historical = False
+
+    def _checked(
+        self,
+        connection,
+        quest_id,
+        plan_revision,
+        proposal_digest,
+        *,
+        status,
+        allow_running=False,
+        validate_profiles=True,
+        historical=False,
+    ):
+        row = connection.execute(
+            "SELECT * FROM team_proposals WHERE quest_id=? AND plan_revision=? AND proposal_digest=?",
+            (quest_id, plan_revision, proposal_digest),
+        ).fetchone()
+        if row is None or row["status"] != status:
+            raise DomainError("Team approval unavailable")
+        quest, plan = self._current_plan(
+            connection,
+            quest_id,
+            plan_revision,
+            row["plan_digest"],
+            allow_running=allow_running or status == "approved",
+            historical=historical,
+        )
+        try:
+            if _digest(json.loads(plan["graph_json"])) != row["plan_digest"]:
+                raise ValueError
+            body = json.loads(row["body_json"])
+            if (
+                _digest(body) != proposal_digest
+                or body["quest_id"] != quest_id
+                or body["plan_revision"] != plan_revision
+                or body["plan_digest"] != row["plan_digest"]
+            ):
+                raise ValueError
+            for model_id, expected in body["profile_hashes"].items() if validate_profiles else []:
+                model = connection.execute(
+                    "SELECT profile FROM models WHERE id=?", (model_id,)
+                ).fetchone()
+                if (
+                    model is None
+                    or hashlib.sha256(model["profile"].encode("utf-8")).hexdigest() != expected
+                ):
+                    raise ValueError
+        except (ValueError, KeyError, TypeError) as exc:
+>           raise DomainError("Team proposal is stale or invalid") from exc
+E           forge_core.domain.DomainError: Team proposal is stale or invalid
+
+backend\src\forge_core\team_composition.py:900: DomainError
+__ test_unverifiable_or_pending_evidence_never_has_usable_capacity[receipt] ___
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-624/test_unverifiable_or_pending_e0')
+tamper = 'receipt'
+
+    @pytest.mark.parametrize("tamper", ["receipt", "arguments", "artifact", "team", "pending"])
+    def test_unverifiable_or_pending_evidence_never_has_usable_capacity(tmp_path, tamper):
+        store, manager, model, worker, _content = report(tmp_path)
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        assert preview(store, worker, model)["complete"]
+        if tamper == "artifact":
+            (tmp_path / "work/findings.json").write_text('{"changed":true}', encoding="utf-8")
+        else:
+            statement = {
+                "receipt": "UPDATE action_receipts SET result_digest='tampered'",
+                "arguments": "UPDATE worker_tool_calls SET arguments_json='{}'",
+                "team": "UPDATE team_proposals SET body_json='{}'",
+                "pending": "UPDATE worker_tool_calls SET state='pending'",
+            }[tamper]
+            with store.unit_of_work() as work:
+>               work.connection.execute(statement)
+E               sqlite3.IntegrityError: immutable receipt
+
+backend\tests\test_review_capacity_preview_phase2.py:180: IntegrityError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_review_capacity_preview_phase2.py::test_complete_measurement_matches_native_payload_and_settled_model_review[True]
+FAILED backend\tests\test_review_capacity_preview_phase2.py::test_unverifiable_or_pending_evidence_never_has_usable_capacity[receipt]
+2 failed, 63 passed in 18.68s

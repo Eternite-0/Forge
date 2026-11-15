@@ -37,7 +37,8 @@ class OperatorConfig(BaseModel):
     provider: OperatorProvider | None
     router_model_id: str | None = Field(default=None, min_length=1, max_length=512)
     router_context_limit: int = Field(ge=2049, le=10_000_000)
-    model_token_limit: int = Field(ge=0, le=1_000_000_000)
+    model_token_limit: int | None = Field(default=None, ge=0, le=1_000_000_000)
+    enforce_token_budgets: bool = False
     model_concurrency_limit: int = Field(ge=1, le=64)
     network_hosts: list[str] = Field(max_length=64)
 
@@ -45,6 +46,8 @@ class OperatorConfig(BaseModel):
     def validate_configuration(self):
         if self.router_model_id and self.provider is None:
             raise ValueError("Router model requires a provider")
+        if self.enforce_token_budgets and self.model_token_limit is None:
+            raise ValueError("Enabled token budgets require an explicit limit")
         if len(set(self.network_hosts)) != len(self.network_hosts) or any(
             not re.fullmatch(r"[a-z0-9](?:[a-z0-9.-]{0,251}[a-z0-9])?", host)
             for host in self.network_hosts
@@ -123,10 +126,12 @@ def apply_operator_settings(root):
     provider = config["provider"]
     values = {
         "FORGE_ROUTER_CONTEXT_LIMIT": str(config["router_context_limit"]),
-        "FORGE_MODEL_TOKEN_LIMIT": str(config["model_token_limit"]),
+        "FORGE_ENFORCE_TOKEN_BUDGETS": str(config["enforce_token_budgets"]).lower(),
         "FORGE_MODEL_CONCURRENCY_LIMIT": str(config["model_concurrency_limit"]),
         "FORGE_TOOL_NETWORK_HOSTS_JSON": json.dumps(config["network_hosts"]),
     }
+    if config["model_token_limit"] is not None:
+        values["FORGE_MODEL_TOKEN_LIMIT"] = str(config["model_token_limit"])
     if provider:
         values.update(
             FORGE_PROVIDER_ID=provider["id"],
@@ -158,6 +163,7 @@ def overridden_operator_keys():
         "FORGE_ROUTER_MODEL_ID",
         "FORGE_ROUTER_CONTEXT_LIMIT",
         "FORGE_MODEL_TOKEN_LIMIT",
+        "FORGE_ENFORCE_TOKEN_BUDGETS",
         "FORGE_MODEL_CONCURRENCY_LIMIT",
         "FORGE_TOOL_NETWORK_HOSTS_JSON",
     }

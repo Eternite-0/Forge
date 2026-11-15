@@ -1,0 +1,2 @@
+Each stream is an ordered list of [event_type, id]:
+[[["write","a"],["approve","a"],["write","a"]],[["approve","b"],["revoke","b"],["write","b"]]]

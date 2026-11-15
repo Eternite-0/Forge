@@ -1,0 +1,1420 @@
+{
+  "audit_version": 2,
+  "baseline_auditor_sha256": "e626d7a6666df3c30949e92d7fd1bd077041999a1f4f4e56a8849b3b30be3ec6",
+  "baseline_auditor_preserved": true,
+  "source_version": "v29",
+  "generated_at": "2026-11-15T16:07:50.219093+00:00",
+  "read_mode": "sqlite URI mode=ro; PRAGMA query_only=ON; explicit BEGIN read snapshot",
+  "scope": "Only explicitly named finished V29 live runs. No Store construction, Provider calls, credential access, database mutation, product source edits, or historical evidence changes.",
+  "frozen_manifest_sha256": "73fc216d1ce3c3c9bdf33caa8473f2defbfda8d4eaae6a26d62b3eb2e632011f",
+  "frozen_manifest_file_sha256": "99c4155bb3b7a025100d667f8e17c0b2ed241c5fd2d9cbcee7d38c1b993d0852",
+  "audit_script_sha256": "c194255ff8f0673eec7a5ab4e188bf699bcc1e32a85cea0a037639953711d42e",
+  "runs": [
+    {
+      "run_id": "20261115T154942Z-L1-eb980c",
+      "level": "L1",
+      "started_at": "2026-11-15T15:49:42.999477+00:00",
+      "finished_at": "2026-11-15T15:50:29.180636+00:00",
+      "duration_seconds": 46.116,
+      "driver_record_path": ".local/phase2/runs/20261115T154942Z-L1-eb980c/run.json",
+      "driver_record_sha256": "409c0d0b66f5e2e596a1d746b84e9da0da051fc799e8ed89e8c94fdeb4d5c2b0",
+      "database_path": ".local/phase2/ws-20261115T154942Z-L1-eb980c/data/forge.sqlite3",
+      "database_sha256": "24616602de61c0f3249fc469e10aaa0df2404498cf120f066eb6235a2d09e4df",
+      "driver_code_snapshot_sha256": "e2ff86ccc33a6bf3d91baa7f59ee96e4370b498309b2651155ba8853d69b7597",
+      "driver_source_file_count": 113,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:readonly_tool_receipts",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "successful_worker_nodes",
+        "structured_deliveries",
+        "independent_content_review",
+        "readonly_tool_receipts",
+        "independent_delivery_review",
+        "three_ranked_findings_or_explicit_insufficient_evidence",
+        "real_source_citations",
+        "router_completion_summary"
+      ],
+      "unknown_acceptance_checks": [],
+      "schema_version": 13,
+      "independent_failure_path": "see_durable_events_and_driver_checks",
+      "planner_failure_diagnostics": [],
+      "planner_rejection_detail_available": null,
+      "planner_rejection_events": [],
+      "worker_model_response_rejections": [
+        {
+          "seq": 19,
+          "event_id": "evt_917b1eca620b",
+          "plan_id": "plan_3fcc7afbee6a",
+          "task_node_key": "weakness-analysis",
+          "run_id": "run_8c10be1584c4",
+          "call_id": "model_call_c5ed381037b0",
+          "reason_code": "delivery_byte_bound",
+          "diagnostic_payload_sha256": "113f03c1f9be148305a0ef14a9a2a209a9eac11fc6f6d0afc83bdf69d7e416b2",
+          "diagnostics": {
+            "schema": "output_schema",
+            "error": "DeliveryCapacityError",
+            "validation_stage": "capacity_contract",
+            "response_bytes": 4320,
+            "response_sha256": "fe6cc2cd56cd41f1427ea242419388c3212ec9b967f9c579b33148d064db27d1",
+            "code": "delivery_byte_bound",
+            "actual_bytes": 4320,
+            "max_bytes": 2048,
+            "schema_errors": []
+          }
+        }
+      ],
+      "quests": [
+        {
+          "id": "quest_b1eb6f4776bc",
+          "status": "running",
+          "plan_revision": 1
+        }
+      ],
+      "plans": [
+        {
+          "id": "plan_3fcc7afbee6a",
+          "revision": 1,
+          "status": "approved",
+          "digest": "9b69cc562f1eeaee478a42041ba87c66949ed62a2f5536b756aced37211b3b0b",
+          "approved_by": "local_user"
+        }
+      ],
+      "teams": [
+        {
+          "id": "team_94c9af9cb3b5",
+          "status": "approved",
+          "proposal_digest": "fe2a904f5919b196541e99e754688f0860dfa0371b86e352976f187978d1050c",
+          "plan_revision": 1,
+          "limits": {
+            "allowed_tools": [
+              "directory_list",
+              "file_read",
+              "numeric_ast",
+              "python_compile",
+              "worker_read_action_receipt",
+              "worker_read_completed_delivery"
+            ],
+            "currency": null,
+            "max_concurrency": 1,
+            "max_cost_microunits": null,
+            "max_depth": 0,
+            "max_members": 1,
+            "max_total_tokens": 211306,
+            "max_total_tool_calls": 16
+          },
+          "estimated_tokens": 211306,
+          "member_count": 1,
+          "executed": true
+        }
+      ],
+      "scenario_limits": {
+        "max_nodes": 1,
+        "max_members": 1,
+        "max_concurrency": 1,
+        "max_depth": 1,
+        "max_duration_seconds": 600,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "token_budgets_enforced": false,
+        "model_token_limit": null,
+        "model_concurrency_limit": 1
+      },
+      "gateway_attempt_count": 9,
+      "final_gateway_state_counts": {
+        "settled": 9
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 38602,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 38602,
+      "token_budgets_enforced": false,
+      "all_gateway_usage_known_and_settled": true,
+      "opening_usage": [],
+      "opening_usage_valid": true,
+      "known_opening_tokens": 0,
+      "known_gateway_and_opening_tokens": 38602,
+      "gateway_tokens_within_original_scenario_limit": null,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 835,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 7595,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3771,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router_notice",
+          "attempt_count": 3,
+          "state_counts": {
+            "settled": 3
+          },
+          "known_tokens": 7468,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "team_composer",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3032,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "worker",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 15901,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {
+        "settled": 2
+      },
+      "local_reservations": [
+        {
+          "call_id": "model_call_ac5226d083ff",
+          "run_id": "run_8c10be1584c4",
+          "generation": 1,
+          "state": "settled",
+          "reserved_tokens": 31201,
+          "output_limit": 2048,
+          "input_tokens": 7233,
+          "output_tokens": 106,
+          "reserved_cost_microunits": null,
+          "actual_cost_microunits": null,
+          "created_at": "2026-11-15T15:50:10.744935+00:00",
+          "settled_at": "2026-11-15T15:50:12.522928+00:00",
+          "assignment_binding_valid": true,
+          "purpose": "worker",
+          "gateway_attempt_count": 1,
+          "exact_settled_gateway_proof": true,
+          "terminal_usage_matches_gateway": true,
+          "unsent_refund_has_no_gateway_attempt": null
+        },
+        {
+          "call_id": "model_call_c5ed381037b0",
+          "run_id": "run_8c10be1584c4",
+          "generation": 1,
+          "state": "settled",
+          "reserved_tokens": 32347,
+          "output_limit": 2048,
+          "input_tokens": 7476,
+          "output_tokens": 1086,
+          "reserved_cost_microunits": null,
+          "actual_cost_microunits": null,
+          "created_at": "2026-11-15T15:50:12.645432+00:00",
+          "settled_at": "2026-11-15T15:50:21.547799+00:00",
+          "assignment_binding_valid": true,
+          "purpose": "worker",
+          "gateway_attempt_count": 1,
+          "exact_settled_gateway_proof": true,
+          "terminal_usage_matches_gateway": true,
+          "unsent_refund_has_no_gateway_attempt": null
+        }
+      ],
+      "worker_counters": [
+        {
+          "id": "run_8c10be1584c4",
+          "worker_id": "worker_c23b9902360b",
+          "node_key": "weakness-analysis",
+          "state": "blocked",
+          "generation": 1,
+          "steps": 2,
+          "repairs": 1,
+          "token_spent": 15901,
+          "token_limit": 211306,
+          "tool_spent": 3,
+          "cost_limit_microunits": null,
+          "cost_spent_microunits": null,
+          "opening_tokens": 0,
+          "worker_component_tokens": 15901,
+          "worker_component_steps": 2,
+          "review_component_tokens": 0,
+          "review_component_steps": 0,
+          "tokens_exact": true,
+          "steps_exact": true,
+          "model_selected_admitted_calls": 0,
+          "core_admitted_source_reads": 3,
+          "model_selection_bindings_valid": true,
+          "expected_tool_spent": 3,
+          "unattributed_tool_spend": 0,
+          "tools_exact": true,
+          "help_calls_are_not_inferred_from_events": true
+        }
+      ],
+      "held_allocation_audit": {
+        "passed": true,
+        "token_budgets_enforced": false,
+        "disabled_policy_binding_valid": true,
+        "all_gateway_usage_known_and_settled": true,
+        "original_scenario_cap": null,
+        "original_cap_preserved": null,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [
+          {
+            "scope": "global",
+            "scope_id": "global",
+            "token_limit": 1000000,
+            "tokens_allocated": 211306,
+            "tool_limit": 1000,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          },
+          {
+            "scope": "quest",
+            "scope_id": "quest_b1eb6f4776bc",
+            "token_limit": 1000000,
+            "tokens_allocated": 211306,
+            "tool_limit": 1000,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          },
+          {
+            "scope": "team",
+            "scope_id": "fe2a904f5919b196541e99e754688f0860dfa0371b86e352976f187978d1050c",
+            "token_limit": 211306,
+            "tokens_allocated": 211306,
+            "tool_limit": 16,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          }
+        ],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Exact approved assignments and all held usage estimates/tool counters; no cumulative token limit."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 3,
+        "state_counts": {
+          "succeeded": 3
+        },
+        "worker_inventories": [
+          {
+            "run_id": "run_8c10be1584c4",
+            "origin": "core-declared-source-prefetch-v1",
+            "declared_source_count": 3,
+            "admitted_source_count": 3,
+            "admission_inventory_complete": true,
+            "approved_assignment_valid": true
+          }
+        ],
+        "sources": [
+          {
+            "id": "core_source_8dafa2a2913af06ab24592c04202e3a9",
+            "run_id": "run_8c10be1584c4",
+            "ordinal": 0,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_52230361dd64",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "1051e74b93227c23992d2ce996e561c31ddccd93a9402e41bca3831a9b530533",
+            "admission_event_id": "evt_9508ff7075f9",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 887,
+            "file_sha256": "9550533530b6a11afc34fe5027466e3a1423c842d9c9d94f1e108854dada060f",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "e09355ef2e88eb98ef184762b785d3493f6f9ca24ef9d87b85c277dc75cf25f5",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "989978f433953514479c36c796d6eb8991a3a5c0a8875cb5332affc1262f7413",
+            "user_message_precedes_first_assistant": true
+          },
+          {
+            "id": "core_source_36a889cb6cc8dbdacd6990284d996d3e",
+            "run_id": "run_8c10be1584c4",
+            "ordinal": 1,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_a2fa68b749b9",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "27dca515bf9bd22ae6543e4ebea8c9fac973983002a24b645c176aeb1bbbff80",
+            "admission_event_id": "evt_297cf0425245",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 4895,
+            "file_sha256": "eb393960d5b158607c5f046404b2fe2cb416b620f7ac47bc3199d78362b90174",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "c14663c771e2d2037337d14273017f79b91748a434503f8e5f118fdc1731063d",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "989978f433953514479c36c796d6eb8991a3a5c0a8875cb5332affc1262f7413",
+            "user_message_precedes_first_assistant": true
+          },
+          {
+            "id": "core_source_75f845d82de34f393e469091e4d95b1d",
+            "run_id": "run_8c10be1584c4",
+            "ordinal": 2,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_3cb52ca1a2f3",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "5a482adc9dcd2b243b0ba22fa96036ee38e05008c0d26d8bde4be27df8971ef0",
+            "admission_event_id": "evt_16611bec9f64",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 5947,
+            "file_sha256": "cf7d12770a4071066ada2bafefbee10174afaca9fbd1d6839287671af5c89170",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "2bff9fc990500d6382dc90a62dd76cb017390996d974750b0e40626063390853",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "989978f433953514479c36c796d6eb8991a3a5c0a8875cb5332affc1262f7413",
+            "user_message_precedes_first_assistant": true
+          }
+        ],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [
+          {
+            "run_id": "run_8c10be1584c4",
+            "tool_spent": 3,
+            "model_selected_admitted_calls": 0,
+            "core_admitted_source_reads": 3,
+            "model_selection_bindings_valid": true,
+            "expected_tool_spent": 3,
+            "unattributed_tool_spend": 0,
+            "tools_exact": true,
+            "help_calls_are_not_inferred_from_events": true
+          }
+        ],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "context_archive_integrity": {
+        "passed": true,
+        "archive_count": 0,
+        "archives": [],
+        "errors": [],
+        "claim_boundary": "Complete retained source hashes, tool pairs and archive chains; model text remains unverified. Native request bytes and historical CAS timing are not reconstructed from final SQL."
+      },
+      "model_compaction_checkpoints": {
+        "applicable": false,
+        "passed": true,
+        "checkpoints": []
+      },
+      "independent_continuity": {
+        "compaction_followed_by_actual_execution_and_completion": false,
+        "mid_execution_process_restart_and_continuation": false,
+        "later_worker_attempt_ids": [],
+        "later_pass_event_ids": [],
+        "process_pair": null,
+        "restart_errors": [],
+        "claim_boundary": "Controlled quiescent process stop/start with retained SQL anchors and later actual model execution; unresolved external action crash recovery is not inferred."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [
+        {
+          "seq": 20,
+          "event_id": "evt_d86dd160c93f",
+          "event_type": "worker.blocked",
+          "run_id": "run_8c10be1584c4",
+          "plan_id": "plan_3fcc7afbee6a",
+          "task_node_key": "weakness-analysis",
+          "reason_code": "invalid_output_contract"
+        }
+      ],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "router",
+          "event_type": "worker.progress",
+          "notice_attempts": 1,
+          "notice_error": "resource_busy",
+          "notice_dead_at": null,
+          "processed_at": "2026-11-15T15:50:22.778317+00:00"
+        },
+        {
+          "consumer_id": "router",
+          "event_type": "worker.progress",
+          "notice_attempts": 1,
+          "notice_error": "resource_busy",
+          "notice_dead_at": null,
+          "processed_at": "2026-11-15T15:50:28.931840+00:00"
+        },
+        {
+          "consumer_id": "router",
+          "event_type": "worker.progress",
+          "notice_attempts": 1,
+          "notice_error": "resource_busy",
+          "notice_dead_at": null,
+          "processed_at": "2026-11-15T15:50:28.931885+00:00"
+        },
+        {
+          "consumer_id": "router",
+          "event_type": "worker.blocked",
+          "notice_attempts": 1,
+          "notice_error": "processing_failed",
+          "notice_dead_at": null,
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T154942Z-L2-898b5e",
+      "level": "L2",
+      "started_at": "2026-11-15T15:49:43.074892+00:00",
+      "finished_at": "2026-11-15T15:50:38.946869+00:00",
+      "duration_seconds": 55.814,
+      "driver_record_path": ".local/phase2/runs/20261115T154942Z-L2-898b5e/run.json",
+      "driver_record_sha256": "8a5f1860732a1d801e7e0a960ae5193181fe80ed3ee3eafb8234d6ed85a37bb2",
+      "database_path": ".local/phase2/ws-20261115T154942Z-L2-898b5e/data/forge.sqlite3",
+      "database_sha256": "7fcc539bcfbf31646cf9abe13eb9e62fc55e5c5ed7c9aa2f470eb213278b1527",
+      "driver_code_snapshot_sha256": "e2ff86ccc33a6bf3d91baa7f59ee96e4370b498309b2651155ba8853d69b7597",
+      "driver_source_file_count": 113,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "all_remaining_workers_settled_blocked",
+        "quest_status_running",
+        "mid_execution_restart_not_observed",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:artifact_hashes",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:three_or_four_specialist_workers",
+        "acceptance_failed:artifact_receipt_hashes",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "successful_worker_nodes",
+        "structured_deliveries",
+        "artifact_hashes",
+        "independent_content_review",
+        "three_or_four_specialist_workers",
+        "artifact_receipt_hashes",
+        "real_source_citations",
+        "router_completion_summary"
+      ],
+      "unknown_acceptance_checks": [],
+      "schema_version": 13,
+      "independent_failure_path": "see_durable_events_and_driver_checks",
+      "planner_failure_diagnostics": [],
+      "planner_rejection_detail_available": null,
+      "planner_rejection_events": [],
+      "worker_model_response_rejections": [
+        {
+          "seq": 22,
+          "event_id": "evt_a5f0f3ffe7eb",
+          "plan_id": "plan_5f87d195efcd",
+          "task_node_key": "research",
+          "run_id": "run_4d437cc5b28c",
+          "call_id": "model_call_a4778e3da8aa",
+          "reason_code": "truncated",
+          "diagnostic_payload_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "diagnostics": {}
+        },
+        {
+          "seq": 24,
+          "event_id": "evt_d49c9ce06995",
+          "plan_id": "plan_5f87d195efcd",
+          "task_node_key": "research",
+          "run_id": "run_4d437cc5b28c",
+          "call_id": "model_call_f3406202b2f6",
+          "reason_code": "delivery_byte_bound",
+          "diagnostic_payload_sha256": "f5728d005172206e608cd793e31f8467f867d84ca5ba38731ea32ab402d6294e",
+          "diagnostics": {
+            "schema": "output_schema",
+            "error": "DeliveryCapacityError",
+            "validation_stage": "capacity_contract",
+            "response_bytes": 4559,
+            "response_sha256": "0c777f046a7e3b7f429ddbe8cc8564e48e50525aaa82b2c49fa5ebccf06ce99e",
+            "code": "delivery_byte_bound",
+            "actual_bytes": 4559,
+            "max_bytes": 2048,
+            "schema_errors": []
+          }
+        }
+      ],
+      "quests": [
+        {
+          "id": "quest_b094be5573e1",
+          "status": "running",
+          "plan_revision": 1
+        }
+      ],
+      "plans": [
+        {
+          "id": "plan_5f87d195efcd",
+          "revision": 1,
+          "status": "approved",
+          "digest": "14d0d784ea29d946427a63d62c27747d3f7e7a90c200877b01a654317fcf6a70",
+          "approved_by": "local_user"
+        }
+      ],
+      "teams": [
+        {
+          "id": "team_7d4ec3b41705",
+          "status": "approved",
+          "proposal_digest": "e8dff1a7fb18b6d9147809290979f4fb4964d7a4ed4405c615e20ebe109bc662",
+          "plan_revision": 1,
+          "limits": {
+            "allowed_tools": [
+              "directory_list",
+              "file_read",
+              "file_revise",
+              "file_write",
+              "worker_read_action_receipt",
+              "worker_read_completed_delivery"
+            ],
+            "currency": null,
+            "max_concurrency": 1,
+            "max_cost_microunits": null,
+            "max_depth": 0,
+            "max_members": 4,
+            "max_total_tokens": 415180,
+            "max_total_tool_calls": 64
+          },
+          "estimated_tokens": 211090,
+          "member_count": 4,
+          "executed": true
+        }
+      ],
+      "scenario_limits": {
+        "max_nodes": 4,
+        "max_members": 4,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_duration_seconds": 1200,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "token_budgets_enforced": false,
+        "model_token_limit": null,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 11,
+      "final_gateway_state_counts": {
+        "settled": 11
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 55439,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 55439,
+      "token_budgets_enforced": false,
+      "all_gateway_usage_known_and_settled": true,
+      "opening_usage": [],
+      "opening_usage_valid": true,
+      "known_opening_tokens": 0,
+      "known_gateway_and_opening_tokens": 55439,
+      "gateway_tokens_within_original_scenario_limit": null,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 924,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 8097,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 3929,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router_notice",
+          "attempt_count": 5,
+          "state_counts": {
+            "settled": 5
+          },
+          "known_tokens": 11877,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "team_composer",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 4252,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "worker",
+          "attempt_count": 2,
+          "state_counts": {
+            "settled": 2
+          },
+          "known_tokens": 26360,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {
+        "settled": 2
+      },
+      "local_reservations": [
+        {
+          "call_id": "model_call_a4778e3da8aa",
+          "run_id": "run_4d437cc5b28c",
+          "generation": 1,
+          "state": "settled",
+          "reserved_tokens": 49737,
+          "output_limit": 2048,
+          "input_tokens": 11447,
+          "output_tokens": 2048,
+          "reserved_cost_microunits": null,
+          "actual_cost_microunits": null,
+          "created_at": "2026-11-15T15:50:15.282651+00:00",
+          "settled_at": "2026-11-15T15:50:27.383200+00:00",
+          "assignment_binding_valid": true,
+          "purpose": "worker",
+          "gateway_attempt_count": 1,
+          "exact_settled_gateway_proof": true,
+          "terminal_usage_matches_gateway": true,
+          "unsent_refund_has_no_gateway_attempt": null
+        },
+        {
+          "call_id": "model_call_f3406202b2f6",
+          "run_id": "run_4d437cc5b28c",
+          "generation": 1,
+          "state": "settled",
+          "reserved_tokens": 50920,
+          "output_limit": 2048,
+          "input_tokens": 11696,
+          "output_tokens": 1169,
+          "reserved_cost_microunits": null,
+          "actual_cost_microunits": null,
+          "created_at": "2026-11-15T15:50:27.530972+00:00",
+          "settled_at": "2026-11-15T15:50:35.512213+00:00",
+          "assignment_binding_valid": true,
+          "purpose": "worker",
+          "gateway_attempt_count": 1,
+          "exact_settled_gateway_proof": true,
+          "terminal_usage_matches_gateway": true,
+          "unsent_refund_has_no_gateway_attempt": null
+        }
+      ],
+      "worker_counters": [
+        {
+          "id": "run_4d437cc5b28c",
+          "worker_id": "worker_9e7c009ae5ab",
+          "node_key": "research",
+          "state": "blocked",
+          "generation": 1,
+          "steps": 2,
+          "repairs": 1,
+          "token_spent": 26360,
+          "token_limit": 255824,
+          "tool_spent": 4,
+          "cost_limit_microunits": null,
+          "cost_spent_microunits": null,
+          "opening_tokens": 0,
+          "worker_component_tokens": 26360,
+          "worker_component_steps": 2,
+          "review_component_tokens": 0,
+          "review_component_steps": 0,
+          "tokens_exact": true,
+          "steps_exact": true,
+          "model_selected_admitted_calls": 0,
+          "core_admitted_source_reads": 4,
+          "model_selection_bindings_valid": true,
+          "expected_tool_spent": 4,
+          "unattributed_tool_spend": 0,
+          "tools_exact": true,
+          "help_calls_are_not_inferred_from_events": true
+        }
+      ],
+      "held_allocation_audit": {
+        "passed": true,
+        "token_budgets_enforced": false,
+        "disabled_policy_binding_valid": true,
+        "all_gateway_usage_known_and_settled": true,
+        "original_scenario_cap": null,
+        "original_cap_preserved": null,
+        "serial_worker_starts": [
+          {
+            "run_id": "run_4d437cc5b28c",
+            "approved_contract_valid": true,
+            "start_admission_valid": true
+          }
+        ],
+        "expected_serial_marker_count": 3,
+        "held_worker_budget_ledgers": [
+          {
+            "scope": "global",
+            "scope_id": "global",
+            "token_limit": 1000000,
+            "tokens_allocated": 255824,
+            "tool_limit": 1000,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          },
+          {
+            "scope": "quest",
+            "scope_id": "quest_b094be5573e1",
+            "token_limit": 1000000,
+            "tokens_allocated": 255824,
+            "tool_limit": 1000,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          },
+          {
+            "scope": "serial_reserve",
+            "scope_id": "quest_b094be5573e1:global:global",
+            "token_limit": 204090,
+            "tokens_allocated": 204090,
+            "tool_limit": 0,
+            "tools_allocated": 0,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": true
+          },
+          {
+            "scope": "serial_reserve",
+            "scope_id": "quest_b094be5573e1:quest:quest_b094be5573e1",
+            "token_limit": 204090,
+            "tokens_allocated": 204090,
+            "tool_limit": 0,
+            "tools_allocated": 0,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": true
+          },
+          {
+            "scope": "serial_reserve",
+            "scope_id": "quest_b094be5573e1:team:e8dff1a7fb18b6d9147809290979f4fb4964d7a4ed4405c615e20ebe109bc662",
+            "token_limit": 204090,
+            "tokens_allocated": 204090,
+            "tool_limit": 0,
+            "tools_allocated": 0,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": true
+          },
+          {
+            "scope": "team",
+            "scope_id": "e8dff1a7fb18b6d9147809290979f4fb4964d7a4ed4405c615e20ebe109bc662",
+            "token_limit": 415180,
+            "tokens_allocated": 255824,
+            "tool_limit": 64,
+            "tools_allocated": 16,
+            "held_allocation_matches": true,
+            "within_declared_limits": true,
+            "marker_amount_unchanged": null
+          }
+        ],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Exact approved assignments and all held usage estimates/tool counters; no cumulative token limit."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 4,
+        "state_counts": {
+          "succeeded": 4
+        },
+        "worker_inventories": [
+          {
+            "run_id": "run_4d437cc5b28c",
+            "origin": "core-declared-source-prefetch-v1",
+            "declared_source_count": 4,
+            "admitted_source_count": 4,
+            "admission_inventory_complete": true,
+            "approved_assignment_valid": true
+          }
+        ],
+        "sources": [
+          {
+            "id": "core_source_4efe0af648758b1894cfba40b04fd59b",
+            "run_id": "run_4d437cc5b28c",
+            "ordinal": 0,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_3553fb78e90c",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "b3a99c6f4a48cf23a0151b96d785c21a988302434d3f7cd0988c6bb9cf7c2f1e",
+            "admission_event_id": "evt_80445b4f4e1f",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 1284,
+            "file_sha256": "bedb7b87354e0dd405f60b17fba3d70903b4572cbc378703a163a15a8fd0e222",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "dac00459540d379af2bf304dcd2d82b57e10a8ae6ffd8cdf7fb20019e1a4aa02",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "2938b4fb11024ffff51ca09f690653a91460a7900647c9c57a7daf0ac65a4b75",
+            "user_message_precedes_first_assistant": true
+          },
+          {
+            "id": "core_source_3796947dabe86b8236f5c04c7a283b84",
+            "run_id": "run_4d437cc5b28c",
+            "ordinal": 1,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_dbd6cd0d4815",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "4d973e334c650bf4766ba277fc67d7c77d5c0c89e783049cc493c77fd851c5f8",
+            "admission_event_id": "evt_f176bdafb060",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 10739,
+            "file_sha256": "441cd21e8a329df279510c11094dcdb92707a11067f21238ba356b66689a1c0e",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "05b1f5f37873920bbf16ade126431e20beda66553a3174c628247411f23f0d3d",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "2938b4fb11024ffff51ca09f690653a91460a7900647c9c57a7daf0ac65a4b75",
+            "user_message_precedes_first_assistant": true
+          },
+          {
+            "id": "core_source_46c35283ce0837f2554b345b34af4c4f",
+            "run_id": "run_4d437cc5b28c",
+            "ordinal": 2,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_4169adc57800",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "994a1a675405dfd6acff1db8d59ba754e64882daabf911b765e0ba6f8ae84397",
+            "admission_event_id": "evt_2a66b8dfe33e",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 6409,
+            "file_sha256": "06ffab6aa234fc614d7ae88b7fb9abdbaf4709828a82b81f1f10c266a1c1d8c6",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "88803be831e16c115bf8c8b86a8cb15c17a2f2faeef042f177821702edf82d61",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "2938b4fb11024ffff51ca09f690653a91460a7900647c9c57a7daf0ac65a4b75",
+            "user_message_precedes_first_assistant": true
+          },
+          {
+            "id": "core_source_7b0ffc4110c3477da9b8468dde429cb1",
+            "run_id": "run_4d437cc5b28c",
+            "ordinal": 3,
+            "tool_name": "file_read",
+            "state": "succeeded",
+            "receipt_id": "receipt_bc086e78d5bb",
+            "message_ordinal": 2,
+            "origin": "core-declared-source-prefetch-v1",
+            "admission_binding_valid": true,
+            "settled_source_valid": true,
+            "no_model_reservation_or_gateway_attempt": true,
+            "binding_sha256": "82f0beeb24b9cb96ec1d00f29dd51fffd0376fc571bd66039dd94d62feab6f89",
+            "admission_event_id": "evt_5f8539b633be",
+            "admission_precedes_first_model_reservation": true,
+            "source_kind": "verified_input_inventory",
+            "file_bytes": 10629,
+            "file_sha256": "34feab654fcd5371da557f4a8c8fc3ca0f857142145855994c5f199130000396",
+            "native_receipt_valid": true,
+            "producer_run_id": null,
+            "producer_reconstructed_review_passes": {},
+            "result_sha256": "688bf7b20d323f5beff53ec6bbb6c6821872d52c84d0009ac56cfc6ac2a1e4f3",
+            "complete_user_message_valid": true,
+            "user_message_sha256": "2938b4fb11024ffff51ca09f690653a91460a7900647c9c57a7daf0ac65a4b75",
+            "user_message_precedes_first_assistant": true
+          }
+        ],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [
+          {
+            "run_id": "run_4d437cc5b28c",
+            "tool_spent": 4,
+            "model_selected_admitted_calls": 0,
+            "core_admitted_source_reads": 4,
+            "model_selection_bindings_valid": true,
+            "expected_tool_spent": 4,
+            "unattributed_tool_spend": 0,
+            "tools_exact": true,
+            "help_calls_are_not_inferred_from_events": true
+          }
+        ],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "context_archive_integrity": {
+        "passed": true,
+        "archive_count": 0,
+        "archives": [],
+        "errors": [],
+        "claim_boundary": "Complete retained source hashes, tool pairs and archive chains; model text remains unverified. Native request bytes and historical CAS timing are not reconstructed from final SQL."
+      },
+      "model_compaction_checkpoints": {
+        "applicable": false,
+        "passed": true,
+        "checkpoints": []
+      },
+      "independent_continuity": {
+        "compaction_followed_by_actual_execution_and_completion": false,
+        "mid_execution_process_restart_and_continuation": false,
+        "later_worker_attempt_ids": [],
+        "later_pass_event_ids": [],
+        "process_pair": null,
+        "restart_errors": [],
+        "claim_boundary": "Controlled quiescent process stop/start with retained SQL anchors and later actual model execution; unresolved external action crash recovery is not inferred."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [
+        {
+          "seq": 25,
+          "event_id": "evt_8ecfdb7de923",
+          "event_type": "worker.blocked",
+          "run_id": "run_4d437cc5b28c",
+          "plan_id": "plan_5f87d195efcd",
+          "task_node_key": "research",
+          "reason_code": "invalid_output_contract"
+        }
+      ],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "router",
+          "event_type": "worker.progress",
+          "notice_attempts": 2,
+          "notice_error": "processing_failed",
+          "notice_dead_at": null,
+          "processed_at": null
+        },
+        {
+          "consumer_id": "router",
+          "event_type": "worker.blocked",
+          "notice_attempts": 1,
+          "notice_error": "processing_failed",
+          "notice_dead_at": null,
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T154942Z-L3-5408c2",
+      "level": "L3",
+      "started_at": "2026-11-15T15:49:43.010058+00:00",
+      "finished_at": "2026-11-15T15:50:59.180020+00:00",
+      "duration_seconds": 76.162,
+      "driver_record_path": ".local/phase2/runs/20261115T154942Z-L3-5408c2/run.json",
+      "driver_record_sha256": "cac5caade5ac89d6baef19fd0d525706d0fef19c0c4661670e5bd696fce1f7c0",
+      "database_path": ".local/phase2/ws-20261115T154942Z-L3-5408c2/data/forge.sqlite3",
+      "database_sha256": "0759b7aaa5b77f5a1570a83eb1e960d8c503b50aac5cc76d377268f863676f6b",
+      "driver_code_snapshot_sha256": "e2ff86ccc33a6bf3d91baa7f59ee96e4370b498309b2651155ba8853d69b7597",
+      "driver_source_file_count": 113,
+      "frozen_manifest_match": true,
+      "source_mismatches": [],
+      "driver_failures": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:scenario_token_budget_policy",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "failed_acceptance_checks": [
+        "completed_quest",
+        "scenario_token_budget_policy",
+        "approved_current_dag"
+      ],
+      "unknown_acceptance_checks": [
+        "model_generated_dag",
+        "research_math_architecture_coding_experiment_review",
+        "real_numeric_ast_receipts",
+        "independent_fixed_semantic_suite",
+        "artifact_hashes",
+        "core_restart_continuity",
+        "context_compaction_continuity"
+      ],
+      "schema_version": 13,
+      "independent_failure_path": "planner_dead_before_plan_approval_or_worker_execution",
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "planner_rejection_detail_available": true,
+      "planner_rejection_events": [
+        {
+          "seq": 3,
+          "event_id": "evt_cf59d8daeab9",
+          "planner_call_id": "call_23d840835bcd",
+          "response_sha256": "484f1ac46d05a5c71c3cbcc6393e6a7a32dd21daf1b811bb0df69f1bb8c96ca2",
+          "validation_errors_sha256": "4464145b34598752f4c841f1f650da8ecda7d39299e6611fe7039b2870f99bcf",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 4,
+          "event_id": "evt_ee16ab03db98",
+          "planner_call_id": "call_20452293d43d",
+          "response_sha256": "ed3fb1fdd5df38dbf48fe8c164e06fe99d8b9e16dee1c1b0b611a737f629d133",
+          "validation_errors_sha256": "4883b7f00ba393f14b5a909c320176775f721c890f553211e2bc708ff49d2498",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 5,
+          "event_id": "evt_cd54a83f3895",
+          "planner_call_id": "call_68fdad917fc5",
+          "response_sha256": "56e56897107ee7b9ef3352da2df8e2510e80d7a0c4c66ad7b67cad3e4da46b00",
+          "validation_errors_sha256": "fe023e274cd7c99fe34836c50a437f9efd76c23701ecbe477204d1df9cf1ca94",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 6,
+          "event_id": "evt_223fc310fded",
+          "planner_call_id": "call_c44639fb09eb",
+          "response_sha256": "175458dc75a6ab2b36732c0cc1619ac1b1141373e15083c88b12d8ba2deebb3e",
+          "validation_errors_sha256": "c4e5d0cda5f6f45ed431d6b40e8b8aea120197469be9cdcb3ede386357085d78",
+          "capacity_diagnostics_present": true
+        },
+        {
+          "seq": 7,
+          "event_id": "evt_6bf7a9eccb70",
+          "planner_call_id": "call_049c42986c89",
+          "response_sha256": "16a348423f93aafc1671cf14a575c85caa9cd47e1a7ea65d3c8be9e21aa75798",
+          "validation_errors_sha256": "5f400f4beca79794bb3a33eda2ebb24ae1a98bb63cad397e2551852e60a16a9b",
+          "capacity_diagnostics_present": true
+        }
+      ],
+      "worker_model_response_rejections": [],
+      "quests": [
+        {
+          "id": "quest_401fa93a86db",
+          "status": "proposed",
+          "plan_revision": 0
+        }
+      ],
+      "plans": [],
+      "teams": [],
+      "scenario_limits": {
+        "max_nodes": 7,
+        "max_members": 7,
+        "max_concurrency": 2,
+        "max_depth": 1,
+        "max_duration_seconds": 1800,
+        "max_worker_steps": 16,
+        "max_worker_tool_calls": 16,
+        "max_review_rounds": 3
+      },
+      "runtime_settings": {
+        "reasoning_effort": "none",
+        "review_max_rounds": 3,
+        "worker_lease_seconds": 150.0,
+        "provider_timeout_seconds": 120.0,
+        "provider_max_retries": 0,
+        "token_budgets_enforced": false,
+        "model_token_limit": null,
+        "model_concurrency_limit": 2
+      },
+      "gateway_attempt_count": 7,
+      "final_gateway_state_counts": {
+        "settled": 7
+      },
+      "final_unsettled_gateway_attempts": 0,
+      "final_unknown_gateway_attempts": 0,
+      "missing_gateway_usage_count": 0,
+      "known_gateway_tokens": 54435,
+      "unknown_reserved_tokens": 0,
+      "conservative_gateway_tokens": 54435,
+      "token_budgets_enforced": true,
+      "all_gateway_usage_known_and_settled": true,
+      "opening_usage": [],
+      "opening_usage_valid": true,
+      "known_opening_tokens": 0,
+      "known_gateway_and_opening_tokens": 54435,
+      "gateway_tokens_within_original_scenario_limit": false,
+      "gateway_by_purpose": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 1112,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "planner",
+          "attempt_count": 5,
+          "state_counts": {
+            "settled": 5
+          },
+          "known_tokens": 49113,
+          "missing_usage_count": 0
+        },
+        {
+          "purpose": "router",
+          "attempt_count": 1,
+          "state_counts": {
+            "settled": 1
+          },
+          "known_tokens": 4210,
+          "missing_usage_count": 0
+        }
+      ],
+      "driver_usage_matches_database": true,
+      "reservation_state_counts": {},
+      "local_reservations": [],
+      "worker_counters": [],
+      "held_allocation_audit": {
+        "passed": false,
+        "token_budgets_enforced": false,
+        "disabled_policy_binding_valid": false,
+        "all_gateway_usage_known_and_settled": true,
+        "original_scenario_cap": null,
+        "original_cap_preserved": null,
+        "serial_worker_starts": [],
+        "expected_serial_marker_count": 0,
+        "held_worker_budget_ledgers": [],
+        "missing_ledgers": [],
+        "errors": [],
+        "scope": "Exact approved assignments and all held usage estimates/tool counters; no cumulative token limit."
+      },
+      "unknown_or_sent_reservations_never_refunded": true,
+      "accounting_checks_passed": true,
+      "core_declared_source_audit": {
+        "table_present": true,
+        "origin": "core-declared-source-prefetch-v1",
+        "source_count": 0,
+        "state_counts": {},
+        "worker_inventories": [],
+        "sources": [],
+        "completed_delivery_handoffs": [],
+        "tool_counters": [],
+        "tool_accounting_checks_passed": true,
+        "source_evidence_checks_passed": true,
+        "orphan_admission_event_ids": [],
+        "errors": [],
+        "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+      },
+      "context_archive_integrity": {
+        "passed": true,
+        "archive_count": 0,
+        "archives": [],
+        "errors": [],
+        "claim_boundary": "Complete retained source hashes, tool pairs and archive chains; model text remains unverified. Native request bytes and historical CAS timing are not reconstructed from final SQL."
+      },
+      "model_compaction_checkpoints": {
+        "applicable": false,
+        "passed": true
+      },
+      "independent_continuity": {
+        "compaction_followed_by_actual_execution_and_completion": false,
+        "mid_execution_process_restart_and_continuation": false,
+        "later_worker_attempt_ids": [],
+        "later_pass_event_ids": [],
+        "process_pair": null,
+        "restart_errors": [],
+        "claim_boundary": "Controlled quiescent process stop/start with retained SQL anchors and later actual model execution; unresolved external action crash recovery is not inferred."
+      },
+      "core_completed_delivery_handoffs": [],
+      "failure_events": [],
+      "inbox_diagnostics": [
+        {
+          "consumer_id": "planner",
+          "event_type": "quest.proposed",
+          "notice_attempts": 4,
+          "notice_error": "planning_failed:DomainError:Invalid_graph_proposal",
+          "notice_dead_at": "2026-11-15T15:50:58.227900+00:00",
+          "processed_at": null
+        }
+      ],
+      "review_reservations": [],
+      "review_events": [],
+      "reconstructed_review_passes": [],
+      "completed_delivery_handoffs": [],
+      "succeeded_node_live_evidence_revalidation": [],
+      "independent_review_pass_count": 0,
+      "review_revision_request_count": 0,
+      "context_archives_by_scope": [],
+      "worker_source_readbacks": 0,
+      "upstream_receipt_readbacks": 0,
+      "semantic_test_run_count": 0,
+      "artifact_hash_checks": [],
+      "restart_record_present": false,
+      "restart_stage": null,
+      "harness_router_compaction_record_present": false,
+      "core_start_count": 1,
+      "monetary_cost": null,
+      "monetary_cost_note": "Unconfigured prices/cost limits remain unknown; null is not zero.",
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "current_frozen_source_mismatches": [
+    "backend/scripts/phase2/live_e2e.py",
+    "backend/src/forge_core/quest_graph.py",
+    "backend/tests/planner_capacity_fixtures.py",
+    "backend/tests/test_background_busy_m7.py",
+    "backend/tests/test_m4_adversarial.py",
+    "backend/tests/test_m4_integration.py"
+  ],
+  "interpretation_limits": [
+    "Final Gateway settlement and exact local accounting do not establish task success or strict acceptance.",
+    "Planner invalid proposals are not retained as raw model responses. An Invalid_graph_proposal diagnostic alone cannot establish a specific schema, capacity, or model-quality root cause.",
+    "No absence of a Gateway attempt is treated as permission to refund a reservation. Refunded records are checked only against their existing durable terminal state.",
+    "Review PASS is accepted only by rebuilding the complete packet and running the existing live provenance/hash binding checks.",
+    "Core source rows are independently joined to approved graph/team/capsule bindings, immutable admission events, complete user-message bytes and native receipts or the predecessor's original delivery and reconstructed PASS/fixed verification. No worker_prefetch verified flag is accepted as proof.",
+    "Core admission IDs must have no model reservation, Gateway attempt or assistant/tool selection. Tool counters count each persisted model-selected admission and each Core admission exactly once; unpersisted help-call spend remains an explicit unproven difference and fails exact accounting.",
+    "Core source evidence validity is reported separately from token/tool accounting. A settled ledger can coexist with failed, incomplete or unverifiable task execution. Persisted source-message order proves the block precedes the first saved assistant response; the final SQL ledger alone does not retain every transmitted request body.",
+    "Unknown usage and unconfigured monetary costs are never converted into zero. Rejected HTTP attempts without usage still retain their full reservations.",
+    "Shared serial reserves are reconstructed once per Quest/accounting scope from every started Worker and the final durable markers. Stored start snapshots are checked against prior Gateway calls and opening balances; settled_at timestamps are unavailable, so historical settlement timing cannot be proved from the final ledger alone."
+  ]
+}

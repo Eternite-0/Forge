@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-11-15T10:36:53.2496038Z",
+  "scope": "Exact original bytes of the four worker_review-owned main documents before the V22 in-progress update; preserves historical wording without changing its conclusions.",
+  "files": [
+    {
+      "original_path": "docs/STATUS.md",
+      "path": "STATUS.md",
+      "bytes": 5676,
+      "sha256": "0338a9b2fd969dce980b9af5c7b1b7db3ea488b28b14d552be935a06864d2364"
+    },
+    {
+      "original_path": "docs/ROADMAP.md",
+      "path": "ROADMAP.md",
+      "bytes": 4347,
+      "sha256": "f023b3406b3eed28982d484498aa057de5c921b22eb2478c1a4ccf92d4eafdee"
+    },
+    {
+      "original_path": "docs/QUALITY_GATES.md",
+      "path": "QUALITY_GATES.md",
+      "bytes": 5171,
+      "sha256": "2df79a1edac13846afa4d3b4ed1c9b4c087f736aa477decd0ab9398355f8b00e"
+    },
+    {
+      "original_path": "docs/PHASE2_STATUS.md",
+      "path": "PHASE2_STATUS.md",
+      "bytes": 5685,
+      "sha256": "b8d02fa0ecbb8ccbec69db0734a2822a4a6693d5b670220a0d815559f9aab277"
+    }
+  ]
+}

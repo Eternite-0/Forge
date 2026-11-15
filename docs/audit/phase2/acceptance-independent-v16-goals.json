@@ -1,0 +1,122 @@
+[
+  {
+    "number": 1,
+    "goal": "同一个长期对话",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/store.py:32"],
+    "test_evidence": ["backend/tests/test_router_intelligence_phase2.py::test_same_router_identity_and_original_source_survive_compaction_and_restart"],
+    "evidence_boundary": "Durable main conversation and Router identity have local compaction/reopen proof; current-source strict live records determine final acceptance."
+  },
+  {
+    "number": 2,
+    "goal": "理解复杂目标",
+    "acceptance_status": "partial",
+    "source_evidence": ["backend/src/forge_core/router.py:887", "backend/src/forge_core/router.py:1351"],
+    "test_evidence": ["backend/tests/test_router_intelligence_phase2.py:182", "backend/tests/test_router_semantic_recall_v16.py:109"],
+    "evidence_boundary": "Router classifications and source constraints exist. Multimodal requests explicitly need input; actual image/audio/video execution is unavailable. Complex goal quality requires accepted live outputs."
+  },
+  {
+    "number": 3,
+    "goal": "自动生成 Quest",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/router.py:1281"],
+    "test_evidence": ["backend/tests/test_persistent_router.py:135", "backend/tests/test_persistent_router.py:247"],
+    "evidence_boundary": "Atomic model-driven Quest proposals are implemented and locally verified; normal authenticated approval remains required."
+  },
+  {
+    "number": 4,
+    "goal": "自动规划 DAG",
+    "acceptance_status": "partial",
+    "source_evidence": ["backend/src/forge_core/quest_graph.py:935", "backend/src/forge_api/main.py:860", "backend/src/forge_api/main.py:1286"],
+    "test_evidence": ["backend/tests/test_m4_integration.py:584", "backend/tests/test_remaining_dag_v16.py:138"],
+    "evidence_boundary": "Automatic initial planning is connected. Remaining-DAG generation and evidence-preserving approval are service/API capabilities; no feedback-notice path automatically invokes this mode."
+  },
+  {
+    "number": 5,
+    "goal": "从模型库选择模型",
+    "acceptance_status": "bounded_implementation",
+    "source_evidence": ["backend/src/forge_core/team_composition.py:275", "backend/src/forge_core/team_composition.py:415"],
+    "test_evidence": ["backend/tests/test_team_intelligence_phase2.py:77", "backend/tests/test_team_intelligence_phase2.py:97"],
+    "evidence_boundary": "Capability/source/reliability selection is implemented. One real model is available, so live multi-model choice quality and model-diversity benefits remain unproven."
+  },
+  {
+    "number": 6,
+    "goal": "动态形成团队",
+    "acceptance_status": "partial",
+    "source_evidence": ["backend/src/forge_core/team_composition.py:657", "backend/src/forge_core/hierarchical_plans.py:7"],
+    "test_evidence": ["backend/tests/test_remaining_dag_v16.py:138", "backend/tests/test_remaining_dag_v16.py:174"],
+    "evidence_boundary": "Dynamic role contracts, replacement and bounded child-DAG expansion are implemented with plan/team approval. Autonomous hierarchy/replanning quality is not established by the local contract tests."
+  },
+  {
+    "number": 7,
+    "goal": "后台并行执行任务",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/worker_runtime.py:2638", "backend/src/forge_core/worker_runtime.py:2654"],
+    "test_evidence": ["backend/tests/test_m5_lifespan_execution.py:50", "backend/tests/test_worker_runtime.py:265"],
+    "evidence_boundary": "Local actual scheduling reaches two simultaneous Workers in one DAG. Cross-Quest Gateway tests verify isolation/queueing under concurrency one; real multi-Quest parallel completion is unproven."
+  },
+  {
+    "number": 8,
+    "goal": "Agent 之间进行结构化协作",
+    "acceptance_status": "bounded_implementation",
+    "source_evidence": ["backend/src/forge_core/agent_protocol.py:46", "backend/src/forge_core/agent_protocol.py:141"],
+    "test_evidence": ["backend/tests/test_agent_protocol_v2_phase2.py:83", "backend/tests/test_agent_protocol_v2_phase2.py:169"],
+    "evidence_boundary": "Ten durable v2 message classes validate payload and native assignment identity. Historical v1 events retain explicitly weaker identity-only contracts."
+  },
+  {
+    "number": 9,
+    "goal": "自动发现并修复错误",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/worker_runtime.py:1533", "backend/src/forge_core/worker_recovery.py:90", "backend/src/forge_core/code_test_harness.py:185"],
+    "test_evidence": ["backend/tests/test_code_test_harness_phase2.py:86"],
+    "evidence_boundary": "Bounded recovery and a real child-process failing-test/revision/retest loop have local proof. Pure-function governed testing does not establish unrestricted repository execution or complex live repair success."
+  },
+  {
+    "number": 10,
+    "goal": "独立 Reviewer 审查结果",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/independent_review.py:859", "backend/src/forge_core/independent_review.py:1541"],
+    "test_evidence": ["backend/tests/test_worker_intelligence_phase2.py:201", "backend/tests/test_worker_intelligence_phase2.py:279"],
+    "evidence_boundary": "Fresh-context review binds original sources/receipts and the current result. Same-model independent context is supported; no different-reviewer-model advantage is claimed."
+  },
+  {
+    "number": 11,
+    "goal": "对不合格结果自动返工",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/worker_runtime.py:917"],
+    "test_evidence": ["backend/tests/test_review_envelope_phase2.py:396", "backend/tests/test_reviewer_repair_phase2.py:105"],
+    "evidence_boundary": "NEEDS_REVISION drives bounded rework within original assignments and budgets. Current-source complex live review/rework/PASS requires its own accepted run."
+  },
+  {
+    "number": 12,
+    "goal": "上下文压缩后继续工作",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/context_service.py:328", "backend/src/forge_core/context_service.py:426", "backend/src/forge_core/context_service.py:699"],
+    "test_evidence": ["backend/tests/test_context_m6.py:388", "backend/tests/test_context_m6.py:615"],
+    "evidence_boundary": "Actual archives, exact source readback and settled whole-tool-exchange restoration are locally verified. The controlled study uses these mechanisms, while whole complex Quest continuity needs strict live acceptance."
+  },
+  {
+    "number": 13,
+    "goal": "跨任务长期记忆",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/semantic_memory.py:61", "backend/src/forge_core/semantic_memory.py:120", "backend/src/forge_core/router.py:389"],
+    "test_evidence": ["backend/tests/test_router_semantic_recall_v16.py:46", "backend/tests/test_router_semantic_recall_v16.py:68", "backend/tests/test_semantic_memory_phase2.py:143"],
+    "evidence_boundary": "Budgeted model semantic selection, exact source identity and post-await revocation/change checks are implemented. Mock success alone is not live cross-task semantic success."
+  },
+  {
+    "number": 14,
+    "goal": "Core 重启后继续任务",
+    "acceptance_status": "local_evidence_only",
+    "source_evidence": ["backend/src/forge_core/worker_runtime.py:2654"],
+    "test_evidence": ["backend/tests/test_worker_lineage_v16.py:106", "backend/tests/test_worker_model_usage_phase2.py:190", "backend/tests/test_worker_model_usage_phase2.py:230"],
+    "evidence_boundary": "Durable scheduler/lineage recovery and exact known-usage reconciliation have local proof. Complete complex live continuation through mid-execution Core restart remains a separate gate."
+  },
+  {
+    "number": 15,
+    "goal": "所有成果具备可信证据",
+    "acceptance_status": "bounded_implementation",
+    "source_evidence": ["backend/src/forge_core/evidence.py:171", "backend/src/forge_core/independent_review.py:805", "backend/src/forge_core/plan_lineage.py:220"],
+    "test_evidence": ["backend/tests/test_semantic_evidence_m7.py:143", "backend/tests/test_semantic_lineage_v16.py:136"],
+    "evidence_boundary": "Immutable receipts, hashes, authenticated approvals, current PASS binding and inherited evidence revalidation are enforced. A passing gate or consistent record does not establish arbitrary-task correctness."
+  }
+]

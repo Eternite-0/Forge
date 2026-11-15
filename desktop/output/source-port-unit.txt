@@ -1,0 +1,30 @@
+
+> forge-desktop@0.2.0 test
+> node --test tests/*.test.mjs
+
+✔ authenticated requests send only the in-memory bearer (65.2919ms)
+✔ permission and stale-version errors remain distinguishable (4.8221ms)
+✔ browser bootstrap derives a bearer without persisting or sending the secret (20.6876ms)
+✔ artifact history reads only the exact receipt endpoint with the in-memory bearer and abort signal (54.3994ms)
+✔ a mismatched or malformed history response cannot become a trusted diff (16.8101ms)
+✔ unavailable history remains an explicit Core error without a fallback to current files or Git (1.0404ms)
+✔ a failed send retries with the same request ID until the draft changes (2.0832ms)
+✔ Enter submits only outside IME composition and without Shift (0.2623ms)
+✔ history pagination retains order and removes overlapping records (0.3793ms)
+✔ delayed results cannot overwrite a newer Core generation or selected view (0.5126ms)
+✔ operator settings never serialize a secret and reject credentials in a URL (1.3922ms)
+✔ Markdown links admit only credential-free HTTP(S), and history keeps its viewport (0.6796ms)
+✔ unchanged polling retains the same timeline array (0.643ms)
+✔ sidebar and task fallback share a stable workspace identity without inventing a project (3.3739ms)
+✔ real JSON-text Quest metadata stays a display group and never becomes a workspace binding (0.4274ms)
+✔ foreign or malformed context cannot supply the current workspace identity (0.5152ms)
+✔ timeline sorts real events and messages, deduplicates, and reconciles the outgoing request (2.2448ms)
+✔ a failed uncommitted send remains visible alongside a new draft (0.3546ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 632.7544

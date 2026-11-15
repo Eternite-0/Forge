@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="14" time="2.220" timestamp="2026-11-15T15:57:17.809934+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[missing]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[unknown]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[bool]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[negative]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[version]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[context]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[small_verdict]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_cycle_policy_counts_remaining_stages_without_charging" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_lossless_projection_handles_unicode_escaping_and_hostile_reference_objects" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_legacy_wire_and_packet_keep_the_same_fields_and_hash" time="0.336" /><testcase classname="tests.test_review_envelope_phase2" name="test_packet_limits_count_complete_sources_artifacts_and_delivery_in_bytes" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_review_then_revision_then_fresh_pass_within_original_cycle" time="0.515"><failure message="forge_core.domain.DomainError: Team validation requires caller-owned write transaction">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-651/test_native_review_then_revisi0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000020DC88CB360&gt;
+
+    def test_native_review_then_revision_then_fresh_pass_within_original_cycle(tmp_path, monkeypatch):
+        store, manager, model, worker = new_pending(tmp_path, monkeypatch)
+        original = manager.get(worker["id"])
+        posted = []
+    
+        def handle(request):
+            body = json.loads(request.content)
+            posted.append(body)
+            verdict = (
+                {
+                    "verdict": "NEEDS_REVISION",
+                    "findings": ["Clarify the exact inspected source."],
+                    "revision_goals": [
+                        "State the complete inspected source name and preserve evidence."
+                    ],
+                    "confidence": 0.8,
+                }
+                if len(posted) == 1
+                else {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+            )
+            assert body["max_tokens"] == 1024 and not body.get("tools")
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [{"message": {"content": _json(verdict)}, "finish_reason": "stop"}],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ProviderGateway(
+            ProviderConfig(
+                id="protocol",
+                kind="openai_compatible",
+                base_url="https://example.invalid/v1",
+                credential_ref="FORGE_PROVIDER_KEY_TEST",
+                supports_tools=True,
+            ),
+            credential_resolver=lambda _: "fixture",
+            transport=httpx.MockTransport(handle),
+            budget_ledger=ModelCallBudgetLedger(store.path, token_limit=200000, concurrency_limit=1),
+        )
+        manager.providers = ProviderPool({"protocol": gateway})
+        with store.connection() as connection:
+            connection.execute("PRAGMA query_only=ON")
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            packet = _packet(store, connection, row)
+            old_hash = _hash(packet)
+            measured = measure_review_envelope(connection, row, gateway, packet)
+            assert measured["native_input_reservation"] &lt; envelope()["max_review_input_tokens"]
+            assert measured["raw_packet_bytes"] &lt; 65536
+            assert connection.total_changes == 0
+            assert review_cycle_state(connection, worker["id"], envelope())["reviews_remaining"] == 2
+        service = IndependentReviewService(manager)
+        first = asyncio.run(service.review(worker["id"]))
+        assert first["verdict"] == "NEEDS_REVISION" and first["revision_applied"]
+        with store.connection() as connection:
+            stage = review_cycle_state(connection, worker["id"], envelope())
+            assert stage["reviews_remaining"] == stage["correction_calls_remaining"] == 1
+            assert stage["correction_started"]
+        # The correction model is synchronous/offline; Reviewer calls still use the
+        # actual Gateway and native ledger, without fabricated attempt rows.
+        model.responses.append(
+            response(delivery("Inspected complete work/input.txt; unchanged evidence retained."))
+        )
+        manager.providers = ProviderPool({"protocol": model})
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        manager.providers = ProviderPool({"protocol": gateway})
+        with store.connection() as connection:
+            stage = review_cycle_state(connection, worker["id"], envelope())
+            assert stage["reviews_remaining"] == 1 and stage["correction_calls_remaining"] == 0
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+&gt;           assert _hash(_packet(store, connection, row)) != old_hash
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:241: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\independent_review.py:344: in _packet
+    assignment = _review_assignment(store, connection, run)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:283: in _review_assignment
+    else authority.get_historical_approved(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.team_composition.TeamCompositionService object at 0x0000020DC89429D0&gt;
+quest_id = 'quest_fdd1307c68dc', plan_revision = 1
+proposal_digest = 'ddabce94885d25994285f29049f695edc82a85e930a0ebfadf79baeb392e64f6'
+connection = &lt;sqlite3.Connection object at 0x0000020DC88DA3E0&gt;
+run_id = 'run_04d4d739ed24'
+
+    def get_historical_approved(
+        self, quest_id, plan_revision, proposal_digest, *, connection, run_id
+    ):
+        """Validate past approval for evidence only; never authorizes new execution."""
+        if not connection.in_transaction:
+&gt;           raise DomainError("Team validation requires caller-owned write transaction")
+E           forge_core.domain.DomainError: Team validation requires caller-owned write transaction
+
+backend\src\forge_core\team_composition.py:1130: DomainError</failure></testcase><testcase classname="tests.test_review_envelope_phase2" name="test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review" time="0.546" /><testcase classname="tests.test_review_envelope_phase2" name="test_unsent_review_release_retains_cycle_stage_without_resetting_usage" time="0.289" /></testsuite></testsuites>

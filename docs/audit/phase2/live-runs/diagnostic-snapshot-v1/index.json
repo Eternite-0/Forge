@@ -1,0 +1,169 @@
+{
+  "limitations": "Historical snapshots preserve their then-current evidence; later code changes do not retroactively promote failed or unaccepted runs. No Provider requests were made by publication.",
+  "run_count": 9,
+  "runs": [
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 1386,
+        "path": "20261114T215236Z-L1.json",
+        "sha256": "233a6ec32eae817d27c2378c015c6b72653ce3ffdf91e6d147adaabb4b909968"
+      },
+      "run_id": "20261114T215236Z-L1",
+      "source_snapshot": {
+        "bytes": 14114,
+        "path": "20261114T215236Z-L1/run.json",
+        "sha256": "46bbb747981971e4c37b183c57545f3321fba5f5de1bfe169d80481517a1f2df"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 1386,
+        "path": "20261114T215614Z-L1.json",
+        "sha256": "839cbcc8067940908555bfac7905bfa90d5b5bbaf44cfb21db311d5e5d5d6540"
+      },
+      "run_id": "20261114T215614Z-L1",
+      "source_snapshot": {
+        "bytes": 11943,
+        "path": "20261114T215614Z-L1/run.json",
+        "sha256": "facb7514b9fb7c3e5cd7ddb788f173a1c8a0a815e6aed8ad130189a2e661e3c0"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 1387,
+        "path": "20261114T220018Z-L1.json",
+        "sha256": "2c3d85f1e06a13d29b0c81db8c16867219ea0ab281acb0255f15a7e09ed65edf"
+      },
+      "run_id": "20261114T220018Z-L1",
+      "source_snapshot": {
+        "bytes": 27372,
+        "path": "20261114T220018Z-L1/run.json",
+        "sha256": "0505a5197b02064492b01df3e85c448b639184257a959487453ac38391407e00"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 1387,
+        "path": "20261114T220634Z-L1.json",
+        "sha256": "78a1fed454f5b8801bd6034cd2c9622f02202a97546d523aba5d29989df6ebd9"
+      },
+      "run_id": "20261114T220634Z-L1",
+      "source_snapshot": {
+        "bytes": 26095,
+        "path": "20261114T220634Z-L1/run.json",
+        "sha256": "136166f40e015be7cf0f8cad5f9bb0ebdd8bb3c076e4961d990168c629a67e2c"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 1387,
+        "path": "20261114T220838Z-L1.json",
+        "sha256": "3aaf53b77864827b4a83611363ff3f7e20682dcd1a248b744d964e5bcbb6398c"
+      },
+      "run_id": "20261114T220838Z-L1",
+      "source_snapshot": {
+        "bytes": 27258,
+        "path": "20261114T220838Z-L1/run.json",
+        "sha256": "c4e1ce3be68beae84c16d8f3724a197cef4fa4ccbc1671663b4ef90024939af1"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": null,
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 1394,
+        "path": "20261114T233731Z-L1-c53b2d.json",
+        "sha256": "c0d08f940a67c378f493a1b706cff2134bfc093d827ab6fe5687fc085e9e7ec4"
+      },
+      "run_id": "20261114T233731Z-L1-c53b2d",
+      "source_snapshot": {
+        "bytes": 18941,
+        "path": "20261114T233731Z-L1-c53b2d/run.json",
+        "sha256": "844cac25eca2789b01a1f8f4db303b8a862930960f169b755ca4b41ab784f0f0"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "running",
+      "failures": [
+        "quest_did_not_reach_terminal_state"
+      ],
+      "published_snapshot": {
+        "bytes": 4295,
+        "path": "20261114T234309Z-L1-238a52.json",
+        "sha256": "a1716f2ad4a514b2ba4ed0d790f32236449303f94fff861644a57ac0aebd0254"
+      },
+      "run_id": "20261114T234309Z-L1-238a52",
+      "source_snapshot": {
+        "bytes": 62905,
+        "path": "20261114T234309Z-L1-238a52/run.json",
+        "sha256": "2564b387b678ee5aa0f73e248fb73deb16228f96a566f261faa50cd0769974f7"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "approved",
+      "failures": [
+        "composer_did_not_propose_team"
+      ],
+      "published_snapshot": {
+        "bytes": 3049,
+        "path": "20261114T235101Z-L1-3318e2.json",
+        "sha256": "d69641d8760122fa2636d59616179f1a39f60d62433188a8e3a1321978deec04"
+      },
+      "run_id": "20261114T235101Z-L1-3318e2",
+      "source_snapshot": {
+        "bytes": 30719,
+        "path": "20261114T235101Z-L1-3318e2/run.json",
+        "sha256": "6d07785ec8865f3314080ed12c495c340227c15d9661ce905e5a0526a30462aa"
+      }
+    },
+    {
+      "acceptance_status": null,
+      "actual_final_status": "proposed",
+      "failures": [
+        "planner_did_not_produce_plan"
+      ],
+      "published_snapshot": {
+        "bytes": 3850,
+        "path": "20261114T235634Z-L2-020787.json",
+        "sha256": "7334fe3afe3bd87d64c46276b3368ce79403f8871f45efc61da4e612ee538d96"
+      },
+      "run_id": "20261114T235634Z-L2-020787",
+      "source_snapshot": {
+        "bytes": 27913,
+        "path": "20261114T235634Z-L2-020787/run.json",
+        "sha256": "223c49061ff881d9b2a7a5bc48e539f329fcb37f44a7e564b98661f164fe7724"
+      }
+    }
+  ],
+  "schema_version": 1
+}

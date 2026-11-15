@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="1.434" timestamp="2026-11-15T16:53:55.277565+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[openai_compatible]" time="0.118" /><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[deepseek]" time="0.095" /><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[anthropic]" time="0.098" /><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[0]" time="0.343"><failure message="AssertionError: assert 6 == 3&#10; +  where 6 = len([ModelRequest(model_id='fixture', messages=[{'role': 'system', 'content': 'You are the independent reviewer of the CUR...363aa763', quest_id='quest_b819ee58a115', worker_run_id='run_cc56ef46faec', parent_call_id=None), context_limit=32920)])">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-719/test_native_runtime_initial_an0')
+depth = 0
+
+    @pytest.mark.parametrize("depth", [0, 1])
+    def test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions(
+        tmp_path, depth
+    ):
+        posts = []
+    
+        def transport(request):
+            posts.append(json.loads(request.content))
+            index = len(posts)
+            if index == 1:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": f"source-{number}",
+                            "type": "function",
+                            "function": {
+                                "name": "file_read",
+                                "arguments": json.dumps({"path": f"work/source-{number}.txt"}),
+                            },
+                        }
+                        for number in (1, 2)
+                    ],
+                }
+            elif index == 2:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": "archive-read",
+                            "type": "function",
+                            "function": {
+                                "name": "worker_read_context_source",
+                                "arguments": '{"ordinal":3,"max_chars":2048}',
+                            },
+                        }
+                    ],
+                }
+            else:
+                assert index == 3
+                message = {
+                    "role": "assistant",
+                    "content": json.dumps(delivery("Recovered original source")),
+                }
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {"message": message, "finish_reason": "tool_calls" if index &lt; 3 else "stop"}
+                    ],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ObservedGateway(transport=httpx.MockTransport(transport))
+        store, manager, worker = native_archive_worker(tmp_path, gateway, depth=depth)
+        result = asyncio.run(manager.run(worker["id"]))
+        assert result["state"] == "review_pending" and result["steps"] == len(posts) == 3
+        assert result["execution_mode"] == "mock" and result["token_spent"] == 120
+        expected = {
+            item["name"]: item
+            for item in supplemental_worker_tools(source_readback=True, help_allowed=True)
+        }
+        runtime_requests = [request for request, _payload in gateway.serialized]
+&gt;       assert len(runtime_requests) == 3
+E       AssertionError: assert 6 == 3
+E        +  where 6 = len([ModelRequest(model_id='fixture', messages=[{'role': 'system', 'content': 'You are the independent reviewer of the CUR...363aa763', quest_id='quest_b819ee58a115', worker_run_id='run_cc56ef46faec', parent_call_id=None), context_limit=32920)])
+
+tests\test_worker_request_framing_v17.py:256: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[1]" time="0.413"><failure message="AssertionError: assert 6 == 3&#10; +  where 6 = len([ModelRequest(model_id='fixture', messages=[{'role': 'system', 'content': 'You are the independent reviewer of the CUR...0e4dc81f', quest_id='quest_3b620ff470bc', worker_run_id='run_4f4de307333a', parent_call_id=None), context_limit=32920)])">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-719/test_native_runtime_initial_an1')
+depth = 1
+
+    @pytest.mark.parametrize("depth", [0, 1])
+    def test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions(
+        tmp_path, depth
+    ):
+        posts = []
+    
+        def transport(request):
+            posts.append(json.loads(request.content))
+            index = len(posts)
+            if index == 1:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": f"source-{number}",
+                            "type": "function",
+                            "function": {
+                                "name": "file_read",
+                                "arguments": json.dumps({"path": f"work/source-{number}.txt"}),
+                            },
+                        }
+                        for number in (1, 2)
+                    ],
+                }
+            elif index == 2:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": "archive-read",
+                            "type": "function",
+                            "function": {
+                                "name": "worker_read_context_source",
+                                "arguments": '{"ordinal":3,"max_chars":2048}',
+                            },
+                        }
+                    ],
+                }
+            else:
+                assert index == 3
+                message = {
+                    "role": "assistant",
+                    "content": json.dumps(delivery("Recovered original source")),
+                }
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {"message": message, "finish_reason": "tool_calls" if index &lt; 3 else "stop"}
+                    ],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ObservedGateway(transport=httpx.MockTransport(transport))
+        store, manager, worker = native_archive_worker(tmp_path, gateway, depth=depth)
+        result = asyncio.run(manager.run(worker["id"]))
+        assert result["state"] == "review_pending" and result["steps"] == len(posts) == 3
+        assert result["execution_mode"] == "mock" and result["token_spent"] == 120
+        expected = {
+            item["name"]: item
+            for item in supplemental_worker_tools(source_readback=True, help_allowed=True)
+        }
+        runtime_requests = [request for request, _payload in gateway.serialized]
+&gt;       assert len(runtime_requests) == 3
+E       AssertionError: assert 6 == 3
+E        +  where 6 = len([ModelRequest(model_id='fixture', messages=[{'role': 'system', 'content': 'You are the independent reviewer of the CUR...0e4dc81f', quest_id='quest_3b620ff470bc', worker_run_id='run_4f4de307333a', parent_call_id=None), context_limit=32920)])
+
+tests\test_worker_request_framing_v17.py:256: AssertionError</failure></testcase></testsuite></testsuites>

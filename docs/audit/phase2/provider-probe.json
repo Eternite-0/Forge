@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "source_snapshot": {
+    "path": ".local/phase2/provider/20261114T233125Z-d07064/report.json",
+    "sha256": "8ca1d329d1f9e4efc8a4d35f78852623f19bf0475be1f5d85f11f627bf65f6c2",
+    "bytes": 9257
+  },
+  "run_id": "20261114T233125Z-d07064",
+  "execution_mode": "live",
+  "provider_alias": "wb-local",
+  "proxy_reported_model_id": "deepseek-v4.1-flash",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "identity_limit": "The local OpenAI-compatible proxy returned this model/provider identity. The probe does not independently verify which upstream model served the request.",
+  "operator_limits": {
+    "context_ceiling": 65536,
+    "output_probe_ceiling": 1024,
+    "total_token_budget": 300000,
+    "concurrency_limit": 2
+  },
+  "actual_limits": {
+    "context_maximum": null,
+    "output_maximum": null,
+    "rate_limit": null,
+    "cost": null,
+    "limitation": "Configured ceilings are operator safety bounds. The largest observed input was 2580 reported input tokens; no maximum-context or maximum-output boundary was measured. Two successful overlapping calls do not establish a service rate limit. No price evidence was supplied."
+  },
+  "protocol_cases": [
+    {"name": "minimal_dialogue", "correct": true, "input_tokens": 44, "output_tokens": 19},
+    {"name": "router_schema_1", "correct": true, "input_tokens": 581, "output_tokens": 108},
+    {"name": "router_schema_2", "correct": true, "input_tokens": 581, "output_tokens": 85},
+    {"name": "router_schema_3", "correct": true, "input_tokens": 581, "output_tokens": 116},
+    {"name": "tool_call_1", "correct": true, "input_tokens": 316, "output_tokens": 57},
+    {"name": "tool_call_2", "correct": true, "input_tokens": 316, "output_tokens": 58},
+    {"name": "tool_call_3", "correct": true, "input_tokens": 316, "output_tokens": 64},
+    {"name": "bounded_context_recall", "correct": true, "input_tokens": 2580, "output_tokens": 65},
+    {"name": "concurrency_1", "correct": true, "input_tokens": 40, "output_tokens": 18},
+    {"name": "concurrency_2", "correct": true, "input_tokens": 40, "output_tokens": 19},
+    {"name": "streaming", "correct": true, "input_tokens": 49, "output_tokens": 28, "ttft_seconds": 1.921, "chunks": 9}
+  ],
+  "discovery": {"returned_model_ids": 11, "target_available": true},
+  "usage": {"gateway_attempts": 11, "settled_attempts": 11, "input_tokens": 5444, "output_tokens": 637},
+  "duration_seconds": 26.712,
+  "finished_at": "2026-11-14T23:31:52.232198+00:00",
+  "publication_scope": "Allowlisted measured fields from the existing sanitized report. No credential source, base URL, request content, response content, or logs are published. Protocol success is not Quest acceptance or a task-quality benchmark. This publication made no Provider request."
+}

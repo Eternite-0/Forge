@@ -1,0 +1,178 @@
+Native preview layout — source evidence
+Generated 2026-11-16; read-only static inspection, no product/bundle execution.
+
+Source directory: D:\crack\chatgpt-ui\mirror\webview\assets\async
+Offsets below are zero-based UTF-16 code units (JavaScript string indexing) and UTF-8 byte offsets in the exact decoded file, not line numbers. Original minified snippets are verbatim bounded excerpts; no inferred code inserted.
+
+SHA256
+907538.0572f09d40.js: EBA5577E16A50A8106A64A05025FA23D0A589D8B4F775A6FE065BA7D916E6B1C
+983280.4074749967.js: 95279DC5685FB11C504F68F76D7A575307D0DF5ACB401FA6C4AF55B9D9AE9675
+200114.81334159bb.js: 92205ECF696ADF8814A6BA6353C655AFBCD8DF7BB3193575BCB9D95D9BD5AE20
+
+Portable rules supported by these sources
+1. Measure actual main/workspace logical width W after sidebar and shell insets; measure workspace body row logical height H after title/header rows.
+2. Nominal default600 becomes D=max(320,min(1.6*H,W-500),min(640,W-352)); non600 explicit config passes through unchanged. This is NOT a640 ceiling. Examples (W,H)=(808,900) =>D456 after later regular clamp; (1100,900)=>640; (1600,900)=>1100.
+3. regular maximum=max(320,W-352), unified maximum=max(320,W-320), full maximum=max(320,W). min320. R2 converts clamped px into normalized ratio in this interval; Ju converts back. Retain the ratio during container resize; full display uses full workspace and returns to split with the same ratio.
+4. Tree root width initial250, clamp200..max(200,parent logical width*.6), CSSmax-width60%, edge-left drag; threshold100 closes it. The same width state is used in split/full.
+5. Main pane threshold160 and tree threshold100 are logicalpx because FHYD divides pointer coordinates by zoom. Double-click uses current defaultSize, not hardcoded screenshot percentage.
+6. Original app resize policy uses960/720 plus actual left-sidebar state. No evidence supports FORGE's former1280/1440 guesses or separate44% expanded tree default.
+7. Keep FORGE state in React memory; do not transplant native preference persistence or dependencies.
+
+Known limits / do not claim
+- No runtime screenshot can establish the user's previous drag width or saved ratio;250/600 config alone does not establish every actual screenshot pane width.
+- Every tab-specific paneWidth and opener was not enumerated. Standard open ei/er does not close sidebar; whether an individual feature opener does so is unknown.
+- Resize threshold policy is proven for the root resize callback; applying it at initial/open time would be a separate product decision.
+- Header and tree typography are traced elsewhere; this file focuses on layout/state and separator rules.
+
+[1] DUYS — 外内容 pane 的完整宽度公式。默认值600仅作为配置；Mv可返回超过640。Ju/R2在[320,max]区间与[0,1] ratio之间转换，ratio不是整个窗口的百分比。AU/t7的存储属于原应用实证，FORGE移植时不新增storage。
+File 907538.0572f09d40.js; offset UTF16 2636339; byte 2638958
+DUYS(e,t,n){var r=n("kpIY");function i(e,t,n="regular"){let r=Number.isFinite(e)?e:600,a=s(t,n);return Math.max(Math.min(320,a),Math.min(r,a))}function a(e,t,n="regular"){let r=o(t,n),s=r.maximum-r.minimum;return 0===s?0:l((i(e,t,n)-r.minimum)/s)}function s(e,t){return"full"===t?Math.max(320,e):Math.max(320,e-("unified"===t?320:352))}function o(e,t){let n=s(e,t);return{maximum:n,minimum:Math.min(320,n)}}function l(e){return Math.max(0,Math.min(1,e))}n.d(t,{},{AU:function({mainContentWidth:e,storageKey:t,width:n,widthMode:i}){(0,r.jx)(t,a(n,e,i))},Ju:function(e,t,n="regular"){let r=o(t,n);return i(r.minimum+l(e)*(r.maximum-r.minimum),t,n)},Mv:function({defaultWidth:e,mainContentWidth:t,shellHeight:n}){return 600!==e?e:Math.max(320,Math.min(1.6*n,t-500),Math.min(640,t-352))},R2:a,t7:function({defaultWidth:e,mainContentWidth:t,storageKey:n,widthMode:i}){let s=(0,r.TB)(n,null);return null!=s&&Number.isFinite(s)?s<=1?l(s):a(s,t,i):a(e,t,i)},vu:function({primaryPane:e,secondaryPane:t,workspaceWidth:n,contentWidth:r}){return e===t?n/2:"chat"===e?r:n-r},z4:"app-shell:right-panel-width:v3"})
+
+[2] I7bK — B7(x)=0.5*x；所以调用B7(200)阈值100、B7(320)阈值160，单位为逻辑px。Y只是从closedSize到size的线性插值；L5计算扣除内容pane后的主区目标宽。m9是原应用spring的duration=.5/bounce=.1，IH=.35/.1。
+File 907538.0572f09d40.js; offset UTF16 2591556; byte 2594175
+I7bK(e,t,n){var r=n("zd8w"),i=n("DUYS");let a=(0,r.createContext)(null);n.d(t,{},{B7:function(e){return .5*e},Fd:function(){let e=(0,r.useContext)(a);if(null==e)throw Error("AppShellLayoutMotionContext is missing");return e},IH:{type:"spring",duration:.35,bounce:.1},L5:function({contentPaneWidthMode:e,contentPaneWidthRatio:t,isContentPaneOpen:n,workspaceWidth:r}){return n?Math.max(0,r-(0,i.Ju)(t,r,e)):r},Y:function(e,t,n){return n+Math.max(0,Math.min(1,t))*(e-n)},f$:a,m9:{type:"spring",duration:.5,bounce:.1}})
+
+[3] QcW8 — 全局默认width config为{defaultWidth:600,storageKey:...}。不是固定分割比例。
+File 907538.0572f09d40.js; offset UTF16 2602230; byte 2604849
+F=(0,a.vP)(l.u,{defaultWidth:600,storageKey:h.z4}),H=(0,a.un)(u.GD,({get:e,scope:t})=>("client-
+
+[4] QcW8 — 初始layout状态为split。仅此不能断言所有tab opener都不切full。
+File 907538.0572f09d40.js; offset UTF16 2602096; byte 2604715
+L=(0,a.vP)(d.l7,({scope:e})=>"split"),U=(0,a.vP)(d.l7,({scope:e})=>!0===e.value.initialWorkspaceHasContentHome),G=(0,a.v
+
+[5] gbrq — 文件树width atom r6初值250；与open atom vN分开，同一app-root scope。这里width atom没有读写持久化。
+File 907538.0572f09d40.js; offset UTF16 2663133; byte 2665752
+let J=(0,s.vP)(c.u,eo),ee=(0,s.vP)(c.u,()=>new r.KG(+!!eo())),et=(0,s.vP)(c.u,250);function en(e,t,n={}){!function(e,t,n){t||(0,l.e)(),!t&&e.get(P)&&e.set(
+
+[6] gbrq — 基础打开调用mC→ei→er：打开设置SZ与yN，em按现有hy===full设置。该路径不包含关闭左栏，也不按一个新断点强制full。
+File 907538.0572f09d40.js; offset UTF16 2663556; byte 2666175
+function er(e,t,n={}){if(!t&&"window-resize"!==n.closeReason&&e.get(K)){e.set($,!1),e.set(v.em,!1);return}"window-resize"!==n.closeReason&&e.set(z,null),e.set(v.SZ,t);let r=e.get(W);r.stop(),!1===n.animate?(e.set(Y,e=>e+1),r.set(+!!t)):el(r,t,e.get(h.x)),t||(e.set($,!1),e.set(v.em,!1))}function ei(e,t,n={}){t&&!e.get(v.dX)&&e.set(v.ab,!1),t&&e.set(v.em,"full"===e.get(v.hy));let r=e.get($)!==t&&e.get(v.Rl);e.set($,t),er(e,t,{...n,animate:n.animate??!r})}
+
+[7] gbrq — Kg在窗口变窄时记住当前tabs/detail/closed状态后收起右pane。Kt负责tree open，原应用持久化的是tree open状态，FORGE不移植该storage。
+File 907538.0572f09d40.js; offset UTF16 2664501; byte 2667120
+Kg:function(e){let t=e.get(v.SZ);e.set(z,t?e.get($)?"tabs":"detail":"closed"),t&&er(e,!1,{closeReason:"window-resize"})},Kt:function(e,t,n={}){var r,a,s,o;!1!==n.persist&&(0,f.jx)(T,t),e.set(J,t),r=e.get(ee),a=t,s=e.get(h.x),o=n,(r.stop(),!1===o.animate||s)?r.set(+!!a):(0,i.i)(r,+!!a,E.m9)},Nb:O,RJ:function(e,t){return"boolean"==typeof e?e:null==e?(0,f.TB)(C,!0):e.isPinned||"boolean"!=typeof t&&e.resetKey!==t.resetKey},RX:Y,Ug:x,VK:F,Ym:B,_z:function(e){let t=Symbol();return e.set(k,e=>new Set([...e,t])),
+
+[8] gbrq — g3在窗口扩宽时恢复被Kg收起的tabs/detail状态。
+File 907538.0572f09d40.js; offset UTF16 2665102; byte 2667721
+g3:function(e){let t=e.get(z);if(null!=t){if("tabs"===t)return void ei(e,!0);if("detail"===t||e.get(K))return void er(e,!0);e.set(z,null)}},gU:b,hl:P,is:en,j_:D,jy:X,lN:q,mC:ei,m_:er,n4
+
+[9] U5mJ — tree实际渲染与draggable边。首选250，夹在minimum200与max(200,父pane逻辑宽*0.6)之间，额外CSS maxWidth60%。拖到100以下关闭。expanded/split没有独立tree width。小于333.33宽时JS minimum200与CSS60%的冲突需依原CSS布局处理，不能虚构另一个默认比例。
+File 907538.0572f09d40.js; offset UTF16 7256838; byte 7259663
+U5mJ(e,t,n){var r=n("ABep"),i=n("K45w"),a=n("LIss"),s=n("zTeN"),o=n("zd8w"),l=n("I7bK"),u=n("QESW"),d=n("FHYD"),c=n("gbrq"),p=n("wD9O"),h=n("Bbed"),_=n("MOsl"),m=n("Oj9r");let f=(0,r.jsx)("div",{className:"min-w-0 flex-1 px-1",children:(0,r.jsx)(_.R,{children:null})}),g=(0,h._)(async()=>(await Promise.all([n.e(435437),n.e(172613),n.e(265808)]).then(n.bind(n,"z5ha"))).WorkspaceFileTreeContent,{fallback:f,propagateLoadError:!0});n.d(t,{},{s:function(e){let t=(0,s.gh)(m.GD),n=(0,s.Ul)(c.vN),h=(0,s.Ul)(c.FA),_=(0,s.Ul)(c.r6),E=(0,o.useRef)(null),v=(0,p.dz)(),y=n&&("changed-files"===e.type||e.isLoading||e.roots.length>0),I=(0,o.useCallback)(e=>Math.min(Math.max(e,200),Math.max(200,(E.current?.parentElement?.getBoundingClientRect().width??window.innerWidth)/v*.6)),[v]),T=I(_),C=(0,i.d)(T);n||C.get()===T||C.set(T);let{isMounted:A,opacity:S,animatedSize:b}=(0,u.j)({animation:h,size:C,isVisible:y}),w=(0,o.useCallback)(e=>{if(e<(0,l.B7)(200))return void(0,c.Kt)(t,!1);let n=I(e);C.set(n),t.set(c.r6,n)},[C,I,t]);if(!A&&!y)return null;let O=null;return"changed-files"===e.type?O=e.children:e.isLoading?O=f:e.roots.length>0&&(O=(0,r.jsx)(g,{activeFilePath:e.activeFilePath??null,autoFocusSearch:e.autoFocusSearch,comparisonRoot:e.comparisonRoot,comparisonTarget:e.comparisonTarget,hostId:e.hostId,environmentId:e.environmentId,onSelectFile:e.onSelectFile,roots:e.roots})),(0,r.jsxs)(a.P.div,{ref:E,style:{maxWidth:"60%",opacity:S,width:b},className:"relative flex h-full shrink-0 border-l border-default",children:[(0,r.jsx)(d.$,{edge:"left",defaultSize:T,getCurrentSize:()=>C.get(),setSize:w}),O]})}})
+
+[10] 983280 nW — 有显式paneWidth override则优先，否则活动tab paneWidth，然后回退QcW8.VB。此证据没有穷举每种tab的override。
+File 983280.4074749967.js; offset UTF16 124534; byte 124544
+nW=(0,o.un)(c.GD,({get:e})=>{let t=e(w.It.activeTab$);return e(x.m6)??(null==t?e(x.Ey):t.tabType.paneWidth?.(t.props))??e(x.VB)}),nR=(0,o.un)(c.GD,({get:e})=>null!=e(w.It.activeTab$));function nF(e){let t,n,l,s,d,g,y,I,C,S,T,j,k,A,E,L,N,M,_,W,R,F,U,B,D,$,
+
+[11] 983280 outer pane hook — 实际先Mv自适应defaultWidth，再t7归一化；full模式初次初始化仍使用regular区间，full显示时宽度另取全部workspace。恢复split继续使用同一个ratio。isUnifiedWorkspace才选unified。
+File 983280.4074749967.js; offset UTF16 138173; byte 138183
+let _="regular";w?_="full":I&&(_="unified");let W=function(e,t,n,l){let r=(0,a.useRef)(null);if(r.current?.config===e)return r.current.widthRatio;let i=(0,nU.OQ)((0,K.t7)({...e,defaultWidth:(0,K.Mv)({defaultWidth:e.defaultWidth,mainContentWidth:t.get(),shellHeight:n.get()}),mainContentWidth:t.get(),widthMode:"unified"===l?"unified":"regular"}));return r.current={config:e,widthRatio:i},i}(A,T,C,_);x[5]!==A||x[6]!==C||x[7]!==T?(n=()=>(0,K.Mv)({defaultWidth:A.defaultWidth,mainContentWidth:T.get(),shellHeight:C.get()}),x[5]=A,x[6]=C,x[7]=T,x[8]=n):n=x[8];let R=n;x[9]!==W||x[10]!==S?(l=[S,W],x[9]=W,x[10]=S,x[11]=l):l=x[11],x[12]!==w||x[13]!==j||x[14]!==I?(r=e=>{let[t,n]=e;return j?0:w?t:(0,K.Ju)(n,t,I?"unified":"regular")},x[12]=w,x[13]=j,x[14]=I,x[15]=r):r=x[15];let F=(0,h.G)(l,r);x[16]!==W||x[17]!==T?(s=[T,W],x[16]=W,x[17]=T,x[18]=s):s=x[18],x[19]!==j||x[20]!==I?(d=e=>{let[t,n]=e;return j?0:(0,K.Ju)(n,t,I?"unified":"regular")},x[19]=j,x[20]=I,x[21]=d):d=x[21];let U=(0,h.G)(s,d),B=w?T:U;x[22]!==P||x[23]!==B?(c=[P,B],x[22]=P,x[23]=B,x[24]=c):c=x[24],x[25]!==w?(u=e=>{let[t,n]=e;return w?0:Math.max(0,Math.min(1,t))*n},x[25]=w,x[26]=u):u=x[
+
+[12] 983280 nF — Workspace pane separator。minimum320，allowPointerOverflow=true允许拖越界；低于B7(320)=160时关闭。defaultSize经vu根据当前primary/secondary语义和Mv默认计算。resizeEnd写原应用ratio，FORGE仅保留内存状态。
+File 983280.4074749967.js; offset UTF16 128265; byte 128275
+M=X&&!eT||ev?{allowPointerOverflow:!0,ariaLabel:el.formatMessage({id:"codex.appShell.resizeWorkspacePanes",defaultMessage:"Resize workspace panes",description:"Accessible label for the keyboard-operable divider between the chat and content workspace panes"}),defaultSize:()=>(0,K.vu)({primaryPane:et.get(P.dX)?"content":"chat",secondaryPane:et.get(n_),workspaceWidth:ee.get(),contentWidth:eo??V()}),extendIntoToolbar:!!eb&&null!=eg&&"titlebar",maximumSize:eE,minimumSize:320,hitArea:"after",layer:"document",onResizingChange:e=>{ex(e),eC.current=e?ee.get():null,e&&(eI.current=et.get(m.yN))},setSize:e=>(0,nA.$)(et,"pane_resize",()=>{if(eI.current&&null!=et.get(x.sY)&&0===et.get(w.It.tabs$).length)return;let t=e>=(0,v.B7)(320);et.get(m.SZ)!==t&&(t&&eI.current?(0,m.mC)(et,!0):(0,m.m_)(et,t));let n=eC.current??ee.get(),l=et.get(nR)&&e>(0,K.Ju)(1,n,eA)&&n-e<(0,v.B7)(320);(0,nN.X8)(et,l,{notifyTab:!1}),t&&!l&&Y.set((0,K.R2)(e,n,eA))}),onResizeEnd:e=>{let t=et.get(P.xI);if(ec&&null!=t&&e<(0,v.B7)(320))return void(0,nA.$)(et,"pane_resize",()=>{(0,nE.xO)(et,t,{mode:"full"}),et.set(x.ab,!0)});if(et.get(x.kF)){let e=et.get(w.It.activeTab$);e?.tabType.onEnterFullWidth?.(et,e.props);return}e<(0,v.B7)(320)||(0,K.AU)({mainContentWidth:ee.get(),storageKey:es.storageKey,width:e,widthMode:eA})}}
+
+[13] 983280 Root resize callback — workspace宽<=960且sidebar展开，或workspace宽<=720，收右pane；shell宽<=720控制左栏。这是尺寸变化回调，不等同于打开文件时自动收左栏。代码还含retainFullWidthOnWindowResize例外，需保留为原应用特例。
+File 983280.4074749967.js; offset UTF16 143040; byte 143050
+H=e=>{let{width:t,workspaceWidth:n}=e;t$.set(t);let l=null==n?ns.current:n<=960,a=null==n?nd.current:n<=720,r=t<=720,i=l!==ns.current,o=a!==nd.current,s=r!==nc.current;if(ns.current=l,nd.current=a,nc.current=r,!i&&!o&&!s)return;let d=tM&&s&&tp.get(m.co),u=d?tL&&!r:tN;if(null!=n){let e=tp.get(w.It.activeTab$);!(!tp.get(c.Rj)&&tp.get(m.SZ)&&tp.get(m.yN)&&tp.get(x.kF)&&e?.tabType.retainFullWidthOnWindowResize?.(e.props)===!0)&&(i&&u&&no&&l||o&&no&&a)?("right-panel"===tp.get(x.J8)&&(0,x.B4)(tp,"main"),tp.get(x.em)&&tp.set(x.em,!1),(0,m.Kg)(tp)):a||u&&l||(0,m.g3)(tp)}d&&(0,m.is)(tp,!r)},ts[102]=no,ts[103]=tL,ts[104]=tN,ts[105]=tM,ts[106]=tp,ts[107]=t$,ts[108]=H):H=ts[108];let l_=(0,ez.K)(H);ts[109]!==l_||ts[110]!==t$?(V=()=>(l_({width:t$.get()}),t$.on("change",e=>l_({width:e}))),q=[l_,t$],ts[109]=l_,ts[110]=t$,ts[111]=V,ts[112]=q):(V
+
+[14] 200114 WindowShell mainContentWidth — row宽tv减当前动画左栏宽Y(tC(...),tw(...),d)，再减mainContentInlineInset tL与trailingSidebar动画宽tK。FORGE可实测其main内容容器，不可用未经扣左栏的window.innerWidth。
+File 200114.81334159bb.js; offset UTF16 579447; byte 579491
+E=[tv,tx,tj,tL,tK],ep[55]=tx,ep[56]=tL,ep[57]=tv,ep[58]=tj,ep[59]=tK,ep[60]=E):E=ep[60],ep[61]!==d||ep[62]!==tw||ep[63]!==tC||!1!==ep[64]?(A=e=>{let[t,n,r,a,i]=e,o=(0,gb.Y)(tC(n,t),tw(r),d);return Math.max(0,t-o-a-i)},ep[61]=d,ep[62]=tw,ep[63]=tC,ep[64]=!1,ep[65]=A):A=ep[65];let tW=(0,ps.G)(E,A);
+
+[15] 200114 WindowShell measurement — ResizeObserver测workspace row，height写shellHeight(tO)，width写shellWidth(tv)。初始化fallback是window.innerHeight/innerWidth除windowZoom，但实际挂载后由row测量更新。
+File 200114.81334159bb.js; offset UTF16 582102; byte 582146
+B=e=>{let{height:t,width:n}=(0,ej.q)(e);tO.set(t),tv.set(n)},ep[115]=tO,ep[116]=tv,ep[117]=B):B=ep[117];let tq=(0,ew.wY)(B);ep[118]!==eI||ep[119]!==tW||ep[120]!==tq||ep[121]!==eC||ep[122]!==tO||ep[123]!==tv?(F=e=>{tq(e),null==e||eI||(tO.set(e.clientHeight),tv.set(e.clientWidth)),eC.set(gv.jU,null==e?null:tW.get())},ep[118]=eI,ep[119]=tW,ep[120]=tq,ep[121]=eC,ep[122]=tO,ep[123]=tv,ep[124]=F):F=ep[124];
+
+[16] 200114 row挂载 — 该row在titleBar/rootBanner/application menu topbar之后，是包住left panel、main workspace、trailing sidebar的flex-1行。shellHeight不应直接取含标题栏的整个window高度。
+File 200114.81334159bb.js; offset UTF16 587559; byte 587603
+"data-app-shell-workspace-row":!0,className:Y,children:[er,ea]}),ep[210]=tZ,ep[2
+
+[17] FHYD — pointer位置除windowZoom，指针差值和minimum/defaultSize使用逻辑尺寸。不要把160/100解释成固定物理屏幕像素。
+File 907538.0572f09d40.js; offset UTF16 2652450; byte 2655069
+let e=e=>({x:e.clientX/Y,y:e.clientY/Y}),t=t=>{let n=V.current;if(null==n||n.pointerId!==t.pointerId)return;t.preventDefault();let r=e(t);(z?r.x!==n.startPointer.x:r.y!==n.startPointer.y)&&(n.didMove=!0),n.lastSize=h(p(U,r,n,W),L?void 0:N,L?void 0:R),M(n.lastSize)},n=()=>{let e=V.current;null!=e&&(V.current=null,e.didMove&&P?.(e.lastSize),e.captureTarget.hasPointerCapture?.(e.p
+
+[18] FHYD — detail===2（双击）用defaultSize，夹至minimum/maximum，再setSize与onResizeEnd。
+File 907538.0572f09d40.js; offset UTF16 2654193; byte 2656812
+l=e=>{if(2!==e.detail)return;e.preventDefault(),V.current=null,K(!1),k?.(!1);let t=h("function"==typeof T?T():T,N,R);M(t),P?.(t)},g[18]=T,g[19]=R,g[20]=N,g[21]=P,g[22]=k,g[23]=M,g[24]=l):l=g
+
+Resize hide / restore state machine — further bounded inspection
+
+Mapping (gbrq):
+SZ = actual right panel shell visibility, yN = content tabs selected/open, K = forced detail-owner lease, V = lease count, z = nullable resize restore snapshot.
+z initial null; K initial false; yN initial false. Left auto-resize flag co/N initial true; an explicit sidebar action pK disables it (sets N=false). Automatic sidebar change uses is/en and does not disable it.
+Kg unconditionally snapshots z = SZ ? (yN ? "tabs" : "detail") : "closed". If SZ is true, it calls er(false,{closeReason:"window-resize"}), preserving z and bypassing the forced-owner close guard. It clears yN/em while hiding; it does not close content tabs.
+g3: saved "tabs" -> ei(true), saved "detail" OR active forced-owner K -> er(true), saved "closed" with K false -> clear z. Opening through er clears z. Restoration is one-shot.
+Ordinary er(false) with K false clears z and closes; later resize cannot reopen it. With K true, ordinary close only deselects tabs and clears em, leaving required detail shell and z intact. This is an explicit native forced-content exception, not a reason for FORGE to invent a forced-owner feature.
+ei(true) sets em from existing hy==="full"; Kg clears em but does not change hy. Thus restore can reapply the retained width mode. Source-specific retained-full exception is additionally described below.
+
+Resize callback's 3 refs start false, false, false: previous workspace<=960, previous workspace<=720, previous shell<=720. They store threshold categories, not raw width.
+The initial shell-only callback preserves prior workspace categories and can trigger initial sidebar auto-collapse at shell<=720. The first workspace ResizeObserver sample counts as a crossing when it is <=960 or <=720, because those refs start false. A wide first sample can return without action. There is no explicit ignore-first-measurement guard.
+No action occurs if all 3 categories are unchanged, even if some other state (sidebar visibility, manual opening, eligibility) has changed. Do not enforce the hide policy on every open or every React render.
+The resize input "workspaceWidth" is q(mainSurfaceResizeEntry).width + leftPanelViewportWidth.get(); it includes the visible left panel. This differs from DUYS mainContentWidth which excludes the left panel.
+rightEligible/no is ni&&!nt, with ni=!tH&&!ne&&showRightPanel, not actual SZ/open. This matters for repeated narrower threshold crossings.
+
+Equivalent control flow (bindings keep source semantics):
+  narrow960 = workspaceWidth is absent ? previous960 : workspaceWidth<=960
+  narrow720 = workspaceWidth is absent ? previous720 : workspaceWidth<=720
+  shellNarrow720 = shellWidth<=720
+  crossing960/720/shell = new categories differ from the stored refs
+  store new categories
+  if none of the 3 changed: return
+  autoLeftChange = isLeftPanelCollapsible && crossingShell && sidebarAutoFlag(co)
+  expandedLeft = autoLeftChange ? (hasKnownLeftPanel && !shellNarrow720) : isExpandedLeftPanelVisible
+  if workspaceWidth is present:
+    keepFull = !routeGuard(c.Rj) && actualRightOpen(SZ) && tabsOpen(yN) &&
+               contentFullWidthGuard(x.kF) &&
+               activeTab.tabType.retainFullWidthOnWindowResize?.(props)===true
+    if !keepFull && ((crossing960 && expandedLeft && rightEligible && narrow960) ||
+                     (crossing720 && rightEligible && narrow720)):
+      if focus was right-panel: focus main
+      clear transient expanded(em)
+      Kg() // always snapshots current actual visibility
+    else if !(narrow720 || (expandedLeft && narrow960)):
+      g3()
+  if autoLeftChange: setSidebarVisible(!shellNarrow720) via is/en
+
+Boundary examples for the native callback (assuming rightEligible=true, no forced owner/full-retain exception):
+- 1100 -> 900 with left expanded: save tabs/detail and hide. 900 -> 1100: restore once.
+- 1100 -> 900 with left already collapsed: crossing960 does not hide. 900 -> 700: crossing720 hides regardless of expandedLeft.
+- 1100 -> 900 (hide) -> 700: the second crossing calls Kg again while SZ=false, overwriting the old snapshot with "closed". Returning wide does not reopen. This is what the source does; preserving the earliest snapshot would be a FORGE product deviation.
+- Manual close after a resize hide clears the snapshot (without forced-owner lease), so returning wide stays closed.
+- Manually opening a pane while already in the same narrow category is not immediately undone by this callback.
+- User manual sidebar toggle disables native automatic sidebar show/hide at shell720. Sidebar change alone without one of the 3 category changes does not run the hide/restore policy.
+- Full mode is exempt only for the stated tab capability and native guard conjunction, not for every expanded/full pane.
+- The meaning of routeGuard(c.Rj) was not traced beyond its route-scope boolean default=false; keep it named as an unresolved native-specific guard.
+
+Smallest FORGE transplant consistent with its single preview:
+- Keep separate actual open, nullable resize snapshot ("open"/"closed"), width-mode intent, three threshold refs, and any existing manual-sidebar preference.
+- Run the source-equivalent policy only from actual measurement-category crossings; use entire workspace-row width for960/720 and main content width only forDUYS.
+- Automatic hiding snapshots current actual state and retains file tabs and width ratio. Explicit user open/close clears the auto-restore snapshot.
+- Restore once when allowed by current categories; preserve manual close. Native repeated-crossing overwrite and full/forced-owner exceptions should be explicitly documented if omitted or changed.
+- Do not create native route/tab/lease concepts that FORGE does not have; those remain stated parity limits.
+
+Additional verbatim evidence:
+
+[R1] File 907538.0572f09d40.js; offset UTF16 2661854; byte 2664473
+N=(0,s.vP)(c.u,!0),P=(0,s.vP)(c.u,!1),k=(0,s.vP)(c.u,()=>new Set),D=(0,s.un
+
+[R2] File 907538.0572f09d40.js; offset UTF16 2662888; byte 2665507
+$=(0,s.vP)(p.l7,!1),K=(0,s.vP)(p.l7,!1),V=(0,s.vP)(p.l7,0),z=(0,s.vP)(p.l7,null),X=(0,g.m3)(C,!0),Z=(0,s.bD)(c.u,e=>Q(e,!1!==
+
+[R3] File 907538.0572f09d40.js; offset UTF16 2664229; byte 2666848
+BX:function(e){return e.set(V,e.get(V)+1),e.set(K,!0),null==e.get(z)&&er(e,!0,{animate:!1}),()=>{e.set(V,Math.max(e.get(V)-1,0)),queueMicrotask(()=>{0===e.get(V)&&(e.set(K,!1),er(e,!1))})}},CC:W,FA:ee,Fu:Z,IT:function(){null==(0,f.TB)(I,void 0)&&(0,f.jx)(I,!1)},Im:U,K3:A,Kg:function(e){let
+
+[R4] File 907538.0572f09d40.js; offset UTF16 2665391; byte 2668010
+pK:function(e,t,n={}){e.set(N,!1),en(e,t,n)},r6:et,rV:R,s1:w,sJ:L,t1:H,vA:G,v
+
+[R5] File 983280.4074749967.js; offset UTF16 134628; byte 134638
+ni=!tH&&!ne&&void 0!==tu&&tu,no=ni&&!nt,ns=(0,a.useRef)(!1),nd=(0,a.useRef)(!1),nc=(0,a.useRef)(!1),nu=(0,o.Ul)(x.sY),nh=(0,o.Ul)(x.em),np=(0,o.Ul)(m.SZ),nf=(0,o.Ul)(x.eN)&&tG,nm=(
+
+[R6] File 983280.4074749967.js; offset UTF16 143763; byte 143773
+V=()=>(l_({width:t$.get()}),t$.on("change",e=>l_({width:e}))),q=[l_,t$],ts[109]=l_,ts[110]=t$,ts[111]=V,ts[112]=q):(V=ts[111],q=ts[112]),(0,a.useLayoutEffect)(V,q),ts[113]!==tz||ts[114]!==l_||ts[115]!
+
+[R7] File 983280.4074749967.js; offset UTF16 144367; byte 144377
+workspaceWidth:l+tF.get()})})},ts[113]=tz,ts[114]=l_,ts[115]=tA,t
+
+[R8] File 983280.4074749967.js; offset UTF16 155982; byte 155992
+ref:lR,className:em,style:lA,"data-codex-history-swipe-page":!0,"data-app-shell-main-surface":"default",tabIndex:-1,children:[eb,eg,ev,eI,l3,e9,te]}),

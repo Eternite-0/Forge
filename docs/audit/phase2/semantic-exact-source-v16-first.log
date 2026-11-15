@@ -1,0 +1,21 @@
+.........................F..                                             [100%]
+================================== FAILURES ===================================
+____________ test_semantic_task_identity_can_reopen_an_older_quest ____________
+tests\test_router_semantic_recall_v16.py:83: in test_semantic_task_identity_can_reopen_an_older_quest
+    result = asyncio.run(router.handle_user_message(query, request_id="old-semantic"))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+src\forge_core\router.py:1207: in handle_user_message
+    raise DomainError("Router context changed concurrently")
+E   forge_core.domain.DomainError: Router context changed concurrently
+=========================== short test summary info ===========================
+FAILED tests/test_router_semantic_recall_v16.py::test_semantic_task_identity_can_reopen_an_older_quest
+1 failed, 27 passed in 2.71s

@@ -1,0 +1,17 @@
+{
+  "scope": "Only two production Mock graph fixture selections changed; manual generation retains the legacy fixture. No assertion or wait-call AST changed.",
+  "files": {
+    "backend/tests/test_m4_integration.py": {
+      "assertions_unchanged": true,
+      "assertion_count": 76,
+      "wait_calls_unchanged": true,
+      "wait_call_count": 10
+    },
+    "backend/tests/test_m4_adversarial.py": {
+      "assertions_unchanged": true,
+      "assertion_count": 13,
+      "wait_calls_unchanged": true,
+      "wait_call_count": 0
+    }
+  }
+}

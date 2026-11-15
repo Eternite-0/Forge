@@ -1,4 +1,69 @@
-"""Worker checkpoint and budget tables; migration runs inside the v7 transaction."""
+"""Worker checkpoint, budget tables and the delivery contract.
+
+The default delivery schema preserves older, narrower approved role contracts.
+The native Composer's explicit schema selection requires all eight fields; Core
+validates that contract without inserting defaults into the model's result.
+"""
+
+from copy import deepcopy
+
+DELIVERY_OUTPUT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "summary": {"type": "string"},
+        "findings": {"type": "array", "maxItems": 20, "items": {"type": "string"}, "default": []},
+        "decisions": {"type": "array", "maxItems": 20, "items": {"type": "string"}, "default": []},
+        "artifacts": {"type": "array", "maxItems": 20, "items": {"type": "string"}, "default": []},
+        "evidence_references": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {"type": "string"},
+            "default": [],
+        },
+        "unresolved_issues": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {"type": "string"},
+            "default": [],
+        },
+        "confidence": {"type": "number", "default": 0},
+        "next_actions": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {"type": "string"},
+            "default": [],
+        },
+    },
+    "required": ["summary"],
+    "additionalProperties": False,
+}
+
+DELIVERY_FIELDS = (
+    "summary",
+    "findings",
+    "decisions",
+    "artifacts",
+    "evidence_references",
+    "unresolved_issues",
+    "confidence",
+    "next_actions",
+)
+
+# Explicit null in a native TeamWire selects this complete delivery contract.
+# Keep a separate copy so existing direct roles and approved schemas retain
+# their original meaning when the native contract changes.
+STRICT_DELIVERY_OUTPUT_SCHEMA = deepcopy(DELIVERY_OUTPUT_SCHEMA)
+STRICT_DELIVERY_OUTPUT_SCHEMA["required"] = list(DELIVERY_FIELDS)
+STRICT_DELIVERY_OUTPUT_SCHEMA["properties"]["confidence"].update(minimum=0, maximum=1)
+
+# Pre-v2 approved contracts may omit an output schema. Preserve their narrow
+# meaning and context reservation; newly composed roles bind the delivery schema.
+LEGACY_OUTPUT_SCHEMA = {
+    "type": "object",
+    "properties": {"summary": {"type": "string"}},
+    "required": ["summary"],
+    "additionalProperties": False,
+}
 
 
 def migrate_worker(connection):

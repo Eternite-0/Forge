@@ -1,0 +1,97 @@
+{
+  "candidate": {
+    "answers": [],
+    "citations": [],
+    "completed": false,
+    "retained_constraints": [
+      "Evaluate select for every supplied input pair in order; return its integer outputs.",
+      "Follow the exact branch order, including equality and negative values.",
+      "Sources not present must not be guessed."
+    ]
+  },
+  "case_id": "code-2",
+  "context_cap": 16384,
+  "context_records_sha256": "568e127f29579f07798d6d4d9595b29b0d5a7bbbe9f8ce4eef4e05f548ccbf87",
+  "cost": null,
+  "difficulty": 2,
+  "domain": "code_contract",
+  "duration_seconds": 2.666897200018866,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": false,
+    "obligations_retained": 0,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer",
+      "source_evidence",
+      "lost_obligation",
+      "not_completed"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_e390aba67fd3",
+      "receipt_id": "receipt_8b601d8f1511",
+      "sha256": "8a93a7eede5f0940adacc7da9a143c360155f671ffdd8c541f839d96dad86a5a",
+      "source_id": "function"
+    },
+    {
+      "intent_id": "action_364bdfd425c6",
+      "receipt_id": "receipt_c92fde96951b",
+      "sha256": "91eb257a8a6839dcca14fb49aebae2d3e1fac6e0a9390d78bcc04e835c9ac48c",
+      "source_id": "inputs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_8aa1c0063999",
+      "duration_seconds": 2.3306160000211094,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "439a495df6a5cb8a23a80629e1cddcdc039e39d773adc38f48823ce6332124c8",
+      "response_sha256": "e0adcd5f3ad7d23d8277717a774a4d1d742a050befbe12cbf510d0ed5967734d",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 444,
+        "output_tokens": 58
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_8aa1c0063999",
+        "cost_charged": null,
+        "input_charged": 444,
+        "input_reserved": 3113,
+        "output_charged": 58,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 444,
+    "known_input_tokens": 444,
+    "known_output_tokens": 58,
+    "model_calls": 1,
+    "output_tokens": 58,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "recency_truncation"
+}

@@ -1,0 +1,76 @@
+{
+  "acceptance": {
+    "checks": {},
+    "failed_checks": [],
+    "passed": null,
+    "status": null,
+    "unknown_checks": []
+  },
+  "actual_final_status": null,
+  "artifact_hashes": [],
+  "code_snapshot_sha256": null,
+  "compaction": {
+    "archive_created": null,
+    "rebuilt_messages": null,
+    "source_count": null,
+    "source_readback_available": null
+  },
+  "context_archives": null,
+  "conversation_count": null,
+  "cost": null,
+  "driver_final_status": null,
+  "duration_seconds": null,
+  "execution_mode": "live",
+  "failures": [
+    "composer_did_not_propose_team"
+  ],
+  "inspection_error": null,
+  "level": "L1",
+  "model_attempts": [],
+  "model_attempts_omitted": 0,
+  "model_calls": null,
+  "model_settlement_wait": {
+    "timeout_seconds": null,
+    "unsettled_attempts": null,
+    "waited_seconds": null
+  },
+  "publication_scope": "Allowlisted summaries of already-redacted live-driver records. Prompt/reply/log/artifact content omitted; unknown usage/cost preserved. A completed Quest alone does not establish scenario acceptance.",
+  "restart": {
+    "after": null,
+    "initial_router_identity": null,
+    "restored_router_identity": null,
+    "router_identity_retained": null,
+    "same_workspace": null
+  },
+  "retry_accounting": null,
+  "retry_breakdown": {
+    "background_notice_retries": null,
+    "provider_http_retries": null,
+    "review_revision_requests": null,
+    "worker_self_repairs": null
+  },
+  "retry_count": null,
+  "review_results": [],
+  "router_status": 200,
+  "run_id": "20261114T220634Z-L1",
+  "runtime_settings": {
+    "model_concurrency_limit": null,
+    "model_token_limit": null,
+    "provider_max_retries": null,
+    "provider_timeout_seconds": null,
+    "reasoning_effort": null,
+    "review_max_rounds": null,
+    "worker_lease_seconds": null
+  },
+  "scenario_id": null,
+  "schema_version": 1,
+  "semantic_test_runs": null,
+  "token_usage": {
+    "input": null,
+    "output": null,
+    "unknown_attempts": null
+  },
+  "tool_calls": null,
+  "tools": [],
+  "workers": []
+}

@@ -1,0 +1,35 @@
+.F.......................................................                [100%]
+================================== FAILURES ===================================
+____________ test_semantic_task_identity_can_reopen_an_older_quest ____________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-672/test_semantic_task_identity_ca0')
+
+    def test_semantic_task_identity_can_reopen_an_older_quest(tmp_path):
+        provider = RouterSelector("placeholder")
+        store, router = prepared(tmp_path, provider)
+        target = Quest(title="Nebula", goal="Construct a safe priority queue", status="completed")
+>       store.save_quest(target)
+
+backend\tests\test_router_semantic_recall_v16.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\store.py:306: in save_quest
+    return self._write("save_quest", quest, conversation_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\store.py:294: in _write
+    return getattr(work, method)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.store.UnitOfWork object at 0x0000026573BCF950>
+quest = Quest(id='quest_8d4bbffdee70', title='Nebula', goal='Construct a safe priority queue', status=<QuestStatus.COMPLETED: ... priority=3, created_at='2026-11-15T08:12:05.536325+00:00', updated_at='2026-11-15T08:12:05.536338+00:00', metadata={})
+conversation_id = 'main'
+
+    def save_quest(self, quest, conversation_id="main"):
+        if quest.status != QuestStatus.PROPOSED or quest.version != 0:
+>           raise DomainError("New Quest must begin proposed at version zero")
+E           forge_core.domain.DomainError: New Quest must begin proposed at version zero
+
+backend\src\forge_core\store.py:64: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_router_semantic_recall_v16.py::test_semantic_task_identity_can_reopen_an_older_quest
+1 failed, 56 passed in 9.17s

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="18" time="11.890" timestamp="2026-11-15T16:49:24.029346+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_predecessor_delivery_v17" name="test_full_original_delivery_reads_without_mutation_and_uses_declared_bound" time="0.524" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_current_reader_modes_do_not_authorize_execution_after_delivery" time="0.658" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_running_successor_reads_exact_preserved_producer_after_remaining_dag" time="0.645" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage" time="1.386"><failure message="forge_core.domain.DomainError: Remaining DAG requires an approved parent plan">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-710/test_real_core_read_tool_messa0')
+
+    def test_real_core_read_tool_message_and_historical_reader_revalidate_after_lineage(tmp_path):
+        store, manager, model, quest, plan, _, reader, expected = prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool(TOOL_NAME, {"node_key": "producer"}),
+                tool(
+                    "file_write", {"path": "work/review.json", "content": '{"checked":true}'}, ordinal=2
+                ),
+                response(delivery("Read the complete predecessor.")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            call = connection.execute(
+                "SELECT * FROM worker_tool_calls WHERE run_id=? AND tool_name=?",
+                (reader["id"], TOOL_NAME),
+            ).fetchone()
+            assert _verify_worker_context_call(store, connection, reader["id"], call)
+            assert json.loads(call["result_json"])["delivery"] == expected
+        assert NodeVerifier(store).verify(quest.id, "reader")["status"] == "completed"
+        original = read(store, reader, historical=True)
+&gt;       successor(store, manager, quest, plan, new_reader=False)
+
+backend\tests\test_predecessor_delivery_v17.py:272: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_predecessor_delivery_v17.py:188: in successor
+    proposal = graphs.propose_remaining(
+backend\src\forge_core\quest_graph.py:406: in propose_remaining
+    parent = self._remaining_parent(connection, quest)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x000001A5F920F2E0&gt;
+quest = &lt;sqlite3.Row object at 0x000001A5F92FD8A0&gt;
+
+    @staticmethod
+    def _remaining_parent(connection, quest):
+        from .worker_recovery import unresolved_calls
+    
+        parent = connection.execute(
+            "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+            (quest["id"], quest["plan_revision"]),
+        ).fetchone()
+        if (
+            parent is None
+            or parent["status"] not in {"approved", "paused"}
+            or quest["status"]
+            not in {"approved", "queued", "paused", "blocked", "needs_input", "running"}
+        ):
+&gt;           raise DomainError("Remaining DAG requires an approved parent plan")
+E           forge_core.domain.DomainError: Remaining DAG requires an approved parent plan
+
+backend\src\forge_core\quest_graph.py:356: DomainError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[artifact]" time="0.508" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[suite_evidence]" time="0.699" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[source_state]" time="0.517" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[source_result]" time="0.459" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[reader_scope]" time="0.442" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[reader_contract]" time="0.477" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[edge]" time="0.429" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[current_approval]" time="0.527" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_read_rejects_tampered_authority_lineage_or_original_evidence[lineage_goal]" time="0.862" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_whole_delivery_over_bound_is_rejected_without_truncation" time="0.562"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'approved byte bound'&#10;  Actual message: 'Completed-delivery source failed validation'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-710/test_whole_delivery_over_bound0')
+
+    def test_whole_delivery_over_bound_is_rejected_without_truncation(tmp_path):
+        store, manager, _, _, _, _, reader, _ = prepared(tmp_path, summary="x" * 3000)
+        manager._claim(reader["id"])
+&gt;       with pytest.raises(DomainError, match="approved byte bound"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'approved byte bound'
+E         Actual message: 'Completed-delivery source failed validation'
+
+backend\tests\test_predecessor_delivery_v17.py:330: AssertionError</failure></testcase><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[None]" time="0.898" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[tool_result]" time="0.869" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_review_packet_preserves_complete_handoff_and_requires_own_fresh_pass[tool_message]" time="0.771" /><testcase classname="tests.test_predecessor_delivery_v17" name="test_predecessor_source_bytes_count_all_fields_in_review_envelope" time="0.001" /></testsuite></testsuites>

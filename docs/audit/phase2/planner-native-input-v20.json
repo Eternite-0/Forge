@@ -1,0 +1,150 @@
+{
+  "scope": "offline_recorded_real_Router_shapes_production_native_serializer",
+  "external_provider_calls_sent": 0,
+  "cases": [
+    {
+      "level": 1,
+      "repair": false,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 26440,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 14621,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "verified_input_count": 3,
+          "complete_original_request": true
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "repair": true,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 26440,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 14621,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "verified_input_count": 3,
+          "complete_original_request": true
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 27056,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 14621,
+          "original_request_sha256": "1faf1abaa9856893b61d6cb16f52f7530949db7c848980c20e39bf81f146ec66",
+          "verified_input_count": 3,
+          "complete_original_request": true
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "repair": false,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 27314,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 15503,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "repair": true,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 27314,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 15503,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 27930,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 15503,
+          "original_request_sha256": "0186bf53667909ed35b322ff61bb26d1a578a49c3b48ab3ab2052e90172a5193",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "repair": false,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28168,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 16357,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "repair": true,
+      "requests": [
+        {
+          "stage": "initial",
+          "native_request_bytes_plus_64": 28168,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 16357,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        },
+        {
+          "stage": "repair",
+          "native_request_bytes_plus_64": 28784,
+          "response_reserve": 4096,
+          "context_limit": 65536,
+          "policy_bytes": 2883,
+          "schema_bytes": 3580,
+          "user_context_bytes": 16357,
+          "original_request_sha256": "289cae568a8f95b2f5ba786af47404492df1121b4da5250a42401a43ff402062",
+          "verified_input_count": 4,
+          "complete_original_request": true
+        }
+      ]
+    }
+  ]
+}

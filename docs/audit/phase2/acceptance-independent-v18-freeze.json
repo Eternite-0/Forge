@@ -1,0 +1,101 @@
+{
+  "scope": "Immutable V18 freeze/static/preservation observation. No tests, Provider calls or runtime database reads. This is not strict live or Phase 2 acceptance.",
+  "generated_at": "2026-11-15T09:40:55.743793+00:00",
+  "source_version": "v18",
+  "auditor_script_sha256": "3da6d6293045489173e9fcb6d17d59b249515ea39929d73cfe41fb68757c60ef",
+  "source_freeze": {
+    "manifest": {
+      "path": "docs/audit/phase2/source-manifest-v18.json",
+      "bytes": 36351,
+      "sha256": "ac91d0391af31a3676344d141afa6ef2b673aefc29ff8391a2b0372693f449d5"
+    },
+    "manifest_sha256": "794621474be2b8bbfba2bb807e7c2944a46645c34913b5741b973f2505be3347",
+    "canonical_manifest_matches": true,
+    "declared_files": 203,
+    "actual_entries": 203,
+    "python_files": 199,
+    "duplicate_paths": [],
+    "missing_files": [],
+    "changed_files": [],
+    "inventory_omissions": [],
+    "inventory_extras": [],
+    "executable_snapshot_sha256": "6d78ffe9c9edb466aaa8bbad0e4c220b16e13f8df91e282c1f020bbc75c6f4fb",
+    "passed": true
+  },
+  "static_checks": [
+    {
+      "name": "ruff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-ruff-v18.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "result": "All checks passed!",
+      "passed": true
+    },
+    {
+      "name": "format",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-format-v18.log",
+        "bytes": 28,
+        "sha256": "692aa17a66e5a48293d97156d9c8b2690bef0a98514251662ef4832003fb0463"
+      },
+      "result": "199 files already formatted",
+      "passed": true
+    },
+    {
+      "name": "pip",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-pip-v18.log",
+        "bytes": 31,
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      },
+      "result": "No broken requirements found.",
+      "passed": true
+    },
+    {
+      "name": "diff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-diff-v18.log",
+        "bytes": 25,
+        "sha256": "f6a7d2113895ff7c42d5ce1b8ed901898e65102abf499b98eebd4c7ba5a0c7a2"
+      },
+      "result": "git diff --check: passed",
+      "passed": true
+    }
+  ],
+  "preservation": {
+    "evidence": {
+      "path": "docs/audit/phase2/preservation-v18.json",
+      "bytes": 211779,
+      "sha256": "e55523fb7f7631a5d6f0a00505ea34f23d44618a79b2242150228c8899e4cd59"
+    },
+    "phase1_evidence_checked": 355,
+    "phase1_reports_checked": 9,
+    "byte_mismatches": [],
+    "original_test_count": 364,
+    "missing_tests": [],
+    "changed_test_ast": [
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_composer_only_approved_plan_events",
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_planner_events_to_independent_consumer",
+      "backend/tests/test_live_context_probe_offline.py::test_probe_fixtures_restart_and_report_with_mock_gateway",
+      "backend/tests/test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt",
+      "backend/tests/test_m4_integration.py::test_authenticated_graph_controls_survive_restart_without_running_worker",
+      "backend/tests/test_m4_integration.py::test_graph_planner_sends_strict_wire_schema_through_gateway",
+      "backend/tests/test_m4_integration.py::test_planner_refuses_stale_quest_after_model_call",
+      "backend/tests/test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message",
+      "backend/tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database",
+      "backend/tests/test_migrations.py::test_each_migration_step",
+      "backend/tests/test_migrations.py::test_v8_component_failure_rolls_back_v7_data",
+      "backend/tests/test_worker_runtime.py::test_model_can_request_bounded_help_without_spawning_or_gaining_tools",
+      "backend/tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves",
+      "backend/tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget",
+      "backend/tests/test_workspace_backup_m7.py::test_v7_snapshot_is_migrated_in_staging_before_publish"
+    ],
+    "changed_test_ast_matches_disclosure": true,
+    "assertion_disclosure_mismatches": [],
+    "new_skip_or_xfail_decorators": [],
+    "passed": true
+  },
+  "checks_passed": true
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "Unchanged original test called in a new C temp directory with error-code instrumentation only.",
+  "case_directory": "C:\\Users\\msi\\AppData\\Local\\Temp\\forge-startup-io-z4f7xzu4",
+  "observed": [
+    {
+      "test": "passed"
+    }
+  ]
+}

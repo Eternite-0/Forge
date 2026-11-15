@@ -37,6 +37,7 @@ EVENT_TITLES = {
 SAFE_TOOLS = {
     "file_read",
     "file_write",
+    "file_revise",
     "directory_list",
     "directory_create",
     "shell_inspect",
@@ -159,6 +160,7 @@ def read_timeline(store, *, before=None, limit=100):
             if tool in {
                 "file_read",
                 "file_write",
+                "file_revise",
                 "directory_list",
                 "directory_create",
                 "git_status",

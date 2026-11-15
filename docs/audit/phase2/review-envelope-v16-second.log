@@ -1,0 +1,109 @@
+...........F..                                                           [100%]
+================================== FAILURES ===================================
+___ test_native_review_then_revision_then_fresh_pass_within_original_cycle ____
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-651/test_native_review_then_revisi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020DC88CB360>
+
+    def test_native_review_then_revision_then_fresh_pass_within_original_cycle(tmp_path, monkeypatch):
+        store, manager, model, worker = new_pending(tmp_path, monkeypatch)
+        original = manager.get(worker["id"])
+        posted = []
+    
+        def handle(request):
+            body = json.loads(request.content)
+            posted.append(body)
+            verdict = (
+                {
+                    "verdict": "NEEDS_REVISION",
+                    "findings": ["Clarify the exact inspected source."],
+                    "revision_goals": [
+                        "State the complete inspected source name and preserve evidence."
+                    ],
+                    "confidence": 0.8,
+                }
+                if len(posted) == 1
+                else {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+            )
+            assert body["max_tokens"] == 1024 and not body.get("tools")
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [{"message": {"content": _json(verdict)}, "finish_reason": "stop"}],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ProviderGateway(
+            ProviderConfig(
+                id="protocol",
+                kind="openai_compatible",
+                base_url="https://example.invalid/v1",
+                credential_ref="FORGE_PROVIDER_KEY_TEST",
+                supports_tools=True,
+            ),
+            credential_resolver=lambda _: "fixture",
+            transport=httpx.MockTransport(handle),
+            budget_ledger=ModelCallBudgetLedger(store.path, token_limit=200000, concurrency_limit=1),
+        )
+        manager.providers = ProviderPool({"protocol": gateway})
+        with store.connection() as connection:
+            connection.execute("PRAGMA query_only=ON")
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+            packet = _packet(store, connection, row)
+            old_hash = _hash(packet)
+            measured = measure_review_envelope(connection, row, gateway, packet)
+            assert measured["native_input_reservation"] < envelope()["max_review_input_tokens"]
+            assert measured["raw_packet_bytes"] < 65536
+            assert connection.total_changes == 0
+            assert review_cycle_state(connection, worker["id"], envelope())["reviews_remaining"] == 2
+        service = IndependentReviewService(manager)
+        first = asyncio.run(service.review(worker["id"]))
+        assert first["verdict"] == "NEEDS_REVISION" and first["revision_applied"]
+        with store.connection() as connection:
+            stage = review_cycle_state(connection, worker["id"], envelope())
+            assert stage["reviews_remaining"] == stage["correction_calls_remaining"] == 1
+            assert stage["correction_started"]
+        # The correction model is synchronous/offline; Reviewer calls still use the
+        # actual Gateway and native ledger, without fabricated attempt rows.
+        model.responses.append(
+            response(delivery("Inspected complete work/input.txt; unchanged evidence retained."))
+        )
+        manager.providers = ProviderPool({"protocol": model})
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        manager.providers = ProviderPool({"protocol": gateway})
+        with store.connection() as connection:
+            stage = review_cycle_state(connection, worker["id"], envelope())
+            assert stage["reviews_remaining"] == 1 and stage["correction_calls_remaining"] == 0
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+>           assert _hash(_packet(store, connection, row)) != old_hash
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:241: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\independent_review.py:344: in _packet
+    assignment = _review_assignment(store, connection, run)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:283: in _review_assignment
+    else authority.get_historical_approved(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x0000020DC89429D0>
+quest_id = 'quest_fdd1307c68dc', plan_revision = 1
+proposal_digest = 'ddabce94885d25994285f29049f695edc82a85e930a0ebfadf79baeb392e64f6'
+connection = <sqlite3.Connection object at 0x0000020DC88DA3E0>
+run_id = 'run_04d4d739ed24'
+
+    def get_historical_approved(
+        self, quest_id, plan_revision, proposal_digest, *, connection, run_id
+    ):
+        """Validate past approval for evidence only; never authorizes new execution."""
+        if not connection.in_transaction:
+>           raise DomainError("Team validation requires caller-owned write transaction")
+E           forge_core.domain.DomainError: Team validation requires caller-owned write transaction
+
+backend\src\forge_core\team_composition.py:1130: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_review_envelope_phase2.py::test_native_review_then_revision_then_fresh_pass_within_original_cycle
+1 failed, 13 passed in 2.34s

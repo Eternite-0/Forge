@@ -1,0 +1,86 @@
+{
+  "generated_at": "2026-11-15T13:02:21.780241+00:00",
+  "source_version": "v23",
+  "scope": "Immutable independent interpretation of original frozen XML/log and source ZIP. No tests, runtime DB reads, Provider calls or original record changes.",
+  "boundary_record": {
+    "path": "docs/audit/phase2/acceptance-independent-v23-boundary.json",
+    "bytes": 8824,
+    "sha256": "64c2379761f0bfcaef01a7fc054b3e1451dcb32fa34f026f6d5457921cf744f2"
+  },
+  "original_suite_evidence": [
+    {
+      "path": "docs/audit/phase2/frozen-tests-v23.xml",
+      "bytes": 258825,
+      "sha256": "a9aa5ad0a7e447b4fa91f09e930021153cb4e9e28ffcd32c328b6e6db6ab8a8c"
+    },
+    {
+      "path": "docs/audit/phase2/frozen-tests-v23.log",
+      "bytes": 6217,
+      "sha256": "318b69e97c61b5d04df4e528f83a504bf458c4c1cc5eeec2879b28c76cabe392"
+    }
+  ],
+  "historical_source_archive": {
+    "path": ".local/phase2/source-snapshot-v23.zip",
+    "bytes": 826313,
+    "sha256": "10b6367b2cd2ca70cd7c72a60f160bf507bc210f8912b1c866f3371c0fc5284a"
+  },
+  "suite_result": {
+    "tests": 1715,
+    "failures": 5,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 1710,
+    "warnings": 1,
+    "console_seconds": 412.81,
+    "passed_gate": false
+  },
+  "testcase_elements": 1715,
+  "failed_test_cases": [
+    {
+      "classname": "tests.test_m4_adversarial",
+      "name": "test_expired_planner_attempt_cannot_modify_new_attempt[False]",
+      "message": "assert False",
+      "failure_text_sha256": "81d4bfbbb7ed6bb9f5b68d9d12f179026d201bcf44110915ac080cbf06e23837",
+      "failure_text_bytes": 581
+    },
+    {
+      "classname": "tests.test_m4_adversarial",
+      "name": "test_expired_planner_attempt_cannot_modify_new_attempt[True]",
+      "message": "assert False",
+      "failure_text_sha256": "81d4bfbbb7ed6bb9f5b68d9d12f179026d201bcf44110915ac080cbf06e23837",
+      "failure_text_bytes": 581
+    },
+    {
+      "classname": "tests.test_m4_integration",
+      "name": "test_user_turn_automatically_plans_once_without_extra_user_message",
+      "message": "AssertionError: Background dispatch did not reach the expected state",
+      "failure_text_sha256": "45183dadc7b197ef0f89e50b3e468568c21baadaac3c4907736efee0b2572d65",
+      "failure_text_bytes": 391
+    },
+    {
+      "classname": "tests.test_worker_runtime",
+      "name": "test_v7_worker_opening_migrates_once_with_known_reserves",
+      "message": "sqlite3.OperationalError: table worker_core_source_reads already exists",
+      "failure_text_sha256": "cf35959f690032f5fc984772afa7bddf8ed067f5c37bfc66d502700bca80bde1",
+      "failure_text_bytes": 495
+    },
+    {
+      "classname": "tests.test_worker_runtime",
+      "name": "test_v8_active_worker_enters_output_review_without_changing_team_or_budget",
+      "message": "sqlite3.OperationalError: table worker_core_source_reads already exists",
+      "failure_text_sha256": "2648c5232abd8c7c6b8a32dc6f733444ab057a5c216f18ddefa7ff85f9395133",
+      "failure_text_bytes": 513
+    }
+  ],
+  "counts_match": true,
+  "archived_migration_fixture_observation": {
+    "test_source_sha256": "4056d8f77388bc8dc047bc8bd552b1297258d3254b09e851bc30e6e8079fee4f",
+    "prefetch_source_sha256": "d69a7f82b8f21d770f986f41e28e105b73c6e0ca5bf7bf86c2d0c079f8bc7007",
+    "v7_fixture_mentions_new_core_table": false,
+    "v8_fixture_mentions_new_core_table": false,
+    "production_create_is_fail_closed": true
+  },
+  "interpretation": "Five original failures remain failures. Two old-schema reconstruction fixtures retained the V23 Core table while lowering schema_meta, so the fail-closed migration correctly rejected duplicate CREATE TABLE; repair the disposable old-schema fixtures rather than silently accepting an ambiguous schema. The remaining failures concern expired Planner attempt fixtures and background automatic planning. Static/preservation/usage success does not pass this suite.",
+  "original_records_changed": false,
+  "phase2_complete": false
+}

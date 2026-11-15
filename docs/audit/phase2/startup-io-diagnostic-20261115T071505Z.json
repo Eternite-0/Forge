@@ -1,0 +1,9 @@
+{
+  "scope": "Isolated invocation of unchanged original startup test with read-only error-code instrumentation; no provider credential lookup or settings change.",
+  "case_directory": "D:\\Competition_this\\Agent\\.local\\phase2\\startup-io-diagnostic-20261115T071505Z",
+  "observed": [
+    {
+      "test": "passed"
+    }
+  ]
+}

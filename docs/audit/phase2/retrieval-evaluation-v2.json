@@ -1,0 +1,166 @@
+{
+  "dataset": "phase2-retrieval-v1",
+  "dataset_sha256": "6d4dd52492b4bb9e55db3dcbff5f5bd49ddfa260665504356097eeede92a533b",
+  "execution_mode": "synthetic",
+  "retrieval_method": "bounded lexical index with bilingual alias expansion",
+  "model_calls": 0,
+  "source_identity_cases": [
+    {
+      "case_id": "budget-bilingual",
+      "expected_sources": [
+        "message:msg_eval_budget"
+      ],
+      "returned_sources": [
+        "message:msg_eval_budget"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_budget": "ac61ab2710bed69f358c6b91ad977cf39a008c783e86923a63c7b13b890d9d61"
+      },
+      "latency_ms": 3.9,
+      "returned_bytes": 621,
+      "omitted": 0
+    },
+    {
+      "case_id": "retention-bilingual",
+      "expected_sources": [
+        "message:msg_eval_retention"
+      ],
+      "returned_sources": [
+        "message:msg_eval_retention"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_retention": "1ebf45ab0ed723551dc6b781c2c9b4516953c6b212fe007250a2ecc6bc974b17"
+      },
+      "latency_ms": 3.97,
+      "returned_bytes": 626,
+      "omitted": 0
+    },
+    {
+      "case_id": "language-keyword",
+      "expected_sources": [
+        "message:msg_eval_language"
+      ],
+      "returned_sources": [
+        "message:msg_eval_language"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_language": "5caef1fd9ee5b8b9dcc039bdd5cad715b2a3b827dbb3fac08b1e6e3657921e79"
+      },
+      "latency_ms": 3.242,
+      "returned_bytes": 622,
+      "omitted": 0
+    },
+    {
+      "case_id": "deadline-bilingual",
+      "expected_sources": [
+        "message:msg_eval_deadline"
+      ],
+      "returned_sources": [
+        "message:msg_eval_deadline"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_deadline": "87ec7608cd33ac6554d5d1ca66b77a5a5da29e1d81a5c3038699ba5ba1fd26d1"
+      },
+      "latency_ms": 4.23,
+      "returned_bytes": 617,
+      "omitted": 0
+    },
+    {
+      "case_id": "path-exact",
+      "expected_sources": [
+        "message:msg_eval_artifact"
+      ],
+      "returned_sources": [
+        "message:msg_eval_artifact"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_artifact": "b9e6a3b4aa29ebab0be4e31beaf8097bbb8df9c2dcc686adb0fe459104110714"
+      },
+      "latency_ms": 3.528,
+      "returned_bytes": 553,
+      "omitted": 0
+    },
+    {
+      "case_id": "decision-record",
+      "expected_sources": [
+        "message:msg_eval_decision"
+      ],
+      "returned_sources": [
+        "message:msg_eval_decision"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_decision": "bece3294dc831e7acd275aec89b83c3672e634d282c8b2436b5131cf84dae255"
+      },
+      "latency_ms": 3.159,
+      "returned_bytes": 546,
+      "omitted": 0
+    },
+    {
+      "case_id": "quest-identity",
+      "expected_sources": [
+        "quest:quest_eval_research"
+      ],
+      "returned_sources": [
+        "quest:quest_eval_research"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "quest:quest_eval_research": "d379bede5a79ceddaea6b095dfcca7419809d9bc2cf4e51d2f6c2652b90bfb56"
+      },
+      "latency_ms": 3.15,
+      "returned_bytes": 605,
+      "omitted": 0
+    },
+    {
+      "case_id": "quest-constraint-link",
+      "expected_sources": [
+        "message:msg_eval_deadline"
+      ],
+      "returned_sources": [
+        "message:msg_eval_deadline"
+      ],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {
+        "message:msg_eval_deadline": "87ec7608cd33ac6554d5d1ca66b77a5a5da29e1d81a5c3038699ba5ba1fd26d1"
+      },
+      "latency_ms": 3.749,
+      "returned_bytes": 617,
+      "omitted": 0
+    },
+    {
+      "case_id": "time-exclusion",
+      "expected_sources": [],
+      "returned_sources": [],
+      "passed": true,
+      "source_hash_complete": true,
+      "returned_source_hashes": {},
+      "latency_ms": 4.181,
+      "returned_bytes": 0,
+      "omitted": 0
+    }
+  ],
+  "passed": 9,
+  "total": 9,
+  "success_rate": 1.0,
+  "duration_seconds": 0.17,
+  "limitations": [
+    "Nine exploratory fixed synthetic cases; not a held-out generalization result.",
+    "Measures source identity and provenance after storage restart, not domain truth.",
+    "Alias expansion is limited lexical retrieval, not embedding or learned semantic retrieval.",
+    "No real Provider calls or user task quality measurements."
+  ]
+}

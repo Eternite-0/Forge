@@ -1,0 +1,363 @@
+Native shell / navigation / conversation source audit
+Date: 2026-11-16
+Scope: static source reads only. No bundle execution, native UI automation, or product edits.
+
+SOURCE AUTHORITY AND LOCATORS
+
+Reference root: D:/crack/chatgpt-ui
+The reference README identifies the dumped application as OpenAI.Codex26.1111.21308
+(Electron 157.0.8103.78). Its assets require native MessagePort RPC; app/public/app.js
+is a reconstruction and is not the authoritative component call chain.
+
+The JavaScript and CSS below are original shipped assets under mirror/webview/assets/async.
+Offsets are zero-based Unicode character offsets, not byte offsets; these minified files
+are normally one line. Use file + module/function + excerpt together as the locator.
+live/conversation.json.html is the saved native HTML. spec/structure.md is a secondary
+DOM blueprint; spec/conversation-structure.json labels its own URL __replica/conversation.html,
+so its computed dimensions are cross-checks, not independent evidence for original JS behavior.
+
+1. ROOT FONT SIZE AND SPACING: UI 14px IS NOT ROOT 14px
+
+File: mirror/webview/assets/async/66582da7ee6b.css
+Offset 4362, @layer theme :root,:host:
+  --spacing:.25rem;
+Offset 4857, same theme tokens:
+  --text-base:14px;--text-base--line-height:calc(1.5 / 1);
+Offset 159948, base:
+  html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;
+    font-family:var(--default-font-family,...);
+    font-feature-settings:var(--default-font-feature-settings,normal);
+    font-variation-settings:var(--default-font-variation-settings,normal);
+    -webkit-tap-highlight-color:transparent}
+Offset 163335:
+  html,:host{font-synthesis-weight:none}
+Offset 163882:
+  html,:host{color:var(--color-text);-webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;letter-spacing:var(--tracking-normal)}
+
+No font-size declaration exists on these html/:root/:host base rules. The saved native
+live/conversation.json.html starts with:
+  <html ... data-codex-window-type="electron" data-codex-os="win32"
+    data-codex-window-chrome="application-menu" style="...
+    --font-code-size: 12px; --font-ui-size: 14px; ... --text-base: 14px;
+    --text-sm: 13px; --text-xs: 12px; ...">
+It also has no inline html font-size. Therefore 14px here is a UI token, while rem uses
+the browser's root default (normally 16px). That yields spacing 4px, consistent with
+the captured 52px header (=13*4), 8px surface top inset (=2*4), 4px right/bottom gutter.
+The CSS occurrences of --spacing:4px found in other chunks are .root-BSFpJ0 checkout
+scope, and do not establish a shell override.
+
+FORGE implication: current :root font-size:14px with --spacing:.25rem yields 3.5px.
+Set an independent 4px spacing token, or preserve root16 and give body/UI14. Do not
+claim that setting html14 copies the native UI14 token; rem geometry then contracts 12.5%.
+
+2. NATIVE DOM HIERARCHY AND LEFT PANEL
+
+spec/structure.md captured dimensions at 1422x804:
+  Layout / PageSurfaceLayout / ApplicationMenuPageSurfaceLayout 1422x804
+    ApplicationMenuTopBar 1418x36
+    relative flex workspace shell 1418x764
+      PageSurface 1366x756
+      aside.LeftPanel.ResponsiveLeftPanel 340x756
+        content flex
+          nav.group/sidebar-rail 52x756
+          .sidebar-navigation.ConversationSidebar 288x756
+      .Workspace (display:contents)
+        header 1078x52
+        .MainContentClip 1078x764
+          main.MainContentSurface.MainContentLeftBorder 1078x756
+            .WorkspaceContent 1077x756
+              .MainContentViewport 1077x704
+                .MainContentFrame 1077x704
+
+Original default total-left-panel width source:
+File: mirror/webview/assets/async/907538.0572f09d40.js
+Module qbQ6, offset 2665495 (module begins just after gbrq):
+  let i="sidebar-width";
+  function a(){return s((0,r.TB)(i,340))}
+  function s(e,t=1/0,n=240){return Number.isFinite(e)
+    ?Math.max(n,Math.min(e,520,t-240)):Math.max(340,n)}
+  n.d(t,{hh:()=>240},{I$:s,TD:a,
+    fy:function(e){(0,r.jx)(i,s(e))},lr:function(e){},
+    mk:"(min-width: 768px)",nY:function(){return a()}})
+
+340 is total left shell width; 288 is the captured residual navigation after rail52.
+The earlier 272 sidebar design belongs to another/different reference state and must
+not override this native shell capture. Native resizing supports total width240..520,
+also limited by viewport-240. Native persistence calls are source evidence only:
+do not port storage behavior, because the FORGE user prohibited local/sessionStorage.
+
+Rail renderer:
+File: mirror/webview/assets/async/200114.81334159bb.js
+function t$ around150186; class construction offset150868:
+  "group/sidebar-rail relative flex min-h-0 shrink-0 flex-col items-center
+   gap-2 px-2 pb-2 select-none browser:w-13 browser:gap-0 browser:px-0
+   browser:pt-0 browser:[--height-token-nav-row:36px]
+   browser:[--height-token-row:36px] browser:[--padding-row-cell-x:8px]
+   browser:[--padding-row-x:8px] ..."
+It renders nav aria-label App navigation and data-app-navigation-rail=true.
+browser:w-13 is a variant class; the frozen native 52px width is the measured cross-check.
+
+Navigation root renderer offset542017:
+  (tz||eH||eB||"browser-popover"===eN||"rail-only"!==tr) && jsx("div",{
+    ref:eO,"data-sidebar-navigation-root":true,
+    className:classes("relative flex min-h-0 min-w-0 flex-1 flex-col
+      overflow-hidden sidebar-navigation", ... "ConversationSidebar-EDF_I4"),
+    style:tC,children:[...]})
+The rail and this conditional navigation root are siblings in one flex row. Rail-only
+is a first-class state; collapse does not imply removing the rail. The captured
+settings behavior should be implemented by collapsing/hiding the project panel,
+while preserving required real FORGE destinations and existing accessible names.
+
+Navigation animation and focus, same file function pm around501000..505500:
+  let W=w?void 0:"",H=!w;
+  jsx(motion.div,{ref:F,"data-slate-sidebar-content":true,
+    className:"flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden sidebar-navigation",
+    "data-sidebar-collapsed":W,inert:H,style:{opacity:R,transform:D},children:...})
+Before render it restores focus to a collapsed sidebar trigger with preventScroll:true
+when keyboard focus was inside the disappearing panel. Thus a visual width0 panel
+must also be inert/hidden from keyboard navigation; merely shrinking its CSS width
+does not reproduce the interaction.
+
+3. SHELL CALL CHAIN: SHARED PAGE SURFACE, SEPARATE HEADER, MAIN AND PREVIEW
+
+File: mirror/webview/assets/async/983280.4074749967.js
+RWLM CSS module map near1163:
+  Workspace:"Workspace-IfYAxV",WorkspaceContent:"WorkspaceContent-dnr6uY",
+  ApplicationMenuTopBar:"ApplicationMenuTopBar-SLuX8q",...
+
+Render chain, offsets150457..157200:
+  e3 = div("flex h-full min-h-0 min-w-0 flex-1 flex-col outline-none",
+    data-app-shell-focus-area:"main",inert:nM,children:pageContent)
+  e4 = div("relative flex min-h-0 flex-1
+    [--thread-content-responsive-max-width:var(--thread-content-expanded-max-width,inherit)]
+    @max-thread-expanded/app-shell-main-content:
+      [--thread-content-responsive-max-width:var(--thread-content-compact-max-width,inherit)]",
+    children:[topFade,e3])
+  e5 = motion.div(MainContentFrame,style:{width:lm},children:[toolbar,banner,e4])
+  e6 = div(MainContentViewport,
+    data-app-shell-workspace-layout:nu?.mode,
+    data-app-shell-main-content-layout:nx,
+    data-app-shell-right-panel-full-width:nv,inert:nM,children:e5)
+  e7 = nF({getContentPaneDefaultWidth:ls,contentPaneWidth:lc,
+    contentPaneWidthRatio:lu,isPrimaryFullWidth:nr,isContentPaneOpen:no,
+    widthMode:lf,workspaceWidth:tB})
+  e9 = div(WorkspaceContent,children:[e6,e7])
+  tt = main(MainContentSurface,... children:[banners,e9,bottomPanel])
+  tn = div(MainContentClip,children:tt)
+  tr = motion.div(Workspace,
+    data-app-shell-unified-tab-strip:nE,
+    data-app-shell-compact-page-gutter:lK,
+    data-app-shell-header-placement:lV,
+    data-app-shell-page-surface:lq,... children:[header,tn])
+
+Original CSS, mirror/webview/assets/async/1a537644288e.css:
+  .Workspace-IfYAxV{display:contents}                    [around1900]
+  .WorkspaceContent-dnr6uY{
+    --thread-floating-content-top-inset:calc(var(--spacing)*2);
+    --thread-floating-content-bottom-inset:calc(var(--spacing)*2)}
+  .MainContentViewport-OinMfT{                           [around9430]
+    --app-shell-main-content-frame-top-offset:var(--height-toolbar);
+    --thread-content-top-inset:calc(var(--spacing)*8);
+    flex-direction:column;flex:1;min-width:0;min-height:0;display:flex;position:relative}
+  .MainContentFrame-sss8BP{
+    margin-top:var(--app-shell-main-content-frame-top-offset);
+    flex-direction:column;flex:1;min-width:100%;min-height:0;
+    display:flex;position:relative;container:app-shell-main-content/inline-size}
+  .PageSurface-g2Llyi{                                  [around15500]
+    inset-block:var(--app-shell-titlebar-height) 0;
+    inset-inline:var(--app-shell-navigation-rail-width) 0;
+    border-radius:var(--app-shell-window-radius,var(--radius-xl-base));
+    box-shadow:var(--app-shell-page-surface-shadow);
+    pointer-events:none;position:absolute}
+
+PageSurface rules around18800:
+  .PageSurfaceLayout-oqnRfB{
+    --app-shell-titlebar-height:var(--height-titlebar);
+    --app-shell-page-header-offset:var(--app-shell-titlebar-height);
+    --app-shell-page-inline-end-inset:var(--spacing);
+    --sidebar-navigation-header-height:calc(var(--spacing)*13);
+    padding-block-end:var(--spacing);
+    padding-inline-end:var(--app-shell-page-inline-end-inset)}
+  .PageSurfaceLayout ... .MainContentSurface[data-app-shell-main-surface=default]{
+    margin-top:var(--app-shell-titlebar-height);
+    border-radius:var(--radius-xl-base);background-color:var(--color-surface)}
+  .ApplicationMenuPageSurfaceLayout-yb71ay{                [around23900]
+    --app-shell-titlebar-height:calc(var(--spacing)*2)}
+  .Layout[data-app-shell-application-menu-header]{
+    --app-shell-titlebar-top-inset:var(--app-shell-titlebar-height);
+    --app-shell-header-height:var(--sidebar-navigation-header-height)}
+  .Layout[data-app-shell-application-menu-header] .WorkspaceContent{
+    padding-block-start:var(--app-shell-header-height)}
+
+ApplicationMenuTopBar CSS around2299..2631:
+  z-index:40;height:var(--height-toolbar-sm);
+  -webkit-app-region:drag;user-select:none;align-items:center;display:flex;
+  padding-inline-start:var(--spacing-token-safe-header-left);
+  padding-inline-end:var(--spacing-token-safe-header-right)
+  button/link descendants are no-drag.
+66582da7ee6b.css offset10872 explicitly defines --height-toolbar-sm:36px.
+
+Thus the real Windows application-menu arrangement contains a36px application menu,
+8px page-surface top inset and52px page header. The 52px is13*spacing through
+app-shell-header-height, not the generic electron --height-toolbar46px token.
+FORGE's Tauri/OS window chrome is a different host. Do not add a fake File/Edit menu
+or count nonexistent native chrome simply to mimic total screenshot coordinates.
+
+Surface continuity:
+  outer .sidebar-navigation background=surface65% transparent via color-mix(in oklab),
+  start corners use --app-shell-window-radius fallback --radius-xl-base;
+  [data-app-shell-page-sidebar=true] main start corners are0.
+  ApplicationMenuPageSurface main/pageSurface end-end corner uses --radius-xs-base.
+The project panel and main page join as one surface; applying separate fully-rounded
+bordered cards to each creates an unsupported seam. The source uses base radii for
+shell corners, distinct from scaled card radii12.5px; shell radius-xl-base=.75rem
+(12px with default root16), not the scaled --radius-xl15px.
+
+Responsive native breakpoint around13000:
+  @media not all and (width>=768px){
+    .Layout[data-app-shell-responsive-sidebar=true]{--app-shell-left-panel-width:0px}
+    ... .ResponsiveLeftPanel{display:none}
+    ... .MainContentLeftBorder{border-left:0}}
+This does not establish a universal1360px auto-collapse threshold for opening previews.
+
+4. PREVIEW / CONTENT PANE SIZE AND CLOSE STATE: ACTUAL FUNCTIONS
+
+File:983280.4074749967.js
+Import K=n("DUYS") offset44729; m=n("gbrq") offset41553.
+function nF around124700..130300 is the content pane renderer.
+It uses animated visibility/size from eX.j({animation:eh,size:q,isVisible:X});
+the main surface and content pane are siblings, not overlay cards.
+The splitter spec around128000:
+  defaultSize:()=>K.vu({primaryPane:store.get(P.dX)?"content":"chat",
+    secondaryPane:store.get(n_),workspaceWidth:ee.get(),contentWidth:eo??V()}),
+  maximumSize:K.Ju(1,workspaceWidth,widthMode),minimumSize:320,
+  hitArea:"after",layer:"document"
+On resize it switches pane visibility at the zoom-adjusted320 threshold, updates
+full-width state if remaining chat would be under320, and on resize-end can enter
+mode full. If continuing a hidden content pane, onEnterFullWidth can be invoked.
+
+File:907538.0572f09d40.js module DUYS offset2636320:
+  function i(e,t,n="regular"){
+    let r=Number.isFinite(e)?e:600,a=s(t,n);
+    return Math.max(Math.min(320,a),Math.min(r,a))}
+  function s(e,t){return "full"===t?Math.max(320,e)
+    :Math.max(320,e-("unified"===t?320:352))}
+  function o(e,t){let n=s(e,t);return{maximum:n,minimum:Math.min(320,n)}}
+  Ju(e,t,n="regular") { ... interpolate min..max ... }
+  Mv({defaultWidth:e,mainContentWidth:t,shellHeight:n}){
+    return 600!==e?e:Math.max(320,
+      Math.min(1.6*n,t-500),Math.min(640,t-352))}
+  vu({primaryPane:e,secondaryPane:t,workspaceWidth:n,contentWidth:r}){
+    return e===t?n/2:"chat"===e?r:n-r}
+
+Native supports min320 and computed default, with role-sensitive half split. It is
+not a fixed600 minimum or arbitrary41..60 percent default. Its persistence helpers
+must not be copied into FORGE (user storage restriction).
+
+gbrq state module same file offset2661091; er around2663537:
+  function er(store,open,opts={}){
+    if(!open&&opts.closeReason!=="window-resize"&&store.get(lock)){ ...;return }
+    opts.closeReason!=="window-resize"&&store.set(remembered,null);
+    store.set(v.SZ,open); ... animate or set visibility ...;
+    open||(store.set(tabsOpen,false),store.set(v.em,false))}
+  ei toggles tab/content state and calls er.
+Exports mC:ei,m_:er,CC:W(animation),yN:$(tabs state).
+No verified native rule discovered saying “opening preview at1360 always closes
+the left navigation”. Such a breakpoint is a FORGE adaptation and must be labeled so.
+
+5. CONVERSATION WIDTH, FLOATING COMPOSER AND SCROLL RESERVE
+
+File:907538.0572f09d40.js module KkZX offset7819596:
+  let l=classes(
+    "[--thread-content-max-width:var(--thread-content-responsive-max-width,inherit)]",
+    "[--thread-body-max-width:calc(var(--thread-content-max-width)+var(--thread-body-inline-padding,0px)*2)]",
+    "mx-auto w-full max-w-(--thread-body-max-width)",
+    "px-[var(--thread-body-inline-padding,var(--padding-toolbar))]");
+  exports Aj:l,HW:u,cS:d.
+The responsive width token comes from shell main-content container, and the body
+adds insets around that width. Do not combine a736px wrapper with extra internal
+padding that accidentally shrinks the736px usable conversation column.
+The captured computed user/assistant usable content width is736px (spec/components),
+while global default body token in66582...css is48rem. Those facts should not be
+collapsed into an unconditional native “all modes max736” claim.
+
+File:344734.3322725bda.js
+imports R=r("KkZX") around4417.
+Footer rendering around29500..30900:
+  div(className:classes("footer-A8ZvKV",...,
+    "pointer-events-none absolute inset-x-0 z-20 ...",
+    isHome?[...]:"bottom-0"),children:
+      div(ref:measureFooter,className:"relative w-full shrink-0 ...",
+        data-thread-scroll-footer:"true",children:[leading,
+          div(className:classes("relative z-10 flex flex-col *:pointer-events-auto",
+            compact?undefined:R.Aj,...),data-pip-obstacle:"thread-footer",
+            data-thread-composer-backdrop:!isHome||undefined,children:[...,composer])]))
+
+Main structure around31000..34500:
+  div("group/thread-scroll-layout ... relative h-full flex-1")
+    div("thread-scroll-container ... h-full ... flex flex-col",
+      role:conversation?"region":"presentation",children:[
+        div("[container-type:inline-size] flex min-h-full shrink-0 flex-col ...",
+          children:[
+            transcript div(R.Aj,"relative flex flex-1 shrink-0 flex-col ... pb-8"),
+            ...,
+            spacer div("pointer-events-none mt-auto w-full shrink-0
+              h-[calc(var(--thread-scroll-padding-bottom)-var(--spacing)*4)]")
+          ]),
+        ...,
+        footer
+      ])
+Footer is absolute within a relative full-height ancestor and coexists with an
+explicit scroll reserve; it is not a normal flow footer below the timeline.
+
+Measurement around28031:
+  n.style.setProperty("--thread-scroll-padding-bottom",`${r+rT}px`)
+  ... only scroll if at end / direction permits, otherwise preserve reading position.
+ResizeObservers also watch transcript/viewport changes around16300 and20298.
+
+File:20dca5934f5d.css offset4224, footer backdrop:
+  .footer-A8ZvKV{anchor-scope:--thread-composer}
+  ...:before{background:linear-gradient(to bottom,transparent,
+    var(--color-surface) calc(100% - var(--composer-radius)));top:50%;bottom:0}
+  ...:after{background:var(--color-surface);top:100%;bottom:0}
+  @supports(anchor-scope:--thread-composer){... uses anchor compositor center/bottom ...}
+Pointer-events:none on overlay shell plus pointer-events:auto on controls lets empty
+overlay space pass through. Flat opaque full-width footer bars will look different.
+
+6. DIRECTLY PORTABLE RULES / EXPLICIT FORGE DEVIATIONS
+
+Directly supported by original sources + captured DOM:
+  - rail52 + residual project navigation288 = total default340;
+  - single connected page surface, no individual panel-card outlines;
+  - right and bottom surface gutters4; application-menu surface inset8;
+  - UI14 independent of rem root sizing; spacing4 with browser root default16;
+  - project/sidebar collapse owns opacity/transform, inert and focus recovery;
+  - preview/main siblings, native min320 and viewport-sensitive default width;
+  - container-centered content and floating composer with measured scroll reserve;
+  - actual shell base radius12, card scaled radius12.5 are separate values.
+
+FORGE adaptations / deviations observed before integration during this audit:
+  - desktop/src/usePreviewLayout.ts custom1360 left-collapse threshold;
+  - custom preview600 minimum / ratio41..60% if still present;
+  - .conversation-shell toolbar/timeline/composer regular flex flow;
+  - :root font-size14 with rem-based spacing compresses geometry;
+  - .chat-workspace radius12.5 is a card radius; native shell uses base radius;
+  - Tauri host chrome differs from native Electron application-menu chrome.
+These need deliberate product decisions or corrections; they are not verified native
+behavior and should not be described as a1:1 copy.
+
+INTEGRATION ADDENDUM
+After completing the read-only audit, parent authorized CSS-only implementation.
+desktop/src/style.css now applies8px shell top inset /4px right-bottom gutters,
+joined main corners0/12/4/0 with only a0.5px logical left divider, compact shell
+corners12/12/4/12, floating footer z20 with measured transcript bottom reserve,
+pointer pass-through on empty footer area,16px bottom inset, and16px/24px user text.
+The parent independently implemented root16/body14 and ported DUYS sizing functions;
+those changes are outside this agent's edits. The parent also added the existing
+footer ResizeObserver's --conversation-footer-height measurement used by the CSS.
+The <=760px flat mobile shell and home footer clearance are FORGE adaptations.
+TypeScript noEmit and git diff --check returned exit0 after the CSS integration.
+Browser and complete test/build verification belongs to the parent integration.
+Preserve FORGE security, IME, polling reading position, existing accessible names,
+and user storage restrictions when extending these findings.

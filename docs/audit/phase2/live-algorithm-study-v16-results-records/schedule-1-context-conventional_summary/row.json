@@ -1,0 +1,119 @@
+{
+  "candidate": {
+    "answers": [],
+    "citations": [],
+    "completed": false,
+    "retained_constraints": []
+  },
+  "case_id": "schedule-1",
+  "context_cap": 16384,
+  "context_records_sha256": "49587b1b4010131fc3958f44e50c03daf16a1b1f11a9755fae66671c916655fe",
+  "cost": null,
+  "difficulty": 1,
+  "domain": "integer_scheduling",
+  "duration_seconds": 4.807181399984984,
+  "execution_mode": "live",
+  "family": "context",
+  "http_retries": 0,
+  "output_cap": 512,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": false,
+    "obligations_retained": 0,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer",
+      "source_evidence",
+      "lost_obligation",
+      "not_completed"
+    ]
+  },
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_1052f701ce0b",
+      "receipt_id": "receipt_2b723af307fd",
+      "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_1b9aa8992747",
+      "receipt_id": "receipt_c14c04b636a1",
+      "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_20d4204b311d",
+      "duration_seconds": 2.6863444999908097,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "d30444dc09843c3a3d05cfde0f13cbec0e1bb2a33d1db8ac40339d859b07ceb4",
+      "response_sha256": "d348627130c05f2605db0630a7decc0fb016c0a737963d97b79bb930577704bc",
+      "schema_valid": true,
+      "stage": "summary",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 0,
+        "input_tokens": 758,
+        "output_tokens": 259
+      }
+    },
+    {
+      "call_id": "study_call_7b0bc15537ff",
+      "duration_seconds": 1.7586178000201471,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "62d672d30171b7f8f2bb95243d80616040e8cefc0faed2bbb290e045c728e913",
+      "response_sha256": "363ac876264ace1233b2d38957becdad31e8e94ea1c20172d883978a7e3911e6",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 128,
+        "input_tokens": 618,
+        "output_tokens": 21
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_20d4204b311d",
+        "cost_charged": null,
+        "input_charged": 758,
+        "input_reserved": 3313,
+        "output_charged": 259,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_summary",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_7b0bc15537ff",
+        "cost_charged": null,
+        "input_charged": 618,
+        "input_reserved": 3566,
+        "output_charged": 21,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1376,
+    "known_input_tokens": 1376,
+    "known_output_tokens": 280,
+    "model_calls": 2,
+    "output_tokens": 280,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "conventional_summary"
+}

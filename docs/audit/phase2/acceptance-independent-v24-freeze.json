@@ -1,0 +1,137 @@
+{
+  "scope": "Immutable source freeze/static/preservation and exact ZIP observation. No tests, Provider calls or runtime DB reads. Full-suite, strict-live and Phase 2 acceptance remain separate.",
+  "generated_at": "2026-11-15T13:10:36.949416+00:00",
+  "source_version": "v24",
+  "auditor_script_sha256": "3da6d6293045489173e9fcb6d17d59b249515ea39929d73cfe41fb68757c60ef",
+  "freeze_driver": {
+    "path": ".local/phase2/audit_freeze_version.py",
+    "bytes": 6475,
+    "sha256": "2088ea4753a22344a71dd4e0c2d55d803d46ef387bbb4a09fed8ec784e714bce"
+  },
+  "expected_identity": {
+    "version": "v24",
+    "expected_manifest": "5c74c045034d4f770d90e844a24663b426f7f1f219c76032a0d2c2851a46dff6",
+    "expected_executable": "427bc515fb6ff830c40662ab88d9e5e98e8e9137058a56e0140a8c9f61bf2bd2",
+    "expected_file_count": 234,
+    "expected_python_count": 229,
+    "expected_zip_sha256": "bda0bb80e318dafd60fc3a3e572e61748f6ab13aecddc0ab08fe510d2614fda5",
+    "expected_zip_bytes": 835525
+  },
+  "source_freeze": {
+    "manifest": {
+      "path": "docs/audit/phase2/source-manifest-v24.json",
+      "bytes": 41972,
+      "sha256": "d091e019b094bda7abddd890595c68149724b5886863534545b1fa520536472f"
+    },
+    "manifest_sha256": "5c74c045034d4f770d90e844a24663b426f7f1f219c76032a0d2c2851a46dff6",
+    "canonical_manifest_matches": true,
+    "declared_files": 234,
+    "actual_entries": 234,
+    "python_files": 229,
+    "duplicate_paths": [],
+    "missing_files": [],
+    "changed_files": [],
+    "inventory_omissions": [],
+    "inventory_extras": [],
+    "executable_snapshot_sha256": "427bc515fb6ff830c40662ab88d9e5e98e8e9137058a56e0140a8c9f61bf2bd2",
+    "passed": true,
+    "explicit_identity_checks": {
+      "executable_matches_manifest": true,
+      "manifest_matches_expected": true,
+      "executable_matches_expected": true,
+      "file_count_matches_expected": true,
+      "python_count_matches_expected": true
+    }
+  },
+  "source_snapshot": {
+    "evidence": {
+      "path": ".local/phase2/source-snapshot-v24.zip",
+      "bytes": 835525,
+      "sha256": "bda0bb80e318dafd60fc3a3e572e61748f6ab13aecddc0ab08fe510d2614fda5"
+    },
+    "members": 234,
+    "uncompressed_bytes": 3214849,
+    "duplicate_paths": [],
+    "missing_paths": [],
+    "extra_paths": [],
+    "content_differences": [],
+    "expected_archive_identity_matches": true,
+    "passed": true
+  },
+  "static_checks": [
+    {
+      "name": "ruff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-ruff-v24.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "result": "All checks passed!",
+      "passed": true
+    },
+    {
+      "name": "format",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-format-v24.log",
+        "bytes": 28,
+        "sha256": "c1b38a9478b031b6d4bd55b5f933dd2ac57ed867adb55152d400e81451810b51"
+      },
+      "result": "229 files already formatted",
+      "passed": true
+    },
+    {
+      "name": "pip",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-pip-v24.log",
+        "bytes": 31,
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      },
+      "result": "No broken requirements found.",
+      "passed": true
+    },
+    {
+      "name": "diff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-diff-v24.log",
+        "bytes": 25,
+        "sha256": "f6a7d2113895ff7c42d5ce1b8ed901898e65102abf499b98eebd4c7ba5a0c7a2"
+      },
+      "result": "git diff --check: passed",
+      "passed": true
+    }
+  ],
+  "preservation": {
+    "evidence": {
+      "path": "docs/audit/phase2/preservation-v24.json",
+      "bytes": 211779,
+      "sha256": "9cba92ac331ed2af906794bd0ecf4dd94bb8ee9be5ebd4364280c4dedc77d7f7"
+    },
+    "phase1_evidence_checked": 355,
+    "phase1_reports_checked": 9,
+    "byte_mismatches": [],
+    "original_test_count": 364,
+    "missing_tests": [],
+    "changed_test_ast": [
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_composer_only_approved_plan_events",
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_planner_events_to_independent_consumer",
+      "backend/tests/test_live_context_probe_offline.py::test_probe_fixtures_restart_and_report_with_mock_gateway",
+      "backend/tests/test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt",
+      "backend/tests/test_m4_integration.py::test_authenticated_graph_controls_survive_restart_without_running_worker",
+      "backend/tests/test_m4_integration.py::test_graph_planner_sends_strict_wire_schema_through_gateway",
+      "backend/tests/test_m4_integration.py::test_planner_refuses_stale_quest_after_model_call",
+      "backend/tests/test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message",
+      "backend/tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database",
+      "backend/tests/test_migrations.py::test_each_migration_step",
+      "backend/tests/test_migrations.py::test_v8_component_failure_rolls_back_v7_data",
+      "backend/tests/test_worker_runtime.py::test_model_can_request_bounded_help_without_spawning_or_gaining_tools",
+      "backend/tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves",
+      "backend/tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget",
+      "backend/tests/test_workspace_backup_m7.py::test_v7_snapshot_is_migrated_in_staging_before_publish"
+    ],
+    "changed_test_ast_matches_disclosure": true,
+    "assertion_disclosure_mismatches": [],
+    "new_skip_or_xfail_decorators": [],
+    "passed": true
+  },
+  "checks_passed": true
+}

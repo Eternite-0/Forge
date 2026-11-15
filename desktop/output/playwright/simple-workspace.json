@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 81,
+  "mutations": [
+    {
+      "path": "/api/quests/quest-alpha/plan/approve",
+      "payload": {
+        "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "plan_revision": 3,
+        "expected_version": 7
+      }
+    },
+    {
+      "path": "/api/quests/quest-alpha/teams/approve",
+      "payload": {
+        "expected_version": 8,
+        "plan_revision": 3,
+        "proposal_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      }
+    }
+  ],
+  "screenshots": [
+    "rebuild-forge-workspace-conversation",
+    "rebuild-forge-workspace-plan",
+    "rebuild-forge-workspace-team",
+    "rebuild-forge-workspace-approvals",
+    "rebuild-forge-workspace-models-compact",
+    "rebuild-forge-workspace-models",
+    "rebuild-forge-workspace-model-editor-compact",
+    "rebuild-forge-workspace-model-editor",
+    "rebuild-forge-workspace-budget",
+    "rebuild-forge-workspace-budget-unknown",
+    "rebuild-forge-workspace-plan-small"
+  ],
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

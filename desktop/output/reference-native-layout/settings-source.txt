@@ -1,0 +1,259 @@
+FORGE settings: native source layout audit
+Date: 2026-11-16
+Scope: static, read-only comparison of supplied extracted native desktop bundle and FORGE SettingsView.tsx/style.css.
+Evidence type: shell static source evidence. No browser, CUA, image generation, package execution or product/test edits performed for this audit. REA MCP unavailable; no registration repair attempted.
+Offsets: zero-based JavaScript UTF-16 character offsets and UTF-8 byte offsets computed from the full source prefix. SHA-256 applies to exact file bytes.
+Source root: D:/crack/chatgpt-ui/mirror/webview/assets/async/
+Do not call this runtime verification. Native feature flags, route/embedded variants, and CSS support remain conditional.
+
+Call chain
+F4PH.SettingsLayout -> tP -> tN -> TL68.L -> SGc2.L shell.
+Settings nav: to -> tr -> tl -> b5fQ.RQ groups / b5fQ.jl rows; BiIz header/title; okCa sidebar-header search.
+Settings content: jxU8.P -> group/settings -> AWNZ.ic rows -> ZEx5.t groups; slate heading uses DiyT.g header.
+The product retains FORGE's actual seven settings destinations; native account/cloud/product features are not copied.
+
+Resolved portable rules (desktop/electron)
+- Shared spacing token: 4px. Default nonembedded settings max-w-3xl = 48rem = 768px, centered, width100%.
+- Slate branch: px-panel/pb-panel/pt-panel are INSIDE max768 content column; native body panel padding20px. Header also max768 with horizontal20px. This differs from FORGE's previous outside24px32px plus max760.
+- Default settings section gap40px. Compact density has22px; embedded can use panel20px. Do not mix variants.
+- Slate title28px/33.6px weight500. BiIz sidebar title18px/24px weight600.
+- Sidebar navigation default row30px high, 8px horizontal inset, 5px vertical padding, plain-list gap1px; group wrapper gap4px, heading min-height30px; groups gap16px.
+- Important nested typography: b5fQ outer row has text-sm=13px/18.5714px, but actual label wrapper explicitly text-base=14px/21px. FORGE nav text14px/21px follows effective label class; changing it to13 would follow only outer wrapper and miss native inner override.
+- okCa sidebar-header search36px high, horizontal12px, gap8px, fully rounded, input14px/18px. FORGE's previous34px search is not native.
+- BiIz header owns both title and search in one flex column with gap0 and horizontal8px. Title row has logical margin-start8px, height32px, end-padding4px. Nav scroll content starts4px below header. A 26px standalone title row and sibling search margin-top-8px do not reproduce this structure.
+- AWNZ default row: px16px, py12px, gap24px, align center/justify-between. No universal64px minimum. 64px empty-state token belongs evwP.EmptyState(layout=settings-row).
+- AWNZ default label13px/18.571429px weight500; compact density leading18px. Description12px/16px. Label/description gap2px.
+- AWNZ control group gap8px, max-width100%, shrink0, minimum min(160px,40cqw); grow variant flexes instead.
+- Native controls have variants; no universal28px rule. hwkA button md=28px +13px font; lg=32px+14px. zLIa compact input28px+13px; field32px+13px; default36px+13px; settings textarea has intrinsic height.
+- FORGE may explicitly choose compact input and md button as its common settings controls (28px/13px). That is native variant selection adapted to FORGE forms, not proof every native settings control uses28px.
+- b5fQ .sidebar-item radius is var(--radius-lg), NOT --radius-token-row even though nav token is10px. Electron radius-lg-base10px; CSS superellipse support multiplies1.25 ->12.5px and applies corner-shape:superellipse(1.5); unsupported fallback10px.
+- ZEx5 default settings group uses rounded-2xl plus 1px border-default: base16px, enhanced20px+superellipse. It is a different component from the 12.5px command card. Default group background uses --color-background-panel with neutral-soft-alpha fallback.
+- Border-default follows native semantic color token; 0.8px command-card rule must not be generalized to settings groups.
+- Existing 288px FORGE settings nav width is supplied handoff/functional layout adaptation. F4PH uses shared app-shell contextual sidebar; this audit did not prove a standalone fixed288 width from native shell.
+- Preserve FORGE navigation/accessibility names, real controls, save/revision/security semantics, and seven functional destinations.
+
+Previous subjective values distinguished
+- Settings row label14/21 and description13/20 were NOT AWNZ default source rules; restore13/18.5714 and12/16.
+- Common32px inputs/buttons were a prior sizing choice. Native compact/md selects28/13; native field/lg can legitimately remain32 when deliberately selected.
+- Nav label14/21 IS justified by actual nested text-base class; nav32px height is not (native30).
+- Content760, search34, title20/26 for nav were supplied/previous values; source branch establishes768/36/18x24.
+- Group radius12.5 and0.8 border were incorrectly shared from command cards if used for SettingsGroup; native default settings group resolves16/20 and1px.
+- No subjective visual adjustments were made in this audit.
+
+Unknowns and limits
+- This audit does not prove active feature-flag branch or CSS superellipse support in a running native window.
+- Settings sidebar shell resize/default width was not fully traced; fixed288 remains FORGE/handoff adaptation.
+- FORGE input/button variant choice must be reported as adaptation.
+- No behavior, API, backend, storage, test assertion or dependency was changed by the audit.
+
+File identities
+21225.4dac3778de.js
+  bytes=154117
+  sha256=7cd135f4a212607ac33f7ddf93c48768d03c4317040408f0ff8f139ab36c7f5b
+945227.2ee8c0d664.js
+  bytes=45571
+  sha256=4f71e72ffcfdb35d99ad3817f5301a527a7c1ffef309df64819b0b763d5533a3
+405559.315a217811.js
+  bytes=57973
+  sha256=516a089515a32c3cfb357255038f98d04e3316228d489237553e729b6baff1a6
+155094.fab0cbd3e5.js
+  bytes=5186
+  sha256=8537647b7d259742acc677c5fb4e3290d8e242c065236432950e7e9417c3ec63
+970624.7a3f18cdb7.js
+  bytes=13022
+  sha256=96f912d6d76e39ababb68e76d3c8a13fe1d632acc7ec21f4466accf9ad3b4b99
+111855.7aaed505d7.js
+  bytes=56695
+  sha256=2465fe578dc210e35fec78bdd7b1feb848509418ec456120b52718a70e6bddbf
+980390.76b87c1b6d.js
+  bytes=13779
+  sha256=0d99059d4ebf176bac0fea04c6745a1f101f6c42d291893b4d7a4713b81941cc
+b87eafde933c.css
+  bytes=39740
+  sha256=e4c18d063f7fbcd7c83a88ee23557443508d6af890a7d3f98c3b1321c250ac37
+956370.aff5cce818.js
+  bytes=1919102
+  sha256=84c3881d294dc4ac2892d9a58f7f60bed97cb061bde375a4fe2f1a768ea22379
+66582da7ee6b.css
+  bytes=1408648
+  sha256=2d854de60f44d2f236a4bf789cb26ff050fc3c3d44b6ec3b8889b066247cc440
+56463630a849.css
+  bytes=14931
+  sha256=f4f473dd6330edc9f37419904c50e2284ffc67e3632438f43eff63a63f0165d8
+
+Finite source excerpts
+
+[35] BiIz non-browser search wrapper bottom margin, supplied by preview_refinement and verified from exact file bytes
+file=38b55ede2d15.css; bytes=90799; sha256=a59da0e51a71ebe21f3930870661e5f2f89d515ed418428fe20cd114437baf59
+char_offset=34895; utf8_byte_offset=34895
+.header-LjJHnp:not(:where([data-codex-window-type=browser] *))>:is([data-sidebar-header-search],:has([data-sidebar-header-search])){margin-bottom:calc(var(--spacing) * 2)}
+Native/electron spacing4px resolves this margin to8px; the selector excludes browser mode.
+
+[33] BiIz header owns title and search
+file=405559.315a217811.js
+char_offset=54680; utf8_byte_offset=54688
+relative z-10 -mb-(--sidebar-scroll-header-spacing) flex shrink-0 flex-col gap-(--sidebar-navigation-header-gap) px-row-x pb-(--sidebar-scroll-header-spacing)
+
+[34] BiIz title row
+file=405559.315a217811.js
+char_offset=55139; utf8_byte_offset=55147
+@container/navigation-header ms-2 flex h-[var(--sidebar-navigation-header-height,calc(var(--spacing)*8))] items-center pe-1 browser:ms-2.5 browser:h-9
+[1] F4PH settings entry
+file=21225.4dac3778de.js
+char_offset=35784; utf8_byte_offset=35788
+F4PH(e,t,s){s.d(t,{SettingsLayout:()=>tP});var a=s("ABep"),i=s("QosV"),n=s("iRMi"),o=s("zTeN"),r=s("DBCl"),l=s("zd8w"),c=s("Wf1j"),d=s("HZfM"),g=s("gbrq"),u=s("UOa8"),m=s("CyfE"),p=s("q3HK"),h=s("Ot7V"),f=s("GKsW"),b=s("rw8f"),y=s("QIEU"),v=e=>(0,a.jsxs)("svg",{width:16,height:16,viewBox:"0 0 16 16",fill:"none",xmlns:"http://www.w3.org/2000/svg",..
+
+[2] settings nav grouped list
+file=21225.4dac3778de.js
+char_offset=68524; utf8_byte_offset=68530
+sidebar-navigation flex min-h-0 flex-1 flex-col select-none",o,tA),eI[115]=tA,eI[116]=o,eI[117]=ed):ed=eI[117],eI[118]!==tq?(eg=tq.formatMessage({id:"settings.nav.ariaLabel",defaultMessage:"Settings",description:"Aria label for settings navigation"}),eI[118]=tq,eI[119]=eg):eg=eI[119],eI[120]!==tW?(eu=e=>{if(!tW||"ArrowDown"!==e.key&&"ArrowUp"!==e.key)return;let t=e.target instanceof Element?e.target.closest("[data-settings-panel-slug]"):null;if(null==t)return;e.preventDefault();let s=Array.from(e.currentTarget.querySelectorAll("[data-settings-panel-slug]")),a=s[s.indexOf(t)+("ArrowDown"===e.key?1:-1)];a?.focus(),a?.click()},eI[120]=tW,eI[121]=eu):eu=eI[121],er="flex min-h-0 flex-1 flex-col",
+
+[3] settings nav group rendering
+file=21225.4dac3778de.js
+char_offset=43286; utf8_byte_offset=43292
+en.RQ,{title:r,titleActions:g,children:[f,b,y,v,w]}),C[47]=f,C[48]=b,C[49]=y,C[50]=v,C[51]=w,C[52]=r,C[53]=g,C[54]=_):_=C[54],_}var ey=s("v7NL"),ev=s("jZDY"),ew=s("CV1W"),e_=s("rR9w"),ek=s("n74t"),eC=s("HOye"),ex=s("Y6nA"),eM=s("iqEx"),eI=s.n(eM),eT=s("jPTz"),eA=s("PEAD");let eS=new WeakMap;function ej(e){return"codex-cloud"===e?0:"local-environments"===e||"worktrees"===e?1:"cloud-environments"===e?2:3}function eR(e,t,s,a=V.gr){let i=null;for(let n of e){let e=Math.max(a(n,t),...s.map(e=>a(n,e)));e>0&&(null==i||e>i.score)&&(i={score:e,text:n})}return i}function ez(e,t){return e.toLocaleLowerCase().includes(t.toLocaleLowerCase())?(0,V.gr)(e,t)
+
+[4] search variant
+file=21225.4dac3778de.js
+char_offset=78203; utf8_byte_offset=78211
+id:"settings-search",className:"min-w-0 flex-1",inputRef:h,autoFocus:!0,clearLabel:s,label:n,onKeyDown:g,onSearchQueryChange:m,placeholder:o,inputRole:"searchbox",searchQuery:u,variant:"sidebar-header"}),d[7]=g,d[8]=m,d[9]=u,d[10]=s,d[11]=n,d[12]=o,d[13]=r):r=d[13],r}function tM(e){let t,s,n,o,r=(0,i.c)(28),{activeSection:c,highlightedIndex:g,intl:u,listRef:m,onSelectResult:p,onSelectTeam:f,searchResults:b}=e,y=(0,d.zy)(),{platform:v}=(0,K.V)();i
+
+[5] b5fQ item exterior
+file=945227.2ee8c0d664.js
+char_offset=22245; utf8_byte_offset=22245
+sidebar-item relative shrink-0 items-center overflow-hidden text-start text-sm disabled:cursor-default disabled:opacity-50 aria-disabled:cursor-default aria-disabled:opacity-50",el&&"cursor-interaction",es?"min-h-[var(--height-token-row)]":"h-[var(--nav-item-height,var(--height-token-row))]",J?"flex w-full":"inline-flex w-auto",null==v?[{"compact-summary":"gap-2 px-2 py-2",summary:"gap-2 px-2 py-1",default:"gap-2 px-[var(--padding-row-cell-x,var(--padding-row-x))] py-row-y"}[U],es&&"group-data-[appearance=grouped]/nav-list:py-1.25"]:"compact-summary"!==U&&"pe-[var(--padding-row-cell-x,var(--padding-row-x))]",Y?F:!ed&&el&&X&&("inverse"===ee?"h
+
+[6] b5fQ item inner text
+file=945227.2ee8c0d664.js
+char_offset=26790; utf8_byte_offset=26790
+flex min-w-0 items-center gap-nav-row-content text-base group-data-[appearance=grouped]/nav-list:font-normal group-data-[appearance=grouped]/nav-list:leading-5 group-data-[appearance=grouped]/nav-list:tracking-[-0.14px]",m,y,C),K[123]=m,K[124]=y,K[125]=C,K[126]=r):r=K[126],K[127]!==es||K[128]!==p||K[129]!==B?(s=B??(null!=p?(0,n.jsx)("span",{className:(0,l.A)("flex icon-leading-slot min-w-[var(--ic
+
+[7] b5fQ group heading
+file=945227.2ee8c0d664.js
+char_offset=17186; utf8_byte_offset=17186
+group/nav-section-title flex min-h-[var(--height-token-row)] items-center justify-between gap-2 ps-2 pe-1.5 browser:ps-2.5",children:[(0,n.jsx)("div",{className:(0,l.A)("min-w-0 flex-1",N??"text-base font-medium text-tertiary browser:leading-4.5"),children:b}),null!=w||null!=j?(0,n.jsxs)("div",{className:"flex shrink-0 items-center gap-1",children:[null!=w?(0,n.jsx)("div",{className:(0,l.A)("shrink-0","row"===y&&"flex items-center gap-1",A&&"pointer-events-none w-0 overflow-hidden opacity-0 group-focus-within/nav-section-title:pointer-events-au
+
+[8] BiIz title
+file=405559.315a217811.js
+char_offset=56842; utf8_byte_offset=56850
+font-openai-sans text-heading-sm leading-6 font-semibold text-default [font-synthesis-weight:auto] browser:text-[17px]",children:i}),a[0]=s,a[1]=i,a[2]=t):t=a[2],t}function h(e){let t,a=(0,r.c)(2),{children:l}=e;return a[0]!==l?(t=(0,n.jsx)(o.c0,{className:"mb-2",children:l}),a[0]=l,a[1]=t):t=a[1],t}},OSb2(e,t,a){var n=a("ABep"),r=a("QosV");a.d(t,{
+
+[9] okCa search
+file=155094.fab0cbd3e5.js
+char_offset=1536; utf8_byte_offset=1536
+h-9 shrink-0 gap-2 rounded-full bg-background-secondary-soft-alpha px-3",ei="catalog"===q&&"h-14 gap-3 rounded-xl border border-primary-outline bg-surface px-5",ep="catalog-filter"===q&&"h-12 gap-3 rounded-xl border border-primary-outline bg-surface-secondary px-4",ex="discovery"===q&&"h-12.5 gap-2 rounded-full border border-primary-outline bg-surface-card px-3 text-sm leading-5";y[0]!==k||y[1]!==
+
+[10] jxU8 content max width and padding
+file=970624.7a3f18cdb7.js
+char_offset=7581; utf8_byte_offset=7581
+eN=ea?null:es?"max-w-2xl":"max-w-3xl electron:min-w-[min(100%,calc(320px*var(--codex-window-zoom)))]";en[35]!==v||en[36]!==k||en[37]!==ej||en[38]!==ey||en[39]!==eN||en[40]!==ep?(H=(0,s.A)("group/settings mx-auto flex w-full flex-col",ej,ey,eN,ep&&["px-panel pb-panel",null==k&&"pt-panel"],v),en[35]=v,en[36]=k,en[37]=ej,en[38]=ey,en[39]=eN,en[40]=ep,en[41]=H):H=en[41],en[42]!==l||en[43]!==t||en[44]!==er||en[45]!==es||en[46]!==ew||en[47]!==E||en[48]!==A||en[49]!==S||en[50]!==ep?(B=null==S||ep?null:(0,n.jsx)("div",{className:(0,s.A)("compact"===er&&"pb-5.5","default"===er&&(es?"pb-panel":"pb-8")),children:(0,n.jsx)(i.z,{actions:l,asset:t,subtitle:E,subtitleClassName:(0,s.A)("text-balance",A),title:S,variant:ew})}),en[42]=l,en[43]=t,en[44]=er,en[45]=es,en[46]=ew,en[47]=E,en[48]=A,en[49]=S,en[50]=ep,en[51]=B):B=en[51],en[52]!==k?(F=null==k?null:(0,n.jsx)(u.J1,{className:"top-0 pt-panel pb-2",c
+
+[11] jxU8 section gap
+file=970624.7a3f18cdb7.js
+char_offset=8521; utf8_byte_offset=8521
+let ek=es&&!ea?"gap-[var(--settings-section-gap,var(--padding-panel))]":"gap-[var(--settings-section-gap,--spacing(10))]",eE=null!=k&&"pt-5";en[54]!==ek||en[55]!==eE?(M=(0,s.A)("flex flex-col",ek,eE),en[54]=ek,en[55]=eE,en[56]=M):M=en[56],en[57]!==g||en[58]!==M?(Q=(0,n.jsx)("div",{className:M,children:g}),en[57]=g,en[58]=M,en[59]=Q):Q=en[59],en[60]!==er||en[61]!==H||en[62]!==B||en[63]!==F||en[64]!
+
+[12] jxU8 slate heading
+file=970624.7a3f18cdb7.js
+char_offset=10866; utf8_byte_offset=10866
+"compact"===er?"heading-lg":"heading-xl"),children:S}),null==E?null:(0,n.jsx)("div",{className:(0,s.A)("text-base leading-6 text-balance text-secondary",A),children:E})]}),actions:null==l?null:(0,n.jsx)(d.T,{search:null,actions:l})}),en[92]=l,en[93]=t,en[94]=er,en[95]=ea,en[96]=E,en[97]=A,en[98]=S,en[99]=ex,en[100]=ep,en[101]=W):W=en[101],en[102]!==eA||en[103]!==eL||en[104]!==eC||en[105]!==eT||en[
+
+[13] AWNZ label
+file=111855.7aaed505d7.js
+char_offset=43266; utf8_byte_offset=43276
+group-data-[density=compact]/settings:leading-4.5",S,N,A,_),u[5]=_,u[6]=S,u[7]=N,u[8]=A,u[9]=n):n=u[9],u[10]!==m||u[11]!==p||u[12]!==n?(r=(0,a.jsx)("div",{id:p,className:n,children:m}),u[10]=m,u[11]=p,u[12]=n,u[13]=r):r=u[13],u[14]!==x||u[15]!==h?(o=x?(0,a.jsx)("div",{id:h,className:"min-w-0 text-xs leading-4 text-wrap break-words text-secondary",children:x}):null,u[14]=x,u[15]=h,u[16]=o):o=u[16],u[17]!==r||u[18]!==o?(c=(0,a.jsxs)("div",{className:"flex min-w-0 flex-1 flex-col gap-0.5",children:
+
+[14] AWNZ description
+file=111855.7aaed505d7.js
+char_offset=43551; utf8_byte_offset=43561
+min-w-0 text-xs leading-4 text-wrap break-words text-secondary",children:x}):null,u[14]=x,u[15]=h,u[16]=o):o=u[16],u[17]!==r||u[18]!==o?(c=(0,a.jsxs)("div",{className:"flex min-w-0 flex-1 flex-col gap-0.5",children:[r,o]}),u[17]=r,u[18]=o,u[19]=c):c=
+
+[15] AWNZ default row spacing
+file=111855.7aaed505d7.js
+char_offset=46727; utf8_byte_offset=46737
+gap-6 py-3")),"recommendation"===E&&"dark:bg-secondary-ghost-hover",y),c[0]=y,c[1]=k,c[2]=P,c[3]=B,c[4]=O,c[5]=R,c[6]=Q,c[7]=W,c[8]=V,c[9]=E,c[10]=t):t=c[10],c[11]!==g||c[12]!==L||c[13]!==C||c[14]!==b||c[15]!==u||c[16]!==D||c[17]!==A||c[18]!==_||c[19]!==E||c[20]!==I?(s=C?(0,a.jsx)(d,{label:u,labelId
+
+[16] AWNZ controls
+file=111855.7aaed505d7.js
+char_offset=47780; utf8_byte_offset=47790
+min-w-[min(--spacing(40),40cqw)] empty:min-w-0")),children:X?x({"aria-labelledby":D,"aria-describedby":L}):x}):null,c[22]=x,c[23]=z,c[24]=L,c[25]=X,c[26]=D,c[27]=k,c[28]=E,c[29]=r):r=c[29],c[30]!==j||c[31]!==t||c[32]!==s||c[33]!==r?(o=(0,a.jsxs)("div
+
+[17] ZEx5 default group border/radius
+file=111855.7aaed505d7.js
+char_offset=54012; utf8_byte_offset=54022
+ZEx5(e,t,s){s.d(t,{t:()=>r});var a=s("ABep"),i=s("QosV"),l=s("on57"),n=s("bZug");function r(e){let t,s,r,o=(0,i.c)(23),{children:c,className:d,contentOverflow:u,dividers:m,variant:p,decoration:f}=e,g=void 0===p?"default":p,x="flat"===g||"rows"===g?n.s:n.r,h=void 0===m||m?x:"flex flex-col",b="recommendation"===g&&"rounded-[20px]",y="recommendation"!==g&&"flat"!==g&&"rows"!==g&&"outlinedLarge"!==g&&"rounded-2xl",j="outlinedLarge"===g&&"rounded-[30px] border border-default bg-transparent",v="daybreak"===f&&"daybreak-VsXdEH",w="visible"===(void 0===u?"hidden":u)?"overflow-visible":"overflow-hidden",S="default"===g&&"border border-default group-data-[density=compact]/settings:border-0 group-data-[density=compact]/settings:ring-1 group-data-[density=compact]/settings:ring-inset group-data-[density=compact]/settings:ring-border",N="metered"===g&&"ring-1 ring-inset ring-border-subtle",A="secondary"===g&&"bg-surface-secondary/92",_="muted"===g&&"bg-(--color-background-neutral-soft-alpha)/50 dark:bg-background-neutral-soft-alpha",k="form"===g&&"border border-subtle bg-surface dark:bg-surface-secondary/92 group-data-[density=form]/settings:border-default group-data-[density=form]/settings:bg-
+
+[18] hwkA button size prop
+file=980390.76b87c1b6d.js
+char_offset=333; utf8_byte_offset=333
+size:f="xs",iconSize:h,gutterSize:v,loading:x,selected:y,block:g,opticallyAlign:b,children:j,className:w,onClick:N,disabled:z,disabledTone:D,inert:A=x,...k}=e,B=z||A,M=(0,a.useCallback)(e=>{z||N?.(e)},[N,z]);return(0,i.jsxs)("button",{type:t,classNam
+
+[19] hwkA button md mapping
+file=b87eafde933c.css
+char_offset=4698; utf8_byte_offset=4698
+.Button-BZrLNX:where([data-size=md]){--button-size:var(--control-size-sm);--button-gutter:var(--control-gutter-sm);--button-font-size:var(--control-font-size-md);--button-icon-size:var(--control-icon-size-md);--button-gap:var(--button-gap-md);--button-radius:var(--control-radius-sm);--button-icon-offset:-1px;--indicator-size:15px;--circular-progress-size:15px}.Button-BZrLNX:whe
+
+[20] zLIa compact/field input variants
+file=956370.aff5cce818.js
+char_offset=863482; utf8_byte_offset=863514
+compact:"h-7 rounded-md bg-primary-soft px-2 text-sm",plain:"h-7 rounded-md border-transparent bg-transparent p-0 text-sm",default:"h-9 rounded-md bg-primary-soft px-2.5 text-sm",field:"h-8 rounded-lg bg-primary-soft px-2 text-sm focus-within:bg-secondary-ghost-hover forced-colors:focus-within:outline-2 forced-colors:focus-within:outline-solid",form:"h-12 rounded-2xl border-default bg-transparent px-5 text-form-body font-normal",onboarding:"h-10 rounded-lg border-default bg-transparent px-3 text-sm font-normal",outlined:"h-9.5 rounded-lg border-default bg-surface px-3 py-2 text-sm leading-5",grouped:"h-10 rounded-[inherit] border-transparent bg-transparent px-3 text-sm",ghost:"h-token-button-composer rounded-md bg-transparent px-2 text-sm",
+
+[21] native typography/base widths
+file=66582da7ee6b.css
+char_offset=4639; utf8_byte_offset=4639
+--container-3xl:48rem;--container-4xl:56rem;--container-5xl:64rem;--container-6xl:72rem;--container-7xl:80rem;--text-xs:11px;--text-xs--line-height:calc(1 / .75);--text-sm:12px;--text-sm--line-height:calc(1.25 / .875);--text-base:14px;--text-base--line-height:calc(1.5 / 1);--text-lg:16px;--text-lg--line-height:calc(1.75 / 1.125);--text-xl:28px;--text-xl--line-height:calc(1.75 / 1.25);--text-2xl:36px;--text-2xl--line-height:calc(2 / 1.5);--text-3xl:48px;--text-3xl--line-height:calc(2.25 / 1.875);
+
+[22] electron typography
+file=66582da7ee6b.css
+char_offset=1391373; utf8_byte_offset=1391383
+x}[data-codex-window-type=electron]{--image-viewer-transparent-backdrop-filter:blur(var(--blur-xs));--text-sm:13px;--text-xs:12px;--text-conversation-title:var(--text-sm);--font-weight-medium:500;--font-ui-weight:430;background:0 0;overflow:hidden}[data-codex-window-type=electron] body{--cursor-interaction:default;overscroll-behavior:none;overflow:hidden}[data-codex-window-type
+
+[23] nav scope
+file=66582da7ee6b.css
+char_offset=620378; utf8_byte_offset=620378
+.sidebar-navigation{--sidebar-navigation-header-gap:0px;--sidebar-scroll-content-top-padding:var(--spacing);--sidebar-scroll-header-spacing:0px;--height-token-mode-switch:32px;--height-token-nav-row:30px;--height-token-row:var(--height-token-nav-row);--padding-row-cell-x:8px;--padding-row-x:8px;--radius-token-row:10px;--sidebar-row-label-inset:calc(var(--height-token-row) + var(--spacing) / 2);--sidebar-child-icon-indent:calc((var(--height-token-row) + var(--icon-leading-size)) / 2 + var(--spacing) / 4)}.sidebar-navigation:where([data-codex-window-type=browser] .sidebar-navigation){--sidebar-navigation-header-gap:calc(var(--spacing) * 2);--he
+
+[24] nav actual radius
+file=66582da7ee6b.css
+char_offset=340957; utf8_byte_offset=340957
+.sidebar-item{border-radius:var(--radius-lg);corner-shape:var(--codex-corner-shape)}.\!rounded-2xl{border-radius:var(--radius
+
+[25] radius bases
+file=66582da7ee6b.css
+char_offset=9921; utf8_byte_offset=9921
+--corner-radius-scale:1;--radius-2xs-base:.125rem;--radius-xs-base:.25rem;--radius-sm-base:.375rem;--radius-md-base:.5rem;--radius-lg-base:.625rem;--radius-xl-base:.75rem;--radius-2xl-base:1rem;--radius-3xl-base:1.25rem;--radius-4xl-base:1.5rem;--radius-form-dialog:calc(var(--spacing) * 6 * var(--corner-radius-scale));--border-width-hairline:.5px;--shadow-ha
+
+[26] superellipse enhancement
+file=66582da7ee6b.css
+char_offset=67407; utf8_byte_offset=67407
+@supports (corner-shape:superellipse(1.5)){:is(:where(:root),:where([data-theme])):where([data-codex-window-type=electron],[data-codex-window-type=electron] *,[data-codex-window-type=extension],[data-codex-window-type=extension] *){--tooltip-border-radius:calc(var(--radius-2xl-base,var(--radius-2xl)) * var(--codex-corner-radius-scale,1.25))}}:where(:root),:where([data-theme]){--modal-sheet-fade-shadow:0 -8px 16px 0 #00000012, 0 -2px 6px 0 #0000000d, 0 0 0 1px var(--color-border);--modal-backdrop-fade-shadow:0 8px 16px 0 #00000012, 0 2px 6px 0 #0000000d, 0 0 0 1px var(--color-border)}:is(:where(:root),:where([data-theme])):where(:root[data-codex-window-type=browser],:root[data-codex-window-type=browser] *){--alert-border-radius:var(--radius-2xl);--alert-gutter:calc(var(--spacing) * 3);--alert-title-font-weight:var(--font-weight-medium);--button-font-weight:var(--font-weight-medium);--dialog-radius:var(--radius-2xl);--menu-background-color:var(--color-surface-elevated-secondary)}@support
+
+[27] heading xl
+file=66582da7ee6b.css
+char_offset=176367; utf8_byte_offset=176367
+.heading-xl{font-size:var(--text-xl);font-weight:var(--font-weight-medium);line-height:1.2}.heading-xl:where([data-codex-window-type=browser] .heading-xl){font-
+
+[28] native body panel padding
+file=66582da7ee6b.css
+char_offset=1388450; utf8_byte_offset=1388460
+:is([data-codex-window-type=browser],[data-codex-window-type=chrome-extension],[data-codex-window-type=electron]) body{--padding-row-y:calc(var(--spacing) * 1.25);--height-token-nav-row:calc(var(--text-base) * 1.5 + var(--padding-row-y) * 2);--padding-panel-base:calc(var(--spacing) * 5);--padding-panel:var(--padding-panel-base);--thread-content-max-width:48rem;--composer-adjacent-max-width:calc(var(--thread-content-max-width) + var(--composer-inline-overhang) + var(--composer-inline-overhang) -
+
+[29] control sizes
+file=66582da7ee6b.css
+char_offset=50778; utf8_byte_offset=50778
+--control-size-sm:1.75rem;--control-size-md:2rem;--control-size-lg:2.25rem;--control-size-xl:2.5rem;--control-size-2xl:2.75rem;--control-size-3xl:3rem;--control-gutter-2xs:.375rem;--control-gutter-xs:.5rem;--control-gutt
+
+[30] control font mapping
+file=66582da7ee6b.css
+char_offset=159659; utf8_byte_offset=159659
+--control-font-size-md:var(--text-sm);--control-font-size-lg:var(--text-base);--tooltip-font-size:var(--text-sm)}}@layer base{*,:after,:before,::backd
+
+[31] DiyT slate header shell
+file=56463630a849.css
+char_offset=92; utf8_byte_offset=92
+.shell-yWQKe6{border-bottom-style:var(--tw-border-style);padding-top:calc(var(--spacing,.25rem) * 4);--spacing-token-button-composer:calc(var(--spacing) * 8);border-bottom-width:1px;container-type:inline-size}.shell-yWQKe6:where([data-codex-window-type=browser
+
+[32] DiyT slate title wrapper
+file=56463630a849.css
+char_offset=1219; utf8_byte_offset=1219
+.title-x3JvHx{min-height:calc(var(--spacing,.25rem) * 15);justify-content:center;gap:var(--spacing,.25rem);min-width:0;max-width:100%;padding-block:calc(var(--spacing,.25rem) * 3);flex-direction:column;flex-basis:max-content;grid-row-start:1;grid-column-start:1;padding-inline-start:max(0px, var(--app-shell-titlebar-left-inset,0px) - var(--header-content-start,0px));display:flex}.titleContent-nEpGod{gap:var(--spacing,.25rem);flex-direction:column;min-width:

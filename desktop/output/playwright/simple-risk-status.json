@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 16,
+  "uncaughtPageErrors": 0
+}

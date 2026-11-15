@@ -1,0 +1,13 @@
+
+> forge-desktop@0.2.0 build
+> tsc && vite build
+
+vite v6.4.6 building for production...
+transforming...
+✓ 302 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.35 kB │ gzip:   0.26 kB
+dist/assets/index-w7zHWr8u.css   74.23 kB │ gzip:  13.34 kB
+dist/assets/index-C4j0v-ud.js   476.32 kB │ gzip: 147.73 kB
+✓ built in 1.67s

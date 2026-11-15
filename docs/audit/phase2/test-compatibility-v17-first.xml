@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="5" time="5.740" timestamp="2026-11-15T16:41:28.277192+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[False]" time="0.376" /><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[True]" time="0.164" /><testcase classname="tests.test_m4_integration" name="test_graph_planner_sends_strict_wire_schema_through_gateway" time="0.056"><failure message="AssertionError: assert {'cost_curren...ens', 'nodes'} == {'coordinatio..._tokens', ...}&#10;  &#10;  Extra items in the right set:&#10;  'coordination_reserve_tokens'&#10;  Use -v to get more diff">tests\test_m4_integration.py:246: in test_graph_planner_sends_strict_wire_schema_through_gateway
+    result = asyncio.run(
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+src\forge_core\quest_graph.py:1173: in generate
+    response = await provider.generate(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\forge_core\providers\__init__.py:664: in generate
+    response = await self._send(
+src\forge_core\providers\__init__.py:594: in _send
+    response = await client.send(req, stream=streaming)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1629: in send
+    response = await self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:1657: in _send_handling_auth
+    response = await self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:1694: in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1730: in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_transports\mock.py:34: in handle_async_request
+    response = self.handler(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\test_m4_integration.py:196: in provider_handler
+    verify_objects(schema)
+tests\test_m4_integration.py:186: in verify_objects
+    assert set(value.get("required", [])) == set(value.get("properties", {}))
+E   AssertionError: assert {'cost_curren...ens', 'nodes'} == {'coordinatio..._tokens', ...}
+E     
+E     Extra items in the right set:
+E     'coordination_reserve_tokens'
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_m4_integration" name="test_authenticated_graph_controls_survive_restart_without_running_worker" time="0.190"><failure message="assert 409 == 200&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">tests\test_m4_integration.py:497: in test_authenticated_graph_controls_survive_restart_without_running_worker
+    assert response.status_code == 200
+E   assert 409 == 200
+E    +  where 409 = &lt;Response [409 Conflict]&gt;.status_code</failure></testcase><testcase classname="tests.test_m4_integration" name="test_user_turn_automatically_plans_once_without_extra_user_message" time="4.200"><failure message="AssertionError: Background dispatch did not reach the expected state">tests\test_m4_integration.py:624: in test_user_turn_automatically_plans_once_without_extra_user_message
+    wait_for(lambda: client.get(path, headers=token).status_code == 200)
+tests\test_m4_integration.py:27: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,18 @@
+
+> forge-desktop@0.2.0 build
+> tsc && vite build
+
+vite v6.4.6 building for production...
+transforming...
+✓ 307 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.35 kB │ gzip:   0.26 kB
+dist/assets/index-CubVoYix.css   87.16 kB │ gzip:  15.36 kB
+dist/assets/index-DhvP5QUi.js   505.25 kB │ gzip: 156.16 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.84s

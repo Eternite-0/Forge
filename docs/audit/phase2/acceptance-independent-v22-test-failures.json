@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-11-15T10:53:32.470124+00:00",
+  "source_version": "v22",
+  "scope": "Immutable clarification of the original failed complete suite. Reads only saved evidence and the unchanged original test source; no test, Provider or database operation and no historical record change.",
+  "boundary_record": {
+    "path": "docs/audit/phase2/acceptance-independent-v22-boundary.json",
+    "bytes": 7837,
+    "sha256": "0ed3dc8ab7cafe684aca169ce8652ec27bae3b9ddabfe22906feab48980615fe"
+  },
+  "original_suite_evidence": [
+    {
+      "path": "docs/audit/phase2/frozen-tests-v22.xml",
+      "bytes": 239694,
+      "sha256": "7160e5d9c1c113c1a888e9bc61ca67c3b8ed1a09e4de5a478321dda9d0a7c097"
+    },
+    {
+      "path": "docs/audit/phase2/frozen-tests-v22.log",
+      "bytes": 6768,
+      "sha256": "a940a62f4f1f85895667d88cb4cbfcd1667cbb2807a9587f88566dbd4f33a02e"
+    }
+  ],
+  "original_test_source": {
+    "path": "backend/tests/test_native_delivery_contract_phase2.py",
+    "bytes": 9393,
+    "sha256": "8ff0bd09ea2ef2896d86207b8669aabde6e853bfe3b82058ff4321c56be7a585"
+  },
+  "suite_result": {
+    "tests": 1595,
+    "passed": 1592,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "console_seconds": 352.37,
+    "passed_gate": false
+  },
+  "failed_test_cases": [
+    {
+      "classname": "tests.test_native_delivery_contract_phase2",
+      "name": "test_native_worker_repairs_out_of_range_confidence_without_delivery_review[-0.1]",
+      "type": null,
+      "message": "KeyError: 'path'",
+      "full_failure_text_sha256": "c14b7715ae44a2a8b39736c6fb0099852ce2f0d126fb6f9c411ab78a375e1b77",
+      "full_failure_text_bytes": 1147
+    },
+    {
+      "classname": "tests.test_native_delivery_contract_phase2",
+      "name": "test_native_worker_repairs_out_of_range_confidence_without_delivery_review[1.1]",
+      "type": null,
+      "message": "KeyError: 'path'",
+      "full_failure_text_sha256": "7013e4a85c0a1525e5597117c6a068c9d30ab3a42f8bd18bc02e6576e484f416",
+      "full_failure_text_bytes": 1146
+    },
+    {
+      "classname": "tests.test_native_delivery_contract_phase2",
+      "name": "test_native_worker_repairs_out_of_range_confidence_without_delivery_review[True]",
+      "type": null,
+      "message": "KeyError: 'path'",
+      "full_failure_text_sha256": "8f63b232acc6da427c4e5ba11ef2d456a9a613ba7cbc5f6378db315c800bdafd",
+      "full_failure_text_bytes": 1147
+    }
+  ],
+  "observed_regression": "All three unchanged legacy tests require feedback.detail.path == confidence; the V22 schema-feedback branch omitted that field, producing KeyError. Existing assertions were not removed or edited.",
+  "interpretation": "The original boundary JSON records tests.passed=false and evidence_consistency_passed=false. Its Markdown summary lists passed/warning counts without the failing count; this addendum explicitly preserves the three failures. Source/archive/static/preservation/usage checks passing does not make this suite pass.",
+  "original_records_changed": false,
+  "phase2_complete": false
+}

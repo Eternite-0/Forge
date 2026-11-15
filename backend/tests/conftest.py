@@ -6,6 +6,16 @@ from pathlib import Path
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def explicit_legacy_token_budget_mode(monkeypatch):
+    """Existing budget regressions exercise the opt-in enforced policy explicitly.
+
+    Tests for the normal unbounded policy override this value in their own body.
+    Child-process legacy tests inherit the same explicit operator setting.
+    """
+    monkeypatch.setenv("FORGE_ENFORCE_TOKEN_BUDGETS", "true")
+
+
 class RouterMockProvider:
     """Explicit deterministic test-only provider, never production fallback."""
 

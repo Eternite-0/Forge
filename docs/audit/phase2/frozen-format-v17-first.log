@@ -1,0 +1,12 @@
+unformatted: File would be reformatted
+   --> backend\src\forge_core\worker_runtime.py:477:39
+    |
+476 |                 if self.global_cost_limits:
+    -                     raise DomainError("Serial shared reserve does not support cost-capped execution")
+477 +                     raise DomainError(
+478 +                         "Serial shared reserve does not support cost-capped execution"
+479 +                     )
+480 |                 serial_allowance = serial_start_allowance(
+    |
+
+1 file would be reformatted, 197 files already formatted

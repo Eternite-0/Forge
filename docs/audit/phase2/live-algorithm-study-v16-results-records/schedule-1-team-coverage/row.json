@@ -1,0 +1,148 @@
+{
+  "candidate": {
+    "answers": [
+      1,
+      1,
+      1
+    ],
+    "citations": [
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+        "source_id": "machines"
+      },
+      {
+        "line_end": 2,
+        "line_start": 1,
+        "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+        "source_id": "jobs"
+      }
+    ],
+    "completed": true,
+    "retained_constraints": [
+      "lowest_cost_then_id",
+      "explicit_no_candidate"
+    ]
+  },
+  "case_id": "schedule-1",
+  "context_cap": 16384,
+  "cost": null,
+  "difficulty": 1,
+  "domain": "integer_scheduling",
+  "duration_seconds": 5.493106699985219,
+  "execution_mode": "live",
+  "family": "team",
+  "http_retries": 0,
+  "output_cap": 512,
+  "recomposition_count": 0,
+  "score": {
+    "answer_correct": false,
+    "evidence_complete": true,
+    "obligations_retained": 2,
+    "schema_valid": true,
+    "task_success": false,
+    "violations": [
+      "wrong_answer"
+    ]
+  },
+  "selected_assignments": [
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "math"
+    },
+    {
+      "model_id": "deepseek-v4.1-flash",
+      "profile_id": "deepseek-v4.1-flash",
+      "role_id": "reviewer"
+    }
+  ],
+  "source_read_controller": "explicit_approved_benchmark_fixture_not_autonomous_tool_choice",
+  "source_receipts": [
+    {
+      "intent_id": "action_0ec890609a40",
+      "receipt_id": "receipt_1c84d7818921",
+      "sha256": "df83a145233758ca21cc84aeb30932419a7a4a7b92c08b13939fb2a41ec86c5b",
+      "source_id": "machines"
+    },
+    {
+      "intent_id": "action_a7dd5eaa8100",
+      "receipt_id": "receipt_80bd0adcdb92",
+      "sha256": "d07d7b8d055934b00ec73d5c8ba5690eef93cd62ebb08b64f601b4eeac9bc92c",
+      "source_id": "jobs"
+    }
+  ],
+  "source_receipts_valid": true,
+  "stages": [
+    {
+      "call_id": "study_call_7f30de95bcda",
+      "duration_seconds": 2.5154305000032764,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "dde040f582e937b8945a2e11d2751e9ca103b218812c28ac9eb9cca07793f9c7",
+      "response_sha256": "9c1931c04b1f6653c9e86906308f98d52ba9d3b08176d1bc397484851180d903",
+      "schema_valid": true,
+      "stage": "candidate",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 256,
+        "input_tokens": 511,
+        "output_tokens": 154
+      }
+    },
+    {
+      "call_id": "study_call_6dc066a301d0",
+      "duration_seconds": 2.363347500009695,
+      "execution_mode": "live",
+      "provider_error": null,
+      "request_sha256": "0fdf9dfc3fd78e86b24824e9d3d16792a6cbfd32d9f86c205cae5ebc4f63bf20",
+      "response_sha256": "af0345550e775d7f863c962bc55b995b6b11a949ab066006a88c1a3cf83ec298",
+      "schema_valid": true,
+      "stage": "second_specialist",
+      "usage": {
+        "cache_creation_input_tokens": null,
+        "cached_input_tokens": 512,
+        "input_tokens": 693,
+        "output_tokens": 154
+      }
+    }
+  ],
+  "status": "completed",
+  "token_cap": 16000,
+  "usage": {
+    "attempts": [
+      {
+        "call_id": "study_call_7f30de95bcda",
+        "cost_charged": null,
+        "input_charged": 511,
+        "input_reserved": 3089,
+        "output_charged": 154,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_candidate",
+        "state": "settled"
+      },
+      {
+        "call_id": "study_call_6dc066a301d0",
+        "cost_charged": null,
+        "input_charged": 693,
+        "input_reserved": 3671,
+        "output_charged": 154,
+        "output_reserved": 512,
+        "purpose": "algorithm_benchmark_second_specialist",
+        "state": "settled"
+      }
+    ],
+    "cost": null,
+    "input_tokens": 1204,
+    "known_input_tokens": 1204,
+    "known_output_tokens": 308,
+    "model_calls": 2,
+    "output_tokens": 308,
+    "overrun_attempts": 0,
+    "totals_complete": true,
+    "unknown_attempts": 0,
+    "unknown_reserved_tokens": 0
+  },
+  "variant": "coverage"
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="2.572" timestamp="2026-11-15T16:23:25.970231+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_envelope_v16" name="test_oversized_artifact_repairs_before_any_file_or_intent" time="0.257" /><testcase classname="tests.test_worker_envelope_v16" name="test_undeclared_source_never_enters_a_tool_receipt" time="0.209" /><testcase classname="tests.test_worker_envelope_v16" name="test_actual_read_rechecks_identity_after_queued_batch_admission" time="0.547" /><testcase classname="tests.test_worker_envelope_v16" name="test_revised_worker_rejects_capsule_contract_tampering_before_another_model_call" time="0.356" /><testcase classname="tests.test_worker_envelope_v16" name="test_fixed_verification_capacity_repairs_real_python_failure_without_model_reviews" time="0.754"><failure message="forge_core.domain.DomainError: Approved correction call count exhausted">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-693/test_fixed_verification_capaci0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001B6BFCA8270&gt;
+
+    def test_fixed_verification_capacity_repairs_real_python_failure_without_model_reviews(
+        tmp_path, monkeypatch
+    ):
+        candidate = TeamComposerEngine._candidate
+        propose = TeamCompositionService.propose
+        capacity = {
+            "version": "worker-capacity-v1",
+            "max_source_bytes": 5000,
+            "max_artifact_bytes": 1500,
+            "max_delivery_bytes": 1536,
+            "correction_input_tokens": 18000,
+            "correction_output_tokens": 3000,
+            "correction_calls": 2,
+        }
+    
+        def bound(self, *args, **kwargs):
+            value = candidate(self, *args, **kwargs)
+            source = (tmp_path / "work/input.txt").read_bytes()
+            value.update(
+                worker_capacity=capacity,
+                required_input_paths=["work/input.txt"],
+                verified_input_inventory=[
+                    {
+                        "path": "work/input.txt",
+                        "bytes": len(source),
+                        "sha256": hashlib.sha256(source).hexdigest(),
+                    }
+                ],
+            )
+            return value
+    
+        def funded(self, quest_id, roles, limits, **kwargs):
+            roles = [{**role, "input_tokens": 57000} for role in roles]
+            return propose(self, quest_id, roles, {**limits, "max_total_tokens": 60000}, **kwargs)
+    
+        monkeypatch.setattr(TeamComposerEngine, "_candidate", bound)
+        monkeypatch.setattr(TeamCompositionService, "propose", funded)
+        suite = {"cases": [{"inputs": {"a": 2, "b": 3}, "expected": 5}]}
+        store, manager, model, worker = prepared(
+            tmp_path,
+            [
+                tool("file_write", {"path": "work/add.py", "content": "def add(a,b):\n return a-b\n"}),
+                tool(
+                    "python_test", {"path": "work/add.py", "function": "add", "suite": suite}, ordinal=2
+                ),
+            ],
+            tools=["file_write", "file_revise", "python_test"],
+        )
+        # The repair model chooses a new revision and then runs the actual isolated
+        # harness in the same batch; it cannot replace the failed receipt.
+        original_generate = model.generate
+    
+        async def generate(request):
+            if not model.responses:
+                with store.connection() as connection:
+                    receipt = connection.execute(
+                        "SELECT r.id,r.result_json FROM action_receipts r JOIN action_intents i "
+                        "ON i.id=r.intent_id WHERE i.tool_name='file_write'"
+                    ).fetchone()
+                prior = json.loads(receipt["result_json"])
+                if len(model.requests) == 2:
+                    model.responses.append(
+                        response(
+                            "",
+                            calls=[
+                                {
+                                    "id": "fix-3",
+                                    "name": "file_revise",
+                                    "arguments": {
+                                        "path": "work/add.py",
+                                        "prior_receipt_id": receipt["id"],
+                                        "expected_sha256": prior["sha256"],
+                                        "content": "def add(a,b):\n return a+b\n",
+                                    },
+                                },
+                                {
+                                    "id": "test-4",
+                                    "name": "python_test",
+                                    "arguments": {
+                                        "path": "work/add.py",
+                                        "function": "add",
+                                        "suite": suite,
+                                    },
+                                },
+                            ],
+                        )
+                    )
+                else:
+                    model.responses.append(response(delivery("Corrected and tested add.py.")))
+            return await original_generate(request)
+    
+        model.generate = generate
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        with store.connection() as connection:
+            calls = connection.execute(
+                "SELECT tool_name,state FROM worker_tool_calls ORDER BY rowid"
+            ).fetchall()
+            assert [(row[0], row[1]) for row in calls] == [
+                ("file_write", "succeeded"),
+                ("python_test", "failed"),
+                ("file_revise", "succeeded"),
+                ("python_test", "succeeded"),
+            ]
+            assert (
+&gt;               cycle_allowance(connection, manager.get(worker["id"]), capacity)[
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    "future_reserve_tokens"
+                ]
+                == 0
+            )
+
+backend\tests\test_worker_envelope_v16.py:220: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x000001B6C0946980&gt;
+run = {'id': 'run_b90563490fe8', 'worker_id': 'worker_a9e6776d1cde', 'quest_id': 'quest_d0850018ce95', 'plan_id': 'plan_c35423eb2988', ...}
+envelope = {'version': 'worker-capacity-v1', 'max_source_bytes': 5000, 'max_artifact_bytes': 1500, 'max_delivery_bytes': 1536, ...}
+
+    def cycle_allowance(connection, run, envelope):
+        if envelope.get("version") == "worker-capacity-v1":
+            validate_capacity_policy(envelope)
+            repair = connection.execute(
+                "SELECT created_at FROM events WHERE event_type='worker.progress' "
+                "AND json_extract(payload,'$.run_id')=? AND json_extract(payload,'$.phase')='self_repair' "
+                "ORDER BY seq LIMIT 1",
+                (run["id"],),
+            ).fetchone()
+            consumed = (
+                connection.execute(
+                    "SELECT count(*) FROM worker_model_reservations WHERE run_id=? AND created_at&gt;=? "
+                    "AND state!='refunded'",
+                    (run["id"], repair[0]),
+                ).fetchone()[0]
+                if repair
+                else 0
+            )
+            calls = max(0, envelope["correction_calls"] - consumed)
+            state = {
+                "reviews_remaining": 0,
+                "correction_calls_remaining": calls,
+                "future_reserve_tokens": calls
+                * (envelope["correction_input_tokens"] + envelope["correction_output_tokens"]),
+                "correction_started": repair is not None,
+            }
+        else:
+            state = review_cycle_state(connection, run["id"], envelope)
+        held = state["future_reserve_tokens"]
+        if state["correction_started"]:
+            if not state["correction_calls_remaining"]:
+&gt;               raise DomainError("Approved correction call count exhausted")
+E               forge_core.domain.DomainError: Approved correction call count exhausted
+
+backend\src\forge_core\worker_envelope.py:73: DomainError</failure></testcase></testsuite></testsuites>

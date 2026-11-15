@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="46" time="3.368" timestamp="2026-11-15T15:18:27.786725+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_migrations" name="test_schema_version_is_singleton_after_reopening" time="0.067" /><testcase classname="tests.test_migrations" name="test_legacy_upgrade_preserves_every_entity" time="0.112" /><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions0]" time="0.072" /><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions1]" time="0.063" /><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions0]" time="0.069" /><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions1]" time="0.063" /><testcase classname="tests.test_migrations" name="test_each_migration_step" time="0.076" /><testcase classname="tests.test_migrations" name="test_migration_failure_rolls_back_ddl_data_and_version" time="0.087" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[0]" time="0.079" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[1]" time="0.081" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[2]" time="0.075" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[3]" time="0.092" /><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router[4]" time="0.073" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[1]" time="0.033" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[2]" time="0.035" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[3]" time="0.036" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[4]" time="0.037" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[5]" time="0.037" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[6]" time="0.040" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[7]" time="0.038" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[8]" time="0.038" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[9]" time="0.040" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[10]" time="0.041" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[11]" time="0.045" /><testcase classname="tests.test_migrations" name="test_each_migration_failure_rolls_back_a_fresh_database[12]" time="0.049" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[context_schema-migrate_context]" time="0.032" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[memory_schema-migrate_memory]" time="0.032" /><testcase classname="tests.test_migrations" name="test_v8_component_failure_rolls_back_v7_data[model_budget_schema-migrate_model_budget]" time="0.032" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_v11_cutover_preserves_all_history_and_does_not_backfill" time="0.084"><failure message="sqlite3.OperationalError: no such column: rowid">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-633/test_v11_cutover_preserves_all0/legacy.sqlite3')
+
+    def test_v11_cutover_preserves_all_history_and_does_not_backfill(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+            _seed_v11(connection)
+&gt;           before = _snapshot(connection)
+                     ^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_worker_model_usage_migration_phase2.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x0000023C70D9EF20&gt;
+
+    def _snapshot(connection):
+        tables = [
+            row[0]
+            for row in connection.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name!='schema_meta' ORDER BY name"
+            )
+        ]
+        return {
+            table: json.dumps(
+&gt;               connection.execute(f'SELECT * FROM "{table}" ORDER BY rowid').fetchall(),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            for table in tables
+        }
+E       sqlite3.OperationalError: no such column: rowid
+
+tests\test_worker_model_usage_migration_phase2.py:110: OperationalError</failure></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_v12_failure_rolls_back_new_table_and_preserves_v11" time="0.083"><failure message="sqlite3.OperationalError: no such column: rowid">legacy_database = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-633/test_v12_failure_rolls_back_ne0/legacy.sqlite3')
+
+    def test_v12_failure_rolls_back_new_table_and_preserves_v11(legacy_database):
+        with closing(sqlite3.connect(legacy_database, isolation_level=None)) as connection:
+            _seed_v11(connection)
+&gt;           before = _snapshot(connection)
+                     ^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_worker_model_usage_migration_phase2.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = &lt;sqlite3.Connection object at 0x0000023C70D9EA70&gt;
+
+    def _snapshot(connection):
+        tables = [
+            row[0]
+            for row in connection.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name!='schema_meta' ORDER BY name"
+            )
+        ]
+        return {
+            table: json.dumps(
+&gt;               connection.execute(f'SELECT * FROM "{table}" ORDER BY rowid').fetchall(),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            for table in tables
+        }
+E       sqlite3.OperationalError: no such column: rowid
+
+tests\test_worker_model_usage_migration_phase2.py:110: OperationalError</failure></testcase><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_reservation_and_worker_admission_share_rollback_boundary" time="0.079" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_reservation_requires_existing_run_and_unique_call" time="0.081" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes0]" time="0.080" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes1]" time="0.086" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes2]" time="0.079" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes3]" time="0.078" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes4]" time="0.076" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes5]" time="0.084" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes6]" time="0.079" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes7]" time="0.079" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes8]" time="0.079" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes9]" time="0.081" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes10]" time="0.089" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_invalid_reservation_or_settlement_is_rejected[changes11]" time="0.085" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_original_binding_and_terminal_settlement_cannot_be_rewritten" time="0.090" /><testcase classname="tests.test_worker_model_usage_migration_phase2" name="test_cost_settlement_is_bounded_and_unsent_refund_is_terminal" time="0.092" /></testsuite></testsuites>

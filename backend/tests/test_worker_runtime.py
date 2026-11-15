@@ -1117,6 +1117,8 @@ def test_v7_worker_opening_migrates_once_with_known_reserves(graph, tmp_path):
     with store.connection() as source, sqlite3.connect(path, isolation_level=None) as target:
         source.backup(target)
         for table in (
+            "worker_core_source_reads",
+            "worker_model_reservations",
             "model_budget_attempts",
             "model_budget_metadata",
             "model_budget_opening",
@@ -1134,6 +1136,9 @@ def test_v7_worker_opening_migrates_once_with_known_reserves(graph, tmp_path):
             "restore_reviews",
             "model_budget_worker_teams",
             "semantic_test_runs",
+            "constraint_records",
+            "constraint_message_index",
+            "constraint_index_cursor",
         ):
             target.execute(f"DROP TABLE {table}")
         for column in (
@@ -1141,6 +1146,7 @@ def test_v7_worker_opening_migrates_once_with_known_reserves(graph, tmp_path):
             "model_max_output_tokens",
             "model_context_window",
             "next_attempt_at",
+            "repairs",
         ):
             target.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
         target.execute("UPDATE schema_meta SET version=7")
@@ -1225,11 +1231,17 @@ def test_v8_active_worker_enters_output_review_without_changing_team_or_budget(g
             "model_max_output_tokens",
             "model_context_window",
             "next_attempt_at",
+            "repairs",
         ):
             target.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
         target.execute("DROP TABLE restore_reviews")
         target.execute("DROP TABLE model_budget_worker_teams")
         target.execute("DROP TABLE semantic_test_runs")
+        target.execute("DROP TABLE constraint_records")
+        target.execute("DROP TABLE constraint_message_index")
+        target.execute("DROP TABLE constraint_index_cursor")
+        target.execute("DROP TABLE worker_model_reservations")
+        target.execute("DROP TABLE worker_core_source_reads")
         target.execute("UPDATE schema_meta SET version=8")
         migrate(target)
         assert target.execute(
@@ -1980,7 +1992,9 @@ def test_model_can_request_bounded_help_without_spawning_or_gaining_tools(graph)
     session = manager.start(quest.id, plan["id"], "n", team_digest="team", member_index=0)
     result = run(manager.run(session["id"]))
     assert result["state"] == "blocked" and tools.calls == []
-    assert result["token_spent"] > 15
+    # Known help responses are settled to actual usage; the request remains
+    # blocked for Router coordination without charging a stale reservation.
+    assert result["token_spent"] == 15
     with store.connection() as connection:
         assert connection.execute("SELECT COUNT(*) FROM worker_runs").fetchone()[0] == 1
         assert (

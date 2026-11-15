@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-11-15",
+  "mode": "independent_read_only_source_and_retained_evidence_review",
+  "scope": "Outstanding user requirements for integration-owner verification; this is not the final verification.json and does not predict results of a later run.",
+  "baseline_commit": "bcc3592bfa820054079419456f3ba24afc81f785",
+  "requirements": [
+    {
+      "id": "complex-live-continuity",
+      "request_sections": ["9", "12 Sprint H", "14"],
+      "status": "not_established_by_retained_live_runs",
+      "requirement": "A real complex task remains continuous through failure, repair/review revision, compaction with source recovery and a Core restart, and ultimately completes with real artifacts and trustworthy evidence.",
+      "current_evidence": "The strict earlier L1 pass has live self-repair/revision but no compaction/restart. Retained L2/L3 through the v6 runs stop before successful dependent execution. Plan-boundary restart alone is insufficient.",
+      "needed": "A later run's actual accepted final state, settled model/tool receipts, current artifact hash bindings, independent review, compaction/source readback and observed mid-execution restart continuity must all be checked. Root must substitute its final run evidence.",
+      "evidence_paths": ["docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md", "docs/PHASE2_EXPERIMENTS.md", "backend/scripts/phase2/acceptance_checks.py"]
+    },
+    {
+      "id": "provider-actual-capacity-and-upstream",
+      "request_sections": ["2 items 4-6"],
+      "status": "unknown_actual_limits",
+      "requirement": "Determine actual model context/output capability and service rate/concurrency/token constraints, keeping proxy transport, upstream execution and correct answer distinct.",
+      "current_evidence": "Small protocol probes exist. Context 65536, output 8192/1024 and concurrency two are operator bounds or tested cases, not actual service maxima. Upstream identity remains proxy-reported and unverified; price and true rate limit are unknown.",
+      "needed": "Trusted provider/service documentation or bounded direct measurements before claiming real service maxima. Unknown price/identity must remain unknown.",
+      "evidence_paths": ["docs/audit/phase2/provider-probe.json", "docs/audit/phase2/provider-probe-reasoning-none.json"]
+    },
+    {
+      "id": "running-dag-replanning",
+      "request_sections": ["3.1", "4.3", "5.1 Planner"],
+      "status": "not_implemented_generally",
+      "requirement": "Planner can replan the unfinished running DAG after a failure while completed nodes, receipts and executed external effects remain intact.",
+      "current_evidence": "Goal changes and new DAG proposals are constrained to proposed/awaiting-approval Quests. Approved team replacement preserves the existing DAG; it is not general remaining-DAG replanning.",
+      "needed": "A minimal governed running-plan revision protocol and tests/live evidence preserving all prior work; no historical plan mutation.",
+      "evidence_paths": ["backend/src/forge_core/quest_graph.py", "backend/src/forge_core/team_composition.py", "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md"]
+    },
+    {
+      "id": "dynamic-specialist-and-hierarchical-teams",
+      "request_sections": ["4.2", "4.3", "14 items 6-8"],
+      "status": "partial_local_mechanisms_complex_live_unverified",
+      "requirement": "Bounded specialist/hierarchical expansion, model replacement and unfinished-node reassignment work during execution without losing completed work or uncertain effects.",
+      "current_evidence": "Composition algorithms and approval-bound replacement have local regression. General hierarchical expansion is incomplete and the retained complex live attempts have not established the complete adaptive path.",
+      "needed": "Explicit bounded hierarchy/expansion contracts and a real adaptive run with historical identity, approval, evidence and budget preservation.",
+      "evidence_paths": ["backend/src/forge_core/team_composition.py", "backend/src/forge_core/worker_runtime.py", "docs/audit/phase2/sprint-ci.md"]
+    },
+    {
+      "id": "semantic-memory-retrieval",
+      "request_sections": ["7.3"],
+      "status": "not_implemented",
+      "requirement": "Semantic retrieval complements keyword, Quest, time, reliability/conflict and expiry filtering.",
+      "current_evidence": "Recall uses lexical terms and bounded bilingual aliases; its source-ID/hash dataset is exploratory. No embedding or learned semantic retrieval is implemented.",
+      "needed": "A sourced semantic index plus independent retrieval evaluation using source identities and task relevance, not summary similarity alone.",
+      "evidence_paths": ["backend/src/forge_core/memory.py", "backend/tests/fixtures/phase2_retrieval_v1.json", "docs/audit/phase2/retrieval-evaluation-v2.json"]
+    },
+    {
+      "id": "general-coding-and-experiment-worker",
+      "request_sections": ["5.1 Coding", "5.1 Experiment", "5.2", "9 Level 3"],
+      "status": "bounded_subset_only",
+      "requirement": "Workers read, modify and test code and perform reproducible experiments with real execution and bounded self-correction.",
+      "current_evidence": "Current tools provide file creation, own-latest-artifact revision, syntax checks and a fixed pure numeric AST subset. They do not provide arbitrary shell, unrestricted Python, general repository patching or arbitrary test commands. The narrow scheduler experiment cannot establish general software development.",
+      "needed": "Governed tool support and actual tests for the broader claimed scope, or a clear delivery statement limiting support to the implemented subset.",
+      "evidence_paths": ["backend/src/forge_core/tool_domain.py", "backend/src/forge_core/artifact_revision.py", "README.md"]
+    },
+    {
+      "id": "uniform-eight-field-delivery",
+      "request_sections": ["5.3"],
+      "status": "not_universal_across_legacy_contracts",
+      "requirement": "Every Worker submits all eight structured delivery fields.",
+      "current_evidence": "Review criteria enforce the eight fields and record actual supplied fields. Default/legacy compatibility output schemas still require only summary, so universal enforcement is not established.",
+      "needed": "An explicitly versioned approval/compatibility policy and checks for every relevant contract, without inventing omitted model fields or silently expanding old approvals.",
+      "evidence_paths": ["backend/src/forge_core/worker_schema.py", "backend/src/forge_core/worker_runtime.py", "backend/src/forge_core/independent_review.py"]
+    },
+    {
+      "id": "complete-agent-message-payload-contracts",
+      "request_sections": ["8"],
+      "status": "partial",
+      "requirement": "Agent communication uses durable structured task, help, review/revision, dependency, model, budget and failure messages rather than free-text coordination.",
+      "current_evidence": "The durable event/outbox transport and typed projection validate task identity and map ten message types. AgentMessage.payload remains a dict; exhaustive independent schema validation of every message-specific payload is incomplete.",
+      "needed": "Per-type payload contracts and compatibility/adversarial checks for the fields actually consumed by Router/Worker coordination.",
+      "evidence_paths": ["backend/src/forge_core/agent_protocol.py", "backend/src/forge_core/dispatcher.py", "docs/audit/phase2/execution-chain-audit.md"]
+    },
+    {
+      "id": "online-model-intelligence",
+      "request_sections": ["4.1"],
+      "status": "sparse_exploratory_observations",
+      "requirement": "Task/tool success, retry, schema compliance, latency, token/cost and review-pass measurements have source, sample count, time and uncertainty separated from manual priors.",
+      "current_evidence": "Online execution observations and confidence-aware inputs exist, while the single local target profile uses manual exploratory priors. Small transport samples are not broad capability estimates; many requested quality/cost statistics remain unmeasured.",
+      "needed": "Multiple independently scored task outcomes by capability and reliable cost data before claiming measured general model skill or full performance coverage.",
+      "evidence_paths": ["backend/src/forge_core/model_performance.py", "docs/audit/phase2/sprint-ci.md", "docs/PHASE2_EXPERIMENTS.md"]
+    },
+    {
+      "id": "three-live-algorithm-benchmarks",
+      "request_sections": ["10", "12 Sprint I"],
+      "status": "offline_mechanism_benchmarks_only",
+      "requirement": "Team composition, context compression and governance compare the requested variants on multiple domains/difficulties with fixed datasets, common budgets and independent scoring of task success, cost, latency, tokens, rework and evidence completeness.",
+      "current_evidence": "The fixed offline benchmark has synthetic profiles, extractive context baselines, counterfactual governance ablations and real local tools under Mock fixtures. These are explicitly exploratory and make zero Provider calls. Same-budget live quality/governance comparisons and generalization are unmeasured.",
+      "needed": "A real-model benchmark with separately scored task quality and actual usage, preserved failed runs, comparable budgets and modest small-sample conclusions.",
+      "evidence_paths": ["docs/audit/phase2/benchmark-final-v4.json", "docs/PHASE2_EXPERIMENTS.md", "backend/scripts/phase2/intelligence_benchmark.py"]
+    },
+    {
+      "id": "multimodal-and-concurrent-quests",
+      "request_sections": ["3.3"],
+      "status": "real_end_to_end_coverage_unverified",
+      "requirement": "Task handling covers multimodal work and multiple parallel Quests without unnecessarily splitting simple chat.",
+      "current_evidence": "The retained acceptance scenarios use bounded local text/code sources and one Quest per workspace. They do not establish actual multimodal input execution or simultaneous multi-Quest autonomous completion.",
+      "needed": "Purpose-specific real end-to-end scenarios and capability-compatible models; route classification alone is insufficient.",
+      "evidence_paths": ["backend/scripts/phase2/acceptance_scenarios.py", "docs/PHASE2_EXPERIMENTS.md"]
+    },
+    {
+      "id": "arbitrary-inflight-recovery",
+      "request_sections": ["9", "12 Sprint G/H", "14 items 9/12/14"],
+      "status": "safe_bounded_recovery_partial_broader_claim_unproven",
+      "requirement": "Restart recovery preserves task continuity and historical side effects without replaying unknown remote outcomes.",
+      "current_evidence": "Leases, receipts, checkpoint/source recovery and bounded semantic/review callbacks are tested locally. Arbitrary in-flight external effects and unknown remote model outcomes remain fenced/reserved; no per-attempt operator reconciliation interface exists. Safe refusal is intentional and is not proof of general autonomous recovery.",
+      "needed": "Exact-boundary live restart evidence for supported cases, and a trusted reconciliation mechanism before expanding claims to unknown effects.",
+      "evidence_paths": ["backend/src/forge_core/model_call_budget.py", "backend/src/forge_core/worker_recovery.py", "docs/audit/phase2/semantic-recovery-20261115T090801.xml", "README.md"]
+    }
+  ],
+  "reporting_rules": [
+    "Root must bind final full-suite and live outcomes to its final source snapshot; v6 diagnostics are not results for later code.",
+    "Retain all failed protocol/task runs in their appropriate denominator and preserve unknown reservations.",
+    "Do not count overlapping focused test groups as one aggregate full-suite total.",
+    "Same-model fresh-context review satisfies the implemented context-isolation boundary; a different reviewer model is a possible limitation, not an additional user-mandated hard requirement.",
+    "Authenticated plan/team/tool approval remains intentional. Removing it would violate the user's approval/policy constraints.",
+    "Deferred UI/installer/native packaging work is outside this Sprint's requested main acceptance scope."
+  ]
+}

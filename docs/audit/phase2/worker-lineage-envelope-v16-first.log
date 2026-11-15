@@ -1,0 +1,92 @@
+..F...................................                                   [100%]
+================================== FAILURES ===================================
+_______ test_actual_read_rechecks_identity_after_queued_batch_admission _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-673/test_actual_read_rechecks_iden0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B3BA5DDEB0>
+
+    def test_actual_read_rechecks_identity_after_queued_batch_admission(tmp_path, monkeypatch):
+        original = ToolEngine._perform
+        changed = []
+    
+        def perform(self, intent, cancelled):
+            if intent["tool_name"] == "file_read" and not changed:
+                changed.append(True)
+                (tmp_path / "work/input.txt").write_text("CHANGED_SOURCE_SENTINEL", encoding="utf-8")
+            return original(self, intent, cancelled)
+    
+        monkeypatch.setattr(ToolEngine, "_perform", perform)
+>       store, manager, model, worker = new_pending(
+            tmp_path,
+            monkeypatch,
+            responses=[tool("file_read", {"path": "work/input.txt"}), response(delivery())],
+        )
+
+backend\tests\test_worker_envelope_v16.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-673/test_actual_read_rechecks_iden0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B3BA5DDEB0>
+env = {'version': 'review-envelope-v1', 'max_source_bytes': 10000, 'max_artifact_bytes': 3072, 'max_delivery_bytes': 1536, ...}
+responses = [ModelResponse(text='', tool_calls=[{'id': 'tool-1', 'name': 'file_read', 'arguments': {'path': 'work/input.txt'}}], u..._tokens': 15}, provider_id=None, model_id=None, finish_reason='stop', provider_request_id=None, cost=None, content=[])]
+tools = None, criteria = None, budget = 59000
+
+    def new_pending(
+        tmp_path, monkeypatch, *, env=None, responses=None, tools=None, criteria=None, budget=59000
+    ):
+        env = envelope() if env is None else env
+        original_candidate = TeamComposerEngine._candidate
+        original_propose = TeamCompositionService.propose
+        from forge_core.quest_graph import QuestGraphService
+    
+        original_plan = QuestGraphService.propose
+    
+        def plan(self, quest_id, graph, **kwargs):
+            graph = copy.deepcopy(graph)
+            graph["max_total_tokens"] = max(60000, budget)
+            graph["nodes"][0]["budget_tokens"] = max(60000, budget)
+            return original_plan(self, quest_id, graph, **kwargs)
+    
+        def candidate(self, *args, **kwargs):
+            result = original_candidate(self, *args, **kwargs)
+            result["review_envelope"] = copy.deepcopy(env)
+            source = (tmp_path / "work/input.txt").read_bytes()
+            result["required_input_paths"] = ["work/input.txt"]
+            result["verified_input_inventory"] = [
+                {
+                    "path": "work/input.txt",
+                    "bytes": len(source),
+                    "sha256": hashlib.sha256(source).hexdigest(),
+                }
+            ]
+            return result
+    
+        def propose(self, quest_id, roles, limits, **kwargs):
+            # A new normal proposal binds the envelope before digest/approval.
+            # New approval chooses its original allowance before any execution.
+            # No existing run, historical evidence, or live scenario cap is changed.
+            roles = copy.deepcopy(roles)
+            for role in roles:
+                role["input_tokens"] = budget - role["output_tokens"]
+            limits = {**limits, "max_total_tokens": budget}
+            return original_propose(self, quest_id, roles, limits, **kwargs)
+    
+        monkeypatch.setattr(TeamComposerEngine, "_candidate", candidate)
+        monkeypatch.setattr(TeamCompositionService, "propose", propose)
+        monkeypatch.setattr(QuestGraphService, "propose", plan)
+        store, manager, model, worker = prepared(
+            tmp_path,
+            responses or [tool("file_read", {"path": "work/input.txt"}), response(delivery())],
+            tools=tools,
+            criteria=criteria,
+        )
+>       assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+E       AssertionError: assert 'blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked
+
+backend\tests\test_review_envelope_phase2.py:107: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_envelope_v16.py::test_actual_read_rechecks_identity_after_queued_batch_admission
+1 failed, 37 passed in 14.16s

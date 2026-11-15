@@ -29,10 +29,9 @@ def test_probe_fixtures_restart_and_report_with_mock_gateway(tmp_path, monkeypat
     }
     for key, value in settings.items():
         monkeypatch.setenv(key, value)
-    if invalid:
-        monkeypatch.setenv("FORGE_CONTEXT_PROBE_TOKEN_LIMIT", "75000")
-    else:
-        monkeypatch.delenv("FORGE_CONTEXT_PROBE_TOKEN_LIMIT", raising=False)
+    # Phase 2's sourced constraint snapshot increases conservative serialized
+    # admission. Keep a finite explicit fixture ceiling for both outcomes.
+    monkeypatch.setenv("FORGE_CONTEXT_PROBE_TOKEN_LIMIT", "75000")
 
     class MockGateway:
         def __init__(self, config, *, budget_ledger):
@@ -88,11 +87,12 @@ def test_probe_fixtures_restart_and_report_with_mock_gateway(tmp_path, monkeypat
         report["status"] == ("failed" if invalid else "passed") and report["constraints_preserved"]
     )
     assert report["fixture_constraints"] == 60 and report["fixture_cancelled_quests"] == 105
-    assert len(report["attempts"]) == 1 and report["attempts"][0]["state"] == "settled"
+    assert len(report["attempts"]) == (2 if invalid else 1)
+    assert all(attempt["state"] == "settled" for attempt in report["attempts"])
     assert report["responses"][0]["finish_reason"] == "stop"
     assert report["responses"][0]["tool_names"] == []
     assert report["responses"][0]["input_serialized_bytes"] > 0
-    assert report["token_limit"] == (75000 if invalid else 30000)
+    assert report["token_limit"] == 75000
     if invalid:
         assert report["domain_error"] == "Invalid Router model decision"
         assert report["schema_validation"][0]["type"] == "literal_error"

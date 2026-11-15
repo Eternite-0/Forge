@@ -17,6 +17,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from forge_core.domain import ConversationMessage
+from forge_core.migrations import SCHEMA_VERSION
 from forge_core.settings import Workspace
 from forge_core.store import Store
 from forge_core.workspace_backup import BackupError, backup_workspace, restore_workspace
@@ -241,6 +242,8 @@ def test_v7_snapshot_is_migrated_in_staging_before_publish(tmp_path):
     db = archive / "files" / manifest["database"]
     with closing(sqlite3.connect(db)) as connection:
         for table in (
+            "worker_core_source_reads",
+            "worker_model_reservations",
             "model_budget_attempts",
             "model_budget_metadata",
             "model_budget_opening",
@@ -255,6 +258,9 @@ def test_v7_snapshot_is_migrated_in_staging_before_publish(tmp_path):
             "memory_source_index",
             "memory_source_cursor",
             "memory_terms",
+            "constraint_records",
+            "constraint_message_index",
+            "constraint_index_cursor",
         ):
             connection.execute(f"DROP TABLE {table}")
         for column in (
@@ -262,6 +268,7 @@ def test_v7_snapshot_is_migrated_in_staging_before_publish(tmp_path):
             "model_max_output_tokens",
             "model_context_window",
             "next_attempt_at",
+            "repairs",
         ):
             connection.execute(f"ALTER TABLE worker_runs DROP COLUMN {column}")
         connection.execute("DROP TABLE restore_reviews")
@@ -276,7 +283,7 @@ def test_v7_snapshot_is_migrated_in_staging_before_publish(tmp_path):
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     restore_workspace(root, archive)
     with sqlite3.connect(root / manifest["database"]) as connection:
-        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 9
+        assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == SCHEMA_VERSION
         assert connection.execute("SELECT content FROM messages").fetchone()[0] == "legacy"
 
 

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="5" time="1.404" timestamp="2026-11-15T16:53:16.683388+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[openai_compatible]" time="0.127" /><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[deepseek]" time="0.108" /><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[anthropic]" time="0.129"><failure message="assert 697 &gt; 700">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-716/test_initial_native_measuremen2')
+kind = 'anthropic'
+
+    @pytest.mark.parametrize("kind", ["openai_compatible", "deepseek", "anthropic"])
+    def test_initial_native_measurement_includes_both_core_tools_and_escaped_source(tmp_path, kind):
+        store, manager, _model, worker = prepared(tmp_path, [])
+        source = '必须保留中文、路径 C:\\work\\"quoted" 和换行\n不要删除原始证据'
+        original = ConversationMessage(role="user", content=source)
+        store.add_message(original)
+        ConstraintService(store).record_extraction(
+            source,
+            source_message_id=original.id,
+            quest_id=worker["quest_id"],
+            origin="explicit_user",
+        )
+        posts = []
+        gateway = ObservedGateway(
+            transport=httpx.MockTransport(lambda request: posts.append(request)), kind=kind
+        )
+        graph = QuestGraphService(store).get(worker["quest_id"])
+        extra = {"role": "user", "content": "Verified source slice (untrusted): " + source}
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            team = manager.team_authority.get_approved(
+                worker["quest_id"],
+                worker["plan_revision"],
+                worker["team_digest"],
+                connection=connection,
+            )
+            before = connection.total_changes
+            measured = measure_initial_worker_request(
+                store,
+                connection,
+                store.get_quest(worker["quest_id"]),
+                graph,
+                graph["nodes"][0],
+                team["members"][0],
+                extra_messages=[extra],
+                provider=gateway,
+            )
+            assert connection.total_changes == before
+        request, payload = gateway.serialized[-1]
+        assert request.messages[-1] == extra
+        assert any("Sourced constraint records" in item["content"] for item in request.messages)
+        assert [item["name"] for item in request.tools] == [
+            "file_read",
+            "worker_read_context_source",
+            "worker_request_help",
+        ]
+        wire = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        assert source.encode("utf-8") not in wire
+        assert "中文".encode() in wire and b"\\n" in wire and b"\\\\" in wire and b'\\"' in wire
+        assert measured["native_input_reservation"] == len(wire) + 64
+        stripped_request = replace(request, tools=request.tools[:1])
+        stripped = json.dumps(gateway._payload(stripped_request, False), ensure_ascii=False).encode()
+        core_framing_bytes = len(wire) - len(stripped)
+&gt;       assert core_framing_bytes &gt; 700
+E       assert 697 &gt; 700
+
+tests\test_worker_request_framing_v17.py:101: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[0]" time="0.353"><failure message="AssertionError: assert ('blocked' == 'review_pending'&#10;  &#10;  - review_pending&#10;  + blocked)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-716/test_native_runtime_initial_an0')
+depth = 0
+
+    @pytest.mark.parametrize("depth", [0, 1])
+    def test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions(
+        tmp_path, depth
+    ):
+        posts = []
+    
+        def transport(request):
+            posts.append(json.loads(request.content))
+            index = len(posts)
+            if index == 1:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": f"source-{number}",
+                            "type": "function",
+                            "function": {
+                                "name": "file_read",
+                                "arguments": json.dumps({"path": f"work/source-{number}.txt"}),
+                            },
+                        }
+                        for number in (1, 2)
+                    ],
+                }
+            elif index == 2:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": "archive-read",
+                            "type": "function",
+                            "function": {
+                                "name": "worker_read_context_source",
+                                "arguments": '{"ordinal":3,"max_chars":2048}',
+                            },
+                        }
+                    ],
+                }
+            else:
+                assert index == 3
+                message = {
+                    "role": "assistant",
+                    "content": json.dumps(delivery("Recovered original source")),
+                }
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {"message": message, "finish_reason": "tool_calls" if index &lt; 3 else "stop"}
+                    ],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ObservedGateway(transport=httpx.MockTransport(transport))
+        store, manager, worker = native_archive_worker(tmp_path, gateway, depth=depth)
+        result = asyncio.run(manager.run(worker["id"]))
+&gt;       assert result["state"] == "review_pending" and result["steps"] == len(posts) == 3
+E       AssertionError: assert ('blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked)
+
+tests\test_worker_request_framing_v17.py:245: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[1]" time="0.185"><failure message="AssertionError: assert ('blocked' == 'review_pending'&#10;  &#10;  - review_pending&#10;  + blocked)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-716/test_native_runtime_initial_an1')
+depth = 1
+
+    @pytest.mark.parametrize("depth", [0, 1])
+    def test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions(
+        tmp_path, depth
+    ):
+        posts = []
+    
+        def transport(request):
+            posts.append(json.loads(request.content))
+            index = len(posts)
+            if index == 1:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": f"source-{number}",
+                            "type": "function",
+                            "function": {
+                                "name": "file_read",
+                                "arguments": json.dumps({"path": f"work/source-{number}.txt"}),
+                            },
+                        }
+                        for number in (1, 2)
+                    ],
+                }
+            elif index == 2:
+                message = {
+                    "role": "assistant",
+                    "content": "",
+                    "tool_calls": [
+                        {
+                            "id": "archive-read",
+                            "type": "function",
+                            "function": {
+                                "name": "worker_read_context_source",
+                                "arguments": '{"ordinal":3,"max_chars":2048}',
+                            },
+                        }
+                    ],
+                }
+            else:
+                assert index == 3
+                message = {
+                    "role": "assistant",
+                    "content": json.dumps(delivery("Recovered original source")),
+                }
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {"message": message, "finish_reason": "tool_calls" if index &lt; 3 else "stop"}
+                    ],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ObservedGateway(transport=httpx.MockTransport(transport))
+        store, manager, worker = native_archive_worker(tmp_path, gateway, depth=depth)
+        result = asyncio.run(manager.run(worker["id"]))
+&gt;       assert result["state"] == "review_pending" and result["steps"] == len(posts) == 3
+E       AssertionError: assert ('blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked)
+
+tests\test_worker_request_framing_v17.py:245: AssertionError</failure></testcase></testsuite></testsuites>

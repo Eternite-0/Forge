@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-15T07:18:26.721023+00:00",
+  "status": "unresolved_intermittent_windows_startup_failure",
+  "source_modified": false,
+  "original_test_modified": false,
+  "databases_or_sidecars_deleted": false,
+  "provider_calls": 0,
+  "credential_lookup": false,
+  "reported_original_io_error_code": null,
+  "observed_additional_failure": {
+    "type": "ConnectionResetError",
+    "winerror": 10054,
+    "phase": "startup_http_poll"
+  },
+  "assessment": "Original I/O failure did not reproduce with an extended SQLite error code. Later focused passes do not constitute a source fix. No generic I/O retry or weakened original test proposed.",
+  "evidence": [
+    {
+      "path": "docs/audit/phase2/frozen-tests-v13.xml",
+      "sha256": "14efc6eaa833999cfd9e9309bac2325d7d6f8673ad2fb365f49cadeb7ed83e0d",
+      "bytes": 150254,
+      "tests": {
+        "tests": 978,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 208.488
+    },
+    {
+      "path": "docs/audit/phase2/frozen-tests-v13.log",
+      "sha256": "71dc45fb40c39a7f5d792eefc67e9b6cdcda5e2b9c56eadf9137d81e784cdc17",
+      "bytes": 13104
+    },
+    {
+      "path": "docs/audit/phase2/v13-failure-regressions-v14.xml",
+      "sha256": "6fd053fc59d217d8a6c866b7541e66dc309f37b58f00fcb2cb0d7a89b7eb890e",
+      "bytes": 11996,
+      "tests": {
+        "tests": 22,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 6.699
+    },
+    {
+      "path": "docs/audit/phase2/v13-failure-regressions-v14.log",
+      "sha256": "c5698944d5a518bef1e0bd582b4ef0c2bed28493c7ea255a62a8979485902833",
+      "bytes": 8855
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-diagnostic-20261115T071505Z.json",
+      "sha256": "f85db6ebc196d638be4c95f32c8a17f73b9e45b2a1b50c8483c8b26c99039e2c",
+      "bytes": 335
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-c-diagnostic-20261115T071624Z.json",
+      "sha256": "c15bff5fff23cae36ede80e111114895353ffd0d6a1f0609d147a0efe2bf6410",
+      "bytes": 262
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-tests.xml",
+      "sha256": "4476bc3a24329145302e8a52a09f42e9a7dcc66967591d223142551adace7732",
+      "bytes": 6479,
+      "tests": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 2.215
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-tests.log",
+      "sha256": "6d5ce7072bb2277f69db712de308094eddd7cd9d673347968b96d6f7038013ba",
+      "bytes": 6404
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-repeat.xml",
+      "sha256": "6203ab4aab47e017340b8207f906cf0d34c3af2bc10a8f50d54322f88479c939",
+      "bytes": 385,
+      "tests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 2.381
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-repeat.log",
+      "sha256": "7a6852e4e2324eae5cf06d82abdde3a0ea6cfc098c89b1ac07eadd734f127bdb",
+      "bytes": 100
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-repeat2.xml",
+      "sha256": "fb2a03f8e1d9d02ac9a452626c499b3b39ca3c7377cc8d288ba556e1f2e415b4",
+      "bytes": 385,
+      "tests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 2.401
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-instrumented-repeat2.log",
+      "sha256": "4a34a9a1f858c6f7996315def984e3c89add9e45b0b54157d87aabe372ec64d4",
+      "bytes": 100
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-plugin-tests.xml",
+      "sha256": "6003e5549392135cdce684384a0fe2892ed16bdb145dccd157a32187eb695bdf",
+      "bytes": 385,
+      "tests": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 2.459
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-plugin-tests.log",
+      "sha256": "2ba0f19f314d956b2982e649cec3ddd29e442dae010026bf0a8f5f1ec6e734f7",
+      "bytes": 100
+    },
+    {
+      "path": "docs/audit/phase2/startup-io-v14-diagnosis.md",
+      "sha256": "a874e8323b2ae3926391a909d6cefb887e20d3cad180917e2c8dba64df2caff1",
+      "bytes": 2356
+    }
+  ]
+}

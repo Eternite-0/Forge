@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "source_version": "v27",
+  "generated_at": "2026-11-15T14:30:12.386635+00:00",
+  "mode": "parallel",
+  "scope": "Independent read-only wrapper for finished supplementary goal probes.\n\nThe goal auditor checks actual exchange chains. A separate SQL/hash auditor\nreconstructs Core-origin evidence and current reviewer packets. This wrapper\nnever constructs Store, starts Core, reads credentials or calls a Provider.\n",
+  "independent_auditor": {
+    "path": ".local/phase2/audit_supplement_version.py",
+    "bytes": 15734,
+    "sha256": "5bd79323f1e45e1be67a29c6c078e002f85be311e5bf808ea33538dc5b616641"
+  },
+  "driver_record": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-parallel-51eb00/run.json",
+    "bytes": 81734,
+    "sha256": "a5f68566d9a2ec3b6293991c41eeb3e356e2524876393a2c4b0abf5202299b2f"
+  },
+  "original_spec": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-parallel-51eb00/spec.json",
+    "bytes": 21354,
+    "sha256": "b6909b93a674509cad27722907cfba531c96555d5350a2f5a50c5ce0e8a1fd19"
+  },
+  "saved_evidence": {
+    "path": ".local/phase2/goal-probes-v23/runs/20261115T142121Z-parallel-51eb00/evidence.json",
+    "bytes": 7339,
+    "sha256": "ed6b5f45cbc2eabdbdef708e68dc782690b0d23a609d6366c1a54ced744e1c1a"
+  },
+  "reservation_samples": null,
+  "goal_auditor": {
+    "path": ".local/phase2/goal-probes-v23/audit.py",
+    "bytes": 50343,
+    "sha256": "317e9037388ff8cb03aff495db4f69bb966ef3508a8737583714445802cd0932"
+  },
+  "core_auditor": {
+    "path": ".local/phase2/audit_live_usage_v23.py",
+    "bytes": 92288,
+    "sha256": "4d714cdf29d49150ee31fb357c9927a9d3a24c1caceb8c936dc0f4af2fc4a963"
+  },
+  "frozen_manifest_sha256": "54aeb64f231cb8f0d7ce9c4ad785c7272d8986003f5d7d2471557c429400d8dc",
+  "frozen_executable_sha256": "1ca5706f478f4eca2ccc50292323a8d9d9551a7155254e42fb3f0288de05039d",
+  "finished_driver_passed": false,
+  "finished_driver_failures": [
+    "ValueError: Composer terminal failure",
+    "one_completed_quest_required",
+    "independently_verified_worker_count_mismatch",
+    "router_completion_notice_missing",
+    "overlapping_settled_worker_requests_not_observed"
+  ],
+  "original_spec_matches": true,
+  "code_snapshots_match": true,
+  "driver_snapshots_match": true,
+  "saved_evidence_matches_recollection": true,
+  "independent_passes_reconstructed": false,
+  "reconstructed_passes": [],
+  "worker_token_step_counters": [],
+  "held_allocation_audit": {
+    "passed": true,
+    "original_scenario_cap": 360000,
+    "original_cap_preserved": true,
+    "serial_worker_starts": [],
+    "expected_serial_marker_count": 0,
+    "held_worker_budget_ledgers": [],
+    "missing_ledgers": [],
+    "errors": [],
+    "scope": "Final held allocation and stored admission reconstruction. No row or reservation is refunded; all started Workers, including failed/cancelled runs, remain allocated."
+  },
+  "known_usage_within_original_caps": true,
+  "known_gateway_tokens": 22100,
+  "unknown_attempt_ids": [],
+  "goal_exchange_bindings_valid": false,
+  "goal_audit": {
+    "passed": false,
+    "failures": [
+      "one_completed_quest_required",
+      "independently_verified_worker_count_mismatch",
+      "router_completion_notice_missing",
+      "overlapping_settled_worker_requests_not_observed"
+    ],
+    "independent_passes": {},
+    "goal_evidence": {
+      "passed": false,
+      "reason": "overlapping_settled_worker_requests_not_observed"
+    },
+    "input_checks": [
+      {
+        "path": "inputs/source-a.json",
+        "unchanged": true
+      },
+      {
+        "path": "inputs/source-b.json",
+        "unchanged": true
+      }
+    ],
+    "receipt_failures": [],
+    "usage": {
+      "known_total_tokens": 22100,
+      "unknown_attempt_ids": []
+    },
+    "identity_limit": "Configured proxy/model identity; physical upstream identity is unverified.",
+    "parallel_limit": "Overlapping Gateway admission windows, not physical upstream scheduling."
+  },
+  "core_declared_source_audit": {
+    "table_present": true,
+    "origin": "core-declared-source-prefetch-v1",
+    "source_count": 0,
+    "state_counts": {},
+    "worker_inventories": [],
+    "sources": [],
+    "completed_delivery_handoffs": [],
+    "tool_counters": [],
+    "tool_accounting_checks_passed": true,
+    "source_evidence_checks_passed": true,
+    "orphan_admission_event_ids": [],
+    "errors": [],
+    "interpretation_limit": "Core admission is charged as a tool operation and never as model-selected behavior. SQL source IDs are checked against model ledgers; runtime request ordering is additionally bounded by the persisted user-message/assistant order, not inferred from exported verified flags."
+  },
+  "read_snapshot_total_changes": 0,
+  "claim_boundary": "Actual goal-specific durable exchange chains plus independent Core SQL/hash and original current PASS reconstruction. Unique settled call windows are not raw HTTP request/response provenance. Controlled challenges do not replace strict acceptance.",
+  "passed": false
+}

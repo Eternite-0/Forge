@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP receipt history; actual File API current bytes",
+  "checks": 29,
+  "screenshots": [
+    "history-revision-light"
+  ],
+  "requests": 37,
+  "writes": 0,
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "results": [
+    "opening recorded changes reads only its exact immutable receipt endpoint",
+    "history displays true added and removed counts from the record",
+    "loaded receipt counts are reflected beside that timeline record",
+    "long recorded diffs reuse virtual source rendering",
+    "refresh retains the original diff DOM and reading position",
+    "close and reopen retain the mounted historical source position",
+    "reopening the same history panel does not refetch or reinterpret the receipt",
+    "current file content has a separate tab and source",
+    "recorded changes never fall back to the current file bytes",
+    "unloaded task request origin has an explicit status instead of a false navigation",
+    "loaded original request navigation returns to its actual message",
+    "two receipts for the same path keep distinct history tabs",
+    "same-path revisions keep their own exact counts",
+    "mock provenance stays explicit without denying that a tool write may have occurred",
+    "same-path receipt selection shows only that revision",
+    "receipt_missing reports its unavailable, size or malformed response explicitly",
+    "receipt_missing never exposes another receipt's diff",
+    "receipt_invalid reports its unavailable, size or malformed response explicitly",
+    "receipt_invalid never exposes another receipt's diff",
+    "receipt_malformed reports its unavailable, size or malformed response explicitly",
+    "receipt_malformed never exposes another receipt's diff",
+    "failed refresh hides the previously loaded diff",
+    "retry restores exact history without discarding its source reading state",
+    "a delayed history request has a genuine loading state",
+    "disconnect clears prior history tabs and visible receipt content",
+    "late old-generation history cannot overwrite the new workspace record",
+    "the new generation has only its own receipt tab",
+    "history navigation performs only existing read endpoints and the new exact receipt read",
+    "history navigation and cached reading positions never use persistent browser storage"
+  ],
+  "uncaughtPageErrors": 0
+}

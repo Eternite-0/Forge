@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP only",
+  "checks": 87,
+  "screenshots": [
+    "rebuild-forge-conversation-collapsed-home",
+    "rebuild-forge-conversation-collapsed-chat",
+    "rebuild-forge-conversation-router-worker-initial",
+    "rebuild-forge-conversation-regrouped-activity",
+    "rebuild-forge-conversation-router-worker",
+    "rebuild-forge-conversation-router-worker-dark",
+    "rebuild-forge-conversation-router-worker-small"
+  ],
+  "mutations": 0,
+  "requests": 81,
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "uncaughtPageErrors": 0
+}

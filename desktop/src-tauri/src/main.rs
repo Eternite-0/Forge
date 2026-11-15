@@ -2,7 +2,7 @@
 
 use forge_desktop::{
     core_host::{Connection, CoreHost, Status},
-    credential_vault,
+    credential_vault, workspace_files,
 };
 use serde_json::{json, Value};
 use tauri::{Manager, State, WebviewWindow};
@@ -29,6 +29,53 @@ fn runtime_retry(window: WebviewWindow, host: State<'_, CoreHost>) -> Result<Val
     main_window(&window)?;
     host.restart();
     Ok(json!({"requested":true}))
+}
+#[tauri::command]
+async fn workspace_files_list(
+    window: WebviewWindow,
+    host: State<'_, CoreHost>,
+    path: String,
+) -> Result<Vec<workspace_files::WorkspaceFile>, String> {
+    main_window(&window)?;
+    let root = host.workspace_root.clone();
+    tauri::async_runtime::spawn_blocking(move || workspace_files::list(&root, &path))
+        .await
+        .map_err(|_| "文件列表读取中断。".to_string())?
+}
+#[tauri::command]
+async fn workspace_file_read(
+    window: WebviewWindow,
+    host: State<'_, CoreHost>,
+    path: String,
+) -> Result<workspace_files::WorkspaceDocument, String> {
+    main_window(&window)?;
+    let root = host.workspace_root.clone();
+    tauri::async_runtime::spawn_blocking(move || workspace_files::read(&root, &path))
+        .await
+        .map_err(|_| "文件读取中断。".to_string())?
+}
+#[tauri::command]
+async fn workspace_changes(
+    window: WebviewWindow,
+    host: State<'_, CoreHost>,
+) -> Result<workspace_files::ChangeSet, String> {
+    main_window(&window)?;
+    let root = host.workspace_root.clone();
+    tauri::async_runtime::spawn_blocking(move || workspace_files::changes(&root))
+        .await
+        .map_err(|_| "更改读取中断。".to_string())?
+}
+#[tauri::command]
+async fn workspace_file_diff(
+    window: WebviewWindow,
+    host: State<'_, CoreHost>,
+    path: String,
+) -> Result<workspace_files::FileDiff, String> {
+    main_window(&window)?;
+    let root = host.workspace_root.clone();
+    tauri::async_runtime::spawn_blocking(move || workspace_files::diff(&root, &path))
+        .await
+        .map_err(|_| "更改读取中断。".to_string())?
 }
 #[tauri::command]
 fn credential_set(
@@ -151,7 +198,7 @@ fn main() {
                         || (url.scheme() == "tauri" && url.host_str() == Some("localhost"))
                         || (cfg!(debug_assertions)
                             && url.scheme() == "http"
-                            && url.host_str() == Some("localhost")
+                            && matches!(url.host_str(), Some("localhost" | "127.0.0.1"))
                             && url.port() == Some(5173))
                 })
                 .build(),
@@ -181,6 +228,10 @@ fn main() {
             workspace_restore,
             workspace_operation_status,
             workspace_operation_acknowledge,
+            workspace_files_list,
+            workspace_file_read,
+            workspace_changes,
+            workspace_file_diff,
             open_external
         ])
         .on_window_event(|window, event| {

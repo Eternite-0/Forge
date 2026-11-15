@@ -1,0 +1,35 @@
+{
+  "reason": "Preserve V22 documentation before V23 progress update",
+  "files": [
+    {
+      "original_path": "README.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/README.md",
+      "sha256": "2c35cf37176eb99bde68dc1bf1dc93aa6fb93747fe8af7cfa8aadbac694a0362"
+    },
+    {
+      "original_path": "docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/docs/PHASE2_AGENT_INTELLIGENCE_REPORT.md",
+      "sha256": "e56ed33dfb6fd7ca4b4824ef8b8055aa03ff12306cb08751fcd4a0eedf00db41"
+    },
+    {
+      "original_path": "docs/PHASE2_EXPERIMENTS.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/docs/PHASE2_EXPERIMENTS.md",
+      "sha256": "1808160193bb839a58b9650a74ce490df0cd9d3070616d6453a174154a8f81c5"
+    },
+    {
+      "original_path": "docs/audit/phase2/execution-chain-audit.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/docs/audit/phase2/execution-chain-audit.md",
+      "sha256": "d424573e2d2a46dc0fbe4b5687a819d5753d8f139bbd7b00eef99dd504a5f65d"
+    },
+    {
+      "original_path": "docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/docs/adr/ADR-009-agent-intelligence-contracts-and-review.md",
+      "sha256": "f271fde23527401a55110b522992b12bc60b2fbc79022dc16d1d3d40e2cced73"
+    },
+    {
+      "original_path": "docs/adr/ADR-010-bounded-serial-review-reserve.md",
+      "saved_path": "docs/audit/phase2/checkpoint-pre-v23-root-docs/docs/adr/ADR-010-bounded-serial-review-reserve.md",
+      "sha256": "c02009df81c63f57beca09534d2ccefdfea58fa056d11838288ca5bdec13510b"
+    }
+  ]
+}

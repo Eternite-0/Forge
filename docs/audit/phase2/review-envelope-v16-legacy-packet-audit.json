@@ -1,0 +1,29 @@
+{
+  "read_mode": "SQLite URI mode=ro; query_only=ON; BEGIN read snapshot; no Store initialization or Provider call",
+  "source_files": {
+    "independent_review.py": "2246d4a7803c8d1dfbf2ae46d5995f680fa5d56843e59c20112a1646f5b9d953",
+    "review_envelope.py": "8cd12ee53f83fae4f3d89b6cffed976b178d69ee04ab133a3bb5efe1fbba5105"
+  },
+  "runs": [
+    {
+      "run_id": "run_7932f0527e66",
+      "node_key": "draft-report",
+      "packet_bytes": 54421,
+      "expected_sha256": "29cb5b35d1ac9f431064d9ffa137d92aa8c0717edebf51690725207f411f3575",
+      "actual_sha256": "29cb5b35d1ac9f431064d9ffa137d92aa8c0717edebf51690725207f411f3575",
+      "unchanged": true,
+      "legacy_wire_equal": true,
+      "total_changes": 0
+    },
+    {
+      "run_id": "run_035942f959d8",
+      "node_key": "research",
+      "packet_bytes": 68149,
+      "expected_sha256": "f6d0fd266015410da021b87f4e9e8d9c91c005a3aef626e12b011ee29f15005a",
+      "actual_sha256": "f6d0fd266015410da021b87f4e9e8d9c91c005a3aef626e12b011ee29f15005a",
+      "unchanged": true,
+      "legacy_wire_equal": true,
+      "total_changes": 0
+    }
+  ]
+}

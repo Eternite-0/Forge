@@ -1,0 +1,161 @@
+{
+  "generated_at": "2026-11-15T10:49:01.019278+00:00",
+  "source_version": "v22",
+  "scope": "Additional immutable interpretation of original driver flags and final read-only usage snapshots. This addendum reads only finalized JSON artifacts, opens no database and changes no original record.",
+  "usage_audit": {
+    "path": "docs/audit/phase2/live-usage-v22-audit.json",
+    "bytes": 28266,
+    "sha256": "2bb82b52d275eb060f73e77dab283acffde12c09201c0f015ff271db41f958b8"
+  },
+  "runs": [
+    {
+      "run_id": "20261115T104536Z-L1-79aa8a",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T104536Z-L1-79aa8a/run.json",
+        "bytes": 127589,
+        "sha256": "a6cf5972281afcfa25c7fea7f046bb7baf1e90976d5e76225e98d261cc06f343"
+      },
+      "original_acceptance_status": "failed",
+      "original_acceptance_passed": false,
+      "original_driver_failure_flags": [
+        "remaining_workers_blocked_with_unsettled_model_attempts",
+        "quest_status_running",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:successful_worker_nodes",
+        "acceptance_failed:structured_deliveries",
+        "acceptance_failed:independent_content_review",
+        "acceptance_failed:readonly_tool_receipts",
+        "acceptance_failed:independent_delivery_review",
+        "acceptance_failed:three_ranked_findings_or_explicit_insufficient_evidence",
+        "acceptance_failed:real_source_citations",
+        "acceptance_failed:router_completion_summary"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.761,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "final_gateway_state_counts": {
+        "settled": 10
+      },
+      "final_missing_gateway_usage_count": 0,
+      "final_unknown_reserved_tokens": 0,
+      "worker_counters": [
+        {
+          "id": "run_9bd71910657d",
+          "worker_id": "worker_512e574e0aa5",
+          "node_key": "triage-analyst",
+          "state": "blocked",
+          "generation": 1,
+          "steps": 3,
+          "repairs": 2,
+          "token_spent": 11846,
+          "token_limit": 154136,
+          "tool_spent": 3,
+          "cost_limit_microunits": null,
+          "cost_spent_microunits": null,
+          "opening_tokens": 0,
+          "worker_component_tokens": 11846,
+          "worker_component_steps": 3,
+          "review_component_tokens": 0,
+          "review_component_steps": 0,
+          "tokens_exact": true,
+          "steps_exact": true
+        }
+      ],
+      "worker_model_response_rejections": [],
+      "failure_events": [
+        {
+          "seq": 21,
+          "event_id": "evt_26e6f8fbbd9a",
+          "event_type": "worker.blocked",
+          "run_id": "run_9bd71910657d",
+          "plan_id": "plan_77b94c21171c",
+          "task_node_key": "triage-analyst",
+          "reason_code": "context_budget"
+        }
+      ],
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T104536Z-L2-776888",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T104536Z-L2-776888/run.json",
+        "bytes": 48216,
+        "sha256": "1f8db2a5bcdf31ebfd678176b13a2b99b1d8b6c21b3d22e53fb44b53e2039418"
+      },
+      "original_acceptance_status": "failed",
+      "original_acceptance_passed": false,
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:three_or_four_specialist_workers",
+        "acceptance_unknown:real_source_citations",
+        "acceptance_unknown:artifact_receipt_hashes",
+        "acceptance_unknown:independent_content_review"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.003,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "final_gateway_state_counts": {
+        "settled": 5
+      },
+      "final_missing_gateway_usage_count": 0,
+      "final_unknown_reserved_tokens": 0,
+      "worker_counters": [],
+      "worker_model_response_rejections": [],
+      "failure_events": [],
+      "read_snapshot_total_changes": 0
+    },
+    {
+      "run_id": "20261115T104536Z-L3-774dfc",
+      "driver_record": {
+        "path": ".local/phase2/runs/20261115T104536Z-L3-774dfc/run.json",
+        "bytes": 55692,
+        "sha256": "6067e57abb9d644bb3da0ece35d200a24a13b34185e73af65386d78dcf62d086"
+      },
+      "original_acceptance_status": "failed",
+      "original_acceptance_passed": false,
+      "original_driver_failure_flags": [
+        "planner_did_not_produce_plan",
+        "acceptance_failed:completed_quest",
+        "acceptance_failed:approved_current_dag",
+        "acceptance_unknown:model_generated_dag",
+        "acceptance_unknown:research_math_architecture_coding_experiment_review",
+        "acceptance_unknown:real_numeric_ast_receipts",
+        "acceptance_unknown:independent_fixed_semantic_suite",
+        "acceptance_unknown:artifact_hashes",
+        "acceptance_unknown:core_restart_continuity",
+        "acceptance_unknown:context_compaction_continuity"
+      ],
+      "original_model_settlement_wait": {
+        "waited_seconds": 0.003,
+        "unsettled_attempts": 0,
+        "timeout_seconds": 30
+      },
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "final_missing_gateway_usage_count": 0,
+      "final_unknown_reserved_tokens": 0,
+      "worker_counters": [],
+      "worker_model_response_rejections": [],
+      "failure_events": [],
+      "read_snapshot_total_changes": 0
+    }
+  ],
+  "timing_boundary": {
+    "original_l1_unsettled_failure_flag_retained": true,
+    "original_l1_settlement_wait_reports_zero_unsettled": true,
+    "l1_final_attempts_all_settled": true,
+    "intermediate_unsettled_snapshot_persisted": false,
+    "exact_attempt_settlement_timestamps_available": false,
+    "interpretation": "The original driver flag describes its earlier failure observation. Final all-settled accounting does not reconstruct that earlier instant, remove the original flag, establish that execution succeeded, or convert the blocked Worker into a success. No transient unsettled attempt is counted as a final unknown; no final zero is projected backward."
+  },
+  "strict_acceptance_changed": false,
+  "phase2_complete": false
+}

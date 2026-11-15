@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope": "read_only_original_request_and_v15_source_evidence",
+  "execution_mode": "source_audit_no_provider_no_database",
+  "phase2_complete": false,
+  "original_request": "C:/Users/msi/.codex/attachments/243a1232-21d9-4505-b56a-882181ebc822/已粘贴的文本.txt",
+  "reference_verification": "docs/audit/phase2/verification-v15.json",
+  "required_gaps": [
+    {"capability": "remaining_running_dag_replanning", "explicit_sections": ["3.1", "4.3", "5.1"], "v15": "same_dag_approved_replacement_only"},
+    {"capability": "bounded_hierarchical_specialist_expansion", "explicit_sections": ["4.2", "4.3"], "v15": "incomplete"},
+    {"capability": "semantic_memory_retrieval", "explicit_sections": ["7.3"], "v15": "lexical_plus_aliases", "learned_or_embedding_required": false},
+    {"capability": "controlled_code_revision_test_repair", "explicit_sections": ["5.1", "5.2"], "v15": "own_artifact_revision_and_numeric_ast_only", "arbitrary_shell_or_repository_required": false},
+    {"capability": "message_specific_native_acp_payloads", "explicit_sections": ["8"], "v15": "ten_types_with_generic_assignment_identity"},
+    {"capability": "same_budget_live_algorithm_quality_study", "explicit_sections": ["10"], "v15": "fixed_offline_synthetic_mechanism_study_only"},
+    {"capability": "whole_complex_task_continuity", "explicit_sections": ["9", "14"], "v15": "all_three_latest_strict_runs_failed"}
+  ],
+  "additional_unproven_scope": ["multimodal_capability_handling_and_actual_compatible_input", "concurrent_multi_quest_completion", "cross_task_live_memory_reuse"],
+  "not_extra_requirements": ["different_model_for_independent_review", "embedding_or_learned_memory_index", "unrestricted_shell_execution", "unbounded_provider_maxima_probing", "unbounded_recursive_agents", "desktop_packaging"],
+  "corrected_old_gap": "model_performance.py now implements sourced online task/tool/retry/schema/latency/token/review metrics; price remains unknown when not configured",
+  "benchmark": {
+    "domains": ["code_contract_analysis", "integer_scheduling", "source_architecture_comparison"],
+    "difficulties": [1, 2, 3],
+    "team_variants": ["single_model", "static_team", "greedy", "capability_coverage", "complementarity", "dynamic_recomposition"],
+    "context_variants": ["full", "recency", "conventional_summary", "task_centric", "task_centric_source_recall"],
+    "governance_variants": ["model_claim", "tool_receipt", "independent_reviewer", "evidence_gated"],
+    "budget": "same_per_case_variant_total_gateway_token_cap_including_all_coordination_and_summary_review_calls",
+    "grading": "fixed_hidden_deterministic_task_test_and_citation_specification_not_model_self_verdict",
+    "single_model_limit": "coordination_policy_study_only_when_model_selection_is_identical",
+    "outputs": ["success", "false_acceptance", "false_rejection", "evidence_completeness", "latency", "tokens", "repairs", "review_rounds", "known_cost_coverage"],
+    "unknown_price": null,
+    "status": "design_not_executed"
+  }
+}

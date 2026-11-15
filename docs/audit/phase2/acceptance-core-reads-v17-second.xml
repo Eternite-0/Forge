@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="4" time="6.332" timestamp="2026-11-15T16:56:35.512745+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt[False]" time="1.953"><failure message="KeyError: 'artifact_integrity'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-729/test_evaluator_revalidates_com0')
+tamper = False
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt(
+        tmp_path, tamper
+    ):
+        store, manager, model, quest, _plan, producer, reader, _expected = completed_prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool("worker_read_completed_delivery", {"node_key": "producer"}),
+                tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, 2),
+                response(delivery("Read the full original predecessor")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        NodeVerifier(store).verify(quest.id, "reader")
+        if tamper:
+            with store.unit_of_work() as work:
+                work.connection.execute(
+                    "UPDATE events SET payload=json_set(payload,'$.claim','{}') "
+                    "WHERE event_type='worker.result' AND worker_id=?",
+                    (producer["worker_id"],),
+                )
+        report = evaluated(store, tmp_path)
+        expected = "failed" if tamper else "passed"
+        assert report["checks"]["receipt_integrity"]["status"] == expected
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == expected
+        if not tamper:
+            assert len(core["evidence"]["verified"]) == 1
+            assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_completed_delivery"
+        # Core reads do not satisfy seeded file source, required final artifact or
+        # independently reviewed final-report requirements of strict L3.
+&gt;       assert report["checks"]["artifact_integrity"]["status"] != "passed"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'artifact_integrity'
+
+tests\test_acceptance_core_reads_v17.py:59: KeyError</failure></testcase><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt[True]" time="1.881"><failure message="KeyError: 'artifact_integrity'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-729/test_evaluator_revalidates_com1')
+tamper = True
+
+    @pytest.mark.parametrize("tamper", [False, True])
+    def test_evaluator_revalidates_complete_delivery_instead_of_demanding_action_receipt(
+        tmp_path, tamper
+    ):
+        store, manager, model, quest, _plan, producer, reader, _expected = completed_prepared(tmp_path)
+        model.responses.extend(
+            [
+                tool("worker_read_completed_delivery", {"node_key": "producer"}),
+                tool("file_write", {"path": "work/review.json", "content": '{"checked":true}'}, 2),
+                response(delivery("Read the full original predecessor")),
+            ]
+        )
+        assert asyncio.run(manager.run(reader["id"]))["state"] == "review_pending"
+        NodeVerifier(store).verify(quest.id, "reader")
+        if tamper:
+            with store.unit_of_work() as work:
+                work.connection.execute(
+                    "UPDATE events SET payload=json_set(payload,'$.claim','{}') "
+                    "WHERE event_type='worker.result' AND worker_id=?",
+                    (producer["worker_id"],),
+                )
+        report = evaluated(store, tmp_path)
+        expected = "failed" if tamper else "passed"
+        assert report["checks"]["receipt_integrity"]["status"] == expected
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == expected
+        if not tamper:
+            assert len(core["evidence"]["verified"]) == 1
+            assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_completed_delivery"
+        # Core reads do not satisfy seeded file source, required final artifact or
+        # independently reviewed final-report requirements of strict L3.
+&gt;       assert report["checks"]["artifact_integrity"]["status"] != "passed"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'artifact_integrity'
+
+tests\test_acceptance_core_reads_v17.py:59: KeyError</failure></testcase><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_accepts_verified_receipt_read_without_counting_it_as_file_source" time="1.492" /><testcase classname="tests.test_acceptance_core_reads_v17" name="test_evaluator_accepts_actual_archive_source_and_rejects_changed_source_hash" time="0.474"><failure message="FileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-729\\test_evaluator_accepts_actual_0\\inputs\\scenario-3'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-729/test_evaluator_accepts_actual_0')
+
+    def test_evaluator_accepts_actual_archive_source_and_rejects_changed_source_hash(tmp_path):
+        # This explicitly scripted adapter's live tag exercises the durable live
+        # provenance gate. It performs no HTTP and is not real acceptance evidence.
+        model = Protocol(
+            [
+                response(
+                    "",
+                    calls=[
+                        {
+                            "id": f"source-{n}",
+                            "name": "file_read",
+                            "arguments": {"path": f"work/source-{n}.txt"},
+                        }
+                        for n in (1, 2)
+                    ],
+                ),
+                tool("worker_read_context_source", {"ordinal": 3, "max_chars": 2048}),
+                response(delivery()),
+            ]
+        )
+        store, manager, worker = native_archive_worker(tmp_path, model, depth=0)
+        assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
+        report = evaluated(store, tmp_path)
+        assert report["checks"]["receipt_integrity"]["status"] == "passed"
+        core = report["checks"]["core_context_read_integrity"]
+        assert core["status"] == "passed"
+        assert core["evidence"]["verified"][0]["tool_name"] == "worker_read_context_source"
+        with store.unit_of_work() as work:
+            row = work.connection.execute(
+                "SELECT call_id,result_json FROM worker_tool_calls WHERE run_id=? AND tool_name=?",
+                (worker["id"], "worker_read_context_source"),
+            ).fetchone()
+            result = json.loads(row["result_json"])
+            result["source_sha256"] = "0" * 64
+            work.connection.execute(
+                "UPDATE worker_tool_calls SET result_json=? WHERE call_id=?",
+                (json.dumps(result), row["call_id"]),
+            )
+&gt;       report = evaluated(store, tmp_path)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_acceptance_core_reads_v17.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_acceptance_core_reads_v17.py:22: in evaluated
+    module("acceptance_scenarios").seed_scenario(3, root), {}, root
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts\phase2\acceptance_scenarios.py:212: in seed_scenario
+    inputs.mkdir(parents=True, exist_ok=False)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-729/test_evaluator_accepts_actual_0/inputs/scenario-3')
+mode = 511, parents = True, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           FileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-729\\test_evaluator_accepts_actual_0\\inputs\\scenario-3'
+
+C:\Python313\Lib\pathlib\_local.py:722: FileExistsError</failure></testcase></testsuite></testsuites>

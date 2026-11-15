@@ -1,0 +1,87 @@
+FORGE native source port: browser verification
+Date: 2026-11-16
+Runner: existing desktop/tests/run-ui-smoke.mjs; installed Playwright C:/Python313/Lib/site-packages/playwright/driver/package; Edge channel msedge; Vite127.0.0.1:5173.
+No browser dependency was installed. No CUA, image generation, live provider, credential vault or real Core was used.
+
+Final results (each command exited0)
+ui-smoke.playwright.js: passed, 2 requests, requestIdReused=true, singleChat=true.
+ui-layout.playwright.js: passed, 184 checks, 3 original approval decisions, 14 screenshots.
+ui-conversation.playwright.js: passed, 87 checks, 0 mutations, 81 fixture requests.
+ui-settings-save.playwright.js: passed, 34 checks, 2 intended revision-bound HTTP writes, 1 synthetic credential command.
+ui-preview.playwright.js: passed, 72 checks, 11 screenshots, actual browser File API imports and two-page PDF bytes/download.
+ui-preview-tree.playwright.js: passed, 39 checks, 26 allowlisted synthetic native reads, 0 writes.
+Combined: 416 numbered checks plus smoke. Every suite reported uncaughtPageErrors=0; all browser storage checks reported local0/session0.
+
+Exact result logs
+desktop/output/playwright/source-port-smoke.json
+desktop/output/playwright/source-port-layout.json
+desktop/output/playwright/source-port-conversation.json
+desktop/output/playwright/source-port-settings-save.json
+desktop/output/playwright/source-port-preview.json
+desktop/output/playwright/source-port-preview-tree.json
+
+Source-bound checks added/rebuilt
+- Settings: jxU8 max768 with internal20px padding; BiIz title18/24/600 and title row32; header/search gap0; search36; group heading30/gap4/list gap1; nav row30 with outer13/inner14; native superellipse/fallback nav12.5/10 and group20/16; 1px settings group border; AWNZ label13/18.5714 and description12/16; FORGE selects compact input/md button28/13.
+- Preview: actual workspace pixel bounds320..W-352; normalized ratio retained through resize; keyboard10px/Home/End; double click uses current DUYS default formula; shared tree250 with200/60% bound; full view preserves split intent and documents; native960/720 threshold crossing hides/restores and explicit open/close clears restore intent; a second narrower crossing overwrites the snapshot with closed.
+- FORGE explicit adaptation: when a user opens the preview in a window<=720px, show one full-width file view and make retained chat inert. This is distinct from native resize auto-hide.
+- Kept original behavioral checks for drafts, mounted DOM, reading positions, polling, approvals, version binding, credential separation, unsafe HTML/URLs/images, source search/virtualization, tabs, PDF bytes/download, reduced motion and zero browser storage.
+
+Measured ordinary preview geometry (viewport / workspace / preview / document / tree / navigation)
+1152 / 808 / 422.640625 / 172.640625 / 250 / 340
+1280 / 936 / 519.234375 / 269.234375 / 250 / 340
+1400 / 1056 / 609.796875 / 359.796875 / 250 / 340
+1440 / 1096 / 640 / 390 / 250 / 340
+1920 / 1576 / 1002.25 / 752.25 / 250 / 340
+All five: document overflow0 and short filenames fully readable in both tree sections.
+Expanded preview at1440/1280: preview1384/1224; document1134/974; tree250.
+
+Failures resolved during validation
+- Full-width preview left the visible separator hit area; root restored preview-expanded divider display:none. Existing test caught it without weakening the assertion.
+- Settings save success notice precedes its panel refresh; the fixture now waits for revision4 before asserting the same revision/pending-restart state. No payload assertion was changed.
+- One concurrent Edge opening-animation sample missed intermediate frames; unchanged intermediate-frame assertion passed in the isolated final run, with measured widths [0,0,625.3125,630.796875,634.859375,640]. No product timing was changed for the test.
+
+Limits
+Browser settings/Core/approval data are synthetic HTTP fixtures. Native commands are synthetic bridge fixtures. File/PDF tests use genuine browser files/bytes, not a Tauri native window. These results do not establish Windows native DPI, packaged PDF/download, live provider connectivity or Core execution quality.
+No .test.mjs assertion, API, backend, dependency or product file was edited by the validation subtask. Four independent .playwright.js fixtures were updated with source-derived geometry and additional interaction coverage.
+
+Latest frozen preview/tree checkpoint — 2026-11-16
+Both commands exited0 on Edge/msedge, sequential runs:
+  node tests/run-ui-smoke.mjs ui-preview.playwright.js
+    checks78; screenshots11; uncaughtPageErrors0.
+    Result: desktop/output/playwright/new-reference-preview.json
+  node tests/run-ui-smoke.mjs ui-preview-tree.playwright.js
+    status passed; checks49; nativeReads26; writes0; uncaughtPageErrors0.
+    Result: desktop/output/playwright/new-reference-tree.json
+The six previous source-port-*.json logs are preserved. Replacing only the two
+preview counts in the prior six-suite checkpoint gives432 numbered checks plus
+smoke. Other suites were not rerun for this targeted toolbar/tree polish; their
+existing assertions contain no old Git/secondary text palette expectations.
+
+Additional final interaction/source checks
+- Tab plus activates a genuine multiple-file browser FileChooser; its imported
+  File API bytes feed the existing Markdown/source/PDF flow.
+- Native tab plus shows the all-files tree and focuses its existing filter.
+- Tree toggle is in the document toolbar and exposes its actual pressed state.
+- File find is collapsed initially; toolbar action opens it, Ctrl+F focuses it,
+  and Escape clears/closes it while retaining source reading position.
+- Native DMvp Markdown/TypeScript/text artwork uses decorative16px SVGs.
+- Added/deleted/modified have native20px outlined plus/minus/dot status glyphs.
+- Tree nesting uses8.75px level steps;1px guides align at10.75+level*8.75;
+  guides are quiet at0 and reveal at.75 opacity on hover.
+- Sectioned Git palette is exact #00a240/#e02e2a/#0285ff; normal selected rows
+  retain #0d0d0d and the native rgba(13,13,13,.049) background. Edge serializes
+  that alpha as.047, so the numerical check permits one8-bit alpha step(.003).
+  Status rows remain Git-colored, as the original source permits.
+- The final native resize measurement adds the whole visible left-panel slot,
+  separate from DUYS main-area W. The viewport960 test measures956px for the
+  native whole workspace row and crosses the960 breakpoint. Former1000px test
+  would measure996px and correctly would not trigger auto-hide.
+
+Visual review of screenshots from these final runs
+Inspected scale-preview-tree-1280.png, simple-preview-tree-expanded.png,
+preview-code-light.png, preview-pdf-light.png and preview-narrow.png locally.
+Confirmed distinct file glyphs, legible short tree paths, aligned nested guides,
+unclipped status boxes, toolbar/tree boundaries, source beginning directly under
+the toolbar, collapsed file search, and actual two-page PDF content with its
+native viewer controls. Narrow dark view keeps a single full-width file workspace
+without document overflow. No image generation or CUA was involved.

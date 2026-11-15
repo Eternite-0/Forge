@@ -7,6 +7,7 @@ import secrets
 
 import httpx
 import pytest
+from planner_capacity_fixtures import NativePlannerMock, configure_planner_capacity
 
 from forge_core.dispatcher import Dispatcher
 from forge_core.domain import ForgeEvent, Quest
@@ -162,13 +163,15 @@ def test_background_planner_and_composer_busy_do_not_consume_retries(
         if main.dispatcher.inbox(consumer):
             break
 
-    class Busy:
+    class Busy(NativePlannerMock):
         execution_mode = "mock"
 
         async def generate(self, request):
             raise ProviderError("concurrency_unavailable")
 
     main.router.provider = Busy()
+    if consumer == "planner":
+        configure_planner_capacity(main, main.router.provider)
     main.router.model_id = "mock"
     operation = main.process_pending_plan if consumer == "planner" else main.process_pending_team
     for _ in range(6):

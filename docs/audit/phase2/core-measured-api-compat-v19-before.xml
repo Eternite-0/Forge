@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="21" time="12.680" timestamp="2026-11-15T17:55:40.160901+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_integration" name="test_lifespan_dispatches_and_resumes_notice_without_fabricating_user_message" time="0.703" /><testcase classname="tests.test_m4_integration" name="test_two_dispatchers_fence_expired_claim_and_redeliver_after_reopen" time="0.094" /><testcase classname="tests.test_m4_integration" name="test_urgent_delivery_does_not_skip_earlier_cursor_gap" time="0.071" /><testcase classname="tests.test_m4_integration" name="test_handler_failure_rolls_back_inbox_then_poison_reaches_dead_letter" time="0.079" /><testcase classname="tests.test_m4_integration" name="test_graph_planner_sends_strict_wire_schema_through_gateway" time="0.073" /><testcase classname="tests.test_m4_integration" name="test_notice_failure_stays_pending_and_silent_decision_creates_no_message" time="0.150" /><testcase classname="tests.test_m4_integration" name="test_concurrent_worker_progress_does_not_ack_unseen_event" time="0.237" /><testcase classname="tests.test_m4_integration" name="test_slow_notice_model_does_not_block_delivery_of_later_critical_event" time="0.678" /><testcase classname="tests.test_m4_integration" name="test_notice_failures_back_off_persist_and_stop_after_limit" time="4.015" /><testcase classname="tests.test_m4_integration" name="test_authenticated_graph_controls_survive_restart_without_running_worker" time="0.339" /><testcase classname="tests.test_m4_integration" name="test_invalid_graph_never_changes_quest_or_outbox[edges0]" time="0.045" /><testcase classname="tests.test_m4_integration" name="test_invalid_graph_never_changes_quest_or_outbox[edges1]" time="0.044" /><testcase classname="tests.test_m4_integration" name="test_user_turn_automatically_plans_once_without_extra_user_message" time="4.157"><failure message="AssertionError: Background dispatch did not reach the expected state">tests\test_m4_integration.py:624: in test_user_turn_automatically_plans_once_without_extra_user_message
+    wait_for(lambda: client.get(path, headers=token).status_code == 200)
+tests\test_m4_integration.py:27: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state</failure></testcase><testcase classname="tests.test_m4_integration" name="test_planner_cancelled_claims_survive_reload_and_stop_after_five" time="0.553" /><testcase classname="tests.test_m4_integration" name="test_planner_refuses_stale_quest_after_model_call" time="0.082" /><testcase classname="tests.test_m4_adversarial" name="test_cancelled_quest_never_has_ready_plan_or_plan_control" time="0.076" /><testcase classname="tests.test_m4_adversarial" name="test_concurrent_notice_failure_does_not_dead_letter_successful_inflight" time="0.106" /><testcase classname="tests.test_m4_adversarial" name="test_expired_notice_attempt_is_fenced_from_new_attempt" time="0.114" /><testcase classname="tests.test_m4_adversarial" name="test_expired_notice_success_cannot_ack_new_inflight_attempt" time="0.115" /><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[False]" time="0.177"><failure message="assert False">tests\test_m4_adversarial.py:271: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\test_m4_adversarial.py:269: in race
+    assert await second
+E   assert False</failure></testcase><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[True]" time="0.165"><failure message="assert False">tests\test_m4_adversarial.py:271: in test_expired_planner_attempt_cannot_modify_new_attempt
+    asyncio.run(race())
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\test_m4_adversarial.py:269: in race
+    assert await second
+E   assert False</failure></testcase></testsuite></testsuites>

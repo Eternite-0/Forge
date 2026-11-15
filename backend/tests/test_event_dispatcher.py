@@ -15,6 +15,21 @@ def store(tmp_path):
     return Store(tmp_path / "dispatcher.sqlite3", workspace=Workspace.from_path(tmp_path))
 
 
+def drain_dispatcher(dispatcher, *, max_ticks=32):
+    """Drain this finite fixture without depending on each tick's time slice."""
+    for _ in range(max_ticks):
+        dispatcher.tick()
+        with dispatcher.store.connection() as connection:
+            latest = connection.execute("SELECT COALESCE(MAX(seq),0) FROM events").fetchone()[0]
+            lagging = connection.execute(
+                "SELECT 1 FROM event_consumers WHERE scan_seq<? OR cursor_seq<? LIMIT 1",
+                (latest, latest),
+            ).fetchone()
+        if lagging is None:
+            return
+    pytest.fail(f"Dispatcher did not drain the fixture within {max_ticks} ticks")
+
+
 def test_replay_is_per_consumer_and_fenced(store):
     quest = Quest(title="q", goal="g")
     store.save_quest(quest)
@@ -186,8 +201,7 @@ def test_tick_routes_planner_events_to_independent_consumer(store):
     store.append_event(proposed)
     store.append_event(ordinary)
     d = Dispatcher(store)
-    for _ in range(3):
-        d.tick()
+    drain_dispatcher(d)
     assert [item["event_id"] for item in d.inbox("planner")] == [proposed.id]
     assert {item["event_id"] for item in d.inbox("router")} == {proposed.id, ordinary.id}
 
@@ -198,8 +212,7 @@ def test_tick_routes_composer_only_approved_plan_events(store):
     store.append_event(approved)
     store.append_event(ordinary)
     d = Dispatcher(store)
-    for _ in range(3):
-        d.tick()
+    drain_dispatcher(d)
     assert [item["event_id"] for item in d.inbox("composer")] == [approved.id]
 
 

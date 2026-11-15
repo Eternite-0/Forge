@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="8" skipped="0" tests="111" time="17.592" timestamp="2026-11-15T16:03:54.264413+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_code_test_harness_phase2" name="test_actual_pure_functions_cover_recursion_loops_and_boolean_logic" time="0.002" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[import os\ndef f(x):\n return x]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[def f(x):\n return x.__class__]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[def f(x):\n return open('secret').read()]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[@print\ndef f(x):\n return x]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[def f(x=1):\n return x]" time="0.000" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[def f(x):\n return [item for item in x]]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_candidate_cannot_execute_python_or_acquire_authority[def f(x):\n def g(y):\n  return y\n return g(x)]" time="0.000" /><testcase classname="tests.test_code_test_harness_phase2" name="test_unbounded_computation_returns_a_bounded_test_failure[def f(x):\n return f(x)]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_unbounded_computation_returns_a_bounded_test_failure[def f(x):\n while x &gt; 0:\n  x = x + 1\n return x]" time="0.050" /><testcase classname="tests.test_code_test_harness_phase2" name="test_unbounded_computation_returns_a_bounded_test_failure[def f(x):\n return 2 ** 1000000]" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_wrong_value_and_type_are_failures_and_missing_parameters_are_rejected" time="0.001" /><testcase classname="tests.test_code_test_harness_phase2" name="test_real_subprocess_failure_drives_owned_revision_and_new_test_with_immutable_history" time="0.706" /><testcase classname="tests.test_code_test_harness_phase2" name="test_python_test_preserves_workspace_path_and_original_authority" time="0.103" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_delivery_self_repair_is_bounded_and_charges_actual_usage" time="0.210" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_invalid_delivery_stops_at_finite_repair_bound" time="0.252" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_failed_numeric_diagnostic_is_observed_and_never_replayed" time="0.424" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_mock_review_isolated_context_cannot_prove_live_completion" time="0.233"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_mock_review_isolated_cont0')
+
+    def test_mock_review_isolated_context_cannot_prove_live_completion(tmp_path):
+        verdict = {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+        store, manager, model, worker = prepared(
+            tmp_path,
+            [tool("file_read", {"path": "work/input.txt"}), response(delivery()), response(verdict)],
+        )
+        asyncio.run(manager.run(worker["id"]))
+&gt;       result = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_intelligence_phase2.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1528: in review
+    packet = _packet(self.store, connection, run, parse_diagnostics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C5CB67B0&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5BEF970&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5D333A0&gt;, parse_diagnostics = True
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_worker_intelligence_phase2" name="test_review_revision_retains_budget_receipts_and_survives_core_reopen" time="0.242"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_review_revision_retains_b0')
+
+    def test_review_revision_retains_budget_receipts_and_survives_core_reopen(tmp_path):
+        verdict = {
+            "verdict": "NEEDS_REVISION",
+            "findings": ["Explain source finding"],
+            "revision_goals": ["State the actual source finding"],
+            "confidence": 0.7,
+        }
+        store, manager, model, worker = prepared(
+            tmp_path,
+            [
+                tool("file_read", {"path": "work/input.txt"}),
+                response(delivery()),
+                response(verdict),
+                response(delivery("Corrected finding")),
+            ],
+        )
+        asyncio.run(manager.run(worker["id"]))
+        prior = manager.get(worker["id"])
+        service = IndependentReviewService(manager)
+&gt;       result = asyncio.run(service.review(worker["id"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_intelligence_phase2.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1528: in review
+    packet = _packet(self.store, connection, run, parse_diagnostics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C5D0C6B0&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5D4C8B0&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5D5B9D0&gt;, parse_diagnostics = True
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_worker_intelligence_phase2" name="test_model_claim_without_tool_receipt_blocks_review_and_is_durable" time="0.168" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_artifact_change_during_review_is_recorded_and_rejects_pass" time="0.357" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_review_rejects_missing_original_user_contract" time="0.292" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_empty_revision_goals_fail_closed_without_resuming_worker" time="0.296"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_empty_revision_goals_fail0')
+
+    def test_empty_revision_goals_fail_closed_without_resuming_worker(tmp_path):
+        verdict = {
+            "verdict": "NEEDS_REVISION",
+            "findings": ["bad"],
+            "revision_goals": [],
+            "confidence": 0.8,
+        }
+        _store, manager, _model, worker = prepared(
+            tmp_path,
+            [
+                tool("file_read", {"path": "work/input.txt"}),
+                response(delivery()),
+                response(verdict),
+            ],
+        )
+        asyncio.run(manager.run(worker["id"]))
+&gt;       result = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_intelligence_phase2.py:349: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1528: in review
+    packet = _packet(self.store, connection, run, parse_diagnostics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C5D4E030&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5D4E6B0&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5D32F50&gt;, parse_diagnostics = True
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_worker_intelligence_phase2" name="test_preexecution_scope_rejection_is_observed_without_fake_receipt" time="0.331" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_missing_local_file_has_real_failure_receipt_and_bounded_correction" time="0.388"><failure message="AssertionError: assert ('review_pending' == 'review_pending'&#10;  &#10;    review_pending and 2 == 1)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_missing_local_file_has_re0')
+
+    def test_missing_local_file_has_real_failure_receipt_and_bounded_correction(tmp_path):
+        store, manager, model, worker = prepared(
+            tmp_path,
+            [
+                tool("file_read", {"path": "work/missing.txt"}),
+                tool("file_read", {"path": "work/input.txt"}, 2),
+                response(delivery()),
+            ],
+        )
+        result = asyncio.run(manager.run(worker["id"]))
+&gt;       assert result["state"] == "review_pending" and result["repairs"] == 1
+E       AssertionError: assert ('review_pending' == 'review_pending'
+E         
+E           review_pending and 2 == 1)
+
+backend\tests\test_worker_intelligence_phase2.py:395: AssertionError</failure></testcase><testcase classname="tests.test_worker_intelligence_phase2" name="test_native_agent_protocol_validates_assignment_and_deadletters_forgery" time="0.156" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_legacy_worker_proposal_is_labelled_nonexecution" time="0.055" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_provider_failure_records_only_controlled_codes[budget_exhausted-budget_exhausted]" time="0.181" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_provider_failure_records_only_controlled_codes[untrusted-secret-marker-unexpected_provider_error]" time="0.155" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_committed_review_revision_survives_restart_before_requeue" time="0.292"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_committed_review_revision0')
+
+    def test_committed_review_revision_survives_restart_before_requeue(tmp_path):
+        verdict = {
+            "verdict": "NEEDS_REVISION",
+            "findings": ["Missing detail"],
+            "revision_goals": ["Add the source detail"],
+            "confidence": 0.7,
+        }
+        store, manager, model, worker = prepared(
+            tmp_path,
+            [
+                tool("file_read", {"path": "work/input.txt"}),
+                response(delivery()),
+                response(verdict),
+                response(delivery("Fixed")),
+            ],
+        )
+        asyncio.run(manager.run(worker["id"]))
+    
+        def crash_after_review(*_):
+            raise RuntimeError("Simulated Core stop between result and requeue")
+    
+        manager.request_revision = crash_after_review
+        with pytest.raises(RuntimeError, match="Simulated Core stop"):
+&gt;           asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+
+backend\tests\test_worker_intelligence_phase2.py:505: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1528: in review
+    packet = _packet(self.store, connection, run, parse_diagnostics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C5DB05D0&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5D4F970&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5D1FD90&gt;, parse_diagnostics = True
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_worker_intelligence_phase2" name="test_settled_gateway_truncation_repairs_compact_delivery_without_partial_tool_effects[False]" time="0.447" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_settled_gateway_truncation_repairs_compact_delivery_without_partial_tool_effects[True]" time="0.304" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_unknown_provider_timeout_does_not_enter_truncation_repair" time="0.149" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_unsettled_live_provenance_stub_cannot_authorize_truncation_repair" time="0.135" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_authorized_worker_renews_between_settled_steps_beyond_initial_lease" time="0.254" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_worker_lease_renewal_never_revives_stale_or_unauthorized_claim[expired]" time="0.117" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_worker_lease_renewal_never_revives_stale_or_unauthorized_claim[competing_owner]" time="0.118" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_worker_lease_renewal_never_revives_stale_or_unauthorized_claim[paused]" time="0.105" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_worker_lease_renewal_never_revives_stale_or_unauthorized_claim[plan_changed]" time="0.107" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_worker_lease_renewal_stays_inside_original_task_deadline" time="0.104" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_model_failure_records_fixed_exception_label_without_raw_text[failure0-TimeoutError]" time="0.155" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_model_failure_records_fixed_exception_label_without_raw_text[failure1-TypeError]" time="0.131" /><testcase classname="tests.test_worker_intelligence_phase2" name="test_outer_worker_timeout_keeps_actual_gateway_attempt_unknown" time="0.175" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_settled_late_response_only_reconciles_its_exact_reserve[pause]" time="0.186" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_settled_late_response_only_reconciles_its_exact_reserve[cancel]" time="0.190" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_old_settlement_never_refunds_new_owners_live_reservation" time="0.279" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_reopen_recovers_settled_call_without_replaying_crashed_response" time="0.286" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_tick_recovers_all_states_accounting_only_after_crash[False-pause]" time="0.227" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_tick_recovers_all_states_accounting_only_after_crash[False-cancel]" time="0.201" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_tick_recovers_all_states_accounting_only_after_crash[True-pause]" time="0.213" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_tick_recovers_all_states_accounting_only_after_crash[True-cancel]" time="0.209" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-missing]" time="0.137" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-reserved]" time="0.151" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-unknown]" time="0.159" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-overrun]" time="0.138" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-wrong_run]" time="0.140" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-wrong_provider]" time="0.135" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-null_usage]" time="0.134" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[mock-wrong_call]" time="0.133" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-missing]" time="0.137" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-reserved]" time="0.148" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-unknown]" time="0.136" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-overrun]" time="0.397" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-wrong_run]" time="0.144" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-wrong_provider]" time="0.152" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-null_usage]" time="0.159" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_unproven_attempts_cannot_release_any_local_reservation[live-wrong_call]" time="0.157" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_current_synchronous_live_adapter_keeps_original_response_usage_contract" time="0.177" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_stale_synchronous_live_response_cannot_settle_without_gateway_proof" time="0.173" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_late_cost_settlement_only_releases_original_scopes_once[None]" time="0.148" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_late_cost_settlement_only_releases_original_scopes_once[input_price]" time="0.146" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_late_cost_settlement_only_releases_original_scopes_once[price_version]" time="0.145" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_late_cost_settlement_only_releases_original_scopes_once[cost_charged]" time="0.150" /><testcase classname="tests.test_worker_model_usage_phase2" name="test_mock_current_owner_and_unsent_refund_remain_exactly_once" time="0.216" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[missing]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[unknown]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[bool]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[negative]" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[version]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[context]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_envelope_requires_explicit_valid_bounded_policy[small_verdict]" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_cycle_policy_counts_remaining_stages_without_charging" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_lossless_projection_handles_unicode_escaping_and_hostile_reference_objects" time="0.001" /><testcase classname="tests.test_review_envelope_phase2" name="test_legacy_wire_and_packet_keep_the_same_fields_and_hash" time="0.255"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_legacy_wire_and_packet_ke0')
+
+    def test_legacy_wire_and_packet_keep_the_same_fields_and_hash(tmp_path):
+        store, manager, _model, worker = prepared(
+            tmp_path, [tool("file_read", {"path": "work/input.txt"}), response(delivery())]
+        )
+        asyncio.run(manager.run(worker["id"]))
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+&gt;           packet = _packet(store, connection, row)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C6F88170&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C6F16E30&gt;
+run = &lt;sqlite3.Row object at 0x00000200C6ED2C80&gt;, parse_diagnostics = False
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_review_envelope_phase2" name="test_packet_limits_count_complete_sources_artifacts_and_delivery_in_bytes" time="0.000" /><testcase classname="tests.test_review_envelope_phase2" name="test_native_review_then_revision_then_fresh_pass_within_original_cycle" time="0.289"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_native_review_then_revisi0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000200C5CAB5C0&gt;
+
+    def test_native_review_then_revision_then_fresh_pass_within_original_cycle(tmp_path, monkeypatch):
+        store, manager, _model, worker = new_pending(tmp_path, monkeypatch)
+        original = manager.get(worker["id"])
+        posted = []
+        reviewed = []
+    
+        def handle(request):
+            body = json.loads(request.content)
+            posted.append(body)
+            if body.get("tools"):
+                message = delivery("Inspected complete work/input.txt; unchanged evidence retained.")
+            else:
+                reviewed.append(body)
+                message = (
+                    {
+                        "verdict": "NEEDS_REVISION",
+                        "findings": ["Clarify the exact inspected source."],
+                        "revision_goals": [
+                            "State the complete inspected source name and preserve evidence."
+                        ],
+                        "confidence": 0.8,
+                    }
+                    if len(reviewed) == 1
+                    else {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
+                )
+                assert body["max_tokens"] == 1024
+            return httpx.Response(
+                200,
+                json={
+                    "choices": [{"message": {"content": _json(message)}, "finish_reason": "stop"}],
+                    "usage": {"prompt_tokens": 25, "completion_tokens": 15},
+                },
+            )
+    
+        gateway = ProviderGateway(
+            ProviderConfig(
+                id="protocol",
+                kind="openai_compatible",
+                base_url="https://example.invalid/v1",
+                credential_ref="FORGE_PROVIDER_KEY_TEST",
+                supports_tools=True,
+            ),
+            credential_resolver=lambda _: "fixture",
+            transport=httpx.MockTransport(handle),
+            budget_ledger=ModelCallBudgetLedger(store.path, token_limit=200000, concurrency_limit=1),
+        )
+        manager.providers = ProviderPool({"protocol": gateway})
+        with store.connection() as connection:
+            connection.execute("PRAGMA query_only=ON")
+            connection.execute("BEGIN")
+            row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+&gt;           packet = _packet(store, connection, row)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_review_envelope_phase2.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C6F8B410&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5D4FC40&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5DA7370&gt;, parse_diagnostics = False
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_review_envelope_phase2" name="test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review" time="0.331"><failure message="forge_core.domain.DomainError: Independent review requires successful tool evidence">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-663/test_budget_for_one_review_can0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000200C5CABE10&gt;
+
+    def test_budget_for_one_review_cannot_consume_reserved_correction_and_second_review(
+        tmp_path, monkeypatch
+    ):
+        store, manager, model, worker = new_pending(tmp_path, monkeypatch)
+        # Synthetic previous settled spending isolates the new cycle-policy gate.
+        with store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE worker_runs SET token_spent=token_limit-20000 WHERE id=?", (worker["id"],)
+            )
+        before = manager.get(worker["id"])
+        with pytest.raises(ReviewEnvelopeError) as caught:
+&gt;           asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+
+backend\tests\test_review_envelope_phase2.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend\src\forge_core\independent_review.py:1528: in review
+    packet = _packet(self.store, connection, run, parse_diagnostics=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000200C5DBB110&gt;
+connection = &lt;sqlite3.Connection object at 0x00000200C5D4E3E0&gt;
+run = &lt;sqlite3.Row object at 0x00000200C5CCCE50&gt;, parse_diagnostics = True
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        if not any(item.get("execution_mode") == run["execution_mode"] for item in receipts):
+&gt;           raise DomainError("Independent review requires successful tool evidence")
+E           forge_core.domain.DomainError: Independent review requires successful tool evidence
+
+backend\src\forge_core\independent_review.py:375: DomainError</failure></testcase><testcase classname="tests.test_review_envelope_phase2" name="test_unsent_review_release_retains_cycle_stage_without_resetting_usage" time="0.471" /><testcase classname="tests.test_tool_engine" name="test_actual_mock_run_file_write_needs_grant_and_receipt_is_immutable" time="0.163" /><testcase classname="tests.test_tool_engine" name="test_actual_numeric_subprocess_and_escape_rejection" time="0.242" /><testcase classname="tests.test_tool_engine" name="test_r2_approval_consumption_and_intent_are_atomic_on_real_sql_failure" time="0.094" /><testcase classname="tests.test_tool_engine" name="test_r2_approval_cannot_be_consumed_twice" time="0.103" /><testcase classname="tests.test_tool_engine" name="test_replaced_parameters_and_sensitive_paths_are_rejected" time="0.083" /><testcase classname="tests.test_tool_engine" name="test_abandoned_effect_is_uncertain_and_never_replayed" time="0.109" /><testcase classname="tests.test_tool_engine" name="test_file_write_create_only_never_overwrites" time="0.101" /><testcase classname="tests.test_tool_engine" name="test_real_git_status_rejects_external_gitdir" time="0.240" /><testcase classname="tests.test_tool_engine" name="test_http_error_is_failed_receipt" time="0.120" /><testcase classname="tests.test_tool_engine" name="test_v7_failure_rolls_back_all_components" time="0.023" /><testcase classname="tests.test_tool_engine" name="test_mock_worker_and_forged_receipt_never_complete" time="0.083" /><testcase classname="tests.test_tool_engine" name="test_unknown_or_unapproved_action_is_rejected" time="0.041" /><testcase classname="tests.test_tool_engine" name="test_model_cannot_register_tool_or_trusted_evidence" time="0.033" /><testcase classname="tests.test_tool_engine" name="test_git_config_cannot_redirect_reads[[include]\npath = /outside/config\n]" time="0.063" /><testcase classname="tests.test_tool_engine" name="test_git_config_cannot_redirect_reads[[core]\nworktree = /outside\n]" time="0.066" /><testcase classname="tests.test_tool_engine" name="test_git_config_cannot_redirect_reads[[extensions]\nworktreeConfig = true\n]" time="0.066" /><testcase classname="tests.test_tool_engine" name="test_git_config_cannot_redirect_reads[[core]\nfsmonitor = evil\n]" time="0.064" /><testcase classname="tests.test_tool_engine" name="test_dns_uses_remaining_wall_deadline" time="0.103" /><testcase classname="tests.test_tool_engine" name="test_mcp_protocol_error_has_failed_receipt[{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;bad-mcp&quot;,&quot;error&quot;:{&quot;code&quot;:-1}}]" time="0.128" /><testcase classname="tests.test_tool_engine" name="test_mcp_protocol_error_has_failed_receipt[{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;other&quot;,&quot;result&quot;:{}}]" time="0.121" /><testcase classname="tests.test_tool_engine" name="test_mcp_protocol_error_has_failed_receipt[not JSON]" time="0.220" /><testcase classname="tests.test_tool_engine" name="test_old_plan_pending_does_not_suppress_current_tool_approval" time="0.149" /><testcase classname="tests.test_tool_engine" name="test_concurrent_same_call_requests_one_approval_and_separate_calls_bind_individually" time="0.186" /></testsuite></testsuites>

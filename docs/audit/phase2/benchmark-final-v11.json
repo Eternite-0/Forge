@@ -1,0 +1,2214 @@
+{
+  "run_id": "benchmark_f23819557132",
+  "created_at": "2026-11-15T06:25:07.121034+00:00",
+  "suite": "forge-intelligence-offline-v1",
+  "execution_mode": "offline_synthetic",
+  "live_provider_calls": 0,
+  "dataset_sha256": "99cdfeeae6df2635f03c768ec7290230452e31e15ae65bee74d885aaf1ef8cec",
+  "dataset": {
+    "team": [
+      [
+        "code-small",
+        "coding",
+        1,
+        [
+          "coding"
+        ]
+      ],
+      [
+        "math-check",
+        "mathematics",
+        1,
+        [
+          "math"
+        ]
+      ],
+      [
+        "research-architecture",
+        "research",
+        2,
+        [
+          "research",
+          "architect"
+        ]
+      ],
+      [
+        "code-review",
+        "coding",
+        2,
+        [
+          "coding",
+          "reviewer"
+        ]
+      ],
+      [
+        "research-experiment",
+        "research",
+        3,
+        [
+          "research",
+          "math",
+          "coding",
+          "experiment",
+          "reviewer"
+        ]
+      ],
+      [
+        "system-development",
+        "architecture",
+        3,
+        [
+          "planner",
+          "architect",
+          "coding",
+          "experiment",
+          "reviewer"
+        ]
+      ]
+    ],
+    "context": [
+      [
+        "coding",
+        1,
+        "Keep the original Python source unchanged.",
+        "Run the regression test before final delivery."
+      ],
+      [
+        "mathematics",
+        1,
+        "Use exact integer arithmetic.",
+        "Check the zero and negative boundary cases."
+      ],
+      [
+        "research",
+        2,
+        "Cite every factual conclusion.",
+        "Retain the original source timestamp."
+      ],
+      [
+        "architecture",
+        2,
+        "Preserve the public API.",
+        "The implementation must survive Core restart."
+      ],
+      [
+        "experiment",
+        3,
+        "Use the fixed random seed 41.",
+        "Report failed trials as well as successes."
+      ],
+      [
+        "multimodal",
+        3,
+        "Keep all original image files.",
+        "Do not infer unreadable text as verified facts."
+      ]
+    ],
+    "role_capabilities": {
+      "coding": "coding",
+      "math": "mathematics",
+      "research": "research",
+      "architect": "architecture",
+      "experiment": "mathematics",
+      "reviewer": "instruction_following",
+      "planner": "planning"
+    }
+  },
+  "limitations": "Exploratory deterministic algorithm regressions with small fixed test sets, no statistical generalization or real task-success claim. Actual runtime E2E evidence is reported separately.",
+  "team_composition": {
+    "cases": 6,
+    "rows": [
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "single_model",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0006067999929655343,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "static_team",
+        "selected": [
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 300,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00018649999401532114,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "greedy",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003268999862484634,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "coverage",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0002761000068858266,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00027150000096298754,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00026309999520890415,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0002505000156816095,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-small",
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-coding"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.000669400003971532,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "single_model",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00027990000671707094,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "static_team",
+        "selected": [
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 300,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00024369999300688505,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "greedy",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.000367300002835691,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "coverage",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00025729998014867306,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00026259999140165746,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00027150000096298754,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0002578999847173691,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "math-check",
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-mathematics"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 1,
+        "estimated_tokens": 300,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0002589999930933118,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "single_model",
+        "selected": [
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00035539999953471124,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "static_team",
+        "selected": [
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00018069997895509005,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "greedy",
+        "selected": [
+          "specialist-research",
+          "specialist-architecture"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00034920001053251326,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "coverage",
+        "selected": [
+          "specialist-research",
+          "specialist-architecture"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003529000096023083,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-research",
+          "specialist-architecture"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003732999903149903,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-research",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 900,
+        "recomposition_count": 1,
+        "completed_assignment_preserved": true,
+        "algorithm_seconds": 0.0007603999983984977,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-research",
+          "specialist-architecture"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003918000147677958,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-architecture",
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-research",
+          "specialist-architecture"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003392999933566898,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "single_model",
+        "selected": [
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0010211000044364482,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "static_team",
+        "selected": [
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 600,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00021579998428933322,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "greedy",
+        "selected": [
+          "specialist-coding",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003617999900598079,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "coverage",
+        "selected": [
+          "specialist-coding",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00037919997703284025,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-coding",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00035149999894201756,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-coding",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 1,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 900,
+        "recomposition_count": 1,
+        "completed_assignment_preserved": true,
+        "algorithm_seconds": 0.0006794000219088048,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-coding",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0003786000015679747,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "code-review",
+        "domain": "coding",
+        "difficulty": 2,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-coding",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 2,
+        "specialist_targets_total": 2,
+        "estimated_tokens": 600,
+        "synthetic_cost_microunits": 1200,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00039209998794831336,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "single_model",
+        "selected": [
+          "general",
+          "general",
+          "general",
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 1500,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0006086000066716224,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "static_team",
+        "selected": [
+          "general",
+          "general",
+          "general",
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 1500,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.000299000006634742,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "greedy",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0005794999888166785,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "coverage",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.001465699984692037,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.001185000000987202,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 4,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 2700,
+        "recomposition_count": 1,
+        "completed_assignment_preserved": true,
+        "algorithm_seconds": 0.002036500023677945,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0009817999962251633,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "research-experiment",
+        "domain": "research",
+        "difficulty": 3,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-research",
+          "specialist-mathematics",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0010172000038437545,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "single_model",
+        "selected": [
+          "general",
+          "general",
+          "general",
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 1500,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.00050380002357997,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "static_team",
+        "selected": [
+          "general",
+          "general",
+          "general",
+          "general",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 0,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 1500,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.000287900009425357,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "greedy",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0005155000253580511,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "coverage",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.001130200020270422,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "complementarity",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.001190500013763085,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "dynamic_recomposition",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "general"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 4,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 2700,
+        "recomposition_count": 1,
+        "completed_assignment_preserved": true,
+        "algorithm_seconds": 0.001946400007000193,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "no_coordination",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0012211999855935574,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      },
+      {
+        "case": "system-development",
+        "domain": "architecture",
+        "difficulty": 3,
+        "variant": "no_confidence",
+        "selected": [
+          "specialist-planning",
+          "specialist-architecture",
+          "specialist-coding",
+          "specialist-mathematics",
+          "specialist-instruction_following"
+        ],
+        "contract_passed": true,
+        "violations": [],
+        "specialist_targets_met": 5,
+        "specialist_targets_total": 5,
+        "estimated_tokens": 1500,
+        "synthetic_cost_microunits": 3000,
+        "recomposition_count": 0,
+        "completed_assignment_preserved": null,
+        "algorithm_seconds": 0.0015540999884251505,
+        "actual_model_tokens": 0,
+        "actual_provider_cost": null,
+        "task_success": null,
+        "mode": "synthetic_selection"
+      }
+    ],
+    "summary": [
+      {
+        "variant": "single_model",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 0.125
+      },
+      {
+        "variant": "static_team",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 0.0
+      },
+      {
+        "variant": "greedy",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 1.0
+      },
+      {
+        "variant": "coverage",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 1.0
+      },
+      {
+        "variant": "complementarity",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 1.0
+      },
+      {
+        "variant": "dynamic_recomposition",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 0.75
+      },
+      {
+        "variant": "no_coordination",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 1.0
+      },
+      {
+        "variant": "no_confidence",
+        "attempts": 6,
+        "contract_pass_rate": 1.0,
+        "specialist_target_fraction": 1.0
+      }
+    ],
+    "limitations": "Synthetic profiles and prices. Contract/specialist proxies do not measure model task quality, hierarchy or actual adaptive runtime. Runtime retention is separately regression tested."
+  },
+  "context_compression": {
+    "cases": 6,
+    "input_byte_limit": 6144,
+    "rows": [
+      {
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15514,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 6099,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5626,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "coding",
+        "difficulty": 1,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5902,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15738,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5911,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5701,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "mathematics",
+        "difficulty": 1,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5936,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15589,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 6141,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5656,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "research",
+        "difficulty": 2,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5901,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "architecture",
+        "difficulty": 2,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15783,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "architecture",
+        "difficulty": 2,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5931,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "architecture",
+        "difficulty": 2,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "architecture",
+        "difficulty": 2,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5716,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "architecture",
+        "difficulty": 2,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5943,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "experiment",
+        "difficulty": 3,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15689,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "experiment",
+        "difficulty": 3,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5891,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "experiment",
+        "difficulty": 3,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "experiment",
+        "difficulty": 3,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5686,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "experiment",
+        "difficulty": 3,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5925,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "multimodal",
+        "difficulty": 3,
+        "variant": "full_context",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 15695,
+        "budget_admitted": false,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "multimodal",
+        "difficulty": 3,
+        "variant": "recency_truncation",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5891,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 0,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "multimodal",
+        "difficulty": 3,
+        "variant": "conventional_summary",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 779,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 0,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "multimodal",
+        "difficulty": 3,
+        "variant": "task_centric",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5686,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 1,
+        "source_grounded_obligations": 1,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      },
+      {
+        "domain": "multimodal",
+        "difficulty": 3,
+        "variant": "task_centric_source_recall",
+        "input_byte_limit": 6144,
+        "serialized_bytes": 5931,
+        "budget_admitted": true,
+        "obligations": 2,
+        "retained_obligations": 2,
+        "source_grounded_obligations": 2,
+        "source_exact_hash_verified": true,
+        "core_reopened": true,
+        "model_calls": 0,
+        "model_tokens": 0,
+        "provider_cost": null,
+        "mode": "synthetic_context_actual_archive"
+      }
+    ],
+    "summary": [
+      {
+        "variant": "full_context",
+        "admission_rate": 0.0,
+        "constraint_retention": 0.0,
+        "source_grounded_recall": 0.0
+      },
+      {
+        "variant": "recency_truncation",
+        "admission_rate": 1.0,
+        "constraint_retention": 0.0,
+        "source_grounded_recall": 0.0
+      },
+      {
+        "variant": "conventional_summary",
+        "admission_rate": 1.0,
+        "constraint_retention": 0.5,
+        "source_grounded_recall": 0.0
+      },
+      {
+        "variant": "task_centric",
+        "admission_rate": 1.0,
+        "constraint_retention": 0.5,
+        "source_grounded_recall": 0.5
+      },
+      {
+        "variant": "task_centric_source_recall",
+        "admission_rate": 1.0,
+        "constraint_retention": 1.0,
+        "source_grounded_recall": 1.0
+      }
+    ],
+    "limitations": "Fixed extractive summary baseline, not model-generated summary. Equal serialized UTF-8 byte budgets, not measured provider token budgets. Full context exceeding the same budget is refused. Source hashes/IDs, not text similarity, establish source recovery."
+  },
+  "governance": {
+    "dataset": "tool-governance-matrix-v2",
+    "mode": "isolated-local-synthetic-worker",
+    "external_requests": 0,
+    "actual_execution_requests": 3,
+    "unique_action_receipts": 2,
+    "cases": [
+      {
+        "case": "r0_actual_file_read",
+        "expected": "allow",
+        "actual": "allow",
+        "boundary": "execution",
+        "reason": null
+      },
+      {
+        "case": "r1_missing_grant",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Tool authorization is required"
+      },
+      {
+        "case": "r1_actual_granted_write",
+        "expected": "allow",
+        "actual": "allow",
+        "boundary": "execution",
+        "reason": null
+      },
+      {
+        "case": "idempotent_receipt",
+        "expected": "allow",
+        "actual": "allow",
+        "boundary": "receipt_replay",
+        "reason": null
+      },
+      {
+        "case": "reserved_parameter_substitution",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Tool parameters differ from Worker reservation"
+      },
+      {
+        "case": "path_attack_0",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Resource outside workspace"
+      },
+      {
+        "case": "path_attack_1",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Resource includes protected configuration"
+      },
+      {
+        "case": "path_attack_2",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Sensitive resource is protected"
+      },
+      {
+        "case": "grant_revoked_before_execution",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "begin",
+        "reason": "Workspace grant was revoked"
+      },
+      {
+        "case": "r2_missing_approval",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Tool authorization is required"
+      },
+      {
+        "case": "r2_approval_parameter_substitution",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Tool authorization is required"
+      },
+      {
+        "case": "r2_concurrent_winner",
+        "expected": "allow",
+        "actual": "allow",
+        "boundary": "prepare"
+      },
+      {
+        "case": "r2_concurrent_replay",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare"
+      },
+      {
+        "case": "r2_revoked_approval",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "prepare",
+        "reason": "Tool authorization is required"
+      },
+      {
+        "case": "forged_receipt_cannot_complete",
+        "expected": "deny",
+        "actual": "deny",
+        "boundary": "independent_verifier",
+        "reason": "Worker action receipt is invalid"
+      }
+    ],
+    "expected_deny_denominator": 11,
+    "expected_allow_denominator": 4,
+    "false_allows": 0,
+    "false_denials": 0,
+    "false_allow_rate": 0.0,
+    "false_deny_rate": 0.0,
+    "ablations": [
+      {
+        "variant": "model_claim_only",
+        "mode": "synthetic_counterfactual_only",
+        "cases": 15,
+        "expected_deny_denominator": 11,
+        "expected_allow_denominator": 4,
+        "false_allows": 11,
+        "false_denials": 0,
+        "false_allow_rate": 1.0,
+        "false_deny_rate": 0.0,
+        "omitted_checks": [
+          "forged_receipt_cannot_complete",
+          "grant_revoked_before_execution",
+          "idempotent_receipt",
+          "path_attack_0",
+          "path_attack_1",
+          "path_attack_2",
+          "r0_actual_file_read",
+          "r1_actual_granted_write",
+          "r1_missing_grant",
+          "r2_approval_parameter_substitution",
+          "r2_concurrent_replay",
+          "r2_concurrent_winner",
+          "r2_missing_approval",
+          "r2_revoked_approval",
+          "reserved_parameter_substitution"
+        ]
+      },
+      {
+        "variant": "no_binding",
+        "mode": "synthetic_counterfactual_only",
+        "cases": 15,
+        "expected_deny_denominator": 11,
+        "expected_allow_denominator": 4,
+        "false_allows": 4,
+        "false_denials": 0,
+        "false_allow_rate": 0.36363636363636365,
+        "false_deny_rate": 0.0,
+        "omitted_checks": [
+          "forged_receipt_cannot_complete",
+          "r2_approval_parameter_substitution",
+          "r2_concurrent_replay",
+          "reserved_parameter_substitution"
+        ]
+      },
+      {
+        "variant": "no_revocation_recheck",
+        "mode": "synthetic_counterfactual_only",
+        "cases": 15,
+        "expected_deny_denominator": 11,
+        "expected_allow_denominator": 4,
+        "false_allows": 2,
+        "false_denials": 0,
+        "false_allow_rate": 0.18181818181818182,
+        "false_deny_rate": 0.0,
+        "omitted_checks": [
+          "grant_revoked_before_execution",
+          "r2_revoked_approval"
+        ]
+      }
+    ],
+    "limitations": "Small deterministic regression matrix, not attack prevalence. Worker/provider context is a SQL fixture; real local file tools execute. R2 stops at intent preparation.",
+    "required_variants": {
+      "model_claim_only": "counterfactual in ablations; never authorizes an action",
+      "tool_receipt_verification": "actual tool receipt replay and forged-receipt cases",
+      "independent_reviewer": "actual fixed NodeVerifier rejection case; no LLM review quality estimate",
+      "evidence_gated_completion": "actual CompletionGate reached through NodeVerifier; no live model task"
+    }
+  },
+  "retrieval": {
+    "dataset": "phase2-retrieval-v1",
+    "dataset_sha256": "6d4dd52492b4bb9e55db3dcbff5f5bd49ddfa260665504356097eeede92a533b",
+    "execution_mode": "synthetic",
+    "retrieval_method": "bounded lexical index with bilingual alias expansion",
+    "model_calls": 0,
+    "source_identity_cases": [
+      {
+        "case_id": "budget-bilingual",
+        "expected_sources": [
+          "message:msg_eval_budget"
+        ],
+        "returned_sources": [
+          "message:msg_eval_budget"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_budget": "ac61ab2710bed69f358c6b91ad977cf39a008c783e86923a63c7b13b890d9d61"
+        },
+        "latency_ms": 11.512,
+        "returned_bytes": 621,
+        "omitted": 0
+      },
+      {
+        "case_id": "retention-bilingual",
+        "expected_sources": [
+          "message:msg_eval_retention"
+        ],
+        "returned_sources": [
+          "message:msg_eval_retention"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_retention": "1ebf45ab0ed723551dc6b781c2c9b4516953c6b212fe007250a2ecc6bc974b17"
+        },
+        "latency_ms": 4.318,
+        "returned_bytes": 626,
+        "omitted": 0
+      },
+      {
+        "case_id": "language-keyword",
+        "expected_sources": [
+          "message:msg_eval_language"
+        ],
+        "returned_sources": [
+          "message:msg_eval_language"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_language": "5caef1fd9ee5b8b9dcc039bdd5cad715b2a3b827dbb3fac08b1e6e3657921e79"
+        },
+        "latency_ms": 3.746,
+        "returned_bytes": 622,
+        "omitted": 0
+      },
+      {
+        "case_id": "deadline-bilingual",
+        "expected_sources": [
+          "message:msg_eval_deadline"
+        ],
+        "returned_sources": [
+          "message:msg_eval_deadline"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_deadline": "87ec7608cd33ac6554d5d1ca66b77a5a5da29e1d81a5c3038699ba5ba1fd26d1"
+        },
+        "latency_ms": 3.579,
+        "returned_bytes": 617,
+        "omitted": 0
+      },
+      {
+        "case_id": "path-exact",
+        "expected_sources": [
+          "message:msg_eval_artifact"
+        ],
+        "returned_sources": [
+          "message:msg_eval_artifact"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_artifact": "b9e6a3b4aa29ebab0be4e31beaf8097bbb8df9c2dcc686adb0fe459104110714"
+        },
+        "latency_ms": 3.449,
+        "returned_bytes": 570,
+        "omitted": 0
+      },
+      {
+        "case_id": "decision-record",
+        "expected_sources": [
+          "message:msg_eval_decision"
+        ],
+        "returned_sources": [
+          "message:msg_eval_decision"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_decision": "bece3294dc831e7acd275aec89b83c3672e634d282c8b2436b5131cf84dae255"
+        },
+        "latency_ms": 3.094,
+        "returned_bytes": 563,
+        "omitted": 0
+      },
+      {
+        "case_id": "quest-identity",
+        "expected_sources": [
+          "quest:quest_eval_research"
+        ],
+        "returned_sources": [
+          "quest:quest_eval_research"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "quest:quest_eval_research": "d379bede5a79ceddaea6b095dfcca7419809d9bc2cf4e51d2f6c2652b90bfb56"
+        },
+        "latency_ms": 3.171,
+        "returned_bytes": 605,
+        "omitted": 0
+      },
+      {
+        "case_id": "quest-constraint-link",
+        "expected_sources": [
+          "message:msg_eval_deadline"
+        ],
+        "returned_sources": [
+          "message:msg_eval_deadline"
+        ],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {
+          "message:msg_eval_deadline": "87ec7608cd33ac6554d5d1ca66b77a5a5da29e1d81a5c3038699ba5ba1fd26d1"
+        },
+        "latency_ms": 10.334,
+        "returned_bytes": 617,
+        "omitted": 0
+      },
+      {
+        "case_id": "time-exclusion",
+        "expected_sources": [],
+        "returned_sources": [],
+        "passed": true,
+        "source_hash_complete": true,
+        "returned_source_hashes": {},
+        "latency_ms": 5.177,
+        "returned_bytes": 0,
+        "omitted": 0
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "success_rate": 1.0,
+    "duration_seconds": 0.335,
+    "limitations": [
+      "Nine exploratory fixed synthetic cases; not a held-out generalization result.",
+      "Measures source identity and provenance after storage restart, not domain truth.",
+      "Alias expansion is limited lexical retrieval, not embedding or learned semantic retrieval.",
+      "No real Provider calls or user task quality measurements."
+    ]
+  },
+  "final_status": "completed",
+  "duration_seconds": 4.383756899973378
+}

@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "fixture": "synthetic HTTP projection only; no file bytes",
+  "checks": 14,
+  "screenshots": 1,
+  "results": [
+    "file list initially shows three recorded paths",
+    "successful live writes are deduplicated by validated relative path",
+    "failed, mock, unknown, nonzero-exit, invalid and read-only receipts do not enter the edited-file list",
+    "more-files count reflects only the remaining distinct paths",
+    "keyboard expansion exposes every recorded file",
+    "a grouped file opens its actual relative path in preview",
+    "a projection does not invent content when no browser file source was selected",
+    "unchanged polling retains the expanded more-files DOM",
+    "unchanged polling preserves a nonzero file-list reading position",
+    "group splitting restores more-files expansion from the member event memory",
+    "split group keeps its real remaining file set available",
+    "group splitting preserves the same file reading anchor within one pixel",
+    "activity file groups do not claim unsupported chat-turn or historical-diff semantics",
+    "grouped files introduce no new HTTP endpoints or writes"
+  ],
+  "uncaughtPageErrors": 0
+}

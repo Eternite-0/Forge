@@ -1,0 +1,210 @@
+{
+  "generated_at": "2026-11-15T10:19:07.781074+00:00",
+  "source_version": "v20",
+  "status": "historical_failed_boundary",
+  "phase2_complete": false,
+  "scope": "Historical frozen suite and strict live failures. Archived source is rehashed without extracting or treating it as current source. No tests, Provider calls, Store construction, credentials or runtime database access.",
+  "boundary_auditor": {
+    "path": ".local/phase2/audit_version_boundary.py",
+    "bytes": 11366,
+    "sha256": "7cd1281e465583d5d64bb9568c52abcc933771e2a420ca6db156efa7f39afd28"
+  },
+  "source_manifest": {
+    "path": "docs/audit/phase2/source-manifest-v20.json",
+    "bytes": 37606,
+    "sha256": "e7aebc274d8f7557fdd96353d7848a3fe6f6b7dfe15b502bbbd19bdfdc7c0c5c"
+  },
+  "canonical_manifest_sha256": "b8e72cb26c8d1f6ba455490cef2969cd304d3af0c62e35bdd5eedfba96b8b692",
+  "freeze_manifest_binding": {
+    "checks": {
+      "canonical_manifest_matches": true,
+      "declared_file_count_matches": true,
+      "unique_manifest_paths": true,
+      "freeze_source_version_matches": true,
+      "freeze_manifest_file_matches": true,
+      "freeze_canonical_manifest_matches": true,
+      "freeze_inventory_counts_match": true,
+      "freeze_source_checks_passed": true
+    },
+    "passed": true
+  },
+  "original_frozen_observation": {
+    "path": "docs/audit/phase2/acceptance-independent-v20-freeze.json",
+    "bytes": 4367,
+    "sha256": "54eddb0b0427549ad75b51fd8966175c10ca45ad5e212685333e53455633fc00"
+  },
+  "captured_source_static_preservation_passed": true,
+  "historical_source_archive": {
+    "evidence": {
+      "path": ".local/phase2/source-snapshot-v20.zip",
+      "bytes": 748788,
+      "sha256": "19a70d332257bff4afd4e106fea87f2751ccd3bff549f75eb9491282b50b539a"
+    },
+    "entries": 210,
+    "expected_files": 210,
+    "differences": [],
+    "extras": [],
+    "duplicates": [],
+    "passed": true
+  },
+  "full_tests": {
+    "evidence": [
+      {
+        "path": "docs/audit/phase2/frozen-tests-v20.xml",
+        "bytes": 220062,
+        "sha256": "cc4ba4edd69ffca5842532292c87debc38ffd3856d831afedda3b69594503b78"
+      },
+      {
+        "path": "docs/audit/phase2/frozen-tests-v20.log",
+        "bytes": 2228,
+        "sha256": "41d3d802282f5c0c0785d355a7d4bfa52abec8420d2511e7c1ebd7d44454b91a"
+      }
+    ],
+    "tests": 1490,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "testcase_elements": 1490,
+    "console_passed": 1490,
+    "console_warnings": 1,
+    "console_seconds": 312.74,
+    "duplicate_test_identities": [],
+    "missing_frozen_modules": [],
+    "extra_junit_modules": [],
+    "passed": true
+  },
+  "static_checks": [
+    {
+      "name": "ruff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-ruff-v20.log",
+        "bytes": 19,
+        "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+      },
+      "result": "All checks passed!",
+      "passed": true
+    },
+    {
+      "name": "format",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-format-v20.log",
+        "bytes": 28,
+        "sha256": "d8cc52b50ca13fedc6693fcd96fb5f6d82b81aeec14f6c97b4f905d167fdbd96"
+      },
+      "result": "206 files already formatted",
+      "passed": true
+    },
+    {
+      "name": "pip",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-pip-v20.log",
+        "bytes": 31,
+        "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+      },
+      "result": "No broken requirements found.",
+      "passed": true
+    },
+    {
+      "name": "diff",
+      "evidence": {
+        "path": "docs/audit/phase2/frozen-diff-v20.log",
+        "bytes": 26,
+        "sha256": "408d8ffd5d2095fb6c3fe04ed6319480a2c115e272bfcd711f2318af1b356552"
+      },
+      "result": "git diff --check: passed",
+      "passed": true
+    }
+  ],
+  "preservation": {
+    "evidence": {
+      "path": "docs/audit/phase2/preservation-v20.json",
+      "bytes": 211779,
+      "sha256": "c852a9a0bb74494b1027c9aba5505279e1b4fb9d59470cfb031ef6410e21aca5"
+    },
+    "phase1_evidence_checked": 355,
+    "phase1_reports_checked": 9,
+    "byte_mismatches": [],
+    "original_test_count": 364,
+    "missing_tests": [],
+    "changed_test_ast": [
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_composer_only_approved_plan_events",
+      "backend/tests/test_event_dispatcher.py::test_tick_routes_planner_events_to_independent_consumer",
+      "backend/tests/test_live_context_probe_offline.py::test_probe_fixtures_restart_and_report_with_mock_gateway",
+      "backend/tests/test_m4_adversarial.py::test_expired_planner_attempt_cannot_modify_new_attempt",
+      "backend/tests/test_m4_integration.py::test_authenticated_graph_controls_survive_restart_without_running_worker",
+      "backend/tests/test_m4_integration.py::test_graph_planner_sends_strict_wire_schema_through_gateway",
+      "backend/tests/test_m4_integration.py::test_planner_refuses_stale_quest_after_model_call",
+      "backend/tests/test_m4_integration.py::test_user_turn_automatically_plans_once_without_extra_user_message",
+      "backend/tests/test_migrations.py::test_each_migration_failure_rolls_back_a_fresh_database",
+      "backend/tests/test_migrations.py::test_each_migration_step",
+      "backend/tests/test_migrations.py::test_v8_component_failure_rolls_back_v7_data",
+      "backend/tests/test_worker_runtime.py::test_model_can_request_bounded_help_without_spawning_or_gaining_tools",
+      "backend/tests/test_worker_runtime.py::test_v7_worker_opening_migrates_once_with_known_reserves",
+      "backend/tests/test_worker_runtime.py::test_v8_active_worker_enters_output_review_without_changing_team_or_budget",
+      "backend/tests/test_workspace_backup_m7.py::test_v7_snapshot_is_migrated_in_staging_before_publish"
+    ],
+    "changed_test_ast_matches_disclosure": true,
+    "assertion_disclosure_mismatches": [],
+    "new_skip_or_xfail_decorators": [],
+    "passed": true
+  },
+  "usage_audit": {
+    "path": "docs/audit/phase2/live-usage-v20-audit.json",
+    "bytes": 22390,
+    "sha256": "61ae3f5212cc5b9c3773ce3e7a17e2b75a85b3479f0d0782bf960a5c841c2e3d"
+  },
+  "usage_consistency_passed": true,
+  "strict_live_runs": [
+    {
+      "run_id": "20261115T101049Z-L1-6b5894",
+      "level": "L1",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 444.633,
+      "known_gateway_tokens": 67880,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 14
+      },
+      "planner_failure_diagnostics": [],
+      "worker_runs": 0,
+      "retained_planner_rejection_events": 1
+    },
+    {
+      "run_id": "20261115T101050Z-L2-42afb2",
+      "level": "L2",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 30.395,
+      "known_gateway_tokens": 20314,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "worker_runs": 0,
+      "retained_planner_rejection_events": 2
+    },
+    {
+      "run_id": "20261115T101049Z-L3-52f4c0",
+      "level": "L3",
+      "acceptance_status": "failed",
+      "acceptance_passed": false,
+      "duration_seconds": 27.743,
+      "known_gateway_tokens": 20264,
+      "missing_gateway_usage_count": 0,
+      "final_gateway_state_counts": {
+        "settled": 4
+      },
+      "planner_failure_diagnostics": [
+        "planning_failed:DomainError:Invalid_graph_proposal"
+      ],
+      "worker_runs": 0,
+      "retained_planner_rejection_events": 2
+    }
+  ],
+  "evidence_consistency_passed": true,
+  "interpretation": "Original strict failures remain failed. Passing backend checks and later-version repairs never promote this historical boundary."
+}

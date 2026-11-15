@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.501" timestamp="2026-11-15T16:01:57.505764+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="" name="tests.test_verified_capacity_v16" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Competition_this\Agent\backend\tests\test_verified_capacity_v16.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+backend\tests\test_verified_capacity_v16.py:25: in &lt;module&gt;
+    from forge_core.workspace import Workspace
+E   ModuleNotFoundError: No module named 'forge_core.workspace'</error></testcase></testsuite></testsuites>

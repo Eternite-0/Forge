@@ -1,0 +1,155 @@
+{
+  "acceptance": {
+    "checks": {},
+    "failed_checks": [],
+    "passed": null,
+    "status": null,
+    "unknown_checks": []
+  },
+  "actual_final_status": "running",
+  "artifact_hashes": [],
+  "compaction": {
+    "archive_created": null,
+    "rebuilt_messages": null,
+    "source_count": null,
+    "source_readback_available": null
+  },
+  "context_archives": 0,
+  "conversation_count": 1,
+  "cost": null,
+  "driver_final_status": null,
+  "duration_seconds": 279.642,
+  "execution_mode": "live",
+  "failures": [
+    "quest_did_not_reach_terminal_state"
+  ],
+  "inspection_error": null,
+  "level": "L1",
+  "model_attempts": [
+    {
+      "attempt_id": "dbdd7698a72349d888cf9d883f82e005",
+      "call_id": "call_11f66de91ff7",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2344,
+      "input_reserved": 11708,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 571,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "09a2b0772bab451da2e3708cb8f64890",
+      "call_id": "call_fe2b23861dc5",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2757,
+      "input_reserved": 13442,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 562,
+      "output_reserved": 4096,
+      "provider_id": "wb-local",
+      "purpose": "planner",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "5748cf67a03b46e080e3121c2d614efb",
+      "call_id": "call_3ac70255b0f8",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 2433,
+      "input_reserved": 14095,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 2063,
+      "output_reserved": 8192,
+      "provider_id": "wb-local",
+      "purpose": "team_composer",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "f153135641384916a371c703655a1093",
+      "call_id": "model_call_5610b828b820",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 1756,
+      "input_reserved": 6358,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 73,
+      "output_reserved": 6000,
+      "provider_id": "wb-local",
+      "purpose": "worker",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "35cc4fd0c6194eb189bf9f6deb4cc1c2",
+      "call_id": "call_5019f3c1a5af",
+      "cost_charged": null,
+      "currency": null,
+      "input_charged": 7286,
+      "input_reserved": 25709,
+      "model_id": "deepseek-v4.1-flash",
+      "output_charged": 222,
+      "output_reserved": 2048,
+      "provider_id": "wb-local",
+      "purpose": "router_notice",
+      "state": "settled"
+    }
+  ],
+  "model_attempts_omitted": 0,
+  "model_calls": 5,
+  "publication_scope": "Allowlisted summaries of already-redacted live-driver records. Prompt/reply/log/artifact content omitted; unknown usage/cost preserved. A completed Quest alone does not establish scenario acceptance.",
+  "restart": {
+    "after": null,
+    "initial_router_identity": null,
+    "restored_router_identity": null,
+    "router_identity_retained": null,
+    "same_workspace": null
+  },
+  "review_results": [],
+  "router_status": 200,
+  "run_id": "20261114T234309Z-L1-238a52",
+  "scenario_id": null,
+  "schema_version": 1,
+  "semantic_test_runs": 0,
+  "token_usage": {
+    "input": 16576,
+    "output": 3491,
+    "unknown_attempts": 0
+  },
+  "tool_calls": 2,
+  "tools": [
+    {
+      "call_id": "call_ed63229d03e58c432607c61220b793e8306b9262f4a31d4000d1808d9a6ae8a9",
+      "execution_mode": null,
+      "receipt_id": null,
+      "state": "uncertain",
+      "tool_name": "directory_list"
+    },
+    {
+      "call_id": "call_4eaf7a606b337b9fc00edba556d78c435935acac127b292b08e4b960cb1d32e8",
+      "execution_mode": null,
+      "receipt_id": null,
+      "state": "pending",
+      "tool_name": "directory_list"
+    }
+  ],
+  "workers": [
+    {
+      "execution_mode": "live",
+      "id": "run_ec95f0df42a1",
+      "model_id": "deepseek-v4.1-flash",
+      "node_key": "readonly_inventory_analysis",
+      "provider_id": "wb-local",
+      "repairs": 0,
+      "role_id": "coding",
+      "state": "blocked",
+      "steps": 1,
+      "token_limit": 46000,
+      "token_spent": 1829,
+      "tool_spent": 2,
+      "worker_id": "worker_e5746bc8939b"
+    }
+  ]
+}
