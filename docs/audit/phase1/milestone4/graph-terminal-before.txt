@@ -1,0 +1,24 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_cancelled_quest_never_has_ready_plan_or_plan_control __________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-87/test_cancelled_quest_never_has0')
+
+    def test_cancelled_quest_never_has_ready_plan_or_plan_control(tmp_path):
+        store = Store(tmp_path / "m4.sqlite3", workspace=Workspace.from_path(tmp_path))
+        quest = Quest(title="test", goal="test")
+        store.save_quest(quest)
+        graph = QuestGraphService(store)
+        plan = graph.propose(quest.id, {"nodes": [{"key": "a", "objective": "work", "success_criteria": ["done"], "budget_tokens": 10}], "edges": []}, expected_version=0)
+        graph.approve(quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user")
+        QuestService(store).transition(quest.id, QuestStatus.CANCELLED, expected_version=2)
+>       assert graph.readiness(quest.id)["a"] == "inactive"
+E       AssertionError: assert 'ready' == 'inactive'
+E         
+E         - inactive
+E         + ready
+
+tests\test_m4_adversarial.py:20: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_m4_adversarial.py::test_cancelled_quest_never_has_ready_plan_or_plan_control
+1 failed in 0.26s

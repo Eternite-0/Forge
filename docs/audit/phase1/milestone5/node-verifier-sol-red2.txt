@@ -1,0 +1,20 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+__ test_independent_json_positive_path_settles_worker_and_rechecks_artifact ___
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-145/test_independent_json_positive0')
+
+    def test_independent_json_positive_path_settles_worker_and_rechecks_artifact(tmp_path):
+        store, quest, _, run, artifact = reviewed_artifact(tmp_path)
+        assert NodeVerifier(store).verify(quest.id, "n")["status"] == "completed"
+        with store.connection() as connection:
+>           assert connection.execute("SELECT state FROM worker_runs WHERE id=?", (run["id"],)).fetchone()[0] == "succeeded"
+E           AssertionError: assert 'review_pending' == 'succeeded'
+E             
+E             - succeeded
+E             + review_pending
+
+backend\tests\test_node_verifier_m5.py:65: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_node_verifier_m5.py::test_independent_json_positive_path_settles_worker_and_rechecks_artifact
+1 failed, 3 passed in 1.71s

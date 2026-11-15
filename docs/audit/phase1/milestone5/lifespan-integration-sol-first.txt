@@ -1,0 +1,91 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+_______ test_actual_lifespan_schedules_parallel_dag_verifies_and_relays _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-165/test_actual_lifespan_schedules0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280C36D7490>
+
+    def test_actual_lifespan_schedules_parallel_dag_verifies_and_relays(tmp_path, monkeypatch):
+        main = load_main(tmp_path, monkeypatch)
+        quest = Quest(title="Offline lifecycle integration", goal="Create three valid JSON artifacts")
+        main.store.save_quest(quest)
+        keys = ["a", "b", "c"]
+        nodes = [{"key": key, "objective": "Create " + key, "success_criteria": ["json_valid:" + str(tmp_path / "work" / (key + ".json"))], "budget_tokens": 16000, "allowed_tools": ["file_write"]} for key in keys]
+        plan = main.quest_graph.propose(quest.id, {"nodes": nodes, "edges": [{"source": "a", "target": "c", "condition": "success"}], "max_total_tokens": 48000}, expected_version=0)
+        main.quest_graph.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        for key in keys:
+            main.store.save_model(ModelProfile(id=key, provider="fixture", model_id=key, display_name="Scripted test provenance stub", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        # A capability requirement per node distinguishes the otherwise identical models.
+>       from forge_core.domain import CapabilityMeasurement
+E       ImportError: cannot import name 'CapabilityMeasurement' from 'forge_core.domain' (D:\Competition_this\Agent\backend\src\forge_core\domain.py)
+
+backend\tests\test_m5_lifespan_execution.py:51: ImportError
+_________ test_actual_lifespan_help_creates_only_pending_reassignment _________
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-165/test_actual_lifespan_help_crea0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280C4B3A3F0>
+
+    def test_actual_lifespan_help_creates_only_pending_reassignment(tmp_path, monkeypatch):
+        main = load_main(tmp_path, monkeypatch)
+        quest = Quest(title="Offline help arbitration", goal="Request a replacement")
+        main.store.save_quest(quest)
+        plan = main.quest_graph.propose(quest.id, {"nodes": [{"key": "n", "objective": quest.goal, "success_criteria": ["manual"], "budget_tokens": 16000, "allowed_tools": []}], "edges": [], "max_total_tokens": 16000}, expected_version=0)
+        main.quest_graph.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        main.store.save_model(ModelProfile(id="fixture", provider="fixture", model_id="fixture", display_name="Scripted mock", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        role = {"id": "coding", "task_node_key": "n", "tools": [], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60}
+        limits = {"max_members": 1, "max_depth": 1, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 1, "allowed_tools": []}
+        team = main.team_service.propose(quest.id, [role], limits, strategy="greedy", expected_version=2)
+        main.team_service.approve(quest.id, 1, team["proposal_digest"], expected_version=2, actor="local_user")
+    
+        class HelpWorker:
+            execution_mode = "mock"
+            async def generate(self, request):
+                return ModelResponse(tool_calls=[{"id": "help", "name": "worker_request_help", "arguments": {"requested_role": "reviewer", "reason": "Need another specialist"}}], usage={"input_tokens": 30, "output_tokens": 20})
+    
+        wire_role = {**role, "required_capabilities": [], "depth": 0, "dynamic": False, "responsibility": "Implement", "input_contract": ["goal"], "output_schema_json": json.dumps(DEFAULT_OUTPUT_SCHEMA), "acceptance_criteria": ["manual"]}
+        wire_limits = {**limits, "max_cost_microunits": None, "currency": None}
+    
+        class Arbitrator:
+            execution_mode = "mock"
+            calls = 0
+            async def generate(self, request):
+                if request.response_format["json_schema"]["name"] == "team_proposal":
+                    self.calls += 1
+                    text = json.dumps({"roles": [wire_role], "limits": wire_limits, "strategy": "greedy"})
+                else:
+                    text = '{"action":"silent","reply":null}'
+                return ModelResponse(text=text, usage={"input_tokens": 10, "output_tokens": 10})
+    
+        monkeypatch.setattr(ProviderPool, "from_environment", classmethod(lambda cls, **kwargs: (ProviderPool({"fixture": HelpWorker()}), {})))
+        arbitrator = Arbitrator()
+        main.router.provider, main.router.model_id = arbitrator, "mock-router"
+        with TestClient(main.app, base_url="http://127.0.0.1", client=("127.0.0.1", 12345)) as client:
+>           wait_for(lambda: len(main.list_teams(quest.id)) == 2)
+
+backend\tests\test_m5_lifespan_execution.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+check = <function test_actual_lifespan_help_creates_only_pending_reassignment.<locals>.<lambda> at 0x00000280C4CF5A80>
+seconds = 12
+
+    def wait_for(check, seconds=12):
+        deadline = time.monotonic() + seconds
+        while time.monotonic() < deadline:
+            if check():
+                return
+            time.sleep(0.03)
+>       assert check()
+E       assert False
+E        +  where False = <function test_actual_lifespan_help_creates_only_pending_reassignment.<locals>.<lambda> at 0x00000280C4CF5A80>()
+
+backend\tests\test_m5_lifespan_execution.py:37: AssertionError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_schedules_parallel_dag_verifies_and_relays
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_help_creates_only_pending_reassignment
+2 failed, 1 warning in 13.08s

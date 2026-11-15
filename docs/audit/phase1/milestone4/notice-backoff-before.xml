@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.046" timestamp="2026-11-15T00:04:33.310884+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_integration" name="test_notice_failures_back_off_persist_and_stop_after_limit" time="4.302"><failure message="AssertionError: Background dispatch did not reach the expected state">tests\test_m4_integration.py:333: in test_notice_failures_back_off_persist_and_stop_after_limit
+    wait_for(lambda: notice() is not None and notice()["notice_attempts"] == 1)
+tests\test_m4_integration.py:26: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state</failure></testcase></testsuite></testsuites>

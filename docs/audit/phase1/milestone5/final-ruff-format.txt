@@ -1,0 +1,371 @@
+unformatted: File would be reformatted
+  --> backend\src\forge_core\event_domain.py:73:17
+   |
+72 |             or (node_key is not None and plan is None)
+   -             or (row["event_type"] in WORKER_COMMANDS | WORKER_FACTS and plan is not None and node_key is None)
+73 +             or (
+74 +                 row["event_type"] in WORKER_COMMANDS | WORKER_FACTS
+75 +                 and plan is not None
+76 +                 and node_key is None
+77 +             )
+78 |             or (node is not None and (plan is None or node != node_key))
+   |
+
+unformatted: File would be reformatted
+  --> backend\src\forge_core\governance.py:14:6
+   |
+13 | ACTION_RISKS = MappingProxyType(
+   -     {"read": "R0", "workspace_write": "R1", "publish": "R2", "browser_get": "R2", "mcp_call": "R2", "delete": "R3"}
+14 +     {
+15 +         "read": "R0",
+16 +         "workspace_write": "R1",
+17 +         "publish": "R2",
+18 +         "browser_get": "R2",
+19 +         "mcp_call": "R2",
+20 +         "delete": "R3",
+21 +     }
+22 | )
+   |
+
+unformatted: File would be reformatted
+   --> backend\src\forge_core\providers\__init__.py:164:49
+    |
+163 |     def _payload(self, request, streaming):
+    -         if request.max_retries is not None and (type(request.max_retries) is not int or not 0 <= request.max_retries <= self.config.max_retries):
+164 +         if request.max_retries is not None and (
+165 +             type(request.max_retries) is not int
+166 +             or not 0 <= request.max_retries <= self.config.max_retries
+167 +         ):
+168 |             raise ProviderError("configuration")
+    |
+
+unformatted: File would be reformatted
+  --> backend\src\forge_core\providers\config.py:34:14
+   |
+33 |         if (
+   -             (parsed.scheme != "https" and not (parsed.scheme == "http" and self.allow_insecure_loopback is True and numeric_loopback))
+34 +             (
+35 +                 parsed.scheme != "https"
+36 +                 and not (
+37 +                     parsed.scheme == "http"
+38 +                     and self.allow_insecure_loopback is True
+39 +                     and numeric_loopback
+40 +                 )
+41 +             )
+42 |             or not parsed.hostname
+--------------------------------------------------------------------------------
+57 |             raise ValueError("Invalid provider configuration")
+   -         if type(self.supports_tools) is not bool or type(self.supports_json_schema) is not bool or type(self.allow_insecure_loopback) is not bool:
+58 +         if (
+59 +             type(self.supports_tools) is not bool
+60 +             or type(self.supports_json_schema) is not bool
+61 +             or type(self.allow_insecure_loopback) is not bool
+62 +         ):
+63 |             raise ValueError("Provider capability flags must be boolean")
+   |
+
+unformatted: File would be reformatted
+   --> backend\tests\live_provider_probe.py:21:19
+    |
+20  |     path.mkdir(parents=True, exist_ok=True)
+    -     report_path = path / f"protocol-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{secrets.token_hex(4)}.json"
+    -     tool = {"type": "function", "function": {"name": "add_numbers", "description": "Add two numbers", "parameters": {"type": "object", "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}}, "required": ["a", "b"], "additionalProperties": False}}}
+    -     schema = {"type": "object", "properties": {"ok": {"type": "boolean"}}, "required": ["ok"], "additionalProperties": False}
+21  +     report_path = (
+22  +         path
+23  +         / f"protocol-{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{secrets.token_hex(4)}.json"
+24  +     )
+25  +     tool = {
+26  +         "type": "function",
+27  +         "function": {
+28  +             "name": "add_numbers",
+29  +             "description": "Add two numbers",
+30  +             "parameters": {
+31  +                 "type": "object",
+32  +                 "properties": {"a": {"type": "integer"}, "b": {"type": "integer"}},
+33  +                 "required": ["a", "b"],
+34  +                 "additionalProperties": False,
+35  +             },
+36  +         },
+37  +     }
+38  +     schema = {
+39  +         "type": "object",
+40  +         "properties": {"ok": {"type": "boolean"}},
+41  +         "required": ["ok"],
+42  +         "additionalProperties": False,
+43  +     }
+44  |     cases = {
+    -         "chat": {"model": model, "messages": [{"role": "user", "content": "Reply with the word hello."}], "max_tokens": 128, "stream": False},
+    -         "forced_tool": {"model": model, "messages": [{"role": "user", "content": "Call add_numbers with a=2 and b=3."}], "tools": [tool], "tool_choice": {"type": "function", "function": {"name": "add_numbers"}}, "max_tokens": 256, "stream": False},
+    -         "strict_schema": {"model": model, "messages": [{"role": "user", "content": "Return exactly {\"ok\":true}."}], "response_format": {"type": "json_schema", "json_schema": {"name": "probe", "strict": True, "schema": schema}}, "max_tokens": 128, "stream": False},
+45  +         "chat": {
+46  +             "model": model,
+47  +             "messages": [{"role": "user", "content": "Reply with the word hello."}],
+48  +             "max_tokens": 128,
+49  +             "stream": False,
+50  +         },
+51  +         "forced_tool": {
+52  +             "model": model,
+53  +             "messages": [{"role": "user", "content": "Call add_numbers with a=2 and b=3."}],
+54  +             "tools": [tool],
+55  +             "tool_choice": {"type": "function", "function": {"name": "add_numbers"}},
+56  +             "max_tokens": 256,
+57  +             "stream": False,
+58  +         },
+59  +         "strict_schema": {
+60  +             "model": model,
+61  +             "messages": [{"role": "user", "content": 'Return exactly {"ok":true}.'}],
+62  +             "response_format": {
+63  +                 "type": "json_schema",
+64  +                 "json_schema": {"name": "probe", "strict": True, "schema": schema},
+65  +             },
+66  +             "max_tokens": 128,
+67  +             "stream": False,
+68  +         },
+69  |     }
+--------------------------------------------------------------------------------
+76  |         if isinstance(value, dict):
+    -             return {str(key).replace(secret, "[REDACTED]"): redact(item) for key, item in value.items()}
+77  +             return {
+78  +                 str(key).replace(secret, "[REDACTED]"): redact(item) for key, item in value.items()
+79  +             }
+80  |         return value
+--------------------------------------------------------------------------------
+86  |             try:
+    -                 async with asyncio.timeout(20), client.stream("POST", url, headers={"Authorization": f"Bearer {secret}"}, json=payload) as response:
+87  +                 async with (
+88  +                     asyncio.timeout(20),
+89  +                     client.stream(
+90  +                         "POST", url, headers={"Authorization": f"Bearer {secret}"}, json=payload
+91  +                     ) as response,
+92  +                 ):
+93  |                     entry["http_status"] = response.status_code
+--------------------------------------------------------------------------------
+106 |                     if name == "chat":
+    -                         entry["chat_valid"] = isinstance(message.get("content"), str) and bool(message["content"].strip())
+107 +                         entry["chat_valid"] = isinstance(message.get("content"), str) and bool(
+108 +                             message["content"].strip()
+109 +                         )
+110 |                     if name == "forced_tool":
+111 |                         calls = message.get("tool_calls") or []
+112 |                         valid = False
+    -                         if len(calls) == 1 and calls[0].get("function", {}).get("name") == "add_numbers":
+113 +                         if (
+114 +                             len(calls) == 1
+115 +                             and calls[0].get("function", {}).get("name") == "add_numbers"
+116 +                         ):
+117 |                             args = json.loads(calls[0]["function"]["arguments"])
+118 |                             valid = args == {"a": 2, "b": 3}
+119 |                         entry["tool_call_valid"] = valid
+120 |                     if name == "strict_schema":
+    -                         entry["schema_valid"] = json.loads(message.get("content") or "null") == {"ok": True}
+    -                         entry["schema_note"] = "One conforming response does not establish server-side schema enforcement."
+121 +                         entry["schema_valid"] = json.loads(message.get("content") or "null") == {
+122 +                             "ok": True
+123 +                         }
+124 +                         entry["schema_note"] = (
+125 +                             "One conforming response does not establish server-side schema enforcement."
+126 +                         )
+127 |                 except (ValueError, TypeError, KeyError, IndexError):
+--------------------------------------------------------------------------------
+135 |             result["cases"][name] = entry
+    -     success = all(result["cases"][name].get("http_status") == 200 and result["cases"][name].get(check) is True and result["cases"][name].get("finish_reason") == finish for name, check, finish in (("chat", "chat_valid", "stop"), ("forced_tool", "tool_call_valid", "tool_calls"), ("strict_schema", "schema_valid", "stop")))
+136 +     success = all(
+137 +         result["cases"][name].get("http_status") == 200
+138 +         and result["cases"][name].get(check) is True
+139 +         and result["cases"][name].get("finish_reason") == finish
+140 +         for name, check, finish in (
+141 +             ("chat", "chat_valid", "stop"),
+142 +             ("forced_tool", "tool_call_valid", "tool_calls"),
+143 +             ("strict_schema", "schema_valid", "stop"),
+144 +         )
+145 +     )
+146 |     result["status"] = "passed_all_three" if success else "partial_or_failed"
+    -     report_path.write_text(json.dumps(redact(result), ensure_ascii=False, indent=2), encoding="utf-8")
+    -     print(json.dumps(redact({"report": str(report_path), "status": result["status"], "cases": {name: {key: value for key, value in entry.items() if key in {"http_status", "error", "parse_error", "finish_reason", "chat_valid", "tool_call_valid", "schema_valid", "usage"}} for name, entry in result["cases"].items()}}), ensure_ascii=False))
+147 +     report_path.write_text(
+148 +         json.dumps(redact(result), ensure_ascii=False, indent=2), encoding="utf-8"
+149 +     )
+150 +     print(
+151 +         json.dumps(
+152 +             redact(
+153 +                 {
+154 +                     "report": str(report_path),
+155 +                     "status": result["status"],
+156 +                     "cases": {
+157 +                         name: {
+158 +                             key: value
+159 +                             for key, value in entry.items()
+160 +                             if key
+161 +                             in {
+162 +                                 "http_status",
+163 +                                 "error",
+164 +                                 "parse_error",
+165 +                                 "finish_reason",
+166 +                                 "chat_valid",
+167 +                                 "tool_call_valid",
+168 +                                 "schema_valid",
+169 +                                 "usage",
+170 +                             }
+171 +                         }
+172 +                         for name, entry in result["cases"].items()
+173 +                     },
+174 +                 }
+175 +             ),
+176 +             ensure_ascii=False,
+177 +         )
+178 +     )
+179 |     return 0 if success else 2
+    |
+
+unformatted: File would be reformatted
+   --> backend\tests\test_providers.py:543:24
+    |
+542 |     with pytest.raises(ValueError):
+    -         ProviderConfig(id="p",kind="openai_compatible",base_url="http://127.0.0.1:8788/v1",credential_ref="FORGE_PROVIDER_KEY_TEST")
+    -     local = ProviderConfig(id="p",kind="openai_compatible",base_url="http://127.0.0.1:8788/v1",credential_ref="FORGE_PROVIDER_KEY_TEST",allow_insecure_loopback=True)
+543 +         ProviderConfig(
+544 +             id="p",
+545 +             kind="openai_compatible",
+546 +             base_url="http://127.0.0.1:8788/v1",
+547 +             credential_ref="FORGE_PROVIDER_KEY_TEST",
+548 +         )
+549 +     local = ProviderConfig(
+550 +         id="p",
+551 +         kind="openai_compatible",
+552 +         base_url="http://127.0.0.1:8788/v1",
+553 +         credential_ref="FORGE_PROVIDER_KEY_TEST",
+554 +         allow_insecure_loopback=True,
+555 +     )
+556 |     assert local.base_url.startswith("http://127.0.0.1")
+557 |     for host in ("localhost", "192.168.1.1", "example.invalid"):
+558 |         with pytest.raises(ValueError):
+    -             ProviderConfig(id="p",kind="openai_compatible",base_url=f"http://{host}:8788/v1",credential_ref="FORGE_PROVIDER_KEY_TEST",allow_insecure_loopback=True)
+559 +             ProviderConfig(
+560 +                 id="p",
+561 +                 kind="openai_compatible",
+562 +                 base_url=f"http://{host}:8788/v1",
+563 +                 credential_ref="FORGE_PROVIDER_KEY_TEST",
+564 +                 allow_insecure_loopback=True,
+565 +             )
+566 |
+    |
+
+unformatted: File would be reformatted
+   --> backend\tests\test_worker_tool_integration.py:24:27
+    |
+23  |     graphs = QuestGraphService(store)
+    -     plan = graphs.propose(quest.id, {"nodes": [{"key": "n", "objective": "Run test", "success_criteria": ["verified"], "budget_tokens": 16000, "allowed_tools": tool_names}], "edges": [], "max_total_tokens": 16000}, expected_version=0)
+    -     graphs.approve(quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user")
+    -     store.save_model(ModelProfile(id="profile", provider="mock-provider", model_id="mock-model", display_name="Mock", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="user_override")))
+24  +     plan = graphs.propose(
+25  +         quest.id,
+26  +         {
+27  +             "nodes": [
+28  +                 {
+29  +                     "key": "n",
+30  +                     "objective": "Run test",
+31  +                     "success_criteria": ["verified"],
+32  +                     "budget_tokens": 16000,
+33  +                     "allowed_tools": tool_names,
+34  +                 }
+35  +             ],
+36  +             "edges": [],
+37  +             "max_total_tokens": 16000,
+38  +         },
+39  +         expected_version=0,
+40  +     )
+41  +     graphs.approve(
+42  +         quest.id, plan["digest"], plan["plan_revision"], expected_version=1, actor="local_user"
+43  +     )
+44  +     store.save_model(
+45  +         ModelProfile(
+46  +             id="profile",
+47  +             provider="mock-provider",
+48  +             model_id="mock-model",
+49  +             display_name="Mock",
+50  +             context_window=32000,
+51  +             max_output_tokens=4000,
+52  +             tool_calling_support=ProtocolSupport(supported=True, source="user_override"),
+53  +         )
+54  +     )
+55  |     team_service = TeamCompositionService(store)
+    -     team = team_service.propose(quest.id, [{"id": "coding", "task_node_key": "n", "tools": tool_names, "input_tokens": 9000, "output_tokens": 3000, "max_steps": 6, "max_tool_calls": 3, "max_duration_seconds": 60}], {"max_members": 1, "max_depth": 1, "max_concurrency": 1, "max_total_tokens": 12000, "max_total_tool_calls": 3, "allowed_tools": tool_names}, strategy="greedy", expected_version=2)
+    -     team_service.approve(quest.id, plan["plan_revision"], team["proposal_digest"], expected_version=2, actor="local_user")
+56  +     team = team_service.propose(
+57  +         quest.id,
+58  +         [
+59  +             {
+60  +                 "id": "coding",
+61  +                 "task_node_key": "n",
+62  +                 "tools": tool_names,
+63  +                 "input_tokens": 9000,
+64  +                 "output_tokens": 3000,
+65  +                 "max_steps": 6,
+66  +                 "max_tool_calls": 3,
+67  +                 "max_duration_seconds": 60,
+68  +             }
+69  +         ],
+70  +         {
+71  +             "max_members": 1,
+72  +             "max_depth": 1,
+73  +             "max_concurrency": 1,
+74  +             "max_total_tokens": 12000,
+75  +             "max_total_tool_calls": 3,
+76  +             "allowed_tools": tool_names,
+77  +         },
+78  +         strategy="greedy",
+79  +         expected_version=2,
+80  +     )
+81  +     team_service.approve(
+82  +         quest.id,
+83  +         plan["plan_revision"],
+84  +         team["proposal_digest"],
+85  +         expected_version=2,
+86  +         actor="local_user",
+87  +     )
+88  |     GovernanceService(store).grant_workspace(quest.id, "work", "local_user")
+89  |
+90  |     class Model:
+91  |         execution_mode = "mock"
+92  +
+93  |         def __init__(self):
+94  |             self.count = 0
+95  +
+96  |         async def generate(self, request):
+--------------------------------------------------------------------------------
+102 |             ]
+    -             calls = [] if self.count > len(actions) else [{"id": f"model-{self.count}", "name": actions[self.count-1][0], "arguments": actions[self.count-1][1]}]
+    -             return ModelResponse(text='{"summary":"claim"}' if not calls else "", tool_calls=calls, usage={"input_tokens": 50, "output_tokens": 10})
+103 +             calls = (
+104 +                 []
+105 +                 if self.count > len(actions)
+106 +                 else [
+107 +                     {
+108 +                         "id": f"model-{self.count}",
+109 +                         "name": actions[self.count - 1][0],
+110 +                         "arguments": actions[self.count - 1][1],
+111 +                     }
+112 +                 ]
+113 +             )
+114 +             return ModelResponse(
+115 +                 text='{"summary":"claim"}' if not calls else "",
+116 +                 tool_calls=calls,
+117 +                 usage={"input_tokens": 50, "output_tokens": 10},
+118 +             )
+119 |
+    -     manager = WorkerManager(store, ProviderPool({"mock-provider": Model()}), ToolEngine(store), team_authority=team_service)
+    -     worker = manager.start(quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0)
+120 +     manager = WorkerManager(
+121 +         store,
+122 +         ProviderPool({"mock-provider": Model()}),
+123 +         ToolEngine(store),
+124 +         team_authority=team_service,
+125 +     )
+126 +     worker = manager.start(
+127 +         quest.id, plan["id"], "n", team_digest=team["proposal_digest"], member_index=0
+128 +     )
+129 |     result = asyncio.run(manager.run(worker["id"]))
+    |
+
+7 files would be reformatted, 67 files already formatted

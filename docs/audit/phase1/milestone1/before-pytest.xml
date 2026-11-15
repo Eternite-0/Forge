@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="37" skipped="0" tests="49" time="3.082" timestamp="2026-11-14T22:24:27.655179+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_api" name="test_api_health_and_single_conversation" time="0.112" /><testcase classname="tests.test_concurrency" name="test_stale_compare_and_swap_cannot_overwrite_terminal_state" time="0.020"><failure message="KeyError: 'version'">tests\test_concurrency.py:19: in test_stale_compare_and_swap_cannot_overwrite_terminal_state
+    assert changed["version"] == 1
+           ^^^^^^^^^^^^^^^^^^
+E   KeyError: 'version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_real_competing_connections_only_commit_one_transition[0]" time="0.019"><failure message="TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'">tests\test_concurrency.py:49: in test_real_competing_connections_only_commit_one_transition
+    outcomes = list(executor.map(compete, range(2)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_concurrency.py:42: in compete
+    services[index].transition(quest.id, target, expected_version=0)
+E   TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_real_competing_connections_only_commit_one_transition[1]" time="0.018"><failure message="TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'">tests\test_concurrency.py:49: in test_real_competing_connections_only_commit_one_transition
+    outcomes = list(executor.map(compete, range(2)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_concurrency.py:42: in compete
+    services[index].transition(quest.id, target, expected_version=0)
+E   TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_real_competing_connections_only_commit_one_transition[2]" time="0.019"><failure message="TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'">tests\test_concurrency.py:49: in test_real_competing_connections_only_commit_one_transition
+    outcomes = list(executor.map(compete, range(2)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_concurrency.py:42: in compete
+    services[index].transition(quest.id, target, expected_version=0)
+E   TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_real_competing_connections_only_commit_one_transition[3]" time="0.018"><failure message="TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'">tests\test_concurrency.py:49: in test_real_competing_connections_only_commit_one_transition
+    outcomes = list(executor.map(compete, range(2)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_concurrency.py:42: in compete
+    services[index].transition(quest.id, target, expected_version=0)
+E   TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_real_competing_connections_only_commit_one_transition[4]" time="0.017"><failure message="TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'">tests\test_concurrency.py:49: in test_real_competing_connections_only_commit_one_transition
+    outcomes = list(executor.map(compete, range(2)))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_concurrency.py:42: in compete
+    services[index].transition(quest.id, target, expected_version=0)
+E   TypeError: QuestService.transition() got an unexpected keyword argument 'expected_version'</failure></testcase><testcase classname="tests.test_concurrency" name="test_terminal_status_rejects_transition_without_writes[completed]" time="0.017" /><testcase classname="tests.test_concurrency" name="test_terminal_status_rejects_transition_without_writes[failed]" time="0.016" /><testcase classname="tests.test_concurrency" name="test_terminal_status_rejects_transition_without_writes[cancelled]" time="0.016" /><testcase classname="tests.test_concurrency" name="test_terminal_status_rejects_transition_without_writes[rejected]" time="0.019" /><testcase classname="tests.test_concurrency" name="test_api_returns_clear_conflict_for_stale_version" time="0.055"><failure message="KeyError: 'version'">tests\test_concurrency.py:81: in test_api_returns_clear_conflict_for_stale_version
+    assert first.json()["version"] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'version'</failure></testcase><testcase classname="tests.test_core" name="test_router_identity_survives_store_reopen" time="0.018" /><testcase classname="tests.test_core" name="test_single_conversation_stores_messages_and_quest" time="0.032" /><testcase classname="tests.test_core" name="test_chat_does_not_create_quest" time="0.023" /><testcase classname="tests.test_core" name="test_model_registry_team_composition" time="0.024" /><testcase classname="tests.test_core" name="test_quest_transition_validation" time="0.001" /><testcase classname="tests.test_core" name="test_quest_lifecycle_transition_is_persisted" time="0.023" /><testcase classname="tests.test_core" name="test_worker_sessions_are_hidden_by_default" time="0.022" /><testcase classname="tests.test_migrations" name="test_schema_version_is_singleton_after_reopening" time="0.021"><failure message="AssertionError: assert 3 == 1&#10; +  where 3 = len([(1,), (1,), (1,)])&#10; +    where [(1,), (1,), (1,)] = &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEE49740&gt;()&#10; +      where &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEE49740&gt; = &lt;sqlite3.Cursor object at 0x000001F5CEE49740&gt;.fetchall&#10; +        where &lt;sqlite3.Cursor object at 0x000001F5CEE49740&gt; = &lt;built-in method execute of sqlite3.Connection object at 0x000001F5CEDC7E20&gt;('SELECT version FROM schema_meta')&#10;[+1 more line; full report in element text]">tests\test_migrations.py:16: in test_schema_version_is_singleton_after_reopening
+    assert len(connection.execute("SELECT version FROM schema_meta").fetchall()) == 1
+E   AssertionError: assert 3 == 1
+E    +  where 3 = len([(1,), (1,), (1,)])
+E    +    where [(1,), (1,), (1,)] = &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEE49740&gt;()
+E    +      where &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEE49740&gt; = &lt;sqlite3.Cursor object at 0x000001F5CEE49740&gt;.fetchall
+E    +        where &lt;sqlite3.Cursor object at 0x000001F5CEE49740&gt; = &lt;built-in method execute of sqlite3.Connection object at 0x000001F5CEDC7E20&gt;('SELECT version FROM schema_meta')
+E    +          where &lt;built-in method execute of sqlite3.Connection object at 0x000001F5CEDC7E20&gt; = &lt;sqlite3.Connection object at 0x000001F5CEDC7E20&gt;.execute</failure></testcase><testcase classname="tests.test_migrations" name="test_legacy_upgrade_preserves_every_entity" time="0.058"><failure message="AssertionError: assert 4 == 1&#10; +  where 4 = len([(1,), (1,), (1,), (1,)])&#10; +    where [(1,), (1,), (1,), (1,)] = &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEDB3040&gt;()&#10; +      where &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEDB3040&gt; = &lt;sqlite3.Cursor object at 0x000001F5CEDB3040&gt;.fetchall&#10;[+2 more lines; full report in element text]">tests\test_migrations.py:24: in test_legacy_upgrade_preserves_every_entity
+    assert len(connection.execute("SELECT version FROM schema_meta").fetchall()) == 1
+E   AssertionError: assert 4 == 1
+E    +  where 4 = len([(1,), (1,), (1,), (1,)])
+E    +    where [(1,), (1,), (1,), (1,)] = &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEDB3040&gt;()
+E    +      where &lt;built-in method fetchall of sqlite3.Cursor object at 0x000001F5CEDB3040&gt; = &lt;sqlite3.Cursor object at 0x000001F5CEDB3040&gt;.fetchall
+E    +        where &lt;sqlite3.Cursor object at 0x000001F5CEDB3040&gt; = &lt;built-in method execute of sqlite3.Connection object at 0x000001F5CED0EC50&gt;('SELECT version FROM schema_meta')
+E    +          where &lt;built-in method execute of sqlite3.Connection object at 0x000001F5CED0EC50&gt; = &lt;sqlite3.Connection object at 0x000001F5CED0EC50&gt;.execute</failure></testcase><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions0]" time="0.065"><failure message="Failed: DID NOT RAISE ValueError">tests\test_migrations.py:44: in test_future_schema_is_rejected_without_mutation
+    with pytest.raises(ValueError, match="(?i)(version|newer|unsupported)"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="tests.test_migrations" name="test_future_schema_is_rejected_without_mutation[versions1]" time="0.068"><failure message="Failed: DID NOT RAISE ValueError">tests\test_migrations.py:44: in test_future_schema_is_rejected_without_mutation
+    with pytest.raises(ValueError, match="(?i)(version|newer|unsupported)"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions0]" time="0.069"><failure message="Failed: DID NOT RAISE ValueError">tests\test_migrations.py:59: in test_ambiguous_legacy_version_is_rejected
+    with pytest.raises(ValueError, match="(?i)version"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="tests.test_migrations" name="test_ambiguous_legacy_version_is_rejected[versions1]" time="0.069"><failure message="Failed: DID NOT RAISE ValueError">tests\test_migrations.py:59: in test_ambiguous_legacy_version_is_rejected
+    with pytest.raises(ValueError, match="(?i)version"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError</failure></testcase><testcase classname="tests.test_migrations" name="test_each_migration_step" time="0.060"><failure message="ModuleNotFoundError: No module named 'forge_core.migrations'">tests\test_migrations.py:64: in test_each_migration_step
+    from forge_core.migrations import SCHEMA_VERSION, migrate
+E   ModuleNotFoundError: No module named 'forge_core.migrations'</failure></testcase><testcase classname="tests.test_migrations" name="test_migration_failure_rolls_back_ddl_data_and_version" time="0.058"><failure message="ModuleNotFoundError: No module named 'forge_core.migrations'">tests\test_migrations.py:81: in test_migration_failure_rolls_back_ddl_data_and_version
+    from forge_core.migrations import MIGRATIONS, migrate
+E   ModuleNotFoundError: No module named 'forge_core.migrations'</failure></testcase><testcase classname="tests.test_migrations" name="test_concurrent_initialization_keeps_one_version_and_router" time="0.025"><failure message="sqlite3.OperationalError: database is locked">tests\test_migrations.py:109: in test_concurrent_initialization_keeps_one_version_and_router
+    identities = list(executor.map(open_store, range(4)))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+C:\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_migrations.py:106: in open_store
+    return Store(path).ensure_router()["router_session_id"]
+           ^^^^^^^^^^^
+src\forge_core\store.py:12: in __init__
+    self._initialize()
+src\forge_core\store.py:24: in _initialize
+    with self._connect() as conn:
+         ^^^^^^^^^^^^^^^
+src\forge_core\store.py:17: in _connect
+    conn.execute("PRAGMA journal_mode=WAL")
+E   sqlite3.OperationalError: database is locked</failure></testcase><testcase classname="tests.test_settings" name="test_same_workspace_has_same_router_from_different_startup_directories" time="0.876"><failure message="AssertionError: assert {'db': 'C:\\U...ffbca086ecb2'} == {'db': 'C:\\U...adc253de2e97'}&#10;  &#10;  Differing items:&#10;  {'db': 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1\\test_same_workspace_has_same_r0\\cli-cwd\\data\\forge.sqlite3'} != {'db': 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1\\test_same_workspace_has_same_r0\\desktop-cwd\\data\\forge.sqlite3'}&#10;  {'router': 'router_ffbca086ecb2'} != {'router': 'router_adc253de2e97'}&#10;  Use -v to get more diff">tests\test_settings.py:32: in test_same_workspace_has_same_router_from_different_startup_directories
+    assert observations[0] == observations[1]
+E   AssertionError: assert {'db': 'C:\\U...ffbca086ecb2'} == {'db': 'C:\\U...adc253de2e97'}
+E     
+E     Differing items:
+E     {'db': 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1\\test_same_workspace_has_same_r0\\cli-cwd\\data\\forge.sqlite3'} != {'db': 'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1\\test_same_workspace_has_same_r0\\desktop-cwd\\data\\forge.sqlite3'}
+E     {'router': 'router_ffbca086ecb2'} != {'router': 'router_adc253de2e97'}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_settings" name="test_settings_precedence_and_absolute_paths" time="0.003"><failure message="ModuleNotFoundError: No module named 'forge_core.settings'">tests\test_settings.py:37: in test_settings_precedence_and_absolute_paths
+    from forge_core.settings import Settings
+E   ModuleNotFoundError: No module named 'forge_core.settings'</failure></testcase><testcase classname="tests.test_settings" name="test_relative_workspace_is_rejected" time="0.001"><failure message="ModuleNotFoundError: No module named 'forge_core.settings'">tests\test_settings.py:51: in test_relative_workspace_is_rejected
+    from forge_core.settings import Settings
+E   ModuleNotFoundError: No module named 'forge_core.settings'</failure></testcase><testcase classname="tests.test_settings" name="test_invalid_settings_do_not_fall_back_silently" time="0.003"><failure message="ModuleNotFoundError: No module named 'forge_core.settings'">tests\test_settings.py:58: in test_invalid_settings_do_not_fall_back_silently
+    from forge_core.settings import Settings
+E   ModuleNotFoundError: No module named 'forge_core.settings'</failure></testcase><testcase classname="tests.test_settings" name="test_workspace_binding_prevents_accidental_database_reuse" time="0.003"><failure message="ModuleNotFoundError: No module named 'forge_core.settings'">tests\test_settings.py:66: in test_workspace_binding_prevents_accidental_database_reuse
+    from forge_core.settings import Workspace
+E   ModuleNotFoundError: No module named 'forge_core.settings'</failure></testcase><testcase classname="tests.test_settings" name="test_relative_store_path_is_workspace_relative" time="0.003"><failure message="ModuleNotFoundError: No module named 'forge_core.settings'">tests\test_settings.py:79: in test_relative_store_path_is_workspace_relative
+    from forge_core.settings import Workspace
+E   ModuleNotFoundError: No module named 'forge_core.settings'</failure></testcase><testcase classname="tests.test_transactions" name="test_router_cross_entity_failure_rolls_back[quests-1]" time="0.020"><failure message="AssertionError: assert [{'rowid': 1,... 'user', ...}] == []&#10;  &#10;  Left contains one more item: {'rowid': 1, 'id': 'msg_1aa869a094da', 'conversation_id': 'main', 'role': 'user', ...}&#10;  Use -v to get more diff">tests\test_transactions.py:34: in test_router_cross_entity_failure_rolls_back
+    assert store.list_messages() == []
+E   AssertionError: assert [{'rowid': 1,... 'user', ...}] == []
+E     
+E     Left contains one more item: {'rowid': 1, 'id': 'msg_1aa869a094da', 'conversation_id': 'main', 'role': 'user', ...}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_transactions" name="test_router_cross_entity_failure_rolls_back[events-1]" time="0.022"><failure message="AssertionError: assert [{'rowid': 1,... 'user', ...}] == []&#10;  &#10;  Left contains one more item: {'rowid': 1, 'id': 'msg_caaddf95ff86', 'conversation_id': 'main', 'role': 'user', ...}&#10;  Use -v to get more diff">tests\test_transactions.py:34: in test_router_cross_entity_failure_rolls_back
+    assert store.list_messages() == []
+E   AssertionError: assert [{'rowid': 1,... 'user', ...}] == []
+E     
+E     Left contains one more item: {'rowid': 1, 'id': 'msg_caaddf95ff86', 'conversation_id': 'main', 'role': 'user', ...}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_transactions" name="test_router_cross_entity_failure_rolls_back[outbox-1]" time="0.015"><failure message="sqlite3.OperationalError: no such table: main.outbox">tests\test_transactions.py:30: in test_router_cross_entity_failure_rolls_back
+    install_abort_trigger(store.path, table, condition)
+tests\test_transactions.py:18: in install_abort_trigger
+    connection.executescript(
+E   sqlite3.OperationalError: no such table: main.outbox</failure></testcase><testcase classname="tests.test_transactions" name="test_router_cross_entity_failure_rolls_back[messages-NEW.role='assistant']" time="0.025"><failure message="AssertionError: assert [{'rowid': 1,... 'user', ...}] == []&#10;  &#10;  Left contains one more item: {'rowid': 1, 'id': 'msg_16ee72a65a7e', 'conversation_id': 'main', 'role': 'user', ...}&#10;  Use -v to get more diff">tests\test_transactions.py:34: in test_router_cross_entity_failure_rolls_back
+    assert store.list_messages() == []
+E   AssertionError: assert [{'rowid': 1,... 'user', ...}] == []
+E     
+E     Left contains one more item: {'rowid': 1, 'id': 'msg_16ee72a65a7e', 'conversation_id': 'main', 'role': 'user', ...}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_transactions" name="test_status_and_event_failure_rolls_back[events]" time="0.020"><failure message="AssertionError: assert 'awaiting_approval' == 'proposed'&#10;  &#10;  - proposed&#10;  + awaiting_approval">tests\test_transactions.py:48: in test_status_and_event_failure_rolls_back
+    assert store.get_quest(quest.id)["status"] == "proposed"
+E   AssertionError: assert 'awaiting_approval' == 'proposed'
+E     
+E     - proposed
+E     + awaiting_approval</failure></testcase><testcase classname="tests.test_transactions" name="test_status_and_event_failure_rolls_back[outbox]" time="0.017"><failure message="sqlite3.OperationalError: no such table: main.outbox">tests\test_transactions.py:45: in test_status_and_event_failure_rolls_back
+    install_abort_trigger(store.path, table)
+tests\test_transactions.py:18: in install_abort_trigger
+    connection.executescript(
+E   sqlite3.OperationalError: no such table: main.outbox</failure></testcase><testcase classname="tests.test_transactions" name="test_worker_proposal_and_event_failure_rolls_back[events]" time="0.029"><failure message="AssertionError: assert [{'id': 'work...': None, ...}] == []&#10;  &#10;  Left contains one more item: {'id': 'worker_a83df7dd3d55', 'quest_id': 'quest_4fb588894d83', 'role': 'research', 'model_id': None, ...}&#10;  Use -v to get more diff">tests\test_transactions.py:65: in test_worker_proposal_and_event_failure_rolls_back
+    assert main.store.list_workers() == []
+E   AssertionError: assert [{'id': 'work...': None, ...}] == []
+E     
+E     Left contains one more item: {'id': 'worker_a83df7dd3d55', 'quest_id': 'quest_4fb588894d83', 'role': 'research', 'model_id': None, ...}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.test_transactions" name="test_worker_proposal_and_event_failure_rolls_back[outbox]" time="0.021"><failure message="sqlite3.OperationalError: no such table: main.outbox">tests\test_transactions.py:61: in test_worker_proposal_and_event_failure_rolls_back
+    install_abort_trigger(main.store.path, table)
+tests\test_transactions.py:18: in install_abort_trigger
+    connection.executescript(
+E   sqlite3.OperationalError: no such table: main.outbox</failure></testcase><testcase classname="tests.test_transactions" name="test_unit_of_work_exception_rolls_back_and_closes[RuntimeError]" time="0.014"><failure message="AttributeError: 'Store' object has no attribute 'unit_of_work'">tests\test_transactions.py:74: in test_unit_of_work_exception_rolls_back_and_closes
+    with store.unit_of_work() as work:
+         ^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'Store' object has no attribute 'unit_of_work'</failure></testcase><testcase classname="tests.test_transactions" name="test_unit_of_work_exception_rolls_back_and_closes[KeyboardInterrupt]" time="0.013"><failure message="AttributeError: 'Store' object has no attribute 'unit_of_work'">tests\test_transactions.py:74: in test_unit_of_work_exception_rolls_back_and_closes
+    with store.unit_of_work() as work:
+         ^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'Store' object has no attribute 'unit_of_work'</failure></testcase><testcase classname="tests.test_transactions" name="test_commit_failure_rolls_back_and_closes" time="0.017"><failure message="AttributeError: 'Store' object has no attribute 'unit_of_work'">tests\test_transactions.py:98: in test_commit_failure_rolls_back_and_closes
+    with store.unit_of_work() as work:
+         ^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'Store' object has no attribute 'unit_of_work'</failure></testcase><testcase classname="tests.test_transactions" name="test_repeated_reads_and_writes_explicitly_close_every_connection" time="0.080"><failure message="Failed: DID NOT RAISE ProgrammingError">tests\test_transactions.py:126: in test_repeated_reads_and_writes_explicitly_close_every_connection
+    with pytest.raises(sqlite3.ProgrammingError, match="closed"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ProgrammingError</failure></testcase><testcase classname="tests.test_transactions" name="test_begin_failure_releases_connection_and_allows_retry" time="0.004"><failure message="TypeError: Store.__init__() got an unexpected keyword argument 'busy_timeout_ms'">tests\test_transactions.py:135: in test_begin_failure_releases_connection_and_allows_retry
+    store = TrackingStore(str(tmp_path / "begin-failure.sqlite3"), busy_timeout_ms=25)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_transactions.py:112: in __init__
+    super().__init__(*args, **kwargs)
+E   TypeError: Store.__init__() got an unexpected keyword argument 'busy_timeout_ms'</failure></testcase><testcase classname="tests.test_transactions" name="test_event_and_outbox_insert_are_atomic" time="0.016"><failure message="sqlite3.OperationalError: no such table: main.outbox">tests\test_transactions.py:150: in test_event_and_outbox_insert_are_atomic
+    install_abort_trigger(store.path, "outbox")
+tests\test_transactions.py:18: in install_abort_trigger
+    connection.executescript(
+E   sqlite3.OperationalError: no such table: main.outbox</failure></testcase><testcase classname="tests.test_transactions" name="test_outbox_survives_restart_and_ack_is_idempotent" time="0.016"><failure message="AttributeError: 'Store' object has no attribute 'list_outbox'">tests\test_transactions.py:163: in test_outbox_survives_restart_and_ack_is_idempotent
+    assert [row["event_id"] for row in reopened.list_outbox()] == [event.id]
+                                       ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'Store' object has no attribute 'list_outbox'</failure></testcase></testsuite></testsuites>

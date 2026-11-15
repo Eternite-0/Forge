@@ -1,0 +1,56 @@
+F...............                                                         [100%]
+================================== FAILURES ===================================
+_____ test_reassignment_preserves_completed_node_and_historical_approval ______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-146/test_reassignment_preserves_co0')
+
+    def test_reassignment_preserves_completed_node_and_historical_approval(tmp_path):
+        store, quest, plan, roles, limits, service, old, manager, runs = prepared_team(tmp_path)
+        with store.unit_of_work() as work:
+            for run, state in zip(runs, ("succeeded", "blocked"), strict=True):
+                work.connection.execute("UPDATE worker_runs SET state=? WHERE id=?", (state, run["id"]))
+                work.connection.execute("UPDATE task_nodes SET status=? WHERE plan_id=? AND node_key=?", (state, plan["id"], run["node_key"]))
+        version = store.get_quest(quest.id)["version"]
+        replacement = service.propose_reassignment(quest.id, runs[1]["id"], "Replace blocked reviewer", roles, limits, strategy="coverage", expected_version=version)
+        service.approve(quest.id, plan["revision"], replacement["proposal_digest"], expected_version=version, actor="local_user")
+        with store.unit_of_work() as work:
+            completed = work.connection.execute("SELECT * FROM task_nodes WHERE plan_id=? AND node_key='a'", (plan["id"],)).fetchone()
+            assert completed["status"] == "succeeded" and completed["worker_id"] == runs[0]["worker_id"]
+            assert service.get_historical_approved(quest.id, plan["revision"], old["proposal_digest"], connection=work.connection, run_id=runs[0]["id"])["status"] == "superseded"
+            with pytest.raises(DomainError):
+                service.get_approved(quest.id, plan["revision"], old["proposal_digest"], connection=work.connection)
+>       manager.start(quest.id, plan["id"], "b", team_digest=replacement["proposal_digest"], member_index=1)
+
+backend\tests\test_team_reassignment_m5.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\src\forge_core\worker_runtime.py:253: in start
+    self._reserve(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+connection = <sqlite3.Connection object at 0x000002F51F09ED40>, scope = 'quest'
+scope_id = 'quest_0e8176393250', limit = 400, allocation = 200, tools_limit = 64
+tools_allocation = 8
+
+    @staticmethod
+    def _reserve(connection, scope, scope_id, limit, allocation, tools_limit, tools_allocation):
+        connection.execute(
+            "INSERT OR IGNORE INTO worker_budget_ledger(scope,scope_id,token_limit,tool_limit) VALUES (?,?,?,?)",
+            (scope, scope_id, limit, tools_limit),
+        )
+        row = connection.execute(
+            "SELECT * FROM worker_budget_ledger WHERE scope=? AND scope_id=?", (scope, scope_id)
+        ).fetchone()
+        if row["token_limit"] != limit or row["tool_limit"] != tools_limit:
+            raise DomainError("Budget policy changed; new allocation denied")
+        result = connection.execute(
+            "UPDATE worker_budget_ledger SET tokens_allocated=tokens_allocated+?,tools_allocated=tools_allocated+? WHERE scope=? AND scope_id=? AND tokens_allocated+?<=token_limit AND tools_allocated+?<=tool_limit",
+            (allocation, tools_allocation, scope, scope_id, allocation, tools_allocation),
+        )
+        if result.rowcount != 1:
+>           raise DomainError("Worker budget exhausted")
+E           forge_core.domain.DomainError: Worker budget exhausted
+
+backend\src\forge_core\worker_runtime.py:112: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_team_reassignment_m5.py::test_reassignment_preserves_completed_node_and_historical_approval
+1 failed, 15 passed in 1.05s

@@ -1,0 +1,107 @@
+[
+  {
+    "path": "backend\\src\\forge_api\\main.py",
+    "change": "modified",
+    "sha256": "F698C016C743CB87ED20182B639F36E7FDDA5CCD851A293296E3ACFD9D5CA160"
+  },
+  {
+    "path": "backend\\src\\forge_core\\dispatcher_schema.py",
+    "change": "new",
+    "sha256": "8F8BA0538CCAE40EA487938688E457ED3FFE6BD4F6CDA5C844E005FB0ACFAD7E"
+  },
+  {
+    "path": "backend\\src\\forge_core\\dispatcher.py",
+    "change": "new",
+    "sha256": "AC0F5B9631F9984017DEB8D557CBFD82756E0CF820CCD37A5B5384D09661E32F"
+  },
+  {
+    "path": "backend\\src\\forge_core\\event_domain.py",
+    "change": "new",
+    "sha256": "16815B52AC0CE525905EC847B75BA7D4BF694DE9CE574A5ADA2FA5F226FB1F00"
+  },
+  {
+    "path": "backend\\src\\forge_core\\graph_domain.py",
+    "change": "new",
+    "sha256": "C3918D429D78A59A4B4F71DF64A66A29BC0113D9FB2BA27D7DDC859BE87A6035"
+  },
+  {
+    "path": "backend\\src\\forge_core\\graph_schema.py",
+    "change": "new",
+    "sha256": "52C1BB7FE68D8F868675B51797E8C1C440598E42B409870762C43E436A4C1603"
+  },
+  {
+    "path": "backend\\src\\forge_core\\migrations.py",
+    "change": "modified",
+    "sha256": "6DB76DDA8F39686DB77CCE1D1696A8ADAE7AF264B0E19FC79C5007AB667D15CB"
+  },
+  {
+    "path": "backend\\src\\forge_core\\quest_graph.py",
+    "change": "new",
+    "sha256": "CE3A9E1CABDF039625971116F911B32DABB75332E16121F1CF133628D10B1577"
+  },
+  {
+    "path": "backend\\src\\forge_core\\router_domain.py",
+    "change": "modified",
+    "sha256": "3AF8D0156348F8BC89F9AED4128E4E0AB7329B1104ED290C5D94445FAB893156"
+  },
+  {
+    "path": "backend\\src\\forge_core\\router.py",
+    "change": "modified",
+    "sha256": "366D3480E457840D18AB5D684AA12039BB0B638B432ADA3497A055C3580E9D93"
+  },
+  {
+    "path": "backend\\tests\\test_event_dispatcher.py",
+    "change": "new",
+    "sha256": "F1C40C423C04FF483170DADA811B2157BC7331135DA2BD554D403E2A278F2208"
+  },
+  {
+    "path": "backend\\tests\\test_m4_adversarial.py",
+    "change": "new",
+    "sha256": "E4B2DB75994463842C0A60AAF446D5C0D7701C67F4EF58224070E622C33D8DD1"
+  },
+  {
+    "path": "backend\\tests\\test_m4_integration.py",
+    "change": "new",
+    "sha256": "5A1559A06A9A5357879AC75B21BE3F5F9A72E76C4CABBC4D92536713D0733608"
+  },
+  {
+    "path": "backend\\tests\\test_migrations.py",
+    "change": "modified",
+    "sha256": "AFB59C7D94BA554643F01010CE53A0BF6CA44622F425A9F71F3352CBD0060964"
+  },
+  {
+    "path": "backend\\tests\\test_persistent_router.py",
+    "change": "modified",
+    "sha256": "516DA3EBB6C0059B8A40EC8E7C17364A931D5FACFBA9B08707B08758966A179D"
+  },
+  {
+    "path": "backend\\tests\\test_quest_graph.py",
+    "change": "new",
+    "sha256": "C4BCA3B00C2E8675B586BBE18087B0B0BD17622D39FE24B49D447CE46A3E63AA"
+  },
+  {
+    "path": "docs\\DOMAIN_AND_LIFECYCLE.md",
+    "change": "modified",
+    "sha256": "F58162D20F01EDC8214701220885E24A76A2E9A83816467123729C2920A2031F"
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE4_REPORT.md",
+    "change": "new",
+    "sha256": "11E688D8C024AE40F60BB1CD35BE2D775F8D532ED2DB38713987E2C2C03EFFE1"
+  },
+  {
+    "path": "docs\\QUALITY_GATES.md",
+    "change": "modified",
+    "sha256": "852D1EA43E3E82FD786F6AF3763AD40626597FFF8DB64808FC671297C1FE7C6E"
+  },
+  {
+    "path": "docs\\ROUTER_AND_WORKER_PROTOCOL.md",
+    "change": "modified",
+    "sha256": "F0EA424CC4E23A61AB3593453B3EB590D48EEAA5A1607D504AC9CE8C9E8BD16D"
+  },
+  {
+    "path": "docs\\adr\\ADR-006-durable-event-delivery.md",
+    "change": "new",
+    "sha256": "9066B7B5C5BE87B43F751AF122D82B0048AA6D1BC04F13CC65AF7B8C285FD49C"
+  }
+]

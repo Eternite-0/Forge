@@ -1,0 +1,242 @@
+[
+  {
+    "path": "docs\\PHASE0_AUDIT.md",
+    "baseline": "94BFDF114A39F0E4E659E2A1C4C7543AADBD9B6E2F81740E66EADADE6AF191E7",
+    "current": "94BFDF114A39F0E4E659E2A1C4C7543AADBD9B6E2F81740E66EADADE6AF191E7",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\PHASE1_MILESTONE1_REPORT.md",
+    "baseline": "F171E448C9B9131EDA8D2A1A314C796F2CD27336EC46D117B26C0236DE388871",
+    "current": "F171E448C9B9131EDA8D2A1A314C796F2CD27336EC46D117B26C0236DE388871",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\archive-check.json",
+    "baseline": "66BD815B623FDFCD3CCF6D1EA9C527058B7D5200B606604C419D913FD2BAA2E5",
+    "current": "66BD815B623FDFCD3CCF6D1EA9C527058B7D5200B606604C419D913FD2BAA2E5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\build-results.json",
+    "baseline": "568253CAA0B3D477253B96138C472B7D3628A7C294C4335C5091DF77FC386308",
+    "current": "568253CAA0B3D477253B96138C472B7D3628A7C294C4335C5091DF77FC386308",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\http-smoke.json",
+    "baseline": "1FF4F6E5F6979ADF876402FDA7C38418044D6924F1910B11B2186440210A709A",
+    "current": "1FF4F6E5F6979ADF876402FDA7C38418044D6924F1910B11B2186440210A709A",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-audit-production.json",
+    "baseline": "8FFE215A46E77F7FDD3C8B66C39885520EFF42B990BCF4AF7D75B39B1CE165F9",
+    "current": "8FFE215A46E77F7FDD3C8B66C39885520EFF42B990BCF4AF7D75B39B1CE165F9",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-audit.json",
+    "baseline": "DB9887DC5F1328C38F860AB904D3F83E9EE70326C2B0031D36C4BC9A4EFEC2BB",
+    "current": "DB9887DC5F1328C38F860AB904D3F83E9EE70326C2B0031D36C4BC9A4EFEC2BB",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\npm-tree.json",
+    "baseline": "94D793545BF49BAD61AFB8B1246144AF677EBA74ED84193E802AAB85955E0695",
+    "current": "94D793545BF49BAD61AFB8B1246144AF677EBA74ED84193E802AAB85955E0695",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\probes.json",
+    "baseline": "7EF42D4501BC2B54C5F02D41DD8EBA70A05F499B39BAF1E0F9B9ADB5258C83BF",
+    "current": "7EF42D4501BC2B54C5F02D41DD8EBA70A05F499B39BAF1E0F9B9ADB5258C83BF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\pytest.xml",
+    "baseline": "621EEFD3F52957A86F9B0C255FA036D129591BF004850BAE350F31F379674B65",
+    "current": "621EEFD3F52957A86F9B0C255FA036D129591BF004850BAE350F31F379674B65",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\python-environment.txt",
+    "baseline": "82F96AC02FE907C99562FF91CE53F5CDD92B3FD560EB72C758F0FAA56248557D",
+    "current": "82F96AC02FE907C99562FF91CE53F5CDD92B3FD560EB72C758F0FAA56248557D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\ruff.json",
+    "baseline": "35CE158DDB0AC894663A0C3465C8A44EE88F8123F8AF049348CC32E49816BCE9",
+    "current": "35CE158DDB0AC894663A0C3465C8A44EE88F8123F8AF049348CC32E49816BCE9",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase0\\verification.json",
+    "baseline": "D4D4C94CD7E2908F39D6B678297DC45F3E6299401B5DEF8E933D05027535E384",
+    "current": "D4D4C94CD7E2908F39D6B678297DC45F3E6299401B5DEF8E933D05027535E384",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\auxiliary-results.json",
+    "baseline": "5AE0708C5362090958FAF527873A93B855F2948A41AB5AFABFD06FB35C9A433E",
+    "current": "5AE0708C5362090958FAF527873A93B855F2948A41AB5AFABFD06FB35C9A433E",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\baseline-source.json",
+    "baseline": "AA71A117E85430921F928038074EA14C3F619C04DCF23E0836ABB9E07B0F1D41",
+    "current": "AA71A117E85430921F928038074EA14C3F619C04DCF23E0836ABB9E07B0F1D41",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-pytest.txt",
+    "baseline": "04874B8FB75BB96B547D1AF483E9C9A819137189768B88DA814FCC72C6592690",
+    "current": "04874B8FB75BB96B547D1AF483E9C9A819137189768B88DA814FCC72C6592690",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-pytest.xml",
+    "baseline": "4E7E6A1DC1987053E311BCE4D6D7DAE44F374E32A622D95BD949BE38495FC1A2",
+    "current": "4E7E6A1DC1987053E311BCE4D6D7DAE44F374E32A622D95BD949BE38495FC1A2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\before-result.json",
+    "baseline": "E0C2A133209F266B86D2B8B23A4FC3AA4D744BE336D3922CE9F7D3417FEFF007",
+    "current": "E0C2A133209F266B86D2B8B23A4FC3AA4D744BE336D3922CE9F7D3417FEFF007",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\delivery-results.json",
+    "baseline": "9B1B35AE75E03BA88577934D530E94D7F5D53CD91BA71FC731EFB2D033DA6015",
+    "current": "9B1B35AE75E03BA88577934D530E94D7F5D53CD91BA71FC731EFB2D033DA6015",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\failed-command-results.json",
+    "baseline": "FCDA9A0CB458757E708C39C797F5A2684F81EEFE29C88A8B27144246BBEA309C",
+    "current": "FCDA9A0CB458757E708C39C797F5A2684F81EEFE29C88A8B27144246BBEA309C",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-compile.txt",
+    "baseline": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "current": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-format.txt",
+    "baseline": "66F7D03F920E131ED22153A556DD7F796A42A1ADFF045C9C14639DC96E36A3D8",
+    "current": "66F7D03F920E131ED22153A556DD7F796A42A1ADFF045C9C14639DC96E36A3D8",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pip-check.txt",
+    "baseline": "672AEC65A45BED50E70229C70934A7EEBF0462595C459B83023027645D57CCCF",
+    "current": "672AEC65A45BED50E70229C70934A7EEBF0462595C459B83023027645D57CCCF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pytest.txt",
+    "baseline": "2C2ED4C896A29F34556D0CAACCA2DF9C7EFBC0063C3F9E1FA240359BBB1A3BB5",
+    "current": "2C2ED4C896A29F34556D0CAACCA2DF9C7EFBC0063C3F9E1FA240359BBB1A3BB5",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-pytest.xml",
+    "baseline": "98BB35F942B7A616C6A3862FE83B0628F0413A9C095C7E2084D5709FEE27C3C3",
+    "current": "98BB35F942B7A616C6A3862FE83B0628F0413A9C095C7E2084D5709FEE27C3C3",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\final-ruff.txt",
+    "baseline": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "current": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\http-restart.json",
+    "baseline": "762BDD87D8526F1BED642F7177F8EB2685B0B5731336ED79D7B908AFF1707AE2",
+    "current": "762BDD87D8526F1BED642F7177F8EB2685B0B5731336ED79D7B908AFF1707AE2",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\initialization-race.txt",
+    "baseline": "AB149D03E4E8659E983631D6D4262E8147061A0388401AE15DE4E7974E54AD29",
+    "current": "AB149D03E4E8659E983631D6D4262E8147061A0388401AE15DE4E7974E54AD29",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\initialization-race.xml",
+    "baseline": "A23D4E338D19835B2C14EB17879269EDBF8942B586FFF8F9798C2927A243C053",
+    "current": "A23D4E338D19835B2C14EB17879269EDBF8942B586FFF8F9798C2927A243C053",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\install.txt",
+    "baseline": "CB0954FE1A8D5149741922657DB2ADAE2A30DE163B56B41AD961B5D6083F071E",
+    "current": "CB0954FE1A8D5149741922657DB2ADAE2A30DE163B56B41AD961B5D6083F071E",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\original-tests-preserved.json",
+    "baseline": "D560FA42223B9D733AB844C953DEDD4868A16F4EFE88918C5B3C1643BCBD7A5D",
+    "current": "D560FA42223B9D733AB844C953DEDD4868A16F4EFE88918C5B3C1643BCBD7A5D",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\passed-command-results.json",
+    "baseline": "189D3164F007E7A65439A3B42DCD0EA200F373D887BAEE26A4E1A03B6A8B5D5A",
+    "current": "189D3164F007E7A65439A3B42DCD0EA200F373D887BAEE26A4E1A03B6A8B5D5A",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\phase0-preservation.json",
+    "baseline": "DEEF77DA556313DF5FEAAA6B9194F514887E0A44A9ED3EFBBFAE27B3A8FE75CF",
+    "current": "DEEF77DA556313DF5FEAAA6B9194F514887E0A44A9ED3EFBBFAE27B3A8FE75CF",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before-result.json",
+    "baseline": "8B219CF679548E80C74815A9891F360F2C37C29538B20CF92F66BB7432745115",
+    "current": "8B219CF679548E80C74815A9891F360F2C37C29538B20CF92F66BB7432745115",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before.txt",
+    "baseline": "D3B833A38C1B639DAD2948B8E635E136B5891404482EEB055472C905543FF055",
+    "current": "D3B833A38C1B639DAD2948B8E635E136B5891404482EEB055472C905543FF055",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\settings-before.xml",
+    "baseline": "2F8819FADE53398AD8045079BCEAA0BABDA8A06A8198ACC9E031285B002DF652",
+    "current": "2F8819FADE53398AD8045079BCEAA0BABDA8A06A8198ACC9E031285B002DF652",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\source-changes.diff",
+    "baseline": "08ECC555AC5BA553B6A121D260629BDC330FFDFE1A875F8344A7C48AF0142691",
+    "current": "08ECC555AC5BA553B6A121D260629BDC330FFDFE1A875F8344A7C48AF0142691",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\startup-before.txt",
+    "baseline": "E96DECCDF212C9DBD4F76151467A89164D464AFB759A364E6729762D1B6D9939",
+    "current": "E96DECCDF212C9DBD4F76151467A89164D464AFB759A364E6729762D1B6D9939",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1\\startup-before.xml",
+    "baseline": "696F516E6BC960B688D2A1D34506A6AE3DE46E28AE45C0736E46B34DE7AF463F",
+    "current": "696F516E6BC960B688D2A1D34506A6AE3DE46E28AE45C0736E46B34DE7AF463F",
+    "unchanged": true
+  },
+  {
+    "path": "docs\\audit\\phase1\\milestone1-verification.json",
+    "baseline": "72135CCB3812E9D00B0D0814C77826C954BD9728D496321552206E017B8015D5",
+    "current": "72135CCB3812E9D00B0D0814C77826C954BD9728D496321552206E017B8015D5",
+    "unchanged": true
+  }
+]

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="1.657" timestamp="2026-11-14T23:05:08.471392+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_api_trust" name="test_approval_and_grants_http_are_user_controlled" time="0.443"><failure message="assert 404 == 200&#10; +  where 404 = &lt;Response [404 Not Found]&gt;.status_code">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-20/test_approval_and_grants_http_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001F19B4A29E0&gt;
+
+    def test_approval_and_grants_http_are_user_controlled(tmp_path, monkeypatch):
+        secret = secrets.token_hex(32)
+        monkeypatch.setenv("FORGE_CORE_SECRET", secret)
+        monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+        from forge_api import main
+    
+        importlib.reload(main)
+        client = TestClient(main.app, base_url="http://127.0.0.1:8765", client=("127.0.0.1", 12345))
+        session = client.get("/health").json()["session"]
+        token = hmac.new(bytes.fromhex(secret), session.encode(), hashlib.sha256).hexdigest()
+        headers = {"Authorization": f"Bearer {token}"}
+        client.post("/api/conversation/message", headers=headers, json={"content": "帮我开发数据层"})
+        quest_id = client.get("/api/quests", headers=headers).json()[0]["id"]
+        body = {"quest_id": quest_id, "action_type": "publish", "parameters": {"file": "one"}, "resource_scope": "example", "risk": "R2", "reason": "publish"}
+        assert client.post("/api/approvals", json=body).status_code == 401
+        response = client.post("/api/approvals", headers=headers, json=body)
+&gt;       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = &lt;Response [404 Not Found]&gt;.status_code
+
+tests\test_api_trust.py:109: AssertionError</failure></testcase></testsuite></testsuites>

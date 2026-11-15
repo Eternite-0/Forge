@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-11-14T13:46:54.832690+00:00",
+  "command": [
+    "D:\\Competition_this\\Agent\\backend\\.venv\\Scripts\\python.exe",
+    "-m",
+    "uvicorn",
+    "forge_api.main:app",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "51327"
+  ],
+  "observations": [
+    {
+      "attempt": 0,
+      "health_status": 200,
+      "router_session_id": "router_e9d0d90327c8",
+      "conversation_id": "main",
+      "message_count": 2,
+      "quest_count": 1,
+      "quest_ids": [
+        "quest_ff318fc91443"
+      ],
+      "router_event_cursor": 0
+    },
+    {
+      "attempt": 1,
+      "health_status": 200,
+      "router_session_id": "router_e9d0d90327c8",
+      "conversation_id": "main",
+      "message_count": 2,
+      "quest_count": 1,
+      "quest_ids": [
+        "quest_ff318fc91443"
+      ],
+      "router_event_cursor": 0
+    }
+  ],
+  "frontend_assets": [
+    {
+      "path": "/",
+      "http_status": 200
+    },
+    {
+      "path": "/assets/index-9GMPQxZU.js",
+      "http_status": 200,
+      "bytes": 146336
+    },
+    {
+      "path": "/assets/index-9p052uzy.css",
+      "http_status": 200,
+      "bytes": 3816
+    }
+  ],
+  "verified": "Real HTTP API startup and durable records after process restart; no Worker recovery claimed."
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.373" timestamp="2026-11-14T23:57:21.276823+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_m4_integration" name="test_lifespan_dispatches_and_resumes_notice_without_fabricating_user_message" time="4.267"><failure message="AssertionError: Background dispatch did not reach the expected state">tests\test_m4_integration.py:40: in test_lifespan_dispatches_and_resumes_notice_without_fabricating_user_message
+    wait_for(lambda: bool(Dispatcher(main.store).inbox("router")))
+tests\test_m4_integration.py:20: in wait_for
+    raise AssertionError("Background dispatch did not reach the expected state")
+E   AssertionError: Background dispatch did not reach the expected state</failure></testcase></testsuite></testsuites>

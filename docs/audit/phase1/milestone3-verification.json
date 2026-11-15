@@ -1,0 +1,279 @@
+{
+  "date": "2026-11-14",
+  "environment": "Windows, Python 3.13",
+  "commands": [
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short --junitxml=..\\.local\\phase1\\milestone3\\final-pytest.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/final-pytest.txt",
+      "junit": "milestone3/final-pytest.xml"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff check --no-cache src tests scripts --config pyproject.toml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/ruff-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check --no-cache src tests scripts",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/ruff-format.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/pip-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip_audit --disable-pip --no-deps -r requirements-lock.txt --format json --output ..\\.local\\phase1\\milestone3\\pip-audit.json --progress-spinner off",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/pip-audit.txt",
+      "output": "milestone3/pip-audit.json"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "repository root",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/git-diff-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_model_registry_m3.py tests/test_benchmark_m3.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone3\\before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone3/before.txt",
+      "purpose": "red collection failure"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_providers.py -q --junitxml=..\\.local\\phase1\\milestone3\\providers-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone3/providers-before.txt",
+      "junit": "milestone3/providers-before.xml",
+      "purpose": "red collection failure"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_providers.py -q --junitxml=..\\.local\\phase1\\milestone3\\providers-green.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/providers-green.txt",
+      "junit": "milestone3/providers-green.xml"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe scripts/run_mock_benchmark.py --workspace <absolute isolated workspace>",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "output": "milestone3/mock-benchmark.json",
+      "note": "deterministic mock; no live model"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe ..\\.local\\phase1\\milestone3\\check_preservation.py",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "output": "milestone3/m2-tests-preservation.json"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_persistent_router.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone3\\router-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone3/router-before.log",
+      "junit": "milestone3/router-before.xml",
+      "purpose": "red regression"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_persistent_router.py tests/test_api_trust.py tests/test_startup.py tests/test_core.py tests/test_migrations.py tests/test_transactions.py -q --tb=short",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone3/router-freeze.log"
+    }
+  ],
+  "changed_files": "milestone3/changed-files.json",
+  "historical_preservation": "milestone3/historical-preservation.json",
+  "limitations": [
+    "No live provider calls verified; protocol tests and benchmark use explicitly marked mocks.",
+    "Strict JSON Schema adapter path only for explicitly supported OpenAI-compatible providers.",
+    "Router rejects resolution beyond 100 Quests; bounded retrieval remains M4.",
+    "Long-term Memory and full compaction/recovery remain M6.",
+    "No trusted Worker execution or approval-to-action receipt; external side effects remain blocked.",
+    "Benchmark smoke suite covers three protocol tasks and does not establish ten-domain capability or algorithm validity.",
+    "Python lock and vulnerability scan verified on Windows/Python 3.13; remote CI not yet run."
+  ],
+  "files": [
+    {
+      "path": "milestone3/before.txt",
+      "sha256": "326086DE1F7CFB0D4216EDBA535A8EF877039AC2E40F4F1A65C8859D619F8845",
+      "bytes": 1618
+    },
+    {
+      "path": "milestone3/before.xml",
+      "sha256": "AE084A25E3582656BC12CBD25E301E7E0B8DA1582BD10E37026E0F1867CB7254",
+      "bytes": 1613
+    },
+    {
+      "path": "milestone3/changed-files.json",
+      "sha256": "5294424D7E761FBB701968711B025B5F3F7AF04FBB261FB158F07F2085B495DF",
+      "bytes": 5251
+    },
+    {
+      "path": "milestone3/check_preservation.py",
+      "sha256": "77B2686456752D591B8B56D9340E2911264397A9893FE69B4824CEF83DA8F0C4",
+      "bytes": 1282
+    },
+    {
+      "path": "milestone3/final-pytest.txt",
+      "sha256": "5216F4C3CB00032357A0165BE7553C713F7BCBCED5A720CA0921A8349E8779E3",
+      "bytes": 683
+    },
+    {
+      "path": "milestone3/final-pytest.xml",
+      "sha256": "957152E5E4CDDAAA41ECFC9851914A6039920FECC488365A509D6CBE4C8C7943",
+      "bytes": 17063
+    },
+    {
+      "path": "milestone3/format-apply.txt",
+      "sha256": "BA9FAE1E36C908F1890A220B81C08B0437ABF40CF89541E69D0441D25E6697B2",
+      "bytes": 39
+    },
+    {
+      "path": "milestone3/git-diff-check.txt",
+      "sha256": "78E1EEFDD5B61C51D0683723752D200301095922E4BB612EA6DD3EA448D410BF",
+      "bytes": 14
+    },
+    {
+      "path": "milestone3/historical-preservation.json",
+      "sha256": "BC5CBDE8BE350C8A241F623619D18556A8838EEA5D6BCA27DF6CD3BE357CF653",
+      "bytes": 33173
+    },
+    {
+      "path": "milestone3/lock-compile.txt",
+      "sha256": "2D3548B593A8519CD7F17C49318676440616FF57CF000AC7D630CB63DB7CE959",
+      "bytes": 218
+    },
+    {
+      "path": "milestone3/m2-tests-preservation.json",
+      "sha256": "301F57196C73405915BD587A303F9D10BF21069C2C342A08E342C00FEEB9D0D8",
+      "bytes": 233
+    },
+    {
+      "path": "milestone3/mock-benchmark-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone3/mock-benchmark.json",
+      "sha256": "6294C6E75EEDEBAB006291CE1506D742B730473ED990DE82FECA98CCE8CFD38E",
+      "bytes": 666
+    },
+    {
+      "path": "milestone3/pip-audit.json",
+      "sha256": "A885294EF2D93B24FCD5A61F6433BBA8B5743F547E5163839B92FD5932CEFE4B",
+      "bytes": 1780
+    },
+    {
+      "path": "milestone3/pip-audit.txt",
+      "sha256": "1F410F6C8AFBD20EA946C1669CC115BD20B121568785BC003B5FA61E98DB809D",
+      "bytes": 282
+    },
+    {
+      "path": "milestone3/pip-check.txt",
+      "sha256": "43796A030CD6F4BAD98CA184982F47754DA0A5E5B0A023D2F4CB1A98907E1E32",
+      "bytes": 45
+    },
+    {
+      "path": "milestone3/providers-before-exit.txt",
+      "sha256": "DF4E26A04A444901B95AFEF44E4A96CFAE34690FFF2AD2C66389C70079CDFF2B",
+      "bytes": 3
+    },
+    {
+      "path": "milestone3/providers-before.txt",
+      "sha256": "BB2891A91BF69225204E068D67BFBFB3C44E19BDA48EB689ACF43AC00E39764D",
+      "bytes": 939
+    },
+    {
+      "path": "milestone3/providers-before.xml",
+      "sha256": "01151749BF4103B95C28E214732F583AFD089F4B91F555B3ABEE845B81A9EE32",
+      "bytes": 938
+    },
+    {
+      "path": "milestone3/providers-green-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone3/providers-green.txt",
+      "sha256": "39BC51224DAE9E5ED5F356C620B6058F03E6D5B389D957759582496CADA1ADF4",
+      "bytes": 101
+    },
+    {
+      "path": "milestone3/providers-green.xml",
+      "sha256": "C83F9473471541B7526EDAF35AD0DE14CE6186A09E788339CD0E5E7EA5ECCCF0",
+      "bytes": 3239
+    },
+    {
+      "path": "milestone3/router-before.log",
+      "sha256": "33065F7562C66F94467003BAF0953BA33D602568FA75FDC7AF3D37E941539F7A",
+      "bytes": 2563
+    },
+    {
+      "path": "milestone3/router-before.xml",
+      "sha256": "17DEF7338DDE4E17A548AFAB13A51C89626252B29C1EBABB76747BC468C766F5",
+      "bytes": 2759
+    },
+    {
+      "path": "milestone3/router-final.log",
+      "sha256": "B936FD25EA7B652717B71992A8244C7CCB37BEB941149CB1B7DEDD6711DA404A",
+      "bytes": 586
+    },
+    {
+      "path": "milestone3/router-focused.log",
+      "sha256": "494D904913ECD1CE384B8083C2277B6DB306F4A56679675CC56196B1E19A7829",
+      "bytes": 100
+    },
+    {
+      "path": "milestone3/router-freeze.log",
+      "sha256": "02FFDA56268290FC59BB8CBBF69B224097E27DFBF6DC1FBF080DAA3827A8961C",
+      "bytes": 586
+    },
+    {
+      "path": "milestone3/router-full-diagnostic.log",
+      "sha256": "DF2A01701AF7F914B158E1CB320F45A954E76B86FCF94221A10DE97080693B54",
+      "bytes": 669
+    },
+    {
+      "path": "milestone3/router-integrated.log",
+      "sha256": "FC8B20A611F0ECA226A0AA1B402A5659D236007AA323790CEB88B9255D1276F8",
+      "bytes": 587
+    },
+    {
+      "path": "milestone3/router-intermediate.log",
+      "sha256": "640D574B3BAC5FB5412904BDBBFF600AF9B97F286EB3DD6822A65819D2ACE808",
+      "bytes": 586
+    },
+    {
+      "path": "milestone3/ruff-check.txt",
+      "sha256": "F41060B0588FA28F9BD1779123401BCDFD7F0A4C4BD2F935EA8CCDBF8CDB501A",
+      "bytes": 34
+    },
+    {
+      "path": "milestone3/ruff-format.txt",
+      "sha256": "CC736C0F20985CB2090495444D0A8E619D2BEFCB2C0F6C0E75D9A04B9C4B3281",
+      "bytes": 42
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "benchmark_9c6722d071fe",
+  "model_id": "mock-baseline",
+  "provider_id": "mock",
+  "suite_version": "forge-smoke-v1",
+  "mode": "mock",
+  "created_at": "2026-11-14T15:48:14.035844+00:00",
+  "n_samples": 3,
+  "results": [
+    {
+      "task_id": "arithmetic",
+      "passed": true,
+      "output": "4",
+      "elapsed_seconds": 1.440000778529793e-05
+    },
+    {
+      "task_id": "instruction",
+      "passed": false,
+      "output": "4",
+      "elapsed_seconds": 7.000009645707905e-06
+    },
+    {
+      "task_id": "copy",
+      "passed": false,
+      "output": "4",
+      "elapsed_seconds": 3.2999960239976645e-06
+    }
+  ]
+}

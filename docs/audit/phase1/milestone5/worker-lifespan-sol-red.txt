@@ -1,0 +1,73 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+________ test_lifespan_recovers_one_tick_failure_and_closes_all_tasks _________
+
+self = <starlette.datastructures.State object at 0x000001AE7498FB10>
+key = 'worker_manager'
+
+    def __getattr__(self, key: Any) -> Any:
+        try:
+>           return self._state[key]
+                   ^^^^^^^^^^^^^^^^
+E           KeyError: 'worker_manager'
+
+backend\.venv\Lib\site-packages\starlette\datastructures.py:696: KeyError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-149/test_lifespan_recovers_one_tic0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001AE734829E0>
+
+    def test_lifespan_recovers_one_tick_failure_and_closes_all_tasks(tmp_path, monkeypatch):
+        monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+        monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+        for name in ("FORGE_PROVIDER_ID", "FORGE_PROVIDER_KIND", "FORGE_PROVIDER_BASE_URL", "FORGE_PROVIDER_CREDENTIAL_REF", "FORGE_PROVIDERS_JSON", "FORGE_PRICE_BOUNDS_JSON"):
+            monkeypatch.delenv(name, raising=False)
+        from forge_api import main
+    
+        importlib.reload(main)
+        calls = 0
+    
+        async def fail_once():
+            nonlocal calls
+            calls += 1
+            if calls == 1:
+                raise RuntimeError("transient test fault")
+    
+        monkeypatch.setattr(main, "process_pending_plan", fail_once)
+        main.router.model_id = "test-enable"
+        with TestClient(main.app, base_url="http://127.0.0.1", client=("127.0.0.1", 12345)):
+            deadline = time.monotonic() + 4
+            while calls < 2 and time.monotonic() < deadline:
+                time.sleep(0.02)
+            assert calls >= 2
+            assert main.app.state.background_health["planner"] == "ok"
+>           assert main.app.state.worker_manager is not None
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_worker_lifespan_m5.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <starlette.datastructures.State object at 0x000001AE7498FB10>
+key = 'worker_manager'
+
+    def __getattr__(self, key: Any) -> Any:
+        try:
+            return self._state[key]
+        except KeyError:
+            message = "'{}' object has no attribute '{}'"
+>           raise AttributeError(message.format(self.__class__.__name__, key))
+E           AttributeError: 'State' object has no attribute 'worker_manager'
+
+backend\.venv\Lib\site-packages\starlette\datastructures.py:699: AttributeError
+------------------------------ Captured log call ------------------------------
+WARNING  forge_api.main:main.py:101 Background planner failed; retrying
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_lifespan_m5.py::test_lifespan_recovers_one_tick_failure_and_closes_all_tasks
+1 failed, 1 warning in 1.76s

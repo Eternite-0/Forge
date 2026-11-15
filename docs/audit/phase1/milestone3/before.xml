@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="0.310" timestamp="2026-11-14T23:32:25.436672+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="" name="tests.test_model_registry_m3" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Competition_this\Agent\backend\tests\test_model_registry_m3.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_model_registry_m3.py:5: in &lt;module&gt;
+    from forge_core.model_intelligence import decode_profile
+E   ModuleNotFoundError: No module named 'forge_core.model_intelligence'</error></testcase><testcase classname="" name="tests.test_benchmark_m3" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\Competition_this\Agent\backend\tests\test_benchmark_m3.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_benchmark_m3.py:3: in &lt;module&gt;
+    from forge_core.benchmark import BenchmarkRunner
+E   ModuleNotFoundError: No module named 'forge_core.benchmark'</error></testcase></testsuite></testsuites>

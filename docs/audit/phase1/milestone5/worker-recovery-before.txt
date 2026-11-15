@@ -1,0 +1,26 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_expired_running_tool_is_uncertain_and_never_replayed __________
+
+graph = (<forge_core.store.Store object at 0x000001F9A413A900>, Quest(id='quest_33db381a686c', title='Task', goal='Implement t...quest_33db381a686c', 'revision': 1, 'digest': 'a0aaf41c85ecb3df0c9e75cbbcfeb5ec9e1d6232e6df35e2f27b0f487edaab20', ...})
+
+    def test_expired_running_tool_is_uncertain_and_never_replayed(graph):
+        store, quest, plan = graph
+        tool = MockToolEngine()
+        manager = WorkerManager(store, ProviderPool({"mock-provider": ScriptedMock()}), tool,
+                                team_authority=MockApprovedTeam(plan, tools=["read"]))
+        session = manager.start(quest.id, plan["id"], "n", team_digest="team", member_index=0)
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE worker_runs SET state='running',lease_until=0,lease_token='old' WHERE id=?", (session["id"],))
+            work.connection.execute("INSERT INTO worker_tool_calls VALUES (?,?,?,?,?,'running',NULL,NULL)", (session["id"],"uncertain-call","old-model-call","read",'{"path":"input.txt"}'))
+        outcome = run(manager.run(session["id"]))
+>       assert outcome["state"] == "blocked"
+E       AssertionError: assert 'review_pending' == 'blocked'
+E         
+E         - blocked
+E         + review_pending
+
+backend\tests\test_worker_runtime.py:215: AssertionError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_worker_runtime.py::test_expired_running_tool_is_uncertain_and_never_replayed
+1 failed, 4 deselected in 0.54s

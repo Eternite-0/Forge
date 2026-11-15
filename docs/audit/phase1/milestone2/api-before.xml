@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.618" timestamp="2026-11-14T22:58:01.912210+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_api_trust" name="test_api_trust_boundary" time="0.098"><failure message="KeyError: 'session'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-9/test_api_trust_boundary0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000216F2DF2780&gt;
+
+    def test_api_trust_boundary(tmp_path, monkeypatch):
+        secret = "a" * 64
+        monkeypatch.setenv("FORGE_CORE_SECRET", secret)
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "trust.sqlite3"))
+        from forge_api import main
+    
+        importlib.reload(main)
+        client = TestClient(main.app, base_url="http://127.0.0.1:8765")
+        health = client.get("/health")
+&gt;       session = health.json()["session"]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'session'
+
+tests\test_api_trust.py:17: KeyError</failure></testcase><testcase classname="tests.test_api_trust" name="test_startup_requires_secret" time="0.031"><failure message="Failed: DID NOT RAISE ValueError">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-9/test_startup_requires_secret0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000216F3250D60&gt;
+
+    def test_startup_requires_secret(tmp_path, monkeypatch):
+        monkeypatch.delenv("FORGE_CORE_SECRET", raising=False)
+        monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "no-secret.sqlite3"))
+        from forge_api import main
+    
+        import pytest
+&gt;       with pytest.raises(ValueError, match="FORGE_CORE_SECRET"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\test_api_trust.py:39: Failed</failure></testcase></testsuite></testsuites>

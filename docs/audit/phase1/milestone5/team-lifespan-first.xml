@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="2.673" timestamp="2026-11-15T00:59:37.242946+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_team_lifespan_m5" name="test_approved_plan_automatically_creates_unapproved_team" time="2.066" /></testsuite></testsuites>

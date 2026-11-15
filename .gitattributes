@@ -1,3 +1,9 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+
+# Preserve audit evidence bytes and diagnostic whitespace exactly as recorded.
+docs/audit/** -text -whitespace
+# Preserve historical phase reports and ADRs without line-ending conversion.
+docs/adr/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/PHASE*.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

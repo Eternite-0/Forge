@@ -1,0 +1,14 @@
+
+> forge-desktop@0.2.0 build
+> tsc && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 31 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.35 kB │ gzip:  0.26 kB
+dist/assets/index-9p052uzy.css    3.82 kB │ gzip:  1.42 kB
+dist/assets/index-PvjGEbqc.js   147.01 kB │ gzip: 47.85 kB
+✓ built in 682ms
+Process did not exit after producing build output; manually interrupted. Tool exit code: 1.

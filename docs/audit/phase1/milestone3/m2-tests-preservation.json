@@ -1,0 +1,11 @@
+{
+  "original_test_functions": 63,
+  "original_assertions": 213,
+  "missing_tests": [],
+  "missing_assertions": [
+    {
+      "test": "test_migrations.py::test_each_migration_step",
+      "missing_assertions": 1
+    }
+  ]
+}

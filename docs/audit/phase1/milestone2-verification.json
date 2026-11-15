@@ -1,0 +1,568 @@
+{
+  "date": "2026-11-14",
+  "environment": "Windows, Python 3.13",
+  "commands": [
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short --junitxml=..\\.local\\phase1\\milestone2\\final-pytest.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/final-pytest.txt",
+      "junit": "milestone2/final-pytest.xml"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff check --no-cache src tests --config pyproject.toml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/ruff-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check --no-cache src tests",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/ruff-format.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/pip-check.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pip_audit --disable-pip --no-deps -r requirements-lock.txt --format json --output ..\\.local\\phase1\\milestone2\\pip-audit.json --progress-spinner off",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/pip-audit.txt",
+      "output": "milestone2/pip-audit.json"
+    },
+    {
+      "command": ".local\\phase1\\milestone2\\lock-venv\\Scripts\\python.exe -m pip install --require-hashes -r backend/requirements-lock.txt",
+      "cwd": "repository root",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/lock-install.txt"
+    },
+    {
+      "command": ".local\\phase1\\milestone2\\lock-venv\\Scripts\\python.exe -m pip install --no-deps --no-build-isolation -e backend",
+      "cwd": "repository root",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/editable-install.txt"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_api_trust.py -q --junitxml=..\\.local\\phase1\\milestone2\\api-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone2/api-before.txt",
+      "junit": "milestone2/api-before.xml",
+      "purpose": "red regression"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_api_trust.py::test_approval_and_grants_http_are_user_controlled -q --junitxml=..\\.local\\phase1\\milestone2\\approval-api-before.xml",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone2/approval-api-before.txt",
+      "junit": "milestone2/approval-api-before.xml",
+      "purpose": "red regression"
+    },
+    {
+      "command": ".\\backend\\.venv\\Scripts\\python.exe -m pytest backend/tests/test_security_adversarial.py -q --tb=short -c backend/pyproject.toml",
+      "cwd": "repository root",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone2/adversarial-before.txt",
+      "purpose": "red regression"
+    },
+    {
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_execution_evidence.py -q --tb=short",
+      "cwd": "backend",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone2/evidence-before.txt",
+      "purpose": "red collection failure"
+    },
+    {
+      "command": "npm.cmd run build",
+      "cwd": "desktop",
+      "completed": false,
+      "exit_code": null,
+      "log": "milestone2/frontend-build-interrupted.txt",
+      "note": "Build output generated; process did not exit and was manually interrupted; tool returned 1."
+    },
+    {
+      "command": null,
+      "cwd": null,
+      "completed": null,
+      "exit_code": null,
+      "log": "milestone2/core-before.log",
+      "junit": "milestone2/core-before.xml",
+      "note": "Original command and exit status not recorded; collection error shown in log."
+    },
+    {
+      "command": null,
+      "cwd": null,
+      "completed": null,
+      "exit_code": null,
+      "log": "milestone2/core-bypass-before.log",
+      "note": "Original command and exit status not recorded; one failure shown in log."
+    },
+    {
+      "command": "npm ci --registry=https://registry.npmjs.org --no-audit --no-fund",
+      "cwd": "desktop",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/frontend-project-install.txt"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "desktop",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/frontend-project-build-1.txt",
+      "result": "milestone2/frontend-project-build-1-result.json"
+    },
+    {
+      "command": "npm run build",
+      "cwd": "desktop",
+      "completed": true,
+      "exit_code": 0,
+      "log": "milestone2/frontend-project-build-2.txt",
+      "result": "milestone2/frontend-project-build-2-result.json"
+    },
+    {
+      "command": "npm audit --json --registry=https://registry.npmjs.org",
+      "cwd": "desktop",
+      "completed": true,
+      "exit_code": 0,
+      "output": "milestone2/frontend-project-audit.json"
+    },
+    {
+      "command": "npm run build",
+      "cwd": ".local/phase1/milestone2/frontend-clean-baseline",
+      "completed": true,
+      "exit_code": 2,
+      "log": "milestone2/frontend-typescript-failure.txt",
+      "note": "Isolated intentional TypeScript error fixture"
+    },
+    {
+      "command": "npm exec -- vite build --config vite-failure-fixture.ts",
+      "cwd": ".local/phase1/milestone2/frontend-clean-baseline",
+      "completed": true,
+      "exit_code": 1,
+      "log": "milestone2/frontend-vite-failure.txt",
+      "note": "Isolated intentional Vite configuration failure fixture"
+    }
+  ],
+  "changed_files": "milestone2/changed-files.json",
+  "historical_preservation": "milestone2/historical-preservation.json",
+  "limitations": [
+    "No native Tauri Core bootstrap or end-to-end desktop trust validation.",
+    "No live model Worker or trusted execution receipt; completion requiring them fails closed.",
+    "Approval consumption is not proof of execution; M5 requires atomic intent and receipt binding, idempotency and recovery.",
+    "Python lock installed and audited only on Windows/Python 3.13; Python audit does not cover Node or Rust.",
+    "One frontend build was interrupted, and an earlier attempt has no recorded exit status; neither is counted as passing. Subsequent project builds exited successfully."
+  ],
+  "files": [
+    {
+      "path": "milestone2/adversarial-before.txt",
+      "sha256": "DEF4C80EE07F8E4D1467075F0D76DB805D0C8DDA49BCE685174F83BEEF0363F6",
+      "bytes": 1391
+    },
+    {
+      "path": "milestone2/api-before.txt",
+      "sha256": "75FD767A477D71CB3F007BAAE29C3216E6B3AFC595D183D2297E6FDD789F2769",
+      "bytes": 2504
+    },
+    {
+      "path": "milestone2/api-before.xml",
+      "sha256": "C8DBEAC52630C8883B8F57DFD337DAFD06FFF54E512589BF27508FFBB5E65983",
+      "bytes": 2007
+    },
+    {
+      "path": "milestone2/api-full-integration.txt",
+      "sha256": "D6650416C80EFC9D7B0DE7FE41B0C4069310C72C3B4397C76EE52D796099134C",
+      "bytes": 668
+    },
+    {
+      "path": "milestone2/api-full-integration.xml",
+      "sha256": "A93B1DD7DFB492A7EC23B4C4480A1E6F1082F5F7C9B633205069E9A4361CDB76",
+      "bytes": 10736
+    },
+    {
+      "path": "milestone2/approval-api-before.txt",
+      "sha256": "D70991736C6B05F0597DCD81697984C004E81352AC70CEB9B4F9102D52663BBF",
+      "bytes": 2426
+    },
+    {
+      "path": "milestone2/approval-api-before.xml",
+      "sha256": "AD358DD2E807F7DA2DAD8B39FED70203E75E0E33247F3CCD8886C74987BA07A2",
+      "bytes": 2013
+    },
+    {
+      "path": "milestone2/changed-files.json",
+      "sha256": "9E2AEFEA8779A439BC703E931C2B6722E5387C47DE3E34950590606A0655A375",
+      "bytes": 6949
+    },
+    {
+      "path": "milestone2/core-after.log",
+      "sha256": "B3FF4F782702364307922E4600CFF5417A5C94AB4601F181286FE8B91FB29F1E",
+      "bytes": 100
+    },
+    {
+      "path": "milestone2/core-after.xml",
+      "sha256": "9453B55BD00F03BF7BDCA0D3D0B5CC33DB68268EB9CEB6365F1884E3A9AAFA2B",
+      "bytes": 824
+    },
+    {
+      "path": "milestone2/core-before.log",
+      "sha256": "4A0AC672403904262162DB8D0C99642C48ADBD37954AFB04A50E94E0AC8D74F8",
+      "bytes": 915
+    },
+    {
+      "path": "milestone2/core-before.xml",
+      "sha256": "B4809A63E7BFC85C117FE7BB0D5CD4E769D24107776BCD6A8A1B87C92A301BAE",
+      "bytes": 914
+    },
+    {
+      "path": "milestone2/core-bypass-before.log",
+      "sha256": "858EDB73D779EF9668AC3A4C874B8F8793B37C92EEB047EECD0BB117B499BF2C",
+      "bytes": 642
+    },
+    {
+      "path": "milestone2/core-expanded-final.log",
+      "sha256": "775226452390D0600936F8BCF80A9ED850DAF4A194E5FF02BCCAE1A22BCEF7AD",
+      "bytes": 586
+    },
+    {
+      "path": "milestone2/core-expanded.log",
+      "sha256": "F8B31C17ED2A25538B1D187BBD83A7C650E702311E0E770B8FEF9F39F814CE29",
+      "bytes": 4505
+    },
+    {
+      "path": "milestone2/core-full-initial.log",
+      "sha256": "B212376142D36B2F1AB98DB617AE11277B0E8AE0632E79D8511345AA672263C4",
+      "bytes": 6462
+    },
+    {
+      "path": "milestone2/core-integrated-final.log",
+      "sha256": "448780913F5303E94CF871A4731118ED4458F3B6FD8A60DF749F5C42E4563EEB",
+      "bytes": 586
+    },
+    {
+      "path": "milestone2/core-integrated.log",
+      "sha256": "E4C095A586C94D9FA74B0E1871A1A65241B9E6DAD133AEFCFB8E5E76D2F92C59",
+      "bytes": 586
+    },
+    {
+      "path": "milestone2/core-ruff.log",
+      "sha256": "A4443AFDCFB6D7363ADB285762515CCF7CF50473B1A05C20C1A50F6BED4D26B0",
+      "bytes": 20
+    },
+    {
+      "path": "milestone2/editable-install.txt",
+      "sha256": "B73DDFCFCBBADB0AD4C485D1CCB2CC970189E58FFDE8EBC20CC94BBE98D94B10",
+      "bytes": 1270
+    },
+    {
+      "path": "milestone2/evidence-before.txt",
+      "sha256": "F55FF903ACEA665D0E1E3DDF6A622641A77D1E8FF81F5A20C4B12840492EF0E8",
+      "bytes": 946
+    },
+    {
+      "path": "milestone2/final-pytest.txt",
+      "sha256": "EEA4837657AD305A73025045FED6C430EE12295F9EECCC0305CC7557E094D41D",
+      "bytes": 681
+    },
+    {
+      "path": "milestone2/final-pytest.xml",
+      "sha256": "11909252830425C8F3BEF12AF47E519A976B96665851679FFCA4B211D3A96F0F",
+      "bytes": 10735
+    },
+    {
+      "path": "milestone2/frontend-active-handles.json",
+      "sha256": "6DFB2D778DED9D18148FDE058E2A07EE3AB7B1C89126D236307CB5626D0B4EBA",
+      "bytes": 457
+    },
+    {
+      "path": "milestone2/frontend-audit-before.json",
+      "sha256": "4E73F42C0C3A5A62AC6C620882A7329A60A93771F6000D70BFEB1A4DED902553",
+      "bytes": 1008
+    },
+    {
+      "path": "milestone2/frontend-audit-official-before.json",
+      "sha256": "C99465A71565AD0EE7C1B1C17BB665F4887FB4FF4304510D0374827D91613ECF",
+      "bytes": 5792
+    },
+    {
+      "path": "milestone2/frontend-build-interrupted.txt",
+      "sha256": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+      "bytes": 485
+    },
+    {
+      "path": "milestone2/frontend-build.txt",
+      "sha256": "57FE81FD58C6D0CF02FADF6A6D662B8446DFDB0A0A8F4C5521A22859195EFB44",
+      "bytes": 485
+    },
+    {
+      "path": "milestone2/frontend-clean-baseline-build-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-clean-baseline-build.txt",
+      "sha256": "7FF63155D9C2F1C1D30350BB67020ECECC7C4342EFDAB784E7AF04FC4889E2F5",
+      "bytes": 392
+    },
+    {
+      "path": "milestone2/frontend-clean-diagnostic-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-clean-diagnostic.txt",
+      "sha256": "6C605467E24A8BD7C9E15A6A24E73CD53A166E2C9539A770BC23B18AF861BE9D",
+      "bytes": 392
+    },
+    {
+      "path": "milestone2/frontend-clean-install-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-clean-install.txt",
+      "sha256": "E4ABEF1A88A92DDDDB32DB50C9412E9447EBBE488510161E7D2F4355D0474D18",
+      "bytes": 27
+    },
+    {
+      "path": "milestone2/frontend-clean-stop-build-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-clean-stop-build.txt",
+      "sha256": "8EB62F8871C6319C42DBAD105409F9527A361544C30D1A94A4D9103F3F9DC15C",
+      "bytes": 391
+    },
+    {
+      "path": "milestone2/frontend-final-install-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-final-install.txt",
+      "sha256": "9984D9E1F2AD8CA58F126608162E9CD0A7A3A3E34BB5551DE1C5BD4816B68940",
+      "bytes": 20
+    },
+    {
+      "path": "milestone2/frontend-pinned-audit-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-pinned-audit.json",
+      "sha256": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+      "bytes": 385
+    },
+    {
+      "path": "milestone2/frontend-pinned-install-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-pinned-install.txt",
+      "sha256": "6780245538BFA6D1662A5B4D6A36F0ED754BBD742B8005C25F70D30ED1457571",
+      "bytes": 40
+    },
+    {
+      "path": "milestone2/frontend-project-audit-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-project-audit.json",
+      "sha256": "F6F2F575914E5941EB022D4607050FAEFAC6E92CB64716ADFEC47F3B5611A099",
+      "bytes": 385
+    },
+    {
+      "path": "milestone2/frontend-project-build-1-result.json",
+      "sha256": "25DB97AC49F0F7C55D0CF0A88CD1B6CAEE06323C5F7981D0E00D9F610579C6DE",
+      "bytes": 57
+    },
+    {
+      "path": "milestone2/frontend-project-build-1.txt",
+      "sha256": "F1C0B24EA96A522625AC7786CE3CCED6B044880413BCEDC4B907734CC12090ED",
+      "bytes": 391
+    },
+    {
+      "path": "milestone2/frontend-project-build-2-result.json",
+      "sha256": "3ABD9B23D79EB2E4DC836CDC646178F97D070D8A02B001E7BA57716052F1DFD4",
+      "bytes": 58
+    },
+    {
+      "path": "milestone2/frontend-project-build-2.txt",
+      "sha256": "983A85242DDB5FA39DB741F3F4CAF2A2D56670477E563FA7E1C23A3BD244A316",
+      "bytes": 391
+    },
+    {
+      "path": "milestone2/frontend-project-install-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-project-install.txt",
+      "sha256": "46D75B29ADCF4AA2B117AE68DB87903F16DC3348D7F180699BCB950FB99F1BC2",
+      "bytes": 27
+    },
+    {
+      "path": "milestone2/frontend-reproduction-before-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-reproduction-before.txt",
+      "sha256": "2EABD32A6672C47E4CBC179FD619BEB510BD3AA9FBCC7E23FDB26323BF670DFA",
+      "bytes": 392
+    },
+    {
+      "path": "milestone2/frontend-typescript-failure-exit.txt",
+      "sha256": "DF4E26A04A444901B95AFEF44E4A96CFAE34690FFF2AD2C66389C70079CDFF2B",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-typescript-failure.txt",
+      "sha256": "44F4BB7579843A5A1D2F6325403138ADEAE998C183A50CC93067B14A81ABEBC1",
+      "bytes": 153
+    },
+    {
+      "path": "milestone2/frontend-upgrade-build-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-upgrade-build.txt",
+      "sha256": "346BF079BF03C214CDCC5D226DA38D92D22DFDDC2048DBF4DE4C8DD2ACA471B0",
+      "bytes": 391
+    },
+    {
+      "path": "milestone2/frontend-upgrade-install-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-upgrade-install.txt",
+      "sha256": "5B3BD3237944429EB745E87932C900E086D098F47DAB76611FA9DD3A217A72FB",
+      "bytes": 51
+    },
+    {
+      "path": "milestone2/frontend-vite-failure-exit.txt",
+      "sha256": "F1B2F662800122BED0FF255693DF89C4487FBDCF453D3524A42D4EC20C3D9C04",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-vite-failure.txt",
+      "sha256": "9D9D049D675862006B7FD610B1EAA7E4099531103F9F78A4B7199530BA38157B",
+      "bytes": 1546
+    },
+    {
+      "path": "milestone2/frontend-wrapper-build-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-wrapper-build.txt",
+      "sha256": "2EE295668ACAB76492798BE2886997BB6C4BD65AAF68D5365A7D6A48C3B9BD80",
+      "bytes": 403
+    },
+    {
+      "path": "milestone2/frontend-wrapper-diagnostic-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-wrapper-diagnostic.txt",
+      "sha256": "432B5A58B119E593E0BFFBDE832B70DAFF0213FC23784302467C6B12CF65887C",
+      "bytes": 403
+    },
+    {
+      "path": "milestone2/frontend-wrapper-handles.json",
+      "sha256": "CEC202CA500B255EE427BB501070DC5CD4A3CA3FD32F709DFCC0DF1129F7A94D",
+      "bytes": 209
+    },
+    {
+      "path": "milestone2/frontend-wrapper-immediate-exit.txt",
+      "sha256": "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354",
+      "bytes": 3
+    },
+    {
+      "path": "milestone2/frontend-wrapper-immediate-handles.json",
+      "sha256": "49FF71D90E8A74AF225BC832B57FC0291AD89BE45009B60C1C16147CB32F0E57",
+      "bytes": 457
+    },
+    {
+      "path": "milestone2/frontend-wrapper-immediate.txt",
+      "sha256": "698666ABA68EEB478C82322B6743C131744A98897A350060AA649B14E0F35A76",
+      "bytes": 403
+    },
+    {
+      "path": "milestone2/historical-preservation.json",
+      "sha256": "438BCD47F56E0D9E230C50C4E63C42CEF74E76E1EFB66D724D1B02FCD18C47D9",
+      "bytes": 10683
+    },
+    {
+      "path": "milestone2/lock-install.txt",
+      "sha256": "841B9E8DC01EDE0385988832190176A8CAA4C211D561AA174DF2BF120B651564",
+      "bytes": 8922
+    },
+    {
+      "path": "milestone2/pip-audit.json",
+      "sha256": "A885294EF2D93B24FCD5A61F6433BBA8B5743F547E5163839B92FD5932CEFE4B",
+      "bytes": 1780
+    },
+    {
+      "path": "milestone2/pip-audit.txt",
+      "sha256": "1F410F6C8AFBD20EA946C1669CC115BD20B121568785BC003B5FA61E98DB809D",
+      "bytes": 282
+    },
+    {
+      "path": "milestone2/pip-check.txt",
+      "sha256": "43796A030CD6F4BAD98CA184982F47754DA0A5E5B0A023D2F4CB1A98907E1E32",
+      "bytes": 45
+    },
+    {
+      "path": "milestone2/policy-evidence-final.log",
+      "sha256": "F492F781271F8B57B37555423804839A0DF40F901676BBF97CA28D45494D45FB",
+      "bytes": 101
+    },
+    {
+      "path": "milestone2/policy-final.log",
+      "sha256": "166150195C8599CAC1C74B8C31B19E31A318D52CFBEF51EDBB25A07618361EEB",
+      "bytes": 101
+    },
+    {
+      "path": "milestone2/pytest.txt",
+      "sha256": "DBE6C3526E001DB39F8A0225145DC20BEF23690AA41F6CFE0328AC651DEDC4B3",
+      "bytes": 681
+    },
+    {
+      "path": "milestone2/pytest.xml",
+      "sha256": "472D48579922A7BF1F86EFBB6DBEE52D27AD8AB1C6CD9B310376C63B35295D05",
+      "bytes": 10735
+    },
+    {
+      "path": "milestone2/ruff-check.txt",
+      "sha256": "F41060B0588FA28F9BD1779123401BCDFD7F0A4C4BD2F935EA8CCDBF8CDB501A",
+      "bytes": 34
+    },
+    {
+      "path": "milestone2/ruff-format.txt",
+      "sha256": "F3275BEE776B40D0A8A6F2E99D2829398601AB3AECB66B2E030D6CA8D6772A21",
+      "bytes": 42
+    }
+  ]
+}

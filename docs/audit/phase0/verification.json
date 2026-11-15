@@ -1,0 +1,306 @@
+{
+  "audit_date": "2026-11-14",
+  "timezone": "Asia/Shanghai",
+  "branch": "codex/phase0-audit",
+  "baseline_commit": "38686cf",
+  "phase": "Phase 0 audit complete with blockers; Phase 1 not started",
+  "archive": {
+    "zip_sha256": "a2a963c3f69e29f9e5f1de739507620d3ba01e4f939353d09d8b643199d89397",
+    "entries": 42,
+    "crc_ok": true,
+    "import_mismatches_except_merged_gitignore": [],
+    "missing_master_prompt": true
+  },
+  "environment": {
+    "python": "3.13.9",
+    "node": "24.19.0",
+    "npm_initial_check": "11.2.0",
+    "npm_reported_by_tauri_info": "11.17.0",
+    "pnpm": "9.15.4",
+    "rustc": "1.87.0",
+    "cargo": "1.87.0",
+    "msvc": "14.44.35207",
+    "windows_sdk": "10.0.22621.0",
+    "webview2": "157.0.4341.46",
+    "target": "x86_64-pc-windows-msvc",
+    "minimal_native_rust_exit_code": 0
+  },
+  "pytest": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "warning_count": 1,
+    "exit_code": 0,
+    "reported_elapsed_seconds": 4.78
+  },
+  "diagnostics": {
+    "observation_groups": 21,
+    "exit_code": 0,
+    "exit_zero_means_product_acceptance": false
+  },
+  "static_checks": {
+    "ruff_findings": 13,
+    "ruff_exit_code": 1,
+    "format_files_needing_changes": 9,
+    "format_exit_code": 1,
+    "syntax_exit_code": 0,
+    "pip_check_exit_code": 0
+  },
+  "builds": {
+    "timestamp": "2026-11-14T21:45:52.877797+08:00",
+    "results": [
+      {
+        "name": "frontend-build-clean",
+        "command": [
+          "C:\\Program Files\\nodejs\\npm.cmd",
+          "run",
+          "build"
+        ],
+        "offline": false,
+        "timeout_seconds": 60,
+        "timed_out": false,
+        "exit_code": 0,
+        "elapsed_seconds": 5.1
+      },
+      {
+        "name": "tauri-build-offline",
+        "command": [
+          "C:\\Program Files\\nodejs\\npm.cmd",
+          "run",
+          "tauri",
+          "--",
+          "build",
+          "--ci",
+          "--no-bundle"
+        ],
+        "offline": true,
+        "timeout_seconds": 90,
+        "timed_out": false,
+        "exit_code": 1,
+        "elapsed_seconds": 8.67
+      },
+      {
+        "name": "tauri-rust-offline",
+        "command": [
+          "C:\\Users\\msi\\.cargo\\bin\\cargo.EXE",
+          "check",
+          "--offline",
+          "--manifest-path",
+          "src-tauri/Cargo.toml"
+        ],
+        "offline": true,
+        "timeout_seconds": 30,
+        "timed_out": false,
+        "exit_code": 101,
+        "elapsed_seconds": 0.33
+      }
+    ]
+  },
+  "full_npm_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 1,
+    "critical": 0,
+    "total": 2
+  },
+  "production_npm_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "limitations": [
+    "codex/MASTER_PROMPT.md absent",
+    "Cargo online index timeout and offline missing glob",
+    "No live provider credentials or executable adapter",
+    "No real Worker runtime, tool execution, compaction, memory, approvals or evidence verifier",
+    "HTTP resource availability is not browser or native WebView E2E"
+  ],
+  "raw_log_hashes": [
+    {
+      "path": ".local/phase0/archive-check.json",
+      "bytes": 213,
+      "sha256": "66bd815b623fdfcd3ccf6d1ea9c527058b7d5200b606604c419d913fd2baa2e5"
+    },
+    {
+      "path": ".local/phase0/build-results.json",
+      "bytes": 1119,
+      "sha256": "568253caa0b3d477253b96138c472b7d3628a7c294c4335c5091df77fc386308"
+    },
+    {
+      "path": ".local/phase0/cargo-check-retry.log",
+      "bytes": 6252,
+      "sha256": "0dc811d27d97a317d0a1559f0d171d89428da3f1b019ce0963406ab451c86748"
+    },
+    {
+      "path": ".local/phase0/cargo-check.log",
+      "bytes": 18746,
+      "sha256": "2793aec12807d065e044c971c69f38dc0694a5929cbf4307973fe579a46662af"
+    },
+    {
+      "path": ".local/phase0/frontend-build-clean.log",
+      "bytes": 379,
+      "sha256": "ddffdba49bd8bf3eb0d72d3a66eafd39b2f9cf825a156ae12ef9af9fd841f11e"
+    },
+    {
+      "path": ".local/phase0/frontend-build.log",
+      "bytes": 392,
+      "sha256": "2c383cc85554915349712205350282016e86ac14880e2099421f22a973a9e032"
+    },
+    {
+      "path": ".local/phase0/http-smoke.json",
+      "bytes": 1303,
+      "sha256": "1ff4f6e5f6979adf876402fda7c38418044d6924f1910b11b2186440210a709a"
+    },
+    {
+      "path": ".local/phase0/http-smoke.log",
+      "bytes": 1303,
+      "sha256": "1ff4f6e5f6979adf876402fda7c38418044d6924f1910b11b2186440210a709a"
+    },
+    {
+      "path": ".local/phase0/npm-audit-clean.json",
+      "bytes": 5584,
+      "sha256": "db9887dc5f1328c38f860ab904d3f83e9ee70326c2b0031d36c4bc9a4efec2bb"
+    },
+    {
+      "path": ".local/phase0/npm-audit-production.json",
+      "bytes": 363,
+      "sha256": "8ffe215a46e77f7fdd3c8b66c39885520eff42b990bcf4af7d75b39b1ce165f9"
+    },
+    {
+      "path": ".local/phase0/npm-audit.json",
+      "bytes": 5584,
+      "sha256": "c21a0b8e21771c46307ddca8823ab1829897a5c3fc5c1c11a937d6819af9ff56"
+    },
+    {
+      "path": ".local/phase0/npm-install-clean.log",
+      "bytes": 279,
+      "sha256": "f3759333dd3175ea3900df77988a8d9b3af6babbef06f3c50b29bb051438b737"
+    },
+    {
+      "path": ".local/phase0/npm-install-official.log",
+      "bytes": 303,
+      "sha256": "dc08293e13f605391c3317455ee96c1bb82fdcd6dc8ee5b82146f426dadc80a1"
+    },
+    {
+      "path": ".local/phase0/npm-tree-clean.json",
+      "bytes": 1377,
+      "sha256": "94d793545bf49bad61afb8b1246144af677eba74ed84193e802aab85955e0695"
+    },
+    {
+      "path": ".local/phase0/npm-tree.json",
+      "bytes": 726,
+      "sha256": "75b7f652556f7be561f56230fa056fd0141cea064721a164dfd64fa0ce518d65"
+    },
+    {
+      "path": ".local/phase0/pip-check.log",
+      "bytes": 31,
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf"
+    },
+    {
+      "path": ".local/phase0/probes-console.log",
+      "bytes": 9113,
+      "sha256": "23733690ef11bfdab04f75ff2b463b4b8c0e60074ea6de5c6e14eaafc1ee1455"
+    },
+    {
+      "path": ".local/phase0/probes.json",
+      "bytes": 8848,
+      "sha256": "7ef42d4501bc2b54c5f02d41dd8eba70a05f499b39baf1e0f9b9adb5258c83bf"
+    },
+    {
+      "path": ".local/phase0/pytest.log",
+      "bytes": 1669,
+      "sha256": "b3cc4ba3deeda5854b27068459c291a0446ca861d85418b9d086ee135cc92bbe"
+    },
+    {
+      "path": ".local/phase0/pytest.xml",
+      "bytes": 1054,
+      "sha256": "621eefd3f52957a86f9b0c255fa036d129591bf004850bae350f31f379674b65"
+    },
+    {
+      "path": ".local/phase0/python-freeze.txt",
+      "bytes": 665,
+      "sha256": "82f96ac02fe907c99562ff91ce53f5cdd92b3fd560eb72c758f0faa56248557d"
+    },
+    {
+      "path": ".local/phase0/python-install.log",
+      "bytes": 9565,
+      "sha256": "309f79351868b162b42afad7d9da8c9fb778ac8edf0f9b2b46e902624a2fea5b"
+    },
+    {
+      "path": ".local/phase0/ruff-format.log",
+      "bytes": 34866,
+      "sha256": "8c70179e889852f6cdf9ba808445d5ba392f037d8f3b69ed49a60ec255b42f24"
+    },
+    {
+      "path": ".local/phase0/ruff-project.json",
+      "bytes": 12044,
+      "sha256": "35ce158ddb0ac894663a0c3465c8a44ee88f8123f8af049348cc32e49816bce9"
+    },
+    {
+      "path": ".local/phase0/ruff-settings.txt",
+      "bytes": 36737,
+      "sha256": "6c452912c135ad1a8a56bf7e1c303d3c10433f7a2b225086918527dbfd0fca47"
+    },
+    {
+      "path": ".local/phase0/ruff.json",
+      "bytes": 12044,
+      "sha256": "35ce158ddb0ac894663a0c3465c8a44ee88f8123f8af049348cc32e49816bce9"
+    },
+    {
+      "path": ".local/phase0/tauri-binding-check.json",
+      "bytes": 250,
+      "sha256": "9278dc152131305b577caa849a565bb07d3ef6cf1602226936eff68af55388da"
+    },
+    {
+      "path": ".local/phase0/tauri-binding-dist.json",
+      "bytes": 945,
+      "sha256": "2c7baaff72ac6d6ec47b22aba1bdcf9a4964cbffe4ab5a1188c5dc7bc47645e3"
+    },
+    {
+      "path": ".local/phase0/tauri-binding-pack.log",
+      "bytes": 639,
+      "sha256": "0ed58a01b1c6493d77801832e869d7f28aa0a47ca01a81c8f0c40d6a57d9e623"
+    },
+    {
+      "path": ".local/phase0/tauri-build-offline.log",
+      "bytes": 1107,
+      "sha256": "d0d8c6ed46f89e85c971e44b0c1a64a75a11323b220931f35e27779136e9a3bf"
+    },
+    {
+      "path": ".local/phase0/tauri-info-clean.log",
+      "bytes": 914,
+      "sha256": "0894902cacaf9a1b524870187345a770cdbb89e2c1a67a529dccb2ec1d3200a8"
+    },
+    {
+      "path": ".local/phase0/tauri-info-restored.log",
+      "bytes": 915,
+      "sha256": "3b758aed67c0e40890f4a3afb5b1735a6b25bc641be75fe052b9427cb51da3b8"
+    },
+    {
+      "path": ".local/phase0/tauri-info-retry.log",
+      "bytes": 3480,
+      "sha256": "b51e8cfd0def3ef576e9c8dbd465bdcf74e38711b8e5fb850327a0428f5dda0f"
+    },
+    {
+      "path": ".local/phase0/tauri-info.log",
+      "bytes": 3480,
+      "sha256": "b51e8cfd0def3ef576e9c8dbd465bdcf74e38711b8e5fb850327a0428f5dda0f"
+    },
+    {
+      "path": ".local/phase0/tauri-rust-offline.log",
+      "bytes": 443,
+      "sha256": "14377472f993f92fdc183b5c3bd1020dd9d6ef5a139653ab4047615c8be4e373"
+    }
+  ],
+  "final_source_and_report_checks": {
+    "unchanged_release_files_except_readme_and_merged_gitignore": 40,
+    "changed_release_files": [],
+    "valid_json_evidence_files": 9,
+    "broken_report_links": [],
+    "audit_helper_syntax_ok": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "absolute_git_hook_path": true,
+  "telemetry": false,
+  "checkpoints": {
+    "primary": {
+      "type": "git-refs"
+    }
+  },
+  "redaction": {
+    "custom_redactions": {
+      "hex_32": "(?i)\\b[0-9a-f]{32}\\b"
+    },
+    "pii": {
+      "enabled": true,
+      "email": true,
+      "phone": true
+    }
+  }
+}

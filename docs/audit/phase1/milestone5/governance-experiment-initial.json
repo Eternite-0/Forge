@@ -1,0 +1,39 @@
+{
+  "dataset": "policy-isolated-v1",
+  "mode": "isolated-local",
+  "executed_tools": 0,
+  "cases": [
+    {
+      "case": "r0_read",
+      "expected": "allow",
+      "actual": "deny"
+    },
+    {
+      "case": "r1_without_grant",
+      "expected": "deny",
+      "actual": "deny"
+    },
+    {
+      "case": "r1_granted",
+      "expected": "allow",
+      "actual": "deny"
+    },
+    {
+      "case": "r2_without_approval",
+      "expected": "deny",
+      "actual": "deny"
+    },
+    {
+      "case": "r3_delete",
+      "expected": "deny",
+      "actual": "deny"
+    },
+    {
+      "case": "r2_parameter_substitution",
+      "expected": "deny",
+      "actual": "deny"
+    }
+  ],
+  "false_allows": 0,
+  "false_denials": 2
+}

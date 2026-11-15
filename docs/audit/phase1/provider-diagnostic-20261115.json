@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-15",
+  "scope": "Read-only local diagnostic reported by the primary agent; no model POST was added.",
+  "listener": {"address": "127.0.0.1:8788", "process": "pythonw.exe", "pid": 36100, "executable": "D:/workbuddy2api-hub-v1.8.0/wb-proxy/python/pythonw.exe"},
+  "usage_ledger": {"path": "D:/workbuddy2api-hub-v1.8.0/wb-proxy/usage/usage.jsonl", "size_bytes_at_check": 46153762, "last_24h_sample": 3142, "completed": 3139, "client_aborted": 3, "persisted_4xx_5xx": 0},
+  "client_aborted_beijing_time": ["2026-11-15 00:29:52", "2026-11-15 01:21:19", "2026-11-15 01:29:36"],
+  "client_aborted_description": "Streaming clients disconnected.",
+  "forge_nonstream": {"beijing_times": ["00:59:46", "00:59:47", "00:59:49", "01:09:57", "01:09:59", "01:14:02", "01:14:04"], "completed": 7, "duration_seconds_range": [1.2, 3.3]},
+  "historical_error_rows": 200,
+  "last_observed_errors": [{"beijing_time": "2026-11-13 06:12", "status": 429, "description": "usage exceeds frequency limit"}, {"beijing_time": "2026-11-13 18:04:27", "status": 502, "description": "upstream_aborted: stream aborted, IncompleteRead (0 bytes read)"}],
+  "limitations": "GET /panel/status returned authenticated=false and GET /logs returned 401, so internal retries cannot be summarized. An unauthenticated GET /v1/models returned 401; this authentication probe does not establish that any existing key is invalid."
+}

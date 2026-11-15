@@ -1,0 +1,89 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> src\forge_api\main.py:1:1
+   |
+ 1 | / import os
+ 2 | | import secrets
+ 3 | | import asyncio
+ 4 | | import logging
+ 5 | | import time
+ 6 | | from contextlib import asynccontextmanager, suppress
+ 7 | | from typing import Any, Literal
+ 8 | |
+ 9 | | from fastapi import FastAPI, HTTPException, Request
+10 | | from fastapi.exceptions import RequestValidationError
+11 | | from fastapi.middleware.cors import CORSMiddleware
+12 | | from fastapi.responses import JSONResponse
+13 | | from pydantic import BaseModel, ConfigDict, Field
+14 | | from starlette.exceptions import HTTPException as StarletteHTTPException
+15 | |
+16 | | from forge_api.security import ALLOWED_ORIGINS, SessionGuard
+17 | | from forge_core.domain import (
+18 | |     DomainError,
+19 | |     ForgeEvent,
+20 | |     ModelProfile,
+21 | |     QuestStatus,
+22 | |     WorkerSession,
+23 | |     now_iso,
+24 | | )
+25 | | from forge_core.dispatcher import Dispatcher
+26 | | from forge_core.governance import GovernanceService
+27 | | from forge_core.model_intelligence import ObservationStore
+28 | | from forge_core.providers import ProviderError, ProviderGateway
+29 | | from forge_core.providers.config import ProviderConfig
+30 | | from forge_core.quest_service import QuestService
+31 | | from forge_core.quest_graph import QuestGraphService
+32 | | from forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer
+33 | | from forge_core.router import RouterService
+34 | | from forge_core.settings import Settings
+35 | | from forge_core.store import Store
+   | |__________________________________^
+36 |
+37 |   guard = SessionGuard()
+   |
+help: Organize imports
+   |
+1  + import asyncio
+2  + import logging
+3  | import os
+4  | import secrets
+   - import asyncio
+   - import logging
+5  | import time
+--------------------------------------------------------------------------------
+16 | from forge_api.security import ALLOWED_ORIGINS, SessionGuard
+17 + from forge_core.dispatcher import Dispatcher
+18 | from forge_core.domain import (
+--------------------------------------------------------------------------------
+25 | )
+   - from forge_core.dispatcher import Dispatcher
+26 | from forge_core.governance import GovernanceService
+27 | from forge_core.model_intelligence import ObservationStore
+28 | from forge_core.providers import ProviderError, ProviderGateway
+29 | from forge_core.providers.config import ProviderConfig
+30 + from forge_core.quest_graph import QuestGraphService
+31 | from forge_core.quest_service import QuestService
+   - from forge_core.quest_graph import QuestGraphService
+32 | from forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+   --> tests\test_quest_graph.py:175:5
+    |
+174 |   def test_v5_to_v6_component_failure_rolls_back_and_preserves_state(tmp_path):
+175 | /     import sqlite3
+176 | |     from contextlib import closing
+177 | |     from forge_core.migrations import MIGRATIONS, migrate
+    | |_________________________________________________________^
+178 |
+179 |       path = tmp_path / "old.sqlite3"
+    |
+help: Organize imports
+    |
+176 |     from contextlib import closing
+177 +
+178 |     from forge_core.migrations import MIGRATIONS, migrate
+    |
+
+Found 2 errors.
+[*] 2 fixable with `--fix`.
+Exit code: 1

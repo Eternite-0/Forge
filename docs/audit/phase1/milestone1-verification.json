@@ -1,0 +1,380 @@
+{
+  "milestone": "Phase 1 / Milestone 1 - Data reliability",
+  "status": "implementation_complete_pending_user_acceptance",
+  "generated_at": "2026-11-14T14:48:21.051640+00:00",
+  "branch": "codex/phase1-milestone1",
+  "baseline_commit": "38686cf",
+  "baseline_note": "Phase 0 release import and audit are uncommitted; baseline-source.json preserves pre-M1 source.",
+  "schema_version": 3,
+  "test_first": [
+    {
+      "stage": "before_implementation",
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short --junitxml=..\\.local\\phase1\\milestone1\\before-pytest.xml",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "exit_code": 1,
+      "summary": "37 failed, 12 passed, 1 warning in 3.13s",
+      "log": "milestone1/before-pytest.txt",
+      "junit": "milestone1/before-pytest.xml"
+    },
+    {
+      "stage": "settings_hardening_before_fix",
+      "exit_code": 1,
+      "summary": "3 failed, 6 passed in 1.20s",
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_settings.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone1\\settings-before.xml",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "log": "milestone1/settings-before.txt"
+    },
+    {
+      "stage": "launcher_before_implementation",
+      "exit_code": 1,
+      "summary": "1 failed in 1.49s",
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest tests/test_startup.py -q --tb=short --junitxml=..\\.local\\phase1\\milestone1\\startup-before.xml",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "log": "milestone1/startup-before.txt"
+    },
+    {
+      "stage": "wal_initialization_race_before_retry_fix",
+      "exit_code": 1,
+      "summary": "1 failed, 58 passed, 1 warning in 6.59s",
+      "log": "milestone1/initialization-race.txt",
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short -o junit_logging=all --junitxml=..\\.local\\phase1\\milestone1\\final-pytest.xml",
+      "cwd": "D:\\Competition_this\\Agent\\backend"
+    }
+  ],
+  "final_commands": [
+    {
+      "id": "pytest",
+      "command": ".\\.venv\\Scripts\\python.exe -m pytest -q --tb=short -o junit_logging=all --junitxml=..\\.local\\phase1\\milestone1\\final-pytest.xml",
+      "log": "milestone1/final-pytest.txt",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "started_at": "2026-11-14T14:41:25.176Z",
+      "chunk_id": "60e3c3",
+      "wall_time_seconds": 8.4770683,
+      "exit_code": 0,
+      "original_token_count": 147,
+      "output": "...............................................................          [100%]\r\n============================== warnings summary ===============================\r\n.venv\\Lib\\site-packages\\fastapi\\testclient.py:1\r\n  D:\\Competition_this\\Agent\\backend\\.venv\\Lib\\site-packages\\fastapi\\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\r\n    from starlette.testclient import TestClient as TestClient  # noqa\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n63 passed, 1 warning in 7.38s\r\n"
+    },
+    {
+      "id": "ruff",
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff check --no-cache src tests --config pyproject.toml",
+      "log": "milestone1/final-ruff.txt",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "started_at": "2026-11-14T14:41:25.176Z",
+      "chunk_id": "05602e",
+      "wall_time_seconds": 0.6217664,
+      "exit_code": 0,
+      "original_token_count": 5,
+      "output": "All checks passed!\r\n"
+    },
+    {
+      "id": "format",
+      "command": ".\\.venv\\Scripts\\python.exe -m ruff format --check --no-cache src tests",
+      "log": "milestone1/final-format.txt",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "started_at": "2026-11-14T14:41:25.176Z",
+      "chunk_id": "234af1",
+      "wall_time_seconds": 0.6013046,
+      "exit_code": 0,
+      "original_token_count": 7,
+      "output": "20 files already formatted\r\n"
+    },
+    {
+      "id": "pip-check",
+      "command": ".\\.venv\\Scripts\\python.exe -m pip check",
+      "log": "milestone1/final-pip-check.txt",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "started_at": "2026-11-14T14:41:25.176Z",
+      "chunk_id": "2319b4",
+      "wall_time_seconds": 0.9852934,
+      "exit_code": 0,
+      "original_token_count": 8,
+      "output": "No broken requirements found.\r\n"
+    },
+    {
+      "id": "compile",
+      "command": ".\\.venv\\Scripts\\python.exe -m compileall -q src tests",
+      "log": "milestone1/final-compile.txt",
+      "cwd": "D:\\Competition_this\\Agent\\backend",
+      "started_at": "2026-11-14T14:41:25.176Z",
+      "chunk_id": "73293b",
+      "wall_time_seconds": 0.6135699,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ],
+  "pytest": {
+    "total": 63,
+    "passed": 63,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "original_tests": 8,
+    "new_regressions": 55,
+    "warning_count": 1,
+    "junit": "milestone1/final-pytest.xml"
+  },
+  "http_restart": {
+    "observations": [
+      {
+        "cwd": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\cli-cwd",
+        "router": "router_e9e316652877",
+        "messages": 2,
+        "stale_http": 409,
+        "illegal_http": 409
+      },
+      {
+        "cwd": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\desktop-cwd",
+        "router": "router_e9e316652877",
+        "messages": 2,
+        "stale_http": 409,
+        "illegal_http": 409
+      }
+    ],
+    "db": "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-7\\test_core_launcher_restart_pre0\\workspace\\state\\core.sqlite3",
+    "quest_id": "quest_f3e90d9ac8de",
+    "final_status": "rejected",
+    "version": 1,
+    "events": 2,
+    "outbox": 2
+  },
+  "modified_files_from_pre_milestone_snapshot": [
+    "backend/src/forge_api/main.py",
+    "backend/src/forge_core/domain.py",
+    "backend/src/forge_core/quest_service.py",
+    "backend/src/forge_core/registry.py",
+    "backend/src/forge_core/router.py",
+    "backend/src/forge_core/runtime.py",
+    "backend/src/forge_core/store.py",
+    "backend/tests/test_api.py",
+    "backend/tests/test_core.py",
+    "backend/pyproject.toml",
+    "README.md",
+    "backend/.env.example",
+    "scripts/run-backend.ps1"
+  ],
+  "new_backend_files": [
+    "backend/src/forge_api/__main__.py",
+    "backend/src/forge_core/migrations.py",
+    "backend/src/forge_core/settings.py",
+    "backend/tests/conftest.py",
+    "backend/tests/fixtures/legacy_v1.sql",
+    "backend/tests/test_concurrency.py",
+    "backend/tests/test_migrations.py",
+    "backend/tests/test_settings.py",
+    "backend/tests/test_startup.py",
+    "backend/tests/test_transactions.py"
+  ],
+  "acceptance": {
+    "same_workspace_same_router_across_cwds": [
+      "tests.test_settings.test_same_workspace_has_same_router_from_different_startup_directories",
+      "tests.test_startup"
+    ],
+    "canonical_schema_singleton": [
+      "tests.test_migrations.test_schema_version_is_singleton_after_reopening"
+    ],
+    "legacy_upgrade_preserves_data": [
+      "tests.test_migrations.test_legacy_upgrade_preserves_every_entity",
+      "tests.test_migrations.test_each_migration_step"
+    ],
+    "future_and_ambiguous_versions_rejected": [
+      "tests.test_migrations.test_future_schema_is_rejected_without_mutation",
+      "tests.test_migrations.test_ambiguous_legacy_version_is_rejected"
+    ],
+    "all_migration_steps_rollback": [
+      "tests.test_migrations.test_each_migration_failure_rolls_back_a_fresh_database",
+      "tests.test_migrations.test_migration_failure_rolls_back_ddl_data_and_version"
+    ],
+    "no_cross_entity_partial_commits": [
+      "tests.test_transactions"
+    ],
+    "cas_and_terminal_state_protection": [
+      "tests.test_concurrency"
+    ],
+    "explicit_connection_close_on_errors": [
+      "tests.test_transactions.test_unit_of_work_exception_rolls_back_and_closes",
+      "tests.test_transactions.test_commit_failure_rolls_back_and_closes",
+      "tests.test_transactions.test_begin_failure_releases_connection_and_allows_retry"
+    ],
+    "crash_rollback_and_lock_release": [
+      "tests.test_transactions.test_process_crash_discards_uncommitted_cross_entity_work"
+    ],
+    "concurrent_startup": [
+      "tests.test_migrations.test_concurrent_initialization_keeps_one_version_and_router[0..4]"
+    ],
+    "original_tests_preserved_and_passed": "milestone1/original-tests-preserved.json",
+    "ruff_and_format": [
+      "ruff",
+      "format"
+    ]
+  },
+  "phase0_preservation": {
+    "all_unchanged": true,
+    "files": 12,
+    "manifest": "milestone1/phase0-preservation.json"
+  },
+  "limitations": [
+    "Current Tauri shell has no Core bootstrap; tests use the shared Python launcher in simulated CLI/desktop working directories, not native desktop E2E.",
+    "Outbox dispatcher, leases, retries and consumer idempotency are not implemented.",
+    "Authentication, scope-bound approval and completion evidence enforcement (F01/F02) remain unresolved.",
+    "Router is still a heuristic, Workers are proposals only, and Provider/Agent runtime are not connected.",
+    "Only Windows / Python 3.13.9 / SQLite runtime on this machine was executed; native macOS/Linux and minimum Python 3.11 were not tested.",
+    "Process exit/crash and SQL errors were tested; power loss, disk full, network filesystems and long-duration load were not.",
+    "No automatic discovery or movement of old CWD-relative databases; explicit FORGE_DB_PATH and operator backup are required.",
+    "Phase 0 dependency vulnerabilities, missing master prompt and native Cargo verification remain outstanding."
+  ],
+  "next_milestone_started": false,
+  "delivery_checks": {
+    "git_diff_check_exit_code": 0,
+    "powershell_launcher_syntax_exit_code": 0,
+    "artifact_hashes_and_document_links_exit_code": 0,
+    "remaining_forge_api_or_uvicorn_processes": 0,
+    "raw_outputs": "milestone1/delivery-results.json"
+  },
+  "delivery_documents": [
+    {
+      "path": "README.md",
+      "sha256": "03bec8d186c4e1d64d886c89b672f18e6d9a10610a0788d159fc26b3a5333986"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "sha256": "36c25e51e640cae0f63d722ce19d0a4b4c7b827f10d134474cfe73da8e4ed9c7"
+    },
+    {
+      "path": "docs/PHASE1_MILESTONE1_REPORT.md",
+      "sha256": "f171e448c9b9131eda8d2a1a314c796f2cd27336ec46d117b26c0236de388871"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "milestone1/auxiliary-results.json",
+      "sha256": "5ae0708c5362090958faf527873a93b855f2948a41ab5afabfd06fb35c9a433e",
+      "bytes": 159
+    },
+    {
+      "path": "milestone1/baseline-source.json",
+      "sha256": "aa71a117e85430921f928038074ea14c3f619c04dcf23e0836abb9e07b0f1d41",
+      "bytes": 35503
+    },
+    {
+      "path": "milestone1/before-pytest.txt",
+      "sha256": "04874b8fb75bb96b547d1af483e9c9a819137189768b88da814fcc72c6592690",
+      "bytes": 23283
+    },
+    {
+      "path": "milestone1/before-pytest.xml",
+      "sha256": "4e7e6a1dc1987053e311bce4d6d7dae44f374e32a622d95bd949be38495fc1a2",
+      "bytes": 27850
+    },
+    {
+      "path": "milestone1/before-result.json",
+      "sha256": "e0c2a133209f266b86d2b8b23a4fc3aa4d744be336d3922ce9f7d3417feff007",
+      "bytes": 23
+    },
+    {
+      "path": "milestone1/delivery-results.json",
+      "sha256": "9b1b35ae75e03ba88577934d530e94d7f5d53cd91ba71fc731efb2d033da6015",
+      "bytes": 1290
+    },
+    {
+      "path": "milestone1/failed-command-results.json",
+      "sha256": "fcda9a0cb458757e708c39c797f5a2684f81eefe29c88a8b27144246bbea309c",
+      "bytes": 4766
+    },
+    {
+      "path": "milestone1/final-compile.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "milestone1/final-format.txt",
+      "sha256": "66f7d03f920e131ed22153a556dd7f796a42a1adff045c9c14639dc96e36a3d8",
+      "bytes": 28
+    },
+    {
+      "path": "milestone1/final-pip-check.txt",
+      "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+      "bytes": 31
+    },
+    {
+      "path": "milestone1/final-pytest.txt",
+      "sha256": "2c2ed4c896a29f34556d0caacca2df9c7efbc0063c3f9e1fa240359bbb1a3bb5",
+      "bytes": 586
+    },
+    {
+      "path": "milestone1/final-pytest.xml",
+      "sha256": "98bb35f942b7a616c6a3862fe83b0628f0413a9c095c7e2084d5709fee27c3c3",
+      "bytes": 28113
+    },
+    {
+      "path": "milestone1/final-ruff.txt",
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+      "bytes": 20
+    },
+    {
+      "path": "milestone1/http-restart.json",
+      "sha256": "762bdd87d8526f1bed642f7177f8eb2685b0b5731336ed79d7b908aff1707ae2",
+      "bytes": 793
+    },
+    {
+      "path": "milestone1/initialization-race.txt",
+      "sha256": "ab149d03e4e8659e983631d6d4262e8147061a0388401ae15de4e7974e54ad29",
+      "bytes": 2475
+    },
+    {
+      "path": "milestone1/initialization-race.xml",
+      "sha256": "a23d4e338d19835b2c14eb17879269edbf8942b586fff8f9798c2927a243c053",
+      "bytes": 27964
+    },
+    {
+      "path": "milestone1/install.txt",
+      "sha256": "cb0954fe1a8d5149741922657db2adae2a30de163b56b41ad961b5d6083f071e",
+      "bytes": 6410
+    },
+    {
+      "path": "milestone1/original-tests-preserved.json",
+      "sha256": "d560fa42223b9d733ab844c953dedd4868a16f4efe88918c5b3c1643bcbd7a5d",
+      "bytes": 1336
+    },
+    {
+      "path": "milestone1/passed-command-results.json",
+      "sha256": "189d3164f007e7a65439a3b42dcd0ea200f373d887baee26a4e1a03b6a8b5d5a",
+      "bytes": 2631
+    },
+    {
+      "path": "milestone1/phase0-preservation.json",
+      "sha256": "deef77da556313df5feaaa6b9194f514887e0a44a9ed3efbbfae27b3a8fe75cf",
+      "bytes": 3095
+    },
+    {
+      "path": "milestone1/settings-before-result.json",
+      "sha256": "8b219cf679548e80c74815a9891f360f2c37c29538b20cf92f66bb7432745115",
+      "bytes": 143
+    },
+    {
+      "path": "milestone1/settings-before.txt",
+      "sha256": "d3b833a38c1b639dad2948b8e635e136b5891404482eeb055472c905543ff055",
+      "bytes": 2221
+    },
+    {
+      "path": "milestone1/settings-before.xml",
+      "sha256": "2f8819fade53398ad8045079bceaa0babda8a06a8198acc9e031285b002df652",
+      "bytes": 3248
+    },
+    {
+      "path": "milestone1/source-changes.diff",
+      "sha256": "08ecc555ac5ba553b6a121d260629bdc330ffdfe1a875f8344a7c48af0142691",
+      "bytes": 60043
+    },
+    {
+      "path": "milestone1/startup-before.txt",
+      "sha256": "e96deccdf212c9dbd4f76151467a89164d464afb759a364e6729762d1b6d9939",
+      "bytes": 961
+    },
+    {
+      "path": "milestone1/startup-before.xml",
+      "sha256": "696f516e6bc960b688d2a1d34506a6ae3de46e28ae45c0736e46b34de7af463f",
+      "bytes": 1280
+    }
+  ]
+}

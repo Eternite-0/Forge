@@ -1,0 +1,9 @@
+................F...                                                     [100%]
+================================== FAILURES ===================================
+_______ test_v5_to_v6_component_failure_rolls_back_and_preserves_state ________
+tests\test_quest_graph.py:208: in test_v5_to_v6_component_failure_rolls_back_and_preserves_state
+    assert connection.execute("SELECT version FROM schema_meta").fetchone()[0] == 6
+E   assert 7 == 6
+=========================== short test summary info ===========================
+FAILED tests/test_quest_graph.py::test_v5_to_v6_component_failure_rolls_back_and_preserves_state
+1 failed, 19 passed in 1.94s

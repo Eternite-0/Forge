@@ -1,0 +1,50 @@
+[
+  {
+    "file": "backend/tests/test_api.py",
+    "name": "test_api_health_and_single_conversation",
+    "assertions": 4,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_router_identity_survives_store_reopen",
+    "assertions": 1,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_single_conversation_stores_messages_and_quest",
+    "assertions": 4,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_chat_does_not_create_quest",
+    "assertions": 2,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_model_registry_team_composition",
+    "assertions": 1,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_quest_transition_validation",
+    "assertions": 0,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_quest_lifecycle_transition_is_persisted",
+    "assertions": 1,
+    "assertions_unchanged": true
+  },
+  {
+    "file": "backend/tests/test_core.py",
+    "name": "test_worker_sessions_are_hidden_by_default",
+    "assertions": 2,
+    "assertions_unchanged": true
+  }
+]

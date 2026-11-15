@@ -1,0 +1,5 @@
+
+> forge-desktop@0.2.0 build
+> tsc && vite build
+
+src/verify-build-failure.ts(1,7): error TS2322: Type 'string' is not assignable to type 'number'.

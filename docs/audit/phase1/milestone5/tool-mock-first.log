@@ -1,0 +1,14 @@
+EE.........                                                              [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_actual_mock_run_file_write_needs_grant_and_receipt_is_immutable _
+tests\test_tool_engine.py:63: in mock_run
+    c.execute(
+E   sqlite3.IntegrityError: NOT NULL constraint failed: worker_runs.member_index
+____ ERROR at setup of test_actual_numeric_subprocess_and_escape_rejection ____
+tests\test_tool_engine.py:63: in mock_run
+    c.execute(
+E   sqlite3.IntegrityError: NOT NULL constraint failed: worker_runs.member_index
+=========================== short test summary info ===========================
+ERROR tests/test_tool_engine.py::test_actual_mock_run_file_write_needs_grant_and_receipt_is_immutable
+ERROR tests/test_tool_engine.py::test_actual_numeric_subprocess_and_escape_rejection
+9 passed, 2 errors in 0.48s

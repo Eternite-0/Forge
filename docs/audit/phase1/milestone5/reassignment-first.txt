@@ -1,0 +1,64 @@
+F.                                                                       [100%]
+================================== FAILURES ===================================
+_____ test_reassignment_preserves_completed_node_and_historical_approval ______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-143/test_reassignment_preserves_co0')
+
+    def test_reassignment_preserves_completed_node_and_historical_approval(tmp_path):
+        store, quest, plan, roles, limits, service, old, manager, runs = prepared_team(tmp_path)
+        with store.unit_of_work() as work:
+            for run, state in zip(runs, ("succeeded", "blocked"), strict=True):
+                work.connection.execute("UPDATE worker_runs SET state=? WHERE id=?", (state, run["id"]))
+                work.connection.execute("UPDATE task_nodes SET status=? WHERE plan_id=? AND node_key=?", (state, plan["id"], run["node_key"]))
+        version = store.get_quest(quest.id)["version"]
+        replacement = service.propose_reassignment(quest.id, runs[1]["id"], "Replace blocked reviewer", roles, limits, strategy="coverage", expected_version=version)
+        service.approve(quest.id, plan["revision"], replacement["proposal_digest"], expected_version=version, actor="local_user")
+        with store.unit_of_work() as work:
+            completed = work.connection.execute("SELECT * FROM task_nodes WHERE plan_id=? AND node_key='a'", (plan["id"],)).fetchone()
+            assert completed["status"] == "succeeded" and completed["worker_id"] == runs[0]["worker_id"]
+            assert service.get_historical_approved(quest.id, plan["revision"], old["proposal_digest"], connection=work.connection, run_id=runs[0]["id"])["status"] == "superseded"
+            with pytest.raises(DomainError):
+                service.get_approved(quest.id, plan["revision"], old["proposal_digest"], connection=work.connection)
+>       manager.start(quest.id, plan["id"], "b", team_digest=replacement["proposal_digest"], member_index=1)
+
+backend\tests\test_team_reassignment_m5.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.worker_runtime.WorkerManager object at 0x00000206C94567B0>
+quest_id = 'quest_60310216ea72', plan_id = 'plan_1a9f90786a49', node_key = 'b'
+team_digest = 'f41f2ae015220e0b22689e409b3184f429dbca93e4f36724920f72507cb12e1f'
+member_index = 1, depth = 0
+
+    def start(self, quest_id, plan_id, node_key, *, team_digest, member_index, depth=0):
+        if (
+            type(member_index) is not int
+            or member_index < 0
+            or type(depth) is not int
+            or not 0 <= depth <= self.max_depth
+        ):
+            raise DomainError("Invalid worker assignment")
+        with self.store.unit_of_work() as work:
+            c = work.connection
+            quest = work.get_quest(quest_id)
+            plan = c.execute(
+                "SELECT * FROM quest_plans WHERE id=? AND quest_id=?", (plan_id, quest_id)
+            ).fetchone()
+            node = c.execute(
+                "SELECT * FROM task_nodes WHERE plan_id=? AND node_key=?", (plan_id, node_key)
+            ).fetchone()
+            if quest is None or plan is None or node is None:
+                raise KeyError("Assignment not found")
+            if (
+                quest["status"] not in {"approved", "queued", "running"}
+                or plan["status"] != "approved"
+                or quest["plan_revision"] != plan["revision"]
+                or node["status"] != "proposed"
+                or node["worker_id"]
+            ):
+>               raise DomainError("Assignment is not approved and ready")
+E               forge_core.domain.DomainError: Assignment is not approved and ready
+
+backend\src\forge_core\worker_runtime.py:140: DomainError
+=========================== short test summary info ===========================
+FAILED backend\tests\test_team_reassignment_m5.py::test_reassignment_preserves_completed_node_and_historical_approval
+1 failed, 1 passed in 1.10s

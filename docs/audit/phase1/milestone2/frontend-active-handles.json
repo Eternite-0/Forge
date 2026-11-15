@@ -1,0 +1,32 @@
+{
+  "pid": 10084,
+  "handles": [
+    {
+      "type": "Socket",
+      "fd": 2,
+      "destroyed": false
+    },
+    {
+      "type": "Socket",
+      "destroyed": false
+    },
+    {
+      "type": "Socket",
+      "destroyed": false
+    },
+    {
+      "type": "Socket",
+      "destroyed": false
+    },
+    {
+      "type": "ChildProcess",
+      "pid": 67908
+    },
+    {
+      "type": "Socket",
+      "fd": 1,
+      "destroyed": false
+    }
+  ],
+  "requests": []
+}

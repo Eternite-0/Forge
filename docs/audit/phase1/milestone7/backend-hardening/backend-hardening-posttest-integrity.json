@@ -1,0 +1,13 @@
+{
+  "source_manifest": ".local/phase1/milestone7/review/backend-hardening-source-manifest-v3.json",
+  "source_manifest_sha256": "377a63dfc99291296dc41ed4ae2eafb77397954f2b9cc3ca8e646693a81c6f50",
+  "source_files": 112,
+  "source_changes_after_final_tests": [],
+  "historical_files": 367,
+  "historical_changes": [],
+  "final_evidence_sha256": {
+    "backend-hardening-full-pytest-v3.log": "8a6ab54799200d4a41a999fe10d820a7d38ca67a81265399e444d848c16b18dd",
+    "backend-hardening-static-v3.log": "c39f7646855fd29db1cabd577308d3aa1689960db8b68f7ca0c05e2d23194b05",
+    "backend-hardening-preservation-v3.json": "9f1e8a6eba0c554bf23755aa46c2e3de823296b32ff47465dd134060ad8eab70"
+  }
+}

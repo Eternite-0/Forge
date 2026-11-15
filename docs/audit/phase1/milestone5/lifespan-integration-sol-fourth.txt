@@ -1,0 +1,170 @@
+F.                                                                       [100%]
+================================== FAILURES ===================================
+_______ test_actual_lifespan_schedules_parallel_dag_verifies_and_relays _______
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-175/test_actual_lifespan_schedules0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000153710975C0>
+
+    def test_actual_lifespan_schedules_parallel_dag_verifies_and_relays(tmp_path, monkeypatch):
+        main = load_main(tmp_path, monkeypatch)
+        quest = Quest(title="Offline lifecycle integration", goal="Create three valid JSON artifacts")
+        main.store.save_quest(quest)
+        keys = ["a", "b", "c"]
+        nodes = [{"key": key, "objective": "Create " + key, "success_criteria": ["json_valid:" + str(tmp_path / "work" / (key + ".json"))], "budget_tokens": 16000, "allowed_tools": ["file_write"]} for key in keys]
+        plan = main.quest_graph.propose(quest.id, {"nodes": nodes, "edges": [{"source": "a", "target": "c", "condition": "success"}], "max_total_tokens": 48000}, expected_version=0)
+        main.quest_graph.approve(quest.id, plan["digest"], 1, expected_version=1, actor="local_user")
+        for key in keys:
+            main.store.save_model(ModelProfile(id=key, provider="fixture", model_id=key, display_name="Scripted test provenance stub", context_window=32000, max_output_tokens=4000, tool_calling_support=ProtocolSupport(supported=True, source="test_fixture")))
+        # A capability requirement per node distinguishes the otherwise identical models.
+        from forge_core.domain import Measurement
+        for key in keys:
+            model = next(item for item in main.store.list_models() if item.id == key)
+            model.capability_measurements = {key: Measurement(value=100, source="test_fixture")}
+            main.store.save_model(model)
+        roles = [{"id": "coding_" + key, "dynamic": True, "responsibility": "Create JSON", "input_contract": ["goal"], "output_schema": DEFAULT_OUTPUT_SCHEMA, "acceptance_criteria": ["JSON valid"], "task_node_key": key, "required_capabilities": {key: 1}, "tools": ["file_write"], "input_tokens": 9000, "output_tokens": 3000, "max_steps": 3, "max_tool_calls": 1, "max_duration_seconds": 60} for key in keys]
+>       team = main.team_service.propose(quest.id, roles, {"max_members": 3, "max_depth": 0, "max_concurrency": 2, "max_total_tokens": 36000, "max_total_tool_calls": 3, "allowed_tools": ["file_write"]}, strategy="greedy", expected_version=2)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_m5_lifespan_execution.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <forge_core.team_composition.TeamCompositionService object at 0x00000153725674D0>
+quest_id = 'quest_ad1dd89de5c5'
+roles = [RoleSpec(id='coding_a', task_node_key='a', required_capabilities={'a': 1.0}, tools=['file_write'], input_tokens=9000,...ry': {'type': 'string'}}, 'required': ['summary'], 'additionalProperties': False}, acceptance_criteria=['JSON valid'])]
+limits = CompositionLimits(max_members=3, max_depth=0, max_concurrency=2, max_total_tokens=36000, max_total_tool_calls=3, max_cost_microunits=None, currency=None, allowed_tools=['file_write'])
+strategy = 'greedy', expected_version = 2, source_event_id = None
+source_event_token = None, reassignment_run_id = None
+reassignment_reason = None
+
+    def propose(
+        self,
+        quest_id,
+        roles,
+        limits,
+        *,
+        strategy,
+        expected_version,
+        source_event_id=None,
+        source_event_token=None,
+        reassignment_run_id=None,
+        reassignment_reason=None,
+    ):
+        limits = CompositionLimits.model_validate(limits)
+        roles = [RoleSpec.model_validate(role) for role in roles]
+        if (source_event_id is None) != (source_event_token is None):
+            raise DomainError("A composer event requires its lease token")
+        with self.store.unit_of_work() as work:
+            quest = work.get_quest(quest_id)
+            if quest is None:
+                raise KeyError(quest_id)
+            if quest["version"] != expected_version:
+                raise DomainError("Quest version conflict")
+            plan = work.connection.execute(
+                "SELECT * FROM quest_plans WHERE quest_id=? AND revision=?",
+                (quest_id, quest["plan_revision"]),
+            ).fetchone()
+            if plan is None:
+                raise DomainError("Approved current plan required")
+            self._current_plan(
+                work.connection, quest_id, plan["revision"], plan["digest"], allow_running=True
+            )
+            if reassignment_run_id is not None:
+                self._reassignment_target(work.connection, quest_id, reassignment_run_id)
+                if (
+                    not isinstance(reassignment_reason, str)
+                    or not reassignment_reason.strip()
+                    or len(reassignment_reason) > 2000
+                ):
+                    raise DomainError("A bounded reassignment reason is required")
+            if source_event_id is not None:
+                notice = work.connection.execute(
+                    """SELECT * FROM event_inbox WHERE consumer_id='composer' AND event_id=?
+                    AND event_type IN ('quest.plan_approved','worker.help_requested') AND quest_id=? AND processed_at IS NULL
+                    AND notice_dead_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                    (source_event_id, quest_id, source_event_token, time.time()),
+                ).fetchone()
+                if notice is None:
+                    raise DomainError("Composer event lease is unavailable")
+                payload = json.loads(notice["payload"])
+                if notice["event_type"] == "worker.help_requested":
+                    if reassignment_run_id is None or payload.get("run_id") != reassignment_run_id:
+                        raise DomainError("Help event refers to another Worker")
+                    source_run = work.connection.execute(
+                        "SELECT * FROM worker_runs WHERE id=? AND quest_id=? AND plan_id=?",
+                        (reassignment_run_id, quest_id, plan["id"]),
+                    ).fetchone()
+                    original_event = work.connection.execute(
+                        "SELECT worker_id FROM events WHERE id=?", (source_event_id,)
+                    ).fetchone()
+                    if (
+                        source_run is None
+                        or original_event is None
+                        or source_run["worker_id"] != original_event["worker_id"]
+                        or source_run["plan_revision"] != plan["revision"]
+                        or source_run["plan_digest"] != plan["digest"]
+                    ):
+                        raise DomainError("Help event Worker binding is invalid")
+                elif (
+                    payload.get("plan_revision") != plan["revision"]
+                    or payload.get("digest") != plan["digest"]
+                ):
+                    raise DomainError("Composer event refers to another plan")
+    
+            def acknowledge():
+                if source_event_id is not None:
+                    cursor = work.connection.execute(
+                        """UPDATE event_inbox SET processed_at=?,notice_token=NULL WHERE consumer_id='composer'
+                        AND event_id=? AND processed_at IS NULL AND notice_token=? AND notice_next_attempt>?""",
+                        (now_iso(), source_event_id, source_event_token, time.time()),
+                    )
+                    if cursor.rowcount != 1:
+                        raise DomainError("Composer event lease expired")
+    
+            graph = json.loads(plan["graph_json"])
+            if _digest(graph) != plan["digest"]:
+                raise DomainError("Approved plan digest does not match its content")
+            if limits.max_total_tokens > graph["max_total_tokens"]:
+                raise DomainError("Team token budget exceeds plan")
+            plan_duration = graph.get("max_duration_seconds")
+            if (
+                plan_duration is not None
+                and sum(role.max_duration_seconds for role in roles) > plan_duration
+            ):
+                raise DomainError("Team duration budget exceeds plan")
+            plan_cap = graph.get("max_cost_microunits")
+            if plan_cap is not None:
+                plan_currency = graph.get("cost_currency")
+                if (
+                    not plan_currency
+                    or limits.currency != plan_currency
+                    or limits.max_cost_microunits is None
+                    or limits.max_cost_microunits > plan_cap
+                ):
+                    raise DomainError("Team monetary budget must fit the plan currency and cap")
+            nodes = {node["key"]: node for node in graph["nodes"]}
+            role_nodes = [role.task_node_key for role in roles]
+            if len(role_nodes) != len(nodes) or set(role_nodes) != set(nodes):
+                raise DomainError("Each approved task node requires exactly one team member")
+            used = {}
+            if set(limits.allowed_tools) != {tool for role in roles for tool in role.tools}:
+                raise DomainError("Team tool scope must equal its member scopes")
+            for index, role in enumerate(roles):
+                node = nodes.get(role.task_node_key)
+                if node is None or not set(role.tools).issubset(node.get("allowed_tools", [])):
+                    raise DomainError("Role exceeds approved task tool scope")
+                if role.acceptance_criteria and not set(node["success_criteria"]).issubset(
+                    role.acceptance_criteria
+                ):
+>                   raise DomainError("Role weakens approved task acceptance criteria")
+E                   forge_core.domain.DomainError: Role weakens approved task acceptance criteria
+
+backend\src\forge_core\team_composition.py:619: DomainError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Competition_this\Agent\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_m5_lifespan_execution.py::test_actual_lifespan_schedules_parallel_dag_verifies_and_relays
+1 failed, 1 passed, 1 warning in 2.05s

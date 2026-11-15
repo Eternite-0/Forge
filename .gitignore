@@ -19,6 +19,7 @@ Desktop.ini
 
 # Logs and temporary files.
 *.log
+!docs/audit/**/*.log
 *.tmp
 *.swp
 *~
@@ -38,3 +39,12 @@ coverage/
 htmlcov/
 target/
 .local/
+desktop/.playwright-cli/
+desktop/src-tauri/gen/schemas/
+
+# Imported FORGE release runtime data and Python packaging artifacts.
+data/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.egg-info/
