@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { currentWorkspaceProject } from "./projectContext";
 import { request, type Connection } from "./api";
 import { errorMessage } from "./logic";
+import ShellIcon from "./components/ShellIcon";
 import SidebarGroup from "./components/Sidebar/SidebarGroup";
 
 export interface WorkspaceSidebarProps {
@@ -17,7 +18,7 @@ export interface WorkspaceSidebarProps {
 }
 
 function FolderIcon() {
-  return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 7h7l2 2h9v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Zm0 0V5a1 1 0 0 1 1-1h5l3 3" /></svg>;
+  return <ShellIcon name="folder" size={16} />;
 }
 
 export default function WorkspaceSidebar({

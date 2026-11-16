@@ -38,7 +38,7 @@ async (page) => {
   const tasks = page.getByRole('button', { name: '查看任务', exact: true });
   const more = page.getByRole('button', { name: '更多对话操作' });
   const rail = page.getByLabel('主导航');
-  check(await rail.isVisible() && await page.locator('.desktop-chrome').isVisible(), 'desktop has the icon rail, workspace sidebar and titlebar');
+  check(await rail.isVisible() && await page.locator('.desktop-chrome').isVisible(), 'desktop has the workspace sidebar and titlebar controls');
   check(await rail.evaluate(element => element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'the single Mac-style sidebar is visible at readable width');
   check(await rail.locator('.conversation-entry').count() === 1, 'sidebar keeps one genuine conversation');
   const fileMenu = page.locator('.titlebar').getByRole('menuitem', { name: '文件', exact: true });
@@ -55,6 +55,23 @@ async (page) => {
   check(await page.locator('.composer-workspace-context').isVisible(), 'the welcome composer has a real workspace context strip');
   check(await page.locator('.composer-workspace-context').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.composer').getBoundingClientRect().bottom - 1), 'workspace context sits below the editor');
   const suggestions = page.getByRole('group', { name: /点击填入草稿/ });
+  check(await suggestions.locator('svg[aria-hidden="true"][focusable="false"]').count() === 3 &&
+    await tasks.locator('svg[aria-hidden="true"][focusable="false"]').count() === 1,
+    'suggestion and task icons use decorative vectors without adding focus stops');
+  const initialViewport = page.viewportSize();
+  await page.setViewportSize({ width: 818, height: 582 });
+  await page.waitForFunction(() => Math.abs(document.querySelector('.chat-workspace').getBoundingClientRect().left - innerWidth * .272) < 1);
+  await page.waitForFunction(() => document.querySelector('.composer textarea').getBoundingClientRect().height <= 28);
+  check(await page.evaluate(() => {
+    const pane = document.querySelector('.chat-workspace');
+    const editor = document.querySelector('.composer').getBoundingClientRect();
+    const cards = document.querySelector('.composer-suggestions').getBoundingClientRect();
+    return parseFloat(getComputedStyle(pane).borderTopLeftRadius) >= 10 &&
+      editor.width >= 495 && editor.width <= 520 &&
+      editor.height >= 63 && editor.height <= 73 &&
+      editor.top >= 476 && cards.bottom < editor.top;
+  }), '818 × 582 reference viewport keeps the rounded pane and compact bottom composer');
+  await page.setViewportSize(initialViewport);
   await suggestions.getByRole('button').first().click();
   check((await composer.inputValue()).length > 0 && posts.length === 0, 'a starter card fills the draft without sending');
   await composer.fill('');

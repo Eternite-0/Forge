@@ -20,11 +20,12 @@ export default function useConversationViewport(workspace: WorkspaceState) {
     const timeline = scrollRef.current;
     const position = timeline?.scrollTop || 0;
     const previous = input.getBoundingClientRect().height;
+    const minHeight = parseFloat(getComputedStyle(input).getPropertyValue("--composer-measured-min-height")) || 40;
     window.cancelAnimationFrame(composerResizeFrame.current);
     input.style.transition = "none";
     input.style.height = "0px";
     const natural = input.scrollHeight;
-    const target = Math.max(40, Math.min(180, natural));
+    const target = Math.max(minHeight, Math.min(180, natural));
     input.style.overflowY = natural > 180 ? "auto" : "hidden";
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || Math.abs(previous - target) < .5) input.style.height = `${target}px`;
     else {
