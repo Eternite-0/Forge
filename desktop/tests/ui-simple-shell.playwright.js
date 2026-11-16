@@ -1,9 +1,10 @@
-// Messenger-first default path. All backend responses here are synthetic.
+// Desktop shell and compact task flow. All backend responses here are synthetic.
 async (page) => {
-  const checks = [], posts = [], messages = [];
+  const checks = [], posts = [], messages = [], events = [];
   const check = (ok, label) => { if (!ok) throw new Error(label); checks.push(label); };
   const id = '1234567890abcdef1234567890abcdef';
   const quest = { id, title: id, goal: '整理项目资料', status: 'running', version: 1 };
+  const receiptId = 'abcdef1234567890abcdef1234567890';
   const time = '2026-11-16T08:00:00Z';
   await page.route('http://127.0.0.1:8765/**', async route => {
     const request = route.request(), { pathname } = new URL(request.url());
@@ -15,6 +16,7 @@ async (page) => {
     else if (pathname === '/api/restore-status') json = { fenced: false };
     else if (pathname === '/api/conversation') json = { messages, router: {}, has_more: false };
     else if (pathname === '/api/quests') json = { items: [quest], has_more: false };
+    else if (pathname === '/api/timeline') json = { items: events, has_more: false };
     else if (pathname === `/api/quests/${id}`) json = { quest, workers: [] };
     else if (pathname.endsWith('/grants') || pathname.endsWith('/plan/history')) json = [];
     else if (pathname === '/api/conversation/message') {
@@ -23,6 +25,9 @@ async (page) => {
       const user_message = { id: 'user-fixture', role: 'user', content: posted.content, created_at: time, metadata: { request_id: posted.request_id } };
       const assistant_message = { id: 'assistant-fixture', role: 'assistant', content: '整理好了。', created_at: '2026-11-16T08:00:01Z' };
       messages.push(user_message, assistant_message);
+      quest.status = 'completed';
+      events.push({ kind: 'tool_receipt', event_id: receiptId, seq: 1, created_at: '2026-11-16T08:00:02Z', quest_id: id,
+        status: 'succeeded', execution_mode: 'live', detail: { tool: 'file_write', path: 'reports/summary.md' } });
       json = { user_message, assistant_message };
     }
     return route.fulfill({ headers, json });
@@ -32,13 +37,28 @@ async (page) => {
   const send = page.getByRole('button', { name: '发送消息', exact: true });
   const tasks = page.getByRole('button', { name: '查看任务', exact: true });
   const more = page.getByRole('button', { name: '更多对话操作' });
-  check(await page.locator('.rail, .desktop-chrome').count() === 0, 'default has no sidebar or secondary titlebar');
+  const rail = page.getByLabel('主导航');
+  check(await rail.isVisible() && await page.locator('.desktop-chrome').isVisible(), 'desktop has the icon rail, workspace sidebar and titlebar');
+  check(await rail.evaluate(element => getComputedStyle(element).flexDirection === 'row' && element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'sidebar rail and project list render side by side at readable width');
+  check(await rail.locator('.conversation-entry').count() === 1, 'sidebar keeps one genuine conversation');
+  const fileMenu = page.locator('.titlebar').getByRole('menuitem', { name: '文件', exact: true });
+  await fileMenu.press('ArrowDown');
+  await page.getByRole('menu', { name: '文件菜单' }).getByRole('menuitem', { name: '打开工作空间文件' }).waitFor();
+  await page.keyboard.press('Escape');
   check(await composer.count() === 1 && await send.isDisabled(), 'single composer cannot send empty messages');
-  check(await page.locator('.composer button').count() === 1, 'only send is in the composer');
+  check(await page.locator('.composer button').count() === 3, 'composer offers files, model settings and send');
+  check(await page.evaluate(() => {
+    const greeting = document.querySelector('.empty-conversation').getBoundingClientRect();
+    const editor = document.querySelector('.composer').getBoundingClientRect();
+    return editor.top > greeting.top && editor.top - greeting.bottom < 80;
+  }), 'the first message box is grouped with the welcome title');
   const ready = page.waitForResponse(response => new URL(response.url()).pathname === '/api/quests');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await ready;
+  const progress = page.getByRole('region', { name: '当前任务进展' });
+  await progress.getByText('运行中', { exact: true }).waitFor();
+  check(!(await progress.innerText()).includes(id), 'background status is visible in conversation without IDs');
   await composer.fill('替我整理项目资料');
   await tasks.click();
   const drawer = page.locator('.task-inspector');
@@ -55,7 +75,7 @@ async (page) => {
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '消息内容');
   check(await composer.evaluate(element => element === document.activeElement), 'Escape in Tasks restores focus to the message box');
   check(await composer.inputValue() === '替我整理项目资料', 'task detail navigation preserves the draft');
-  const settings = page.getByRole('button', { name: '设置', exact: true });
+  const settings = page.getByRole('dialog', { name: '对话操作' }).getByRole('button', { name: '设置', exact: true });
   await more.press('ArrowUp');
   await settings.waitFor();
   await page.waitForFunction(() => document.activeElement?.textContent === '设置');
@@ -70,7 +90,24 @@ async (page) => {
   await composer.press('Enter');
   await page.getByText('整理好了。', { exact: true }).waitFor();
   check(posts.length === 1 && posts[0].content === '替我整理项目资料' && await composer.inputValue() === '', 'one send shows the response and clears draft');
+  const result = progress.getByRole('button', { name: /查看最近文件记录/ });
+  await result.waitFor();
+  check(await progress.locator('.task-progress-row').count() === 1 && (await result.innerText()).includes('reports/summary.md'), 'one task updates in place and shows its recorded file');
   await page.setViewportSize({ width: 390, height: 650 });
+  await rail.waitFor({ state: 'hidden' });
+  await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
+  await rail.waitFor();
+  check(await page.locator('.chat-workspace').evaluate(element => element.hasAttribute('inert')), 'narrow navigation prevents keyboard access behind the overlay');
+  await page.keyboard.press('Escape');
+  await rail.waitFor({ state: 'hidden' });
+  await composer.fill('窄屏草稿');
+  await tasks.click();
+  await drawer.waitFor();
+  check(await drawer.evaluate(element => Math.abs(element.getBoundingClientRect().width - innerWidth) < 1), 'narrow Tasks takes the full viewport');
+  check(await page.locator('.chat-workspace').evaluate(element => element.hasAttribute('inert') && getComputedStyle(element).visibility === 'hidden'), 'narrow Tasks fully hides and disables the underlying chat');
+  await drawer.getByRole('button', { name: '关闭任务详情' }).click();
+  await composer.waitFor();
+  check(await composer.inputValue() === '窄屏草稿', 'return from the full task page restores the same draft');
   check(await composer.isVisible() && await tasks.isVisible(), 'narrow windows keep the two main actions available');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'no horizontal page overflow');
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });

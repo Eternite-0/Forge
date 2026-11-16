@@ -33,14 +33,15 @@ export default function WorkspaceInspector({ workspace }: { workspace: Workspace
   const canSuggestModel = (model: Row) => model.enabled === true && !model.quarantine_reason &&
     !!savedProviderId && (model.provider ?? model.provider_id) === savedProviderId && typeof model.model_id === "string" && !!model.model_id.trim();
   const grantPanel = (view === "quests" || view === "approvals") && selected && <GrantPanel quest={selected} state={visibleGrants} workspace={grantContext === `${questContextKey}|${view}` ? workspaceRoot : ""} scope={grantScope} setScope={setGrantScope} blocked={actionBusy || writesBlocked} submit={(path, body) => void perform(path, body)} />;
+  const extraViews = !settingsOpen && taskView && <details className="task-extra-views" open={view !== "quests"}>
+          <summary>更多任务视图</summary>
+          <nav className="workspace-tabs" aria-label="更多任务视图">{TASK_VIEWS.map((destination) => <button key={destination} className={view === destination ? "text-button active" : "text-button"} aria-current={view === destination ? "page" : undefined} onClick={() => openTaskView(destination)}>{VIEW_NAMES[destination]}</button>)}</nav>
+        </details>;
   return view === "chat" ? null : <WorkspaceFrame taskInspector={taskView && !settingsOpen} settingsOpen={settingsOpen} setting={setting} onSetting={selectSetting} onClose={openConversation} title={title}>
       <header className="inspector-header"><div><h2>{title}</h2></div><div className="inspector-actions">{taskView && !settingsOpen && <button type="button" ref={closeTask} className="icon-button" aria-label="关闭任务详情" title="返回对话" onClick={openConversation}>×</button>}<button className={`icon-button refresh-button${refreshing || visiblePlan.loading ? " is-refreshing" : ""}`} aria-label="刷新当前视图" title="刷新当前视图" aria-busy={refreshing || visiblePlan.loading} disabled={!connection || refreshing || visiblePlan.loading} onClick={() => void refreshCurrentView()}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 6.7M20 4v7h-7" /></svg></button></div></header>
       <div className={`inspector-body${view === "quests" ? " quest-body" : ""}`}>
         {actionBusy && <p className="action-progress" role="status"><span className="loading-spinner" aria-hidden="true" />正在处理操作…</p>}
-        {!settingsOpen && taskView && <details className="task-extra-views" open={view !== "quests"}>
-          <summary>更多任务视图</summary>
-          <nav className="workspace-tabs" aria-label="更多任务视图">{TASK_VIEWS.map((destination) => <button key={destination} className={view === destination ? "text-button active" : "text-button"} aria-current={view === destination ? "page" : undefined} onClick={() => openTaskView(destination)}>{VIEW_NAMES[destination]}</button>)}</nav>
-        </details>}
+        {view !== "quests" && extraViews}
         {view === "quests" && <QuestWorkspace key={connectionKey} quests={quests} selected={selected || null} selectedId={selectedId}
           workspaceId={connection?.workspace_id || ""} workspaceRoot={connection ? text(coreInfo.workspace_root, "") : ""} workspaceName={currentWorkspaceName}
           connected={!!connection} error={questLoadError || (!quests.length ? workspace.conversationError : "")} hasMore={!!questsBefore}
@@ -86,6 +87,7 @@ export default function WorkspaceInspector({ workspace }: { workspace: Workspace
           {restoreFenced === true && <div className="restore-warning"><strong>恢复待复核，后台与写入已暂停</strong><p>{restoreStatus?.review_available === true ? "请先核对当前工作区与回滚目录，退出应用后按 README 的离线维护步骤提交复核；此界面不会自动解除锁定。" : "复核记录不可用或损坏，请人工检查；不要尝试自动解锁。"}</p><div className="settings-facts"><SettingsRow label="清单摘要"><span className="break">{text(restoreStatus?.manifest_sha256)}</span></SettingsRow><SettingsRow label="回滚目录"><span className="break">{text(restoreStatus?.rollback_directory)}</span></SettingsRow></div></div>}
         </>}
         {view === "approvals" && grantPanel}
+        {view === "quests" && extraViews}
         {actionError && <p className="notice error" role="alert">{actionError}</p>}
       </div>
     </WorkspaceFrame>;

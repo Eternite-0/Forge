@@ -67,7 +67,7 @@
 .simple-shell .conversation-topbar .router-status { font-size: 12px; line-height: 16px; }
 .simple-shell :is(.disclosure-popover, .agent-panel-menu, .action-toast, .new-messages) { box-shadow: var(--forge-shadow-popover); }
 .simple-shell .conversation-actions-menu { border-radius: var(--radius-lg); }
-.simple-shell .conversation-actions-menu .popover-surface { border-color: var(--color-border); background: var(--app-color-background-elevated-primary); }
+.simple-shell .conversation-actions-menu .popover-surface { border-color: var(--color-border); background: light-dark(#fff,#292929); }
 .simple-shell .conversation-menu-item { border-radius: var(--radius-sm); font-size: 14px; line-height: 21px; }
 
 .simple-shell .message.from-agent .message-body {
@@ -83,8 +83,9 @@
 .simple-shell .empty-conversation > p { font-size: 14px; line-height: 21px; }
 
 .simple-shell .composer.composer-body {
-  min-height: 56px;
-  padding: 7px 7px 7px 15px;
+  display: block;
+  min-height: 88px;
+  padding: 8px 8px 7px 13px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   background: var(--app-color-background-control);
@@ -97,11 +98,35 @@
 }
 .simple-shell .composer-body textarea { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
 .simple-shell .composer-body textarea::placeholder { color: var(--muted); opacity: 1; }
-.simple-shell .composer-body .send-button { width: 40px; height: 40px; }
+.simple-shell .composer-body .send-button { width: 34px; height: 34px; }
+.composer-utilities { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.composer-utility { display: inline-flex; align-items: center; gap: 4px; min-height: 34px; padding: 0 7px; border: 0; border-radius: 8px; background: transparent; color: var(--color-text-secondary); font-size: 12px; }
+.composer-utility:hover { background: var(--color-background-secondary-ghost-hover); }
+.composer-model-label { min-width: 0; max-width: min(48%, 220px); margin-inline-start: auto; }
+.composer-model-label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.composer-model-label svg { flex: none; }
+.simple-shell .home-state .timeline {
+  flex: 0 1 auto;
+  min-height: 0;
+  justify-content: safe center;
+  margin-block-start: auto;
+  padding: 20px 16px 22px;
+}
+.simple-shell .home-state > .composer-wrap {
+  position: relative;
+  flex: none;
+  margin-block-end: auto;
+  padding-bottom: 20px;
+}
+.simple-shell .home-state > .composer-wrap::before { display: none; }
 
 @media (max-width: 600px) {
   .simple-shell .conversation-topbar { padding-inline: 12px; }
   .simple-shell .empty-conversation h2 { font-size: 24px; line-height: 32px; }
+}
+@media (max-height: 440px) {
+  .simple-shell .home-state .timeline { padding-block: 8px 12px; }
+  .simple-shell .home-state > .composer-wrap { padding-bottom: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .simple-shell .composer.composer-body { transition: none; }

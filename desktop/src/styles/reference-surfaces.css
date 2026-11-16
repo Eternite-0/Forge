@@ -79,6 +79,21 @@
   .settings-row { padding-inline: 12px; }
 }
 
+/* At tablet/phone widths, Tasks is a page rather than a partial overlay.
+   The mounted conversation is made inert by App, preserving draft and scroll. */
+@media (max-width: 1000px) {
+  .app-shell > .workspace-panel.task-inspector {
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .task-page-open > .chat-workspace,
+  .task-page-open > .simple-connection { visibility: hidden; pointer-events: none; }
+}
+
 @media (forced-colors: active) {
   .app-shell > .workspace-panel.task-inspector { border-color: CanvasText; box-shadow: none; }
   .settings-nav-item.active, .quest-workspace .quest-filters button.active { outline: 1px solid Highlight; outline-offset: -1px; }

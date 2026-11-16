@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { currentWorkspaceProject } from "./projectContext";
 import { request, type Connection } from "./api";
 import { errorMessage } from "./logic";
+import SidebarGroup from "./components/Sidebar/SidebarGroup";
 
 export interface WorkspaceSidebarProps {
   connected: boolean;
@@ -9,7 +10,7 @@ export interface WorkspaceSidebarProps {
   workspaceRoot: string;
   active: boolean;
   navigation: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   topNavigation?: ReactNode;
   footer?: ReactNode;
   connection?: Connection | null;
@@ -137,14 +138,15 @@ export default function WorkspaceSidebar({
         </button> : <p className="workspace-menu-empty">连接后显示工作空间</p>}
       </div>
     </div>
-    <div className="sidebar-primary">{navigation}</div>
+    <div className="sidebar-primary"><h2 className="sidebar-section-label">对话</h2>{navigation}</div>
     <div className="sidebar-scroll">
-      <div className="sidebar-tools"><h2 className="sidebar-section-label">工具</h2>{topNavigation}</div>
+      {topNavigation && <div className="sidebar-tools"><h2 className="sidebar-section-label">工作记录</h2>{topNavigation}</div>}
       {connected && <section className="sidebar-project-summary" aria-label="项目上下文" data-project-key={workspaceProject.key} data-project-source="workspace">
-        <h2 className="sidebar-section-label">项目上下文</h2>
-        <div className="discovered-project current-project" title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></div>
-        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <div className="discovered-project" key={item.id} title={`${item.root}\n已识别的项目上下文，不授予目录访问权限。`}><FolderIcon /><span>{item.name}</span></div>)}
+        <SidebarGroup label="项目">
+        <details className="codex-project-record current-project"><summary title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></summary><div className="codex-project-path">{workspacePath || "路径暂不可用"}<p>当前工作空间；在同一条对话中继续。</p></div></details>
+        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <details className="codex-project-record" key={item.id}><summary title={item.root}><FolderIcon /><span>{item.name}</span><small>已识别</small></summary><div className="codex-project-path">{item.root}<p>只读项目记录，不切换工作空间或授予目录访问权限。</p></div></details>)}
         {discovery.key === identity && discovery.error && <p className="sidebar-empty" title={discovery.error}>项目发现暂不可用</p>}
+        </SidebarGroup>
       </section>}
     </div>
     <div className="sidebar-connection">{children}</div>

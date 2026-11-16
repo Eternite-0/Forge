@@ -1,7 +1,9 @@
 import { useRef, type RefObject } from "react";
 import AnimatedDetails from "./AnimatedDetails";
 import type { WorkerRun } from "./ConversationRuntime";
-import { needsQuestAttention, questDisplayTitle, riskLabel, statusLabel, toolLabel } from "./presentation";
+import { questDisplayTitle, riskLabel, statusLabel, toolLabel } from "./presentation";
+import { taskProgress } from "./taskProgress";
+import TaskProgressList from "./components/conversation/TaskProgressList";
 import { mergeTimeline, type ChatMessage, type Outgoing } from "./timeline";
 import type { TimelineEvent } from "./timeline";
 import MessageList from "./components/conversation/MessageList";
@@ -26,9 +28,8 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
   if (memoryRef.current.identity !== identity) memoryRef.current = { identity, value: { expansion: new Map(), commandScroll: new Map() } };
   const memory = memoryRef.current.value;
   const items = groupEvents(mergeTimeline(messages, events, outgoing));
-  // Routine runs belong in Tasks, not in a global status list at the end of chat.
-  const attention = quests.filter((quest) => needsQuestAttention(quest.status));
-  const taskRow = (quest: Quest) => <button type="button" className="timeline-update" key={quest.id} onClick={() => onQuest(quest.id)}><span><strong>{questDisplayTitle(quest.title, quest.id, quest.goal)}</strong><small>{statusLabel(quest.status)}</small></span><span aria-hidden="true">›</span></button>;
+  const progress = taskProgress(quests, events, messages).filter(card =>
+    !approvals.some(approval => approval.quest_id === card.quest.id && approval.status === "PENDING"));
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
@@ -37,7 +38,8 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
-    {connected && (attention.length > 0 || approvals.length > 0) && <section className="timeline-updates" aria-label="任务与审批更新">
+    {connected && <TaskProgressList cards={progress} onQuest={onQuest} onOpenHistory={onOpenHistory} />}
+    {connected && approvals.length > 0 && <section className="timeline-updates" aria-label="任务与审批更新">
       <div className="timeline-updates-label">需要你处理</div>
       {approvals.slice(0, 3).map((item) => {
         const quest = quests.find((candidate) => candidate.id === item.quest_id);
@@ -54,8 +56,6 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
         </div>;
       })}
       {approvals.length > 3 && <p className="notice">已加载的审批中另有 {approvals.length - 3} 项待处理，审批页按任务筛选 · <button className="text-button" onClick={() => onApproval(text(approvals[0]?.quest_id, ""))}>按任务查看审批</button></p>}
-      {attention.slice(0, 3).map(taskRow)}
-      {attention.length > 3 && <p className="notice">另有 {attention.length - 3} 项已加载任务需要处理 · <button className="text-button" onClick={() => onQuest("")}>查看全部任务</button></p>}
     </section>}
     {connected && approvalError && <p className="notice error" role="alert">审批状态暂不可用：{approvalError}</p>}
   </div>;

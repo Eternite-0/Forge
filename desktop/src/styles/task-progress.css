@@ -1,0 +1,13 @@
+.task-progress-list { display: flex; flex-direction: column; gap: 4px; margin-block: 16px 8px; }
+.task-progress-row { border: 1px solid var(--color-border-subtle); border-radius: 12px; background: var(--app-color-background-surface); }
+.task-progress-summary { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px; border: 0; border-radius: 12px; background: transparent; color: var(--color-text); text-align: left; }
+.task-progress-summary:hover { background: var(--color-background-secondary-ghost-hover); }
+.task-progress-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.task-progress-status { flex: none; color: var(--color-text-secondary); font-size: 12px; }
+.task-progress-dot { flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-secondary); }
+.task-progress-dot:is([data-state="awaiting_approval"], [data-state="blocked"], [data-state="needs_input"]) { background: var(--color-status-warning); }
+.task-progress-dot[data-state="failed"] { background: var(--color-status-error); }
+.task-progress-result { padding: 0 12px 12px 28px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; }
+.task-progress-result button { display: flex; flex-wrap: wrap; gap: 4px 12px; text-align: left; font-size: 12px; }
+.task-progress-result button > span { color: var(--color-text-secondary); overflow-wrap: anywhere; }
+.task-progress-more { align-self: flex-start; padding: 6px 12px; color: var(--color-text-secondary); font-size: 12px; }

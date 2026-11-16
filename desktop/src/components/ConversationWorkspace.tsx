@@ -1,5 +1,5 @@
 import ChatTimeline from "../ChatTimeline";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import AgentPanel from "./AgentPanel";
 import type { WorkerRun } from "../ConversationRuntime";
 import ConversationToolbar from "../ConversationToolbar";
@@ -9,7 +9,7 @@ import { isNearBottom, shouldSubmitOnEnter } from "../logic";
 import { asRecord } from "../workspaceTypes";
 import type { WorkspaceController } from "../hooks/useWorkspaceController";
 
-export default function ConversationWorkspace({ workspace }: { workspace: WorkspaceController }) {
+export default function ConversationWorkspace({ workspace, connectionSetup }: { workspace: WorkspaceController; connectionSetup?: ReactNode }) {
   const { native, connection, runtimeStatus, workspaceOperation, restoreFenced, view, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, workerActivity, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspaceName, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
   const chatVisible = view === "chat" || (taskView && !settingsOpen);
   const [compactAgent, setCompactAgent] = useState(() => window.matchMedia("(max-width: 1180px)").matches);
@@ -62,6 +62,7 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
       <ConversationToolbar home={home} status={routerStatus} onOpenTasks={() => openTaskView("quests", "")} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent}
         onOpenSettings={workspace.openSettings} onOpenMemory={() => selectSetting("memory")} onOpenActivity={() => openTaskView("activity", "")}
         onConfigure={() => selectSetting("environment")} pendingCount={pendingApprovals.length} />
+      {connectionSetup}
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
       <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
@@ -80,6 +81,7 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
       <ConversationComposer inputRef={composerInput} value={draft} onChange={setDraft}
         onKeyDown={(event) => { if (shouldSubmitOnEnter({ key: event.key, shiftKey: event.shiftKey, isComposing: event.nativeEvent.isComposing, keyCode: event.nativeEvent.keyCode })) { event.preventDefault(); void send(); } }}
         onSend={() => void send()} disabled={!connection || sending || writesBlocked || !draft.trim()} sending={sending}
+        model={workspace.routerModel} onFiles={() => openPreview("files")} onConfigure={() => selectSetting("environment")}
         error={outgoing.some(item => item.status === "failed") ? "" : sendError} requestId={pending?.requestId} />
     </main>
     {previewPresent && <PreviewDivider width={previewWidthPixels} minimum={previewBounds.minimum} maximum={previewBounds.maximum} onResize={resizePreview} onReset={() => resizePreview(initialPreviewWidth)} />}
