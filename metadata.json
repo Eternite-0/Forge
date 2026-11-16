@@ -3,7 +3,7 @@
   "checkpoint_id": "01M7HJXVB6EKZT6GH8G6W4JKHE",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 25,
+  "checkpoints_count": 26,
   "files_touched": [
     "backend/scripts/phase2/live_core.py",
     "backend/src/forge_core/context_service.py",
@@ -125,15 +125,22 @@
       "compact_transcript": "/2/transcript.jsonl",
       "content_hash": "/2/content_hash.txt",
       "prompt": "/2/prompt.txt"
+    },
+    {
+      "metadata": "/3/metadata.json",
+      "transcript": "/3/full.jsonl",
+      "compact_transcript": "/3/transcript.jsonl",
+      "content_hash": "/3/content_hash.txt",
+      "prompt": "/3/prompt.txt"
     }
   ],
   "redaction": {
-    "replacements": 6997,
+    "replacements": 6999,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 436,
+      "credential_value": 438,
       "credentialed_uri": 8,
       "custom": 124,
       "entropy": 6722,
