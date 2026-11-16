@@ -52,7 +52,35 @@
 .windows-reference .timeline .turn-diff :is(button, summary):focus-visible { outline-offset: -3px; }
 .windows-reference .turn-diff .turn-diff-actions button { border-radius: 9px; background: light-dark(#eaeaea,#252525); gap: 5px; }
 .windows-reference .timeline .turn-diff-more > summary { justify-content: flex-start; gap: 7px; font-size: 14px; line-height: 21px; background: light-dark(#f1f1f1,#1c1c1c); }
-.windows-reference .new-messages { box-shadow: var(--shadow-sm); }
+.windows-reference .new-messages {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  bottom: calc(var(--conversation-footer-height, 118px) + 24px);
+  border: 1px solid light-dark(#d8d8d8, #393939);
+  border-radius: 50%;
+  background: light-dark(#ffffff, #222222);
+  color: light-dark(#424242, #dddddd);
+  box-shadow: var(--shadow-sm);
+}
+.windows-reference .new-messages:hover { background: light-dark(#f1f1f1, #303030); }
+.windows-reference .new-messages[data-has-new="true"]::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--app-color-background-surface);
+  border-radius: 50%;
+  background: currentColor;
+}
+@media (forced-colors: active) {
+  .windows-reference .new-messages { border-color: ButtonText; }
+  .windows-reference .new-messages[data-has-new="true"]::after { forced-color-adjust: none; background: Highlight; border-color: Canvas; }
+}
 @media (max-width: 600px) {
   .windows-reference .conversation-topbar[data-home] { height: 44px; min-height: 44px; padding-inline: 12px; }
   .windows-reference .conversation-shell:not(.home-state) .timeline { padding-inline: 14px; }

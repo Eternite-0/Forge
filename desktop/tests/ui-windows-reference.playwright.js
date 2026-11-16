@@ -42,6 +42,7 @@ async (page, { outputDir }) => {
     } };
   }, taskEquivalents);
   let populated = false;
+  let longThread = false, hasIncoming = false;
   const messages = [
     { id: 'layout-ask-1', role: 'user', content: '先看一下项目现在的版本和已有的交接资料，把需要打开的文件集中起来。', created_at: '2026-11-16T08:00:00Z' },
     { id: 'layout-answer-1', role: 'assistant', content: '我把项目说明、配置记录和交接文档放在一起，方便在同一个工作区查看。\n\n文件改动会单独列出来，打开后可以查看源码、Markdown 正文和前后差异。', created_at: '2026-11-16T08:04:05Z' },
@@ -52,6 +53,12 @@ async (page, { outputDir }) => {
     kind: 'tool_receipt', event_id: ('abc' + index).padEnd(32, '0'), seq: index + 1, status: 'succeeded', execution_mode: 'live',
     created_at: `2026-11-16T08:03:0${index}Z`, detail: { tool: 'file_write', path },
   }));
+  const longReply = {
+    id: 'layout-scroll-reply', role: 'assistant',
+    content: Array.from({ length: 72 }, (_, i) => '验收记录 ' + (i + 1) + '：长对话可按原顺序滚动。').join('\n\n'),
+    created_at: '2026-11-16T08:08:00Z',
+  };
+  const incoming = { id: 'layout-scroll-incoming', role: 'assistant', content: '回到最新测试的新回复。', created_at: '2026-11-16T08:09:00Z' };
   await page.route('http://127.0.0.1:8765/**', async (route) => {
     const request = route.request(), { pathname } = new URL(request.url());
     const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,OPTIONS' };
@@ -60,7 +67,7 @@ async (page, { outputDir }) => {
     const lists = { items: [], next_before: null, has_more: false };
     let json;
     if (pathname === '/health') json = { session: 'layout-fixture' };
-    else if (pathname === '/api/conversation') json = { ...lists, messages: populated ? messages : [], router: {} };
+    else if (pathname === '/api/conversation') json = { ...lists, messages: populated ? [...messages, ...(longThread ? [longReply] : []), ...(hasIncoming ? [incoming] : [])] : [], router: {} };
     else if (pathname === '/api/timeline') json = { ...lists, items: populated ? events : [] };
     else if (pathname === '/api/settings') json = settings;
     else if (pathname === '/api/restore-status') json = { fenced: false };
@@ -115,6 +122,11 @@ async (page, { outputDir }) => {
   populated = true;
   await page.reload();
   await page.getByText('可以，文件会在右侧打开，当前对话保持在左边。', { exact: true }).waitFor();
+  const firstProcess = page.locator('.process-transcript').first();
+  check(await firstProcess.evaluate(group => !group.open && /4 分钟 5 秒/.test(group.querySelector('summary').textContent)), 'the folded process displays its measured request-to-reply duration');
+  await firstProcess.locator(':scope > summary').click();
+  check(await firstProcess.evaluate(group => group.open && /4 分钟 5 秒/.test(group.querySelector('summary').textContent)), 'opening process details preserves the same measured duration');
+  await firstProcess.locator(':scope > summary').click();
   await page.getByRole('button', { name: '更多对话操作' }).click();
   await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
   const preview = page.locator('.file-preview-workspace');
@@ -170,6 +182,56 @@ async (page, { outputDir }) => {
     getComputedStyle(document.querySelector('.settings-nav')).backgroundColor === 'rgb(244, 246, 247)');
   const lightContent = await rect('.settings-content');
   check(lightContent.fills === 'rgb(255, 255, 255)', `settings preserves a usable light system appearance: ${lightContent.fills}`);
+  longThread = true;
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await page.reload();
+  const latest = page.locator('.new-messages');
+  const atBottom = () => page.waitForFunction(() => {
+    const pane = document.querySelector('.timeline');
+    return pane && pane.scrollHeight - pane.clientHeight > 500 && pane.scrollHeight - pane.clientHeight - pane.scrollTop < 4;
+  });
+  await atBottom();
+  check(!await latest.isVisible(), 'a long transcript starts at the latest reply with no redundant return control');
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
+  await preview.getByLabel('筛选已加载文件').waitFor();
+  await tree.locator('.changed-file[title="docs/HANDOFF.md"]').click();
+  if (await showDiff.getAttribute('aria-pressed') === 'true') await showDiff.click();
+  await preview.getByRole('heading', { name: 'FORGE 项目交接记录' }).waitFor();
+  await atBottom();
+  const draft = page.getByRole('textbox', { name: '消息内容' });
+  await draft.fill('保留这段草稿');
+  const wheelAway = async (x) => {
+    await page.mouse.move(x, 410);
+    await page.mouse.wheel(0, -1000);
+    await latest.waitFor();
+    await page.waitForFunction(() => {
+      const pane = document.querySelector('.timeline');
+      return pane && pane.scrollHeight - pane.clientHeight - pane.scrollTop > 300;
+    });
+  };
+  await wheelAway(820);
+  const jump = await rect('.new-messages'), composer = await rect('.composer');
+  check(jump.width === 32 && jump.height === 32 && Math.abs(jump.x + 16 - 792) <= 4 &&
+    Math.abs(jump.x + 16 - (composer.x + composer.width / 2)) <= 2 &&
+    Math.abs(composer.y - jump.y - 16 - 40) <= 8, 'ordinary desktop scroll exposes the centered 32px reference jump above the composer');
+  await capture('windows-reference-return-latest');
+  hasIncoming = true;
+  const unread = page.getByRole('button', { name: /有新消息.*回到最新/ });
+  await unread.waitFor({ timeout: 12000 });
+  check(await page.locator('.timeline').evaluate(pane => pane.scrollHeight - pane.clientHeight - pane.scrollTop > 300), 'a real polled fixture reply announces itself without yanking the reading position');
+  await unread.click();
+  await atBottom();
+  await latest.waitFor({ state: 'hidden' });
+  check(await draft.inputValue() === '保留这段草稿', 'returning to the newest reply clears the prompt and preserves the unsent draft');
+  await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
+  await preview.waitFor({ state: 'hidden' });
+  await page.setViewportSize({ width: 390, height: 760 });
+  await atBottom();
+  await wheelAway(180);
+  await page.mouse.wheel(0, 1400);
+  await atBottom();
+  await latest.waitFor({ state: 'hidden' });
+  check(await draft.inputValue() === '保留这段草稿', 'manually scrolling the narrow conversation to its end dismisses the return control without dropping the draft');
   check(writes.length === 0 && unknown.length === 0, `no synthetic writes or unknown Core requests: ${JSON.stringify({ writes, unknown })}`);
   check(await page.evaluate(() => window.__layoutReferenceCalls.every(command => ['connection_get', 'runtime_status', 'workspace_operation_status', 'workspace_changes', 'workspace_files_list', 'workspace_file_read', 'workspace_file_diff'].includes(command))), 'only allowlisted synthetic runtime and file reads');
   return { checks, measurements };

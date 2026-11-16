@@ -14,6 +14,23 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
   const chatVisible = view === "chat" || (taskView && !settingsOpen);
   const [compactAgent, setCompactAgent] = useState(() => window.matchMedia("(max-width: 1180px)").matches);
   const [agentPreference, setAgentPreference] = useState(false);
+  const [awayFromLatest, setAwayFromLatest] = useState(false);
+  useEffect(() => {
+    const timeline = scrollRef.current;
+    if (!timeline) return;
+    // This controls visibility only. Reading pauses and follow behavior retain
+    // their existing semantics, including explicit inspection of old records.
+    const measure = () => {
+      if (timeline.clientHeight > 0) {
+        setAwayFromLatest(!isNearBottom(timeline.scrollTop, timeline.clientHeight, timeline.scrollHeight));
+      }
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(timeline);
+    Array.from(timeline.children).forEach(child => observer.observe(child));
+    return () => observer.disconnect();
+  }, [connectionKey, messages, timelineEvents, outgoing, quests, pendingApprovals, home, chatVisible]);
   const agentOpen = !home && !taskView && !previewOpen && agentPreference;
   const previousAgent = useRef(agentOpen);
   useEffect(() => {
@@ -71,7 +88,15 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
         historyBusy={historyBusy} timelineError={timelineError} conversationError={conversationError}
         approvalError={approvalLoadError} canRetry={!!connection && !sending && !writesBlocked} scrollRef={scrollRef}
-        onScroll={() => { const element = scrollRef.current; if (!element || manualPause.current) return; followBottom.current = isNearBottom(element.scrollTop, element.clientHeight, element.scrollHeight); if (followBottom.current) setHasNew(false); }}
+        onScroll={() => {
+          const element = scrollRef.current;
+          if (!element) return;
+          const nearLatest = isNearBottom(element.scrollTop, element.clientHeight, element.scrollHeight);
+          setAwayFromLatest(!nearLatest);
+          if (manualPause.current) return;
+          followBottom.current = nearLatest;
+          if (nearLatest) setHasNew(false);
+        }}
         onInspect={() => { manualPause.current = true; followBottom.current = false; setReadingPaused(true); }}
         onLoadOlder={() => void loadOlder()} onRetry={(item) => void sendPending(item, false)}
         onQuest={(id) => openTaskView("quests", id)}
@@ -80,7 +105,12 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         onApproval={(id) => openTaskView("approvals", id)}
         approvalsBlocked={actionBusy || writesBlocked} onApprovalDecision={decideApproval} />
       {actionError && <p className="notice error action-error" role="alert">{actionError}</p>}
-      {(hasNew || readingPaused) && <button className="new-messages" onClick={() => { manualPause.current = false; followBottom.current = true; setReadingPaused(false); setHasNew(false); if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }}>{hasNew ? "有新消息 · 回到最新 ↓" : "回到最新 ↓"}</button>}
+      {(awayFromLatest || hasNew || readingPaused) && <button type="button" className="new-messages" data-has-new={hasNew}
+        title={hasNew ? "有新消息 · 回到最新" : "回到最新"}
+        onClick={() => { manualPause.current = false; followBottom.current = true; setReadingPaused(false); setHasNew(false); setAwayFromLatest(false); if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }}>
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M10 4v12m-5-5 5 5 5-5" /></svg>
+        <span className="sr-only">{hasNew ? "有新消息 · 回到最新 ↓" : "回到最新 ↓"}</span>
+      </button>}
       <ConversationComposer inputRef={composerInput} value={draft} onChange={setDraft}
         onKeyDown={(event) => { if (shouldSubmitOnEnter({ key: event.key, shiftKey: event.shiftKey, isComposing: event.nativeEvent.isComposing, keyCode: event.nativeEvent.keyCode })) { event.preventDefault(); void send(); } }}
         onSend={() => void send()} disabled={!connection || sending || writesBlocked || !draft.trim()} sending={sending}
