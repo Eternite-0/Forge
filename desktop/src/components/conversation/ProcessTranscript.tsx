@@ -3,6 +3,7 @@ import type { WorkerRun } from "../../ConversationRuntime";
 import type { ProcessGroup } from "../../processTimeline";
 import { relativeFilePath } from "../../workspaceFiles";
 import TurnDiff from "../TurnDiff";
+import type { TurnDiffFile } from "../TurnDiff";
 import AgentActivityRow from "./AgentActivityRow";
 import AssistantMessage from "./AssistantMessage";
 import EventGroup from "./EventGroup";
@@ -63,9 +64,8 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
 }
 
 /** The closing file summary uses real successful receipts, independently of process visibility. */
-export function ProcessFileChanges({ process, memory, historyStats, onInspect, onOpenFile, onOpenHistory }: Pick<ProcessProps, "process" | "memory" | "historyStats" | "onInspect" | "onOpenFile" | "onOpenHistory">) {
-  const [, update] = useState(0);
-  const files = new Map<string, { path: string; receiptId: string; scrollKey: string; added?: number; removed?: number }>();
+export function processFileChanges(process: ProcessGroup, historyStats?: HistoryProps["historyStats"]): TurnDiffFile[] {
+  const files = new Map<string, TurnDiffFile>();
   const events = process.records.flatMap(record => record.type === "tools" ? record.events : []);
   for (const event of events) {
     const detail = event.detail as Row | undefined;
@@ -75,8 +75,15 @@ export function ProcessFileChanges({ process, memory, historyStats, onInspect, o
       files.set(path, { path, receiptId: event.event_id, scrollKey: `file:${eventKey(event)}`, ...historyStats?.[event.event_id] });
     } catch { /* Invalid recorded paths cannot become file actions. */ }
   }
-  if (!files.size) return null;
+  return [...files.values()];
+}
+
+export function ProcessFileChanges({ process, memory, historyStats, onInspect, onOpenFile, onOpenHistory }: Pick<ProcessProps, "process" | "memory" | "historyStats" | "onInspect" | "onOpenFile" | "onOpenHistory">) {
+  const [, update] = useState(0);
+  const files = processFileChanges(process, historyStats);
+  if (!files.length) return null;
+  const events = process.records.flatMap(record => record.type === "tools" ? record.events : []);
   const state = eventView(memory, events[0]);
-  return <TurnDiff files={[...files.values()]} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
+  return <TurnDiff files={files} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
     onExpandedChange={value => { state.groupFilesExpanded = value; update(count => count + 1); }} onInspect={onInspect} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} />;
 }

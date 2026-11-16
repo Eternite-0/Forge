@@ -24,6 +24,11 @@ export default function WorkspaceSidebar({
   connected, workspaceId, workspaceRoot, active, navigation, children, topNavigation, footer, connection,
 }: WorkspaceSidebarProps) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [projectQuery, setProjectQuery] = useState("");
+  const searchInput = useRef<HTMLInputElement>(null);
+  const searchTrigger = useRef<HTMLButtonElement>(null);
+  const projectSearchId = useId();
   const [discovery, setDiscovery] = useState<{ key: string; items: { id: string; root: string; name: string }[]; error: string }>({ key: "", items: [], error: "" });
   const identity = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "";
   useEffect(() => {
@@ -42,6 +47,11 @@ export default function WorkspaceSidebar({
   const workspaceProject = currentWorkspaceProject(connected ? workspaceId : "", connected ? workspaceRoot : "");
   const workspacePath = connected ? workspaceProject.path || workspaceId : "";
   const workspaceName = workspaceProject.name;
+  const query = projectQuery.trim().toLocaleLowerCase();
+  const matchesProject = (name: string, path: string) => !query || `${name} ${path}`.toLocaleLowerCase().includes(query);
+  const discoveredProjects = discovery.key === identity ? discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase() && matchesProject(item.name, item.root)) : [];
+  const currentMatches = matchesProject(workspaceName, workspacePath);
+  useEffect(() => { if (searchOpen) searchInput.current?.focus(); }, [searchOpen]);
 
   useEffect(() => { if (!active) setWorkspaceOpen(false); }, [active]);
 
@@ -106,6 +116,7 @@ export default function WorkspaceSidebar({
         <span className="workspace-selector-name">FORGE</span>
         <svg className="workspace-selector-chevron" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 6 3 3 3-3" /></svg>
       </button>
+      <button ref={searchTrigger} type="button" className="sidebar-search-toggle" aria-label="筛选已加载项目" title="筛选已加载项目" aria-expanded={searchOpen} aria-controls={projectSearchId} onClick={() => { setSearchOpen(!searchOpen); if (searchOpen) setProjectQuery(""); }}><svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5" /><path d="m12.5 12.5 4 4" /></svg></button>
 
       <div
         id={workspaceDialogId}
@@ -138,13 +149,15 @@ export default function WorkspaceSidebar({
         </button> : <p className="workspace-menu-empty">连接后显示工作空间</p>}
       </div>
     </div>
+    {searchOpen && <div className="sidebar-project-search" id={projectSearchId}><input ref={searchInput} type="search" value={projectQuery} aria-label="按项目名称或路径筛选" placeholder="筛选项目…" onChange={(event) => setProjectQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setSearchOpen(false); setProjectQuery(""); searchTrigger.current?.focus(); } }} /><span>仅筛选已加载项目</span></div>}
     <div className="sidebar-primary"><h2 className="sidebar-section-label">对话</h2>{navigation}</div>
     <div className="sidebar-scroll">
       {topNavigation && <div className="sidebar-tools"><h2 className="sidebar-section-label">工作记录</h2>{topNavigation}</div>}
       {connected && <section className="sidebar-project-summary" aria-label="项目上下文" data-project-key={workspaceProject.key} data-project-source="workspace">
         <SidebarGroup label="项目">
-        <details className="codex-project-record current-project"><summary title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></summary><div className="codex-project-path">{workspacePath || "路径暂不可用"}<p>当前工作空间；在同一条对话中继续。</p></div></details>
-        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <details className="codex-project-record" key={item.id}><summary title={item.root}><FolderIcon /><span>{item.name}</span><small>已识别</small></summary><div className="codex-project-path">{item.root}<p>只读项目记录，不切换工作空间或授予目录访问权限。</p></div></details>)}
+        {currentMatches && <details className="codex-project-record current-project"><summary title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></summary><div className="codex-project-path">{workspacePath || "路径暂不可用"}<p>当前工作空间；在同一条对话中继续。</p></div></details>}
+        {discoveredProjects.map((item) => <details className="codex-project-record" key={item.id}><summary title={item.root}><FolderIcon /><span>{item.name}</span><small>已识别</small></summary><div className="codex-project-path">{item.root}<p>只读项目记录，不切换工作空间或授予目录访问权限。</p></div></details>)}
+        {query && !currentMatches && !discoveredProjects.length && <p className="sidebar-empty" role="status">没有匹配的已加载项目</p>}
         {discovery.key === identity && discovery.error && <p className="sidebar-empty" title={discovery.error}>项目发现暂不可用</p>}
         </SidebarGroup>
       </section>}

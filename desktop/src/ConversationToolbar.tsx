@@ -1,8 +1,9 @@
 import { useCallback, useRef, useState } from "react";
 import DisclosurePopover from "./DisclosurePopover";
 
-export default function ConversationToolbar({ home, status, onOpenFiles, onOpenTasks, onOpenSettings, onOpenMemory, onOpenActivity, onConfigure, pendingCount = 0, agentOpen, onToggleAgent }: {
-  home: boolean; status: string; sessionTitle?: string;
+export default function ConversationToolbar({ home, status, title, context, activityCount, changeCount, workerCount, onOpenChanges, onOpenFiles, onOpenTasks, onOpenSettings, onOpenMemory, onOpenActivity, onConfigure, pendingCount = 0, agentOpen, onToggleAgent }: {
+  home: boolean; status: string; title: string; context: string;
+  activityCount: number; changeCount: number; workerCount: number; onOpenChanges: () => void;
   onOpenFiles?: () => void; onOpenTasks: () => void; agentOpen: boolean; onToggleAgent: () => void;
   onOpenSettings: () => void; onOpenMemory: () => void; onOpenActivity: () => void; onConfigure: () => void; pendingCount?: number;
 }) {
@@ -11,10 +12,18 @@ export default function ConversationToolbar({ home, status, onOpenFiles, onOpenT
   const menuTrigger = useRef<HTMLButtonElement>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   return <header className="topbar conversation-topbar" data-home={home} data-tauri-drag-region>
-    <div className="topbar-title"><h1>FORGE</h1></div>
+    <div className={`topbar-title${home ? " sr-only" : ""}`}>
+      <h1 title={title}>{title}</h1>
+      {!home && context && <p className="thread-context" title={context}>{context}</p>}
+    </div>
     <div className="conversation-status">
       {status === "供应商未配置" ? <button type="button" className="conversation-tasks-toggle" onClick={onConfigure}>连接模型</button> :
         status === "正在回复" && <span className="router-status" role="status" data-status={status}>正在回复…</span>}
+      {!home && <div className="thread-tools">
+        {activityCount > 0 && <button type="button" className="thread-tool" title="查看运行活动" onClick={onOpenActivity}>活动 {activityCount}</button>}
+        {changeCount > 0 && <button type="button" className="thread-tool" title="查看对话中的更改" onClick={onOpenChanges}>改动 {changeCount}</button>}
+        {workerCount > 0 && <button type="button" className="thread-tool" title="查看执行详情" aria-expanded={agentOpen} aria-controls="conversation-agent-panel" onClick={onToggleAgent}>子任务 {workerCount}</button>}
+      </div>}
       <button type="button" className="conversation-tasks-toggle" aria-label="查看任务" onClick={onOpenTasks}>任务{pendingCount > 0 && <span className="task-attention-count" aria-label={`${pendingCount} 项待确认`}>{pendingCount}</span>}</button>
       <div className="conversation-menu-anchor">
         <button ref={menuTrigger} type="button" className="conversation-more-toggle" aria-label="更多对话操作" title="更多对话操作" aria-expanded={menuOpen} aria-controls="conversation-actions-menu" aria-haspopup="dialog" onClick={() => { setFocusLast(false); setMenuOpen(value => !value); }} onKeyDown={event => {

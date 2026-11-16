@@ -1,0 +1,94 @@
+/* Measured reference composition, adapted to FORGE's single real workspace. */
+.simple-shell .home-state .timeline {
+  flex: 1;
+  margin-block-start: 0;
+  justify-content: flex-start;
+  padding: clamp(48px, 24vh, 230px) 24px calc(var(--conversation-footer-height, 150px) + 24px);
+}
+.simple-shell .home-state > .composer-wrap {
+  position: absolute;
+  inset: auto 0 0;
+  margin: 0;
+  padding: 0 24px 16px;
+}
+.simple-shell .home-state > .composer-wrap::before { display: block; }
+.simple-shell .composer-wrap { padding: 0 20px 16px; }
+.simple-shell .home-state .composer-stack { max-width: 736px; }
+.simple-shell .conversation-shell:not(.home-state) :is(.timeline > *, .composer-stack) { max-width: 1040px; }
+.simple-shell .conversation-shell:not(.home-state) .message.from-agent .message-body { max-width: min(736px, 100%); }
+.simple-shell .composer-card { position: relative; isolation: isolate; }
+.simple-shell .composer-workspace-context {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 38px;
+  margin: 0 12px -8px;
+  padding: 0 12px 8px;
+  border: 1px solid var(--color-border-subtle);
+  border-bottom: 0;
+  border-radius: 18px 18px 0 0;
+  background: var(--app-color-background-surface-under);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 18px;
+}
+.composer-workspace-context > button {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: 5px;
+  padding: 3px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.composer-workspace-context > button:hover { color: var(--color-text); }
+.composer-workspace-context > button > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.composer-workspace-context svg { flex: none; }
+.composer-device-context { display: inline-flex; align-items: center; flex: none; gap: 5px; }
+.simple-shell .composer.composer-body {
+  position: relative;
+  min-height: 86px;
+  padding: 8px 10px 6px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 20px;
+  background: var(--app-color-background-control);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 3%), 0 8px 24px -12px rgb(0 0 0 / 14%), inset 0 1px 0 light-dark(#fff, rgb(255 255 255 / 4%));
+}
+.simple-shell .composer.composer-body:focus-within {
+  border-color: var(--color-border);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 4%), 0 8px 24px -12px rgb(0 0 0 / 16%);
+}
+.simple-shell .composer-body textarea { font-size: 14px; line-height: 21px; padding: 3px 2px; min-height: 32px; height: 32px; }
+.simple-shell .composer-body .send-button { width: 30px; height: 30px; }
+.simple-shell .composer-utility { min-height: 30px; padding: 0 5px; font-size: 12px; }
+.simple-shell .composer-model-label { max-width: min(55%, 280px); }
+.simple-shell .empty-conversation { gap: 0; }
+.simple-shell .empty-conversation h2 { font-size: 24px; line-height: 32px; font-weight: 500; letter-spacing: -.4px; }
+/* Original FORGE monogram: a forged hexagonal outline and an F, no third-party mark. */
+.simple-shell .empty-conversation::before {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 20px;
+  background: var(--color-text-tertiary);
+  opacity: .6;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M24 4 41 14v20L24 44 7 34V14Z M18 33V15h14 M18 24h11'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (max-width: 600px) {
+  .simple-shell .home-state > .composer-wrap, .simple-shell .composer-wrap { padding-inline: 12px; padding-bottom: 12px; }
+  .simple-shell .home-state .timeline { padding-inline: 16px; padding-top: clamp(40px, 14vh, 100px); }
+  .simple-shell .empty-conversation h2 { font-size: 22px; line-height: 30px; }
+  .simple-shell .composer-workspace-context { gap: 12px; }
+}
+@media (max-height: 480px) {
+  .simple-shell .home-state .timeline { padding-top: 12px; }
+  .simple-shell .empty-conversation::before { width: 28px; height: 28px; margin-bottom: 8px; }
+}
+@media (forced-colors: active) {
+  .simple-shell .composer.composer-body, .simple-shell .composer-workspace-context { border-color: CanvasText; box-shadow: none; }
+  .simple-shell .empty-conversation::before { background: CanvasText; }
+}

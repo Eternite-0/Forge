@@ -12,7 +12,7 @@ async (page) => {
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
     let json = { items: [], has_more: false };
     if (pathname === '/health') json = { session: 'simple-shell' };
-    else if (pathname === '/api/settings') json = { revision: 1, config: {}, workspace_root: '/fixture/FORGE', provider_configured: true };
+    else if (pathname === '/api/settings') json = { revision: 1, config: {}, workspace_root: '/fixture/FORGE', provider_configured: true, router_model_id: 'fixture-model' };
     else if (pathname === '/api/restore-status') json = { fenced: false };
     else if (pathname === '/api/conversation') json = { messages, router: {}, has_more: false };
     else if (pathname === '/api/quests') json = { items: [quest], has_more: false };
@@ -23,10 +23,10 @@ async (page) => {
       const posted = request.postDataJSON();
       posts.push(posted);
       const user_message = { id: 'user-fixture', role: 'user', content: posted.content, created_at: time, metadata: { request_id: posted.request_id } };
-      const assistant_message = { id: 'assistant-fixture', role: 'assistant', content: '整理好了。', created_at: '2026-11-16T08:00:01Z' };
+      const assistant_message = { id: 'assistant-fixture', role: 'assistant', content: '整理好了。', created_at: '2026-11-16T08:00:02Z' };
       messages.push(user_message, assistant_message);
       quest.status = 'completed';
-      events.push({ kind: 'tool_receipt', event_id: receiptId, seq: 1, created_at: '2026-11-16T08:00:02Z', quest_id: id,
+      events.push({ kind: 'tool_receipt', event_id: receiptId, seq: 1, created_at: '2026-11-16T08:00:01Z', quest_id: id,
         status: 'succeeded', execution_mode: 'live', detail: { tool: 'file_write', path: 'reports/summary.md' } });
       json = { user_message, assistant_message };
     }
@@ -50,8 +50,9 @@ async (page) => {
   check(await page.evaluate(() => {
     const greeting = document.querySelector('.empty-conversation').getBoundingClientRect();
     const editor = document.querySelector('.composer').getBoundingClientRect();
-    return editor.top > greeting.top && editor.top - greeting.bottom < 80;
-  }), 'the first message box is grouped with the welcome title');
+    return editor.top > innerHeight * .72 && greeting.top < innerHeight * .56 && editor.top > greeting.bottom;
+  }), 'the welcome and low composer occupy distinct reference bands');
+  check(await page.locator('.composer-workspace-context').isVisible(), 'the welcome composer has a real workspace context strip');
   const ready = page.waitForResponse(response => new URL(response.url()).pathname === '/api/quests');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
@@ -90,9 +91,13 @@ async (page) => {
   await composer.press('Enter');
   await page.getByText('整理好了。', { exact: true }).waitFor();
   check(posts.length === 1 && posts[0].content === '替我整理项目资料' && await composer.inputValue() === '', 'one send shows the response and clears draft');
-  const result = progress.getByRole('button', { name: /查看最近文件记录/ });
-  await result.waitFor();
-  check(await progress.locator('.task-progress-row').count() === 1 && (await result.innerText()).includes('reports/summary.md'), 'one task updates in place and shows its recorded file');
+  await progress.getByText('已完成', { exact: true }).waitFor();
+  const turnFiles = page.getByRole('region', { name: '记录的文件变更' });
+  await turnFiles.getByRole('button', { name: '查看变更', exact: true }).waitFor();
+  check(await progress.locator('.task-progress-row').count() === 1 && await progress.getByRole('button', { name: /查看最近文件记录/ }).count() === 0 && (await turnFiles.innerText()).includes('reports/summary.md'), 'one task updates in place without duplicating the exact file receipt action');
+  const threadHeader = page.locator('.conversation-topbar');
+  check(await threadHeader.getByRole('heading', { name: '替我整理项目资料' }).isVisible() && await threadHeader.getByRole('button', { name: '改动 1' }).isVisible(), 'working header uses actual request title and change count');
+  check(await turnFiles.evaluate(element => Math.abs(element.getBoundingClientRect().width - document.querySelector('.composer').getBoundingClientRect().width) < 12 && element.getBoundingClientRect().width >= 900), 'working file rows and composer align across the broad reading area');
   await page.setViewportSize({ width: 390, height: 650 });
   await rail.waitFor({ state: 'hidden' });
   await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
