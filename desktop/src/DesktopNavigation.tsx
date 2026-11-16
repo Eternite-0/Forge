@@ -6,14 +6,14 @@ import type { Connection } from "./api";
 export type PrimaryView = "chat" | "quests" | "memory";
 export interface DesktopNavigationProps {
   compact: boolean; activeView: PrimaryView | null; connected: boolean;
-  workspaceId: string; workspaceRoot: string; connection?: Connection | null;
+  workspaceId: string; workspaceRoot: string; conversationTitle?: string; connection?: Connection | null;
   onNavigate: (view: PrimaryView) => void; onSettings: () => void;
   onActivity?: () => void; onClose?: () => void; pendingCount?: number; children?: ReactNode;
 }
 function NavigationIcon({ view }: { view: PrimaryView }) {
   return <ShellIcon className="nav-icon" name={view === "chat" ? "compose" : view === "quests" ? "clock" : "memory"} />;
 }
-export default function DesktopNavigation({ compact, activeView, connected, workspaceId, workspaceRoot, connection, onNavigate, onSettings, onActivity, onClose, pendingCount = 0, children }: DesktopNavigationProps) {
+export default function DesktopNavigation({ compact, activeView, connected, workspaceId, workspaceRoot, conversationTitle, connection, onNavigate, onSettings, onActivity, onClose, pendingCount = 0, children }: DesktopNavigationProps) {
   const first = useRef<HTMLButtonElement>(null);
   const sidebar = useRef<HTMLElement>(null);
   const closeRef = useRef(onClose);
@@ -47,7 +47,7 @@ export default function DesktopNavigation({ compact, activeView, connected, work
       {onActivity && <button type="button" className="reference-rail-button" aria-label="运行活动" title="运行活动" onClick={onActivity}><ShellIcon name="ellipsis" /></button>}
       <button type="button" className="reference-rail-button reference-rail-settings" aria-label="设置" title="设置 (Ctrl+,)" onClick={onSettings}><ShellIcon name="settings" /></button>
     </nav>
-    <WorkspaceSidebar connected={connected} workspaceId={workspaceId} workspaceRoot={workspaceRoot} connection={connection} active={!compact && activeView !== null} navigation={navigation}
+    <WorkspaceSidebar connected={connected} workspaceId={workspaceId} workspaceRoot={workspaceRoot} connection={connection} conversationTitle={conversationTitle} conversationActive={activeView === "chat"} onOpenConversation={() => navigate("chat")} active={!compact && activeView !== null} navigation={navigation}
       footer={<div className="codex-connection-state"><span className={`status-dot${connected ? " on" : ""}`} /><span>{connected ? "Core 已连接" : "Core 未连接"}</span></div>}
     >{children}</WorkspaceSidebar>
   </aside></>;

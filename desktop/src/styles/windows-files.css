@@ -13,7 +13,7 @@
 .windows-reference .preview-tabs-bar { height: 52px; min-height: 52px; padding: 6px 8px; gap: 6px; }
 .windows-reference .preview-open-file-leading { display: inline-flex; align-items: center; gap: 7px; flex: none; height: 32px; padding-inline: 9px; border: 0; border-radius: 8px; background: transparent; color: var(--color-text-secondary); font-size: 13px; white-space: nowrap; }
 .windows-reference .preview-open-file-leading:hover { background: var(--color-background-secondary-ghost-hover); color: var(--color-text); }
-.windows-reference .preview-tabs { justify-content: safe flex-end; }
+.windows-reference .preview-tabs { justify-content: flex-start; }
 .windows-reference .preview-tab { height: 32px; max-width: 240px; border-radius: 8px; }
 .windows-reference .preview-tab.active { background: light-dark(#f1f1f1, #242424); border-color: var(--color-border); box-shadow: none; }
 .windows-reference .preview-tab > [role="tab"] { font-size: 13px; gap: 6px; padding-left: 10px; }
@@ -47,6 +47,12 @@
 .windows-reference .file-preview-workspace .source-lines { padding-top: 0; font-size: 12px; line-height: 22px; }
 .windows-reference .file-preview-workspace .source-line { min-height: 22px; }
 .windows-reference .file-preview-workspace .source-line-number { width: 36px; flex-basis: 36px; padding-inline: 4px 8px; }
+.windows-reference .file-preview-workspace .code-preview-diff .diff-added {
+  background: light-dark(color-mix(in lab, var(--app-color-background-surface) var(--diff-content-mix), var(--diff-added)), #1a2b1b);
+}
+.windows-reference .file-preview-workspace .code-preview-diff .diff-added > .source-line-number {
+  background: light-dark(color-mix(in lab, var(--app-color-background-surface) var(--diff-gutter-mix), var(--diff-added)), #0f1c10);
+}
 .windows-reference .artifact-history-preview { container: receipt-preview / inline-size; }
 .windows-reference .artifact-history-heading { min-height: 44px; padding: 6px 10px; gap: 6px; }
 .windows-reference .artifact-history-heading strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -55,9 +61,13 @@
 .windows-reference .artifact-history-actions .icon-button { width: 26px; height: 26px; flex: none; }
 .windows-reference .artifact-history-record { padding: 8px 12px; }
 .windows-reference .artifact-history-summary { gap: 6px; }
+@container file-preview (min-width: 561px) {
+  .windows-reference .preview-tabs { padding-inline-start: clamp(0px, calc(60cqw - 334px), 146px); }
+  .windows-reference .preview-tab { min-inline-size: 204px; }
+  .windows-reference .preview-tab > [role="tab"] { flex: 1; }
+}
 @container file-preview (max-width: 560px) {
   .windows-reference .preview-open-file-leading { display: none; }
-  .windows-reference .preview-tabs { justify-content: flex-start; }
 }
 @container file-preview (max-width: 440px) {
   .windows-reference .preview-toolbar { flex-wrap: wrap; height: auto; min-height: 48px; gap: 4px; }

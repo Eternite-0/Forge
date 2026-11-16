@@ -57,8 +57,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
     const detail = asRecord(event.detail);
     return event.kind === "tool_receipt" && event.status === "succeeded" && event.execution_mode === "live" && detail.tool === "file_read" && typeof detail.path === "string" ? [detail.path] : [];
   }))];
-  const latestUserText = [...messages].reverse().find(message => message.role === "user")?.content;
-  const threadTitle = latestUserText?.replace(/\s+/g, " ").trim().slice(0, 180) || (home ? "FORGE" : "与 FORGE 对话");
+  const threadTitle = workspace.conversationTitle || (home ? "FORGE" : "与 FORGE 对话");
   return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
       <ConversationToolbar home={home} status={routerStatus} title={threadTitle} changeCount={conversationFiles.length}
@@ -86,6 +85,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         onKeyDown={(event) => { if (shouldSubmitOnEnter({ key: event.key, shiftKey: event.shiftKey, isComposing: event.nativeEvent.isComposing, keyCode: event.nativeEvent.keyCode })) { event.preventDefault(); void send(); } }}
         onSend={() => void send()} disabled={!connection || sending || writesBlocked || !draft.trim()} sending={sending}
         model={workspace.routerModel} onFiles={() => openPreview("files")} onConfigure={() => selectSetting("environment")}
+        onApprovals={() => openTaskView("approvals", "")} approvalCount={pendingApprovals.length}
         home={home} workspaceName={currentWorkspaceName} native={native} connected={!!connection}
         error={outgoing.some(item => item.status === "failed") ? "" : sendError} requestId={pending?.requestId} />
     </main>

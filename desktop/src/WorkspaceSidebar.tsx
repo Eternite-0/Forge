@@ -10,6 +10,9 @@ export interface WorkspaceSidebarProps {
   workspaceId: string;
   workspaceRoot: string;
   active: boolean;
+  conversationTitle?: string;
+  conversationActive?: boolean;
+  onOpenConversation?: () => void;
   navigation: ReactNode;
   children?: ReactNode;
   topNavigation?: ReactNode;
@@ -22,7 +25,7 @@ function FolderIcon() {
 }
 
 export default function WorkspaceSidebar({
-  connected, workspaceId, workspaceRoot, active, navigation, children, topNavigation, footer, connection,
+  connected, workspaceId, workspaceRoot, active, navigation, children, topNavigation, footer, connection, conversationTitle, conversationActive, onOpenConversation,
 }: WorkspaceSidebarProps) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -48,6 +51,7 @@ export default function WorkspaceSidebar({
   const workspaceProject = currentWorkspaceProject(connected ? workspaceId : "", connected ? workspaceRoot : "");
   const workspacePath = connected ? workspaceProject.path || workspaceId : "";
   const workspaceName = workspaceProject.name;
+  const ongoingTitle = conversationTitle?.replace(/\s+/g, " ").trim();
   const query = projectQuery.trim().toLocaleLowerCase();
   const matchesProject = (name: string, path: string) => !query || `${name} ${path}`.toLocaleLowerCase().includes(query);
   const discoveredProjects = discovery.key === identity ? discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase() && matchesProject(item.name, item.root)) : [];
@@ -161,7 +165,7 @@ export default function WorkspaceSidebar({
       {topNavigation && <div className="sidebar-tools"><h2 className="sidebar-section-label">工作记录</h2>{topNavigation}</div>}
       {connected && <section className="sidebar-project-summary" aria-label="项目上下文" data-project-key={workspaceProject.key} data-project-source="workspace">
         <SidebarGroup label="项目">
-        {currentMatches && <details className="codex-project-record current-project"><summary title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></summary><div className="codex-project-path">{workspacePath || "路径暂不可用"}<p>当前工作空间；在同一条对话中继续。</p></div></details>}
+        {currentMatches && <details className={`codex-project-record current-project${ongoingTitle ? " has-conversation" : ""}`} open={!!ongoingTitle}><summary title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></summary><div className="codex-project-path">{workspacePath || "路径暂不可用"}<p>当前工作空间；在同一条对话中继续。</p></div>{ongoingTitle && onOpenConversation && <button type="button" className="reference-project-conversation" title={ongoingTitle} aria-current={conversationActive ? "page" : undefined} onClick={onOpenConversation}><span>{ongoingTitle}</span></button>}</details>}
         {discoveredProjects.map((item) => <details className="codex-project-record" key={item.id}><summary title={item.root}><FolderIcon /><span>{item.name}</span><small>已识别</small></summary><div className="codex-project-path">{item.root}<p>只读项目记录，不切换工作空间或授予目录访问权限。</p></div></details>)}
         {query && !currentMatches && !discoveredProjects.length && <p className="sidebar-empty" role="status">没有匹配的已加载项目</p>}
         {discovery.key === identity && discovery.error && <p className="sidebar-empty" title={discovery.error}>项目发现暂不可用</p>}

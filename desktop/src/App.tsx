@@ -69,7 +69,7 @@ export default function App() {
       if (narrow) setSidebarOverlay(value => !value); else workspace.setSidebarCollapsed(value => !value);
     }} connected={!!connection} onSettings={openSettings} onShortcuts={() => navigate("settings:shortcuts")} onFiles={openFiles} onRefresh={() => void workspace.refreshCurrentView()} />
     <DesktopNavigation compact={compact || taskPageOpen} activeView={activeView} connected={!!connection} workspaceId={connection?.workspace_id || ""}
-      workspaceRoot={text(workspace.coreInfo.workspace_root, "")} connection={connection} onNavigate={navigate} onSettings={openSettings}
+      workspaceRoot={text(workspace.coreInfo.workspace_root, "")} conversationTitle={workspace.conversationTitle} connection={connection} onNavigate={navigate} onSettings={openSettings}
       onActivity={() => navigate("activity")} pendingCount={workspace.pendingApprovals.length}
       onClose={narrow ? () => { closeSidebarOverlay(); requestAnimationFrame(() => shell.current?.querySelector<HTMLButtonElement>('.sidebar-toggle[aria-expanded]')?.focus()); } : undefined} />
     <ConversationWorkspace workspace={workspace} connectionSetup={connectionSetup} />

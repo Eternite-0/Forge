@@ -47,12 +47,14 @@ export default function useWorkspaceController() {
   const compactNavigation = sidebarCollapsed || previewOpen && previewExpanded;
   const hasTaskUpdates = !!connection && (workspace.pendingApprovals.length > 0 || taskProgress(workspace.quests, timelineEvents, messages).length > 0);
   const home = !messages.length && !timelineEvents.length && !outgoing.length && !workerActivity.items.length && !hasTaskUpdates;
+  const lastRequest = [...messages].reverse().find(message => message.role === "user");
+  const conversationTitle = lastRequest?.content?.replace(/\s+/g, " ").trim().slice(0, 180) || undefined;
   const conversationFiles = [...new Set(timelineEvents.flatMap((event) => {
     const detail = event.detail && typeof event.detail === "object" ? event.detail as Row : {};
     if (event.kind !== "tool_receipt" || event.status !== "succeeded" || event.execution_mode !== "live" || typeof detail.exit_code === "number" && detail.exit_code !== 0 || !["file_write", "file_revise"].includes(text(detail.tool, "")) || typeof detail.path !== "string") return [];
     try { return [relativeFilePath(detail.path)]; } catch { return []; }
   }))];
-  return { ...workspace, plan, panelItems, title, taskView, taskDetailRequest, openTaskView, openConversation, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, compactNavigation, home, conversationFiles };
+  return { ...workspace, plan, panelItems, title, taskView, taskDetailRequest, openTaskView, openConversation, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, compactNavigation, home, conversationTitle, conversationFiles };
 }
 export type WorkspaceController = ReturnType<typeof useWorkspaceController>;
 

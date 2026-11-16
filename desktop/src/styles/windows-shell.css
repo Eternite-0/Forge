@@ -98,3 +98,11 @@
   .windows-reference .reference-rail-button.active { outline: 1px solid Highlight; outline-offset: -2px; }
   .windows-reference .codex-project-record.current-project > summary { outline: 1px solid Highlight; outline-offset: -2px; }
 }
+
+/* One actual conversation under its current project, never fabricated history. */
+.windows-reference .current-project.has-conversation > summary { background: transparent; }
+.windows-reference .current-project.has-conversation > .codex-project-path { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.windows-reference .reference-project-conversation { display: flex; align-items: center; width: 100%; min-width: 0; min-height: 32px; padding: 5px 14px 5px 31px; border: 0; border-radius: 11px; background: transparent; color: var(--color-text-secondary); text-align: start; font: inherit; font-size: 14px; cursor: pointer; }
+.windows-reference .reference-project-conversation > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.windows-reference .reference-project-conversation:is(:hover, [aria-current="page"]) { background: light-dark(#e4e8eb, #252a2d); color: var(--color-text); }
+@media (forced-colors: active) { .windows-reference .reference-project-conversation[aria-current="page"] { outline: 1px solid Highlight; outline-offset: -1px; } }

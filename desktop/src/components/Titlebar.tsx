@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 
 export interface TitlebarProps {
   route: string; onNavigate: (route: string) => void;
@@ -70,6 +70,21 @@ export default function Titlebar(props: TitlebarProps) {
     视图: [{ label: props.sidebarCollapsed ? "显示侧边栏" : "隐藏侧边栏", action: props.onToggleSidebar }, { label: "运行活动", action: () => props.onNavigate("activity") }, { label: "记忆", action: () => props.onNavigate("memory") }, { label: "刷新当前视图", action: props.onRefresh }],
     帮助: [{ label: "键盘快捷键", action: props.onShortcuts }, { label: "关于 FORGE", action: () => setAbout(true) }],
   };
+  const moveMenu = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229 || event.altKey || event.ctrlKey || event.metaKey || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    if (!(event.target instanceof HTMLElement)) return;
+    const buttons = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>(".application-menu > [data-app-menu]"));
+    const source = event.target.closest(".application-menu")?.querySelector<HTMLButtonElement>("[data-app-menu]");
+    const index = source ? buttons.indexOf(source) : -1;
+    if (index < 0 || !buttons.length) return;
+    const next = buttons[(index + (event.key === "ArrowRight" ? 1 : -1) + buttons.length) % buttons.length];
+    event.preventDefault();
+    next.focus();
+    if (!menu || !next.dataset.appMenu) return;
+    menuTrigger.current = next;
+    setMenu(next.dataset.appMenu);
+    requestAnimationFrame(() => next.parentElement?.querySelector<HTMLButtonElement>(".application-menu-panel button:not(:disabled)")?.focus());
+  };
   return <>
     <header className="desktop-chrome titlebar" ref={bar} data-tauri-drag-region>
       <div className="titlebar-navigation">
@@ -77,9 +92,9 @@ export default function Titlebar(props: TitlebarProps) {
         <button type="button" className="sidebar-toggle" aria-label="前进" title="前进" disabled={history.index === history.routes.length - 1} onClick={() => move(1)}><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m9 5 5 5-5 5M4 10h10" /></svg></button>
         <button type="button" className="sidebar-toggle" aria-label={props.sidebarCollapsed ? "展开工作空间侧栏" : "收起工作空间侧栏"} aria-expanded={!props.sidebarCollapsed} title={props.sidebarCollapsed ? "显示侧边栏" : "隐藏侧边栏"} onClick={props.onToggleSidebar}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
       </div>
-      <div role="menubar" aria-label="应用程序菜单" className="application-menubar">
+      <div role="menubar" aria-label="应用程序菜单" className="application-menubar" onKeyDown={moveMenu}>
         {Object.entries(commands).map(([name, entries]) => <div className="application-menu" key={name}>
-          <button type="button" role="menuitem" aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu(name); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>{name}</button>
+          <button type="button" role="menuitem" data-app-menu={name} aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu(name); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>{name}</button>
           {menu === name && <div className="application-menu-panel" role="menu" aria-label={`${name}菜单`}>{entries.map((entry) => <button type="button" role="menuitem" key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>}
         </div>)}
       </div>

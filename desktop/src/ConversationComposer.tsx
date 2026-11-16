@@ -1,7 +1,7 @@
 import ShellIcon from "./components/ShellIcon";
 import type { KeyboardEvent, RefObject } from "react";
 
-export default function ConversationComposer({ inputRef, value, onChange, onKeyDown, onSend, disabled, sending, error, requestId, model, onFiles, onConfigure, home, workspaceName, native, connected }: {
+export default function ConversationComposer({ inputRef, value, onChange, onKeyDown, onSend, disabled, sending, error, requestId, model, onFiles, onConfigure, onApprovals, approvalCount, home, workspaceName, native, connected }: {
   inputRef: RefObject<HTMLTextAreaElement>;
   value: string;
   onChange: (value: string) => void;
@@ -14,11 +14,14 @@ export default function ConversationComposer({ inputRef, value, onChange, onKeyD
   model: string;
   onFiles: () => void;
   onConfigure: () => void;
+  onApprovals: () => void;
+  approvalCount: number;
   home: boolean;
   workspaceName: string;
   native: boolean;
   connected: boolean;
 }) {
+  const pendingApprovals = Math.max(0, Math.floor(Number.isFinite(approvalCount) ? approvalCount : 0));
   return <footer className="composer-wrap composer-root">
     <div className="composer-stack">
       {error && <div className="send-error">
@@ -38,6 +41,12 @@ export default function ConversationComposer({ inputRef, value, onChange, onKeyD
         <div className="composer-utilities">
           <button type="button" className="composer-utility" onClick={onFiles} aria-label="从输入栏打开工作空间文件" title="打开工作空间文件">
             <ShellIcon name="plus" size={17} /><span>文件</span>
+          </button>
+          <button type="button" className="composer-utility composer-approvals" onClick={onApprovals} disabled={!connected}
+            aria-label={pendingApprovals > 0 ? `查看审批，${pendingApprovals} 项待确认` : "查看审批"}
+            title={connected ? "查看需要你确认的操作，不会修改权限" : "连接后查看审批"}>
+            <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="m10 2 6 2.5v5c0 3.7-2.8 6.5-6 8.5-3.2-2-6-4.8-6-8.5v-5L10 2Z"/><path d="M10 6v4M10 13h.01"/></svg>
+            <span>审批</span>{pendingApprovals > 0 && <span className="composer-approval-count" aria-hidden="true">{pendingApprovals > 99 ? "99+" : pendingApprovals}</span>}
           </button>
           <button type="button" className="composer-utility composer-model-label" onClick={onConfigure} aria-label="打开对话模型配置" title={`对话模型：${model}`}>
             <span>{model}</span><ShellIcon name="chevronDown" size={13} />

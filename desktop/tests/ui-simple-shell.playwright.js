@@ -1,6 +1,6 @@
 // Desktop shell and compact task flow. All backend responses here are synthetic.
 async (page, { outputDir }) => {
-  const checks = [], posts = [], messages = [], events = [], readReceipts = [], unexpected = [];
+  const checks = [], posts = [], messages = [], events = [], readReceipts = [], unexpected = [], mutations = [];
   const capture = (name) => process.env.FORGE_CAPTURE_UI === '1' ? page.screenshot({ path: `${outputDir}/${name}.png`, animations: 'disabled' }) : Promise.resolve();
   const check = (ok, label) => { if (!ok) throw new Error(label); checks.push(label); };
   const id = '1234567890abcdef1234567890abcdef';
@@ -13,6 +13,7 @@ async (page, { outputDir }) => {
     const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' };
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
     const method = request.method();
+    if (method !== 'GET') mutations.push(`${method} ${pathname}`);
     if (method !== (pathname === '/api/conversation/message' ? 'POST' : 'GET')) {
       unexpected.push(`${method} ${pathname}`);
       return route.fulfill({ status: 405, headers, json: { detail: 'Unexpected fixture mutation' } });
@@ -70,7 +71,8 @@ async (page, { outputDir }) => {
   await page.getByRole('menu', { name: '文件菜单' }).getByRole('menuitem', { name: '打开工作空间文件' }).waitFor();
   await page.keyboard.press('Escape');
   check(await composer.count() === 1 && await send.isDisabled(), 'single composer cannot send empty messages');
-  check(await page.locator('.composer button').count() === 3, 'composer offers files, model settings and send');
+  check(await page.getByRole('button', { name: '查看审批', exact: true }).isDisabled(), 'disconnected composer cannot present approval access as available');
+  check(await page.locator('.composer button').count() === 4, 'composer offers files, genuine approvals, model settings and send');
   check(await page.evaluate(() => {
     const greeting = document.querySelector('.empty-conversation').getBoundingClientRect();
     const editor = document.querySelector('.composer').getBoundingClientRect();
@@ -91,7 +93,22 @@ async (page, { outputDir }) => {
   await page.locator('.simple-connection').waitFor({ state: 'hidden' });
   await page.getByRole('button', { name: '打开对话模型配置', exact: true }).filter({ hasText: 'fixture-model' }).waitFor();
   await page.locator('.empty-conversation').waitFor();
+  check(await rail.locator('.reference-project-conversation').count() === 0, 'empty workspace does not fabricate a recent conversation row');
   await capture('windows-home-connected-reference');
+  await composer.fill('审批导航应保留的草稿');
+  const writesBeforeApprovalNavigation = mutations.length;
+  const approvalEntry = page.getByRole('button', { name: '查看审批', exact: true });
+  check(await approvalEntry.isEnabled(), 'connected composer exposes a real approval-review action');
+  await approvalEntry.click();
+  const approvalPanel = page.locator('.task-inspector');
+  await approvalPanel.getByRole('heading', { name: '审批中心', exact: true }).waitFor();
+  check(await approvalPanel.getByText('选择任务后查看', { exact: true }).isVisible(), 'approval navigation shows genuine empty scope rather than inventing granted access');
+  await approvalPanel.getByRole('button', { name: '关闭任务详情', exact: true }).click();
+  await approvalPanel.waitFor({ state: 'hidden' });
+  check(await composer.inputValue() === '审批导航应保留的草稿' && mutations.length === writesBeforeApprovalNavigation,
+    'opening and closing approvals preserves the draft and issues no write or permission mutation');
+  await composer.fill('');
+
   showQuest = true;
   await page.setViewportSize(initialViewport);
   const progress = page.getByRole('region', { name: '当前任务进展' });
@@ -135,6 +152,18 @@ async (page, { outputDir }) => {
   await composer.press('Enter');
   await page.getByText('整理好了。', { exact: true }).waitFor();
   check(posts.length === 1 && posts[0].content === '替我整理项目资料' && await composer.inputValue() === '', 'one send shows the response and clears draft');
+  const currentThread = rail.locator('.reference-project-conversation');
+  await currentThread.waitFor();
+  check(await currentThread.count() === 1 && await currentThread.getAttribute('aria-current') === 'page' &&
+    await currentThread.innerText() === '替我整理项目资料', 'one genuine saved request creates the current project conversation row');
+  await composer.fill('返回当前对话的草稿');
+  const writesBeforeThreadNavigation = mutations.length;
+  await currentThread.focus();
+  await currentThread.press('Enter');
+  check(await composer.inputValue() === '返回当前对话的草稿' && mutations.length === writesBeforeThreadNavigation,
+    'keyboard activation returns to the same conversation without creating a thread or losing its draft');
+  await composer.fill('');
+
   await progress.getByText('已完成', { exact: true }).waitFor();
   const turnFiles = page.getByRole('region', { name: '记录的文件变更' });
   await turnFiles.getByRole('button', { name: '查看变更', exact: true }).waitFor();
@@ -195,6 +224,14 @@ async (page, { outputDir }) => {
   await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
   await rail.waitFor();
   check(await page.locator('.chat-workspace').evaluate(element => element.hasAttribute('inert')), 'narrow navigation prevents keyboard access behind the overlay');
+  await currentThread.focus();
+  await currentThread.press('Enter');
+  await rail.waitFor({ state: 'hidden' });
+  check(await page.locator('.chat-workspace').evaluate(element => !element.hasAttribute('inert')) && mutations.length === 1,
+    'mobile keyboard thread navigation dismisses the overlay without an unintended write');
+  await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
+  await rail.waitFor();
+
   await page.keyboard.press('Escape');
   await rail.waitFor({ state: 'hidden' });
   await composer.fill('窄屏草稿');
@@ -273,7 +310,8 @@ async (page, { outputDir }) => {
   await page.emulateMedia({ forcedColors: 'active', colorScheme: 'light', reducedMotion: 'reduce' });
   await composer.fill('');
   check(await send.evaluate(element => element.disabled && getComputedStyle(element).opacity === '1' && getComputedStyle(element).borderTopStyle === 'solid'), 'forced colors keep disabled Send legible without enabling it');
-  check(await rail.locator('[aria-current="page"]').evaluate(element => getComputedStyle(element).outlineStyle === 'solid'), 'forced colors mark the active navigation even without the painted background');
+  check(await rail.locator('.reference-icon-rail [aria-current="page"]').evaluate(element => getComputedStyle(element).outlineStyle === 'solid'), 'forced colors mark the active navigation even without the painted background');
+  check(await currentThread.evaluate(element => getComputedStyle(element).outlineStyle === 'solid'), 'forced colors retain a visible current conversation marker');
   await capture('round4-forced-colors');
   await turnFiles.getByRole('button', { name: '查看变更', exact: true }).click();
   await preview.locator('.artifact-history-summary').waitFor();
