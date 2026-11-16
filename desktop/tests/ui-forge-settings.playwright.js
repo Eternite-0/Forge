@@ -48,7 +48,7 @@ async (page, { outputDir }) => {
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
   await page.emulateMedia({ colorScheme: 'light' });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('Settings'));
@@ -115,17 +115,39 @@ async (page, { outputDir }) => {
   await page.screenshot({ path: `${outputDir}/forge-triggers-light.png`, fullPage: true });
   await page.emulateMedia({ colorScheme: 'dark' });
   const dark = await page.locator('.settings-content').evaluate((element) => getComputedStyle(element).backgroundColor);
-  check(light !== dark && dark === 'rgb(33, 33, 33)', 'trigger settings follow the system theme without a JS theme toggle');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
-  check(await page.locator('.settings-content').evaluate((element) => element.clientWidth >= 340), '390px trigger settings retain at least 340px of usable content width');
+  check(light !== dark && dark === 'rgb(17, 17, 17)', 'trigger settings follow the system theme without a JS theme toggle');
+  const settleFocus = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const focusedItemVisible = (label) => nav.getByRole('button', { name: label, exact: true }).evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    const strip = element.closest('.settings-nav-sections').getBoundingClientRect();
+    return document.activeElement === element && bounds.left >= Math.max(0, strip.left) - 1 &&
+      bounds.right <= Math.min(innerWidth, strip.right) + 1 && bounds.top >= strip.top - 1 && bounds.bottom <= strip.bottom + 1;
+  });
+  const writesBeforeFocus = mutations.length;
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.waitForFunction(() => document.querySelector('.settings-content').clientWidth >= innerWidth - 50);
+    check(await page.locator('.settings-content').evaluate(element => element.clientWidth >= innerWidth - 50), `${width}px settings retain usable content width`);
+    await nav.getByRole('searchbox', { name: '搜索设置', exact: true }).focus();
+    for (let index = 0; index < 7; index += 1) await page.keyboard.press('Tab');
+    await settleFocus();
+    check(await focusedItemVisible('触发器'), `${width}px Tab reveals the entire focused settings entry within its scroll strip`);
+    await page.keyboard.press('Shift+Tab');
+    await settleFocus();
+    check(await focusedItemVisible('记忆'), `${width}px reverse Tab preserves order and reveals the previous entry`);
+    await page.keyboard.press('Tab');
+    await settleFocus();
+    check(await focusedItemVisible('触发器'), `${width}px forward Tab returns to the same genuine settings entry`);
+    check(await page.locator('.settings-content').evaluate(element => element.scrollWidth <= element.clientWidth) &&
+      await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px trigger content and document do not overflow horizontally`);
+    await page.screenshot({ path: `${outputDir}/forge-triggers-${width}-dark.png`, fullPage: true });
+  }
+  check(mutations.length === writesBeforeFocus, 'keyboard focus navigation does not change settings or submit a request');
+  await nav.getByRole('button', { name: '触发器', exact: true }).focus();
   await nav.getByRole('searchbox', { name: '搜索设置', exact: true }).focus();
-  for (let index = 0; index < 7; index += 1) await page.keyboard.press('Tab');
-  check(await nav.getByRole('button', { name: '触发器', exact: true }).evaluate((element) => document.activeElement === element && element.getBoundingClientRect().right <= innerWidth), '390px horizontal settings navigation remains keyboard reachable and scrolls focused entries into view');
-  await page.screenshot({ path: `${outputDir}/forge-triggers-narrow-dark.png`, fullPage: true });
-  check(await page.locator('.settings-content').evaluate((element) => element.scrollWidth <= element.clientWidth), '390px trigger settings have no horizontal content overflow');
+  await settleFocus();
+  check(await nav.getByRole('searchbox', { name: '搜索设置', exact: true }).evaluate(element => document.activeElement === element), 'deferred reveal never steals a later deliberate focus');
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.getByRole('button', { name: '展开工作空间侧栏', exact: true }).click();
   await page.emulateMedia({ colorScheme: 'light' });
   await nav.getByRole('button', { name: '模型库', exact: true }).click();
   const intelligence = page.locator('.model-intelligence');
@@ -158,11 +180,11 @@ async (page, { outputDir }) => {
   await page.screenshot({ path: `${outputDir}/forge-models-light.png`, fullPage: true });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('.settings-content').clientWidth >= innerWidth - 50);
   check(await page.locator('.settings-content').evaluate((element) => element.clientWidth >= 340), '390px model settings retain at least 340px of usable content width');
   await page.screenshot({ path: `${outputDir}/forge-models-narrow-dark.png`, fullPage: true });
   check(await page.locator('.settings-content').evaluate((element) => element.scrollWidth <= element.clientWidth), '390px model measurements and controls have no horizontal content overflow');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '390px settings preserve the overall shell bounds');
   check(missing.length === 0, `all requested endpoints have synthetic fixtures: ${missing.join(', ')}`);
-  return { status: 'passed', fixture: 'synthetic HTTP only, no Provider', checks, calls: [...new Set(calls)], mutations: mutations.map((entry) => entry.path), screenshots: ['forge-triggers-light.png', 'forge-triggers-narrow-dark.png', 'forge-models-light.png', 'forge-models-narrow-dark.png'] };
+  return { status: 'passed', fixture: 'synthetic HTTP only, no Provider', checks, calls: [...new Set(calls)], mutations: mutations.map((entry) => entry.path), screenshots: ['forge-triggers-light.png', 'forge-triggers-390-dark.png', 'forge-triggers-320-dark.png', 'forge-models-light.png', 'forge-models-narrow-dark.png'] };
 }

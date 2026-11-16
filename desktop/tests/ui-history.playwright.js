@@ -56,11 +56,11 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(globalThis.process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('aa'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.locator('[data-scroll-key="event:tool_receipt:receipt_one"]').waitFor({ state: 'attached' });
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await page.getByLabel('选择预览目录', { exact: true }).evaluate((input) => {
     const transfer = new DataTransfer(), file = new File(['CURRENT FILE CONTENT'], 'same.ts', { type: 'text/plain' });
     Object.defineProperty(file, 'webkitRelativePath', { value: 'Project/src/same.ts' });
@@ -94,7 +94,7 @@ async (page, { outputDir }) => {
   check(await originalSource.evaluate((element) => element.isConnected && Math.abs(element.scrollTop - 8000) <= 1), 'refresh retains the original diff DOM and reading position');
   const beforeToggleReads = readCount('receipt_one');
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   check(await originalSource.evaluate((element) => element.isConnected && Math.abs(element.scrollTop - 8000) <= 1), 'close and reopen retain the mounted historical source position');
   check(readCount('receipt_one') === beforeToggleReads, 'reopening the same history panel does not refetch or reinterpret the receipt');
   await preview.getByRole('button', { name: '查看当前文件', exact: true }).click();

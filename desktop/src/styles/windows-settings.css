@@ -77,6 +77,10 @@
   .windows-reference .settings-row { gap: 12px; }
   .windows-reference .settings-row-control { min-width: 0; max-width: 48%; }
 }
+@media (max-width: 520px) {
+  .windows-reference .settings-nav-item { scroll-margin-inline: 4px; }
+  .windows-reference .settings-nav-item:focus-visible { outline-offset: -2px; }
+}
 @media (forced-colors: active) {
   .windows-reference .settings-nav-item.active { outline: 1px solid Highlight; outline-offset: -1px; }
   .windows-reference .settings-row:not(:last-child)::after { background: CanvasText; }

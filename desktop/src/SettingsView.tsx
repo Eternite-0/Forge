@@ -75,6 +75,15 @@ export default function SettingsView({ selected, onSelect, onClose, children }: 
   const current = settingMetadata[selected];
   const clearSearch = () => { setQuery(""); searchInput.current?.focus(); };
   const activate = (item: SettingItem) => { onSelect(item.id); itemButtons.current[item.id]?.focus(); };
+  const revealFocusedItem = (button: HTMLButtonElement) => {
+    // Let native focus scrolling finish first, then reveal the whole button in
+    // the horizontal narrow-screen strip without moving or stealing focus.
+    requestAnimationFrame(() => {
+      if (button.isConnected && document.activeElement === button) {
+        button.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+    });
+  };
   const navigate = (event: KeyboardEvent<HTMLButtonElement>, id: SettingId) => {
     if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229 || event.altKey || event.ctrlKey || event.metaKey) return;
     const index = visibleItems.findIndex((item) => item.id === id);
@@ -97,7 +106,7 @@ export default function SettingsView({ selected, onSelect, onClose, children }: 
       <div className="settings-nav-sections">
       {groups.map((group) => <div className="settings-nav-section" key={group.label}>
         <h2 className="settings-nav-group">{group.label}</h2>
-        <div className="settings-nav-items">{group.items.map((item) => <button type="button" key={item.id} ref={(button) => { itemButtons.current[item.id] = button; }} className={`settings-nav-item${selected === item.id ? " active" : ""}`} aria-label={item.accessibleLabel} aria-current={selected === item.id ? "page" : undefined} onKeyDown={(event) => navigate(event, item.id)} onClick={() => onSelect(item.id)}><SettingsIcon id={item.id} /><span>{item.label}</span></button>)}</div>
+        <div className="settings-nav-items">{group.items.map((item) => <button type="button" key={item.id} ref={(button) => { itemButtons.current[item.id] = button; }} className={`settings-nav-item${selected === item.id ? " active" : ""}`} aria-label={item.accessibleLabel} aria-current={selected === item.id ? "page" : undefined} onFocus={(event) => revealFocusedItem(event.currentTarget)} onKeyDown={(event) => navigate(event, item.id)} onClick={() => onSelect(item.id)}><SettingsIcon id={item.id} /><span>{item.label}</span></button>)}</div>
       </div>)}
       {!groups.length && <div className="settings-search-empty"><p className="notice">未找到匹配的设置</p><button type="button" className="text-button" onClick={clearSearch}>显示全部设置</button></div>}
       </div>
