@@ -1,0 +1,41 @@
+{
+  "tool_use_id": "01a1e0e2-5d5f-7ec3-a132-80e9c0cff75d",
+  "agent_id": "01a1e0e2-5d5f-7ec3-a132-80e9c0cff75d",
+  "subagent_type": "default",
+  "files": [
+    "backend/src/forge_core/python_unittest_runner.py",
+    "backend/src/forge_core/tool_domain.py",
+    "backend/src/forge_core/tool_engine.py",
+    "backend/tests/test_python_unittest_superagent.py",
+    "backend/src/forge_core/independent_review.py",
+    "backend/src/forge_core/worker_recovery.py",
+    "backend/scripts/capability_sprint_scenarios.py",
+    "backend/tests/test_capability_sprint_scenarios.py",
+    "backend/scripts/verify_superagent_capability.py",
+    "backend/tests/test_verify_superagent_capability.py",
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/tests/test_worker_write_scope_repair.py",
+    "backend/tests/test_core_source_repair.py",
+    "backend/tests/test_worker_batch_authorization.py",
+    "backend/tests/test_capability_development_receipts.py",
+    "backend/tests/test_worker_python_receipt_visibility.py",
+    "backend/tests/test_worker_context_diagnostics.py",
+    "backend/src/forge_core/context_service.py",
+    "backend/src/forge_core/worker_model_compaction.py",
+    "backend/tests/test_worker_context_affordability.py",
+    "backend/scripts/verify_superagent_failover.py",
+    "backend/tests/test_superagent_failover_driver.py",
+    "backend/tests/test_directory_create_idempotency.py",
+    "backend/tests/test_worker_first_archive_phase2.py",
+    "backend/tests/test_specialist_artifact_projection.py"
+  ],
+  "token_usage": {
+    "input_tokens": 1665610,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 57207936,
+    "output_tokens": 233406,
+    "api_call_count": 408
+  },
+  "started_at": "2026-11-16T04:24:59.6826659+08:00",
+  "completed_at": "2026-11-16T06:41:24.3542177+08:00"
+}
