@@ -1,0 +1,32 @@
+{
+  "tool_use_id": "01a1e288-0491-7783-b50c-568ff7f4b2ee",
+  "agent_id": "01a1e288-0491-7783-b50c-568ff7f4b2ee",
+  "subagent_type": "default",
+  "files": [
+    "backend/tests/test_worker_path_semantics.py",
+    "backend/src/forge_core/worker_environment.py",
+    "backend/src/forge_core/worker_prompts.py",
+    "backend/scripts/capability_continuity_evidence.py",
+    "backend/scripts/verify_superagent_capability.py",
+    "backend/tests/test_capability_continuity_evidence.py",
+    "backend/tests/test_router_intake_notice_convergence.py",
+    "backend/src/forge_core/router.py",
+    "backend/tests/test_capability_restart_boundary.py",
+    "backend/src/forge_core/worker_continuations.py",
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/src/forge_core/worker_superagent.py",
+    "backend/tests/test_worker_continuation_completion.py",
+    "backend/tests/test_worker_core_provenance_superagent.py",
+    "docs/SUPERAGENT_CAPABILITY_SPRINT_REPORT.md",
+    "docs/SUPERAGENT_EXPERIMENTS.md"
+  ],
+  "token_usage": {
+    "input_tokens": 2549220,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 28725633,
+    "output_tokens": 131232,
+    "api_call_count": 240
+  },
+  "started_at": "2026-11-16T12:05:29.1549983+08:00",
+  "completed_at": "2026-11-16T12:26:23.4960652+08:00"
+}
