@@ -1946,7 +1946,14 @@ class WorkerManager:
             from .superagent_events import TriggerService
 
             TriggerService(self.store).flush_run(run_id, connection=work.connection)
-            inbox = work.connection.execute(
+            pending = work.connection.execute(
+                "SELECT * FROM worker_tool_calls WHERE run_id=? AND state IN ('pending','running') ORDER BY rowid LIMIT 1",
+                (run_id,),
+            ).fetchone()
+            # Persist new deliveries immediately, but do not split an outstanding
+            # assistant/tool exchange with a user notice. Consume the inbox after
+            # the whole admitted batch settles, before the next model request.
+            inbox = [] if pending else work.connection.execute(
                 "SELECT event_id,payload_json FROM worker_inbox WHERE run_id=? AND consumed=0 ORDER BY rowid",
                 (run_id,),
             ).fetchall()
@@ -1987,10 +1994,6 @@ class WorkerManager:
                     (run_id,),
                 )
             ]
-            pending = work.connection.execute(
-                "SELECT * FROM worker_tool_calls WHERE run_id=? AND state IN ('pending','running') ORDER BY rowid LIMIT 1",
-                (run_id,),
-            ).fetchone()
             return dict(row), messages, dict(pending) if pending else None
 
     def _renew_lease(self, connection, run_id, token):

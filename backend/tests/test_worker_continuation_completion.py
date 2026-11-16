@@ -2,6 +2,8 @@
 
 import asyncio
 import json
+from collections import Counter
+from pathlib import Path
 
 import pytest
 from test_superagent_delegation import delegated as delegated  # noqa: PLC0414
@@ -165,6 +167,162 @@ def test_late_pending_is_visible_before_next_action_and_tracks_real_pages(contin
         ).fetchall()
         payload = c.execute("SELECT payload_json FROM superagent_triggers WHERE id=?", (late[0]["id"],)).fetchone()[0]
     assert ''.join(json.loads(page[0])["text"] for page in pages) == payload
+
+
+@pytest.mark.parametrize("arrival", ["inference", "tool_execution"])
+def test_late_thread_notice_waits_for_complete_multi_tool_batch(continuation, monkeypatch, arrival):
+    store, manager, model, run, trigger, events = continuation
+    before = authority_snapshot(store, manager, run)
+    scope = before[1][0]["resource_scope"]
+    child = Path(scope) / "batch-child"
+    child.mkdir()
+    batch = [
+        {"id": "batch-list-root", "name": "directory_list", "arguments": {"path": scope}},
+        {"id": "batch-list-child", "name": "directory_list", "arguments": {"path": str(child)}},
+    ]
+    model.responses.append(response("Inspect both directories", calls=batch))
+    original_generate = model.generate
+    original_execute = manager.tools.execute
+    original_checkpoint = manager._checkpoint
+    late, executions, checkpoints, offsets, batch_roles = [], [], [], [], []
+    callback_errors = []
+
+    def receive_late():
+        late.append(events.receive("continuation", "multi-tool-late", "same-task", {
+            "text": "late requirement😊" * 300, "requirement": "retain the final suffix",
+        }))
+        model.responses.extend([
+            response(delivery("charged draft without reading either source")),
+            *reads(trigger, ordinal_start=100),
+            *reads(late[0], ordinal_start=200),
+            response(delivery("Both original and late sources fully read")),
+        ])
+
+    def observe_checkpoint(run_id, token):
+        result = original_checkpoint(run_id, token)
+        if late and result[2]:
+            with store.connection() as c:
+                inbox = c.execute(
+                    "SELECT consumed FROM worker_inbox WHERE run_id=? "
+                    "AND json_extract(payload_json,'$.trigger_id')=?",
+                    (run_id, late[0]["id"]),
+                ).fetchone()
+                delivered = c.execute(
+                    "SELECT COUNT(*) FROM superagent_trigger_deliveries "
+                    "WHERE run_id=? AND trigger_id=?", (run_id, late[0]["id"]),
+                ).fetchone()[0]
+            checkpoints.append((delivered, inbox[0] if inbox else None))
+        return result
+
+    async def execute_real_tool(**kwargs):
+        executions.append((kwargs["tool_name"], kwargs["parameters"]["path"]))
+        if arrival == "tool_execution" and len(executions) == 1:
+            with store.connection() as c:
+                assert c.execute(
+                    "SELECT state FROM worker_tool_calls WHERE call_id=?", (kwargs["call_id"],)
+                ).fetchone()[0] == "running"
+            receive_late()
+        return await original_execute(**kwargs)
+
+    def current_pending_in_request(request):
+        # Current Core metadata is prepended; a rejected draft also leaves
+        # historical boundary feedback later in the transcript. Do not read
+        # that stale snapshot when checking the next turn's durable read debt.
+        content = next(message["content"] for message in request.messages
+                       if message.get("content", "").startswith("Core delivery boundary:"))
+        return json.loads(content[content.index('{"omitted":'):])
+
+    async def inspect_request(request):
+        step = len(model.requests)
+        if step == 0 and arrival == "inference":
+            # Commit while this scripted inference coroutine is still awaiting.
+            async def arrive():
+                await asyncio.sleep(0)
+                receive_late()
+            await asyncio.create_task(arrive())
+            assert late[0]["id"] not in json.dumps(request.messages)
+        if step == 1:
+            messages = request.messages
+            start = next(i for i, message in enumerate(messages)
+                         if message.get("role") == "assistant" and message.get("tool_calls"))
+            exchange = messages[start:start + 3]
+            batch_roles.extend(message["role"] for message in messages[start:])
+            assert [message["role"] for message in exchange] == ["assistant", "tool", "tool"], (
+                "Thread user notice split an unsettled assistant/tool batch: "
+                + repr([message["role"] for message in messages[start:]])
+            )
+            assert [call["id"] for call in exchange[0]["tool_calls"]] == [
+                call["id"] for call in batch
+            ]
+            assert [message["tool_call_id"] for message in exchange[1:]] == [
+                call["id"] for call in batch
+            ]
+            notices = [i for i, message in enumerate(messages)
+                       if message.get("role") == "user"
+                       and message.get("content", "").startswith("Core-delivered untrusted Thread")
+                       and late[0]["id"] in message["content"]]
+            assert len(notices) == 1 and notices[0] > start + 2
+            assert checkpoints and all(item == (1, 0) for item in checkpoints)
+            assert Counter(executions) == Counter([
+                ("directory_list", scope), ("directory_list", str(child)),
+            ])
+            with store.connection() as c:
+                assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 2
+            pending = current_pending_in_request(request)["pending"]
+            assert {item["trigger_id"] for item in pending} == {trigger["id"], late[0]["id"]}
+            assert all(item["next_offset_chars"] == 0 for item in pending)
+        if step == 2:
+            # Consuming the notice and charging a delivery draft must NOT satisfy the read gate.
+            assert {item["trigger_id"] for item in debt(store, run)} == {
+                trigger["id"], late[0]["id"],
+            }
+            with store.connection() as c:
+                assert c.execute("SELECT COUNT(*) FROM events WHERE event_type='worker.result'").fetchone()[0] == 0
+        if late and step >= 2 and debt(store, run):
+            assert current_pending_in_request(request) == {"pending": debt(store, run), "omitted": 0}
+            offsets.extend(item["next_offset_chars"] for item in debt(store, run)
+                           if item["trigger_id"] == late[0]["id"])
+        return await original_generate(request)
+
+    async def inspect_without_swallowing_assertions(request):
+        try:
+            return await inspect_request(request)
+        except Exception as exc:
+            # Worker masks model errors; preserve test failures for the pytest traceback.
+            callback_errors.append(exc)
+            raise
+
+    monkeypatch.setattr(manager, "_checkpoint", observe_checkpoint)
+    monkeypatch.setattr(manager.tools, "execute", execute_real_tool)
+    monkeypatch.setattr(model, "generate", inspect_without_swallowing_assertions)
+    result = asyncio.run(manager.run(run["id"]))
+    if callback_errors:
+        raise callback_errors[0]
+    assert batch_roles[:3] == ["assistant", "tool", "tool"], (
+        "Thread user notice split an unsettled assistant/tool batch: " + repr(batch_roles)
+    )
+    assert result["state"] == "review_pending" and result["repairs"] == 0
+    pages = len(reads(trigger)) + len(reads(late[0]))
+    assert result["steps"] == len(model.requests) == pages + 3
+    assert result["tool_spent"] == pages + 2
+    assert result["token_spent"] == 40 * len(model.requests)
+    assert authority_snapshot(store, manager, run) == before
+    assert not debt(store, run)
+    assert Counter(executions) == Counter([
+        ("directory_list", scope), ("directory_list", str(child)),
+    ])
+    assert 0 in offsets and max(offsets) == (len(reads(late[0])) - 1) * 2048
+    with store.connection() as c:
+        assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 2
+        assert c.execute("SELECT COUNT(*) FROM events WHERE event_type='worker.result'").fetchone()[0] == 1
+        for source in (trigger, late[0]):
+            body = c.execute("SELECT payload_json FROM superagent_triggers WHERE id=?",
+                             (source["id"],)).fetchone()[0]
+            actual = c.execute(
+                "SELECT result_json FROM worker_tool_calls WHERE tool_name='read_trigger' "
+                "AND json_extract(arguments_json,'$.trigger_id')=? ORDER BY rowid", (source["id"],),
+            ).fetchall()
+            assert ''.join(json.loads(page[0])["text"] for page in actual) == body
 
 
 @pytest.mark.parametrize("tamper", ["payload", "inbox", "event", "revoked"])
