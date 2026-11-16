@@ -1,0 +1,40 @@
+/* Measured reference rhythm: 150ms feedback; 200ms for an entering surface. */
+:root {
+  --forge-enter: cubic-bezier(.23, 1, .32, 1);
+  --forge-quick: 150ms;
+  --forge-surface-time: 200ms;
+}
+
+.disclosure-popover {
+  transform: translateY(-4px) scale(.985);
+  transform-origin: top right;
+  transition: opacity var(--forge-quick) ease, transform var(--forge-quick) var(--forge-enter), visibility 0s linear var(--forge-quick);
+}
+.disclosure-popover[data-open="true"] {
+  transform: translateY(0) scale(1);
+  transition: opacity var(--forge-quick) ease, transform var(--forge-surface-time) var(--forge-enter), visibility 0s;
+}
+
+.app-shell > .workspace-panel.task-inspector {
+  animation: forge-slide-panel var(--forge-surface-time) var(--forge-enter) both;
+}
+.quest-detail, .settings-page, .action-toast, .agent-panel-slot:not([hidden]) {
+  animation: forge-surface-in var(--forge-surface-time) var(--forge-enter) both;
+}
+.conversation-menu-item, .conversation-tasks-toggle, .conversation-more-toggle, .quest-list .list-row, .settings-nav-item {
+  transition: color var(--forge-quick) ease, background-color var(--forge-quick) ease, border-color var(--forge-quick) ease;
+}
+
+@keyframes forge-slide-panel {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes forge-surface-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disclosure-popover, .disclosure-popover[data-open="true"] { transition: none; transform: none; }
+  .app-shell > .workspace-panel.task-inspector, .quest-detail, .settings-page, .action-toast, .agent-panel-slot:not([hidden]) { animation: none; }
+}

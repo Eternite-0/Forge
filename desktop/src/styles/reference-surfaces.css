@@ -1,0 +1,85 @@
+/* Reference-inspired surface treatment, using FORGE's own semantic theme.
+   Elevation belongs to the floating drawer, not to every row or section. */
+.app-shell > .workspace-panel.task-inspector {
+  border: 1px solid var(--color-border);
+  border-right: 0;
+  border-radius: 20px 0 0 20px;
+  background: var(--app-color-background-surface);
+  box-shadow: var(--forge-shadow-surface, 0 2px 6px -2px rgb(0 0 0 / 8%), 0 16px 40px -12px rgb(0 0 0 / 14%));
+}
+
+.task-inspector .inspector-header {
+  min-height: 60px;
+  border-bottom-color: var(--color-border-subtle);
+}
+.task-inspector .inspector-header h2 { font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+.task-inspector .inspector-actions .icon-button { border-radius: 10px; }
+.task-inspector .workspace-tabs { gap: 20px; border-bottom-color: var(--color-border-subtle); }
+.task-inspector .workspace-tabs button { font-size: 13px; }
+.task-inspector .workspace-tabs button.active { border-bottom-width: 1px; }
+.task-inspector .task-scope select { border-color: var(--color-border); border-radius: 10px; }
+
+.quest-workspace .quest-project-tasks .list-row {
+  border-bottom-color: var(--color-border-subtle);
+  border-radius: 10px;
+}
+.quest-workspace .quest-project-tasks .list-row:hover { background: var(--color-background-secondary-ghost-hover); }
+.quest-workspace .list-row strong { font-weight: 500; }
+.quest-workspace .list-row > .quest-state { font-variant-numeric: tabular-nums; }
+.quest-workspace .quest-search { border: 1px solid var(--color-border); background: var(--app-color-background-surface); }
+.quest-workspace .quest-search:focus-within { border-color: var(--color-border-strong); }
+.quest-workspace .quest-filters button.active { background: var(--color-background-nav-active); }
+.quest-workspace .quest-detail-heading { letter-spacing: -.025em; }
+.quest-workspace .quest-back { border-radius: 8px; padding-inline: 8px; margin-inline-start: -8px; }
+.quest-workspace .quest-back:hover { background: var(--color-background-secondary-ghost-hover); }
+.quest-workspace .quest-plan-nodes .plan-node { border-color: var(--color-border-subtle); }
+.quest-workspace .quest-technical pre {
+  padding: 14px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 12px;
+  background: var(--color-background-ghost);
+}
+.quest-workspace .quest-empty { color: var(--color-text-secondary); }
+
+/* Settings stay a quiet page: restrained navigation, open sections, fine rules. */
+.settings-view { background: var(--app-color-background-surface); }
+.settings-nav { background: var(--app-color-background-surface); }
+.settings-nav-header-group { padding-block-start: 8px; }
+.settings-search { border: 1px solid var(--color-border); border-radius: 10px; background: var(--app-color-background-surface); }
+.settings-nav-group { color: var(--color-text-secondary); font-size: 13px; font-weight: 400; }
+.settings-nav-item { border-radius: 12px; }
+.settings-nav-item.active { background: var(--color-background-nav-active); font-weight: 500; }
+.settings-content { border-left-color: var(--color-border-subtle); }
+.settings-title { letter-spacing: -.025em; font-weight: 600; }
+.settings-group, .settings-section {
+  border-color: transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.settings-row, .settings-content .field-label, .settings-content .check-label { border-bottom-color: var(--color-border-subtle); }
+.settings-row { padding-block: 15px; }
+.settings-row-label { font-size: 14px; font-weight: 500; }
+.settings-row-desc { margin-top: 4px; line-height: 18px; }
+.settings-content .config-form:not(.operator-settings) { border-color: var(--color-border); border-radius: 15px; }
+.settings-content .field-label :is(input, select, textarea) {
+  border-color: var(--color-border);
+  border-radius: 8px;
+}
+.settings-content .button:not(.primary):not(.danger) {
+  border-color: var(--color-border);
+  background: var(--app-color-background-surface);
+}
+.settings-content .button:not(.primary):not(.danger):hover { background: var(--color-background-secondary-ghost-hover); }
+.settings-content :is(.operator-disclosure, .credential-options) > summary { border-radius: 8px; }
+
+@media (max-width: 600px) {
+  .app-shell > .workspace-panel.task-inspector { border-radius: 15px 0 0 15px; }
+  .task-inspector .inspector-header, .task-inspector .inspector-body { padding-inline: 16px; }
+  .settings-row { padding-inline: 12px; }
+}
+
+@media (forced-colors: active) {
+  .app-shell > .workspace-panel.task-inspector { border-color: CanvasText; box-shadow: none; }
+  .settings-nav-item.active, .quest-workspace .quest-filters button.active { outline: 1px solid Highlight; outline-offset: -1px; }
+}

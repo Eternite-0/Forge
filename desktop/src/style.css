@@ -7,3 +7,7 @@
 @import "./styles/settings.css";
 @import "./styles/files.css";
 @import "./styles/panels.css";
+@import "./styles/simple-shell.css";
+@import "./styles/reference-theme.css";
+@import "./styles/reference-surfaces.css";
+@import "./styles/reference-motion.css";

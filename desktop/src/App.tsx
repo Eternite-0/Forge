@@ -1,7 +1,6 @@
 import ConversationWorkspace from "./components/ConversationWorkspace";
 import WorkspaceInspector from "./components/WorkspaceInspector";
 import useWorkspaceController from "./hooks/useWorkspaceController";
-import "./styles/simple-shell.css";
 
 export default function App() {
   const workspace = useWorkspaceController();

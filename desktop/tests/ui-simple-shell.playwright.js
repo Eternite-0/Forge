@@ -50,10 +50,21 @@ async (page) => {
   await drawer.locator('.quest-detail').waitFor();
   check(!(await drawer.locator('.quest-technical').evaluate(element => element.open)), 'task technical details are closed by default');
   await drawer.getByRole('button', { name: /返回任务列表/ }).click();
-  await page.getByRole('button', { name: '关闭任务详情' }).click();
+  await taskRow.press('Escape');
+  await drawer.waitFor({ state: 'hidden' });
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '消息内容');
+  check(await composer.evaluate(element => element === document.activeElement), 'Escape in Tasks restores focus to the message box');
   check(await composer.inputValue() === '替我整理项目资料', 'task detail navigation preserves the draft');
-  await more.click();
-  await page.getByRole('button', { name: '设置', exact: true }).click();
+  const settings = page.getByRole('button', { name: '设置', exact: true });
+  await more.press('ArrowUp');
+  await settings.waitFor();
+  await page.waitForFunction(() => document.activeElement?.textContent === '设置');
+  check((await page.getByRole('dialog', { name: '对话操作' }).evaluate(element => getComputedStyle(element).boxShadow)) !== 'none', 'overflow has its own elevation');
+  await settings.press('Escape');
+  check(await more.evaluate(element => element === document.activeElement), 'Escape in the overflow restores its trigger');
+  await more.press('ArrowDown');
+  await page.getByRole('button', { name: '查看工作空间文件' }).waitFor();
+  await settings.click();
   await page.getByRole('button', { name: '返回对话', exact: true }).click();
   check(await composer.inputValue() === '替我整理项目资料', 'settings navigation preserves the draft');
   await composer.press('Enter');
@@ -62,5 +73,11 @@ async (page) => {
   await page.setViewportSize({ width: 390, height: 650 });
   check(await composer.isVisible() && await tasks.isVisible(), 'narrow windows keep the two main actions available');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'no horizontal page overflow');
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await more.click();
+  const darkMenu = page.getByRole('dialog', { name: '对话操作' });
+  await darkMenu.waitFor();
+  check(await darkMenu.evaluate(element => getComputedStyle(element).transitionDuration.split(',').every(value => parseFloat(value) <= .001)), 'reduced motion disables the floating transition');
+  check(await page.locator('.conversation-topbar').evaluate(element => getComputedStyle(element).backgroundColor === 'rgb(17, 17, 17)'), 'dark appearance uses the dark surface');
   return { checks };
 }

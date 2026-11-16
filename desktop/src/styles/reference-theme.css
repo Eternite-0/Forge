@@ -1,0 +1,112 @@
+/* FORGE adaptation of the supplied visual measurements, not a source bundle.
+   Keep the single-conversation layout and system fonts. Load after component CSS. */
+:root {
+  color-scheme: light dark;
+  --app-color-background-surface: light-dark(#fff, #111);
+  --app-color-background-surface-under: light-dark(#f5f5f5, #0e0e0e);
+  --app-color-background-elevated-primary: light-dark(rgba(255,255,255,.96), rgba(47,47,47,.96));
+  --app-color-background-control: light-dark(rgba(255,255,255,.96), rgba(38,38,38,.96));
+  --color-text: light-dark(#0d0d0d, #fcfcfc);
+  --app-color-text-foreground: var(--color-text);
+  --app-color-text-foreground-tertiary: light-dark(rgba(13,13,13,.495), rgba(252,252,252,.498));
+  --color-border: light-dark(rgba(13,13,13,.078), rgba(252,252,252,.084));
+  --color-border-subtle: light-dark(rgba(13,13,13,.049), rgba(252,252,252,.042));
+  --app-color-border: var(--color-border);
+  --app-color-border-light: var(--color-border-subtle);
+  --color-background-user-message: light-dark(rgba(13,13,13,.05), rgba(252,252,252,.05));
+  --color-text-user-message: var(--color-text);
+  --color-background-secondary-ghost-hover: light-dark(rgba(13,13,13,.053), rgba(252,252,252,.078));
+  --app-color-background-button-secondary-hover: var(--color-background-secondary-ghost-hover);
+  --radius-xs: 5px;
+  --radius-sm: 7.5px;
+  --radius-md: 10px;
+  --radius-lg: 12.5px;
+  --radius-xl: 15px;
+  --radius-2xl: 20px;
+  --shadow-sm: 0 1px 2px -1px #00000014;
+  --shadow-md: 0 2px 4px -1px #00000014;
+  --shadow-lg: 0 4px 8px -2px #0000001a;
+  --forge-shadow-popover: 0 2px 4px -1px rgb(0 0 0 / 9%), 0 12px 28px -8px light-dark(rgb(0 0 0 / 16%), rgb(0 0 0 / 52%));
+  --forge-shadow-surface: 0 2px 6px -2px rgb(0 0 0 / 8%), 0 16px 40px -12px light-dark(rgb(0 0 0 / 15%), rgb(0 0 0 / 54%));
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans-default: var(--font-sans);
+  --font-mono: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-chat: 14px;
+  --text-chat-line: 21px;
+  --text-assistant: 16px;
+  --text-assistant-line: 24px;
+  --text-meta: 13px;
+  --text-meta-line: 18px;
+  --text-small: 12px;
+  --text-small-line: 16px;
+  /* System fonts need not have the reference's 430/510 variable axes. */
+  --font-weight-body: 400;
+  --font-weight-strong: 500;
+  --thread-content-max-width: 736px;
+}
+
+/* Respect both the OS appearance and an explicit appearance attribute. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+.simple-shell .conversation-topbar {
+  min-height: 56px;
+  height: 56px;
+  padding: 10px 20px;
+  background: var(--app-color-background-surface);
+}
+.simple-shell .conversation-topbar .topbar-title h1 {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: normal;
+}
+.simple-shell .conversation-tasks-toggle,
+.simple-shell .conversation-more-toggle { border-radius: var(--radius-md); }
+.simple-shell .conversation-tasks-toggle { font-size: 14px; line-height: 21px; font-weight: 500; }
+.simple-shell .conversation-topbar .router-status { font-size: 12px; line-height: 16px; }
+.simple-shell :is(.disclosure-popover, .agent-panel-menu, .action-toast, .new-messages) { box-shadow: var(--forge-shadow-popover); }
+.simple-shell .conversation-actions-menu { border-radius: var(--radius-lg); }
+.simple-shell .conversation-actions-menu .popover-surface { border-color: var(--color-border); background: var(--app-color-background-elevated-primary); }
+.simple-shell .conversation-menu-item { border-radius: var(--radius-sm); font-size: 14px; line-height: 21px; }
+
+.simple-shell .message.from-agent .message-body {
+  font-size: var(--text-assistant);
+  line-height: var(--text-assistant-line);
+}
+.simple-shell .message.from-user .message-body {
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+}
+.simple-shell .timeline > *, .simple-shell .composer-stack { max-width: var(--thread-content-max-width); }
+.simple-shell .empty-conversation h2 { font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -.35px; }
+.simple-shell .empty-conversation > p { font-size: 14px; line-height: 21px; }
+
+.simple-shell .composer.composer-body {
+  min-height: 56px;
+  padding: 7px 7px 7px 15px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--app-color-background-control);
+  box-shadow: var(--shadow-sm);
+  transition: border-color .15s var(--ease-out), box-shadow .15s var(--ease-out);
+}
+.simple-shell .composer.composer-body:focus-within {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+.simple-shell .composer-body textarea { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
+.simple-shell .composer-body textarea::placeholder { color: var(--muted); opacity: 1; }
+.simple-shell .composer-body .send-button { width: 40px; height: 40px; }
+
+@media (max-width: 600px) {
+  .simple-shell .conversation-topbar { padding-inline: 12px; }
+  .simple-shell .empty-conversation h2 { font-size: 24px; line-height: 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .simple-shell .composer.composer-body { transition: none; }
+}
+@media (forced-colors: active) {
+  .simple-shell :is(.disclosure-popover, .agent-panel-menu, .action-toast, .new-messages) { box-shadow: none; }
+  .simple-shell .conversation-actions-menu .popover-surface { border-color: CanvasText; }
+}
