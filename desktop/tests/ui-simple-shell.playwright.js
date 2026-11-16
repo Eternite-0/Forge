@@ -100,8 +100,14 @@ async (page, { outputDir }) => {
   check(await drawer.locator('.quest-detail').count() === 0, 'opening Tasks shows the list first');
   await taskRow.click();
   await drawer.locator('.quest-detail').waitFor();
+  check(await drawer.locator('.quest-detail-heading').evaluate(element => element === document.activeElement), 'opening the task moves focus into its heading');
   check(!(await drawer.locator('.quest-technical').evaluate(element => element.open)), 'task technical details are closed by default');
+  await drawer.locator('.quest-detail-heading').press('Escape');
+  await taskRow.waitFor();
+  check(await drawer.isVisible() && await taskRow.evaluate(element => element === document.activeElement), 'Escape goes back one level and restores the originating task row');
+  await taskRow.click();
   await drawer.getByRole('button', { name: /返回任务列表/ }).click();
+  check(await taskRow.evaluate(element => element === document.activeElement), 'clicking Back also restores the task row');
   await taskRow.press('Escape');
   await drawer.waitFor({ state: 'hidden' });
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '消息内容');
@@ -146,6 +152,13 @@ async (page, { outputDir }) => {
   await capture('round2-review');
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await preview.waitFor({ state: 'hidden' });
+  await progress.locator('.task-progress-summary').click();
+  await drawer.locator('.quest-detail-heading').waitFor();
+  await drawer.locator('.quest-detail-heading').press('Escape');
+  await taskRow.waitFor();
+  check(await taskRow.evaluate(element => element === document.activeElement), 'returning from a task opened directly in chat focuses the matching list row');
+  await taskRow.press('Escape');
+  await drawer.waitFor({ state: 'hidden' });
   await page.setViewportSize({ width: 390, height: 650 });
   await rail.waitFor({ state: 'hidden' });
   await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
@@ -158,6 +171,24 @@ async (page, { outputDir }) => {
   await drawer.waitFor();
   check(await drawer.evaluate(element => Math.abs(element.getBoundingClientRect().width - innerWidth) < 1), 'narrow Tasks takes the full viewport');
   check(await page.locator('.chat-workspace').evaluate(element => element.hasAttribute('inert') && getComputedStyle(element).visibility === 'hidden'), 'narrow Tasks fully hides and disables the underlying chat');
+  await taskRow.click();
+  await drawer.locator('.quest-detail-heading').waitFor();
+  await capture('round3-mobile-task');
+  await page.setViewportSize({ width: 900, height: 700 });
+  await page.waitForFunction(() => document.querySelector('.app-shell').classList.contains('task-page-open'));
+  check(await drawer.evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    return Math.abs(bounds.width - innerWidth) < 1 && Math.abs(bounds.left) < 1;
+  }), 'a 900px window shows a full task page rather than covering only part of the chat');
+  check(await drawer.locator('.quest-detail-heading').isVisible(), 'rotating or widening keeps the same selected task');
+  await capture('round3-tablet-task');
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await page.waitForFunction(() => !document.querySelector('.app-shell').classList.contains('task-page-open'));
+  check(await drawer.evaluate(element => element.getBoundingClientRect().width < innerWidth / 2) &&
+    await page.locator('.chat-workspace').evaluate(element => !element.hasAttribute('inert')), 'wide mode makes the same task a side panel and restores chat interaction');
+  await capture('round3-desktop-task');
+  await page.setViewportSize({ width: 390, height: 650 });
+  await page.waitForFunction(() => document.querySelector('.app-shell').classList.contains('task-page-open'));
   await drawer.getByRole('button', { name: '关闭任务详情' }).click();
   await composer.waitFor();
   check(await composer.inputValue() === '窄屏草稿', 'return from the full task page restores the same draft');

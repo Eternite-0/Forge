@@ -26,6 +26,12 @@
 .quest-workspace .quest-project-tasks .list-row:hover { background: var(--color-background-secondary-ghost-hover); }
 .quest-workspace .list-row strong { font-weight: 500; }
 .quest-workspace .list-row > .quest-state { font-variant-numeric: tabular-nums; }
+.task-inspector .quest-workspace .quest-project-tasks .list-row { min-height: 45px; gap: 7px; padding: 8px; }
+.quest-row-label { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; }
+.quest-row-label > svg, .quest-row-chevron { flex: none; color: var(--color-text-secondary); }
+.quest-back { gap: 3px; }
+.quest-back > svg { transform: rotate(180deg); }
+.task-inspector .quest-detail .quest-phase { margin-bottom: 10px; }
 .quest-workspace .quest-search { border: 1px solid var(--color-border); background: var(--app-color-background-surface); }
 .quest-workspace .quest-search:focus-within { border-color: var(--color-border-strong); }
 .quest-workspace .quest-filters button.active { background: var(--color-background-nav-active); }
@@ -81,9 +87,10 @@
 
 /* At tablet/phone widths, Tasks is a page rather than a partial overlay.
    The mounted conversation is made inert by App, preserving draft and scroll. */
-@media (max-width: 760px) {
+@media (max-width: 1000px) {
   .app-shell > .workspace-panel.task-inspector {
     inset: 0;
+    grid-area: auto;
     width: 100%;
     max-width: none;
     border: 0;

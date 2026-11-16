@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { isClosedQuest, namesLabel, needsQuestAttention, questDisplayTitle, statusLabel } from "./presentation";
 import { explicitProjectName, projectFor, type ProjectFields } from "./projectContext";
+import ShellIcon from "./components/ShellIcon";
 
 type Row = Record<string, unknown>;
 
@@ -97,7 +98,7 @@ function QuestGroupDisclosure({ open, id, children }: { open: boolean; id: strin
   return <div ref={panel} id={id} className="quest-group-content" aria-hidden={!open} style={{ height: initial.current ? "auto" : "0px", opacity: initial.current ? 1 : 0 }}>{children}</div>;
 }
 
-function QuestProjectGroup({ project, selectedId, search, filter, showHeading, onSelect }: { project: QuestProject; selectedId: string; search: string; filter: QuestFilter; showHeading: boolean; onSelect: (id: string) => void }) {
+function QuestProjectGroup({ project, selectedId, search, filter, showHeading, onSelect }: { project: QuestProject; selectedId: string; search: string; filter: QuestFilter; showHeading: boolean; onSelect: (id: string, trigger: HTMLButtonElement) => void }) {
   const [expanded, setExpanded] = useState(true);
   const selectedClosed = project.quests.some((quest) => quest.id === selectedId && isClosedQuest(quest.status));
   const [closedExpanded, setClosedExpanded] = useState(selectedClosed || filter === "closed" || !!search);
@@ -115,8 +116,9 @@ function QuestProjectGroup({ project, selectedId, search, filter, showHeading, o
   const foldHistory = project.loaded > 5 && active.length > 0 && filter !== "closed" && !search;
   const projectLabel = project.key === `project:${project.name}` || project.key === `workspace:${project.name}` ? "未命名项目" : project.name;
   const row = (quest: WorkspaceQuest) => <button type="button" key={quest.id} className={selectedId === quest.id ? "list-row selected" : "list-row"}
-    data-task-id={quest.id} aria-label={`${questDisplayTitle(quest.title, quest.id, quest.goal)}，${statusLabel(quest.status)}`} aria-current={selectedId === quest.id ? "page" : undefined} onClick={() => onSelect(quest.id)}>
-    <span><strong>{questDisplayTitle(quest.title, quest.id, quest.goal)}</strong></span><span className="state-label quest-state" data-state={quest.status}>{statusLabel(quest.status)}</span>
+    data-task-id={quest.id} aria-label={`${questDisplayTitle(quest.title, quest.id, quest.goal)}，${statusLabel(quest.status)}`} aria-current={selectedId === quest.id ? "page" : undefined} onClick={event => onSelect(quest.id, event.currentTarget)}>
+    <span className="quest-row-label"><ShellIcon name={quest.status === "completed" ? "check" : needsQuestAttention(quest.status) || isClosedQuest(quest.status) ? "alert" : "clock"} size={16} /><strong>{questDisplayTitle(quest.title, quest.id, quest.goal)}</strong></span>
+    <span className="state-label quest-state" data-state={quest.status}>{statusLabel(quest.status)}</span><ShellIcon name="chevronRight" size={14} className="quest-row-chevron" />
   </button>;
   return <section className="quest-project-group" data-project-key={project.key} data-project-source={project.source}>
     {showHeading && <button type="button" className="quest-project-toggle" aria-expanded={expanded} aria-controls={contentId} title={project.path || undefined} onClick={() => setExpanded((value) => !value)} onKeyDown={(event) => {
@@ -144,22 +146,34 @@ export default function QuestWorkspace({
   const [filter, setFilter] = useState<QuestFilter>("all");
   const [openedId, setOpenedId] = useState<string | null>(detailRequest?.id || null);
   const returnTarget = useRef<HTMLButtonElement | null>(null);
+  const returnId = useRef<string | null>(null);
+  const list = useRef<HTMLDivElement>(null);
   const listScroll = useRef(0);
   const detailHeading = useRef<HTMLHeadingElement>(null);
   const showingDetail = openedId !== null;
-  const openTask = (id: string) => {
-    returnTarget.current = document.activeElement instanceof HTMLButtonElement ? document.activeElement : null;
-    listScroll.current = returnTarget.current?.closest(".quest-body")?.scrollTop ?? 0;
+  const openTask = (id: string, trigger: HTMLButtonElement) => {
+    returnTarget.current = trigger;
+    listScroll.current = trigger.closest(".quest-body")?.scrollTop ?? 0;
     setOpenedId(id);
     onSelect(id);
   };
-  const closeTask = () => { setOpenedId(null); };
+  const closeTask = () => { returnId.current = openedId; setOpenedId(null); };
   useLayoutEffect(() => {
     if (showingDetail) detailHeading.current?.focus();
-    else if (returnTarget.current?.isConnected) {
-      returnTarget.current.focus({ preventScroll: true });
-      const body = returnTarget.current.closest(".quest-body");
-      if (body) body.scrollTop = listScroll.current;
+    else if (returnId.current !== null) {
+      const visible = (element: HTMLElement | null) => element?.isConnected && !element.closest("[inert]") && element.getClientRects().length > 0;
+      const trigger = returnTarget.current;
+      const match = Array.from(list.current?.querySelectorAll<HTMLButtonElement>("button[data-task-id]") || [])
+        .find(button => button.dataset.taskId === returnId.current && visible(button));
+      const inList = visible(trigger) && trigger?.dataset.taskId === returnId.current;
+      const target = inList ? trigger : match || list.current;
+      if (inList) {
+        const body = trigger?.closest(".quest-body");
+        if (body) body.scrollTop = listScroll.current;
+      }
+      target?.focus({ preventScroll: !!inList });
+      returnId.current = null;
+      returnTarget.current = null;
     }
   }, [showingDetail]);
   useLayoutEffect(() => { if (detailRequest) setOpenedId(detailRequest.id || null); }, [detailRequest]);
@@ -214,7 +228,7 @@ export default function QuestWorkspace({
   const nodes = records(plan?.nodes);
   const emptyTitle = search ? "没有找到相关任务" : filter === "attention" ? "没有需要处理的任务" : filter === "active" ? "没有进行中的任务" : filter === "closed" ? "还没有已结束的任务" : "还没有任务";
   return <div className={`quest-workspace${showingDetail ? " is-detail" : ""}`}>
-    <div className="quest-list" hidden={showingDetail} aria-busy={loading}>
+    <div className="quest-list" ref={list} tabIndex={-1} aria-label="任务列表" hidden={showingDetail} aria-busy={loading}>
       {(quests.length > 5 || hasMore || query || filter !== "all") && <details className="quest-find">
       <summary>查找任务{query || filter !== "all" ? " · 已筛选" : ""}</summary>
       <div className="quest-search">
@@ -238,14 +252,18 @@ export default function QuestWorkspace({
       {hasMore && <button type="button" className="text-button more" disabled={loading} onClick={onLoadMore}>{loading ? "正在加载…" : "加载更多任务"}</button>}
     </div>
 
-    {showingDetail && <div className="quest-detail" ref={detailRegion}>
-      <button type="button" className="text-button quest-back" onClick={closeTask}>← 返回任务列表</button>
+    {showingDetail && <div className="quest-detail" ref={detailRegion} onKeyDown={event => {
+      if (event.key !== "Escape" || event.defaultPrevented || event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
+      event.preventDefault();
+      closeTask();
+    }}>
+      <button type="button" className="text-button quest-back" onClick={closeTask}><ShellIcon name="chevronRight" size={16} />返回任务列表</button>
       <h3 className="quest-detail-heading" ref={detailHeading} tabIndex={-1}>{selected?.id === openedId ? questDisplayTitle(selected.title, selected.id, selected.goal) : "任务详情"}</h3>
       {!selected || selected.id !== openedId ? <div className="quest-empty" role="status"><p>{loading ? "正在加载任务…" : "此任务暂时不可用"}</p><p className="notice">返回列表查看最新任务。</p></div> : <>
         <div className="detail quest-overview">
           <div className="quest-phase"><strong className="quest-state" data-state={selected.status}>{statusLabel(selected.status)}</strong></div>
-          <p className="quest-goal">{selected.goal}</p>
-          <p className="notice">{QUEST_PHASES[selected.status] || "当前阶段以服务端原始状态为准。"}</p>
+          {typeof selected.goal === "string" && selected.goal.trim() && selected.goal.trim() !== questDisplayTitle(selected.title, selected.id, selected.goal) && <p className="quest-goal">{selected.goal}</p>}
+          {selected.status !== "completed" && <p className="notice">{QUEST_PHASES[selected.status] || "当前阶段以服务端原始状态为准。"}</p>}
         </div>
 
         <section className="quest-plan">

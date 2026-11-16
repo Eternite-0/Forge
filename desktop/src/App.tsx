@@ -12,14 +12,22 @@ export default function App() {
   const { view, setting, settingsOpen, taskView, connection, native, connectionError, secretInput, connectBrowser, actionNotice, setActionNotice } = workspace;
   const shell = useRef<HTMLDivElement>(null);
   const [narrow, setNarrow] = useState(() => window.matchMedia("(max-width: 760px)").matches);
+  const [taskPageWidth, setTaskPageWidth] = useState(() => window.matchMedia("(max-width: 1000px)").matches);
   const [sidebarOverlay, setSidebarOverlay] = useState(false);
-  const taskPageOpen = narrow && taskView && !settingsOpen;
+  const taskPageOpen = taskPageWidth && taskView && !settingsOpen;
   const sidebarLayerOpen = narrow && sidebarOverlay && !taskPageOpen;
   const compact = narrow ? !sidebarOverlay : workspace.compactNavigation;
   useEffect(() => {
     const media = window.matchMedia("(max-width: 760px)");
     const change = () => { setNarrow(media.matches); setSidebarOverlay(false); };
     media.addEventListener("change", change);
+    return () => media.removeEventListener("change", change);
+  }, []);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1000px)");
+    const change = () => setTaskPageWidth(media.matches);
+    media.addEventListener("change", change);
+    change();
     return () => media.removeEventListener("change", change);
   }, []);
   useLayoutEffect(() => {
