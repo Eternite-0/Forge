@@ -1,0 +1,86 @@
+{
+  "suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "7",
+    "skipped": "0",
+    "tests": "164",
+    "time": "71.343",
+    "timestamp": "2026-11-16T17:48:24.278765+08:00",
+    "hostname": "tracydeMacBook-Pro.local"
+  },
+  "by_module": {
+    "tests.test_worker_core_provenance_superagent": {
+      "passed": 21
+    },
+    "tests.test_worker_continuation_completion": {
+      "passed": 30
+    },
+    "tests.test_continuation_artifact_review": {
+      "passed": 6
+    },
+    "tests.test_recall_restart_continuity": {
+      "passed": 21
+    },
+    "tests.test_continuity_minimal_probe": {
+      "passed": 19,
+      "failed": 7
+    },
+    "tests.test_router_json_protocol": {
+      "passed": 60
+    }
+  },
+  "failures": [
+    {
+      "id": "tests.test_continuity_minimal_probe::test_empty_preflight_is_not_new_zero_history_or_live_success",
+      "message": "continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_prepare_exclusively_claims_workspace_and_never_resumes",
+      "message": "continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_missing_environment_does_not_read_dotenv_or_create_workspace",
+      "message": "AssertionError: Regex pattern did not match.\n  Expected regex: 'environment_credential_missing'\n  Actual message: 'workspace_must_not_modify_repository_sources'",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_successful_cli_preflight_and_prepare_are_still_offline",
+      "message": "AssertionError: assert 2 == 0\n +  where 2 = <function main at 0x112c014e0>(['preflight', '--workspace', '/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0/fresh'])\n +    where <function main at 0x112c014e0> = probe.main",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data",
+      "message": "continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_audit_refuses_a_database_copied_from_old_workspace",
+      "message": "continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    },
+    {
+      "id": "tests.test_continuity_minimal_probe::test_audit_rejects_old_workspace_and_never_creates_database",
+      "message": "continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources",
+      "classification": "audit_write_scope_conflict",
+      "root_cause": "fresh_workspace rejects repo/docs path; audit must write only repo/docs/audit/continuity-review-20261116",
+      "not_a_product_weakening": true
+    }
+  ],
+  "context_only_three_regressions": "all three independently observed passed in followup-fixtures.xml",
+  "real_provider_acceptance": false
+}

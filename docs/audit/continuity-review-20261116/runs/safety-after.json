@@ -1,0 +1,24 @@
+{
+  "captured_at": "2026-11-16T17:31:01.410826+08:00",
+  "head": "7c1763bb2ce962a924f2266c55978e1483bd112b",
+  "diff_sha256": "ac07b52a6fc9fbdf214067a9f319230ed5e2c921cca89ea9fb40456f0f5abfb8",
+  "files": {
+    "backend/scripts/phase2/live_core.py": "732a841316acf4d42554e3b2ba026ac77d788f9946a8ce0974ef50c46103d1bd",
+    "backend/src/forge_core/independent_review.py": "967971a33c4a05161e4659e1ad9daccabfa526d226c22d519166012d1334edd2",
+    "backend/src/forge_core/project_continuity.py": "51c49f4f1be51207a055e30c4ef2e80a02ea1bafe0d79e0cdb53f048f49a0739",
+    "backend/src/forge_core/recall_chain.py": "48548f6ac8c7ae4350670b93da8f62fa480e88b397db10b529ad030d9c49537f",
+    "backend/src/forge_core/router.py": "2d74e49e775fa8a7c21ff79f86748479724f97a04ab9ee1be0612146efaddedb",
+    "backend/src/forge_core/router_json_protocol.py": "95b61b8c12ef9fd899ba3ee424b7e02adf1d0b91d9510f0a7477ca48fe94ae28",
+    "backend/src/forge_core/worker_continuations.py": "63949b2138ec8cdb101440cdcea193d7cb066a66cafe87fa85d1798cf7f922fc",
+    "backend/src/forge_core/worker_runtime.py": "66ea59b476f70fa9f0252bf44d1d199862513ce0c228c4c1685df34cde301e67",
+    "backend/tests/test_capability_router_projects.py": "2ac7fe8916056c8417a4ad1eeda43ca494546695edea3db087f654ec29af5455",
+    "backend/tests/test_composer_resources_v21.py": "9685f1aff6c8ad9e4c139676845b4f4e11ddd8aa27fb2f154fd019fdf77b417d",
+    "backend/tests/test_core_measured_planner_v19.py": "52614388721b9cc08e027ab2da8082b81381e536a4d282028190fdd813e59127",
+    "backend/tests/test_core_measured_serial_v17.py": "5d9e791b8ee28c01b8e3aed543593e8b289e559b7da4ed762daafb1655c20b46",
+    "backend/tests/test_planner_dataflow_v21.py": "49e1cf0910bc9ce81b8ff8eb6675775ab0b5ae838957c6b55f70c69bd519410a",
+    "backend/tests/test_planner_guidance_v24.py": "1af42403a476e3d6fc586dd44e103ba6885f17c7fd00c7a331001b857a605021",
+    "backend/tests/test_planner_protocol_v23.py": "b1b32f4c4b40e1e64fd93943ec7544cd2f06bf6449ed52f19be942f11bd032f7",
+    "backend/tests/test_planner_protocol_v25.py": "d310390af69dfd2d8e63a04d806656757133fe873d939571d42e22e947887452",
+    "backend/tests/test_superagent_loop.py": "239098f3015cefb1e8e3f1215413d64243eedf29a78d8ae24df82462f057e55b"
+  }
+}

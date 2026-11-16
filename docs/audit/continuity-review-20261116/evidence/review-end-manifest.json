@@ -1,0 +1,127 @@
+{
+  "captured_at": "2026-11-16T17:39:03.675950+08:00",
+  "head": "7c1763bb2ce962a924f2266c55978e1483bd112b",
+  "files": {
+    "backend/scripts/phase2/live_core.py": {
+      "sha256": "732a841316acf4d42554e3b2ba026ac77d788f9946a8ce0974ef50c46103d1bd",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/scripts/phase2/live_core.py.gz"
+    },
+    "backend/src/forge_core/independent_review.py": {
+      "sha256": "967971a33c4a05161e4659e1ad9daccabfa526d226c22d519166012d1334edd2",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/independent_review.py.gz"
+    },
+    "backend/src/forge_core/project_continuity.py": {
+      "sha256": "51c49f4f1be51207a055e30c4ef2e80a02ea1bafe0d79e0cdb53f048f49a0739",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/project_continuity.py.gz"
+    },
+    "backend/src/forge_core/recall_chain.py": {
+      "sha256": "48548f6ac8c7ae4350670b93da8f62fa480e88b397db10b529ad030d9c49537f",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/recall_chain.py.gz"
+    },
+    "backend/src/forge_core/router.py": {
+      "sha256": "2d74e49e775fa8a7c21ff79f86748479724f97a04ab9ee1be0612146efaddedb",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/router.py.gz"
+    },
+    "backend/src/forge_core/router_json_protocol.py": {
+      "sha256": "95b61b8c12ef9fd899ba3ee424b7e02adf1d0b91d9510f0a7477ca48fe94ae28",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/router_json_protocol.py.gz"
+    },
+    "backend/src/forge_core/worker_continuations.py": {
+      "sha256": "63949b2138ec8cdb101440cdcea193d7cb066a66cafe87fa85d1798cf7f922fc",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/worker_continuations.py.gz"
+    },
+    "backend/src/forge_core/worker_runtime.py": {
+      "sha256": "66ea59b476f70fa9f0252bf44d1d199862513ce0c228c4c1685df34cde301e67",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/src/forge_core/worker_runtime.py.gz"
+    },
+    "backend/tests/test_capability_router_projects.py": {
+      "sha256": "6a171649ecfca0b38c8099388521dcd28a01e28f1b03fb2167f54b582dd34a35",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_capability_router_projects.py.gz"
+    },
+    "backend/tests/test_composer_resources_v21.py": {
+      "sha256": "9685f1aff6c8ad9e4c139676845b4f4e11ddd8aa27fb2f154fd019fdf77b417d",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_composer_resources_v21.py.gz"
+    },
+    "backend/tests/test_core_measured_planner_v19.py": {
+      "sha256": "52614388721b9cc08e027ab2da8082b81381e536a4d282028190fdd813e59127",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_core_measured_planner_v19.py.gz"
+    },
+    "backend/tests/test_core_measured_serial_v17.py": {
+      "sha256": "5d9e791b8ee28c01b8e3aed543593e8b289e559b7da4ed762daafb1655c20b46",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_core_measured_serial_v17.py.gz"
+    },
+    "backend/tests/test_planner_dataflow_v21.py": {
+      "sha256": "49e1cf0910bc9ce81b8ff8eb6675775ab0b5ae838957c6b55f70c69bd519410a",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_planner_dataflow_v21.py.gz"
+    },
+    "backend/tests/test_planner_guidance_v24.py": {
+      "sha256": "1af42403a476e3d6fc586dd44e103ba6885f17c7fd00c7a331001b857a605021",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_planner_guidance_v24.py.gz"
+    },
+    "backend/tests/test_planner_protocol_v23.py": {
+      "sha256": "b1b32f4c4b40e1e64fd93943ec7544cd2f06bf6449ed52f19be942f11bd032f7",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_planner_protocol_v23.py.gz"
+    },
+    "backend/tests/test_planner_protocol_v25.py": {
+      "sha256": "d310390af69dfd2d8e63a04d806656757133fe873d939571d42e22e947887452",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_planner_protocol_v25.py.gz"
+    },
+    "backend/tests/test_router_json_protocol.py": {
+      "sha256": "c654e5513c661670349d0e7abaf9329001dccb10d9315c6301858121cd5de6aa",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_router_json_protocol.py.gz"
+    },
+    "backend/tests/test_superagent_loop.py": {
+      "sha256": "239098f3015cefb1e8e3f1215413d64243eedf29a78d8ae24df82462f057e55b",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_superagent_loop.py.gz"
+    },
+    "backend/tests/test_worker_continuation_completion.py": {
+      "sha256": "e229dd187bdf346c6a2744012f38f498ea247cb9b22d48721834b3524be3a957",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_worker_continuation_completion.py.gz"
+    },
+    "backend/tests/test_worker_core_provenance_superagent.py": {
+      "sha256": "71be07f584547efeb58cefd1f4795e20216e3a3adf1c2e0cfbbdc2eeee730ea5",
+      "untracked": false,
+      "snapshot": "evidence/end-working-files/backend/tests/test_worker_core_provenance_superagent.py.gz"
+    },
+    "backend/scripts/continuity_minimal_probe.py": {
+      "sha256": "1b5a37598bc56a5dcf712f970022986d30ea5d66075816b384e09d37030f278c",
+      "untracked": true,
+      "snapshot": "evidence/end-working-files/backend/scripts/continuity_minimal_probe.py.gz"
+    },
+    "backend/tests/test_continuation_artifact_review.py": {
+      "sha256": "a5edbe36c177469a91813e3cbfec92a3af3be7db8b2fb1e6892440ca1881ccee",
+      "untracked": true,
+      "snapshot": "evidence/end-working-files/backend/tests/test_continuation_artifact_review.py.gz"
+    },
+    "backend/tests/test_continuity_minimal_probe.py": {
+      "sha256": "8a68bb8308fca0e4c441a114839e3bda89a246f328642bb81ef59ea1a204e83c",
+      "untracked": true,
+      "snapshot": "evidence/end-working-files/backend/tests/test_continuity_minimal_probe.py.gz"
+    },
+    "backend/tests/test_recall_restart_continuity.py": {
+      "sha256": "da95606f18586d831a43ec600ea04697bf5163d911fc1c639fe7330ee8e4a3ac",
+      "untracked": true,
+      "snapshot": "evidence/end-working-files/backend/tests/test_recall_restart_continuity.py.gz"
+    }
+  },
+  "diff_sha256": "1ffd75bc8dab922f8fa860618e2db4560a297b53331e21ceb78bd2f6ec187616"
+}

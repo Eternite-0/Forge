@@ -1,0 +1,26 @@
+{
+  "provider_calls": 0,
+  "old_source": "docs/audit/continuity-review-20261116/evidence/end-working-files/backend/src/forge_core/project_continuity.py.gz",
+  "old_source_sha256": "51c49f4f1be51207a055e30c4ef2e80a02ea1bafe0d79e0cdb53f048f49a0739",
+  "current_source_sha256": "cde603357b3190d5bceeb0f74c5b2eb27c71ad3ad88df03279a21d05077aa3e8",
+  "cases": [
+    {
+      "name": "dot-segments",
+      "expected_project": "beta",
+      "prior_focused_project_id": "project_5f97c105e50098381b1b2d48",
+      "current_focused_project_id": "project_51c9a64a68c8ba1ff86c9049",
+      "expected_project_id": "project_51c9a64a68c8ba1ff86c9049",
+      "prior_mismatch_reproduced": true,
+      "current_fence_matches_discovery": true
+    },
+    {
+      "name": "symlink-alias",
+      "expected_project": "beta",
+      "prior_focused_project_id": null,
+      "current_focused_project_id": "project_51c9a64a68c8ba1ff86c9049",
+      "expected_project_id": "project_51c9a64a68c8ba1ff86c9049",
+      "prior_mismatch_reproduced": true,
+      "current_fence_matches_discovery": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "exit_code": 0,
+  "same_diff_before_after": true,
+  "network_guard": "non-loopback DNS and connects denied in audit process",
+  "provider_credentials": "selected real-provider environment prefixes removed",
+  "scope": [
+    "test_capability_router_projects.py",
+    "test_composer_resources_v21.py",
+    "test_core_measured_planner_v19.py",
+    "test_core_measured_serial_v17.py",
+    "test_planner_dataflow_v21.py",
+    "test_planner_guidance_v24.py",
+    "test_planner_protocol_v23.py",
+    "test_planner_protocol_v25.py",
+    "test_router_json_protocol.py",
+    "test_superagent_loop.py"
+  ]
+}

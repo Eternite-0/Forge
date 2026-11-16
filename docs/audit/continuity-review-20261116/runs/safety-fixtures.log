@@ -1,0 +1,93 @@
+........................................................................ [ 48%]
+.........FFF............................................................ [ 97%]
+....                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[read_trigger] _
+
+completed = (<forge_core.store.Store object at 0x111709df0>, <forge_core.worker_runtime.WorkerManager object at 0x11161a450>, <tes...3', 'thread_id': 'thread_728689425189', ...}, <forge_core.superagent_events.TriggerService object at 0x11170a5d0>, ...)
+name = 'read_trigger'
+
+    @pytest.mark.parametrize("name", ["read_trigger", "recall_object", "handback_trigger"])
+    def test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts(
+        completed, name
+    ):
+        store, manager, model, run, trigger, _, execute = completed
+        arguments = (
+            {"reference": f"quest:{run['quest_id']}"}
+            if name == "recall_object"
+            else {
+                "trigger_id": trigger["id"],
+                **({"reason": "outside this assignment"} if name == "handback_trigger" else {}),
+            }
+        )
+        call = execute(name, arguments)
+        with store.connection() as c:
+            before = c.total_changes
+            assert _verify_worker_context_call(store, c, run["id"], call)
+            receipts, _ = _review_receipts(store, c, run)
+>           assert len(receipts) == 1 and receipts[0]["tool_name"] == "file_write"
+E           AssertionError: assert (3 == 1)
+E            +  where 3 = len([{'id': 'call_3ec4ed46caa6ae795cf1b2762b5a2f70485f79eac7d575f8e83dabbf91f4999d', 'tool_name': 'read_trigger', 'context...e': 'read_trigger', 'context_only': True, 'arguments': {'max_chars': 4096, 'trigger_id': 'trigger_957efb375f55'}, ...}])
+
+backend/tests/test_worker_core_provenance_superagent.py:103: AssertionError
+_ test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[recall_object] _
+
+completed = (<forge_core.store.Store object at 0x11170ba70>, <forge_core.worker_runtime.WorkerManager object at 0x111619910>, <tes...a', 'thread_id': 'thread_0b3c0ad53d94', ...}, <forge_core.superagent_events.TriggerService object at 0x11170bfb0>, ...)
+name = 'recall_object'
+
+    @pytest.mark.parametrize("name", ["read_trigger", "recall_object", "handback_trigger"])
+    def test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts(
+        completed, name
+    ):
+        store, manager, model, run, trigger, _, execute = completed
+        arguments = (
+            {"reference": f"quest:{run['quest_id']}"}
+            if name == "recall_object"
+            else {
+                "trigger_id": trigger["id"],
+                **({"reason": "outside this assignment"} if name == "handback_trigger" else {}),
+            }
+        )
+        call = execute(name, arguments)
+        with store.connection() as c:
+            before = c.total_changes
+            assert _verify_worker_context_call(store, c, run["id"], call)
+            receipts, _ = _review_receipts(store, c, run)
+>           assert len(receipts) == 1 and receipts[0]["tool_name"] == "file_write"
+E           AssertionError: assert (2 == 1)
+E            +  where 2 = len([{'id': 'receipt_2c6f38377ad0', 'tool_name': 'file_write', 'resource_scope': '/Users/tracy/Documents/Forge/docs/audit/...e': 'read_trigger', 'context_only': True, 'arguments': {'max_chars': 4096, 'trigger_id': 'trigger_0f1093e12542'}, ...}])
+
+backend/tests/test_worker_core_provenance_superagent.py:103: AssertionError
+_ test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[handback_trigger] _
+
+completed = (<forge_core.store.Store object at 0x11170a450>, <forge_core.worker_runtime.WorkerManager object at 0x111619b50>, <tes...3', 'thread_id': 'thread_35f3019e5c9f', ...}, <forge_core.superagent_events.TriggerService object at 0x11170a1b0>, ...)
+name = 'handback_trigger'
+
+    @pytest.mark.parametrize("name", ["read_trigger", "recall_object", "handback_trigger"])
+    def test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts(
+        completed, name
+    ):
+        store, manager, model, run, trigger, _, execute = completed
+        arguments = (
+            {"reference": f"quest:{run['quest_id']}"}
+            if name == "recall_object"
+            else {
+                "trigger_id": trigger["id"],
+                **({"reason": "outside this assignment"} if name == "handback_trigger" else {}),
+            }
+        )
+        call = execute(name, arguments)
+        with store.connection() as c:
+            before = c.total_changes
+            assert _verify_worker_context_call(store, c, run["id"], call)
+            receipts, _ = _review_receipts(store, c, run)
+>           assert len(receipts) == 1 and receipts[0]["tool_name"] == "file_write"
+E           AssertionError: assert (3 == 1)
+E            +  where 3 = len([{'id': 'call_616bc095d0193c9de22bcdc6cd08ff11c7f666d212a1a40609fc51e835af70b6', 'tool_name': 'handback_trigger', 'con...e': 'read_trigger', 'context_only': True, 'arguments': {'max_chars': 4096, 'trigger_id': 'trigger_20a80bb2f139'}, ...}])
+
+backend/tests/test_worker_core_provenance_superagent.py:103: AssertionError
+=========================== short test summary info ============================
+FAILED backend/tests/test_worker_core_provenance_superagent.py::test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[read_trigger]
+FAILED backend/tests/test_worker_core_provenance_superagent.py::test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[recall_object]
+FAILED backend/tests/test_worker_core_provenance_superagent.py::test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[handback_trigger]
+3 failed, 145 passed in 89.89s (0:01:29)

@@ -91,6 +91,25 @@ def _reject_nonfinite(_value):
 
 def _strict_json_shape(text):
     """Return fixed codes and numeric locations, never parser messages/inputs."""
+    # Python's JSON decoder recursion behavior differs by version/build. Keep
+    # resource diagnostics deterministic, without counting brackets in strings.
+    depth, quoted, escaped = 0, False, False
+    for character in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                quoted = False
+        elif character == '"':
+            quoted = True
+        elif character in "[{":
+            depth += 1
+            if depth > 1000:
+                return {"syntax": "invalid", "error_code": "nesting_limit"}
+        elif character in "]}":
+            depth -= 1
     try:
         parsed = json.loads(text, parse_constant=_reject_nonfinite)
     except json.JSONDecodeError as exc:

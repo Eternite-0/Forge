@@ -1,0 +1,62 @@
+[
+  {
+    "classname": "tests.test_capability_sprint_scenarios",
+    "name": "test_l2_uses_real_fixed_prototype_and_a_distinct_project_root",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_core_supervisor",
+    "name": "test_restart_waits_for_previous_core_descendants_to_exit",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_core_supervisor",
+    "name": "test_hard_parent_termination_kills_core_and_descendants",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_backup_m7",
+    "name": "test_workspace_lock_key_matches_windows_extended_path",
+    "time": "0.001"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[.env::$DATA]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[data/operator-settings.json::$DATA]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[.forge-restore-fence.json::$DATA]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[work/NUL.txt]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[work/trailing.]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[work/trailing ]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_windows_aliases_cannot_gain_workspace_grant[\\\\\\\\.\\\\NUL]",
+    "time": "0.000"
+  },
+  {
+    "classname": "tests.test_workspace_scope_m7",
+    "name": "test_ntfs_default_stream_alias_reads_dummy_but_tool_rejects",
+    "time": "0.049"
+  }
+]

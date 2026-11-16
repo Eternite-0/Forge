@@ -2558,6 +2558,26 @@ class WorkerManager:
                 )
                 if artifact_message is not None:
                     overhead += len(_json([artifact_message]).encode("utf-8")) + 32
+                continuation_message = None
+                if contract.get("superagent"):
+                    from .worker_continuations import continuation_feedback, pending_continuations
+
+                    try:
+                        with self.store.connection() as connection:
+                            connection.execute("BEGIN")
+                            before = connection.execute(
+                                "SELECT COALESCE(MAX(ordinal),-1)+1 FROM worker_messages WHERE run_id=?",
+                                (run_id,),
+                            ).fetchone()[0]
+                            unread = pending_continuations(
+                                self.store, connection, run_id, before_ordinal=before
+                            )
+                    except DomainError:
+                        self._fail(run_id, token, "continuation_source_unavailable")
+                        return self.get(run_id)
+                    if unread:
+                        continuation_message = {"role": "user", "content": continuation_feedback(unread)}
+                        overhead += len(_json([continuation_message]).encode("utf-8")) + 32
                 from .independent_review import review_capacity_preview
 
                 try:
@@ -2658,6 +2678,10 @@ class WorkerManager:
                     )
                 if artifact_message is not None:
                     messages.append(artifact_message)
+                if continuation_message is not None:
+                    # Recomputed from durable proofs on every model turn, including
+                    # after compaction/restart. Not a synthetic read or authority.
+                    messages.insert(1, continuation_message)
                 if progress_message is not None:
                     if approved_capacity and len(_json(progress_message).encode()) > 2048:
                         raise DomainError("Worker allowance feedback exceeds bounded policy")

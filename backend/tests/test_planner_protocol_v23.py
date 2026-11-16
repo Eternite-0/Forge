@@ -22,6 +22,13 @@ def node(*args, allowance=0, **kwargs):
     return result
 
 
+def diagnostic_setup(tmp_path):
+    """Large-output diagnostics require an eligible 8192-output fixture model."""
+    store, quest, inventory = setup(tmp_path)
+    store.save_model(store.list_models()[0].model_copy(update={"max_output_tokens": 8192}))
+    return store, quest, inventory
+
+
 def graph(*nodes):
     return {"allocation_mode": "core_measured", "nodes": list(nodes)}
 
@@ -137,7 +144,7 @@ def preview(store, quest, selected, provider):
 def test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown(
     tmp_path, monkeypatch
 ):
-    store, quest, _inventory = setup(tmp_path)
+    store, quest, _inventory = diagnostic_setup(tmp_path)
     selected = graph(
         node(
             "producer",
@@ -189,7 +196,7 @@ def test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_st
 def test_first_rejection_combines_schema_and_all_independent_capacity_measurements(
     tmp_path,
 ):
-    store, quest, _inventory = setup(tmp_path)
+    store, quest, _inventory = diagnostic_setup(tmp_path)
     selected = graph(
         node(
             "over",
@@ -569,7 +576,7 @@ def test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measu
     )
     from forge_core.source_capacity import bind_source_receipt_bounds
 
-    store, quest, _inventory = setup(tmp_path)
+    store, quest, _inventory = diagnostic_setup(tmp_path)
     selected = graph(
         node(
             "over",

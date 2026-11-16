@@ -19,6 +19,7 @@ from test_verified_capacity_v16 import capacity_graph, prepared
 from forge_core.capacity_preflight import discover_input_inventory
 from forge_core.domain import ForgeEvent, Quest
 from forge_core.graph_domain import CoreMeasuredGraphWire
+from forge_core.planner_resource_policy import planned_worker_output_tokens
 from forge_core.provider_pool import ProviderPool
 from forge_core.providers import ProviderError
 from forge_core.quest_graph import InvalidGraphProposal, QuestGraphService
@@ -88,6 +89,16 @@ def test_core_protocol_quantifies_single_chain_and_independent_branches(tmp_path
         store, expected_data, discover_input_inventory(store, "Assess inputs/unicode.json.")
     )
     provider = NativeFramingMock(wire)
+    if shape == "branch":
+        # The current five-call cycle and 4096 response tier no longer fit
+        # this historical 360k fixture. Preserve rejection, never raise its cap.
+        with pytest.raises(InvalidGraphProposal):
+            generate(store, quest, provider)
+        diagnostic = json.loads(provider.requests[-1].messages[-1]["content"])["capacity_diagnostics"]
+        assert diagnostic["required_total"] > diagnostic["original_ceiling"] == 360000
+        assert QuestGraphService(store).history(quest.id) == []
+        assert wire == original
+        return
     plan = generate(store, quest, provider)
     assert wire == original
     assert len(provider.requests) == 1 and plan["status"] == "proposed"
@@ -152,10 +163,47 @@ def test_production_schema_has_no_model_resource_fields_or_legacy_mode():
 def test_core_uses_original_operator_intersection_without_accepting_model_caps(tmp_path):
     store, quest = prepared(tmp_path)
     provider = NativeFramingMock(semantic_wire(capacity_graph()))
-    plan = generate(store, quest, provider, operator_max_total_tokens=120000)
-    assert plan["max_total_tokens"] == 120000
-    assert plan["coordination_reserve_tokens"] == 12000
-    assert sum(node["budget_tokens"] for node in plan["nodes"]) + 12000 <= 120000
+    with pytest.raises(InvalidGraphProposal):
+        generate(store, quest, provider, operator_max_total_tokens=120000)
+    diagnostic = json.loads(provider.requests[-1].messages[-1]["content"])["capacity_diagnostics"]
+    assert diagnostic["required_total"] > diagnostic["original_ceiling"] == 120000
+    assert QuestGraphService(store).history(quest.id) == []
+
+
+def test_smaller_independent_branch_fits_unchanged_source_ceiling_without_serial_pool(tmp_path):
+    store, quest = prepared(
+        tmp_path,
+        content='Assess inputs/unicode.json. Task execution limits: {"max_total_tokens":360000,"max_nodes":3,"max_members":3}',
+    )
+    graph = capacity_graph()
+    other = copy.deepcopy(graph["nodes"][0])
+    other.update(key="independent", expected_artifact="work/independent.json")
+    other["success_criteria"] = [
+        item.replace("work/out.json", "work/independent.json")
+        for item in other["success_criteria"]
+    ]
+    graph["nodes"].append(other)
+    wire = semantic_wire(graph)
+    original = copy.deepcopy(wire)
+    plan = generate(store, quest, NativeFramingMock(wire))
+    assert wire == original and plan["edges"] == []
+    assert len(plan["nodes"]) == 2 and plan["max_total_tokens"] == 360000
+    assert "serial_capacity_policy" not in plan
+    observation = plan["capacity_contract"]["resource_allocation"]
+    assert observation["shape"] == "independent_cycles"
+    assert sum(node["budget_tokens"] for node in plan["nodes"]) + plan["coordination_reserve_tokens"] <= 360000
+
+
+def test_affordable_operator_intersection_still_admits_without_increasing_source_cap(tmp_path):
+    store, quest = prepared(tmp_path)
+    plan = generate(
+        store, quest, NativeFramingMock(semantic_wire(capacity_graph())),
+        operator_max_total_tokens=170000,
+    )
+    assert plan["max_total_tokens"] == 170000
+    assert plan["max_total_tokens"] < 180000
+    assert plan["coordination_reserve_tokens"] == 17000
+    assert sum(node["budget_tokens"] for node in plan["nodes"]) + 17000 <= 170000
 
 
 @pytest.mark.parametrize("level", [1, 2, 3])
@@ -215,8 +263,8 @@ def test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin(tmp
                 "tools": node["allowed_tools"],
                 "responsibility": node["objective"]
                 + " Preserve exact sources and distinguish limitations." * 6,
-                "input_tokens": node["budget_tokens"] - 2048,
-                "output_tokens": 2048,
+                "input_tokens": node["budget_tokens"] - planned_worker_output_tokens(node),
+                "output_tokens": planned_worker_output_tokens(node),
             }
         ],
         {
@@ -256,6 +304,7 @@ def test_core_preserves_large_output_bounds_and_context_rejection(tmp_path):
     store, quest = prepared(tmp_path)
     wire = semantic_wire(capacity_graph())
     wire["nodes"][0]["capacity_bounds"]["max_delivery_bytes"] = 32768
+    store.save_model(store.list_models()[0].model_copy(update={"max_output_tokens": 8192}))
     before = copy.deepcopy(wire)
     provider = ScriptedMock(wire)
     with pytest.raises(InvalidGraphProposal):

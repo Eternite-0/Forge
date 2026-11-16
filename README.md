@@ -12,6 +12,51 @@ FORGE is a self-built, general-purpose DeepSeek-style Super-agent desktop
 application: one persistent Router conversation coordinates hidden, isolated
 Workers and continuously receives events.
 
+## Continuity review — 2026-11-16
+
+The `codex/phase1-continuous` review against `0bef3316` preserves the persistent
+Router / hidden Workers / Trigger / pass-through / Chain of Recall architecture;
+it does not change the frontend. Project matching now uses parsed path boundaries
+and the most specific nested project. Unread Thread requirements enter the next
+Worker model turn, and verified full Thread pages reach independent artifact
+review as context, never as execution evidence. Router archives expose typed
+original-message references for actual paginated recall after restart.
+
+The original **17 failed / 2932 passed / 12 skipped** regression and its failure
+classification are retained in [the continuity audit](docs/audit/continuity-review-20261116/REPORT.md).
+The [final continuity report](docs/audit/continuity-review-20261116/FINAL_REPORT.md)
+separates frozen-source regression, new bounded real observations, historical
+failures and remaining limitations. Mock orchestration is not live acceptance;
+these minimal conditions do not replace full capability acceptance.
+
+The optional one-shot probe uses existing dependencies. Run from the repository
+root with the backend environment. Only `run` contacts the Provider; `preflight`
+is offline and does not create the workspace, and `audit-ledger` is read-only.
+Supply the secret through an environment variable (not a CLI flag, committed
+file or captured shell command):
+
+```sh
+export FORGE_PROVIDER_CREDENTIAL_REF=FORGE_PROVIDER_KEY_CONTINUITY
+# Set FORGE_PROVIDER_KEY_CONTINUITY securely in your local environment.
+backend/.venv/bin/python backend/scripts/continuity_minimal_probe.py preflight \
+  --workspace /absolute/new/isolated-workspace --with-thread
+# LIVE: requires current authorization and reconciled remaining campaign budget.
+backend/.venv/bin/python backend/scripts/continuity_minimal_probe.py run \
+  --workspace /absolute/new/isolated-workspace --with-thread
+backend/.venv/bin/python backend/scripts/continuity_minimal_probe.py audit-ledger \
+  --workspace /absolute/new/isolated-workspace
+```
+
+The driver pins the historical **99 attempts / 1089785 charged-or-reserved
+tokens**, allocates at most **18 new attempts / 220000 tokens**, uses a shared
+durable pre-HTTP ledger and zero retries, and starts fresh OS processes for
+seeding and recall. It refuses existing workspaces, source drift, unknown usage
+and replay. It never authorizes another campaign: after any real run, reconcile
+its durable ledger before considering a new allocation. The fixed historical
+opening is not a mechanism for resetting or duplicating the remaining budget.
+
+### Historical capability sprint status (before this review)
+
 The current backend capability sprint adds project-focused context, bounded
 specialist dependencies and expansion, real CPython unittest execution, model
 microbenchmarks and progress-based stall detection. Read the
@@ -27,15 +72,15 @@ Complete Thread consumption and actual post-restart relationship Recall failed;
 those original failures remain recorded. The completion stage totals 99 settled
 attempts and 1089785 charged-or-reserved tokens.
 
-The latest production correction gates final delivery on actual complete
+The prior production correction gated final delivery on actual complete
 source-bound Thread reads or an explicit proved handback. It preserves charged
 drafts and original budgets, and grants no new permissions. This correction has
-targeted offline verification; it has **not** received a new real Provider run or
-a new full-backend regression. The prior full suite's 2886 passed, 13 failed and
+targeted offline verification at that historical checkpoint, without a new real
+Provider run or full-backend regression. That prior full suite's 2886 passed, 13 failed and
 3 skipped remain attributed to its earlier frozen source.
 
 The user requested a combined GitHub delivery of the backend and desktop work
-on `codex/phase1-continuous`. Further real calls are deferred. Read the
+on `codex/phase1-continuous`. Real calls were deferred at that checkpoint. Read the
 [GitHub continuation guide](docs/GITHUB_CONTINUATION.md) for a fresh checkout,
 current checks and remaining acceptance, and the
 [backend handoff](docs/SUPERAGENT_NEXT_ENV_HANDOFF.md) for original budget

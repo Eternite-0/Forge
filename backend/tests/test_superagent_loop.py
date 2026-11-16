@@ -324,8 +324,8 @@ def test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read(ri
                         "name": "read_trigger",
                         "arguments": {
                             "trigger_id": trigger["id"],
-                            "offset_chars": 2150,
-                            "max_chars": 1024,
+                            "offset_chars": 0,
+                            "max_chars": 4096,
                         },
                     }
                 ],
@@ -401,10 +401,16 @@ def test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_o
                 usage={"input_tokens": 20, "output_tokens": 10},
             )
         assert request.messages[-1]["role"] == "tool"
-        assert (
-            "Please explain the private source."
-            in json.loads(request.messages[-1]["content"])["text"]
-        )
+        if count == 2:
+            assert "Please explain the private source." in json.loads(request.messages[-1]["content"])["text"]
+            # Reading the original task does not consume a later Thread request.
+            assert followup["id"] in json.dumps(request.messages)
+            return ModelResponse(text="", tool_calls=[{
+                "id": "read-addition", "name": "read_trigger",
+                "arguments": {"trigger_id": followup["id"]},
+            }], usage={"input_tokens": 20, "output_tokens": 10})
+        assert count == 3
+        assert "Keep the analysis concise" in json.loads(request.messages[-1]["content"])["text"]
         return response(
             {
                 "summary": "Mock source analysis completed",
@@ -440,7 +446,7 @@ def test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_o
     assert followup["status"] == "passed_through"
     result = asyncio.run(manager.run(session["id"]))
     assert result["state"] == "review_pending"
-    assert len(model.requests) == 2
+    assert len(model.requests) == 3
     assert len(store.list_messages()) == 2
     dispatcher = Dispatcher(store)
     for _ in range(12):

@@ -1,0 +1,87 @@
+[
+  {
+    "id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+    "message": "assert 4096 == 2048",
+    "failure_text_sha256": "7ec0e671133b8d191c9325676ecf0e81ad1980486f7cf942fdecaf7d29166162"
+  },
+  {
+    "id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+    "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+    "failure_text_sha256": "008324d8042573d337e09149ef29c9bf3bdf2b51c83f2ee7c790180658fb6dba"
+  },
+  {
+    "id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+    "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+    "failure_text_sha256": "953c02ae590709ce867c53f373bd492ca750e535c93a3cb87f84e6851ca70db5"
+  },
+  {
+    "id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+    "message": "assert 10313 > 12045",
+    "failure_text_sha256": "c9214ce818f81b9f20af5356b9b34882e9380647d0e452f9a7c2a0c8641cea57"
+  },
+  {
+    "id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "1cd71c0210674a379c215cad694e2e758cb05c81e3dda8cdcbf5443870739680"
+  },
+  {
+    "id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+    "message": "assert 10577 > 12045",
+    "failure_text_sha256": "2bb825b75fee759401a35610033b8995f8ce963fde6d58f4e87e7d2581f932dd"
+  },
+  {
+    "id": "tests.test_live_core_private_control::test_private_real_core_restarts_and_stops_without_provider_calls",
+    "message": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/tracy/Documents/Forge/backend/.venv/Scripts/python.exe'",
+    "failure_text_sha256": "9b6bf63586521463bd249965cb33f3b90f7992f38fa589f27abadfa63e4b9007"
+  },
+  {
+    "id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+    "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+    "failure_text_sha256": "13e3f0939e31e9f3c69bbc776f813963e9b69f5dde94dec6b5e0678356c0dbaf"
+  },
+  {
+    "id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+    "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+    "failure_text_sha256": "75f865ca773f0fcd93859a9392af784d94e99150c198782a4362ef776e49788c"
+  },
+  {
+    "id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+    "message": "assert 5 == 4",
+    "failure_text_sha256": "f2ee181cc551fc1dbaf1d8d43599266a0e3b12e59805ec937defe89acf3584c1"
+  },
+  {
+    "id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+    "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+    "failure_text_sha256": "292af93e17371bbce9f2b0f24f9a8c2bd857ae301b522b2f395851c5de6c0735"
+  },
+  {
+    "id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "34bd25493b91d12e9c81da192a3eda53565ce69ace8e2f9a71d2858d177c00fd"
+  },
+  {
+    "id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "78da596e5b0ec62c3e98ca16940ce5913a29edb567eb37585691e02b18486fc0"
+  },
+  {
+    "id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+    "message": "KeyError: 'rows'",
+    "failure_text_sha256": "c5250d14d88d4cf7818acc14a9fb31b1be464abcd3c1a921e8aeaea57ab4d31a"
+  },
+  {
+    "id": "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+    "message": "AssertionError: assert {'syntax': 'i...line': 1, ...} == {'syntax': 'i...esting_limit'}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {'error_code': 'expected_value'} != {'error_code': 'nesting_limit'}\n  Left contains 3 more items:\n  {'column': 3001, 'line': 1, 'position_chars': 3000}\n  Use -v to get more diff",
+    "failure_text_sha256": "459daa14c6aed0e707b4a354ac41232663d1fab3abc951fad3a3990c190f9745"
+  },
+  {
+    "id": "tests.test_superagent_loop::test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read",
+    "message": "AssertionError: assert 'blocked' == 'review_pending'\n  \n  - review_pending\n  + blocked",
+    "failure_text_sha256": "d9f6ba3078e02711f29c98caeb857743437ec895e85fbba2642e3a1546f3925c"
+  },
+  {
+    "id": "tests.test_superagent_loop::test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router",
+    "message": "AssertionError: assert 'blocked' == 'review_pending'\n  \n  - review_pending\n  + blocked",
+    "failure_text_sha256": "577c5424dc39babf5a325a5492f4d9f273193f8ba9d8e0abcac78462803fc5e3"
+  }
+]

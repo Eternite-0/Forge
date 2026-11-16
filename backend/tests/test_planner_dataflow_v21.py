@@ -441,7 +441,7 @@ def test_edge_limit_rejects_explicit_dense_dag_without_dropping_dependencies():
 
 
 @pytest.mark.parametrize("level", [1, 2, 3])
-def test_constructed_original_router_source_capacity_is_feasible(tmp_path, level):
+def test_constructed_original_router_source_capacity_respects_current_ceiling(tmp_path, level):
     from test_planner_router_input_v18 import route_original_scenario
 
     from forge_core.providers import ProviderConfig, ProviderGateway
@@ -486,6 +486,18 @@ def test_constructed_original_router_source_capacity_is_feasible(tmp_path, level
         )
     )
     service = QuestGraphService(store)
+    if level in (1, 2):
+        from forge_core.capacity_preflight import CapacityPreflightError
+
+        before = copy.deepcopy([node["capacity_bounds"] for node in data["nodes"]])
+        with pytest.raises(CapacityPreflightError, match="original task ceiling") as rejected:
+            service._size_core_resources(quest, data, inventory, provider)
+        diagnostic = rejected.value.capacity_diagnostics
+        assert diagnostic["required_total"] > diagnostic["original_ceiling"] == limits["max_total_tokens"]
+        assert data["edges"] == graph["edges"]
+        assert [node["capacity_bounds"] for node in data["nodes"]] == before
+        assert service.history(quest["id"]) == []
+        return
     service._size_core_resources(quest, data, inventory, provider)
     service._capacity_preflight(quest, data, inventory, provider)
     GraphProposal.model_validate(data)

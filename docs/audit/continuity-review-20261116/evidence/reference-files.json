@@ -1,0 +1,12 @@
+{
+  "backend/src/forge_core/planner_resource_policy.py": "be8f93e2836f4ef2aecf5dc5ab0864e8794139b766faafd4cb5d68705386d54c",
+  "backend/src/forge_core/planner_capacity_preview_v23.py": "9869104c4fb8e4476aa55d57e55db26da18f88b926a5934e35366ff9579842f4",
+  "backend/src/forge_core/review_envelope.py": "224e2407705432840979d0e10ebe5efb373ea75d3d72a6bd7f0e307008e82852",
+  "backend/src/forge_core/evidence.py": "041db2ae43475c6e53a224c23012af4064b0fb49d1a5083ea1ab764c7f8d2080",
+  "backend/src/forge_core/workspace_discovery.py": "643758a9590fe5b7511b67f0bc1565f1fb1f4df5ac07512ff0f809d533a5883c",
+  "backend/tests/test_worker_core_provenance_superagent.py": "71be07f584547efeb58cefd1f4795e20216e3a3adf1c2e0cfbbdc2eeee730ea5",
+  "backend/tests/test_live_core_private_control.py": "5c3d40726330e53bb3260704a25da7a645d741d99de30a19c810253e3068f752",
+  "backend/tests/fixtures/phase2_constructed_dataflow_v21.json": "305df734c0259885bcf611ea187604d26037370076c487543be5d5136eb142aa",
+  "AGENTS.md": "fcba318054cceaa691dcc9f4b9aa060d93b095d336cc9e779c43757159478017",
+  "README.md": "bb8dac2806b4b0a240a9b9be0adf7777dc7a50673cefca5fd6ac4865af2a98d9"
+}

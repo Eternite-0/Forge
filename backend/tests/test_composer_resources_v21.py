@@ -19,6 +19,7 @@ from forge_core.composer_resources import (
     uses_core_composer_resources,
 )
 from forge_core.domain import DomainError, ModelProfile, ProtocolSupport
+from forge_core.planner_resource_policy import planned_worker_output_tokens
 from forge_core.provider_pool import ProviderPool
 from forge_core.providers import ProviderError
 from forge_core.team_composition import TeamCompositionService, TeamWire
@@ -270,7 +271,7 @@ def test_production_pump_uses_semantic_wire_then_full_native_service_admission(p
     body = json.loads(row["body_json"])
     member = body["members"][0]
     assert row["status"] == "proposed"
-    assert member["output_tokens"] == 2048
+    assert member["output_tokens"] == planned_worker_output_tokens(plan["nodes"][0]) == 4096
     assert member["estimated_tokens"] == plan["nodes"][0]["budget_tokens"]
     assert member["capacity_preflight"]["minimum_node_tokens"] <= member["estimated_tokens"]
     assert member["output_schema"] == STRICT_DELIVERY_OUTPUT_SCHEMA

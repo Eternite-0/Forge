@@ -1,0 +1,90 @@
+{
+  "captured_at": "2026-11-16T17:48:23.513736+08:00",
+  "attribution": "Other agent supplied run artifacts; not independently reproduced by this copy operation",
+  "artifacts": [
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters-fixed2.log",
+      "copy": "evidence/failure-clusters-fixed2.log.gz",
+      "original_bytes": 774,
+      "original_sha256": "9deacce18f7579d50b8c0894a11b364bfdbc07fc7f68f51b5ebfa13606df3aa4",
+      "gzip_sha256": "a4e4d436d86239de04fc16c37ffb839db95f4624ea553327c5625b4a284d84f9",
+      "decompressed_equal": true,
+      "summary_lines": [
+        "201 passed, 1 warning in 36.52s"
+      ]
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters-fixed2.xml",
+      "copy": "evidence/failure-clusters-fixed2.xml.gz",
+      "original_bytes": 31532,
+      "original_sha256": "e661560fd3b71bf42b6c5cc390f6d0fd82056049589d318ec027fb5a4ad52768",
+      "gzip_sha256": "1ebb8d9841221c5e6741fb6fb7ba0bf62e232433c9b44aa4b68388218d0ec5f8",
+      "decompressed_equal": true,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "201",
+          "time": "36.373",
+          "timestamp": "2026-11-16T17:20:55.804723+08:00",
+          "hostname": "tracydeMacBook-Pro.local"
+        }
+      ]
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/review-targeted.log",
+      "copy": "evidence/review-targeted.log.gz",
+      "original_bytes": 351,
+      "original_sha256": "327d3ef43efdfa59de49150154cd88b92501d9b852ea1b04d27848ebc83e995d",
+      "gzip_sha256": "64bd847243e3cb216deb12e73b9af3bf2dd24235109975e6e8338a8e41b4a065",
+      "decompressed_equal": true,
+      "summary_lines": [
+        "226 passed in 97.97s (0:01:37)"
+      ]
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/review-targeted.xml",
+      "copy": "evidence/review-targeted.xml.gz",
+      "original_bytes": 35156,
+      "original_sha256": "4a5a538a63b97bdaeb5b11107fcf733a9ca5f58ecfe3dccf7031dc334263e12f",
+      "gzip_sha256": "7af0e48ff8f58e0d1720e4b2a633c508b0be7065a0cc4dfc252310d3f828314a",
+      "decompressed_equal": true,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "226",
+          "time": "97.948",
+          "timestamp": "2026-11-16T17:29:49.901998+08:00",
+          "hostname": "tracydeMacBook-Pro.local"
+        }
+      ]
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/provenance-fixed.log",
+      "copy": "evidence/provenance-fixed.log.gz",
+      "original_bytes": 180,
+      "original_sha256": "7e455f2e40523b0a55550668944d88c0b01e8b2fdcae552f8026431bc2c40509",
+      "gzip_sha256": "b5a1362a67c055aa2ddabb9490904ca90ae1c4079cb8cbb47471db8cdef779f5",
+      "decompressed_equal": true,
+      "summary_lines": [
+        "81 passed in 22.25s"
+      ]
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/continuity-targeted.log",
+      "copy": "evidence/continuity-targeted.log.gz",
+      "original_bytes": 6470,
+      "original_sha256": "77d1f1f04af1ed673ff0c18e85ee64eaf5e4fa000f4d0f39cafb373a8201f5ae",
+      "gzip_sha256": "a66b5f43b89a6044e8f69d3a3bbf3c11f675fabcbdee08598d4457c8a3021831",
+      "decompressed_equal": true,
+      "summary_lines": [
+        "3 failed, 125 passed, 1 warning in 48.28s"
+      ]
+    }
+  ]
+}

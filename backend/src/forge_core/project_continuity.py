@@ -3,6 +3,8 @@
 import json
 import re
 
+from .workspace_discovery import _named_paths
+
 
 def project_context(connection, text, *, limit=32):
     rows = connection.execute(
@@ -12,6 +14,27 @@ def project_context(connection, text, *, limit=32):
     lowered = text.casefold().replace("\\", "/")
     projects = [{**dict(row), "reference": "project:" + row["id"]} for row in rows[:limit]]
     selected = set()
+    # Parse paths exactly as discovery does. A path identifies its most specific
+    # known project; neither a sibling prefix nor a duplicate basename is a match.
+    prose = lowered
+    for path in _named_paths(text):
+        # Discovery records resolved identities. Normalize dot segments and
+        # symlink aliases identically before selecting the project fence; an
+        # unresolved lexical prefix can otherwise select the wrong sibling.
+        try:
+            named = str(path.resolve()).casefold().replace("\\", "/").rstrip("/") or "/"
+        except (OSError, RuntimeError, ValueError):
+            continue
+        matches = [
+            project for project in projects
+            if named == project["root"].casefold().replace("\\", "/").rstrip("/")
+            or named.startswith(project["root"].casefold().replace("\\", "/").rstrip("/") + "/")
+        ]
+        if matches:
+            depth = max(len(project["root"].rstrip("/\\")) for project in matches)
+            selected.update(project["id"] for project in matches
+                            if len(project["root"].rstrip("/\\")) == depth)
+        prose = prose.replace(str(path).casefold().replace("\\", "/"), " ")
     for project in projects:
         name = project["name"].casefold()
         # Chinese prose commonly touches an ASCII project name without spaces.
@@ -24,11 +47,10 @@ def project_context(connection, text, *, limit=32):
             boundary_right = rf"(?:(?![\w-])|(?=[{cjk}]))"
         # A shared short name is ambiguous. Exact IDs/roots remain available.
         if (
-            project["id"] in text
-            or project["root"].casefold().replace("\\", "/") in lowered
+            re.search(r"(?<![\w-])" + re.escape(project["id"]) + r"(?![\w-])", text)
             or (
                 len(name) >= 3
-                and re.search(boundary_left + re.escape(name) + boundary_right, lowered)
+                and re.search(boundary_left + re.escape(name) + boundary_right, prose)
             )
         ):
             selected.add(project["id"])

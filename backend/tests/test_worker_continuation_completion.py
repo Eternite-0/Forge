@@ -34,10 +34,12 @@ def continuation(delegated):
     return store, manager, model, run, trigger, events
 
 
-def reads(trigger, *, first=0, size=2048):
+def reads(trigger, *, first=0, size=2048, ordinal_start=1):
     return [tool("read_trigger", {
         "trigger_id": trigger["id"], "offset_chars": offset, "max_chars": size,
-    }, ordinal=number) for number, offset in enumerate(range(first, trigger["total_chars"], size), 1)]
+    }, ordinal=number) for number, offset in enumerate(
+        range(first, trigger["total_chars"], size), ordinal_start
+    )]
 
 
 def debt(store, run, *, before=100000):
@@ -46,6 +48,149 @@ def debt(store, run, *, before=100000):
         result = pending_continuations(store, c, run["id"], before_ordinal=before)
         assert c.total_changes == changes
         return result
+
+
+def pending_in_request(request):
+    """Inspect the current Core metadata, not inbox previews or historic feedback."""
+    content = next(
+        message["content"] for message in reversed(request.messages)
+        if message.get("content", "").startswith("Core delivery boundary:")
+    )
+    return json.loads(content[content.index('{"omitted":'):])
+
+
+def authority_snapshot(store, manager, run):
+    current = manager.get(run["id"])
+    limits = {key: current[key] for key in (
+        "step_limit", "tool_limit", "token_limit", "output_limit", "deadline",
+        "allowed_tools_json", "cost_limit_microunits", "plan_digest", "team_digest",
+    )}
+    with store.connection() as c:
+        grants = [dict(row) for row in c.execute(
+            "SELECT * FROM task_grants WHERE quest_id=? ORDER BY rowid", (run["quest_id"],)
+        )]
+        approvals = [dict(row) for row in c.execute("SELECT * FROM approvals ORDER BY rowid")]
+    return limits, grants, approvals
+
+
+def test_first_model_round_sees_real_pending_without_counting_metadata_as_read(continuation):
+    store, manager, model, run, trigger, _events = continuation
+    original = model.generate
+    model.responses.extend([*reads(trigger), response(delivery())])
+
+    async def inspect_first(request):
+        if not model.requests:
+            pending = debt(store, run)
+            assert pending == [{
+                "trigger_id": trigger["id"], "payload_sha256": trigger["payload_sha256"],
+                "total_chars": trigger["total_chars"], "next_offset_chars": 0,
+            }]
+            assert pending_in_request(request) == {"pending": pending, "omitted": 0}
+            with store.connection() as c:
+                # Consuming the inbox did not manufacture a read or an action.
+                assert c.execute("SELECT consumed FROM worker_inbox").fetchone()[0] == 1
+                assert c.execute("SELECT COUNT(*) FROM worker_tool_calls").fetchone()[0] == 0
+                assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 0
+                assert c.execute("SELECT COUNT(*) FROM evidence WHERE kind='worker_core_source'").fetchone()[0] == 0
+            feedback = next(message["content"] for message in reversed(request.messages)
+                            if message.get("content", "").startswith("Core delivery boundary:"))
+            assert "源😊" not in feedback
+            assert "apply task-relevant additions to the final artifact" in feedback
+            assert "Reading alone does not satisfy a requirement" in feedback
+        return await original(request)
+
+    model.generate = inspect_first
+    result = asyncio.run(manager.run(run["id"]))
+    assert result["state"] == "review_pending"
+    assert result["steps"] == 4 and result["tool_spent"] == 3
+    assert result["token_spent"] == 160 and not debt(store, run)
+
+
+def test_late_pending_is_visible_before_next_action_and_tracks_real_pages(continuation):
+    store, manager, model, run, trigger, events = continuation
+    before = authority_snapshot(store, manager, run)
+    scope = before[1][0]["resource_scope"]
+    model.responses.extend([
+        *reads(trigger), tool("directory_list", {"path": scope}, ordinal=10),
+    ])
+    original = model.generate
+    late = []
+    seen_offsets = []
+
+    async def arrive_during_action(request):
+        step = len(model.requests)
+        if step == 3:
+            # A real event commits while inference is in flight, not at final delivery.
+            late.append(events.receive("continuation", "mid-action", "same-task", {
+                "text": "补充😊" * 1900, "requirement": "retain the final suffix",
+            }))
+            assert late[0]["id"] not in json.dumps(request.messages)
+            model.responses.extend([
+                tool("directory_list", {"path": scope}, ordinal=11),
+                *[tool("read_trigger", {
+                    "trigger_id": late[0]["id"], "offset_chars": offset, "max_chars": 2048,
+                }, ordinal=20 + index) for index, offset in enumerate(
+                    range(0, late[0]["total_chars"], 2048)
+                )],
+                response(delivery("All pages read; additions remain within the original mandate")),
+            ])
+        if late and step >= 4 and debt(store, run):
+            pending = debt(store, run)
+            assert pending_in_request(request) == {"pending": pending, "omitted": 0}
+            assert pending[0]["trigger_id"] == late[0]["id"]
+            seen_offsets.append(pending[0]["next_offset_chars"])
+            if step == 4:
+                with store.connection() as c:
+                    assert c.execute("SELECT COUNT(*) FROM events WHERE event_type='worker.result'").fetchone()[0] == 0
+                    assert c.execute("SELECT COUNT(*) FROM worker_tool_calls WHERE tool_name='directory_list'").fetchone()[0] == 1
+                    assert c.execute("SELECT COUNT(*) FROM worker_tool_calls WHERE json_extract(arguments_json,'$.trigger_id')=?",
+                                     (late[0]["id"],)).fetchone()[0] == 0
+                # The next response selects another real action; pending was already visible.
+                assert model.responses[0].tool_calls[0]["name"] == "directory_list"
+        return await original(request)
+
+    model.generate = arrive_during_action
+    result = asyncio.run(manager.run(run["id"]))
+    assert result["state"] == "review_pending" and result["repairs"] == 0
+    assert seen_offsets == [0, 0, 2048, 4096]
+    assert result["steps"] == len(model.requests) == 9
+    assert result["tool_spent"] == 8 and result["token_spent"] == 360
+    assert authority_snapshot(store, manager, run) == before
+    assert not debt(store, run)
+    with store.connection() as c:
+        assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 2
+        pages = c.execute(
+            "SELECT result_json FROM worker_tool_calls WHERE tool_name='read_trigger' "
+            "AND json_extract(arguments_json,'$.trigger_id')=? ORDER BY rowid", (late[0]["id"],)
+        ).fetchall()
+        payload = c.execute("SELECT payload_json FROM superagent_triggers WHERE id=?", (late[0]["id"],)).fetchone()[0]
+    assert ''.join(json.loads(page[0])["text"] for page in pages) == payload
+
+
+@pytest.mark.parametrize("tamper", ["payload", "inbox", "event", "revoked"])
+def test_first_round_source_tamper_blocks_without_model_request(continuation, tamper):
+    store, manager, model, run, trigger, _events = continuation
+    before = authority_snapshot(store, manager, run)
+    with store.unit_of_work() as work:
+        c = work.connection
+        if tamper == "payload":
+            c.execute("UPDATE superagent_triggers SET payload_json='{}' WHERE id=?", (trigger["id"],))
+        elif tamper == "inbox":
+            c.execute("DELETE FROM worker_inbox")
+        elif tamper == "event":
+            c.execute("UPDATE events SET payload='{}' WHERE event_type='trigger.received'")
+        else:
+            c.execute("INSERT INTO revoked_memory_sources VALUES (?)", ("trigger:" + trigger["id"],))
+    result = asyncio.run(manager.run(run["id"]))
+    assert result["state"] == "blocked"
+    assert not model.requests
+    assert result["steps"] == result["tool_spent"] == result["token_spent"] == 0
+    assert authority_snapshot(store, manager, run) == before
+    with store.connection() as c:
+        payload = c.execute("SELECT payload FROM events WHERE event_type='worker.blocked'").fetchone()[0]
+        assert json.loads(payload)["reason_code"] == "continuation_source_unavailable"
+        assert c.execute("SELECT COUNT(*) FROM events WHERE event_type='worker.result'").fetchone()[0] == 0
+        assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 0
 
 
 def test_injected_preview_cannot_finalize_and_full_reads_preserve_charged_draft(continuation):

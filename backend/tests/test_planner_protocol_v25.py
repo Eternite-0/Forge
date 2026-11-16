@@ -7,7 +7,7 @@ import json
 import pytest
 from pydantic import ValidationError
 from test_core_measured_serial_v17 import NativeFramingMock
-from test_planner_protocol_v23 import graph, node
+from test_planner_protocol_v23 import diagnostic_setup, graph, node
 from test_planner_router_input_v18 import Captured, NativeCapture, route_original_scenario
 from test_planner_source_preview_v22 import dependency, setup
 
@@ -223,7 +223,7 @@ def test_eight_max_key_nodes_keep_every_numeric_row_and_invalid_criterion_stays_
 
 
 def test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values(tmp_path):
-    store, quest, _inventory = setup(tmp_path)
+    store, quest, _inventory = diagnostic_setup(tmp_path)
     selected = profiled(
         node(
             "over",

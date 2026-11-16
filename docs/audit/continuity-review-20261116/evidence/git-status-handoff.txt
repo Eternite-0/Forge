@@ -1,0 +1,26 @@
+ M backend/scripts/phase2/live_core.py
+ M backend/src/forge_core/independent_review.py
+ M backend/src/forge_core/project_continuity.py
+ M backend/src/forge_core/recall_chain.py
+ M backend/src/forge_core/router.py
+ M backend/src/forge_core/router_json_protocol.py
+ M backend/src/forge_core/worker_continuations.py
+ M backend/src/forge_core/worker_runtime.py
+ M backend/tests/test_capability_router_projects.py
+ M backend/tests/test_composer_resources_v21.py
+ M backend/tests/test_core_measured_planner_v19.py
+ M backend/tests/test_core_measured_serial_v17.py
+ M backend/tests/test_planner_dataflow_v21.py
+ M backend/tests/test_planner_guidance_v24.py
+ M backend/tests/test_planner_protocol_v23.py
+ M backend/tests/test_planner_protocol_v25.py
+ M backend/tests/test_router_json_protocol.py
+ M backend/tests/test_superagent_loop.py
+ M backend/tests/test_worker_continuation_completion.py
+ M backend/tests/test_worker_core_provenance_superagent.py
+?? backend/scripts/continuity_minimal_probe.py
+?? backend/scripts/continuity_thread_probe.py
+?? backend/tests/test_continuation_artifact_review.py
+?? backend/tests/test_continuity_minimal_probe.py
+?? backend/tests/test_recall_restart_continuity.py
+?? docs/audit/continuity-review-20261116/

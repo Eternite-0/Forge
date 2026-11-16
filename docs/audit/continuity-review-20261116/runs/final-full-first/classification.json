@@ -1,0 +1,8 @@
+{
+  "final_full_first": "3012 passed / 1 failed / 12 skipped",
+  "cause": "probe.main changed global logging.disable without restoring it; watchdog log assertions failed",
+  "fix": "command-scoped try/finally restores previous logging disable level, regression asserts restoration even for refused CLI",
+  "integrated_driver_first": "mock script selected unrelated unsubscribed trigger; production rejected source_read, no permission relaxation",
+  "integrated_driver_fix": "Mock fixture selects only its run subscription, then validates Mock PASS remains refused by live-only gate",
+  "not_real_provider": true
+}

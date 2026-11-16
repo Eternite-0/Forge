@@ -10,8 +10,44 @@ from test_superagent_loop import rig as base_rig
 
 from forge_core.context_service import ContextService
 from forge_core.domain import ConversationMessage, DomainError, ForgeEvent
+from forge_core.project_continuity import project_context
 from forge_core.router_domain import ExecutionTeam, RouterDecision
 from forge_core.workspace_discovery import WorkspaceDiscovery
+
+
+@pytest.mark.parametrize("suffix", ["bet", "-plugin", "_plugin", ".backup"])
+def test_path_prefix_is_not_a_project_boundary(tmp_path, suffix):
+    import sqlite3
+
+    connection = sqlite3.connect(":memory:")
+    connection.row_factory = sqlite3.Row
+    connection.execute("CREATE TABLE workspace_projects(id,root,name,detected_at)")
+    connection.execute("INSERT INTO workspace_projects VALUES ('p1',?,'alpha','now')",
+                       (str(tmp_path / 'alpha'),))
+    context = project_context(connection, f"Continue `{tmp_path / ('alpha' + suffix)}`")
+    assert context["selected_project_ids"] == []
+    assert context["grants_tool_access"] is False
+    if suffix in ("bet", "-plugin", "_plugin"):
+        assert project_context(connection, "Continue alpha" + suffix)["selected_project_ids"] == []
+
+
+def test_parsed_paths_disambiguate_nested_and_same_name_projects(tmp_path):
+    import sqlite3
+
+    connection = sqlite3.connect(":memory:")
+    connection.row_factory = sqlite3.Row
+    connection.execute("CREATE TABLE workspace_projects(id,root,name,detected_at)")
+    roots = [tmp_path / "alpha", tmp_path / "other" / "alpha", tmp_path / "alpha" / "child"]
+    for index, root in enumerate(roots):
+        connection.execute("INSERT INTO workspace_projects VALUES (?,?,?,'now')",
+                           (f"project_{index}", str(root), root.name))
+    for index, root in enumerate(roots):
+        for path in (root, root / "file with spaces.py"):
+            result = project_context(connection, f'Continue "{path}".')
+            assert result["selected_project_ids"] == [f"project_{index}"]
+            assert result["focused_project_id"] == f"project_{index}"
+    assert project_context(connection, "继续alpha项目")["ambiguous"] is True
+    assert project_context(connection, f"{roots[0]} and {roots[1]}")["ambiguous"] is True
 
 
 @pytest.fixture
@@ -59,6 +95,30 @@ def test_focused_project_continuation_never_targets_other_project(rig):
     result = asyncio.run(
         router.handle_user_message("Continue alpha_project work", request_id="wrong-project")
     )
+    assert result["intent"] == "ambiguous" and result["quest_id"] is None
+
+
+@pytest.mark.parametrize("alias", [False, True], ids=["dot-segments", "symlink-alias"])
+def test_canonical_named_path_preserves_project_fence(rig, tmp_path, alias):
+    store, router, _triggers, projects = rig
+    wrong, target = projects[0], projects[1]
+    if alias:
+        link = tmp_path / "alias"
+        link.symlink_to(tmp_path, target_is_directory=True)
+        named = link / "beta_project"
+    else:
+        named = tmp_path / "alpha_project" / ".." / "beta_project"
+    text = f"Continue `{named}`"
+    with store.connection() as c:
+        discovered = WorkspaceDiscovery(store).register_user_request(text, connection=c)
+        snapshot = router._snapshot(c, text)
+    assert [item["id"] for item in discovered] == [target[1]["id"]]
+    assert snapshot["project_context"]["focused_project_id"] == target[1]["id"]
+    assert {q["id"] for q in snapshot["quests"]} == {target[0].id}
+    router.provider = MockProvider(
+        lambda *_: response(conversational_decision("continue_quest", quest_id=wrong[0].id))
+    )
+    result = asyncio.run(router.handle_user_message(text, request_id="canonical-project"))
     assert result["intent"] == "ambiguous" and result["quest_id"] is None
 
 

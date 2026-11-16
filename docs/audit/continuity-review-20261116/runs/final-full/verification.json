@@ -1,0 +1,33 @@
+{
+  "result": {
+    "passed": 3013,
+    "failed": 0,
+    "skipped": 12,
+    "warnings": 1,
+    "duration_seconds": 711.67
+  },
+  "python_files": 362,
+  "manifest_sha256": "16d47803c47cba36eb8adc6f7b76a55a31c47cd5d5355c15f84670899f9b0518",
+  "source_unchanged_during_run": true,
+  "skipped_ids_unchanged_from_original": true,
+  "provider_calls": 0,
+  "command": "FORGE_WORKSPACE_ROOT=<isolated workspace> backend/.venv/bin/python -m pytest backend/tests -q --junitxml=<evidence path>",
+  "files": {
+    "final-v2-full.log": {
+      "original_sha256": "42a03ae1c89e0eb2bdd92aa0e9e95487fe7b8741280e99d15998dcfe14e55365",
+      "gzip_sha256": "725fd9dfab9a331f351fc05a7d6bcaf06bab3097109ea5233edca9c1b99e3aab"
+    },
+    "final-v2-full.xml": {
+      "original_sha256": "d6a7b4f19261567a5ba1bcfc068932b55617e9f84101c86748e329b52c8099fe",
+      "gzip_sha256": "2b42352ef1806a04d1160d288741ec40a44aaa6f2ef4e6768f2c6d7a4495cd5b"
+    },
+    "final-v2-source-before.json": {
+      "original_sha256": "9f6854bb0f6d1064b88f90325455448070c0e9e5bb4dca79edd192a8b6c3471f",
+      "gzip_sha256": "55d8ff761f01938c1440d70e75ecb3852a3d836eda7565fb16b226737445449d"
+    },
+    "ruff-final.log": {
+      "original_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "gzip_sha256": "f3af4d142827f5aad2eb0c72d556d325488a57fb6219aac10afeb51085667d53"
+    }
+  }
+}

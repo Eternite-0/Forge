@@ -10,6 +10,7 @@ import os
 import secrets
 import socket
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -17,7 +18,7 @@ import httpx
 
 REPO = Path(__file__).resolve().parents[3]
 BACKEND = REPO / "backend"
-PYTHON = BACKEND / ".venv" / "Scripts" / "python.exe"
+PYTHON = Path(sys.executable)
 
 PROVIDER_ID = "wb-local"
 MODEL_ID = "deepseek-v4.1-flash"

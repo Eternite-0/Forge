@@ -11,6 +11,7 @@ from test_verified_capacity_v16 import generate, prepared
 from forge_core.capacity_preflight import verified_input_inventory
 from forge_core.domain import DomainError
 from forge_core.graph_domain import CapacityGraphWire
+from forge_core.planner_resource_policy import planned_worker_output_tokens
 from forge_core.provider_pool import ProviderPool
 from forge_core.providers import ProviderConfig, ProviderGateway
 from forge_core.quest_graph import QuestGraphService
@@ -150,8 +151,8 @@ def test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom(tm
             "task_node_key": node["key"],
             "tools": node["allowed_tools"],
             "responsibility": node["objective"] + " Preserve exact sourced conclusions." * 16,
-            "input_tokens": node["budget_tokens"] - 2048,
-            "output_tokens": 2048,
+            "input_tokens": node["budget_tokens"] - planned_worker_output_tokens(node),
+            "output_tokens": planned_worker_output_tokens(node),
         }
         for index, node in enumerate(plan["nodes"])
     ]

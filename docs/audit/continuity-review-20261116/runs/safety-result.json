@@ -1,0 +1,17 @@
+{
+  "exit_code": 1,
+  "same_diff_before_after": true,
+  "network_guard": "non-loopback DNS and connects denied in audit process",
+  "provider_credentials": "selected real-provider environment prefixes removed",
+  "scope": [
+    "test_live_core_private_control.py",
+    "test_capability_continuation_gates.py",
+    "test_capability_continuity_evidence.py",
+    "test_recall_archive_dependencies_superagent.py",
+    "test_recall_chain_superagent.py",
+    "test_worker_continuation_completion.py",
+    "test_worker_core_provenance_superagent.py",
+    "test_reviewer_capacity_phase2.py",
+    "test_superagent_events.py"
+  ]
+}

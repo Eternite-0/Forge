@@ -1,0 +1,195 @@
+{
+  "captured_at": "2026-11-16T17:23:17.245428+08:00",
+  "repo": "/Users/tracy/Documents/Forge",
+  "head": "7c1763bb2ce962a924f2266c55978e1483bd112b",
+  "baseline": "0bef3316a5783348c1f5687d9d584a2cf1eb5e7a",
+  "backend_tree_baseline": "016a4eadb5034871c00148afda88279224e36822",
+  "backend_tree_head": "016a4eadb5034871c00148afda88279224e36822",
+  "artifacts": [
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/baseline-full.log",
+      "copy": "evidence/baseline-full.log.gz",
+      "original_bytes": 159199,
+      "original_sha256": "62fee10bca46bc85e5086f98f32a7d28199f3bddbb1b89855e2609398f2176ef",
+      "gzip_sha256": "7f04e0680a8cf41c89f07397073838999451c7a8f3199857dac2bc8586eb2d9a",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/baseline-full.xml",
+      "copy": "evidence/baseline-full.xml.gz",
+      "original_bytes": 609173,
+      "original_sha256": "fceef78021d8bf399239fbe2c56e754307099ca004832c7de597458e55a63b2b",
+      "gzip_sha256": "91c215fa74241e3813a0f7d3c8fc5cb14e407f5ac09a80e6453e7db06a38249c",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters.log",
+      "copy": "evidence/failure-clusters.log.gz",
+      "original_bytes": 145196,
+      "original_sha256": "2f48dccebf369d236b70bfe2c93081e13a3c4785d7e78c84bda9eab80f292ff9",
+      "gzip_sha256": "bbb7cffae59e2cbb1dcadd640c9cf353de1d82fea70074e3bb5cc089ffad80db",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters.xml",
+      "copy": "evidence/failure-clusters.xml.gz",
+      "original_bytes": 183339,
+      "original_sha256": "938184e393081fe083273650809491f3d9e328cb334225ec934998e52251bd49",
+      "gzip_sha256": "e876bc3e0169ce46aec4cdb6dc8915f66970ef8e56b11032097785c1431aff8e",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters-fixed.log",
+      "copy": "evidence/failure-clusters-fixed.log.gz",
+      "original_bytes": 16411,
+      "original_sha256": "ea4572de55224e41d095187bbfda77aa0ba1062f94c9e378e41b4b4fa91edb7d",
+      "gzip_sha256": "6e0f6d27e5ccc75176307420945a556b8f94135e20589fb3dc5da98bfcf13dc2",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/failure-clusters-fixed.xml",
+      "copy": "evidence/failure-clusters-fixed.xml.gz",
+      "original_bytes": 46620,
+      "original_sha256": "712d9027a877a081829d7ad17f04fae0a549c8b4a31c7a305faf6f61e404cab1",
+      "gzip_sha256": "b2b0de9a703c26c6660234b1ba2e6a7ad332b11fd3469d07ef3e70137101eeb1",
+      "decompressed_equal": true
+    },
+    {
+      "source": "/Users/tracy/Documents/Forge/.local/continuity-review/recall-parser.log",
+      "copy": "evidence/recall-parser.log.gz",
+      "original_bytes": 179,
+      "original_sha256": "9675e33792b67f8a8af67c8ee6d37089fab9a22f3bb99b6210b3080d2f2be4f2",
+      "gzip_sha256": "6b5d728dcc05cfb0b77018aeca928742528eff7dbdb563876bae7e320b5f8be8",
+      "decompressed_equal": true
+    },
+    {
+      "copy": "evidence/reviewed-working-tree.diff",
+      "bytes": 30875,
+      "sha256": "098807d1ab3a66417aef1121fa735d5ab406b0a732020fcbd8ca7698af5e0c38"
+    },
+    {
+      "copy": "evidence/reviewed-staged.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "copy": "evidence/git-status-start.txt",
+      "bytes": 825,
+      "sha256": "24e32ad86f129867edbeedc3bea9952633d7f0231df3d975b436896d030e4f54"
+    },
+    {
+      "copy": "evidence/baseline-to-head.txt",
+      "bytes": 2106,
+      "sha256": "2fd36015eb4bab7ca9ec04612dfd699fabe1eef2ef8f5a58abdeac83740eaba4"
+    },
+    {
+      "copy": "evidence/backend-baseline-to-head.diff",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "reviewed_files": [
+    {
+      "path": "backend/scripts/phase2/live_core.py",
+      "head_sha256": "afd78146010e552d86273f0eddc63d6dd43e6d0df968ceb1375c061fbd267f52",
+      "working_sha256": "732a841316acf4d42554e3b2ba026ac77d788f9946a8ce0974ef50c46103d1bd",
+      "snapshot": "evidence/working-files/backend/scripts/phase2/live_core.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/independent_review.py",
+      "head_sha256": "80ef9c498bb45ae60b87132e0b11df9f117560ac2675e310b59cfe60d9c24cfa",
+      "working_sha256": "967971a33c4a05161e4659e1ad9daccabfa526d226c22d519166012d1334edd2",
+      "snapshot": "evidence/working-files/backend/src/forge_core/independent_review.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/project_continuity.py",
+      "head_sha256": "6f0327c5c5835aebd57b75c6ce28a6458d764bf4fd4f642094c5aa4f702f9506",
+      "working_sha256": "51c49f4f1be51207a055e30c4ef2e80a02ea1bafe0d79e0cdb53f048f49a0739",
+      "snapshot": "evidence/working-files/backend/src/forge_core/project_continuity.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/recall_chain.py",
+      "head_sha256": "269b4d709b510e6a6c6693d391739c3fbde5b69f755273ff95ec240bf38d3bbf",
+      "working_sha256": "48548f6ac8c7ae4350670b93da8f62fa480e88b397db10b529ad030d9c49537f",
+      "snapshot": "evidence/working-files/backend/src/forge_core/recall_chain.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/router.py",
+      "head_sha256": "94908de7760a5985593af1addfe39313f2f31d2122320af31929d876e5e7e9f8",
+      "working_sha256": "2d74e49e775fa8a7c21ff79f86748479724f97a04ab9ee1be0612146efaddedb",
+      "snapshot": "evidence/working-files/backend/src/forge_core/router.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/router_json_protocol.py",
+      "head_sha256": "f49b383ddf2376f1a445334fdc5dfb51f73ed51c687ebfce5bc021ffc056a6e1",
+      "working_sha256": "95b61b8c12ef9fd899ba3ee424b7e02adf1d0b91d9510f0a7477ca48fe94ae28",
+      "snapshot": "evidence/working-files/backend/src/forge_core/router_json_protocol.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/worker_continuations.py",
+      "head_sha256": "b414a83fdfa493b0786b626ddff637335c44bdb3d23534ce21df0d9c8230b352",
+      "working_sha256": "63949b2138ec8cdb101440cdcea193d7cb066a66cafe87fa85d1798cf7f922fc",
+      "snapshot": "evidence/working-files/backend/src/forge_core/worker_continuations.py.gz"
+    },
+    {
+      "path": "backend/src/forge_core/worker_runtime.py",
+      "head_sha256": "68d74eb21d0a69aaef98c54059cca47069855aeb4286381d93e045427d55de3d",
+      "working_sha256": "a0bcc37dcc3b6688d7cc680d2517f10950418af0a2263bb4604572dcafc93f7a",
+      "snapshot": "evidence/working-files/backend/src/forge_core/worker_runtime.py.gz"
+    },
+    {
+      "path": "backend/tests/test_capability_router_projects.py",
+      "head_sha256": "604e8c033545ab7412f33f9740ba998ae8d475b69924f30cad7b26a9012a59b9",
+      "working_sha256": "2ac7fe8916056c8417a4ad1eeda43ca494546695edea3db087f654ec29af5455",
+      "snapshot": "evidence/working-files/backend/tests/test_capability_router_projects.py.gz"
+    },
+    {
+      "path": "backend/tests/test_composer_resources_v21.py",
+      "head_sha256": "7e3612c36f3b9ceda96b2182a67429acbecf6645ecb1125f52fd5dc9b2ac68a5",
+      "working_sha256": "9685f1aff6c8ad9e4c139676845b4f4e11ddd8aa27fb2f154fd019fdf77b417d",
+      "snapshot": "evidence/working-files/backend/tests/test_composer_resources_v21.py.gz"
+    },
+    {
+      "path": "backend/tests/test_core_measured_planner_v19.py",
+      "head_sha256": "68647bded299a20dc3338f40754460d1e3b65a9726a4374de9be5d5fc7cd08ad",
+      "working_sha256": "52614388721b9cc08e027ab2da8082b81381e536a4d282028190fdd813e59127",
+      "snapshot": "evidence/working-files/backend/tests/test_core_measured_planner_v19.py.gz"
+    },
+    {
+      "path": "backend/tests/test_core_measured_serial_v17.py",
+      "head_sha256": "590f4960a08ca6c3c5de7199e673a473b801620bcd2a85b518c0a6cbb8a676cb",
+      "working_sha256": "5d9e791b8ee28c01b8e3aed543593e8b289e559b7da4ed762daafb1655c20b46",
+      "snapshot": "evidence/working-files/backend/tests/test_core_measured_serial_v17.py.gz"
+    },
+    {
+      "path": "backend/tests/test_planner_dataflow_v21.py",
+      "head_sha256": "f2bb0e80e39ad466716d86dc8f02700a24f67ed1fad35ef95fd47b081563f6b0",
+      "working_sha256": "49e1cf0910bc9ce81b8ff8eb6675775ab0b5ae838957c6b55f70c69bd519410a",
+      "snapshot": "evidence/working-files/backend/tests/test_planner_dataflow_v21.py.gz"
+    },
+    {
+      "path": "backend/tests/test_planner_guidance_v24.py",
+      "head_sha256": "c62b014696441228bf9d378ebb07434b13ab6b9994f02cb48cb4d96ff58e06e8",
+      "working_sha256": "1af42403a476e3d6fc586dd44e103ba6885f17c7fd00c7a331001b857a605021",
+      "snapshot": "evidence/working-files/backend/tests/test_planner_guidance_v24.py.gz"
+    },
+    {
+      "path": "backend/tests/test_planner_protocol_v23.py",
+      "head_sha256": "552fc9a8081c4792ae160bfbd3043d2fc626ec75535895d30c9b5f4cba0a9550",
+      "working_sha256": "b1b32f4c4b40e1e64fd93943ec7544cd2f06bf6449ed52f19be942f11bd032f7",
+      "snapshot": "evidence/working-files/backend/tests/test_planner_protocol_v23.py.gz"
+    },
+    {
+      "path": "backend/tests/test_planner_protocol_v25.py",
+      "head_sha256": "06caa4dabe76ed89787865b8e7c048b0bda3fe140fb7f405b8af4f54ac089de9",
+      "working_sha256": "d310390af69dfd2d8e63a04d806656757133fe873d939571d42e22e947887452",
+      "snapshot": "evidence/working-files/backend/tests/test_planner_protocol_v25.py.gz"
+    },
+    {
+      "path": "backend/tests/test_superagent_loop.py",
+      "head_sha256": "1d7b5c521734503f1af80fad4fb84139f04d749a39f70fdb0edddcc6696d7bc5",
+      "working_sha256": "239098f3015cefb1e8e3f1215413d64243eedf29a78d8ae24df82462f057e55b",
+      "snapshot": "evidence/working-files/backend/tests/test_superagent_loop.py.gz"
+    }
+  ]
+}

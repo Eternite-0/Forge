@@ -1,0 +1,213 @@
+{
+  "verified_at": "2026-11-16T18:02:06.901574+08:00",
+  "original_17_ids_exact_match": true,
+  "original_17_each_independent_pass_observation": [
+    {
+      "original_id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "current_id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "current_id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "current_id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "current_id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "current_id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "current_id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_live_core_private_control::test_private_real_core_restarts_and_stops_without_provider_calls",
+      "current_id": "tests.test_live_core_private_control::test_private_real_core_restarts_and_stops_without_provider_calls",
+      "artifact": "runs/safety-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "current_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_respects_current_ceiling[1]",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "current_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_respects_current_ceiling[2]",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "current_id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "current_id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "current_id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "current_id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "current_id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+      "current_id": "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_superagent_loop::test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read",
+      "current_id": "tests.test_superagent_loop::test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    },
+    {
+      "original_id": "tests.test_superagent_loop::test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router",
+      "current_id": "tests.test_superagent_loop::test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router",
+      "artifact": "runs/offline-fixtures.xml",
+      "observed": "passed"
+    }
+  ],
+  "raw_gzip_equality_and_hash_checks": [
+    {
+      "copy": "evidence/baseline-full.log.gz",
+      "original_sha256": "62fee10bca46bc85e5086f98f32a7d28199f3bddbb1b89855e2609398f2176ef",
+      "gzip_sha256": "7f04e0680a8cf41c89f07397073838999451c7a8f3199857dac2bc8586eb2d9a",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/baseline-full.xml.gz",
+      "original_sha256": "fceef78021d8bf399239fbe2c56e754307099ca004832c7de597458e55a63b2b",
+      "gzip_sha256": "91c215fa74241e3813a0f7d3c8fc5cb14e407f5ac09a80e6453e7db06a38249c",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters.log.gz",
+      "original_sha256": "2f48dccebf369d236b70bfe2c93081e13a3c4785d7e78c84bda9eab80f292ff9",
+      "gzip_sha256": "bbb7cffae59e2cbb1dcadd640c9cf353de1d82fea70074e3bb5cc089ffad80db",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters.xml.gz",
+      "original_sha256": "938184e393081fe083273650809491f3d9e328cb334225ec934998e52251bd49",
+      "gzip_sha256": "e876bc3e0169ce46aec4cdb6dc8915f66970ef8e56b11032097785c1431aff8e",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters-fixed.log.gz",
+      "original_sha256": "ea4572de55224e41d095187bbfda77aa0ba1062f94c9e378e41b4b4fa91edb7d",
+      "gzip_sha256": "6e0f6d27e5ccc75176307420945a556b8f94135e20589fb3dc5da98bfcf13dc2",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters-fixed.xml.gz",
+      "original_sha256": "712d9027a877a081829d7ad17f04fae0a549c8b4a31c7a305faf6f61e404cab1",
+      "gzip_sha256": "b2b0de9a703c26c6660234b1ba2e6a7ad332b11fd3469d07ef3e70137101eeb1",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/recall-parser.log.gz",
+      "original_sha256": "9675e33792b67f8a8af67c8ee6d37089fab9a22f3bb99b6210b3080d2f2be4f2",
+      "gzip_sha256": "6b5d728dcc05cfb0b77018aeca928742528eff7dbdb563876bae7e320b5f8be8",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters-fixed2.log.gz",
+      "original_sha256": "9deacce18f7579d50b8c0894a11b364bfdbc07fc7f68f51b5ebfa13606df3aa4",
+      "gzip_sha256": "a4e4d436d86239de04fc16c37ffb839db95f4624ea553327c5625b4a284d84f9",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/failure-clusters-fixed2.xml.gz",
+      "original_sha256": "e661560fd3b71bf42b6c5cc390f6d0fd82056049589d318ec027fb5a4ad52768",
+      "gzip_sha256": "1ebb8d9841221c5e6741fb6fb7ba0bf62e232433c9b44aa4b68388218d0ec5f8",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/review-targeted.log.gz",
+      "original_sha256": "327d3ef43efdfa59de49150154cd88b92501d9b852ea1b04d27848ebc83e995d",
+      "gzip_sha256": "64bd847243e3cb216deb12e73b9af3bf2dd24235109975e6e8338a8e41b4a065",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/review-targeted.xml.gz",
+      "original_sha256": "4a5a538a63b97bdaeb5b11107fcf733a9ca5f58ecfe3dccf7031dc334263e12f",
+      "gzip_sha256": "7af0e48ff8f58e0d1720e4b2a633c508b0be7065a0cc4dfc252310d3f828314a",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/provenance-fixed.log.gz",
+      "original_sha256": "7e455f2e40523b0a55550668944d88c0b01e8b2fdcae552f8026431bc2c40509",
+      "gzip_sha256": "b5a1362a67c055aa2ddabb9490904ca90ae1c4079cb8cbb47471db8cdef779f5",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/continuity-targeted.log.gz",
+      "original_sha256": "77d1f1f04af1ed673ff0c18e85ee64eaf5e4fa000f4d0f39cafb373a8201f5ae",
+      "gzip_sha256": "a66b5f43b89a6044e8f69d3a3bbf3c11f675fabcbdee08598d4457c8a3021831",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/positive-capacity.log.gz",
+      "original_sha256": "38d4c038ee5432611dba11676f3d89ec1162b2dd9e043c4920624fc92cbdf09f",
+      "gzip_sha256": "36565773eb2095a0f5c5f3ffc78993738fc68395c086a81a2c3bec106391e476",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/new-execution-regressions.log.gz",
+      "original_sha256": "4889ee82fecfca1efcf33325994691708518a22d0356c56a69736aa8173a3a54",
+      "gzip_sha256": "86320281ebc1bb1a7bb07a4c282406b9c379b37bcaba1a2e33da8ec95f71c058",
+      "source_equal": true
+    },
+    {
+      "copy": "evidence/new-execution-regressions.xml.gz",
+      "original_sha256": "1bc39df70448ae5e97f7eddddd63978aca5c6c8949653caea5090b2fdc225707",
+      "gzip_sha256": "859d86324b3ac52e87bde91504b3c440e58f44bffab837649b5fdddb8c282c51",
+      "source_equal": true
+    }
+  ],
+  "gzip_files_decompressed": 117,
+  "content_snapshots_hash_verified": 73,
+  "backend_git_tree_equal": true,
+  "git_diff_check": "passed",
+  "real_provider_acceptance": false,
+  "final_full_observed": false,
+  "remaining_limit": "7 followup minimal-probe tests incompatible with audit docs-only tmp location; preserved not waived"
+}

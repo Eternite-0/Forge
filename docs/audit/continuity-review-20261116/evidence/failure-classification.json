@@ -1,0 +1,316 @@
+[
+  {
+    "number": 1,
+    "id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+    "message": "assert 4096 == 2048",
+    "failure_text_sha256": "7ec0e671133b8d191c9325676ecf0e81ad1980486f7cf942fdecaf7d29166162",
+    "category": "resource_policy",
+    "cause": "2048 硬编码期望过时；现有 planned_worker_output_tokens 按完整产物/交付上界选择4096。",
+    "contract_change": "断言改为策略函数并额外锁定4096；总预算、strict输出schema、真实准入断言不变。",
+    "assessment": "合理；没有仅用同源函数自证，仍有固定4096锚点。",
+    "current_test_id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 2,
+    "id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+    "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+    "failure_text_sha256": "008324d8042573d337e09149ef29c9bf3bdf2b51c83f2ee7c790180658fb6dba",
+    "category": "original_ceiling",
+    "cause": "三节点分支在现有完整周期/输出档位下超过360000原限额。",
+    "contract_change": "成功构造改为 InvalidGraphProposal；required_total>original_ceiling==360000，无计划持久化，wire不变。",
+    "assessment": "安全方向合理，但减少成功分支覆盖；需保留正向伴随用例。",
+    "current_test_id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained",
+    "coverage_followup": {
+      "status": "main agent added separate lawful positive small branch and operator intersection fixtures; supplied log 19 passed",
+      "review": "old oversized tasks remain rejected; not budget increases rescuing originals; not independent rerun; final full pending",
+      "source_artifact": "evidence/positive-capacity.log.gz"
+    }
+  },
+  {
+    "number": 3,
+    "id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+    "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+    "failure_text_sha256": "953c02ae590709ce867c53f373bd492ca750e535c93a3cb87f84e6851ca70db5",
+    "category": "original_ceiling",
+    "cause": "operator上限120000与原任务交集不足，不应为了成功偷偷提高。",
+    "contract_change": "改为拒绝；诊断原限额精确等于120000，无计划历史。",
+    "assessment": "合理；不再证明可行时的交集分配，正向覆盖须另保留。",
+    "current_test_id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained",
+    "coverage_followup": {
+      "status": "main agent added separate lawful positive small branch and operator intersection fixtures; supplied log 19 passed",
+      "review": "old oversized tasks remain rejected; not budget increases rescuing originals; not independent rerun; final full pending",
+      "source_artifact": "evidence/positive-capacity.log.gz"
+    }
+  },
+  {
+    "number": 4,
+    "id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+    "message": "assert 10313 > 12045",
+    "failure_text_sha256": "c9214ce818f81b9f20af5356b9b34882e9380647d0e452f9a7c2a0c8641cea57",
+    "category": "resource_policy",
+    "cause": "角色输出仍写2048，与原测量4096档位不一致，使工作输入成本比较失真。",
+    "contract_change": "input=原node预算-policy_output、output=policy_output；输入输出合计不增加，长responsibility仍必须重新测量。",
+    "assessment": "合理；保留actual初始工作成本上升、minimum不超预算及认证审批。",
+    "current_test_id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 5,
+    "id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "1cd71c0210674a379c215cad694e2e758cb05c81e3dda8cdcbf5443870739680",
+    "category": "eligible_mock_model",
+    "cause": "32768-byte交付需要8192输出档位；4096 mock profile先被淘汰，根本没有第二次修复请求。",
+    "contract_change": "仅本测试注册profile.max_output_tokens由4096改8192；仍要求拒绝、两次请求、wire不变。",
+    "assessment": "合理的mock资格前提；不是提高真实模型能力、原任务总额或context窗口。",
+    "current_test_id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 6,
+    "id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+    "message": "assert 10577 > 12045",
+    "failure_text_sha256": "2bb825b75fee759401a35610033b8995f8ce963fde6d58f4e87e7d2581f932dd",
+    "category": "resource_policy",
+    "cause": "串行team同样固定2048输出，导致actual与原计划比较前提不一致。",
+    "contract_change": "改为policy输出并从input等额扣除，原串行shared reserve及approved limits不变。",
+    "assessment": "合理；保留认证批准和每成员minimum<=execution_token_limit。",
+    "current_test_id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 7,
+    "id": "tests.test_live_core_private_control::test_private_real_core_restarts_and_stops_without_provider_calls",
+    "message": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/tracy/Documents/Forge/backend/.venv/Scripts/python.exe'",
+    "failure_text_sha256": "9b6bf63586521463bd249965cb33f3b90f7992f38fa589f27abadfa63e4b9007",
+    "category": "platform",
+    "cause": "私有Core harness硬编码Windows .venv/Scripts/python.exe，在macOS不存在。",
+    "contract_change": "live_core.PYTHON改为Path(sys.executable)，重用当前解释器；未改密钥管道/鉴权/退出协议。",
+    "assessment": "合理的跨平台生产脚本修复，不是fixture跳过；两次启停与零attempt账本通过。",
+    "current_test_id": "tests.test_live_core_private_control::test_private_real_core_restarts_and_stops_without_provider_calls",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/safety-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 8,
+    "id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+    "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+    "failure_text_sha256": "13e3f0939e31e9f3c69bbc776f813963e9b69f5dde94dec6b5e0678356c0dbaf",
+    "category": "original_ceiling",
+    "cause": "L1旧构造在当前周期测量下超过180000原限额。",
+    "contract_change": "测试重命名respects_current_ceiling；L1改为CapacityPreflightError，保留原ceil、edges、bounds、空history。",
+    "assessment": "合理且更保守；不再宣称该原任务可行，成功覆盖缺口需另补。",
+    "current_test_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_respects_current_ceiling[1]",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained",
+    "coverage_followup": {
+      "status": "main agent added separate lawful positive small branch and operator intersection fixtures; supplied log 19 passed",
+      "review": "old oversized tasks remain rejected; not budget increases rescuing originals; not independent rerun; final full pending",
+      "source_artifact": "evidence/positive-capacity.log.gz"
+    }
+  },
+  {
+    "number": 9,
+    "id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+    "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+    "failure_text_sha256": "75f865ca773f0fcd93859a9392af784d94e99150c198782a4362ef776e49788c",
+    "category": "original_ceiling",
+    "cause": "L2旧串行构造在当前测量下超过360000原限额。",
+    "contract_change": "L2同样要求原ceil不足即拒绝；L3=630000成功路径保持。",
+    "assessment": "合理且不涨预算；不能把L3通过推广成L1/L2成功。",
+    "current_test_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_respects_current_ceiling[2]",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained",
+    "coverage_followup": {
+      "status": "main agent added separate lawful positive small branch and operator intersection fixtures; supplied log 19 passed",
+      "review": "old oversized tasks remain rejected; not budget increases rescuing originals; not independent rerun; final full pending",
+      "source_artifact": "evidence/positive-capacity.log.gz"
+    }
+  },
+  {
+    "number": 10,
+    "id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+    "message": "assert 5 == 4",
+    "failure_text_sha256": "f2ee181cc551fc1dbaf1d8d43599266a0e3b12e59805ec937defe89acf3584c1",
+    "category": "resource_policy",
+    "cause": "complete preview公式当前得5次，而旧fixture要求4次。",
+    "contract_change": "只把固定预期4改5；minimum=initial+reserve、headroom>=0、加额外edge即失去shared pool仍保留。",
+    "assessment": "合理；承认完整工作/审核/修正等调用储备，不缩短周期。",
+    "current_test_id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 11,
+    "id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+    "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+    "failure_text_sha256": "292af93e17371bbce9f2b0f24f9a8c2bd857ae301b522b2f395851c5de6c0735",
+    "category": "eligible_mock_model",
+    "cause": "大输出节点无法在4096 mock profile下产生诊断候选。",
+    "contract_change": "三项v23大输出测试使用局部diagnostic_setup将mock max_output_tokens置8192。",
+    "assessment": "合理；仍验证多项overflow、invalid criteria unavailable、PRIVATE内容不泄露、无provider调用。",
+    "current_test_id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 12,
+    "id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "34bd25493b91d12e9c81da192a3eda53565ce69ace8e2f9a71d2858d177c00fd",
+    "category": "eligible_mock_model",
+    "cause": "同一资格前提导致诊断候选为空，原有第二请求索引越界。",
+    "contract_change": "使用8192局部mock，保留第一次拒绝、完整反馈、恰两请求和空history。",
+    "assessment": "合理；不接受原坏proposal，不修改schema或修复次数。",
+    "current_test_id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 13,
+    "id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+    "message": "IndexError: list index out of range",
+    "failure_text_sha256": "78da596e5b0ec62c3e98ca16940ce5913a29edb567eb37585691e02b18486fc0",
+    "category": "eligible_mock_model",
+    "cause": "diagnostic-only大输出需要eligible profile；旧fixture先被淘汰。",
+    "contract_change": "使用8192局部mock；正常preflight仍拒绝诊断可测packet，diagnostic与admission不混淆。",
+    "assessment": "合理；无真实审批、context或原始bounds放宽。",
+    "current_test_id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 14,
+    "id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+    "message": "KeyError: 'rows'",
+    "failure_text_sha256": "c5250d14d88d4cf7818acc14a9fb31b1be464abcd3c1a921e8aeaea57ab4d31a",
+    "category": "eligible_mock_model",
+    "cause": "v25大输出修复诊断因4096 profile缺候选，压缩报告缺rows。",
+    "contract_change": "v25此一测试复用diagnostic_setup；保留一次compact修复、原custom bounds不变。",
+    "assessment": "合理；不是授权模型改写资源上界。",
+    "current_test_id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 15,
+    "id": "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+    "message": "AssertionError: assert {'syntax': 'i...line': 1, ...} == {'syntax': 'i...esting_limit'}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {'error_code': 'expected_value'} != {'error_code': 'nesting_limit'}\n  Left contains 3 more items:\n  {'column': 3001, 'line': 1, 'position_chars': 3000}\n  Use -v to get more diff",
+    "failure_text_sha256": "459daa14c6aed0e707b4a354ac41232663d1fab3abc951fad3a3990c190f9745",
+    "category": "parser_runtime",
+    "cause": "不同CPython JSON decoder递归行为使3000层输入报expected_value而非nesting_limit。",
+    "contract_change": "源码增加quote/escape-aware深度扫描，深度>1000直接固定nesting_limit；原json.loads及后续验证不变。",
+    "assessment": "合理的跨运行时fail-closed硬化，不是把断言放宽为任意错误；字符串内括号需覆盖。",
+    "current_test_id": "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained",
+    "string_bracket_followup": {
+      "result": "passed",
+      "artifact": "runs/followup-fixtures.xml",
+      "module_total_passed": 60
+    }
+  },
+  {
+    "number": 16,
+    "id": "tests.test_superagent_loop::test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read",
+    "message": "AssertionError: assert 'blocked' == 'review_pending'\n  \n  - review_pending\n  + blocked",
+    "failure_text_sha256": "d9f6ba3078e02711f29c98caeb857743437ec895e85fbba2642e3a1546f3925c",
+    "category": "continuation_read_contract",
+    "cause": "旧fixture只从2150开始读尾部；看见source-tail不能证明完整来源已读。",
+    "contract_change": "从offset0以4096上限读取完整源；仍两次请求和review_pending，不伪造read proof。",
+    "assessment": "合理且加强完整读取合同；不放宽Worker步骤/工具/Token限额。",
+    "current_test_id": "tests.test_superagent_loop::test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  },
+  {
+    "number": 17,
+    "id": "tests.test_superagent_loop::test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router",
+    "message": "AssertionError: assert 'blocked' == 'review_pending'\n  \n  - review_pending\n  + blocked",
+    "failure_text_sha256": "577c5424dc39babf5a325a5492f4d9f273193f8ba9d8e0abcac78462803fc5e3",
+    "category": "continuation_read_contract",
+    "cause": "读原用户请求不能消费之后抵达的Thread新增请求，旧脚本未读followup便final。",
+    "contract_change": "增加真实read_trigger(followup.id)以及实际返回内容断言，总请求2改3。",
+    "assessment": "合理；保留单用户会话/隐藏Worker/无新增审批等断言，不自动标记followup已读。",
+    "current_test_id": "tests.test_superagent_loop::test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router",
+    "offline_observation": {
+      "result": "passed",
+      "artifact": "runs/offline-fixtures.xml"
+    },
+    "live_provider_acceptance": false,
+    "followup_report": "REPORT.md; initial classification and original failure evidence retained"
+  }
+]

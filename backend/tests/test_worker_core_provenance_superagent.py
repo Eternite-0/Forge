@@ -100,7 +100,16 @@ def test_real_core_checkpoints_pass_review_and_completion_without_fabricated_act
         before = c.total_changes
         assert _verify_worker_context_call(store, c, run["id"], call)
         receipts, _ = _review_receipts(store, c, run)
-        assert len(receipts) == 1 and receipts[0]["tool_name"] == "file_write"
+        actions = [item for item in receipts if not item.get("context_only")]
+        context = [item for item in receipts if item.get("context_only")]
+        assert len(actions) == 1 and actions[0]["tool_name"] == "file_write"
+        assert actions[0]["execution_mode"] == "live"
+        assert context and all(
+            item["tool_name"] in {"read_trigger", "handback_trigger"}
+            and "execution_mode" not in item
+            for item in context
+        )
+        assert any(item["arguments"]["trigger_id"] == trigger["id"] for item in context)
         assert c.total_changes == before
         assert call["receipt_id"] is None
         assert c.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 1

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="164" time="71.343" timestamp="2026-11-16T17:48:24.278765+08:00" hostname="tracydeMacBook-Pro.local"><testcase classname="tests.test_worker_core_provenance_superagent" name="test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[read_trigger]" time="2.065" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[recall_object]" time="1.933" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_real_core_checkpoints_pass_review_and_completion_without_fabricated_action_receipts[handback_trigger]" time="1.904" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[arguments]" time="0.968" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[result_and_tool]" time="0.975" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[assistant]" time="1.098" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[tool]" time="1.065" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[proof]" time="1.020" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[trusted]" time="0.917" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[delivery]" time="1.063" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[inbox]" time="1.141" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[trigger_payload]" time="1.124" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_core_source_provenance_rejects_forged_calls_transcripts_and_actual_delivery[event]" time="1.215" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_read_trigger_historical_projection_survives_handback_and_records_only_read_page" time="1.727" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_dynamic_recall_keeps_historical_result_but_current_revocation_is_enforced" time="1.236" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_handback_checkpoint_failure_rolls_back_delivery_and_event" time="0.688" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_immutable_recalled_evidence_is_bound_to_actual_task_and_content" time="1.441" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_cross_task_recall_cannot_mint_core_source_proof" time="0.668" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_missing_core_checkpoint_is_never_reconstructed_from_claims" time="1.037" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_handback_review_is_readonly_and_binds_its_actual_delivery_event[reason]" time="0.919" /><testcase classname="tests.test_worker_core_provenance_superagent" name="test_handback_review_is_readonly_and_binds_its_actual_delivery_event[event]" time="1.239" /><testcase classname="tests.test_worker_continuation_completion" name="test_first_model_round_sees_real_pending_without_counting_metadata_as_read" time="1.134" /><testcase classname="tests.test_worker_continuation_completion" name="test_late_pending_is_visible_before_next_action_and_tracks_real_pages" time="4.044" /><testcase classname="tests.test_worker_continuation_completion" name="test_first_round_source_tamper_blocks_without_model_request[payload]" time="0.400" /><testcase classname="tests.test_worker_continuation_completion" name="test_first_round_source_tamper_blocks_without_model_request[inbox]" time="0.514" /><testcase classname="tests.test_worker_continuation_completion" name="test_first_round_source_tamper_blocks_without_model_request[event]" time="0.602" /><testcase classname="tests.test_worker_continuation_completion" name="test_first_round_source_tamper_blocks_without_model_request[revoked]" time="0.583" /><testcase classname="tests.test_worker_continuation_completion" name="test_injected_preview_cannot_finalize_and_full_reads_preserve_charged_draft" time="1.729" /><testcase classname="tests.test_worker_continuation_completion" name="test_ignored_read_debt_exhausts_original_steps_without_result" time="0.963" /><testcase classname="tests.test_worker_continuation_completion" name="test_superagent_event_arriving_during_final_inference_requires_full_read" time="2.271" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[partial]" time="1.369" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[duplicate]" time="0.946" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[proof]" time="1.067" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[transcript]" time="0.905" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[unknown]" time="0.981" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[hash]" time="0.992" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[late]" time="1.190" /><testcase classname="tests.test_worker_continuation_completion" name="test_full_read_requires_complete_scoped_proofs_before_final_draft[order]" time="0.835" /><testcase classname="tests.test_worker_continuation_completion" name="test_current_source_corruption_fails_closed" time="0.350" /><testcase classname="tests.test_worker_continuation_completion" name="test_corrupt_invocation_transcript_blocks_and_keeps_charged_draft[malformed0]" time="0.724" /><testcase classname="tests.test_worker_continuation_completion" name="test_corrupt_invocation_transcript_blocks_and_keeps_charged_draft[malformed1]" time="0.691" /><testcase classname="tests.test_worker_continuation_completion" name="test_corrupt_invocation_transcript_blocks_and_keeps_charged_draft[malformed2]" time="0.753" /><testcase classname="tests.test_worker_continuation_completion" name="test_actual_out_of_scope_handback_discharges_only_proved_delivery" time="0.564" /><testcase classname="tests.test_worker_continuation_completion" name="test_complete_read_survives_generation_change_and_legacy_remains_unaffected" time="0.928" /><testcase classname="tests.test_worker_continuation_completion" name="test_unread_delivery_source_is_verified_before_any_feedback[inbox]" time="0.353" /><testcase classname="tests.test_worker_continuation_completion" name="test_unread_delivery_source_is_verified_before_any_feedback[envelope]" time="0.278" /><testcase classname="tests.test_worker_continuation_completion" name="test_unread_delivery_source_is_verified_before_any_feedback[event]" time="0.268" /><testcase classname="tests.test_worker_continuation_completion" name="test_unread_delivery_source_is_verified_before_any_feedback[revoked]" time="0.225" /><testcase classname="tests.test_worker_continuation_completion" name="test_unread_delivery_source_is_verified_before_any_feedback[foreign_run]" time="0.226" /><testcase classname="tests.test_worker_continuation_completion" name="test_single_complete_page_is_accepted_and_forged_handback_is_not" time="1.549" /><testcase classname="tests.test_worker_continuation_completion" name="test_feedback_is_bounded_and_never_contains_source_bodies" time="0.001" /><testcase classname="tests.test_continuation_artifact_review" name="test_real_artifact_applies_thread_addition_and_review_detects_omission[write-applies-addition]" time="1.267" /><testcase classname="tests.test_continuation_artifact_review" name="test_real_artifact_applies_thread_addition_and_review_detects_omission[review-requires-real-revision]" time="1.965" /><testcase classname="tests.test_continuation_artifact_review" name="test_read_but_not_adopted_addition_has_explicit_explanation_or_handback[explain]" time="1.324" /><testcase classname="tests.test_continuation_artifact_review" name="test_read_but_not_adopted_addition_has_explicit_explanation_or_handback[handback]" time="1.454" /><testcase classname="tests.test_continuation_artifact_review" name="test_context_only_receipts_cannot_admit_review_as_action_evidence[read_trigger]" time="0.797" /><testcase classname="tests.test_continuation_artifact_review" name="test_context_only_receipts_cannot_admit_review_as_action_evidence[handback_trigger]" time="0.495" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_reads_previous_archive_and_original_decision_and_todo" time="0.254" /><testcase classname="tests.test_recall_restart_continuity" name="test_router_tools_page_unicode_original_and_reject_inter_page_changes[None]" time="0.215" /><testcase classname="tests.test_recall_restart_continuity" name="test_router_tools_page_unicode_original_and_reject_inter_page_changes[source]" time="0.196" /><testcase classname="tests.test_recall_restart_continuity" name="test_router_tools_page_unicode_original_and_reject_inter_page_changes[revocation]" time="0.200" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_focused_router_reads_only_correct_projects_originals[0]" time="0.305" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_focused_router_reads_only_correct_projects_originals[1]" time="0.307" /><testcase classname="tests.test_recall_restart_continuity" name="test_focused_router_tool_rejects_guessed_out_of_project_references[other_project]" time="0.227" /><testcase classname="tests.test_recall_restart_continuity" name="test_focused_router_tool_rejects_guessed_out_of_project_references[other_source]" time="0.245" /><testcase classname="tests.test_recall_restart_continuity" name="test_focused_router_tool_rejects_guessed_out_of_project_references[mixed_archive]" time="0.226" /><testcase classname="tests.test_recall_restart_continuity" name="test_archive_content_and_relation_pages_survive_restart_without_missing_sources" time="0.802" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[revoke_old_original]" time="0.204" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[revoke_current_original]" time="0.274" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[revoke_previous_archive]" time="0.210" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[revoke_head]" time="0.206" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[change_old_original]" time="0.183" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[change_old_metadata]" time="0.197" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[change_previous_capsule]" time="0.177" /><testcase classname="tests.test_recall_restart_continuity" name="test_restarted_router_never_presents_invalid_archive_dependency_to_model[rehash_previous_capsule]" time="0.204" /><testcase classname="tests.test_recall_restart_continuity" name="test_archive_page_continuation_rechecks_sources_and_expected_hash[source]" time="0.151" /><testcase classname="tests.test_recall_restart_continuity" name="test_archive_page_continuation_rechecks_sources_and_expected_hash[revocation]" time="0.133" /><testcase classname="tests.test_recall_restart_continuity" name="test_archive_page_continuation_rechecks_sources_and_expected_hash[capsule]" time="0.134" /><testcase classname="tests.test_continuity_minimal_probe" name="test_inherits_all_four_failed_conditions_without_refund" time="0.005" /><testcase classname="tests.test_continuity_minimal_probe" name="test_changed_history_fails_closed" time="0.004" /><testcase classname="tests.test_continuity_minimal_probe" name="test_empty_preflight_is_not_new_zero_history_or_live_success" time="0.002"><failure message="continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_empty_preflight_is_not_ne0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+
+    def test_empty_preflight_is_not_new_zero_history_or_live_success(tmp_path, frozen):
+        workspace = tmp_path / "fresh"
+&gt;       result = probe.protocol(workspace, environ=ENV)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_empty_preflight_is_not_ne0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+&gt;           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_prepare_exclusively_claims_workspace_and_never_resumes" time="0.002"><failure message="continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_prepare_exclusively_claim0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112e499b0&gt;
+
+    def test_prepare_exclusively_claims_workspace_and_never_resumes(tmp_path, frozen, monkeypatch):
+        monkeypatch.setenv("FORGE_PROVIDER_CREDENTIAL_REF", "OFFLINE_CREDENTIAL")
+        monkeypatch.setenv("OFFLINE_CREDENTIAL", SECRET)
+        workspace = tmp_path / "fresh"
+&gt;       result = probe.prepare(workspace)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_prepare_exclusively_claim0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+&gt;           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_invalid_credential_reference_is_not_logged[]" time="0.003" /><testcase classname="tests.test_continuity_minimal_probe" name="test_invalid_credential_reference_is_not_logged[bad=reference]" time="0.002" /><testcase classname="tests.test_continuity_minimal_probe" name="test_invalid_credential_reference_is_not_logged[bad reference]" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_invalid_credential_reference_is_not_logged[OFFLINE_PLACEHOLDER_MUST_NEVER_APPEAR_IN_OUTPUT!]" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_missing_environment_does_not_read_dotenv_or_create_workspace" time="0.003"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'environment_credential_missing'&#10;  Actual message: 'workspace_must_not_modify_repository_sources'">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_missing_environment_does_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112e49ef0&gt;
+
+    def test_missing_environment_does_not_read_dotenv_or_create_workspace(tmp_path, frozen, monkeypatch):
+        monkeypatch.delenv("FORGE_PROVIDER_CREDENTIAL_REF", raising=False)
+        (tmp_path / ".env").write_text("FORGE_PROVIDER_CREDENTIAL_REF=OFFLINE_CREDENTIAL\n"
+                                      "OFFLINE_CREDENTIAL=" + SECRET, encoding="utf-8")
+&gt;       with pytest.raises(probe.Refused, match="environment_credential_missing"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'environment_credential_missing'
+E         Actual message: 'workspace_must_not_modify_repository_sources'
+
+backend/tests/test_continuity_minimal_probe.py:121: AssertionError</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_existing_and_symlink_workspaces_are_rejected" time="0.003" /><testcase classname="tests.test_continuity_minimal_probe" name="test_partial_and_unknown_usage_retain_each_unreported_reservation" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_caps_are_aggregate_and_overruns_are_not_clamped" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_malformed_usage_never_counts_as_zero[input_reserved-True]" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_malformed_usage_never_counts_as_zero[input_reserved--1]" time="0.004" /><testcase classname="tests.test_continuity_minimal_probe" name="test_malformed_usage_never_counts_as_zero[output_charged--1]" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_malformed_usage_never_counts_as_zero[input_charged-1.5]" time="0.001" /><testcase classname="tests.test_continuity_minimal_probe" name="test_malformed_usage_never_counts_as_zero[state-invented]" time="0.002" /><testcase classname="tests.test_continuity_minimal_probe" name="test_duplicate_attempts_are_not_deduplicated_into_extra_budget" time="0.002" /><testcase classname="tests.test_continuity_minimal_probe" name="test_existing_production_ledger_limits_survive_reopening" time="0.075" /><testcase classname="tests.test_continuity_minimal_probe" name="test_production_token_admission_keeps_unknown_reservation_after_reopening" time="0.023" /><testcase classname="tests.test_continuity_minimal_probe" name="test_main_sanitizes_foreign_errors_and_has_no_live_command" time="0.004" /><testcase classname="tests.test_continuity_minimal_probe" name="test_successful_cli_preflight_and_prepare_are_still_offline" time="0.004"><failure message="AssertionError: assert 2 == 0&#10; +  where 2 = &lt;function main at 0x112c014e0&gt;(['preflight', '--workspace', '/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0/fresh'])&#10; +    where &lt;function main at 0x112c014e0&gt; = probe.main">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112e4baf0&gt;
+capsys = &lt;_pytest.capture.CaptureFixture object at 0x112e374d0&gt;
+
+    def test_successful_cli_preflight_and_prepare_are_still_offline(tmp_path, frozen, monkeypatch, capsys):
+        workspace = tmp_path / "fresh"
+&gt;       assert probe.main(["preflight", "--workspace", str(workspace)]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = &lt;function main at 0x112c014e0&gt;(['preflight', '--workspace', '/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0/fresh'])
+E        +    where &lt;function main at 0x112c014e0&gt; = probe.main
+
+backend/tests/test_continuity_minimal_probe.py:241: AssertionError</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_source_freeze_records_actual_commit_dirty_bytes_and_required_files" time="0.631" /><testcase classname="tests.test_continuity_minimal_probe" name="test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data" time="0.002"><failure message="continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_reuses_read_only_me0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x113035ef0&gt;
+
+    def test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data(
+        tmp_path, frozen, monkeypatch,
+    ):
+&gt;       workspace, database = seed_prepared_store(tmp_path, monkeypatch)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_continuity_minimal_probe.py:269: in seed_prepared_store
+    probe.prepare(workspace)
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_reuses_read_only_me0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+&gt;           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_audit_refuses_a_database_copied_from_old_workspace" time="0.002"><failure message="continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_refuses_a_database_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112e4b3f0&gt;
+
+    def test_audit_refuses_a_database_copied_from_old_workspace(tmp_path, frozen, monkeypatch):
+&gt;       workspace, database = seed_prepared_store(tmp_path, monkeypatch)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_continuity_minimal_probe.py:269: in seed_prepared_store
+    probe.prepare(workspace)
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_refuses_a_database_0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+&gt;           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused</failure></testcase><testcase classname="tests.test_continuity_minimal_probe" name="test_audit_rejects_old_workspace_and_never_creates_database" time="0.002"><failure message="continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources">tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_rejects_old_workspa0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x112e4b4d0&gt;
+
+    def test_audit_rejects_old_workspace_and_never_creates_database(tmp_path, frozen, monkeypatch):
+        monkeypatch.setenv("FORGE_PROVIDER_CREDENTIAL_REF", "OFFLINE_CREDENTIAL")
+        monkeypatch.setenv("OFFLINE_CREDENTIAL", SECRET)
+        workspace = tmp_path / "fresh"
+&gt;       probe.prepare(workspace)
+
+backend/tests/test_continuity_minimal_probe.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_rejects_old_workspa0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+&gt;           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused</failure></testcase><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-False]" time="0.035" /><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-False]" time="0.018" /><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-True]" time="0.083" /><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-True]" time="0.030" /><testcase classname="tests.test_router_json_protocol" name="test_exact_single_json_fence_is_audited_without_reflection_or_validator_bypass" time="0.118" /><testcase classname="tests.test_router_json_protocol" name="test_json_rejection_keeps_only_safe_shape_and_original_hash" time="0.135" /><testcase classname="tests.test_router_json_protocol" name="test_projection_preserves_properties_named_default_and_schema_constraints" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nested_team_refs_resolve_and_list_defaults_are_required_arrays" time="0.145" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[before\n```json\n{}\n```]" time="0.110" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\n{}\n```\nafter]" time="0.138" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\n{}\n```\n```json\n{}\n```]" time="0.098" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\n{}]" time="0.094" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```python\n{}\n```]" time="0.094" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```JSON\n{}\n```]" time="0.088" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[````json\n{}\n````]" time="0.110" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json extra\n{}\n```]" time="0.092" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json {} ```]" time="0.091" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[ ```json\n{}\n```]" time="0.086" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\n{}\n```\n]" time="0.084" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\r\n{}\r\n```]" time="0.088" /><testcase classname="tests.test_router_json_protocol" name="test_nonexact_transport_is_rejected_unchanged[```json\n{}\r\n```]" time="0.094" /><testcase classname="tests.test_router_json_protocol" name="test_transport_conversion_still_requires_original_schema_topology_and_recall[{&quot;intent&quot;:-[root]: json_invalid]" time="0.115" /><testcase classname="tests.test_router_json_protocol" name="test_transport_conversion_still_requires_original_schema_topology_and_recall[body1-priority: less_than_equal]" time="0.115" /><testcase classname="tests.test_router_json_protocol" name="test_transport_conversion_still_requires_original_schema_topology_and_recall[body2-recall_source_not_presented_or_ineligible]" time="0.132" /><testcase classname="tests.test_router_json_protocol" name="test_transport_conversion_still_requires_original_schema_topology_and_recall[body3-execution_team: team_dependencies_not_earlier_distinct]" time="0.146" /><testcase classname="tests.test_router_json_protocol" name="test_fenced_invalid_initial_is_reflected_raw_once_and_fenced_repair_is_validated" time="0.188" /><testcase classname="tests.test_router_json_protocol" name="test_failed_fenced_reflection_does_not_add_a_second_repair" time="0.132" /><testcase classname="tests.test_router_json_protocol" name="test_normalization_does_not_refund_output_bytes_or_change_idempotency" time="0.160" /><testcase classname="tests.test_router_json_protocol" name="test_fenced_task_creation_keeps_atomic_turn_and_does_not_self_conflict" time="0.140" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[-empty-expected_value]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[  \n-empty-expected_value]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[{&quot;a&quot;:1,}-object-expected_property_name]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[{&quot;a&quot;:1} explanation-object-extra_data]" time="0.002" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[Here is the decision: {&quot;a&quot;:1}-letter-expected_value]" time="0.002" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[{&quot;a&quot;:-object-expected_value]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[{&quot;a&quot;:&quot;line\nvalue&quot;}-object-invalid_control_character]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[{&quot;a&quot;:&quot;\\q&quot;}-object-invalid_escape]" time="0.002" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[\ufeff{&quot;a&quot;:1}-bom-unexpected_bom]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_error_shapes_have_only_fixed_metadata[\xa0{&quot;a&quot;:1}-non_json_whitespace-expected_value]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_valid_json_wrong_root_remains_schema_rejection[&quot;private&quot;-string]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_valid_json_wrong_root_remains_schema_rejection[[]-array]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_valid_json_wrong_root_remains_schema_rejection[42-number]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_valid_json_wrong_root_remains_schema_rejection[false-boolean]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_valid_json_wrong_root_remains_schema_rejection[null-null]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nonstandard_constants_have_fixed_codes[NaN]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nonstandard_constants_have_fixed_codes[Infinity]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nonstandard_constants_have_fixed_codes[-Infinity]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nonstandard_constants_have_fixed_codes[{&quot;x&quot;:NaN}]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_unicode_positions_count_characters_while_size_counts_utf8_bytes" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_no_private_fields_values_or_parser_messages_are_returned" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_parser_resource_limits_have_bounded_fixed_diagnostics[text0-json_value_limit]" time="0.002" /><testcase classname="tests.test_router_json_protocol" name="test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nesting_limit_ignores_brackets_and_escaped_quotes_in_strings[value0]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nesting_limit_ignores_brackets_and_escaped_quotes_in_strings[value1]" time="0.003" /><testcase classname="tests.test_router_json_protocol" name="test_nontext_diagnostics_are_fixed_metadata[None]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nontext_diagnostics_are_fixed_metadata[3]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nontext_diagnostics_are_fixed_metadata[value2]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_nontext_diagnostics_are_fixed_metadata[value3]" time="0.001" /><testcase classname="tests.test_router_json_protocol" name="test_native_gateway_schema_tool_rounds_reflection_and_original_framing[32768]" time="0.183" /><testcase classname="tests.test_router_json_protocol" name="test_native_gateway_schema_tool_rounds_reflection_and_original_framing[131072]" time="0.206" /></testsuite></testsuites>

@@ -1,0 +1,246 @@
+........................................................................ [ 43%]
+........FF....F............F.FFF........................................ [ 87%]
+....................                                                     [100%]
+=================================== FAILURES ===================================
+_________ test_empty_preflight_is_not_new_zero_history_or_live_success _________
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_empty_preflight_is_not_ne0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+
+    def test_empty_preflight_is_not_new_zero_history_or_live_success(tmp_path, frozen):
+        workspace = tmp_path / "fresh"
+>       result = probe.protocol(workspace, environ=ENV)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_empty_preflight_is_not_ne0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+>           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused
+_________ test_prepare_exclusively_claims_workspace_and_never_resumes __________
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_prepare_exclusively_claim0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112e499b0>
+
+    def test_prepare_exclusively_claims_workspace_and_never_resumes(tmp_path, frozen, monkeypatch):
+        monkeypatch.setenv("FORGE_PROVIDER_CREDENTIAL_REF", "OFFLINE_CREDENTIAL")
+        monkeypatch.setenv("OFFLINE_CREDENTIAL", SECRET)
+        workspace = tmp_path / "fresh"
+>       result = probe.prepare(workspace)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_prepare_exclusively_claim0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+>           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused
+______ test_missing_environment_does_not_read_dotenv_or_create_workspace _______
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_missing_environment_does_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112e49ef0>
+
+    def test_missing_environment_does_not_read_dotenv_or_create_workspace(tmp_path, frozen, monkeypatch):
+        monkeypatch.delenv("FORGE_PROVIDER_CREDENTIAL_REF", raising=False)
+        (tmp_path / ".env").write_text("FORGE_PROVIDER_CREDENTIAL_REF=OFFLINE_CREDENTIAL\n"
+                                      "OFFLINE_CREDENTIAL=" + SECRET, encoding="utf-8")
+>       with pytest.raises(probe.Refused, match="environment_credential_missing"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'environment_credential_missing'
+E         Actual message: 'workspace_must_not_modify_repository_sources'
+
+backend/tests/test_continuity_minimal_probe.py:121: AssertionError
+_________ test_successful_cli_preflight_and_prepare_are_still_offline __________
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112e4baf0>
+capsys = <_pytest.capture.CaptureFixture object at 0x112e374d0>
+
+    def test_successful_cli_preflight_and_prepare_are_still_offline(tmp_path, frozen, monkeypatch, capsys):
+        workspace = tmp_path / "fresh"
+>       assert probe.main(["preflight", "--workspace", str(workspace)]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = <function main at 0x112c014e0>(['preflight', '--workspace', '/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_successful_cli_preflight_0/fresh'])
+E        +    where <function main at 0x112c014e0> = probe.main
+
+backend/tests/test_continuity_minimal_probe.py:241: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"status": "refused", "failure_code": "workspace_must_not_modify_repository_sources", "provider_requests_by_this_command": 0}
+__ test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data ___
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_reuses_read_only_me0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x113035ef0>
+
+    def test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data(
+        tmp_path, frozen, monkeypatch,
+    ):
+>       workspace, database = seed_prepared_store(tmp_path, monkeypatch)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_continuity_minimal_probe.py:269: in seed_prepared_store
+    probe.prepare(workspace)
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_reuses_read_only_me0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+>           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused
+___________ test_audit_refuses_a_database_copied_from_old_workspace ____________
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_refuses_a_database_0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112e4b3f0>
+
+    def test_audit_refuses_a_database_copied_from_old_workspace(tmp_path, frozen, monkeypatch):
+>       workspace, database = seed_prepared_store(tmp_path, monkeypatch)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend/tests/test_continuity_minimal_probe.py:305: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/tests/test_continuity_minimal_probe.py:269: in seed_prepared_store
+    probe.prepare(workspace)
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_refuses_a_database_0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+>           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused
+_________ test_audit_rejects_old_workspace_and_never_creates_database __________
+
+tmp_path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_rejects_old_workspa0')
+frozen = {'commit': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'dirty': True, 'files': [], 'manifest_sha256': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112e4b4d0>
+
+    def test_audit_rejects_old_workspace_and_never_creates_database(tmp_path, frozen, monkeypatch):
+        monkeypatch.setenv("FORGE_PROVIDER_CREDENTIAL_REF", "OFFLINE_CREDENTIAL")
+        monkeypatch.setenv("OFFLINE_CREDENTIAL", SECRET)
+        workspace = tmp_path / "fresh"
+>       probe.prepare(workspace)
+
+backend/tests/test_continuity_minimal_probe.py:316: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+backend/scripts/continuity_minimal_probe.py:314: in prepare
+    report = protocol(workspace)
+             ^^^^^^^^^^^^^^^^^^^
+backend/scripts/continuity_minimal_probe.py:234: in protocol
+    workspace = fresh_workspace(workspace)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/Users/tracy/Documents/Forge/docs/audit/continuity-review-20261116/runs/followup-pytest-temp/test_audit_rejects_old_workspa0/fresh')
+
+    def fresh_workspace(path):
+        path = Path(path)
+        if not path.is_absolute() or ".." in path.parts:
+            raise Refused("workspace_must_be_new_absolute_path")
+        if any(parent.is_symlink() for parent in (path, *path.parents)):
+            raise Refused("workspace_symlink_forbidden")
+        if path.exists():
+            raise Refused("workspace_exists_no_resume_or_overwrite")
+        if not path.parent.is_dir():
+            raise Refused("workspace_parent_must_exist")
+        if path.is_relative_to(REPO) and not path.is_relative_to(REPO / ".local"):
+>           raise Refused("workspace_must_not_modify_repository_sources")
+E           continuity_minimal_probe_test.Refused: workspace_must_not_modify_repository_sources
+
+backend/scripts/continuity_minimal_probe.py:169: Refused
+=============================== warnings summary ===============================
+backend/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /Users/tracy/Documents/Forge/backend/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED backend/tests/test_continuity_minimal_probe.py::test_empty_preflight_is_not_new_zero_history_or_live_success
+FAILED backend/tests/test_continuity_minimal_probe.py::test_prepare_exclusively_claims_workspace_and_never_resumes
+FAILED backend/tests/test_continuity_minimal_probe.py::test_missing_environment_does_not_read_dotenv_or_create_workspace
+FAILED backend/tests/test_continuity_minimal_probe.py::test_successful_cli_preflight_and_prepare_are_still_offline
+FAILED backend/tests/test_continuity_minimal_probe.py::test_audit_reuses_read_only_metrics_and_retains_unknowns_without_raw_data
+FAILED backend/tests/test_continuity_minimal_probe.py::test_audit_refuses_a_database_copied_from_old_workspace
+FAILED backend/tests/test_continuity_minimal_probe.py::test_audit_rejects_old_workspace_and_never_creates_database
+7 failed, 157 passed, 1 warning in 71.35s (0:01:11)

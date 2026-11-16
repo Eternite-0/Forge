@@ -1,0 +1,9 @@
+[
+  {
+    "test_workspace": "runs/safety-pytest-temp/test_private_real_core_restartcurrent",
+    "model_budget_attempts": 0,
+    "core_started": 2,
+    "core_stopped": 2,
+    "integrity": "ok"
+  }
+]

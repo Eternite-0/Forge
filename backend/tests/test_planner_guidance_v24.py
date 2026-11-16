@@ -130,7 +130,8 @@ def test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool
             candidate["minimum_node_tokens"]
             == candidate["initial_work_tokens"] + candidate["review_cycle_reserve_tokens"]
         )
-        assert candidate["policy_cycle_calls"] == 4
+        # Initial work, review, correction, verification and re-review.
+        assert candidate["policy_cycle_calls"] == 5
         assert candidate["native_correction_headroom"] >= 0
     selected["nodes"][2]["predecessors"].append(dependency("first", artifact=False, deliveries=[]))
     independent = preview(store, quest, selected, NativeFramingMock(selected))

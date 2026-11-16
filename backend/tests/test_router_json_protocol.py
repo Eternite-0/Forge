@@ -306,6 +306,13 @@ def test_parser_resource_limits_have_bounded_fixed_diagnostics(text, code):
     assert json_response_diagnostics(text)["json"] == {"syntax": "invalid", "error_code": code}
 
 
+@pytest.mark.parametrize("value", ["[" * 3000, '{"escaped": "\\\\\\\"["}' * 1200])
+def test_nesting_limit_ignores_brackets_and_escaped_quotes_in_strings(value):
+    assert json_response_diagnostics(json.dumps({"source": value}))["json"] == {
+        "syntax": "valid", "root_kind": "object",
+    }
+
+
 @pytest.mark.parametrize("value", [None, 3, {}, []])
 def test_nontext_diagnostics_are_fixed_metadata(value):
     assert json_response_diagnostics(value) == {

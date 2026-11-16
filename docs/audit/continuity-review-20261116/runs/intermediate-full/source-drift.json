@@ -1,0 +1,19 @@
+{
+  "status": "intermediate_not_final_source_acceptance",
+  "result": "3017 passed, 12 skipped, 1 warning",
+  "reason": "driver and tests changed during run; retain and rerun after freeze",
+  "changed_python_files": {
+    "backend/scripts/continuity_minimal_probe.py": {
+      "before": "f47b3fab5be06f0eeab1d96edae367324eef701cbb260059216f2b0249900407",
+      "after": "4f5b8b3b373bc12d02d81ffc3a20dae49e5b431e88fa1a6ccd7b9d4b0e4c3f36"
+    },
+    "backend/scripts/continuity_thread_probe.py": {
+      "before": null,
+      "after": "58642b9a61e22a5a9c7abdc428ac4c02f43fbcc558d834524f9743e36cfabae9"
+    },
+    "backend/tests/test_continuity_minimal_probe.py": {
+      "before": "7fba08ce757bbcfc1cc1919a00171cea8ffa73ccfeaeaeab159e7730adf083e7",
+      "after": "df2687d21a0d272490619e50abacbfef4101986539fc84267116779f513812b7"
+    }
+  }
+}

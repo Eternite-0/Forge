@@ -915,10 +915,16 @@ class RouterService:
             context["project_context"] = snapshot["project_context"]
             context["coordination"] = snapshot["coordination"]
             context["recall"] = {
-                "root": "conversation:main",
+                "root": "project:" + snapshot["project_context"]["focused_project_id"]
+                if snapshot["project_context"]["focused_project_id"] else "conversation:main",
                 "instruction": "Use recall_object with typed references (quest:, worker:, run:, thread:, trigger:, project:). "
-                "Each recalled object includes next-hop references. Full contents remain externally stored.",
+                "Each recalled object includes next-hop references. Full contents remain externally stored. "
+                "For continuation after compaction/restart, follow relevant next hops and page complete "
+                "original sources to recover historical decisions and pending work before deciding; "
+                "a project/task listing or summary alone does not establish the recalled facts.",
             }
+            if snapshot["archive_head"] and not snapshot["project_context"]["focused_project_id"]:
+                context["recall"]["archive_ref"] = "archive:" + str(snapshot["archive_head"]["archive_id"])
             for quest in context["quests"]:
                 quest["reference"] = "quest:" + quest["id"]
                 quest["project_id"] = snapshot["task_projects"].get(quest["id"])
