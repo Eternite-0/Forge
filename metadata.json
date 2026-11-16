@@ -3,7 +3,7 @@
   "checkpoint_id": "01M7HJXVB6EKZT6GH8G6W4JKHE",
   "strategy": "manual-commit",
   "branch": "codex/phase1-continuous",
-  "checkpoints_count": 26,
+  "checkpoints_count": 27,
   "files_touched": [
     "backend/scripts/phase2/live_core.py",
     "backend/src/forge_core/context_service.py",
@@ -75,6 +75,7 @@
     "desktop/output/playwright/scale-preview-tree-1440.png",
     "desktop/output/playwright/scale-preview-tree-1920.png",
     "desktop/output/playwright/simple-preview-tree-expanded.png",
+    "desktop/output/playwright/simple-settings-save.png",
     "desktop/output/playwright/ui-activity-files.playwright-failure.png",
     "desktop/output/playwright/ui-conversation.playwright-failure.png",
     "desktop/output/playwright/ui-history.playwright-failure.png",
@@ -132,26 +133,33 @@
       "compact_transcript": "/3/transcript.jsonl",
       "content_hash": "/3/content_hash.txt",
       "prompt": "/3/prompt.txt"
+    },
+    {
+      "metadata": "/4/metadata.json",
+      "transcript": "/4/full.jsonl",
+      "compact_transcript": "/4/transcript.jsonl",
+      "content_hash": "/4/content_hash.txt",
+      "prompt": "/4/prompt.txt"
     }
   ],
   "redaction": {
-    "replacements": 6999,
+    "replacements": 7073,
     "layers": {
       "betterleaks": 0,
       "connection_string": 0,
       "credential_key": 0,
-      "credential_value": 438,
+      "credential_value": 468,
       "credentialed_uri": 8,
-      "custom": 124,
-      "entropy": 6722,
+      "custom": 142,
+      "entropy": 6730,
       "key_context": 0,
-      "pii": 328,
+      "pii": 346,
       "provider_token": 0,
       "shell_stdin": 0
     },
     "custom_rules_active": 1,
     "pii": {
-      "EMAIL": 325,
+      "EMAIL": 343,
       "IP": 3,
       "PHONE": 0
     }

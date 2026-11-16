@@ -1,0 +1,84 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7HJXVB6EKZT6GH8G6W4JKHE",
+  "session_id": "01a1e02a-ff24-7663-9287-d1473cf3ba8c",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-16T07:08:08.0385632Z",
+  "branch": "codex/phase1-continuous",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "backend/src/forge_core/context_service.py",
+    "backend/src/forge_core/model_call_budget.py",
+    "backend/src/forge_core/providers/__init__.py",
+    "backend/src/forge_core/registry.py",
+    "desktop/output/playwright/preview-code-expanded.png",
+    "desktop/output/playwright/preview-markdown-dark.png",
+    "desktop/output/playwright/preview-markdown-expanded-1280.png",
+    "desktop/output/playwright/rebuild-forge-chat-expanded.png",
+    "desktop/output/playwright/rebuild-forge-chat-light.png",
+    "desktop/output/playwright/rebuild-forge-conversation-collapsed-home.png",
+    "desktop/output/playwright/rebuild-forge-conversation-regrouped-activity.png",
+    "desktop/output/playwright/rebuild-forge-conversation-router-worker-initial.png",
+    "desktop/output/playwright/rebuild-forge-conversation-router-worker.png",
+    "desktop/output/playwright/rebuild-forge-settings-dark.png",
+    "desktop/output/playwright/rebuild-forge-settings-disconnected-small.png",
+    "desktop/output/playwright/rebuild-forge-settings-general.png",
+    "desktop/output/playwright/scale-preview-tree-1280.png",
+    "desktop/output/playwright/scale-preview-tree-1400.png",
+    "desktop/output/playwright/simple-settings-save.png",
+    "desktop/src/App.tsx",
+    "desktop/src/ChatTimeline.tsx",
+    "desktop/src/SettingsView.tsx",
+    "desktop/src/style.css",
+    "desktop/tests/ui-layout.playwright.js",
+    "desktop/tests/ui-preview.playwright.js",
+    "desktop/tests/ui-settings-save.playwright.js",
+    "desktop/tests/ui-smoke.playwright.js",
+    "docs/STATUS.md"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "380fdbd757cf",
+  "compact_transcript_start": 0,
+  "session_token_usage": {
+    "input_tokens": 133868,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 7977216,
+    "output_tokens": 22852,
+    "api_call_count": 63,
+    "subagent_tokens": {
+      "input_tokens": 194453,
+      "cache_creation_tokens": 0,
+      "cache_read_tokens": 7049216,
+      "output_tokens": 21376,
+      "api_call_count": 64
+    },
+    "subagent_tokens_complete": true
+  },
+  "redaction": {
+    "replacements": 74,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 30,
+      "credentialed_uri": 0,
+      "custom": 18,
+      "entropy": 8,
+      "key_context": 0,
+      "pii": 18,
+      "provider_token": 0,
+      "shell_stdin": 0
+    },
+    "custom_rules_active": 1,
+    "pii": {
+      "EMAIL": 18,
+      "IP": 0,
+      "PHONE": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 1
+  }
+}
