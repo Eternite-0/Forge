@@ -18,7 +18,7 @@ export default function useWorkspacePreview(workspace: WorkspaceState & ReturnTy
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [previewPaneSize, setPreviewPaneSize] = useState({ width: window.innerWidth - 260, height: window.innerHeight - 36 });
   const [preferredPreviewRatio, setPreferredPreviewRatio] = useState<number | null>(null);
-  const initialPreviewWidth = defaultPreviewWidth(previewPaneSize.width, previewPaneSize.height);
+  const initialPreviewWidth = defaultPreviewWidth(previewPaneSize.width);
   const previewBounds = previewWidthBounds(previewPaneSize.width);
   const previewWidthPixels = previewWidthFromRatio(preferredPreviewRatio ?? previewWidthRatio(initialPreviewWidth, previewPaneSize.width), previewPaneSize.width);
   const previewWidth = 100 * previewWidthPixels / Math.max(1, previewPaneSize.width);
@@ -38,7 +38,7 @@ export default function useWorkspacePreview(workspace: WorkspaceState & ReturnTy
     previewResizeRestore.current = null;
     setPreviewOpen(true); setPreviewRequest({ id: ++previewSerial.current, mode, path, paths, receiptId });
   };
-  const closePreview = () => { captureReadingPosition(); previewResizeRestore.current = null; setPreviewOpen(false); setWorkspaceChanges(undefined); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('[aria-label="查看工作空间文件"]')?.focus()); };
+  const closePreview = () => { captureReadingPosition(); previewResizeRestore.current = null; setPreviewOpen(false); setWorkspaceChanges(undefined); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.conversation-topbar :is(.home-open-files, .conversation-more-toggle)')?.focus({ preventScroll: true })); };
   const resizePreview = (width: number) => {
     captureReadingPosition();
     if (width < 160) { closePreview(); return; }
@@ -65,7 +65,6 @@ export default function useWorkspacePreview(workspace: WorkspaceState & ReturnTy
       if (!element.clientWidth) return;
       const height = (shell?.clientHeight || window.innerHeight) - 36;
       setPreviewPaneSize((old) => old.width === element.clientWidth && old.height === height ? old : { width: element.clientWidth, height });
-      setPreferredPreviewRatio((old) => old ?? previewWidthRatio(defaultPreviewWidth(element.clientWidth, height), element.clientWidth));
       // Root.H / gbrq.Kg / gbrq.g3: breakpoint crossings, not file-open rules.
       // Add only an occupied sidebar slot; narrow-window navigation is a fixed overlay.
       const rail = shell?.querySelector<HTMLElement>(".rail");

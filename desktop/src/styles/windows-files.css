@@ -1,0 +1,79 @@
+/* Windows reference: real file and immutable-receipt views, not a browser mock. */
+.windows-reference .file-preview-workspace {
+  --app-color-background-surface: light-dark(#ffffff, #111111);
+  --color-border-subtle: light-dark(#e4e4e4, #272727);
+  --color-border: light-dark(#d8d8d8, #3c3c3c);
+  --color-filetree-selected-bg: light-dark(#e9e9e9, #262626);
+  --color-filetree-selected-text: var(--color-text);
+  --color-git-added: light-dark(#008c36, #00a240);
+  --color-git-modified: light-dark(#0074dc, #0285ff);
+  --color-git-removed: light-dark(#c52b27, #e02e2a);
+  background: var(--app-color-background-surface);
+}
+.windows-reference .preview-tabs-bar { height: 52px; min-height: 52px; padding: 6px 8px; gap: 6px; }
+.windows-reference .preview-open-file-leading { display: inline-flex; align-items: center; gap: 7px; flex: none; height: 32px; padding-inline: 9px; border: 0; border-radius: 8px; background: transparent; color: var(--color-text-secondary); font-size: 13px; white-space: nowrap; }
+.windows-reference .preview-open-file-leading:hover { background: var(--color-background-secondary-ghost-hover); color: var(--color-text); }
+.windows-reference .preview-tabs { justify-content: safe flex-end; }
+.windows-reference .preview-tab { height: 32px; max-width: 240px; border-radius: 8px; }
+.windows-reference .preview-tab.active { background: light-dark(#f1f1f1, #242424); border-color: var(--color-border); box-shadow: none; }
+.windows-reference .preview-tab > [role="tab"] { font-size: 13px; gap: 6px; padding-left: 10px; }
+.windows-reference .preview-tab > [role="tab"] .file-type-glyph { color: currentColor; }
+.windows-reference .preview-tabs-bar > .icon-button { border-radius: 8px; }
+.windows-reference .preview-toolbar { height: 48px; min-height: 48px; flex: none; padding: 7px 8px; gap: 6px; }
+.windows-reference :is(.preview-breadcrumb, .preview-view-actions button) { height: 34px; min-height: 34px; border-color: transparent; background: light-dark(#f0f0f0, #262626); box-shadow: none; font-size: 13px; }
+.windows-reference .preview-breadcrumb { gap: 7px; padding-inline: 11px; }
+.windows-reference .preview-breadcrumb-part { gap: 7px; }
+.windows-reference .preview-breadcrumb-part > strong { font-weight: 600; }
+.windows-reference .preview-view-actions { gap: 5px; }
+.windows-reference .preview-view-actions button { gap: 6px; padding-inline: 10px; }
+.windows-reference .preview-view-actions .preview-icon-action { width: 34px; padding: 5px; }
+.windows-reference .preview-tree-toggle { width: 34px; height: 34px; border: 1px solid transparent; }
+.windows-reference .preview-tree-toggle[aria-pressed="true"] { color: light-dark(#2b7297, #85bad9); background: light-dark(#eaf1f5, #101c24); border-color: light-dark(#ccdce6, #283a46); }
+.windows-reference .preview-view-actions button:hover { background: light-dark(#e5e5e5, #333333); }
+.windows-reference .preview-view-actions button[aria-pressed="true"] { background: light-dark(#dedede, #393939); }
+.windows-reference .preview-file-tree { padding-top: 8px; background: var(--app-color-background-surface); }
+.windows-reference .file-tree-search { height: 28px; min-height: 28px; margin: 0 8px 3px; padding-inline: 10px; }
+.windows-reference .file-tree-search input { height: 26px; font-size: 13px; }
+.windows-reference .file-tree-scopes { margin-bottom: 2px; }
+.windows-reference :is(.file-tree-row, .file-tree-section-heading) { height: 28px; min-height: 28px; border-radius: 6px; font-size: 13px; }
+.windows-reference .file-tree-scroll { padding-inline: 5px; }
+.windows-reference .file-tree-row.selected[data-status*="A"] { color: var(--color-git-added); }
+.windows-reference .file-tree-row.selected[data-status*="M"] { color: var(--color-git-modified); }
+.windows-reference .document-rendered { padding: 8px 16px 24px; }
+.windows-reference .markdown.file-markdown { font-size: 14px; line-height: 22px; }
+.windows-reference .markdown.file-markdown h1 { margin-bottom: 24px; font-size: 24px; line-height: 32px; }
+.windows-reference .markdown.file-markdown h2 { margin: 28px 0 20px; font-size: 21px; line-height: 28px; }
+.windows-reference .markdown.file-markdown h3 { font-size: 18px; line-height: 26px; }
+.windows-reference .file-preview-workspace .source-lines { padding-top: 0; font-size: 12px; line-height: 22px; }
+.windows-reference .file-preview-workspace .source-line { min-height: 22px; }
+.windows-reference .file-preview-workspace .source-line-number { width: 36px; flex-basis: 36px; padding-inline: 4px 8px; }
+.windows-reference .artifact-history-preview { container: receipt-preview / inline-size; }
+.windows-reference .artifact-history-heading { min-height: 44px; padding: 6px 10px; gap: 6px; }
+.windows-reference .artifact-history-heading strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.windows-reference .artifact-history-heading > div:first-child { flex: 1; overflow: hidden; }
+.windows-reference .artifact-history-actions { gap: 2px; }
+.windows-reference .artifact-history-actions .icon-button { width: 26px; height: 26px; flex: none; }
+.windows-reference .artifact-history-record { padding: 8px 12px; }
+.windows-reference .artifact-history-summary { gap: 6px; }
+@container file-preview (max-width: 560px) {
+  .windows-reference .preview-open-file-leading { display: none; }
+  .windows-reference .preview-tabs { justify-content: flex-start; }
+}
+@container file-preview (max-width: 440px) {
+  .windows-reference .preview-toolbar { flex-wrap: wrap; height: auto; min-height: 48px; gap: 4px; }
+  .windows-reference .preview-toolbar > .preview-breadcrumb { flex: 1 1 100%; max-width: 100%; }
+  .windows-reference .preview-view-actions { margin-left: 0; }
+  .windows-reference .preview-file-tree { max-width: 45% !important; }
+  .windows-reference .preview-tab { max-width: 190px; }
+}
+@container receipt-preview (max-width: 220px) {
+  .windows-reference .artifact-history-heading { flex-wrap: wrap; }
+  .windows-reference .artifact-history-heading > div:first-child { flex-basis: calc(100% - 58px); }
+  .windows-reference .artifact-history-context { gap: 3px; }
+  .windows-reference .artifact-history-record { padding-inline: 8px; }
+}
+@media (forced-colors: active) {
+  .windows-reference .file-preview-workspace { --color-git-added: CanvasText; --color-git-removed: CanvasText; --color-git-modified: CanvasText; }
+  .windows-reference .preview-tab.active, .windows-reference .file-tree-row.selected { outline: 1px solid Highlight; outline-offset: -1px; }
+  .windows-reference .file-preview-workspace .code-preview-diff .source-line-number { width: 56px; flex-basis: 56px; }
+}

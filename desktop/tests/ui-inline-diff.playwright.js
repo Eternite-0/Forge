@@ -46,7 +46,7 @@ async (page, { outputDir }) => {
     catch (error) { if (requestGeneration === generation) throw error; }
   });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(globalThis.process.env.FORGE_UI_BASE_URL || 'http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('aa'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   const line = (id) => page.locator(`[data-scroll-key="event:tool_receipt:${id}"]`);

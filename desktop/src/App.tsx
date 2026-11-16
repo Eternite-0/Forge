@@ -63,7 +63,7 @@ export default function App() {
   const connectionSetup = !connection && <section className="simple-connection" aria-label="连接 FORGE">
       <div className="connect-banner" role="status"><div><strong>{native ? "正在连接 FORGE" : "连接 FORGE"}</strong><p>{native ? "正在启动本地服务，请稍候。" : "输入本次启动密钥即可开始。密钥不会保存在浏览器中。"}</p>{connectionError && <p className="error">{connectionError}</p>}</div>{!native && <form className="connect-controls" onSubmit={(event) => { event.preventDefault(); void connectBrowser(); }}><input ref={secretInput} type="password" autoComplete="off" aria-label="Core 启动密钥" placeholder="本次启动密钥" /><button type="submit" className="button primary">连接</button></form>}</div>
     </section>;
-  return <div ref={shell} className={`app-shell simple-shell codex-shell mac-shell${compact ? " compact-navigation" : ""}${view === "chat" && !settingsOpen ? " chat-open" : ""}${settingsOpen ? " settings-open" : ""}${taskView && !settingsOpen ? " tasks-open" : ""}${taskPageOpen ? " task-page-open" : ""}`}>
+  return <div ref={shell} className={`app-shell simple-shell codex-shell mac-shell windows-reference${compact ? " compact-navigation" : ""}${view === "chat" && !settingsOpen ? " chat-open" : ""}${settingsOpen ? " settings-open" : ""}${taskView && !settingsOpen ? " tasks-open" : ""}${taskPageOpen ? " task-page-open" : ""}`}>
     <Titlebar route={settingsOpen ? `settings:${setting}` : view} onNavigate={navigate} sidebarCollapsed={compact} onToggleSidebar={() => {
       workspace.captureReadingPosition();
       if (narrow) setSidebarOverlay(value => !value); else workspace.setSidebarCollapsed(value => !value);

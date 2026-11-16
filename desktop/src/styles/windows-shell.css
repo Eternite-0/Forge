@@ -1,0 +1,100 @@
+/* The supplied 1626px and 2048px captures show different UI densities.
+   Interpolate the measured main-frame offsets between the two viewports. */
+.app-shell.simple-shell.mac-shell.windows-reference {
+  --forge-reference-titlebar: clamp(44px, calc(92.53px - 2.37vw), 54px);
+  --forge-reference-rail: clamp(52px, calc(110.24px - 2.844vw), 64px);
+  --forge-reference-sidebar: clamp(288px, calc(637.42px - 17.06vw), 360px);
+  --app-shell-titlebar-height: var(--forge-reference-titlebar);
+  --sidebar-width: calc(var(--forge-reference-rail) + var(--forge-reference-sidebar));
+  --forge-frame: light-dark(#e8edf0, #1a2227);
+  --forge-project-panel: light-dark(#f4f6f7, #141819);
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  grid-template-rows: var(--forge-reference-titlebar) minmax(0, 1fr);
+  background: var(--forge-frame);
+}
+.app-shell.simple-shell.mac-shell.windows-reference:is(.compact-navigation, .settings-open) {
+  --sidebar-width: var(--forge-reference-rail);
+  grid-template-columns: var(--forge-reference-rail) minmax(0, 1fr);
+}
+.windows-reference > :is(.rail, .chat-workspace, .settings-view, .workspace-panel) { grid-row: 2; }
+.windows-reference > .desktop-chrome {
+  position: relative; inset: auto; grid-column: 1 / -1; grid-row: 1;
+  display: flex; width: auto; height: var(--forge-reference-titlebar);
+  padding: 0 8px calc(var(--forge-reference-titlebar) * .19) 3px; gap: 12px; border: 0; background: var(--forge-frame);
+}
+.windows-reference.compact-navigation > .desktop-chrome { left: auto; }
+.windows-reference .titlebar-navigation { gap: 2px; }
+.windows-reference .titlebar-navigation > button,
+.windows-reference .titlebar-navigation > button:not([aria-expanded]) {
+  position: static; opacity: 1; pointer-events: auto; background: transparent;
+  width: calc(var(--forge-reference-titlebar) - 12px); height: 30px;
+}
+.windows-reference .titlebar-navigation > button:disabled { opacity: .35; pointer-events: none; }
+.windows-reference .application-menubar {
+  position: static; inset: auto; display: flex; opacity: 1; pointer-events: auto;
+  gap: 4px; padding: 0; background: transparent; border-radius: 0; box-shadow: none;
+}
+.windows-reference .application-menu > button {
+  height: 30px; padding: 0 9px;
+  color: light-dark(#626b70, #8d9498); font-size: clamp(14px, calc(23.7px - .474vw), 16px); font-weight: 500;
+}
+.windows-reference .application-menu > button:is(:hover, [aria-expanded="true"]) { color: var(--color-text); background: var(--color-background-ghost); }
+.windows-reference .application-menu-panel { z-index: 110; }
+.windows-reference > .codex-sidebar {
+  display: grid; grid-template-columns: var(--forge-reference-rail) minmax(0, 1fr);
+  width: var(--sidebar-width); background: transparent; border: 0;
+}
+.reference-icon-rail { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 0; min-height: 0; background: var(--forge-frame); }
+.reference-rail-button {
+  position: relative; display: grid; place-items: center; flex: none;
+  width: calc(var(--forge-reference-rail) - 16px); height: calc(var(--forge-reference-rail) - 16px);
+  padding: 0; border: 0; border-radius: 11px; background: transparent;
+  color: light-dark(#697278, #8d969b);
+}
+.reference-rail-button > svg { width: calc(var(--forge-reference-rail) * .38); height: calc(var(--forge-reference-rail) * .38); }
+.reference-rail-button:is(:hover, .active) { background: light-dark(#d8e0e4, #2b3439); color: light-dark(#172025, #f5f6f7); }
+.reference-rail-settings { margin-top: auto; }
+.reference-rail-badge { position: absolute; right: -1px; top: -1px; min-width: 14px; padding: 1px 3px; border-radius: 8px; background: var(--color-text); color: var(--app-color-background-surface); font-size: 9px; }
+.windows-reference .codex-sidebar > .sidebar-panel {
+  width: auto; padding: 0 9px; border: 1px solid light-dark(#dce2e5, #293034);
+  border-bottom: 0; border-radius: 16px 0 0 14px; background: var(--forge-project-panel);
+}
+.windows-reference:is(.compact-navigation, .settings-open) .codex-sidebar > .sidebar-panel { display: none; }
+.windows-reference .codex-sidebar .workspace-selector-wrap { min-height: calc(var(--forge-reference-titlebar) + 8px); padding: 4px 0 2px; gap: 10px; }
+.windows-reference .codex-sidebar .workspace-selector { height: 38px; padding: 0 11px; gap: 7px; }
+.windows-reference .codex-sidebar .workspace-selector-name { color: var(--color-text); font-size: clamp(18px, calc(37.4px - .948vw), 22px); font-weight: 600; }
+.windows-reference .sidebar-search-toggle { width: 30px; height: 30px; margin-right: 5px; }
+.windows-reference .codex-sidebar .sidebar-primary .nav-item { height: 36px; min-height: 36px; padding: 0 11px; font-size: clamp(14px, calc(33.4px - .948vw), 18px); color: var(--color-text); }
+.windows-reference .codex-sidebar .sidebar-primary .nav-item > svg { width: 18px; height: 18px; }
+.windows-reference .codex-sidebar .sidebar-project-summary { margin-top: 25px; padding-top: 0; border: 0; }
+.windows-reference .codex-sidebar .sidebar-group-heading { margin-bottom: 7px; font-size: 14px; font-weight: 600; }
+.windows-reference .codex-sidebar .sidebar-group-heading > button { padding: 7px 11px; }
+.windows-reference .codex-project-record > summary { min-height: 32px; padding: 4px 11px; font-size: 14px; gap: 9px; }
+.windows-reference .codex-project-record.current-project > summary { background: light-dark(#e4e8eb, #252a2d); border-radius: 11px; color: var(--color-text); }
+.windows-reference .codex-connection-state { padding-left: 11px; font-size: 11px; }
+.windows-reference > .chat-workspace { border-radius: 0 16px 3px 0; border: 1px solid light-dark(#dce2e5, #293034); border-left: 0; margin: 0 3px 3px 0; }
+.windows-reference:not(.compact-navigation) > .chat-workspace { border-start-start-radius: 0; border-end-start-radius: 0; }
+.windows-reference.compact-navigation > .chat-workspace { border-left: 1px solid light-dark(#dce2e5, #293034); border-radius: 16px 16px 3px 14px; }
+.windows-reference .conversation-topbar,
+.windows-reference.compact-navigation .conversation-topbar { padding-inline-start: 20px; }
+.windows-reference .codex-sidebar-backdrop { top: var(--forge-reference-titlebar); }
+@media (max-width: 1100px) {
+  .app-shell.simple-shell.mac-shell.windows-reference { --forge-reference-titlebar: 40px; --forge-reference-rail: 48px; --forge-reference-sidebar: 240px; }
+}
+@media (max-width: 760px) {
+  .app-shell.simple-shell.mac-shell.windows-reference,
+  .app-shell.simple-shell.mac-shell.windows-reference:is(.compact-navigation, .settings-open) { grid-template-columns: 0 minmax(0, 1fr); }
+  .windows-reference > .codex-sidebar { position: fixed; top: var(--forge-reference-titlebar); bottom: 0; width: min(288px, calc(100vw - 32px)); grid-template-columns: 48px minmax(0, 1fr); }
+  .windows-reference > .codex-sidebar.sidebar-is-collapsed { display: none; }
+  .windows-reference > .desktop-chrome, .windows-reference.compact-navigation > .desktop-chrome { position: relative; left: auto; width: auto; }
+  .windows-reference .application-menu > button { font-size: 12px; padding-inline: 5px; }
+  .windows-reference > .desktop-chrome { gap: 3px; padding: 0 4px; }
+  .windows-reference .titlebar-navigation { gap: 0; }
+  .windows-reference .titlebar-navigation > button { width: 26px; }
+  .windows-reference > .chat-workspace { border-radius: 10px 10px 0 0; margin: 0; }
+  .windows-reference .conversation-topbar { padding-inline-start: 12px; }
+}
+@media (forced-colors: active) {
+  .windows-reference .reference-rail-button.active { outline: 1px solid Highlight; outline-offset: -2px; }
+  .windows-reference .codex-project-record.current-project > summary { outline: 1px solid Highlight; outline-offset: -2px; }
+}

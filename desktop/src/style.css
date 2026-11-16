@@ -15,3 +15,8 @@
 @import "./styles/native-thread-header.css";
 @import "./styles/native-composer.css";
 @import "./styles/mac-shell.css";
+@import "./styles/windows-shell.css";
+@import "./styles/windows-conversation.css";
+@import "./styles/windows-composer.css";
+@import "./styles/windows-settings.css";
+@import "./styles/windows-files.css";

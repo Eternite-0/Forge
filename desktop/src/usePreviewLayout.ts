@@ -8,8 +8,10 @@ export function previewWidthBounds(workspaceWidth: number) {
   const maximum = Math.max(320, workspaceWidth - 352);
   return { minimum: Math.min(320, maximum), maximum };
 }
-export function defaultPreviewWidth(workspaceWidth: number, shellHeight: number) {
-  return Math.max(320, Math.min(1.6 * shellHeight, workspaceWidth - 500), Math.min(640, workspaceWidth - 352));
+export function defaultPreviewWidth(workspaceWidth: number) {
+  // The supplied desktop reference devotes 800 of 1704 workspace pixels to files.
+  const { minimum, maximum } = previewWidthBounds(workspaceWidth);
+  return Math.max(minimum, Math.min(maximum, Math.round(workspaceWidth * .47)));
 }
 export function previewWidthRatio(width: number, workspaceWidth: number) {
   const { minimum, maximum } = previewWidthBounds(workspaceWidth);

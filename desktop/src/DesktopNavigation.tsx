@@ -36,15 +36,19 @@ export default function DesktopNavigation({ compact, activeView, connected, work
     document.addEventListener("keydown", escape);
     return () => document.removeEventListener("keydown", escape);
   }, [compact]);
-  const navigation = <nav className="codex-feature-list" aria-label="主要功能">
-    {([{ view: "chat", label: "与 FORGE 对话" }, { view: "quests", label: "后台任务" }, { view: "memory", label: "记忆中心" }] as const).map((item, index) => <button ref={index === 0 ? first : undefined} key={item.view} type="button" className={`nav-item${item.view === "chat" ? " conversation-entry" : ""}${activeView === item.view ? " active" : ""}`} data-view={item.view} aria-current={activeView === item.view ? "page" : undefined} onClick={() => navigate(item.view)}><NavigationIcon view={item.view} /><span className="nav-label">{item.label}</span>{item.view === "quests" && pendingCount > 0 && <span className="codex-pending-count" aria-label={`${pendingCount} 项待确认`}>{pendingCount}</span>}</button>)}
-    {onActivity && <button type="button" className="nav-item" onClick={onActivity}><ShellIcon name="activity" /><span className="nav-label">运行活动</span></button>}
+  const navigation = <nav className="codex-feature-list" aria-label="当前对话">
+    <button type="button" className="nav-item conversation-entry" data-view="chat" onClick={() => navigate("chat")}><NavigationIcon view="chat" /><span className="nav-label">与 FORGE 对话</span></button>
   </nav>;
   return <>
     {!compact && onClose && <button type="button" className="codex-sidebar-backdrop" aria-label="收起导航" onClick={onClose} tabIndex={-1} />}
-    <aside ref={sidebar} className="rail sidebar codex-sidebar" aria-label="主导航" hidden={compact}>
+    <aside ref={sidebar} className={`rail sidebar codex-sidebar${compact ? " sidebar-is-collapsed" : ""}`} aria-label="主导航">
+    <nav className="reference-icon-rail" aria-label="主要功能">
+      {([{ view: "chat", label: "与 FORGE 对话" }, { view: "quests", label: "后台任务" }, { view: "memory", label: "记忆中心" }] as const).map((item, index) => <button ref={index === 0 ? first : undefined} key={item.view} type="button" className={`reference-rail-button${activeView === item.view ? " active" : ""}`} data-view={item.view} aria-label={item.label} title={item.label} aria-current={activeView === item.view ? "page" : undefined} onClick={() => navigate(item.view)}>{item.view === "chat" ? <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.5 10.1 10 4.7a3.1 3.1 0 0 1 4 0l6.5 5.4v9.1a1.8 1.8 0 0 1-1.8 1.8h-4.2v-6.1a2.5 2.5 0 0 0-5 0V21H5.3a1.8 1.8 0 0 1-1.8-1.8Z" /></svg> : <NavigationIcon view={item.view} />}{item.view === "quests" && pendingCount > 0 && <span className="reference-rail-badge" aria-label={`${pendingCount} 项待确认`}>{pendingCount}</span>}</button>)}
+      {onActivity && <button type="button" className="reference-rail-button" aria-label="运行活动" title="运行活动" onClick={onActivity}><ShellIcon name="ellipsis" /></button>}
+      <button type="button" className="reference-rail-button reference-rail-settings" aria-label="设置" title="设置 (Ctrl+,)" onClick={onSettings}><ShellIcon name="settings" /></button>
+    </nav>
     <WorkspaceSidebar connected={connected} workspaceId={workspaceId} workspaceRoot={workspaceRoot} connection={connection} active={!compact && activeView !== null} navigation={navigation}
-      footer={<><button type="button" className="nav-item codex-settings-entry" title="设置 (Ctrl+,)" onClick={onSettings}><ShellIcon name="settings" /><span>设置</span></button><div className="codex-connection-state"><span className={`status-dot${connected ? " on" : ""}`} /><span>{connected ? "Core 已连接" : "Core 未连接"}</span></div></>}
+      footer={<div className="codex-connection-state"><span className={`status-dot${connected ? " on" : ""}`} /><span>{connected ? "Core 已连接" : "Core 未连接"}</span></div>}
     >{children}</WorkspaceSidebar>
   </aside></>;
 }

@@ -1,24 +1,30 @@
 // Desktop shell and compact task flow. All backend responses here are synthetic.
 async (page, { outputDir }) => {
-  const checks = [], posts = [], messages = [], events = [], readReceipts = [];
+  const checks = [], posts = [], messages = [], events = [], readReceipts = [], unexpected = [];
   const capture = (name) => process.env.FORGE_CAPTURE_UI === '1' ? page.screenshot({ path: `${outputDir}/${name}.png`, animations: 'disabled' }) : Promise.resolve();
   const check = (ok, label) => { if (!ok) throw new Error(label); checks.push(label); };
   const id = '1234567890abcdef1234567890abcdef';
   const quest = { id, title: id, goal: '整理项目资料', status: 'running', version: 1 };
   const receiptId = 'abcdef1234567890abcdef1234567890';
   const time = '2026-11-16T08:00:00Z';
+  let showQuest = false;
   await page.route('http://127.0.0.1:8765/**', async route => {
     const request = route.request(), { pathname } = new URL(request.url());
     const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,OPTIONS' };
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
-    let json = { items: [], has_more: false };
+    const method = request.method();
+    if (method !== (pathname === '/api/conversation/message' ? 'POST' : 'GET')) {
+      unexpected.push(`${method} ${pathname}`);
+      return route.fulfill({ status: 405, headers, json: { detail: 'Unexpected fixture mutation' } });
+    }
+    let json;
     if (pathname === '/health') json = { session: 'simple-shell' };
     else if (pathname === '/api/settings') json = { revision: 1, config: {}, workspace_root: '/fixture/FORGE', provider_configured: true, router_model_id: 'fixture-model' };
     else if (pathname === '/api/restore-status') json = { fenced: false };
     else if (pathname === '/api/conversation') json = { messages, router: {}, has_more: false };
-    else if (pathname === '/api/quests') json = { items: [quest], has_more: false };
+    else if (pathname === '/api/quests') json = { items: showQuest ? [quest] : [], has_more: false };
     else if (pathname === '/api/timeline') json = { items: events, has_more: false };
-    else if (pathname.startsWith('/api/artifacts/receipts/')) {
+    else if (pathname === `/api/artifacts/receipts/${receiptId}/diff`) {
       readReceipts.push(pathname);
       json = { receipt_id: receiptId, base_receipt_id: 'fixture-base', quest_id: id, run_id: 'fixture-run', path: 'reports/summary.md',
         execution_mode: 'live', change: 'revised', created_at: time, sha256: 'a'.repeat(64), base_sha256: 'b'.repeat(64),
@@ -26,7 +32,11 @@ async (page, { outputDir }) => {
         origin: { original_request_message_id: 'user-fixture', goal_update_message_id: null } };
     }
     else if (pathname === `/api/quests/${id}`) json = { quest, workers: [] };
-    else if (pathname.endsWith('/grants') || pathname.endsWith('/plan/history')) json = [];
+    else if ([`/api/quests/${id}/grants`, `/api/quests/${id}/plan/history`, `/api/quests/${id}/teams`, '/api/models', '/api/projects/discovered'].includes(pathname)) json = [];
+    else if (pathname === `/api/quests/${id}/plan`) json = null;
+    else if (['/api/approvals/pending', '/api/approvals', '/api/activity', '/api/memory'].includes(pathname)) json = { items: [], has_more: false };
+    else if (pathname === '/api/runtime/health') json = { components: [] };
+    else if (pathname === '/api/budget') json = { token_limit: 0, concurrency_limit: 1 };
     else if (pathname === '/api/conversation/message') {
       const posted = request.postDataJSON();
       posts.push(posted);
@@ -38,17 +48,23 @@ async (page, { outputDir }) => {
         status: 'succeeded', execution_mode: 'live', detail: { tool: 'file_write', path: 'reports/summary.md' } });
       json = { user_message, assistant_message };
     }
+    if (json === undefined) {
+      unexpected.push(`${method} ${pathname}`);
+      return route.fulfill({ status: 404, headers, json: { detail: 'Unknown synthetic fixture endpoint' } });
+    }
     return route.fulfill({ headers, json });
   });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.setViewportSize({ width: 1626, height: 1022 });
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto(process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
   const composer = page.getByLabel('消息内容');
   const send = page.getByRole('button', { name: '发送消息', exact: true });
   const tasks = page.getByRole('button', { name: '查看任务', exact: true });
   const more = page.getByRole('button', { name: '更多对话操作' });
   const rail = page.getByLabel('主导航');
   check(await rail.isVisible() && await page.locator('.desktop-chrome').isVisible(), 'desktop has the workspace sidebar and titlebar controls');
-  check(await rail.evaluate(element => element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'the single Mac-style sidebar is visible at readable width');
-  check(await rail.locator('.conversation-entry').count() === 1, 'sidebar keeps one genuine conversation');
+  check(await rail.evaluate(element => element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'Windows project sidebar is visible beside the compact icon rail');
+  check(await rail.getByRole('navigation', { name: '主要功能' }).getByRole('button', { name: '与 FORGE 对话', exact: true }).count() === 1, 'icon rail exposes one genuine conversation entry');
   const fileMenu = page.locator('.titlebar').getByRole('menuitem', { name: '文件', exact: true });
   await fileMenu.press('ArrowDown');
   await page.getByRole('menu', { name: '文件菜单' }).getByRole('menuitem', { name: '打开工作空间文件' }).waitFor();
@@ -61,32 +77,23 @@ async (page, { outputDir }) => {
     return editor.top > innerHeight * .72 && greeting.top < innerHeight * .56 && editor.top > greeting.bottom;
   }), 'the welcome and low composer occupy distinct reference bands');
   check(await page.locator('.composer-workspace-context').isVisible(), 'the welcome composer has a real workspace context strip');
-  check(await page.locator('.composer-workspace-context').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.composer').getBoundingClientRect().bottom - 1), 'workspace context sits below the editor');
-  const suggestions = page.getByRole('group', { name: /点击填入草稿/ });
-  check(await suggestions.locator('svg[aria-hidden="true"][focusable="false"]').count() === 3 &&
-    await tasks.locator('svg[aria-hidden="true"][focusable="false"]').count() === 1,
-    'suggestion and task icons use decorative vectors without adding focus stops');
+  check(await page.locator('.composer-workspace-context').evaluate(element => element.getBoundingClientRect().bottom <= document.querySelector('.composer').getBoundingClientRect().top + 1), 'workspace context attaches above the Windows editor');
+  check(await page.locator('.composer-suggestions').count() === 0, 'reference home has no fabricated starter cards');
+  check(await page.getByRole('button', { name: '打开工作空间文件', exact: true }).isVisible() && await rail.getByRole('button', { name: '后台任务', exact: true }).isVisible(), 'empty home retains genuine file and task entry points');
   const initialViewport = page.viewportSize();
-  await page.setViewportSize({ width: 818, height: 582 });
-  await page.waitForFunction(() => Math.abs(document.querySelector('.chat-workspace').getBoundingClientRect().left - innerWidth * .272) < 1);
-  await page.waitForFunction(() => document.querySelector('.composer textarea').getBoundingClientRect().height <= 28);
-  check(await page.evaluate(() => {
-    const pane = document.querySelector('.chat-workspace');
-    const editor = document.querySelector('.composer').getBoundingClientRect();
-    const cards = document.querySelector('.composer-suggestions').getBoundingClientRect();
-    return parseFloat(getComputedStyle(pane).borderTopLeftRadius) >= 10 &&
-      editor.width >= 495 && editor.width <= 520 &&
-      editor.height >= 63 && editor.height <= 73 &&
-      editor.top >= 476 && cards.bottom < editor.top;
-  }), '818 × 582 reference viewport keeps the rounded pane and compact bottom composer');
-  await page.setViewportSize(initialViewport);
-  await suggestions.getByRole('button').first().click();
-  check((await composer.inputValue()).length > 0 && posts.length === 0, 'a starter card fills the draft without sending');
+  await composer.fill('手动输入草稿');
+  check(posts.length === 0 && await composer.inputValue() === '手动输入草稿', 'typing a draft does not send it');
   await composer.fill('');
   const ready = page.waitForResponse(response => new URL(response.url()).pathname === '/api/quests');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await ready;
+  await page.locator('.simple-connection').waitFor({ state: 'hidden' });
+  await page.getByRole('button', { name: '打开对话模型配置', exact: true }).filter({ hasText: 'fixture-model' }).waitFor();
+  await page.locator('.empty-conversation').waitFor();
+  await capture('windows-home-connected-reference');
+  showQuest = true;
+  await page.setViewportSize(initialViewport);
   const progress = page.getByRole('region', { name: '当前任务进展' });
   await progress.getByText('运行中', { exact: true }).waitFor();
   check(await progress.locator('.task-progress-icon[data-state="running"] svg').count() === 1, 'a live task shows a distinct running glyph without a fabricated progress value');
@@ -135,25 +142,49 @@ async (page, { outputDir }) => {
   const threadHeader = page.locator('.conversation-topbar');
   check(await threadHeader.getByRole('heading', { name: '替我整理项目资料' }).isVisible() && await threadHeader.getByRole('button', { name: '改动 1' }).isVisible(), 'working header uses actual request title and change count');
   check(!(await threadHeader.innerText()).includes('条已加载消息') && await threadHeader.getByRole('button', { name: /活动 \d|子任务 \d/ }).count() === 0, 'working header does not crowd the title with diagnostic counts');
-  check(await turnFiles.evaluate(element => Math.abs(element.getBoundingClientRect().width - document.querySelector('.composer').getBoundingClientRect().width) < 12 && element.getBoundingClientRect().width >= Math.min(innerWidth * .6, 900)), 'working file rows and composer align across the available reading area');
+  const readingColumnAligned = () => turnFiles.evaluate(element => {
+    const file = element.getBoundingClientRect();
+    const editor = document.querySelector('.composer').getBoundingClientRect();
+    const shell = document.querySelector('.conversation-shell').getBoundingClientRect();
+    return file.width <= 737 && editor.width <= shell.width &&
+      Math.abs(file.left + file.width / 2 - editor.left - editor.width / 2) < 2 &&
+      editor.width <= 921 && editor.width >= Math.min(736, shell.width - 300) &&
+      Math.abs(editor.left + editor.width / 2 - shell.left - shell.width / 2) < 2;
+  });
+  check(await readingColumnAligned(), 'Windows file review and editor use bounded centered reading columns');
   check(await turnFiles.evaluate(element => {
     const previous = element.previousElementSibling;
     return previous?.classList.contains('from-agent') &&
       element.getBoundingClientRect().top - previous.getBoundingClientRect().bottom <= 14 &&
       parseFloat(getComputedStyle(element).borderTopWidth) >= 1;
   }), 'changes follow the answer in one lightly framed review block');
-  await page.waitForFunction(() => document.querySelector('.composer textarea').getBoundingClientRect().height <= 28);
-  check(await page.locator('.composer').evaluate(element => element.getBoundingClientRect().height <= 73), 'the working desktop editor keeps the slim home proportions');
+  await page.waitForFunction(() => document.querySelector('.composer textarea').getBoundingClientRect().height >= 30);
+  check(await page.locator('.composer').evaluate(element => element.getBoundingClientRect().height >= 98 && element.getBoundingClientRect().height <= 150), 'working Windows editor retains its two-row input and action layout');
   await capture('round2-thread');
   const preview = page.getByLabel('工作空间文件预览', { exact: true });
   await turnFiles.getByRole('button', { name: '查看变更', exact: true }).click();
   await preview.locator('.artifact-history-summary').waitFor();
   check(readReceipts.length === 1 && readReceipts[0] === `/api/artifacts/receipts/${receiptId}/diff`, 'review opens the exact immutable file receipt and no other one');
+  check(await preview.locator('.diff-removed code').innerText() === '整理初稿' &&
+    await preview.locator('.diff-added code').innerText() === '整理结果' &&
+    await preview.locator('.diff-removed code').isVisible() && await preview.locator('.diff-added code').isVisible(),
+    'immutable receipt renders the exact previous and resulting content, not merely a summary');
   await capture('round2-review');
+  await page.setViewportSize({ width: 818, height: 582 });
+  await preview.locator('.preview-document').waitFor();
+  check(await preview.locator('.preview-content').evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    const documentBounds = element.querySelector('.preview-document').getBoundingClientRect();
+    return documentBounds.width >= Math.min(200, bounds.width * .5) && documentBounds.right <= bounds.right + 1 && documentBounds.height > 100;
+  }), '818px Windows history retains a readable document alongside the file tree');
+  await capture('round5-review-818');
+  await page.setViewportSize(initialViewport);
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await preview.waitFor({ state: 'hidden' });
   await progress.locator('.task-progress-summary').click();
   await drawer.locator('.quest-detail-heading').waitFor();
+  await drawer.locator('.quest-technical > summary').waitFor();
+  check(await drawer.getByText('暂无计划', { exact: true }).isVisible() && await drawer.locator('.quest-technical > summary').isVisible(), 'completed task honestly reports no recorded plan and retains technical details');
   await drawer.locator('.quest-detail-heading').press('Escape');
   await taskRow.waitFor();
   check(await taskRow.evaluate(element => element === document.activeElement), 'returning from a task opened directly in chat focuses the matching list row');
@@ -191,6 +222,7 @@ async (page, { outputDir }) => {
   await page.waitForFunction(() => document.querySelector('.app-shell').classList.contains('task-page-open'));
   await drawer.getByRole('button', { name: '关闭任务详情' }).click();
   await composer.waitFor();
+  check(await readingColumnAligned(), 'narrow file review and composer remain aligned and centered without overflowing');
   check(await composer.inputValue() === '窄屏草稿', 'return from the full task page restores the same draft');
   check(await composer.isVisible() && await tasks.isVisible() && await threadHeader.getByRole('button', { name: '改动 1' }).isVisible(), 'narrow windows keep composer, tasks and actual changes available');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'no horizontal page overflow');
@@ -210,7 +242,7 @@ async (page, { outputDir }) => {
     return Math.min(...['.thread-tool', '.process-transcript > summary', '.turn-diff-actions button', '.task-progress-status']
       .map(selector => ratio(getComputedStyle(document.querySelector(selector)).color, surface)));
   });
-  check(await contrast() >= 4.5, 'light action and status captions have at least 4.5:1 contrast');
+  check(await contrast() >= 4.5, 'default dark action and status captions have at least 4.5:1 contrast');
   await page.setViewportSize({ width: 320, height: 560 });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await more.press('ArrowDown');
@@ -250,5 +282,6 @@ async (page, { outputDir }) => {
   check(await added.isVisible() && await removed.isVisible() && await added.innerText() === '+' && await removed.innerText() === '−',
     'forced-color history differentiates added and removed lines without relying on color');
   await capture('round4-forced-diff');
+  check(unexpected.length === 0, `all API requests match explicit synthetic fixtures: ${unexpected.join(', ')}`);
   return { checks };
 }

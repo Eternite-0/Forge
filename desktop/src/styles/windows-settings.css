@@ -1,0 +1,82 @@
+/* Windows ChatGPT reference: settings rail and centered reading column.
+   Content remains FORGE's actual connection, model and security controls.
+   Light counterparts preserve OS appearance; the dark samples stay unchanged. */
+.windows-reference .settings-view {
+  grid-template-columns: 288px minmax(0, 1fr);
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid light-dark(#dce2e5, #283034);
+  border-radius: 14px 0 0 14px;
+  background: light-dark(#ffffff, #111111);
+}
+.windows-reference .settings-nav {
+  width: 288px;
+  border-radius: 0;
+  background: light-dark(#f4f6f7, #141819);
+  color: light-dark(#202426, #eeeeee);
+}
+.windows-reference .settings-nav-header-group { padding: 8px 8px 0; }
+.windows-reference .settings-nav-header { height: 36px; margin: 0 8px 8px; padding: 0; }
+.windows-reference .settings-page-title { font-size: 18px; line-height: 24px; font-weight: 600; }
+.windows-reference .settings-back { color: light-dark(#626a70, #999d9f); }
+.windows-reference .settings-search {
+  height: 36px;
+  margin-bottom: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 18px;
+  background: light-dark(#e5e9eb, #272b2c);
+  color: light-dark(#626a70, #989c9e);
+}
+.windows-reference .settings-search input { color: light-dark(#242424, #ededed); }
+.windows-reference .settings-search input::placeholder { color: light-dark(#626a70, #989c9e); }
+.windows-reference .settings-nav-sections { padding: 4px 8px 16px; gap: 24px; }
+.windows-reference .settings-nav-section { gap: 4px; }
+.windows-reference .settings-nav-group { min-height: 30px; padding-inline: 8px; color: light-dark(#62686c, #93989a); font-size: 14px; line-height: 21px; font-weight: 600; }
+.windows-reference .settings-nav-items { gap: 1px; }
+.windows-reference .settings-nav-item { height: 30px; min-height: 30px; padding: 4px 8px; gap: 8px; border-radius: 9px; color: light-dark(#242424, #ededed); }
+.windows-reference .settings-nav-item > span { font-size: 14px; line-height: 21px; }
+.windows-reference .settings-nav-icon { width: 16px; height: 16px; color: light-dark(#4c555a, #d2d5d6); }
+.windows-reference .settings-nav-item:is(:hover, .active) { background: light-dark(#e5e9eb, #272b2c); }
+.windows-reference .settings-content { background: light-dark(#ffffff, #111111); border-left: 1px solid light-dark(#dce2e5, #2b3033); color: light-dark(#242424, #ededed); }
+.windows-reference .settings-content-inner { width: 100%; max-width: 768px; margin-inline: auto; padding: 30px 20px 48px; }
+.windows-reference .settings-title { margin: 0 40px 12px 0; font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -.02em; }
+.windows-reference .general-settings { padding-top: 32px; gap: 48px; }
+.windows-reference .settings-block-heading { margin: 0 0 16px; color: light-dark(#303030, #e0e0e0); font-size: 14px; line-height: 21px; font-weight: 600; }
+.windows-reference :is(.settings-group, .settings-section, .settings-content .config-form:not(.operator-settings)) {
+  border: 1px solid light-dark(#dddddd, #303030);
+  border-radius: 16px;
+  background: light-dark(#f7f7f7, #1e1e1e);
+  box-shadow: none;
+}
+.windows-reference .settings-row { position: relative; min-height: 60px; padding: 12px 16px; gap: 24px; border-bottom: 0; }
+.windows-reference .settings-row:not(:last-child)::after { content: ""; position: absolute; inset: auto 16px 0; height: 1px; background: light-dark(#dddddd, #303030); }
+.windows-reference .settings-row-label { color: light-dark(#242424, #ededed); font-size: 13px; line-height: 19px; font-weight: 600; }
+.windows-reference .settings-row-desc { margin-top: 2px; color: light-dark(#606060, #aaaaaa); font-size: 12px; line-height: 17px; }
+.windows-reference .settings-row-value { color: light-dark(#606060, #b5b5b5); font-size: 12px; line-height: 18px; }
+.windows-reference .settings-content .inspector-header { top: 30px; }
+.windows-reference .settings-content .field-label { border-bottom-color: light-dark(#dddddd, #303030); }
+.windows-reference .settings-content .field-label :is(input, select, textarea) { color: light-dark(#292929, #e8e8e8); background: light-dark(#ffffff, #242424); border-color: light-dark(#d8d8d8, #343434); border-radius: 9px; }
+.windows-reference .settings-content .button:not(.primary):not(.danger) { min-height: 28px; padding: 4px 10px; color: light-dark(#292929, #e8e8e8); background: light-dark(#eeeeee, #292929); border: 1px solid light-dark(#d8d8d8, #343434); border-radius: 9px; box-shadow: none; }
+.windows-reference .settings-content .button:not(.primary):not(.danger):hover { background: light-dark(#e2e2e2, #353535); }
+.windows-reference .settings-content :is(.notice, .settings-block-description) { color: light-dark(#606060, #aaaaaa); }
+@media (min-width: 1101px) {
+  .windows-reference .settings-content { padding-inline-end: 16px; }
+}
+@media (max-width: 1000px) {
+  .windows-reference .settings-view { grid-template-columns: 224px minmax(0, 1fr); }
+  .windows-reference .settings-nav { width: 224px; }
+  .windows-reference .settings-content-inner { padding: 24px 20px 40px; }
+}
+@media (max-width: 600px) {
+  .windows-reference .settings-view { grid-template-columns: 1fr; overflow-y: auto; }
+  .windows-reference .settings-nav { width: 100%; max-height: 230px; border-bottom: 1px solid light-dark(#dddddd, #303030); }
+  .windows-reference .settings-content { overflow: visible; border-left: 0; }
+  .windows-reference .settings-content-inner { padding: 24px 16px; }
+  .windows-reference .settings-row { gap: 12px; }
+  .windows-reference .settings-row-control { min-width: 0; max-width: 48%; }
+}
+@media (forced-colors: active) {
+  .windows-reference .settings-nav-item.active { outline: 1px solid Highlight; outline-offset: -1px; }
+  .windows-reference .settings-row:not(:last-child)::after { background: CanvasText; }
+}

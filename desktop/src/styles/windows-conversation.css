@@ -1,0 +1,59 @@
+/* Measurements derived from the supplied dark desktop captures.
+   Colors have light equivalents so the OS appearance still applies. */
+.windows-reference {
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans CJK SC", "Microsoft YaHei UI", sans-serif;
+  font-family: var(--font-sans);
+  --text-assistant: 14px;
+  --text-assistant-line: 22px;
+  --color-background-user-message: light-dark(#f0f0f0,#1e1e1e);
+  --forge-reference-reading: 736px;
+}
+.windows-reference .conversation-topbar[data-home="true"],
+.windows-reference .conversation-topbar[data-home="false"] {
+  height: 52px;
+  min-height: 52px;
+  padding: 0 16px 0 21px;
+  border-block-end: 1px solid var(--color-border-subtle);
+  background: var(--app-color-background-surface);
+}
+.windows-reference .conversation-topbar[data-home="true"] {
+  height: 66px;
+  min-height: 66px;
+  border-block-end: 0;
+}
+.windows-reference .conversation-topbar .topbar-title { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.windows-reference .conversation-topbar .topbar-title > svg { flex: none; color: var(--color-text-secondary); }
+.windows-reference .conversation-topbar .topbar-title h1 { font-size: 13px; line-height: 19px; font-weight: 600; }
+.windows-reference .conversation-topbar[data-home="true"] .topbar-title {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.windows-reference .conversation-topbar[data-home="true"] .conversation-status { margin-inline-start: auto; }
+.windows-reference .conversation-shell:not(.home-state) :is(.timeline > *, .composer-stack) { max-width: var(--forge-reference-reading); }
+.windows-reference .conversation-shell:not(.home-state) .timeline { padding-block-start: 20px; padding-inline: 24px; }
+.windows-reference .conversation-list { --conversation-item-gap: 14px; }
+.windows-reference .conversation-list > .message.from-user:not(:first-child) { margin-block-start: 5px; }
+.windows-reference .conversation-list > .message.from-user .message-body { max-width: min(100%, 70%); padding: 11px 16px; border-radius: 18px; }
+.windows-reference .message.from-agent .message-body { font-size: var(--text-assistant); line-height: var(--text-assistant-line); }
+.windows-reference .timeline .turn-diff.activity-group-files { border-radius: 12px; background: light-dark(#f6f6f6,#161616); }
+.windows-reference .turn-diff .turn-diff-header { min-height: 65px; padding: 9px 12px; background: light-dark(#f1f1f1,#1c1c1c); }
+.windows-reference .turn-diff .turn-diff-icon { color: var(--color-text-secondary); background: light-dark(#e7e7e7,#111); }
+.windows-reference .turn-diff .turn-diff-title { font-weight: 600; }
+.windows-reference .turn-diff .turn-diff-path { font-family: var(--font-sans); }
+.windows-reference .turn-diff .turn-diff-file { height: 36px; min-height: 36px; }
+.windows-reference .turn-diff .turn-diff-actions button { border-radius: 9px; background: light-dark(#eaeaea,#252525); gap: 5px; }
+.windows-reference .turn-diff-more > summary { background: light-dark(#f1f1f1,#1c1c1c); }
+.windows-reference .new-messages { box-shadow: var(--shadow-sm); }
+@media (max-width: 600px) {
+  .windows-reference .conversation-topbar[data-home] { height: 44px; min-height: 44px; padding-inline: 12px; }
+  .windows-reference .conversation-shell:not(.home-state) .timeline { padding-inline: 14px; }
+  .windows-reference .conversation-list > .message.from-user .message-body { max-width: 88%; }
+}
+@media (forced-colors: active) {
+  .windows-reference .turn-diff .turn-diff-actions button { border-color: ButtonText; }
+}

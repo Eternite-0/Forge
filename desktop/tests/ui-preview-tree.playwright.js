@@ -1,5 +1,5 @@
 // Synthetic Tauri file source + synthetic HTTP only. No real workspace path is read.
-// Pane/tree dimensions: output/reference-native-layout/preview-source.txt (DUYS/U5mJ/gbrq).
+// Windows reference shell; original file operations and normalized preview resizing retained.
 // Tree icons/indentation/Git palette: tree-source.txt and filetree-colors-source.txt.
 async (page, { outputDir }) => {
   const checks = [], httpWrites = [], missing = [], previewGeometry = [];
@@ -50,10 +50,11 @@ async (page, { outputDir }) => {
     else { missing.push(url.pathname); status = 404; body = { detail: 'tree fixture endpoint missing' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await page.goto(process.env.FORGE_UI_BASE_URL || 'http://127.0.0.1:5173/');
   await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('TreeFixture'));
   await page.getByLabel('消息内容').fill('tree fixture draft');
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   const preview = page.getByLabel('工作空间文件预览', { exact: true }), tree = preview.locator('.preview-file-tree');
   const changedSection = tree.locator('.file-tree-section').first(), allSection = tree.locator('.file-tree-section').last();
   await changedSection.locator('.changed-file').first().waitFor();
@@ -121,8 +122,7 @@ async (page, { outputDir }) => {
   await unchanged.click();
   await page.waitForTimeout(180);
   const selected = await unchanged.evaluate((row) => { const style = getComputedStyle(row); return { color: style.color, background: style.backgroundColor }; });
-  const selectedChannels = selected.background.match(/[\d.]+/g)?.map(Number) || [];
-  check(selected.color === 'rgb(13, 13, 13)' && selectedChannels.slice(0, 3).every((value) => value === 13) && Math.abs(selectedChannels[3] - .049) <= .003, `a normal selected file uses native neutral foreground/background within browser alpha serialization: ${JSON.stringify(selected)}`);
+  check(selected.background === 'rgb(38, 38, 38)' && selected.color !== selected.background, `a normal selected file uses the Windows reference neutral selected background and visible text: ${JSON.stringify(selected)}`);
   const nativeBefore = await page.evaluate(() => window.__treeFixtureCalls.length);
   await tree.getByRole('button', { name: '刷新文件树', exact: true }).click();
   await page.waitForFunction((count) => window.__treeFixtureCalls.length > count + 2, nativeBefore);
@@ -139,12 +139,9 @@ async (page, { outputDir }) => {
   await changedMain.click();
   await diff.waitFor();
   const divider = page.getByRole('separator', { name: '调整文件预览宽度' });
-  const startingWidth = Number(await divider.getAttribute('aria-valuenow'));
-  const startingMaximum = Number(await divider.getAttribute('aria-valuemax'));
-  const nativeRatio = (startingWidth - 320) / (startingMaximum - 320);
   for (const width of [1152, 1280, 1400, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
+    await page.waitForTimeout(180);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const geometry = await preview.evaluate((panel) => {
       const bounds = (selector) => document.querySelector(selector).getBoundingClientRect();
@@ -155,18 +152,31 @@ async (page, { outputDir }) => {
       return { viewport: innerWidth, workspace: bounds('.chat-workspace').width, preview: panel.getBoundingClientRect().width, document: bounds('.preview-document').width, tree: bounds('.preview-file-tree').width, navigation: bounds('.rail').width, overflow: document.documentElement.scrollWidth - innerWidth, shortNames };
     });
     previewGeometry.push(geometry);
-    const maximum = Math.max(320, geometry.workspace - 352), expected = 320 + nativeRatio * (maximum - 320);
-    check(Math.abs(geometry.preview - expected) <= 2 && geometry.preview >= 319 && geometry.preview <= maximum + 1, `${width}px window: native DUYS preserves its normalized ratio between 320px and workspace minus 352px: ${JSON.stringify(geometry)}`);
-    check(Math.abs(geometry.tree - Math.min(250, Math.max(200, geometry.preview * .6))) <= 1 && geometry.document > 0 && geometry.overflow <= 1, `${width}px window: native shared 250px file tree respects its 200px/60% bounds: ${JSON.stringify(geometry)}`);
-    check(Math.abs(geometry.navigation - 260) <= 1, `${width}px window: resizing the preview retains the single 260px workspace sidebar`);
-    check(geometry.shortNames.length === 4 && geometry.shortNames.every((name) => name.available > 0 && name.text <= name.available + 1), `${width}px window: short filenames remain fully readable in both tree sections: ${JSON.stringify(geometry.shortNames)}`);
+    const maximum = Math.max(320, geometry.workspace - 352), expected = Math.max(320, Math.min(maximum, Math.round(geometry.workspace * .47)));
+    check(Math.abs(geometry.preview - expected) <= 2 && geometry.preview >= 319 && geometry.preview <= maximum + 1, `${width}px window: untouched preview uses the reference 47% split within its safe bounds: ${JSON.stringify(geometry)}`);
+    const expectedTree = geometry.preview <= 440 ? Math.min(250, Math.max(200, geometry.preview * .6), geometry.preview * .45) : Math.min(250, Math.max(200, geometry.preview * .6));
+    check(Math.abs(geometry.tree - expectedTree) <= 1 && geometry.document >= 140 && geometry.overflow <= 1, `${width}px window: shared file tree preserves the document on narrow panes: ${JSON.stringify(geometry)}`);
+    const expectedNavigation = Math.max(52, Math.min(64, 110.24 - width * .02844)) + Math.max(288, Math.min(360, 637.42 - width * .1706));
+    check(Math.abs(geometry.navigation - expectedNavigation) <= 1, `${width}px window: measured Windows icon rail and project panel retain reference widths`);
+    check(geometry.shortNames.length === 4 && geometry.shortNames.every((name) => name.available > 0 && (geometry.preview <= 440 || name.text <= name.available + 1)), `${width}px window: short filenames remain readable, with intentional ellipsis only in narrow trees: ${JSON.stringify(geometry.shortNames)}`);
     await page.mouse.move(0, 0);
     await page.screenshot({ path: `${outputDir}/scale-preview-tree-${width}.png`, fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
+  await page.waitForTimeout(180);
+  const beforeResize = Number(await divider.getAttribute('aria-valuenow'));
+  await divider.focus(); await divider.press('ArrowLeft');
+  await page.waitForTimeout(180);
+  const manualWidth = Number(await divider.getAttribute('aria-valuenow'));
+  check(Math.abs(manualWidth - beforeResize - 10) <= 1, 'keyboard resize increases preview width by ten pixels');
+  const manualRatio = (manualWidth - 320) / (Number(await divider.getAttribute('aria-valuemax')) - 320);
+  await page.setViewportSize({ width: 1920, height: 1000 });
+  await page.waitForTimeout(180);
+  check(Math.abs(Number(await divider.getAttribute('aria-valuenow')) - (320 + manualRatio * (Number(await divider.getAttribute('aria-valuemax')) - 320))) <= 2, 'an explicitly resized preview preserves its normalized manual ratio across viewport changes');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.waitForTimeout(180);
   await preview.getByRole('button', { name: '展开文件预览', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width === 0);
+  await page.locator('.sidebar-panel').waitFor({ state: 'hidden' });
   check(!(await page.getByLabel('主导航').locator('.workspace-selector-wrap').isVisible()) && await page.locator('.conversation-shell').evaluate((element) => element.inert), 'expanded preview hides the workspace panel and removes the retained conversation from keyboard interaction');
   await page.mouse.move(0, 0); await page.waitForTimeout(220);
   await page.screenshot({ path: `${outputDir}/simple-preview-tree-expanded.png`, fullPage: true });
