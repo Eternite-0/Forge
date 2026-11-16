@@ -20,9 +20,9 @@ async (page, { outputDir }) => {
     else if (pathname === '/api/timeline') json = { items: events, has_more: false };
     else if (pathname.startsWith('/api/artifacts/receipts/')) {
       readReceipts.push(pathname);
-      json = { receipt_id: receiptId, base_receipt_id: null, quest_id: id, run_id: 'fixture-run', path: 'reports/summary.md',
-        execution_mode: 'live', change: 'created', created_at: time, sha256: 'a'.repeat(64), base_sha256: null,
-        added: 1, removed: 0, text: '--- /dev/null\n+++ b/reports/summary.md\n@@ -0,0 +1 @@\n+整理结果\n', truncated: false,
+      json = { receipt_id: receiptId, base_receipt_id: 'fixture-base', quest_id: id, run_id: 'fixture-run', path: 'reports/summary.md',
+        execution_mode: 'live', change: 'revised', created_at: time, sha256: 'a'.repeat(64), base_sha256: 'b'.repeat(64),
+        added: 1, removed: 1, text: '--- a/reports/summary.md\n+++ b/reports/summary.md\n@@ -1 +1 @@\n-整理初稿\n+整理结果\n', truncated: false,
         origin: { original_request_message_id: 'user-fixture', goal_update_message_id: null } };
     }
     else if (pathname === `/api/quests/${id}`) json = { quest, workers: [] };
@@ -194,12 +194,61 @@ async (page, { outputDir }) => {
   check(await composer.inputValue() === '窄屏草稿', 'return from the full task page restores the same draft');
   check(await composer.isVisible() && await tasks.isVisible() && await threadHeader.getByRole('button', { name: '改动 1' }).isVisible(), 'narrow windows keep composer, tasks and actual changes available');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'no horizontal page overflow');
+  const contrast = () => page.evaluate(() => {
+    const luminance = (color) => {
+      const rgb = color.match(/\d+(?:\.\d+)?/g).slice(0, 3).map(value => {
+        const channel = Number(value) / 255;
+        return channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4;
+      });
+      return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
+    };
+    const ratio = (a, b) => {
+      const x = luminance(a), y = luminance(b);
+      return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
+    };
+    const surface = getComputedStyle(document.querySelector('.conversation-topbar')).backgroundColor;
+    return Math.min(...['.thread-tool', '.process-transcript > summary', '.turn-diff-actions button', '.task-progress-status']
+      .map(selector => ratio(getComputedStyle(document.querySelector(selector)).color, surface)));
+  });
+  check(await contrast() >= 4.5, 'light action and status captions have at least 4.5:1 contrast');
+  await page.setViewportSize({ width: 320, height: 560 });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
-  await more.click();
+  await more.press('ArrowDown');
   const darkMenu = page.getByRole('dialog', { name: '对话操作' });
   await darkMenu.waitFor();
   check(await darkMenu.evaluate(element => getComputedStyle(element).transitionDuration.split(',').every(value => parseFloat(value) <= .001)), 'reduced motion disables the floating transition');
   check(await page.locator('.conversation-topbar').evaluate(element => getComputedStyle(element).backgroundColor === 'rgb(17, 17, 17)'), 'dark appearance uses the dark surface');
-  await capture('round2-mobile-menu');
+  check(await contrast() >= 4.5, 'dark action and status captions have at least 4.5:1 contrast');
+  check(await darkMenu.evaluate(element => {
+    const { left, right } = element.getBoundingClientRect();
+    return left >= 0 && right <= innerWidth;
+  }), 'dark keyboard menu fits a 320px viewport');
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '查看工作空间文件');
+  check(await darkMenu.getByRole('button', { name: '查看工作空间文件' }).evaluate(element => {
+    const style = getComputedStyle(element);
+    return element === document.activeElement && style.outlineStyle === 'solid' && style.outlineColor === 'rgb(120, 185, 255)';
+  }), 'the focused dark-menu action has a visible inset ring');
+  await capture('round4-dark-320');
+  await page.keyboard.press('Escape');
+  check(await more.evaluate(element => document.activeElement === element), 'Escape restores the menu trigger at 320px');
+  await tasks.click();
+  await drawer.waitFor();
+  check(await drawer.evaluate(element => getComputedStyle(element).animationName === 'none'), 'reduced motion disables task drawer travel');
+  await drawer.getByRole('button', { name: '关闭任务详情' }).click();
+  await drawer.waitFor({ state: 'hidden' });
+  await page.setViewportSize({ width: 818, height: 582 });
+  await rail.waitFor();
+  await page.emulateMedia({ forcedColors: 'active', colorScheme: 'light', reducedMotion: 'reduce' });
+  await composer.fill('');
+  check(await send.evaluate(element => element.disabled && getComputedStyle(element).opacity === '1' && getComputedStyle(element).borderTopStyle === 'solid'), 'forced colors keep disabled Send legible without enabling it');
+  check(await rail.locator('[aria-current="page"]').evaluate(element => getComputedStyle(element).outlineStyle === 'solid'), 'forced colors mark the active navigation even without the painted background');
+  await capture('round4-forced-colors');
+  await turnFiles.getByRole('button', { name: '查看变更', exact: true }).click();
+  await preview.locator('.artifact-history-summary').waitFor();
+  const added = preview.locator('.diff-added .diff-kind-symbol');
+  const removed = preview.locator('.diff-removed .diff-kind-symbol');
+  check(await added.isVisible() && await removed.isVisible() && await added.innerText() === '+' && await removed.innerText() === '−',
+    'forced-color history differentiates added and removed lines without relying on color');
+  await capture('round4-forced-diff');
   return { checks };
 }

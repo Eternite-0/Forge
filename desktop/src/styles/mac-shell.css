@@ -3,6 +3,10 @@
   --app-shell-titlebar-height: 0px;
   --sidebar-width: clamp(208px, 27.2vw, 300px);
   --forge-sidebar-background: linear-gradient(155deg, light-dark(#eaf2fc,#202632) 0%, light-dark(#e5ecfc,#1d2231) 53%, light-dark(#e8e7fb,#22202e) 100%);
+  --color-text-secondary: light-dark(#545a64, #bbc2cf);
+  --color-text-tertiary: light-dark(#5b626e, #a7afbc);
+  --muted: var(--color-text-tertiary);
+  --forge-focus-ring: light-dark(#035eae, #78b9ff);
   position: relative;
   grid-template-rows: minmax(0, 1fr);
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
@@ -21,6 +25,18 @@
   background: transparent;
 }
 .mac-shell.compact-navigation > .desktop-chrome { left: 0; }
+.mac-shell :is(button, summary, input, textarea, select, a):focus-visible {
+  outline-color: var(--forge-focus-ring);
+}
+.mac-shell .composer-body:focus-within {
+  outline: 1px solid var(--forge-focus-ring);
+  outline-offset: 1px;
+}
+.mac-shell .conversation-menu-item:focus-visible {
+  outline-offset: -2px;
+}
+.mac-shell .timeline :is(.turn-diff-actions button, .task-progress-summary, .process-transcript > summary),
+.mac-shell .quest-back { color: var(--color-text-secondary); }
 .mac-shell .titlebar-navigation > button:not([aria-expanded]), .mac-shell .application-menubar {
   opacity: 0;
   pointer-events: none;
@@ -135,4 +151,23 @@
   .mac-shell > .desktop-chrome { left: 0; }
   .mac-shell:not(.compact-navigation) > .desktop-chrome { z-index: 90; }
   .mac-shell .conversation-topbar, .mac-shell .settings-view { padding-inline-start: 43px; }
+}
+@media (max-width: 360px) {
+  .mac-shell .conversation-status { gap: 2px; }
+  .mac-shell .conversation-topbar { gap: 5px; padding-inline-end: 7px; }
+  .mac-shell .conversation-topbar .router-status { font-size: 11px; white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell.simple-shell.mac-shell { transition: none; }
+  .mac-shell :is(.loading-spinner, .refresh-button.is-refreshing svg) { animation: none; }
+  .mac-shell :is(.sidebar-toggle, .conversation-more-toggle, .conversation-menu-item, .thread-tool, .send-button) { transition: none; }
+}
+@media (forced-colors: active) {
+  .app-shell.simple-shell.mac-shell { --forge-focus-ring: Highlight; }
+  .mac-shell .codex-sidebar .nav-item[aria-current="page"] { outline: 1px solid Highlight; outline-offset: -2px; }
+  .mac-shell .composer-body .send-button:disabled {
+    opacity: 1;
+    border: 1px solid GrayText;
+    color: GrayText;
+  }
 }

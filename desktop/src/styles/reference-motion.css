@@ -35,6 +35,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .disclosure-popover, .disclosure-popover[data-open="true"] { transition: none; transform: none; }
+  .disclosure-popover, .disclosure-popover[data-open="true"] { transition-property: none; transition-delay: 0s; transform: none; }
   .app-shell > .workspace-panel.task-inspector, .quest-detail, .settings-page, .action-toast, .agent-panel-slot:not([hidden]) { animation: none; }
 }
