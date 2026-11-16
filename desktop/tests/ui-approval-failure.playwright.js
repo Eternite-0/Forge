@@ -44,7 +44,7 @@ async (page, { outputDir }) => {
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.locator('.from-agent').first().waitFor();
   await page.getByRole('button', { name: '后台任务', exact: true }).click();
-  await page.getByRole('button', { name: /^审批故障回归 quest-approval-failure/ }).click();
+  await page.getByRole('button', { name: /^审批故障回归，运行中/ }).click();
   await page.locator('.workspace-tabs').getByRole('button', { name: '审批中心', exact: true }).click();
   const item = page.locator('.approval-item').first();
   const decide = item.getByRole('button', { name: '批准', exact: true });

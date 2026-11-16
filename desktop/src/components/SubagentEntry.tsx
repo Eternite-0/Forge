@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { WorkerRun } from "../ConversationRuntime";
-import { statusLabel } from "../presentation";
+import { questDisplayTitle, statusLabel } from "../presentation";
 import type { TimelineEvent } from "../timeline";
 import EventGroup from "./conversation/EventGroup";
 import { Chevron } from "./conversation/Icons";
@@ -48,13 +48,13 @@ export default function SubagentEntry({ run, events, quests, memory, onQuest, on
       <Chevron />
     </summary>
     <div className="subagent-body" onPointerDownCapture={() => { saved.manual = true; }} onKeyDownCapture={() => { saved.manual = true; }}>
-      <p className="subagent-scope">{quest?.title || text(run.quest_id, "关联任务未记录")} · {text(run.provider_id, "供应商未记录")} · {currentSource}</p>
+      <p className="subagent-scope">{quest ? questDisplayTitle(quest.title, quest.id) : "关联任务暂未加载"} · {text(run.provider_id, "供应商未记录")} · {currentSource}</p>
       <p className="subagent-run-meta"><span>{text(run.model_id, "模型未记录")}</span><span>已记录 {count(run.steps)} 步 · {count(run.tool_spent)} 次工具</span>{hasMock && <span className="subagent-mode">含模拟记录</span>}</p>
       <p className="subagent-record-notice">当前状态来自最近读取的执行记录。下方为已加载且关联本次 Run 的历史事件。</p>
       {events.length ? <EventGroup item={{ type: "group", questId: run.quest_id || null, events }} quests={quests} runs={[run]} memory={memory} visible={visible}
         onQuest={onQuest} onOpenFile={onOpenFile} onInspect={onInspect} {...history} /> : <p className="subagent-record-notice">尚未加载本次执行的过程记录。</p>}
       <div className="subagent-actions">{run.quest_id && <button type="button" className="text-button" onClick={() => { onInspect(); onQuest(run.quest_id!); }}>任务详情</button>}
-        <span className="subagent-run-id" title={run.run_id}>Run · {run.run_id}</span>
+        <details><summary>技术详情</summary><span className="subagent-run-id">执行 ID · {run.run_id}</span></details>
       </div>
     </div>
   </details>;

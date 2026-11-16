@@ -201,3 +201,12 @@ button.worker-run:hover { background: var(--color-background-secondary-ghost-hov
   .home-state { justify-content: flex-start; padding-block: 60px 20px; overflow-y: auto; }
   .home-state .timeline { flex: none; padding-top: 12px; padding-bottom: 16px; }
 }
+
+/* Conversation overflow exposes genuine task navigation, not backend identifiers. */
+.conversation-menu-anchor { position: relative; flex: none; }
+.conversation-more-toggle { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 9px; background: none; color: var(--muted); }
+.conversation-more-toggle:hover, .conversation-more-toggle[aria-expanded="true"] { color: var(--color-text); background: var(--color-background-ghost); }
+.conversation-actions-menu { top: calc(100% + 6px); right: 0; width: 188px; z-index: 40; }
+.conversation-actions-menu .popover-surface { padding: 5px; }
+.conversation-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 38px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--color-text); font: inherit; font-size: 14px; text-align: left; }
+.conversation-menu-item:hover, .conversation-menu-item:focus-visible { background: var(--color-background-secondary-ghost-hover); }

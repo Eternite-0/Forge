@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { request, type Connection } from "../api";
 import type { WorkerRun } from "../ConversationRuntime";
 import { errorMessage } from "../logic";
-import { statusLabel } from "../presentation";
+import { displayActivityTime, statusLabel, taskActivityRole } from "../presentation";
 import { teamReassignmentProposal, userQuestTransitions } from "../questControls";
 import { asRecord, rows, text, type Quest, type Row } from "../workspaceTypes";
 import { TechnicalDetails } from "./WorkspacePanels";
@@ -71,8 +71,8 @@ export default function QuestControls({ connection, quest, plan, runs, blocked, 
       <section><h3>计划历史</h3>{!visible.loading && !visible.history.length && <p className="notice">暂无计划历史</p>}{visible.history.map(item => <div className="plan-node" key={text(item.id)}><strong>版本 {text(item.revision)} · {statusLabel(item.status)}</strong><small>{text(item.created_at)}</small><TechnicalDetails value={item} /></div>)}</section>
       <section><h3>任务团队</h3>{visible.teams.map(item => <div className="plan-node" key={text(item.id)}><strong>{statusLabel(item.status)} · 计划 {text(item.plan_revision)}</strong><small>{rows(asRecord(item.body).members).map(member => `${text(member.role_id)} / ${text(member.model_id)}`).join("、")}</small><TechnicalDetails value={item} /></div>)}
         {!terminal && <form onSubmit={event => { event.preventDefault(); try { const team = visible.teams.find(item => item.id === teamId); if (!team || !currentRuns.some(run => run.run_id === runId) || !reason.trim()) throw new Error("请选择已有团队、执行记录并说明原因。"); const proposal = teamReassignmentProposal(team.body, strategy); void act("保留角色、权限和预算，提出团队重新分配", `${questPath}/teams/reassign`, { ...version, run_id: runId, reason: reason.trim(), proposal }); } catch (error) { setError(errorMessage(error)); } }}>
-          <label className="field-label">沿用的团队合约<select value={teamId} onChange={event => setTeamId(event.target.value)}><option value="">选择已有团队…</option>{visible.teams.map(item => <option key={text(item.id)} value={text(item.id)}>{text(item.id)} · {statusLabel(item.status)}</option>)}</select></label>
-          <label className="field-label">需要重新分配的执行<select value={runId} onChange={event => setRunId(event.target.value)}><option value="">选择执行记录…</option>{currentRuns.map(run => <option key={run.run_id} value={run.run_id}>{run.role || run.run_id} · {statusLabel(run.state)}</option>)}</select></label>
+          <label className="field-label">沿用的团队合约<select value={teamId} onChange={event => setTeamId(event.target.value)}><option value="">选择已有团队…</option>{visible.teams.map((item, index) => <option key={text(item.id)} value={text(item.id)}>团队提案 {index + 1} · {statusLabel(item.status)} · {displayActivityTime(item.created_at)}</option>)}</select></label>
+          <label className="field-label">需要重新分配的执行<select value={runId} onChange={event => setRunId(event.target.value)}><option value="">选择执行记录…</option>{currentRuns.map(run => <option key={run.run_id} value={run.run_id}>{taskActivityRole(run.role, run.quest_id)} · {statusLabel(run.state)} · {displayActivityTime(run.created_at)}</option>)}</select></label>
           <label className="field-label">重新分配原因<input value={reason} maxLength={1000} onChange={event => setReason(event.target.value)} /></label>
           <label className="field-label">选型策略<select value={strategy} onChange={event => setStrategy(event.target.value)}><option value="greedy">综合能力</option><option value="single_model">单一模型</option><option value="coverage">能力覆盖</option><option value="complementarity">互补协作</option></select></label>
           <button type="submit" className="button" disabled={disabled || !teamId || !runId || !reason.trim()}>提出重新分配</button>

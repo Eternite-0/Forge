@@ -94,12 +94,13 @@ async (page, { outputDir }) => {
   await recall.locator('.recall-result code').filter({ hasText: 'quest:quest-controls' }).waitFor();
   check(recalls.some(item => item.offset === '6') && recalls.some(item => item.relation_offset === '1') && recalls.some(item => item.reference === 'quest:quest-controls'), 'recall traverses real references and both bounded pagination cursors');
   await page.getByRole('button', { name: '后台任务', exact: true }).click();
-  await page.getByRole('button', { name: /^验证任务控件 quest-controls/ }).click();
+  await page.getByRole('button', { name: /^验证任务控件，/ }).click();
+  await page.getByText('任务操作与权限', { exact: true }).click();
   const controls = page.locator('.quest-controls');
   await controls.locator('summary').first().click();
   await controls.getByText('版本 1 ·', { exact: false }).waitFor();
   await controls.getByLabel('任务优先级').selectOption('1');
-  await page.waitForFunction(() => document.querySelector('.quest-phase')?.textContent.includes('版本 4'));
+  await page.waitForFunction(() => document.querySelector('.quest-technical')?.textContent.includes('任务版本4'));
   await controls.getByRole('button', { name: '暂停计划', exact: true }).click();
   await controls.getByRole('button', { name: '恢复计划', exact: true }).click();
   await controls.getByRole('button', { name: '暂停计划', exact: true }).waitFor();
@@ -116,7 +117,7 @@ async (page, { outputDir }) => {
   await workers.getByLabel('模型 ID（可选）').fill('fixture-model');
   await workers.getByRole('button', { name: '创建提案', exact: true }).click();
   await controls.getByLabel('调整任务状态').selectOption('needs_input');
-  await page.waitForFunction(() => document.querySelector('.quest-phase')?.textContent.includes('版本 7'));
+  await page.waitForFunction(() => document.querySelector('.quest-technical')?.textContent.includes('任务版本7'));
   const priority = mutations.find(item => item.path.endsWith('/priority'));
   check(priority.payload.expected_version === 3 && priority.payload.priority === 1, 'priority is bound to the current quest version');
   check(mutations.filter(item => item.path.endsWith('/plan/control')).map(item => `${item.payload.action}:${item.payload.expected_version}`).join('|') === 'pause:4|resume:5', 'pause and resume use the refreshed version and legal plan state');
@@ -152,7 +153,12 @@ async (page, { outputDir }) => {
   await page.locator('.workspace-tabs').getByRole('button', { name: '运行活动', exact: true }).click();
   const feed = page.locator('.event-feed');
   await feed.locator('summary').first().click();
-  await feed.getByText('quest.updated', { exact: true }).waitFor();
+  await feed.getByText('任务已更新', { exact: true }).waitFor();
+  const eventRow = feed.locator('.event-feed-list > details').first();
+  await eventRow.locator(':scope > summary').click();
+  check(!(await eventRow.innerText()).includes('quest-controls') && !(await eventRow.innerText()).includes('quest.updated'), 'task identity and raw event name stay in a closed technical disclosure');
+  await eventRow.getByText('技术详情', { exact: true }).click();
+  check((await eventRow.innerText()).includes('quest.updated'), 'technical details retain the original event');
   await feed.getByRole('button', { name: '刷新事件', exact: true }).click();
   await page.waitForFunction(() => !document.querySelector('.event-feed > button')?.disabled);
   check(eventCursors.join('|') === '0|7' && await feed.locator('.event-feed-list > details').count() === 1, 'event polling advances its sequence cursor without duplicating events');

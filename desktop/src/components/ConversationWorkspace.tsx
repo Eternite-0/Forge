@@ -59,7 +59,7 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
   }))];
   return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
-      <ConversationToolbar home={home} status={routerStatus} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent} sessionTitle={routerInfo.router_session_id ? `Router 会话：${text(routerInfo.router_session_id)}` : undefined} />
+      <ConversationToolbar home={home} status={routerStatus} onOpenTasks={() => openTaskView("quests", "")} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent} sessionTitle={routerInfo.router_session_id ? `Router 会话：${text(routerInfo.router_session_id)}` : undefined} />
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
       <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}

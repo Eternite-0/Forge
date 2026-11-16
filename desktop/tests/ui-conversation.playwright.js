@@ -183,7 +183,7 @@ async (page, { outputDir }) => {
   check(await selectedEntry.evaluate(element => element.open && element.closest('.process-transcript').open) && (await selectedEntry.innerText()).includes('run-research-current') && (await selectedEntry.innerText()).includes('research-model'), 'the Agent row locates and expands the exact run metadata in its visible process');
   check(await selectedEntry.locator('.tool-item').count() === 0 && await page.locator('[data-scroll-key="event:tool_receipt:worker-read"]').count() === 1 && await page.locator('[data-scroll-key="event:tool_receipt:worker-command"]').count() === 1, 'run metadata does not adopt or duplicate the independently ordered tool records');
   await selectedEntry.getByRole('button', { name: '任务详情', exact: true }).click();
-  await page.locator('.quest-overview').getByRole('heading', { name: quest.title, exact: true }).waitFor();
+  await page.locator('.quest-detail').getByRole('heading', { name: quest.title, exact: true }).waitFor();
   check((await page.locator('.quest-overview').innerText()).includes(quest.goal), 'Worker row opens the actual associated task');
   await rail.getByRole('button', { name: '对话', exact: true }).click();
   await openWorkers();

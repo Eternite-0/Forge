@@ -1,5 +1,55 @@
 /** Display labels only. Backend values remain the source of lifecycle and permission decisions. */
 
+/** API keys route task actions; they are never useful as human-facing titles. */
+export function questDisplayTitle(title: unknown, id?: unknown, goal?: unknown): string {
+  const usable = (value: unknown) => {
+    const firstLine = typeof value === "string" ? value.trim().split(/\r?\n/, 1)[0]?.trim() : "";
+    if (!firstLine || firstLine === id || /^(?:[a-f0-9]{32}|[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})$/i.test(firstLine)) return "";
+    return firstLine;
+  };
+  const savedTitle = usable(title);
+  if (savedTitle) return savedTitle;
+  const fallback = usable(goal);
+  const characters = Array.from(fallback);
+  return characters.length > 72 ? characters.slice(0, 71).join("") + "…" : fallback || "未命名任务";
+}
+
+export function displayActivityTime(value: unknown): string {
+  if (typeof value !== "string" || !value.trim()) return "时间未记录";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "时间未记录" : date.toLocaleString();
+}
+
+export function taskActivityRole(role: unknown, taskId?: unknown): string {
+  if (typeof role !== "string" || !role.trim()) return "执行成员";
+  const label = role.trim();
+  const withoutTask = typeof taskId === "string" && taskId && label.startsWith(taskId) &&
+    (label.length === taskId.length || /^[\s:：/·]/.test(label.slice(taskId.length)))
+    ? label.slice(taskId.length).replace(/^[\s:：/·]+/, "") : label;
+  const resolved = questDisplayTitle(withoutTask, taskId);
+  return resolved === "未命名任务" ? "执行成员" : resolved;
+}
+
+const TASK_EVENT_LABELS = new Map([
+  ["quest.updated", "任务已更新"], ["quest.proposed", "任务已提出"],
+  ["quest.status_changed", "任务状态已更新"], ["quest.priority_changed", "优先级已调整"],
+  ["quest.plan_proposed", "计划已提出"], ["quest.plan_approved", "计划已批准"],
+  ["quest.plan_rejected", "计划未获批准"], ["quest.replan_requested", "计划待调整"],
+  ["quest.retry_proposed", "已提出重试"], ["approval.requested", "等待审批"],
+  ["approval.decided", "已记录审批决定"], ["approval.revoked", "审批已撤销"],
+  ["approval.expired", "审批已过期"], ["worker.started", "开始执行"],
+  ["worker.progress", "执行进度更新"], ["worker.result", "执行结果已返回"],
+  ["worker.failed", "执行失败"], ["worker.blocked", "执行遇到阻塞"],
+  ["worker.help_requested", "执行需要协助"], ["worker.review_requested", "等待复核"],
+  ["worker.artifact_ready", "交付物已就绪"], ["task.verified", "任务已验证"],
+  ["task.skipped", "已跳过"], ["tool.receipt_recorded", "工具操作已记录"],
+  ["tool.execution_uncertain", "工具执行结果未知"],
+]);
+
+export function taskEventLabel(value: unknown): string {
+  return typeof value === "string" ? TASK_EVENT_LABELS.get(value) || "运行记录" : "运行记录";
+}
+
 const STATUS_LABELS = new Map<string, string>([
   // QuestStatus (domain.py), immutable plan revisions and team proposals.
   ["proposed", "已提案"],

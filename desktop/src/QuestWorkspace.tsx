@@ -1,5 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { isClosedQuest, namesLabel, needsQuestAttention, statusLabel } from "./presentation";
+import { isClosedQuest, namesLabel, needsQuestAttention, questDisplayTitle, statusLabel } from "./presentation";
 import { explicitProjectName, projectFor, type ProjectFields } from "./projectContext";
 
 type Row = Record<string, unknown>;
@@ -17,6 +17,8 @@ export interface QuestWorkspaceProps {
   selected: WorkspaceQuest | null;
   selectedId: string;
   connected: boolean;
+  loading?: boolean;
+  detailRequest?: { id: string } | null;
   error: string;
   hasMore: boolean;
   onSelect: (id: string) => void;
@@ -111,8 +113,8 @@ function QuestProjectGroup({ project, selectedId, search, filter, onSelect }: { 
   const active = project.quests.filter((quest) => !isClosedQuest(quest.status)).sort((left, right) => priority(left) - priority(right));
   const closed = project.quests.filter((quest) => isClosedQuest(quest.status));
   const row = (quest: WorkspaceQuest) => <button type="button" key={quest.id} className={selectedId === quest.id ? "list-row selected" : "list-row"}
-    aria-label={`${quest.title} ${quest.id} ${quest.status}`} aria-current={selectedId === quest.id ? "page" : undefined} onClick={() => onSelect(quest.id)}>
-    <span><strong>{quest.title}</strong><small>{quest.goal}</small></span><span className="state-label quest-state" data-state={quest.status}>{statusLabel(quest.status)}</span>
+    data-task-id={quest.id} aria-label={`${questDisplayTitle(quest.title, quest.id, quest.goal)}，${statusLabel(quest.status)}`} aria-current={selectedId === quest.id ? "page" : undefined} onClick={() => onSelect(quest.id)}>
+    <span><strong>{questDisplayTitle(quest.title, quest.id, quest.goal)}</strong></span><span className="state-label quest-state" data-state={quest.status}>{statusLabel(quest.status)}</span>
   </button>;
   return <section className="quest-project-group" data-project-key={project.key} data-project-source={project.source}>
     <button type="button" className="quest-project-toggle" aria-expanded={expanded} aria-controls={contentId} title={project.path || undefined} onClick={() => setExpanded((value) => !value)} onKeyDown={(event) => {
@@ -133,11 +135,32 @@ function QuestProjectGroup({ project, selectedId, search, filter, onSelect }: { 
 }
 
 export default function QuestWorkspace({
-  quests, selected, selectedId, connected, error, hasMore, onSelect, onLoadMore,
+  quests, selected, selectedId, connected, loading = false, detailRequest = null, error, hasMore, onSelect, onLoadMore,
   plan, planNotice, blocked, onApprove, grants, workspaceId = "", workspaceRoot = "", workspaceName = "",
 }: QuestWorkspaceProps) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<QuestFilter>("all");
+  const [openedId, setOpenedId] = useState<string | null>(detailRequest?.id || null);
+  const returnTarget = useRef<HTMLButtonElement | null>(null);
+  const listScroll = useRef(0);
+  const detailHeading = useRef<HTMLHeadingElement>(null);
+  const showingDetail = openedId !== null;
+  const openTask = (id: string) => {
+    returnTarget.current = document.activeElement instanceof HTMLButtonElement ? document.activeElement : null;
+    listScroll.current = returnTarget.current?.closest(".quest-body")?.scrollTop ?? 0;
+    setOpenedId(id);
+    onSelect(id);
+  };
+  const closeTask = () => { setOpenedId(null); };
+  useLayoutEffect(() => {
+    if (showingDetail) detailHeading.current?.focus();
+    else if (returnTarget.current?.isConnected) {
+      returnTarget.current.focus({ preventScroll: true });
+      const body = returnTarget.current.closest(".quest-body");
+      if (body) body.scrollTop = listScroll.current;
+    }
+  }, [showingDetail]);
+  useLayoutEffect(() => { if (detailRequest) setOpenedId(detailRequest.id || null); }, [detailRequest]);
   const searchInput = useRef<HTMLInputElement>(null);
   const detailRegion = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => { if (detailRegion.current) detailRegion.current.scrollTop = 0; }, [selectedId]);
@@ -158,7 +181,7 @@ export default function QuestWorkspace({
   const filtered = quests.filter((quest) => {
     const descriptor = projectFor(quest, workspaceId, workspaceRoot, workspaceName);
     const project = loadedProjects.get(descriptor.key)!;
-    const matchesSearch = !search || `${quest.title} ${quest.goal} ${quest.id} ${project.name} ${project.path} ${project.key}`.toLocaleLowerCase().includes(search);
+    const matchesSearch = !search || `${questDisplayTitle(quest.title, quest.id, quest.goal)} ${quest.goal} ${project.name}`.toLocaleLowerCase().includes(search);
     const matchesStatus = filter === "all" || (filter === "active" && !isClosedQuest(quest.status)) ||
       (filter === "attention" && needsQuestAttention(quest.status)) || (filter === "closed" && isClosedQuest(quest.status));
     return matchesSearch && matchesStatus;
@@ -185,12 +208,11 @@ export default function QuestWorkspace({
     if (!next) return;
     event.preventDefault();
     next.focus();
-    if (next !== current) next.click();
   };
   const nodes = records(plan?.nodes);
-  return <div className="quest-workspace">
-    <div className="quest-list">
-      <div className="section-heading"><span>任务列表</span><span>{quests.length} 项已加载{hasMore ? " · 还有更多" : ""}</span></div>
+  const emptyTitle = search ? "没有找到相关任务" : filter === "attention" ? "没有需要处理的任务" : filter === "active" ? "没有进行中的任务" : filter === "closed" ? "还没有已结束的任务" : "还没有任务";
+  return <div className={`quest-workspace${showingDetail ? " is-detail" : ""}`}>
+    <div className="quest-list" hidden={showingDetail} aria-busy={loading}>
       <div className="quest-search">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
         <input ref={searchInput} type="search" aria-label="搜索任务" placeholder="搜索已加载的任务" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => {
@@ -199,46 +221,43 @@ export default function QuestWorkspace({
         {query && <button type="button" className="icon-button" aria-label="清除任务搜索" onClick={clearSearch}>×</button>}
       </div>
       <div className="quest-filters">{QUEST_FILTERS.map((item) => <button type="button" key={item.id} className={`text-button${filter === item.id ? " active" : ""}`} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}</button>)}</div>
-      {quests.length > 0 && <p className="notice quest-filter-count">显示 {filtered.length} / {quests.length} 项已加载任务</p>}
+      {quests.length > 0 && <p className="notice quest-filter-count">{filtered.length} 项任务{hasMore ? " · 仅显示已加载的任务" : ""}{loading ? " · 正在更新…" : ""}</p>}
       {error && <p className="notice error" role="alert">任务列表加载失败：{error}</p>}
-      {!quests.length ? <div className="quest-empty">
-        <p>{connected ? "还没有任务" : "未连接，暂时无法查看任务"}</p>
-        <p className="notice">在对话中交代要做的事，创建后的任务会出现在这里。</p>
+      {!quests.length ? <div className="quest-empty" role="status">
+        <p>{!connected ? "连接后查看任务" : loading ? "正在加载任务…" : error ? "暂时无法加载任务" : "还没有任务"}</p>
+        <p className="notice">{!connected ? "连接恢复后，任务记录会显示在这里。" : loading ? "请稍候。" : error ? "连接恢复后将重新获取任务记录。" : "告诉 FORGE 你想做什么，任务会在这里显示。"}</p>
       </div> : !filtered.length ? <div className="quest-empty quest-filter-empty">
-        <p>没有匹配的已加载任务</p><p className="notice">试试其他关键词，或清除搜索与状态筛选。</p>
+        <p>{emptyTitle}</p><p className="notice">{hasMore ? "你可以加载更多任务，或调整筛选。" : search ? "试试其他关键词。" : "其他任务可以在「全部」中查看。"}</p>
         <button type="button" className="text-button" onClick={resetFilters}>清除筛选</button>
-      </div> : <div className="list quest-project-list" onKeyDown={navigateList}>{[...projects.values()].map((project) => <QuestProjectGroup key={project.key} project={project} selectedId={selectedId} search={search} filter={filter} onSelect={onSelect} />)}</div>}
-      {hasMore && <button type="button" className="text-button more" onClick={onLoadMore}>加载更多任务</button>}
+      </div> : <div className="list quest-project-list" onKeyDown={navigateList}>{[...projects.values()].map((project) => <QuestProjectGroup key={project.key} project={project} selectedId={selectedId} search={search} filter={filter} onSelect={openTask} />)}</div>}
+      {hasMore && <button type="button" className="text-button more" disabled={loading} onClick={onLoadMore}>{loading ? "正在加载…" : "加载更多任务"}</button>}
     </div>
 
-    <div className="quest-detail" ref={detailRegion}>
-      {!selected ? <div className="quest-empty quest-empty-selection"><h3>选择任务，查看计划与权限</h3><p className="notice">每个任务的计划、团队、审批与执行记录保持独立，结果回到同一个长期对话。</p></div> : <>
+    {showingDetail && <div className="quest-detail" ref={detailRegion}>
+      <button type="button" className="text-button quest-back" onClick={closeTask}>← 返回任务列表</button>
+      <h3 className="quest-detail-heading" ref={detailHeading} tabIndex={-1}>{selected?.id === openedId ? questDisplayTitle(selected.title, selected.id, selected.goal) : "任务详情"}</h3>
+      {!selected || selected.id !== openedId ? <div className="quest-empty" role="status"><p>{loading ? "正在加载任务…" : "此任务暂时不可用"}</p><p className="notice">返回列表查看最新任务。</p></div> : <>
         <div className="detail quest-overview">
-          <span className="eyebrow">当前任务</span>
-          <h3>{selected.title}</h3>
+          <div className="quest-phase"><strong className="quest-state" data-state={selected.status}>{statusLabel(selected.status)}</strong></div>
           <p className="quest-goal">{selected.goal}</p>
-          <div className="quest-phase"><strong>{statusLabel(selected.status)}</strong><span>版本 {selected.version}</span></div>
           <p className="notice">{QUEST_PHASES[selected.status] || "当前阶段以服务端原始状态为准。"}</p>
         </div>
 
         <section className="quest-plan">
-          <div className="section-heading spaced"><span>执行计划</span>{plan && <span>{nodes.length} 个节点</span>}</div>
+          <div className="section-heading spaced"><span>执行计划</span></div>
           {planNotice}
           {plan && <>
-            <dl className="quest-plan-facts"><dt>计划版本</dt><dd>{text(plan.plan_revision)}</dd><dt>状态</dt><dd>{statusLabel(plan.status)}</dd><dt>总 Token 预算</dt><dd>{text(plan.max_total_tokens)}</dd><dt>费用上限</dt><dd>{costLimit(plan)}</dd></dl>
             <div className="quest-plan-nodes">{nodes.map((node, index) => <div className="plan-node" key={text(node.key, String(index))}>
               <div className="plan-node-heading"><strong>{index + 1}. {text(node.objective)}</strong><span className="state-label">{statusLabel(node.status)}</span></div>
-              <small>Token 预算：{text(node.budget_tokens)}</small>
-              <small>允许工具：{namesLabel(node.allowed_tools)}</small>
-              <small>验收条件：{criteria(node.success_criteria)}</small>
+              <details className="quest-step-details"><summary>步骤详情</summary><small>Token 预算：{text(node.budget_tokens)}</small><small>允许工具：{namesLabel(node.allowed_tools)}</small><small>验收条件：{criteria(node.success_criteria)}</small></details>
             </div>)}</div>
-            <details className="quest-technical"><summary>技术详情</summary><dl><dt>任务 ID</dt><dd className="mono break">{selected.id}</dd><dt>计划摘要</dt><dd className="mono break">{text(plan.digest)}</dd></dl><pre>{JSON.stringify(plan, null, 2)}</pre></details>
+            <details className="quest-technical"><summary>技术详情</summary><dl><dt>任务 ID</dt><dd className="mono break">{selected.id}</dd><dt>任务版本</dt><dd>{selected.version}</dd><dt>计划版本</dt><dd>{text(plan.plan_revision)}</dd><dt>状态</dt><dd>{statusLabel(plan.status)}</dd><dt>总 Token 预算</dt><dd>{text(plan.max_total_tokens)}</dd><dt>费用上限</dt><dd>{costLimit(plan)}</dd><dt>计划摘要</dt><dd className="mono break">{text(plan.digest)}</dd></dl><pre>{JSON.stringify(plan, null, 2)}</pre></details>
             {plan.status === "proposed" && typeof plan.digest === "string" && <div className="button-row"><button type="button" className="button primary" disabled={blocked} onClick={onApprove}>批准此计划</button></div>}
           </>}
           {!plan && <details className="quest-technical"><summary>技术详情</summary><dl><dt>任务 ID</dt><dd className="mono break">{selected.id}</dd><dt>原始状态</dt><dd>{selected.status}</dd></dl></details>}
         </section>
       </>}
-      {grants}
-    </div>
+      {selected?.id === openedId && <details className="quest-grants"><summary>任务操作与权限</summary>{grants}</details>}
+    </div>}
   </div>;
 }
