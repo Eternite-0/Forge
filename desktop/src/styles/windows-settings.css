@@ -42,6 +42,7 @@
 .windows-reference .settings-content-inner { width: 100%; max-width: 768px; margin-inline: auto; padding: 30px 20px 48px; }
 .windows-reference .settings-title { margin: 0 40px 12px 0; font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -.02em; }
 .windows-reference .general-settings { padding-top: 32px; gap: 48px; }
+.windows-reference .general-settings + .settings-block { margin-block-start: 48px; }
 .windows-reference .settings-block-heading { margin: 0 0 16px; color: light-dark(#303030, #e0e0e0); font-size: 14px; line-height: 21px; font-weight: 600; }
 .windows-reference :is(.settings-group, .settings-section, .settings-content .config-form:not(.operator-settings)) {
   border: 1px solid light-dark(#dddddd, #303030);

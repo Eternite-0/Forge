@@ -164,7 +164,7 @@ export default function FilePreviewWorkspace({ native, source: nativeSource, ide
     setTreeWidth(Math.max(200, Math.min(width, maximumTreeWidth)));
   };
   const [scope, setScope] = useState<PreviewRequest["mode"]>("files"), [paths, setPaths] = useState<string[]>([]);
-  const [allFilesOpen, setAllFilesOpen] = useState(true), [changedFilesOpen, setChangedFilesOpen] = useState(true);
+  const [allFilesPreference, setAllFilesPreference] = useState<boolean | null>(null), [changedFilesOpen, setChangedFilesOpen] = useState(true);
   const [changes, setChanges] = useState<ChangeSet>(emptyChanges), [changesError, setChangesError] = useState(""), [refresh, setRefresh] = useState(0);
   const [feedback, setFeedback] = useState("");
   const filesInput = useRef<HTMLInputElement>(null), directoryInput = useRef<HTMLInputElement>(null), panel = useRef<HTMLElement>(null);
@@ -212,7 +212,7 @@ export default function FilePreviewWorkspace({ native, source: nativeSource, ide
     void load(); const timer = window.setInterval(() => void load(), 6000);
     return () => { current = false; window.clearInterval(timer); };
   }, [source, open, refresh, onChanges]);
-  const chooseFiles = (input: FileList | null) => { if (!input?.length) return; const files = [...input]; setImported(importedFileSource(files)); setImportName(files[0].webkitRelativePath?.split("/")[0] || "已选择的文件"); setTabs([]); setDocuments({}); setActive(""); setScope("files"); };
+  const chooseFiles = (input: FileList | null) => { if (!input?.length) return; const files = [...input]; setImported(importedFileSource(files)); setImportName(files[0].webkitRelativePath?.split("/")[0] || "已选择的文件"); setTabs([]); setDocuments({}); setActive(""); setScope("files"); setAllFilesPreference(true); };
   const closeTab = (path: string) => { const index = tabs.indexOf(path), next = tabs.filter((tab) => tab !== path); setTabs(next); if (active === path) setActive(next[Math.min(index, next.length - 1)] || ""); readSerial.current.delete(path); setDocuments((old) => { const copy = { ...old }; delete copy[path]; return copy; }); };
   const mode = modes[active] || "preview", document = documents[active]?.document;
   const activeHistory = historyTabs[active], activePath = activeHistory?.path || active;
@@ -220,12 +220,15 @@ export default function FilePreviewWorkspace({ native, source: nativeSource, ide
   const tabName = (key: string) => `${tabPath(key).split("/").pop()}${historyTabs[key] ? " · 记录的更改" : ""}`;
   const changed = changes.files.find((file) => file.path === active);
   const displayedChanges = scope === "conversation" ? paths.map((path) => changes.files.find((file) => file.path === path) || { path, status: "记录" }) : changes.files;
+  // Prefer the changes hierarchy when it contains real entries, without replacing
+  // the user's explicit choice about whether the full workspace tree is open.
+  const allFilesOpen = allFilesPreference ?? (displayedChanges.length === 0);
   const statuses = useMemo(() => new Map(changes.files.map((file) => [file.path, file.status])), [changes.files]);
   const filter = query.toLocaleLowerCase().trim();
   const openChanged = (path: string) => { openFile(path); if (changes.files.some((change) => change.path === path)) setModes((old) => ({ ...old, [path]: "diff" })); };
   const browseFile = () => {
     if (!native) { filesInput.current?.click(); return; }
-    setTree(true);
+    setTree(true); setScope("files"); setAllFilesPreference(true);
     requestAnimationFrame(() => panel.current?.querySelector<HTMLInputElement>('[aria-label="筛选已加载文件"]')?.focus());
   };
   const findInFile = () => panel.current?.querySelector('.file-tab-panel:not([hidden]) .code-preview')?.dispatchEvent(new Event("forge-find"));
@@ -250,7 +253,7 @@ export default function FilePreviewWorkspace({ native, source: nativeSource, ide
             </div>
           </section>
           <section className="file-tree-section">
-            <button type="button" className="file-tree-section-heading" aria-pressed={scope === "files"} aria-expanded={allFilesOpen || !!filter} onClick={() => { setScope("files"); setAllFilesOpen((value) => scope !== "files" || !value); }}><span className="file-tree-chevron" data-expanded={allFilesOpen || !!filter}>›</span><span>所有文件</span></button>
+            <button type="button" className="file-tree-section-heading" aria-pressed={scope === "files"} aria-expanded={allFilesOpen || !!filter} onClick={() => { setScope("files"); setAllFilesPreference(!allFilesOpen); }}><span className="file-tree-chevron" aria-hidden="true" data-expanded={allFilesOpen || !!filter}>›</span><span>所有文件</span></button>
             <div hidden={!allFilesOpen && !filter}>{source ? <Directory path="" source={source} active={active} onOpen={openFile} query={filter} refresh={refresh} statuses={statuses} /> : <p className="tree-notice">尚未选择文件。</p>}</div>
           </section>
         </div>{!native && <button type="button" className="file-import-button" onClick={() => directoryInput.current?.click()}>选择本地目录…</button>}

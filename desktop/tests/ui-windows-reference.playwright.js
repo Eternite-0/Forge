@@ -100,6 +100,9 @@ async (page, { outputDir }) => {
   check(home.composer.width >= 908 && home.composer.width <= 926 && Math.abs(home.composer.y - 892) <= 9 && home.composer.fills === 'rgb(47, 47, 47)', `home composer matches the reference width, baseline, and sampled dark fill: ${JSON.stringify(home.composer)}`);
   check(home.context.y < home.composer.y && Math.abs(home.context.x - home.composer.x - 16) <= 3 && Math.abs(home.banner.y - 495) <= 30, 'workspace context above the composer and the centered home heading match figure 1');
   check(home.context.fills === 'rgb(33, 33, 33)', 'home workspace context uses the sampled figure 1 gray');
+  check(await page.locator('.current-project > summary').evaluate(row =>
+    Math.abs(parseFloat(getComputedStyle(row).fontSize) - 18) < 0.2 && Math.abs(row.getBoundingClientRect().height - 39) < 1),
+    '1626px desktop project labels follow the reference size and row rhythm');
   check(await page.getByRole('button', { name: '发送消息', exact: true }).isDisabled(), 'the reference arrangement preserves disabled empty sending');
   measurements.push({ viewport: '1626x1038', ...home });
   await capture('windows-reference-home');
@@ -130,6 +133,13 @@ async (page, { outputDir }) => {
   const addedLine = await rect('.code-preview-diff .diff-added');
   const addedGutter = await rect('.code-preview-diff .diff-added > .source-line-number');
   check(addedLine.fills === 'rgb(26, 43, 27)' && addedGutter.fills === 'rgb(15, 28, 16)', 'source diff uses distinct sampled greens for added lines and the line-number gutter');
+  check(await page.locator('.turn-diff.activity-group-files').first().evaluate(card => {
+    const tile = card.querySelector('.turn-diff-icon').getBoundingClientRect();
+    const path = card.querySelector('.turn-diff-path');
+    return Math.abs(tile.width - 40) < 1 && Math.abs(tile.height - 40) < 1 &&
+      parseFloat(getComputedStyle(card).borderRadius) === 12 && parseFloat(getComputedStyle(path).fontSize) === 14 &&
+      Math.abs(path.getBoundingClientRect().left - 436) <= 2;
+  }), 'file-change card aligns icon, corners and filename with the desktop reference');
   measurements.push({ viewport: '2048x1104', ...work });
   await capture('windows-reference-source');
   await tree.locator('.changed-file[title="docs/HANDOFF.md"]').click();
@@ -149,6 +159,10 @@ async (page, { outputDir }) => {
   check(Math.abs(settingsLayout.navigation.x - 52) <= 3 && Math.abs(settingsLayout.navigation.width - 288) <= 3 && Math.abs(settingsLayout.group.width - 728) <= 3, `settings matches figure 4 rail, navigation and content widths: ${JSON.stringify(settingsLayout)}`);
   check(Math.abs(settingsLayout.heading.x - 823) <= 7 && Math.abs(settingsLayout.heading.y - 78) <= 10, 'settings heading aligns to the centered reference reading column');
   check(settingsLayout.group.fills === 'rgb(28, 28, 28)', 'setting cards use the sampled figure 4 gray');
+  check(await page.locator('.general-settings + .settings-block').evaluate(block => {
+    const previous = block.previousElementSibling;
+    return previous && block.getBoundingClientRect().top - previous.getBoundingClientRect().bottom >= 45;
+  }), 'diagnostics follows the same section separation as the main settings groups');
   measurements.push({ viewport: '2048x1104-settings', ...settingsLayout });
   await capture('windows-reference-settings');
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });

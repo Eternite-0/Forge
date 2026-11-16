@@ -4,6 +4,9 @@
   --forge-reference-titlebar: clamp(44px, calc(92.53px - 2.37vw), 54px);
   --forge-reference-rail: clamp(52px, calc(110.24px - 2.844vw), 64px);
   --forge-reference-sidebar: clamp(288px, calc(637.42px - 17.06vw), 360px);
+  --forge-project-font: clamp(14px, calc(33.4px - .948vw), 18px);
+  --forge-project-row: clamp(32px, calc(65.97px - 1.659vw), 39px);
+  --forge-conversation-indent: clamp(31px, calc(74.68px - 2.133vw), 40px);
   --app-shell-titlebar-height: var(--forge-reference-titlebar);
   --sidebar-width: calc(var(--forge-reference-rail) + var(--forge-reference-sidebar));
   --forge-frame: light-dark(#e8edf0, #1a2227);
@@ -67,9 +70,10 @@
 .windows-reference .codex-sidebar .sidebar-primary .nav-item { height: 36px; min-height: 36px; padding: 0 11px; font-size: clamp(14px, calc(33.4px - .948vw), 18px); color: var(--color-text); }
 .windows-reference .codex-sidebar .sidebar-primary .nav-item > svg { width: 18px; height: 18px; }
 .windows-reference .codex-sidebar .sidebar-project-summary { margin-top: 25px; padding-top: 0; border: 0; }
-.windows-reference .codex-sidebar .sidebar-group-heading { margin-bottom: 7px; font-size: 14px; font-weight: 600; }
+.windows-reference .codex-sidebar .sidebar-group-heading { margin-bottom: 7px; font-size: var(--forge-project-font); font-weight: 600; }
 .windows-reference .codex-sidebar .sidebar-group-heading > button { padding: 7px 11px; }
-.windows-reference .codex-project-record > summary { min-height: 32px; padding: 4px 11px; font-size: 14px; gap: 9px; }
+.windows-reference .codex-project-record > summary { min-height: var(--forge-project-row); padding: 4px 11px; font-size: var(--forge-project-font); gap: 9px; }
+.windows-reference .codex-project-record > summary > svg { width: var(--forge-project-font); height: var(--forge-project-font); }
 .windows-reference .codex-project-record.current-project > summary { background: light-dark(#e4e8eb, #252a2d); border-radius: 11px; color: var(--color-text); }
 .windows-reference .codex-connection-state { padding-left: 11px; font-size: 11px; }
 .windows-reference > .chat-workspace { border-radius: 0 16px 3px 0; border: 1px solid light-dark(#dce2e5, #293034); border-left: 0; margin: 0 3px 3px 0; }
@@ -79,7 +83,7 @@
 .windows-reference.compact-navigation .conversation-topbar { padding-inline-start: 20px; }
 .windows-reference .codex-sidebar-backdrop { top: var(--forge-reference-titlebar); }
 @media (max-width: 1100px) {
-  .app-shell.simple-shell.mac-shell.windows-reference { --forge-reference-titlebar: 40px; --forge-reference-rail: 48px; --forge-reference-sidebar: 240px; }
+  .app-shell.simple-shell.mac-shell.windows-reference { --forge-reference-titlebar: 40px; --forge-reference-rail: 48px; --forge-reference-sidebar: 240px; --forge-project-font: 14px; --forge-project-row: 32px; --forge-conversation-indent: 31px; }
 }
 @media (max-width: 760px) {
   .app-shell.simple-shell.mac-shell.windows-reference,
@@ -102,7 +106,7 @@
 /* One actual conversation under its current project, never fabricated history. */
 .windows-reference .current-project.has-conversation > summary { background: transparent; }
 .windows-reference .current-project.has-conversation > .codex-project-path { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.windows-reference .reference-project-conversation { display: flex; align-items: center; width: 100%; min-width: 0; min-height: 32px; padding: 5px 14px 5px 31px; border: 0; border-radius: 11px; background: transparent; color: var(--color-text-secondary); text-align: start; font: inherit; font-size: 14px; cursor: pointer; }
+.windows-reference .reference-project-conversation { display: flex; align-items: center; width: 100%; min-width: 0; min-height: var(--forge-project-row); padding: 5px 14px 5px var(--forge-conversation-indent); border: 0; border-radius: 11px; background: transparent; color: var(--color-text-secondary); text-align: start; font: inherit; font-size: var(--forge-project-font); cursor: pointer; }
 .windows-reference .reference-project-conversation > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .windows-reference .reference-project-conversation:is(:hover, [aria-current="page"]) { background: light-dark(#e4e8eb, #252a2d); color: var(--color-text); }
 @media (forced-colors: active) { .windows-reference .reference-project-conversation[aria-current="page"] { outline: 1px solid Highlight; outline-offset: -1px; } }

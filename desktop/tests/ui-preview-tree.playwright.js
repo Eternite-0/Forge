@@ -60,6 +60,8 @@ async (page, { outputDir }) => {
   await changedSection.locator('.changed-file').first().waitFor();
   await allSection.getByRole('button', { name: '所有文件' }).waitFor();
   check(await changedSection.getByRole('button', { name: '已更改 5', exact: true }).isVisible() && await allSection.getByRole('button', { name: '所有文件' }).isVisible(), 'changed files and all files remain available as two simultaneous tree sections');
+  const allFilesHeading = allSection.getByRole('button', { name: '所有文件', exact: true });
+  check(await allFilesHeading.getAttribute('aria-expanded') === 'false' && !await allSection.locator('.file-tree-row').first().isVisible(), 'with real changes, the default keeps the duplicate workspace hierarchy collapsed');
   const treeToggle = preview.getByRole('button', { name: '切换文件树', exact: true });
   check(await preview.locator('.preview-toolbar').getByRole('button', { name: '切换文件树', exact: true }).count() === 1, 'the native file-tree toggle lives in the document toolbar');
   await treeToggle.click();
@@ -67,6 +69,12 @@ async (page, { outputDir }) => {
   await preview.getByRole('button', { name: '打开文件', exact: true }).click();
   await tree.getByLabel('筛选已加载文件', { exact: true }).waitFor();
   check(await tree.isVisible() && await treeToggle.getAttribute('aria-pressed') === 'true' && await tree.getByLabel('筛选已加载文件', { exact: true }).evaluate((element) => element === document.activeElement) && await allSection.getByRole('button', { name: '所有文件' }).getAttribute('aria-expanded') === 'true', 'the native tab plus reveals all workspace files and focuses the existing filter');
+  await allFilesHeading.click();
+  await tree.getByLabel('筛选已加载文件', { exact: true }).fill('deep.ts');
+  check(await allFilesHeading.getAttribute('aria-expanded') === 'true', 'filtering can reveal a collapsed workspace hierarchy without changing its preference');
+  await tree.getByLabel('筛选已加载文件', { exact: true }).fill('');
+  check(await allFilesHeading.getAttribute('aria-expanded') === 'false', 'clearing a filter restores the explicit collapsed state');
+  await allFilesHeading.click();
   check(await changedSection.locator('.changed-file').count() === 5 && await changedSection.locator('.changed-directory-toggle[title="src"]').count() === 1 && await changedSection.locator('.changed-directory-toggle[title="src/nested"]').count() === 1, 'the changed-file tree groups same-level leaves and nested directories from actual synthetic paths');
   check((await changedSection.locator('.changed-file[title="README.md"]').innerText()).includes('+1') && (await changedSection.locator('.changed-file[title="deleted.txt"]').innerText()).includes('−1'), 'the changed-file rows preserve supplied addition and deletion counts');
   const colors = await changedSection.locator('.changed-file').evaluateAll((rows) => Object.fromEntries(rows.map((row) => [row.dataset.status, getComputedStyle(row).color])));
