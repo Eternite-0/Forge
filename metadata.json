@@ -1,0 +1,67 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7HJXVB6EKZT6GH8G6W4JKHE",
+  "strategy": "manual-commit",
+  "branch": "codex/phase1-continuous",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "backend/scripts/phase2/live_core.py",
+    "backend/src/forge_core/context_service.py",
+    "backend/src/forge_core/model_call_budget.py",
+    "backend/src/forge_core/model_performance.py",
+    "backend/src/forge_core/plan_lineage.py",
+    "backend/src/forge_core/predecessor_delivery.py",
+    "backend/src/forge_core/providers/__init__.py",
+    "backend/src/forge_core/registry.py",
+    "backend/src/forge_core/semantic_memory.py",
+    "backend/src/forge_core/worker_model_compaction.py",
+    "backend/src/forge_core/worker_model_usage.py",
+    "backend/src/forge_core/worker_recovery.py",
+    "backend/tests/test_review_capacity_preview_phase2.py",
+    "backend/tests/test_reviewer_capacity_phase2.py",
+    "backend/tests/test_reviewer_context_phase2.py",
+    "backend/tests/test_reviewer_repair_phase2.py",
+    "backend/tests/test_router_intelligence_phase2.py",
+    "backend/tests/test_worker_first_archive_phase2.py",
+    "desktop/README.md",
+    "desktop/src/App.tsx",
+    "desktop/src/ChatTimeline.tsx",
+    "desktop/src/SettingsView.tsx",
+    "desktop/src/WorkspaceSidebar.tsx",
+    "desktop/src/style.css",
+    "desktop/tests/ui-layout.playwright.js",
+    "desktop/tests/ui-smoke.playwright.js",
+    "docs/STATUS.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "redaction": {
+    "replacements": 1358,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 393,
+      "credentialed_uri": 0,
+      "custom": 94,
+      "entropy": 626,
+      "key_context": 0,
+      "pii": 245,
+      "provider_token": 0,
+      "shell_stdin": 0
+    },
+    "custom_rules_active": 1,
+    "pii": {
+      "EMAIL": 242,
+      "IP": 3,
+      "PHONE": 0
+    }
+  }
+}
