@@ -1,0 +1,68 @@
+{
+  "current_python_files": 362,
+  "files": {
+    "final-order-full.log": {
+      "gzip_sha256": "60c3414aa39cbce5da4541a5d8888e26a31458f86b9b752bcb41ffa22a213e0b",
+      "original_sha256": "789b389340044d30c25284017710b83b14178069bcf58d7f2ec47b98c751eb18"
+    },
+    "final-order-full.xml": {
+      "gzip_sha256": "2f278c6564b08bb34a3433da72fc28513ebe40b2440d7dd23629c860cb33aaa0",
+      "original_sha256": "14c972a12196886bea19283bb0ba2922b1c1d6c74b6169b3c6970150af462cf0"
+    },
+    "final-order-run-verification.json": {
+      "gzip_sha256": "b47c29f3c15450343558af215feff3924404bb59b7d4589de8cb122c09b353d2",
+      "original_sha256": "910e40570d313a8bc667e64814a7d3b53d867b58ef93f33e51b05de56ee3c77b"
+    },
+    "final-order-source-before.json": {
+      "gzip_sha256": "b90d8bf653a3386876d5791c70d50192c32c78b0de163a1ceef65a4c116a42e7",
+      "original_sha256": "a7cbbc9a858e8291013518632f725b3352d1ed1cef166a029866453c3b3e2725"
+    },
+    "tool-order-before.log": {
+      "gzip_sha256": "0c6efa4884b36c5b6aff9d79e139ca3bb20fbc4a7fc259ea6d22e04c55d2faaa",
+      "original_sha256": "9480ee9194cb94b0b756c5d617282e34fa6c16fb927ddec5c06e52000ca915c4"
+    },
+    "tool-order-final-targeted.log": {
+      "gzip_sha256": "43a0679bf0c7ca24dea17248cf93240c292ddc3b7bff162d3c3f94bb04bd1e8b",
+      "original_sha256": "3a98d73c5783f6deafccaf9192faaf14d26875aed70447b263e2544d35cadd84"
+    },
+    "tool-order-ruff.log": {
+      "gzip_sha256": "f3af4d142827f5aad2eb0c72d556d325488a57fb6219aac10afeb51085667d53",
+      "original_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    "tool-order-targeted.log": {
+      "gzip_sha256": "def6ed7e2dea56e4d606239d849e1134612ebea6a351cc3037960dad72a43921",
+      "original_sha256": "5a96131921cc60dc5b01630291661588f328d48b4b571f7a63698a92594cb4c7"
+    }
+  },
+  "first_targeted_failure": "test_helper_read_historical_feedback_instead_of_current_prepended_metadata_corrected_without_weakening_safety",
+  "implementation_commit": "61ec4f8570d72e22aac7ca8d30d05473151150ee",
+  "manifest_sha256": "d974f890ace9c03660cd8e85cc54fbb6724a7fcdac7a63a9155fd5945f969383",
+  "provider_calls": 0,
+  "real_provider_coverage": "not_run_for_this_fix",
+  "result": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 3015,
+    "skipped": 12,
+    "tests": 3027
+  },
+  "run": {
+    "command": [
+      "/Users/tracy/Documents/Forge/backend/.venv/bin/python",
+      "-m",
+      "pytest",
+      "backend/tests",
+      "-q",
+      "--junitxml=/Users/tracy/Documents/Forge/.local/continuity-review/final-order-full.xml"
+    ],
+    "duration_seconds": 790.6934389739763,
+    "manifest_sha256": "d974f890ace9c03660cd8e85cc54fbb6724a7fcdac7a63a9155fd5945f969383",
+    "provider_credentials": "not_passed_to_subprocess",
+    "python_files": 362,
+    "returncode": 0,
+    "source_commit": "61ec4f8570d72e22aac7ca8d30d05473151150ee",
+    "source_unchanged": true
+  },
+  "skipped_ids_and_reasons_unchanged_from_original": true,
+  "source_unchanged_during_run": true
+}

@@ -1,0 +1,181 @@
+{
+  "baseline": "0bef3316a5783348c1f5687d9d584a2cf1eb5e7a",
+  "campaign_accounting": {
+    "admission_enforcement": "live_gateway_durable_ledger",
+    "attempts": [
+      {
+        "attempt_id_sha256": "bd50f3c2e73fcb364692f3afcc5fb0d34e8b8939fdc3dd800e2efc7c53681a98",
+        "call_id_sha256": "e68619d2fba9e2ec97e03d157f05cdee6da835f2b551088c0164ddabc4a6c257",
+        "charged_or_reserved_tokens": 5410,
+        "input_charged": 4328,
+        "input_reserved": 25785,
+        "model_matches_protocol": true,
+        "output_charged": 1082,
+        "output_reserved": 4096,
+        "purpose_sha256": "74c95604043427f0bee1d0e16bfa53afd537f736ad0073c4cc4e1ccb3a82b5dc",
+        "state": "settled",
+        "usage_known": true
+      },
+      {
+        "attempt_id_sha256": "f071538a06cf917d028034a4db1a3a24449e3f00f6feb5f490d2f7dcb4340af9",
+        "call_id_sha256": "2011e1fc5d01b50aa1ec698b79bef7ee815fa7ce2a8ae49f15a0038cbb6a6cd1",
+        "charged_or_reserved_tokens": 5288,
+        "input_charged": 4512,
+        "input_reserved": 26480,
+        "model_matches_protocol": true,
+        "output_charged": 776,
+        "output_reserved": 4096,
+        "purpose_sha256": "74c95604043427f0bee1d0e16bfa53afd537f736ad0073c4cc4e1ccb3a82b5dc",
+        "state": "settled",
+        "usage_known": true
+      },
+      {
+        "attempt_id_sha256": "6dd94ce7442e2167bbe44b3fdabfaaba4405fb43c6f322c3155a48728cee898f",
+        "call_id_sha256": "aca751b4dcf63cc8de3c132be2b7cf4b1602deec404bd327dd7ebdfe3e5efd84",
+        "charged_or_reserved_tokens": 14098,
+        "input_charged": 13785,
+        "input_reserved": 59551,
+        "model_matches_protocol": true,
+        "output_charged": 313,
+        "output_reserved": 4096,
+        "purpose_sha256": "74c95604043427f0bee1d0e16bfa53afd537f736ad0073c4cc4e1ccb3a82b5dc",
+        "state": "settled",
+        "usage_known": true
+      },
+      {
+        "attempt_id_sha256": "01c27bb45c17e404ea11dfa8c5730ac9fbe0898527563368c596f4154cd016f3",
+        "call_id_sha256": "fb478a2388fc10dadb19c81b03da91a7a29885ee15e37a5852b4261e7c46170a",
+        "charged_or_reserved_tokens": 15644,
+        "input_charged": 15267,
+        "input_reserved": 64591,
+        "model_matches_protocol": true,
+        "output_charged": 377,
+        "output_reserved": 4096,
+        "purpose_sha256": "74c95604043427f0bee1d0e16bfa53afd537f736ad0073c4cc4e1ccb3a82b5dc",
+        "state": "settled",
+        "usage_known": true
+      },
+      {
+        "attempt_id_sha256": "1a8b8f76203b2f954199ad1a6b2440cfe5397c283e5a0a7c0e82870b4e111da7",
+        "call_id_sha256": "9aac04fa4107f19145f4a86b117be7304d21de5aac81123ad6417a885e47716f",
+        "charged_or_reserved_tokens": 4498,
+        "input_charged": 4377,
+        "input_reserved": 17766,
+        "model_matches_protocol": true,
+        "output_charged": 121,
+        "output_reserved": 8192,
+        "purpose_sha256": "87eba76e7f3164534045ba922e7770fb58bbd14ad732bbf5ba6f11cc56989e6e",
+        "state": "settled",
+        "usage_known": true
+      },
+      {
+        "attempt_id_sha256": "7d9c532e68ee86446feb44959a8349145c4d8c9bd2527cde09cf9e19474e479e",
+        "call_id_sha256": "cc0cfa884368067be1839d133d50f89732307639f90c4a57c3989533f4eae8e0",
+        "charged_or_reserved_tokens": 29276,
+        "input_charged": null,
+        "input_reserved": 21084,
+        "model_matches_protocol": true,
+        "output_charged": null,
+        "output_reserved": 8192,
+        "purpose_sha256": "87eba76e7f3164534045ba922e7770fb58bbd14ad732bbf5ba6f11cc56989e6e",
+        "state": "rejected",
+        "usage_known": false
+      }
+    ],
+    "currency_cost": null,
+    "maximum_if_new_allocation_fully_used": {
+      "attempts": 117,
+      "charged_or_reserved_tokens": 1309785
+    },
+    "new_attempts": 6,
+    "new_call_cap": 18,
+    "new_charged_or_reserved_tokens": 74214,
+    "new_known_complete_usage_tokens": 44938,
+    "new_token_cap": 220000,
+    "new_unknown_usage_attempts": 1,
+    "new_unsettled_attempts": 0,
+    "opening_attempts": 99,
+    "opening_tokens": 1089785,
+    "remaining_stage_attempts": 55,
+    "remaining_stage_tokens": 1336001,
+    "stage_attempts": 105,
+    "stage_call_cap": 160,
+    "stage_charged_or_reserved_tokens": 1163999,
+    "stage_token_cap": 2500000,
+    "within_caps": true
+  },
+  "confirmed_local_defect_after_read_only_audit": {
+    "description": "Thread inbox user notice interposed between assistant tool_calls and matching tool results",
+    "diagnosis": "thread/message-order-diagnosis.json",
+    "followup": "offline_reproduction_minimal_fix_full_regression_no_new_live_calls",
+    "remote_rejection_causality": "suspected_not_confirmed"
+  },
+  "evidence_scope": {
+    "credentials": "no_key_saved_in_evidence_no_long_sk_token_patterns",
+    "databases": "original_DB_retained_locally_read_only_whitelisted_exports_committed",
+    "minimal": "byte_copies_of_original_json_with_request_response_hashes_only",
+    "no_replay_no_refund": true,
+    "thread": "byte_copies_of_JSON_and_gzipped_redacted_generate_boundary_messages_response",
+    "thread_trace_limit": "generate_boundary_not_wire_HTTP_status_or_error_body"
+  },
+  "first_condition": {
+    "compaction": "completed_with_receipt",
+    "failure_code": "child_failed_no_retry_inspect_durable_ledger_and_call_receipts",
+    "failure_root_cause": "not_preserved_in_child_diagnostics_cannot_determine",
+    "known_tokens": 40440,
+    "new_attempts": 4,
+    "project_switch": "two_real_projects_created_and_bound",
+    "restart": "new_OS_process_started_recall_failed",
+    "status": "failed",
+    "thread": "not_run_reserved",
+    "unresolved_or_active": {
+      "active_workers": 0,
+      "reservations": 0,
+      "tool_intents": 0,
+      "worker_tools": 0
+    }
+  },
+  "implementation_commit": "9cb619f0b8fa0ad9d93ac9fe6ceaafc4dd358669",
+  "new_thread_condition": {
+    "acceptance_checks": "not_evaluated_fail_closed",
+    "artifact_adoption": "not_completed",
+    "attempts": 2,
+    "failure_code": "worker_not_ready_for_review",
+    "full_pagination": "not_completed",
+    "independent_review": "not_reached",
+    "injection": {
+      "committed_monotonic": 573903.043443899,
+      "during_call_id": "model_call_a2ad99020673",
+      "inflight_at_commit": true,
+      "payload_sha256": "94c672df8aeaf00d8d9ddf93f84e9bd9402e80c5ab203b5b33338803f664301c",
+      "request_had_addition": false,
+      "thread_id": "thread_26c364566e65",
+      "total_chars": 4673,
+      "trigger_id": "trigger_c770d793fe72"
+    },
+    "known_tokens": 4498,
+    "next_round_pending_visible": true,
+    "opening_attempts": 103,
+    "opening_tokens": 1130225,
+    "provider_rejection": "completed_rejection_no_response_usage_captured",
+    "retained_unknown_tokens": 29276,
+    "status": "failed",
+    "unresolved_or_active": {
+      "active_workers": 0,
+      "reservations": 1,
+      "tool_intents": 0,
+      "worker_tools": 0
+    },
+    "worker_state": "blocked"
+  },
+  "provider_calls_stopped": true,
+  "remaining_arithmetic_only_not_authorization": {
+    "blocked_by": "one_completed_rejection_unknown_usage_retains_Gateway_and_Worker_reservation_no_resume",
+    "new_campaign_attempts": 12,
+    "new_campaign_tokens": 145786,
+    "stage_attempts": 55,
+    "stage_tokens": 1336001
+  },
+  "retries": 0,
+  "status": "failed_no_live_acceptance"
+}

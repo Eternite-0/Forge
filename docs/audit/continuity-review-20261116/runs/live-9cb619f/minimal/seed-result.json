@@ -1,0 +1,38 @@
+{
+  "calls": [
+    {
+      "call_id_sha256": "e68619d2fba9e2ec97e03d157f05cdee6da835f2b551088c0164ddabc4a6c257",
+      "failure_code": null,
+      "post_started": true,
+      "request_sha256": "d29de110f942c0dbfdd8ee7856128a945d6a49e6e6fbdc23614c1c29cfe674d5",
+      "response_sha256": "95478ce1b13f9da9452472ac420f60e610e65477a6d9db0224a10d6f3eb4b76c"
+    },
+    {
+      "call_id_sha256": "2011e1fc5d01b50aa1ec698b79bef7ee815fa7ce2a8ae49f15a0038cbb6a6cd1",
+      "failure_code": null,
+      "post_started": true,
+      "request_sha256": "3288ed205a5932d6b4803c70b973331fa5360ebc3f7d53cb6f1e96735a5bb7d7",
+      "response_sha256": "e5107b9a7fad1997f6faf4c74dd1234d05d5bcff320e5c18aa526d66482a0373"
+    }
+  ],
+  "first_compaction": {
+    "receipt_sha256": "92b7a5ec17767ced6dedad5e5c1867c657670dabee5bd997ae71e1a5ad0090eb",
+    "source_count": 2
+  },
+  "pid": 87884,
+  "projects": [
+    {
+      "project_ref": "project:project_88b14b08c102a9a208ee9e5f",
+      "quest_ref": "quest:quest_8168b1f30c0f",
+      "source_ref": "message:msg_d4f9783e0341",
+      "source_sha256": "21d90dcb90193652b6189c0c3f3da85cc590b640b5d20a786c2de083067ae6af"
+    },
+    {
+      "project_ref": "project:project_d1219af2ddc8bd09026da98d",
+      "quest_ref": "quest:quest_4dbe7eb3e530",
+      "source_ref": "message:msg_f021a6db45a7",
+      "source_sha256": "b0440c65e7ad35a1b83d1750e9f1d39295565861c4b5c53f308ee57eeff04f09"
+    }
+  ],
+  "router_session_id": "router_1e1e704c06bb"
+}

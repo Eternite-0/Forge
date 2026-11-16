@@ -1,0 +1,108 @@
+{
+  "attempts": [
+    {
+      "attempt_id": "8e6466abb7ac4d4890aaf3493602a2d6",
+      "call_id": "call_950b11ba5c46",
+      "input_charged": 4328,
+      "input_reserved": 25785,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": 1082,
+      "output_reserved": 4096,
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "221e42c810dd4761895ca95e12f21320",
+      "call_id": "call_63c28d28cfaf",
+      "input_charged": 4512,
+      "input_reserved": 26480,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": 776,
+      "output_reserved": 4096,
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "3b45f93da900449da1addab1b02d94db",
+      "call_id": "call_475a7981fa3e",
+      "input_charged": 13785,
+      "input_reserved": 59551,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": 313,
+      "output_reserved": 4096,
+      "purpose": "router",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "77ebf5784b6746788cad1621180dd322",
+      "call_id": "call_620c5351afb7",
+      "input_charged": 15267,
+      "input_reserved": 64591,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": 377,
+      "output_reserved": 4096,
+      "purpose": "router",
+      "state": "settled"
+    }
+  ],
+  "database_path": "/Users/tracy/Documents/Forge/.local/continuity-review/live-20261116-9cb619f/data/forge.sqlite3",
+  "events": [
+    {
+      "created_at": "2026-11-16T12:14:58.131524+00:00",
+      "event_type": "workspace.task_associated",
+      "payload": "{\"project_id\": \"project_88b14b08c102a9a208ee9e5f\", \"source\": \"router_presented_project\", \"grants_tool_access\": false}",
+      "seq": 1
+    },
+    {
+      "created_at": "2026-11-16T12:14:58.132224+00:00",
+      "event_type": "trigger.received",
+      "payload": "{\"thread_id\": \"thread_bb93c0d2822c\", \"trigger_id\": \"trigger_f21b92f0849a\"}",
+      "seq": 2
+    },
+    {
+      "created_at": "2026-11-16T12:14:58.133328+00:00",
+      "event_type": "router.delegated",
+      "payload": "{\"mandate_id\": \"mandate_56cd24f8c147\", \"policy\": \"local-superagent-v2\"}",
+      "seq": 3
+    },
+    {
+      "created_at": "2026-11-16T12:14:58.133408+00:00",
+      "event_type": "quest.proposed",
+      "payload": "{\"source\": \"router\"}",
+      "seq": 4
+    },
+    {
+      "created_at": "2026-11-16T12:15:06.151988+00:00",
+      "event_type": "workspace.task_associated",
+      "payload": "{\"project_id\": \"project_d1219af2ddc8bd09026da98d\", \"source\": \"router_presented_project\", \"grants_tool_access\": false}",
+      "seq": 5
+    },
+    {
+      "created_at": "2026-11-16T12:15:06.152796+00:00",
+      "event_type": "trigger.received",
+      "payload": "{\"thread_id\": \"thread_3198ba52fdd1\", \"trigger_id\": \"trigger_f1805b575c2f\"}",
+      "seq": 6
+    },
+    {
+      "created_at": "2026-11-16T12:15:06.157532+00:00",
+      "event_type": "router.delegated",
+      "payload": "{\"mandate_id\": \"mandate_954a58d66444\", \"policy\": \"local-superagent-v2\"}",
+      "seq": 7
+    },
+    {
+      "created_at": "2026-11-16T12:15:06.157678+00:00",
+      "event_type": "quest.proposed",
+      "payload": "{\"source\": \"router\"}",
+      "seq": 8
+    }
+  ],
+  "snapshot": "single_read_only_SQLite_transaction_no_reconciliation_or_refund",
+  "unresolved_or_active": {
+    "active_workers": 0,
+    "reservations": 0,
+    "tool_intents": 0,
+    "worker_tools": 0
+  },
+  "worker_model_reservations": [],
+  "workers": []
+}

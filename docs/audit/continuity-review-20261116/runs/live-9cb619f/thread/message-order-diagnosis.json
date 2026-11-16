@@ -1,0 +1,57 @@
+{
+  "cause_path": "WorkerManager._checkpoint consumes inbox before selecting and settling pending tool calls",
+  "confirmed_local_defect": "inbox_user_notification_between_assistant_tool_calls_and_tool_results",
+  "generate_boundary_request_sha256": "d3679a518588fafca93637d5427e2493322a7a6e09a54207917ec3659d0cce6d",
+  "implementation_commit": "9cb619f0b8fa0ad9d93ac9fe6ceaafc4dd358669",
+  "message_structure": [
+    {
+      "index": 0,
+      "role": "system"
+    },
+    {
+      "index": 1,
+      "role": "user"
+    },
+    {
+      "index": 2,
+      "role": "user"
+    },
+    {
+      "index": 3,
+      "role": "user"
+    },
+    {
+      "index": 4,
+      "role": "user"
+    },
+    {
+      "index": 5,
+      "role": "assistant",
+      "tool_names": [
+        "read_trigger",
+        "directory_list"
+      ]
+    },
+    {
+      "index": 6,
+      "interrupts_tool_round": true,
+      "role": "user"
+    },
+    {
+      "index": 7,
+      "matches_outstanding_id": true,
+      "role": "tool"
+    },
+    {
+      "index": 8,
+      "matches_outstanding_id": true,
+      "role": "tool"
+    }
+  ],
+  "no_live_replay": true,
+  "rejection_scope": "Gateway_peer_completed_non_2xx_HTTP_response_not_semantic_model_refusal_not_local_preflight",
+  "remote_causality": "suspected_not_confirmed_no_HTTP_status_or_body_captured",
+  "repair_plan": "defer_inbox_transcript_consumption_until_pending_running_tool_batch_settled_keep_durable_trigger_flush",
+  "request_trace": "thread/trace-cc0cfa884368067be1839d133d50f89732307639f90c4a57c3989533f4eae8e0.json.gz",
+  "tool_call_ids": "unique_and_all_matched_results_not_id_mismatch"
+}

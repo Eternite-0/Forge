@@ -1,0 +1,129 @@
+"""One NEW, previously unrun Thread condition; never resume the failed Recall.
+Local campaign launcher only; production code remains frozen at 9cb619f.
+"""
+import asyncio
+import copy
+import getpass
+import json
+import logging
+import os
+import sqlite3
+import sys
+from pathlib import Path
+
+REPO = Path('/Users/tracy/Documents/Forge')
+sys.path[:0] = [str(REPO / 'backend/src'), str(REPO / 'backend/scripts')]
+import continuity_minimal_probe as probe
+import continuity_thread_probe as thread
+from forge_core.providers import ProviderConfig, ProviderGateway
+from forge_core.model_call_budget import ModelCallBudgetLedger
+from forge_core.settings import Workspace
+from forge_core.store import Store
+
+PRIOR = REPO / '.local/continuity-review/live-20261116-9cb619f'
+ROOT = REPO / '.local/continuity-review/thread-20261116-9cb619f'
+
+
+def rows(database):
+    with sqlite3.connect(Path(database).as_uri() + '?mode=ro', uri=True) as c:
+        c.row_factory = sqlite3.Row
+        c.execute('PRAGMA query_only=ON')
+        return [dict(r) for r in c.execute(
+            'SELECT attempt_id,call_id,purpose,state,model_id,input_reserved,output_reserved,'
+            'input_charged,output_charged FROM model_budget_attempts ORDER BY created_at,attempt_id')]
+
+
+def prepare():
+    source = probe.source_freeze()
+    assert source['commit'] == '9cb619f0b8fa0ad9d93ac9fe6ceaafc4dd358669' and not source['dirty']
+    previous = json.loads((PRIOR / 'result.json').read_bytes())
+    audit = probe.audit_ledger(PRIOR)
+    assert previous['status'] == 'failed' and not audit['failure_codes']
+    assert audit['budget']['stage_attempts'] == 103
+    assert audit['budget']['stage_charged_or_reserved_tokens'] == 1130225
+    assert previous['thread'] == 'not_run_reserved'
+    prior = rows(PRIOR / 'data/forge.sqlite3')
+    assert len(prior) == 4 and all(r['state'] == 'settled' for r in prior)
+    remaining_calls = probe.NEW_CALL_CAP - len(prior)
+    remaining_tokens = probe.NEW_TOKEN_CAP - audit['budget']['new_charged_or_reserved_tokens']
+    assert (remaining_calls, remaining_tokens) == (14, 179560)
+    assert probe.source_freeze() == source
+    return source, prior, remaining_calls, remaining_tokens
+
+
+async def run():
+    source, prior, call_limit, token_limit = prepare()
+    probe.fresh_workspace(ROOT)
+    key = getpass.getpass('Provider credential (hidden): ')
+    if not key.strip():
+        raise RuntimeError('missing_credential_no_calls')
+    os.environ['FORGE_PROVIDER_KEY_CONTINUITY'] = key
+    ROOT.mkdir(mode=0o700)
+    plan = {'source': source, 'scenario': 'new_thread_only_not_recall_resume',
+            'prior_result_sha256': probe.sha((PRIOR / 'result.json').read_bytes()),
+            'launcher_sha256': probe.sha(Path(__file__).read_bytes()),
+            'opening_attempts': 103, 'opening_tokens': 1130225,
+            'new_call_limit': call_limit, 'new_token_limit': token_limit,
+            'campaign_new_cap': [18, 220000], 'retries': 0}
+    probe.write_once(ROOT / 'protocol.json', plan)
+    store = Store(workspace=Workspace.from_path(ROOT))
+    ledger = ModelCallBudgetLedger(store.path, call_limit=call_limit, token_limit=token_limit,
+                                  concurrency_limit=1, enforce_token_budgets=True)
+
+    class Observed(ProviderGateway):
+        async def generate(self, request):
+            assert probe.source_freeze() == source
+            current = rows(store.path)
+            assert all(row['state'] == 'settled' for row in current)
+            cumulative = probe.budget([*prior, *current])
+            assert cumulative['within_caps'] and not cumulative['new_unknown_usage_attempts']
+            assert not cumulative['new_unsettled_attempts']
+            request.max_retries = 0
+            before = copy.deepcopy(request.messages)
+            record = {'purpose': request.budget_context.purpose, 'messages': before}
+            try:
+                result = await super().generate(request)
+                record['response'] = {'text': result.text, 'tools': result.tool_calls,
+                                      'usage': result.usage, 'finish_reason': result.finish_reason}
+                return result
+            finally:
+                # Local private full boundary evidence; exact credential redacted.
+                data = json.dumps(record, ensure_ascii=False, sort_keys=True).replace(key, '<REDACTED>')
+                target = ROOT / ('trace-' + probe.sha(request.budget_context.call_id.encode()) + '.json')
+                with target.open('x', encoding='utf-8') as stream:
+                    os.chmod(target, 0o600)
+                    stream.write(data + '\n')
+
+    gateway = Observed(ProviderConfig(id=probe.PROVIDER_ID, kind='openai_compatible',
+        base_url=probe.BASE_URL, credential_ref='FORGE_PROVIDER_KEY_CONTINUITY', max_retries=0,
+        timeout_seconds=120, concurrency=1, supports_tools=True, supports_json_schema=True,
+        allow_insecure_loopback=True), budget_ledger=ledger)
+    probe.make_router(store, gateway)  # explicit 100M/8192 profile, no Router call
+    report = await thread.run_thread(store, gateway)
+    probe.write_once(ROOT / 'thread-report.json', report)
+    final = probe.budget([*prior, *rows(store.path)])
+    with store.connection() as c:
+        pending = {name: c.execute(query).fetchone()[0] for name, query in {
+            'worker_tools': "SELECT COUNT(*) FROM worker_tool_calls WHERE state IN ('pending','running','uncertain')",
+            'tool_intents': "SELECT COUNT(*) FROM action_intents WHERE state IN ('prepared','executing','uncertain')",
+            'reservations': "SELECT COUNT(*) FROM worker_model_reservations WHERE state='reserved'",
+            'active_workers': "SELECT COUNT(*) FROM worker_runs WHERE state IN ('queued','running','review_pending')",
+        }.items()}
+    result = {'status': report['status'], 'passed': report['passed'], 'accounting': final,
+              'unresolved_or_active': pending, 'source_unchanged': probe.source_freeze() == source,
+              'thread_report_sha256': probe.sha((ROOT / 'thread-report.json').read_bytes()),
+              'plan': plan}
+    probe.write_once(ROOT / 'result.json', result)
+    print(json.dumps({'status': result['status'], 'passed': result['passed'],
+        'new_thread_calls': len(rows(store.path)), 'campaign_calls': final['stage_attempts'],
+        'campaign_tokens': final['stage_charged_or_reserved_tokens'], 'unresolved': pending}))
+
+
+if __name__ == '__main__':
+    logging.disable(logging.CRITICAL)
+    try:
+        asyncio.run(run())
+    except Exception as error:
+        print(json.dumps({'status': 'failed_no_retry', 'exception_type': type(error).__name__,
+                          'usage': 'inspect_persistent_ledger_no_refund_no_replay'}))
+        raise SystemExit(2) from None

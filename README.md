@@ -29,6 +29,20 @@ separates frozen-source regression, new bounded real observations, historical
 failures and remaining limitations. Mock orchestration is not live acceptance;
 these minimal conditions do not replace full capability acceptance.
 
+Current source commit `61ec4f8570d72e22aac7ca8d30d05473151150ee` has a new frozen
+full offline result of **3015 passed / 0 failed / 12 skipped**. It additionally
+defers inbox notices until the admitted assistant/tool batch settles, preserving
+next-turn visibility and the original gates and budgets. That ordering fix has
+**not** been live-tested. The new real conditions ran at
+`9cb619f0b8fa0ad9d93ac9fe6ceaafc4dd358669` and **did not pass**: project creation/switching succeeded, but the
+post-compaction restart Recall child failed; a separate Thread condition showed
+the addition in the next request, then received a Provider rejection before
+artifact/review acceptance. Campaign accounting is now **105 attempts /
+1163999 charged-or-reserved tokens**, including **one unknown-usage rejection
+with its reservation retained**. Do not run the fixed-99-opening example below
+as a fresh campaign or resume either failed condition. Read the final report
+and reconcile the retained ledgers and authorization before any new live work.
+
 The optional one-shot probe uses existing dependencies. Run from the repository
 root with the backend environment. Only `run` contacts the Provider; `preflight`
 is offline and does not create the workspace, and `audit-ledger` is read-only.

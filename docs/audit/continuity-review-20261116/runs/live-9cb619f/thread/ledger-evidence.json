@@ -1,0 +1,162 @@
+{
+  "attempts": [
+    {
+      "attempt_id": "1312918f361e4514b2071fcb5e7fef82",
+      "call_id": "model_call_a2ad99020673",
+      "input_charged": 4377,
+      "input_reserved": 17766,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": 121,
+      "output_reserved": 8192,
+      "purpose": "worker",
+      "state": "settled"
+    },
+    {
+      "attempt_id": "95b69996c41c4ad19da91c140a44214f",
+      "call_id": "model_call_128ed160efe4",
+      "input_charged": null,
+      "input_reserved": 21084,
+      "model_id": "global:deepseek-v4.1-flash-sg",
+      "output_charged": null,
+      "output_reserved": 8192,
+      "purpose": "worker",
+      "state": "rejected"
+    }
+  ],
+  "database_path": "/Users/tracy/Documents/Forge/.local/continuity-review/thread-20261116-9cb619f/data/forge.sqlite3",
+  "events": [
+    {
+      "created_at": "2026-11-16T12:32:18.238169+00:00",
+      "event_type": "router.delegated",
+      "payload": "{\"mandate_id\": \"mandate_4359f95223c2\", \"policy\": \"local-superagent-v2\"}",
+      "seq": 1
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.261968+00:00",
+      "event_type": "quest.plan_proposed",
+      "payload": "{\"plan_id\": \"plan_2a2e277a5ae0\", \"plan_revision\": 1, \"digest\": \"a7911384ca40e3a027992f8f52eb9b4853151e967e8118ccdb33871d6e045594\"}",
+      "seq": 2
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.279914+00:00",
+      "event_type": "quest.plan_approved",
+      "payload": "{\"plan_id\": \"plan_2a2e277a5ae0\", \"plan_revision\": 1, \"digest\": \"a7911384ca40e3a027992f8f52eb9b4853151e967e8118ccdb33871d6e045594\", \"actor\": \"router_mandate:mandate_4359f95223c2\"}",
+      "seq": 3
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.303085+00:00",
+      "event_type": "team.proposed",
+      "payload": "{\"team_id\": \"team_c946ad2f29bf\", \"proposal_digest\": \"a3136aeb12032c458345c9616c2a02eec0b13fa7f8dba66452be414b28e99990\"}",
+      "seq": 4
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.319451+00:00",
+      "event_type": "team.approved",
+      "payload": "{\"team_id\": \"team_c946ad2f29bf\", \"proposal_digest\": \"a3136aeb12032c458345c9616c2a02eec0b13fa7f8dba66452be414b28e99990\"}",
+      "seq": 5
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.330127+00:00",
+      "event_type": "governance.workspace_granted",
+      "payload": "{\"scope\": \"/Users/tracy/Documents/Forge/.local/continuity-review/thread-20261116-9cb619f/work/quest_b8bc3c4fded7\", \"actor\": \"router_mandate:mandate_4359f95223c2\", \"policy\": \"local-superagent-v2\"}",
+      "seq": 6
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.348310+00:00",
+      "event_type": "worker.proposed",
+      "payload": "{\"protocol_version\": 2, \"plan_id\": \"plan_2a2e277a5ae0\", \"task_node_key\": \"task\", \"run_id\": \"run_4f742a90d68d\", \"execution_mode\": \"live\"}",
+      "seq": 7
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.372815+00:00",
+      "event_type": "trigger.received",
+      "payload": "{\"thread_id\": \"thread_26c364566e65\", \"trigger_id\": \"trigger_f77fc8b1bbf7\"}",
+      "seq": 8
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.389980+00:00",
+      "event_type": "worker.accepted",
+      "payload": "{\"protocol_version\": 2, \"plan_id\": \"plan_2a2e277a5ae0\", \"task_node_key\": \"task\", \"run_id\": \"run_4f742a90d68d\", \"generation\": 1, \"message_type\": \"TASK_ACCEPTED\"}",
+      "seq": 9
+    },
+    {
+      "created_at": "2026-11-16T12:32:18.943581+00:00",
+      "event_type": "trigger.received",
+      "payload": "{\"thread_id\": \"thread_26c364566e65\", \"trigger_id\": \"trigger_c770d793fe72\"}",
+      "seq": 10
+    },
+    {
+      "created_at": "2026-11-16T12:32:20.892440+00:00",
+      "event_type": "tool.intent_prepared",
+      "payload": "{\"intent_id\": \"action_9cf97fbb98d9\", \"tool\": \"directory_list\"}",
+      "seq": 11
+    },
+    {
+      "created_at": "2026-11-16T12:32:20.914874+00:00",
+      "event_type": "tool.receipt_recorded",
+      "payload": "{\"intent_id\": \"action_9cf97fbb98d9\", \"receipt_id\": \"receipt_a43ed1a04b1c\", \"state\": \"succeeded\"}",
+      "seq": 12
+    },
+    {
+      "created_at": "2026-11-16T12:32:20.921649+00:00",
+      "event_type": "worker.progress",
+      "payload": "{\"plan_id\": \"plan_2a2e277a5ae0\", \"task_node_key\": \"task\", \"run_id\": \"run_4f742a90d68d\", \"phase\": \"tool_observed\", \"step\": 1, \"tool_calls\": 2, \"token_spent\": 4498, \"receipt_id\": \"receipt_a43ed1a04b1c\"}",
+      "seq": 13
+    },
+    {
+      "created_at": "2026-11-16T12:32:22.385389+00:00",
+      "event_type": "worker.model_request_rejected",
+      "payload": "{\"plan_id\": \"plan_2a2e277a5ae0\", \"task_node_key\": \"task\", \"call_id\": \"model_call_128ed160efe4\", \"run_id\": \"run_4f742a90d68d\", \"attempt_id\": \"95b69996c41c4ad19da91c140a44214f\", \"execution_mode\": \"live\", \"operation_status\": \"completed_rejection\", \"usage_status\": \"unknown\", \"reservation_retained\": true, \"local_reserved_tokens\": 28341, \"gateway_input_reserved\": 21084, \"gateway_output_reserved\": 8192, \"gateway_cost_reserved\": null, \"source_reference\": \"model_attempt:95b69996c41c4ad19da91c140a44214f\"}",
+      "seq": 14
+    },
+    {
+      "created_at": "2026-11-16T12:32:22.388548+00:00",
+      "event_type": "worker.blocked",
+      "payload": "{\"protocol_version\": 2, \"plan_id\": \"plan_2a2e277a5ae0\", \"task_node_key\": \"task\", \"run_id\": \"run_4f742a90d68d\", \"reason_code\": \"model_error\", \"failure_category\": \"provider\", \"provider_error_code\": \"provider_error\", \"exception_type\": \"ProviderError\"}",
+      "seq": 15
+    }
+  ],
+  "snapshot": "single_read_only_SQLite_transaction_no_reconciliation_or_refund",
+  "unresolved_or_active": {
+    "active_workers": 0,
+    "reservations": 1,
+    "tool_intents": 0,
+    "worker_tools": 0
+  },
+  "worker_model_reservations": [
+    {
+      "call_id": "model_call_a2ad99020673",
+      "execution_mode": "live",
+      "input_tokens": 4377,
+      "output_limit": 8192,
+      "output_tokens": 121,
+      "reserved_tokens": 25059,
+      "run_id": "run_4f742a90d68d",
+      "state": "settled"
+    },
+    {
+      "call_id": "model_call_128ed160efe4",
+      "execution_mode": "live",
+      "input_tokens": null,
+      "output_limit": 8192,
+      "output_tokens": null,
+      "reserved_tokens": 28341,
+      "run_id": "run_4f742a90d68d",
+      "state": "reserved"
+    }
+  ],
+  "workers": [
+    {
+      "id": "run_4f742a90d68d",
+      "output_limit": 8192,
+      "quest_id": "quest_b8bc3c4fded7",
+      "state": "blocked",
+      "step_limit": 32,
+      "steps": 2,
+      "token_limit": 500000,
+      "token_spent": 32839,
+      "tool_limit": 32,
+      "tool_spent": 2
+    }
+  ]
+}
