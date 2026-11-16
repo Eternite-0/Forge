@@ -1,0 +1,27 @@
+为什么我当前项目没办法连接entire，明明我已经配置好了，但是没触发Agent，帮我看看
+
+---
+
+<send_user_message_question_reply>
+[{"questionItemId":"[\"request_user_input_async\",\"call_804e1edb933842339689ff58aabb04ea\",0]","question":"你说的“没触发 Agent”具体出现在哪里？本地日志已确认 Codex 会话被 Entire 捕获。","answer":"Entire 网页没有会话或 checkpoint"}]
+</send_user_message_question_reply>
+
+---
+
+是不是一定要提交到main分支他才会触发呢？
+
+---
+
+我已经提交过了，为什么没有。[https://entire.com/gh/Eternite-0/Forge/agents](https://entire.com/gh/Eternite-0/Forge/agents)你帮我打开网页看看
+
+---
+
+我想要它启动agent，我要用这个网站试试
+
+---
+
+我的电脑配置了you.com，你测试一下
+
+---
+
+我需要你查全网，有什么办法可以免费用Claude opus5.5 开始吧

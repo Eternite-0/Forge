@@ -1,0 +1,53 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7HJXVB6EKZT6GH8G6W4JKHE",
+  "session_id": "01a1dc6a-1c8d-7d00-aa42-0150bcbcfa58",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-16T07:08:01.7946756Z",
+  "branch": "codex/phase1-continuous",
+  "checkpoints_count": 6,
+  "save_step_count": 1,
+  "files_touched": [
+    "backend/scripts/phase2/live_core.py",
+    "backend/src/forge_core/context_service.py",
+    "backend/src/forge_core/registry.py",
+    "backend/src/forge_core/worker_recovery.py",
+    "backend/tests/test_router_intelligence_phase2.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-6.1-sol",
+  "turn_id": "a0a47c228d99",
+  "compact_transcript_start": 0,
+  "session_token_usage": {
+    "input_tokens": 159824,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 5051392,
+    "output_tokens": 13100,
+    "api_call_count": 52
+  },
+  "redaction": {
+    "replacements": 2499,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 2,
+      "credentialed_uri": 0,
+      "custom": 0,
+      "entropy": 2999,
+      "key_context": 0,
+      "pii": 6,
+      "provider_token": 0,
+      "shell_stdin": 0
+    },
+    "custom_rules_active": 1,
+    "pii": {
+      "EMAIL": 6,
+      "IP": 0,
+      "PHONE": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 6
+  }
+}
