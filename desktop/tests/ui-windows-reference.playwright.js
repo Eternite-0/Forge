@@ -209,7 +209,10 @@ async (page, { outputDir }) => {
   const settingsLayout = { navigation: await rect('.settings-nav'), heading: await rect('.settings-title'), group: await rect('.settings-group') };
   check(Math.abs(settingsLayout.navigation.x - 52) <= 3 && Math.abs(settingsLayout.navigation.width - 288) <= 3 && Math.abs(settingsLayout.group.width - 728) <= 3, `settings matches figure 4 rail, navigation and content widths: ${JSON.stringify(settingsLayout)}`);
   check(Math.abs(settingsLayout.heading.x - 823) <= 7 && Math.abs(settingsLayout.heading.y - 78) <= 10, 'settings heading aligns to the centered reference reading column');
-  check(settingsLayout.group.fills === 'rgb(28, 28, 28)', 'setting cards use the sampled figure 4 gray');
+  check(settingsLayout.group.fills === 'rgb(28, 28, 28)' && Math.abs(settingsLayout.group.y - 187) <= 1, 'setting cards use the sampled dark gray and match the first reference card baseline');
+  check(settingsLayout.navigation.fills === 'rgb(21, 23, 24)' && (await rect('.settings-search')).fills === 'rgb(38, 41, 43)', 'settings navigation and search use their measured reference colors');
+  const settingsFileMenu = await rect('.application-menubar [data-app-menu="文件"]');
+  check(Math.abs(settingsFileMenu.x - 75) <= 2 && !await page.locator('.titlebar-navigation > .sidebar-toggle[aria-expanded]').isVisible(), 'desktop settings aligns the application menu without a redundant project-sidebar toggle');
   check(await page.locator('.general-settings + .settings-block').evaluate(block => {
     const previous = block.previousElementSibling;
     return previous && block.getBoundingClientRect().top - previous.getBoundingClientRect().bottom >= 45;

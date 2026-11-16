@@ -33,9 +33,10 @@ export function SettingInfo({ setting }: { setting: SettingId }) {
 }
 
 export function CoreOverview({ settings, connected }: { settings: Row; connected: boolean }) {
+  const workspacePath = text(settings.workspace_root ?? settings.workspace_id);
   return <div className="general-settings">
     <section><h2 className="settings-block-heading">工作空间与连接</h2><div className="settings-group">
-      <SettingsRow label="工作空间" description="当前长期对话与任务所在的工作空间。">{text(settings.workspace_root ?? settings.workspace_id)}</SettingsRow>
+      <SettingsRow label="工作空间" description="当前长期对话与任务所在的工作空间。"><span className="settings-workspace-path" title={workspacePath}>{workspacePath}</span></SettingsRow>
       <SettingsRow label="运行状态" description="连接状态不代表供应商、模型、权限和预算均已就绪。">{connected ? "Core 已连接" : "Core 未连接"}</SettingsRow>
     </div></section>
     <section><h2 className="settings-block-heading">模型与运行</h2><div className="settings-group">

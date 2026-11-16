@@ -283,7 +283,9 @@ async (page, { outputDir }) => {
   await longRow.click();
   const longTab = preview.getByRole('tab', { name: longName, exact: true });
   await longTab.waitFor();
-  check(await longTab.getAttribute('title') === longName && await preview.getByRole('heading', { name: 'Long filename content', exact: true }).isVisible(), 'an ellipsized long tab retains its full accessible name, tooltip and actual rendered content');
+  const longHeading = preview.getByRole('heading', { name: 'Long filename content', exact: true });
+  await longHeading.waitFor();
+  check(await longTab.getAttribute('title') === longName && await longHeading.isVisible(), 'an ellipsized long tab retains its full accessible name, tooltip and actual rendered content');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'a long filename cannot widen the document viewport');
   await preview.getByRole('button', { name: 'oversized-text.txt', exact: true }).click();
   await preview.getByRole('alert').waitFor();
@@ -305,15 +307,17 @@ async (page, { outputDir }) => {
   await page.waitForTimeout(200);
   check(await preview.isVisible() && !(await preview.evaluate((element) => element.inert)), 'a rapid close/open reverses the transition and restores keyboard interaction');
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  const reduced = await page.evaluate(async () => {
-    document.querySelector('[aria-label="关闭文件预览"]').click();
-    await new Promise(requestAnimationFrame);
-    return document.querySelector('.file-preview-workspace').hidden;
+  const reduced = await preview.evaluate(element => {
+    const milliseconds = value => value.split(',').map(part => parseFloat(part) * (part.trim().endsWith('ms') ? 1 : 1000));
+    return matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      [element, element.closest('.chat-workspace')].every(surface => milliseconds(getComputedStyle(surface).transitionDuration).every(duration => duration <= 1));
   });
-  check(reduced, 'reduced motion closes preview in the next rendered frame');
+  check(reduced, 'the actual preview surfaces have no visible transition under reduced motion');
+  await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
+  await preview.waitFor({ state: 'hidden' });
   await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
-  await page.evaluate(() => new Promise(requestAnimationFrame));
-  check(await preview.isVisible(), 'reduced motion opens preview immediately');
+  await preview.waitFor({ state: 'visible' });
+  check(await preview.evaluate(element => !element.inert), 'reduced motion can reopen the preview with keyboard interaction');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'file workspace never overflows the window');
   check(await page.evaluate(() => localStorage.length === 0 && sessionStorage.length === 0), 'preview persists no browser storage');
   return { checks: checks.length, screenshots, data: 'real File API imports; two-page PDF', previewGeometry, results: checks };
