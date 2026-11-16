@@ -51,6 +51,9 @@
 .workspace-tabs { display: flex; gap: 20px; margin-bottom: 20px; overflow-x: auto; border-bottom: 1px solid var(--color-border-subtle); }
 .workspace-tabs button { flex: none; min-height: 40px; padding: 8px 0; border-bottom: 2px solid transparent; color: var(--muted); font-size: 14px; line-height: 20px; white-space: nowrap; }
 .workspace-tabs button.active { border-color: var(--color-text); color: var(--color-text); font-weight: var(--font-weight-strong); }
+.task-extra-views { margin-bottom: 14px; color: var(--muted); font-size: 13px; }
+.task-extra-views > summary { padding-block: 6px; cursor: pointer; }
+.task-extra-views > .workspace-tabs { margin-bottom: 0; }
 .quest-workspace { display: grid; grid-template-columns: 272px minmax(0,1fr); gap: 24px; }
 .quest-list { min-width: 0; padding-right: 16px; border-right: 1px solid var(--color-border-subtle); }
 .quest-detail { min-width: 0; max-width: 760px; }
@@ -191,6 +194,9 @@
 .quest-step-details summary, .quest-technical summary, .quest-grants > summary { cursor: pointer; padding-block: 8px; }
 .quest-step-details small { display: block; margin-top: 6px; }
 .quest-grants { margin-top: 24px; border-top: 1px solid var(--color-border-subtle); font-size: 13px; }
+.quest-find { margin-bottom: 12px; font-size: 13px; color: var(--color-text-secondary); }
+.quest-find > summary { width: fit-content; cursor: pointer; padding: 8px 0; }
+.quest-find[open] > summary { margin-bottom: 8px; }
 .task-inspector .quest-body .quest-workspace .quest-list { padding: 0; border: 0; }
 .task-inspector .quest-body .quest-workspace .quest-list[hidden] { display: none; }
 .task-inspector .quest-body .quest-workspace .quest-list > .list { max-height: none; overflow: visible; }

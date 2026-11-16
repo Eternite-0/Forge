@@ -1,10 +1,9 @@
 # FORGE v4 — General-purpose Super-agent
 
-The desktop opens to a chat-first workspace: a centered composer on an empty
-conversation and the same composer at the bottom once the conversation starts.
-Routine background work is available from Tasks; the conversation still surfaces
-pending approvals, blockers and requests for input. Execution details and file
-views are available on demand. The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)
+The desktop opens to one persistent conversation with a single message field
+at the bottom. Use Tasks to see background work, or the overflow menu for
+settings, files and execution details. The conversation still surfaces pending
+approvals, blockers and requests for input. The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)
 describes the historical Codex-style layout; see the [API-to-UI map](desktop/API-UI-COVERAGE.md)
 and [desktop instructions](desktop/README.md) for existing capabilities.
 

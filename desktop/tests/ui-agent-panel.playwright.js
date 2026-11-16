@@ -50,6 +50,7 @@ async (page, { outputDir }) => {
   await connect();
   const panel = page.locator('.agent-panel'), summary = panel.locator('.agent-panel-summary');
   check(!(await panel.isVisible()), 'the Agent companion starts closed even on wide screens');
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await page.getByRole('button', { name: '切换 Agent 面板', exact: true }).click();
   await panel.waitFor();
   const geometry = await panel.evaluate(element => {
@@ -111,6 +112,7 @@ async (page, { outputDir }) => {
   const process = page.locator('.process-transcript');
   if (await process.evaluate(element => element.open)) await process.locator(':scope > summary').click();
   const riskToggle = page.getByRole('button', { name: '切换 Agent 面板', exact: true });
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await riskToggle.click();
   runs = runs.map(run => run.run_id === 'panel-run-c' ? { ...run, state: 'failed' } : run);
   await page.waitForFunction(() => document.querySelector('.process-transcript > summary')?.textContent.includes('当前运行失败'), null, { timeout: 10000 });
@@ -121,6 +123,7 @@ async (page, { outputDir }) => {
   runs = runs.map(run => ({ ...run, state: 'succeeded' }));
   await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 完成') && !document.querySelector('.process-transcript > summary .event-unknown'), null, { timeout: 10000 });
   check(await process.locator(':scope > summary .event-failed, :scope > summary .event-unknown').count() === 0, 'a recovered run clears current risk labels while the recorded receipts remain unchanged');
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await riskToggle.click();
   await panel.getByRole('button', { name: 'README.md', exact: true }).click();
   await page.getByLabel('工作空间文件预览', { exact: true }).waitFor();
@@ -135,11 +138,13 @@ async (page, { outputDir }) => {
   const draft = page.getByLabel('消息内容');
   await draft.fill('切换面板后保留这段草稿');
   const toggle = page.getByRole('button', { name: '切换 Agent 面板', exact: true });
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await toggle.click();
   check(!(await panel.isVisible()) && await draft.inputValue() === '切换面板后保留这段草稿', 'hiding the right card preserves the composer draft');
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.setViewportSize({ width: 1440, height: 1000 });
   check(!(await panel.isVisible()), 'a manually hidden card stays hidden after window resizing');
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await toggle.click();
   await panel.waitFor();
   activityFailure = true;
@@ -154,6 +159,7 @@ async (page, { outputDir }) => {
   check(await page.locator('.process-transcript').evaluateAll(elements => elements.every(element => !element.open)) && await page.locator('[data-scroll-key="message:agent-panel-answer"]').isVisible(), 'a completed process starts collapsed after reload while its trailing reply stays visible');
   check(!(await panel.isVisible()), '1024px starts with the companion hidden');
   await draft.fill('窄屏仍可输入');
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await toggle.click();
   await panel.waitFor();
   check(await hitComposer(), 'the 1024px companion leaves the composer send button uncovered');
@@ -165,6 +171,7 @@ async (page, { outputDir }) => {
   check(await hitComposer() && await draft.inputValue() === '窄屏仍可输入', 'the 390px companion preserves the usable composer and draft');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'the narrow companion has no horizontal page overflow');
   await page.screenshot({ path: `${outputDir}/forge-agent-panel-390-dark.png`, fullPage: true });
+  await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await toggle.click();
   check(await draft.isVisible() && !(await panel.isVisible()), 'the narrow Agent toggle closes the overlay');
   check(unexpected.length === 0, `all requests use existing read-only endpoints: ${unexpected.join(', ')}`);

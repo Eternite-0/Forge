@@ -5,7 +5,6 @@ import { needsQuestAttention, questDisplayTitle, riskLabel, statusLabel, toolLab
 import { mergeTimeline, type ChatMessage, type Outgoing } from "./timeline";
 import type { TimelineEvent } from "./timeline";
 import MessageList from "./components/conversation/MessageList";
-import RecallCard from "./components/RecallCard";
 import { Chevron } from "./components/conversation/Icons";
 import { groupEvents, text, type EventViewMemory, type HistoryProps, type Quest, type Row } from "./components/conversation/eventModel";
 
@@ -29,12 +28,12 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
   const items = groupEvents(mergeTimeline(messages, events, outgoing));
   // Routine runs belong in Tasks, not in a global status list at the end of chat.
   const attention = quests.filter((quest) => needsQuestAttention(quest.status));
-  const taskRow = (quest: Quest) => <button type="button" className="timeline-update" key={quest.id} onClick={() => onQuest(quest.id)}><span><strong>{questDisplayTitle(quest.title, quest.id)}</strong><small>{statusLabel(quest.status)}</small></span><span aria-hidden="true">›</span></button>;
+  const taskRow = (quest: Quest) => <button type="button" className="timeline-update" key={quest.id} onClick={() => onQuest(quest.id)}><span><strong>{questDisplayTitle(quest.title, quest.id, quest.goal)}</strong><small>{statusLabel(quest.status)}</small></span><span aria-hidden="true">›</span></button>;
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
     {timelineError && <p className="notice error" role="alert">过程记录暂不可用：{timelineError}</p>}
-    {!items.length && !workerRuns.length && <div className="empty-conversation"><h2>有什么可以帮你？</h2></div>}
+    {!items.length && !workerRuns.length && <div className="empty-conversation"><h2>今天想做什么？</h2><p>直接发条消息，FORGE 可以回答问题，也可以在后台继续做事。</p></div>}
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
@@ -47,7 +46,7 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
           typeof item.parameter_digest === "string" && /^[a-f0-9]{64}$/.test(item.parameter_digest) && typeof item.plan_revision === "number";
         return <div className="timeline-update approval-card" key={text(item.id)}>
           <button className="approval-summary" aria-label={`需要审批 · ${text(item.action_type)} 风险 ${text(item.risk)} · ${text(item.resource_scope)}`} onClick={() => onApproval(text(item.quest_id, ""))}>
-            <span><strong>{quest ? questDisplayTitle(quest.title, quest.id) : "关联任务暂未加载"}</strong><small>{statusLabel(item.status, "待审批")} · {toolLabel(item.action_type)} · {riskLabel(item.risk)}</small></span><span aria-hidden="true">›</span>
+            <span><strong>{quest ? questDisplayTitle(quest.title, quest.id, quest.goal) : "关联任务暂未加载"}</strong><small>{statusLabel(item.status, "待审批")} · {toolLabel(item.action_type)} · {riskLabel(item.risk)}</small></span><span aria-hidden="true">›</span>
           </button>
           <div className="approval-scope"><span>{text(item.resource_scope)}</span><small>计划版本 {text(item.plan_revision)}</small></div>
           <AnimatedDetails className="approval-details" onInspect={onInspect} summary={<><span>操作详情</span><Chevron /></>}><dl><dt>参数摘要</dt><dd className="mono break">{text(item.parameter_digest)}</dd><dt>原因</dt><dd>{text(item.reason)}</dd><dt>过期时间</dt><dd>{text(item.expires_at)}</dd></dl></AnimatedDetails>
@@ -59,6 +58,5 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
       {attention.length > 3 && <p className="notice">另有 {attention.length - 3} 项已加载任务需要处理 · <button className="text-button" onClick={() => onQuest("")}>查看全部任务</button></p>}
     </section>}
     {connected && approvalError && <p className="notice error" role="alert">审批状态暂不可用：{approvalError}</p>}
-    {connected && (items.length > 0 || workerRuns.length > 0) && <RecallCard connection={connection || null} />}
   </div>;
 }

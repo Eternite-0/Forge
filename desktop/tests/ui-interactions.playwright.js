@@ -67,7 +67,9 @@ async (page, { outputDir }) => {
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.locator('.message.from-agent').first().waitFor();
-  const rail = page.getByLabel('主导航'), draft = page.getByLabel('消息内容');
+  const draft = page.getByLabel('消息内容');
+  const taskTrigger = page.getByRole('button', { name: '查看任务', exact: true });
+  const closeTasks = () => page.getByRole('button', { name: '关闭任务详情', exact: true }).click();
   const timeline = page.getByLabel('对话历史');
   const originalTimeline = await timeline.elementHandle(), originalDraft = await draft.elementHandle();
   const baseHeight = await draft.evaluate((element) => element.clientHeight);
@@ -102,24 +104,14 @@ async (page, { outputDir }) => {
   await approvalSummary.click();
   await page.waitForFunction(() => !document.querySelector('.approval-details')?.open);
   check(await originalApprovalPanel.evaluate((element) => element.isConnected) && await approvalSummary.getAttribute('aria-expanded') === 'false', 'collapsing approval details preserves the mounted detail DOM');
-  const workspaceSelector = rail.getByRole('button', { name: '查看当前工作空间', exact: true });
-  const conversationEntry = rail.getByRole('button', { name: '对话', exact: true });
-  const originalConversationEntry = await conversationEntry.elementHandle();
-  const originalWorkspaceSelector = await workspaceSelector.elementHandle();
-  await workspaceSelector.click();
-  const workspaceDialog = page.getByRole('dialog', { name: '当前工作空间', exact: true });
-  await workspaceDialog.waitFor();
-  check(await workspaceDialog.getByRole('button', { name: '使用当前工作空间', exact: true }).count() === 1, 'workspace picker exposes the current workspace');
+  const more = page.getByRole('button', { name: '更多对话操作', exact: true });
+  await more.click();
+  const moreDialog = page.getByRole('dialog', { name: '对话操作', exact: true });
+  await moreDialog.waitFor();
   await page.keyboard.press('Escape');
-  check(!(await workspaceDialog.isVisible()) && await draft.inputValue() === preservedDraft, 'closing workspace picker preserves the conversation draft');
-  await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
-  check(!(await rail.isVisible()) && await rail.locator('.utility-nav > button').count() === 3 && await rail.locator('.conversation-nav > button').count() === 1, 'global collapse hides the single sidebar while preserving its navigation DOM');
-  check(await rail.getByRole('button', { name: '对话', exact: true, includeHidden: true }).count() === 1 && !(await rail.getByRole('button', { name: '对话', exact: true, includeHidden: true }).isVisible()), 'collapsed navigation retains one mounted conversation entry');
-  check(await originalConversationEntry.evaluate((element) => element.isConnected), 'collapsing navigation moves the existing conversation entry without remounting it');
-  check(await originalTimeline.evaluate((element) => element.isConnected) && await draft.inputValue() === preservedDraft, 'sidebar collapse preserves the conversation and draft');
-  await page.getByRole('button', { name: '展开工作空间侧栏', exact: true }).click();
-  check(await rail.locator('.workspace-selector-wrap').isVisible() && await originalWorkspaceSelector.evaluate((element) => element.isConnected), 'global expansion restores the same workspace selector');
-  await rail.getByRole('button', { name: '后台任务', exact: true }).click();
+  check(!(await moreDialog.isVisible()) && await draft.inputValue() === preservedDraft, 'closing the overflow preserves the conversation draft');
+  check(await more.evaluate(element => document.activeElement === element), 'the overflow restores focus');
+  await taskTrigger.click();
   const list = page.locator('.quest-list'), filters = list.locator('.quest-filters'), search = page.getByLabel('搜索任务');
   const row = (id) => list.locator(`button.list-row[data-task-id="${id}"]`);
   const heading = page.locator('.quest-detail-heading');
@@ -127,7 +119,7 @@ async (page, { outputDir }) => {
   await row('quest-alpha').waitFor();
   check(await page.locator('.quest-detail').count() === 0, 'global task manager starts with the list, not an automatically selected detail');
   check(!(await row('quest-alpha').getAttribute('aria-label')).includes('quest-alpha'), 'task accessible names contain human titles rather than internal IDs');
-  check(await rail.locator('.workspace-selector-wrap').isVisible(), 'task drawer keeps the workspace selector available');
+  check(await page.locator('.rail').count() === 0, 'task drawer does not introduce a permanent sidebar');
   await row('quest-alpha').click();
   await page.locator('.quest-plan-nodes .plan-node').first().waitFor();
   check(await heading.innerText() === 'Alpha 调研交付' && !(await list.isVisible()), 'title click opens the correct detail and hides the list');
@@ -137,14 +129,12 @@ async (page, { outputDir }) => {
   check((await details.innerText()).includes('quest-alpha'), 'internal task ID remains available only in disclosed technical detail');
   await back();
   check(await row('quest-alpha').evaluate((element) => document.activeElement === element), 'returning to the list restores focus to the opened task');
-  const project = list.locator('.quest-project-group'), projectToggle = project.locator(':scope > .quest-project-toggle');
-  check(await project.count() === 1 && (await projectToggle.innerText()).includes('FORGE-interactions'), 'tasks without project metadata share their actual current workspace group');
-  check(await projectToggle.getAttribute('title') === settings.workspace_root, 'project group retains the actual full workspace path');
+  const project = list.locator('.quest-project-group');
+  check(await project.count() === 1 && await project.locator(':scope > .quest-project-toggle').count() === 0, 'a single workspace shows tasks without a redundant project heading');
   check(await project.locator('.quest-closed-toggle').getAttribute('aria-expanded') === 'false', 'finished tasks start in a folded history group');
-  await projectToggle.click();
-  check(await projectToggle.getAttribute('aria-expanded') === 'false' && await project.locator(':scope > .quest-group-content').getAttribute('inert') !== null, 'collapsing a project removes its tasks from keyboard navigation');
-  await projectToggle.press('ArrowRight');
-  check(await projectToggle.getAttribute('aria-expanded') === 'true' && await project.locator(':scope > .quest-group-content').getAttribute('inert') === null, 'ArrowRight expands the project and restores its task navigation');
+  check(!(await search.isVisible()) && !(await filters.isVisible()), 'search and filters do not crowd the default task list');
+  await list.locator('.quest-find > summary').click();
+  check(await search.isVisible() && await filters.isVisible(), 'larger task lists retain discoverable search and status filters');
   for (const [label, expected] of [
     ['未结束', quests.filter((quest) => !closedStates.has(quest.status)).length],
     ['需处理', quests.filter((quest) => attentionStates.has(quest.status)).length],
@@ -228,7 +218,7 @@ async (page, { outputDir }) => {
   await page.locator('.quest-plan-nodes .plan-node').first().waitFor();
   check(await page.getByRole('alert').filter({ hasText: 'synthetic plan refresh unavailable' }).count() === 0, 'a successful retry recovers the plan view');
   await screenshot('forge-interactions-task-filters');
-  await rail.getByRole('button', { name: '对话', exact: true }).click();
+  await closeTasks();
   check(await originalTimeline.evaluate((element) => element.isConnected) && await originalDraft.evaluate((element) => element.isConnected) && await draft.inputValue() === preservedDraft, 'task interactions retain one mounted conversation and its draft');
   await page.keyboard.press('Control+,');
   const settingsNav = page.locator('.settings-nav'), settingsSearch = page.getByLabel('搜索设置');
@@ -272,7 +262,8 @@ async (page, { outputDir }) => {
     { id: 'quest-project-b-running', title: '项目 B 执行记录', status: 'running', version: 2, plan_revision: 3, goal: 'project-b-running-proof', project_id: 'fixture-project-b', project_name: '同名项目', project_root: 'D:/Synthetic/Project-B', metadata: {} },
   ];
   quests.push(...newProjectQuests);
-  await rail.getByRole('button', { name: '后台任务', exact: true }).click();
+  await settingsNav.getByRole('button', { name: '返回对话', exact: true }).click();
+  await taskTrigger.click();
   await refresh.click();
   await page.waitForFunction(() => document.querySelectorAll('.quest-project-group').length === 3);
   const projectA = list.locator('[data-project-key="project:fixture-project-a"]'), projectB = list.locator('[data-project-key="project:fixture-project-b"]');
@@ -284,6 +275,10 @@ async (page, { outputDir }) => {
   await back();
   const projectBToggle = projectB.locator('.quest-project-toggle');
   await projectBToggle.click();
+  check(await projectBToggle.getAttribute('aria-expanded') === 'false' && await projectB.locator(':scope > .quest-group-content').getAttribute('inert') !== null, 'collapsing a project removes its rows from keyboard navigation');
+  await projectBToggle.press('ArrowRight');
+  check(await projectBToggle.getAttribute('aria-expanded') === 'true', 'ArrowRight expands a real multi-project group');
+  await projectBToggle.press('ArrowLeft');
   const projectBNode = await projectB.elementHandle();
   await list.locator('.quest-project-group').filter({ has: page.locator('.quest-project-toggle').filter({ hasText: 'FORGE-interactions' }) }).locator('.quest-closed-toggle').click();
   await page.waitForFunction(() => [...document.querySelectorAll('.quest-project-group')].some((group) => group.querySelector('.quest-project-toggle')?.textContent.includes('FORGE-interactions') && group.querySelector('.quest-closed-group > .quest-group-content')?.style.height === 'auto') && document.querySelector('[data-project-key="project:fixture-project-b"] > .quest-group-content')?.style.height === '0px');
@@ -295,9 +290,17 @@ async (page, { outputDir }) => {
   check(await projectBNode.evaluate((element) => element.isConnected) && await projectBToggle.getAttribute('aria-expanded') === 'false', 'refreshing retains the mounted project group and its collapsed state');
   check(await projectIndex.evaluate((element) => element.scrollTop) === projectScroll && projectScroll > 0, 'refreshing project groups preserves the task index scroll position');
   check(await row('quest-project-a-input').getAttribute('aria-current') === 'page', 'refreshing grouped tasks retains the actual selected project record without opening its detail');
+  await list.locator('.quest-find > summary').click();
   await search.fill('项目 B 执行记录');
   check(await list.locator('.quest-project-group').count() === 1 && await row('quest-project-b-running').count() === 1 && await projectBToggle.getAttribute('aria-expanded') === 'true', 'searching a human task title finds and expands only its matching group');
   await screenshot('forge-interactions-project-groups');
+  await search.press('Escape');
+  const smallList = [quests[0], quests[1], quests.find((quest) => quest.id === 'quest-finished')];
+  quests.splice(0, quests.length, ...smallList);
+  await refresh.click();
+  await page.waitForFunction(() => document.querySelectorAll('.quest-list .list-row').length === 3);
+  check(await list.locator('.quest-find').count() === 0 && await list.locator('.quest-project-toggle').count() === 0, 'a short list needs neither search controls nor a redundant project group');
+  check(await row('quest-finished').isVisible() && await list.locator('.quest-closed-toggle').count() === 0, 'short lists show finished tasks directly rather than hiding a small amount of history');
   check(mutations.length === 0 && missing.length === 0, 'read-only interactions introduce no mutations or additional API endpoints');
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));
   check(storage.local === 0 && storage.session === 0, 'interaction state stays out of browser storage');
