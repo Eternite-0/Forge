@@ -1,5 +1,5 @@
 // Real browser File API + actual multi-page PDF bytes; Core events are labelled fixtures.
-// Pane bounds/keyboard/reset: output/reference-native-layout/preview-source.txt (DUYS/FHYD).
+// Windows reference pane ratio and browser keyboard/renderer regression coverage.
 async (page, { outputDir }) => {
   const checks = [], previewGeometry = [];
   let screenshots = 0;
@@ -13,10 +13,10 @@ async (page, { outputDir }) => {
       return { viewport: innerWidth, previewWidth: panel.getBoundingClientRect().width, documentWidth: panel.querySelector('.preview-document').getBoundingClientRect().width, treeWidth: panel.querySelector('.preview-file-tree').getBoundingClientRect().width, tab: size('.preview-tab > [role="tab"]'), breadcrumb: size('.preview-breadcrumb'), toolbar: size('.preview-toolbar'), tree: size('.file-tree-row'), markdown: size('.file-markdown') };
     });
     previewGeometry.push({ state, ...metrics });
-    check(metrics.tab.font === 14 && metrics.breadcrumb.font === 14, `${state}: preview tabs and breadcrumb use readable 14px UI text`);
-    check(Math.abs(metrics.toolbar.height - 48) <= 1, `${state}: preview toolbar retains its 48px reading rhythm`);
-    check(metrics.tree.font === 13 && Math.abs(metrics.tree.height - 30) <= 1, `${state}: file tree uses 13px text and 30px rows`);
-    if (markdownVisible) check(metrics.markdown.font === 16 && metrics.markdown.line === 24, `${state}: Markdown uses 16px text with 24px line height`);
+    check(metrics.tab.font === 13 && metrics.breadcrumb.font === 13, `${state}: preview tabs and breadcrumb use readable 13px Windows UI text`);
+    check(metrics.toolbar.height >= 48, `${state}: preview toolbar retains at least 48px height while narrow controls may wrap`);
+    check(metrics.tree.font === 13 && Math.abs(metrics.tree.height - 28) <= 1, `${state}: file tree uses 13px text and 28px Windows rows`);
+    if (markdownVisible) check(metrics.markdown.font === 14 && metrics.markdown.line === 22, `${state}: Markdown uses 14px text with 22px Windows line height`);
   };
   const shot = async (name) => { await page.mouse.move(0, 0); await page.waitForTimeout(220); await page.screenshot({ path: `${outputDir}/preview-${name}.png`, fullPage: true }); screenshots += 1; };
   const makePdf = () => {
@@ -33,9 +33,9 @@ async (page, { outputDir }) => {
   let unsafeRequests = 0;
   page.on('request', (request) => { if (request.url().includes('forbidden.invalid')) unsafeRequests += 1; });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
   const opening = await page.evaluate(async () => {
-    document.querySelector('[aria-label="查看工作空间文件"]').click();
+    document.querySelector('[aria-label="从输入栏打开工作空间文件"]').click();
     const samples = [], started = performance.now();
     do {
       await new Promise(requestAnimationFrame);
@@ -64,13 +64,13 @@ async (page, { outputDir }) => {
   check(await preview.locator('.file-markdown h1').innerText() === 'FORGE 文件预览', 'Markdown renders the imported content');
   for (const width of [1440, 1280]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
+    await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width >= 288);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await assertReadablePreview(preview, `split preview ${width}`, true);
     await shot(`markdown-split-${width}`);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
+  await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width >= 288);
   check(await page.evaluate(() => !window.previewUnsafe), 'Markdown HTML does not execute');
   check(await preview.locator('.file-markdown img').count() === 0 && unsafeRequests === 0, 'Markdown never loads external images');
   check(await preview.locator('.file-markdown a[href^="javascript:"]').count() === 0, 'dangerous links are never rendered as anchors');
@@ -121,19 +121,18 @@ async (page, { outputDir }) => {
   const initialPreviewWidth = Number(await divider.getAttribute('aria-valuenow'));
   await divider.focus(); await divider.press('ArrowLeft');
   const keyboardPreviewWidth = Number(await divider.getAttribute('aria-valuenow'));
-  check(keyboardPreviewWidth === Math.min(initialPreviewWidth + 10, Number(await divider.getAttribute('aria-valuemax'))), 'native splitter resizes in 10px keyboard steps within pixel bounds');
+  check(keyboardPreviewWidth === Math.min(initialPreviewWidth + 10, Number(await divider.getAttribute('aria-valuemax'))), 'splitter resizes in 10px keyboard steps within pixel bounds');
   const bounds = await divider.boundingBox();
   await page.mouse.move(bounds.x + 2, bounds.y + 20); await page.mouse.down(); await page.mouse.move(bounds.x - 60, bounds.y + 20); await page.mouse.up();
   check(Number(await divider.getAttribute('aria-valuenow')) > keyboardPreviewWidth, 'splitter supports pointer resizing');
   await divider.focus(); await divider.press('Home');
-  check(Number(await divider.getAttribute('aria-valuenow')) === 320, 'native splitter Home selects its 320px logical minimum');
+  check(Number(await divider.getAttribute('aria-valuenow')) === 320, 'splitter Home selects its 320px logical minimum');
   await divider.press('End');
   const workspaceWidth = await page.locator('.chat-workspace').evaluate((element) => element.clientWidth);
-  check(Number(await divider.getAttribute('aria-valuenow')) === Math.round(Math.max(320, workspaceWidth - 352)), 'native splitter End retains 352px of the primary workspace');
+  check(Number(await divider.getAttribute('aria-valuenow')) === Math.round(Math.max(320, workspaceWidth - 352)), 'splitter End retains 352px of the primary workspace');
   await divider.dblclick();
-  const shellHeight = await page.locator('.chat-workspace').evaluate((element) => element.clientHeight);
-  const defaultWidth = Math.max(320, Math.min(1.6 * shellHeight, workspaceWidth - 500), Math.min(640, workspaceWidth - 352));
-  check(Number(await divider.getAttribute('aria-valuenow')) === Math.round(Math.min(Math.max(320, defaultWidth), Math.max(320, workspaceWidth - 352))), 'native splitter double click restores the current DUYS default formula');
+  const defaultWidth = Math.max(320, Math.min(Math.max(320, workspaceWidth - 352), Math.round(workspaceWidth * .47)));
+  check(Number(await divider.getAttribute('aria-valuenow')) === Math.round(Math.min(Math.max(320, defaultWidth), Math.max(320, workspaceWidth - 352))), 'splitter double click restores the bounded 47-percent Windows reference width');
   const expandedToggle = preview.getByRole('button', { name: '展开文件预览', exact: true });
   const beforeExpandScroll = await sourceScroll.evaluate((element) => element.scrollTop), retainedSource = await sourceScroll.elementHandle();
   const beforeExpandSplit = Number(await divider.getAttribute('aria-valuenow'));
@@ -145,7 +144,7 @@ async (page, { outputDir }) => {
   await preview.getByRole('tab', { name: 'README.md', exact: true }).click();
   for (const width of [1440, 1280]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width === 0);
+    await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width <= 64);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await assertReadablePreview(preview, `expanded preview ${width}`, true);
     await shot(`markdown-expanded-${width}`);
@@ -156,27 +155,33 @@ async (page, { outputDir }) => {
   await shot('code-expanded');
   await page.setViewportSize({ width: 720, height: 700 });
   await preview.waitFor({ state: 'hidden' });
-  check(await retainedSource.evaluate((element) => element.isConnected), 'native resize auto-hide retains the expanded source DOM');
+  check(await retainedSource.evaluate((element) => element.isConnected), 'responsive resize auto-hide retains the expanded source DOM');
   await page.setViewportSize({ width: 1440, height: 900 });
   await preview.waitFor({ state: 'visible' });
   await page.waitForFunction(() => document.querySelector('.file-preview-workspace').getBoundingClientRect().width >= document.querySelector('.chat-workspace').getBoundingClientRect().width - 2);
-  check(await expandedToggle.getAttribute('aria-pressed') === 'true' && await retainedSource.evaluate((element) => Math.abs(element.scrollTop - 8000) <= 1), 'native widening restores the saved full-width preview and its reading position');
+  check(await expandedToggle.getAttribute('aria-pressed') === 'true' && await retainedSource.evaluate((element) => Math.abs(element.scrollTop - 8000) <= 1), 'widening restores the saved full-width preview and its reading position');
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await preview.waitFor({ state: 'hidden' });
   check(await retainedConversation.evaluate((element) => element.isConnected && !element.inert) && await page.getByLabel('消息内容').inputValue() === '保留的草稿', 'closing a full-width preview restores the same conversation and draft');
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await page.waitForFunction(() => { const preview = document.querySelector('.file-preview-workspace'), workspace = document.querySelector('.chat-workspace'); return preview.getBoundingClientRect().width >= workspace.getBoundingClientRect().width - 2; });
   check(await expandedToggle.getAttribute('aria-pressed') === 'true' && await retainedSource.evaluate((element) => element.isConnected && Math.abs(element.scrollTop - 8000) <= 1), 'reopening a full-width preview restores its expanded state and exact file reading position');
   await expandedToggle.click();
   await page.waitForFunction(() => !document.querySelector('.chat-workspace')?.classList.contains('preview-expanded') && document.querySelector('.conversation-shell')?.inert === false);
+  await page.waitForFunction(width => Number(document.querySelector('.preview-divider')?.getAttribute('aria-valuenow')) === width, beforeExpandSplit);
   check(await expandedToggle.getAttribute('aria-pressed') === 'false' && await divider.isVisible() && Number(await divider.getAttribute('aria-valuenow')) === beforeExpandSplit, 'restoring the preview returns to the exact prior split width');
   check(await retainedSource.evaluate((element) => element.isConnected) && Math.abs(await sourceScroll.evaluate((element) => element.scrollTop) - beforeExpandScroll) <= 1, 'restoring the split preserves the same source document and reading position');
   await preview.getByRole('tab', { name: 'README.md', exact: true }).click();
   await shot('markdown-light');
   await preview.locator('.file-tree-row').filter({ hasText: 'report.pdf' }).click();
   const object = preview.locator('object[type="application/pdf"]');
-  await object.waitFor(); await page.waitForTimeout(1200);
-  check((await object.getAttribute('data')).startsWith('blob:'), 'PDF receives actual imported bytes through an owned Blob URL');
+  if (await page.evaluate(() => navigator.pdfViewerEnabled === false)) {
+    check(await preview.getByText('当前查看器不支持内嵌 PDF。可下载后阅读。', {exact:true}).isVisible(), 'headless browser honestly exposes PDF download fallback');
+    check((await preview.getByRole('link',{name:'下载 PDF',exact:true}).getAttribute('href')).startsWith('blob:'), 'PDF fallback has an owned Blob URL');
+  } else {
+    await object.waitFor();
+    check((await object.getAttribute('data')).startsWith('blob:'), 'PDF receives actual imported bytes through an owned Blob URL');
+  }
   const downloaded = page.waitForEvent('download'); await preview.getByRole('link', { name: '下载 PDF', exact: true }).click();
   const download = await downloaded;
   check(download.suggestedFilename() === 'report.pdf', 'PDF provides a real downloadable document');
@@ -198,7 +203,7 @@ async (page, { outputDir }) => {
   });
   check(closing.samples.some((sample) => !sample.hidden && sample.width > 1 && sample.width < closing.initial - 1), 'preview exit keeps the mounted document through intermediate widths');
   check(closing.samples.every((sample) => sample.inert) && closing.samples.at(-1).hidden, 'closing preview immediately removes its controls from keyboard interaction and eventually hides it');
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await page.waitForTimeout(200);
   check(Math.abs(await preview.locator('.document-rendered:visible').evaluate((element) => element.scrollTop) - beforeClose) <= 1, 'animated close and reopen retain the document reading position');
   await page.emulateMedia({ colorScheme: 'dark' }); await shot('markdown-dark');
@@ -206,22 +211,22 @@ async (page, { outputDir }) => {
   await page.setViewportSize({ width: 960, height: 900 });
   await preview.waitFor({ state: 'hidden' });
   const resizeWorkspace = await page.evaluate(() => document.querySelector('.chat-workspace').clientWidth + document.querySelector('.rail').getBoundingClientRect().width);
-  check(resizeWorkspace <= 960, `native hide threshold measures the whole workspace row including its left panel: ${resizeWorkspace}px`);
-  check(await retainedMarkdown.evaluate((element) => element.isConnected) && await retainedDraft.evaluate((element) => element.value === '保留的草稿'), 'crossing native 960px workspace threshold retains documents and the chat draft');
-  check(await page.locator('.conversation-shell').isVisible() && !(await retainedConversation.evaluate((element) => element.inert)), 'native auto-hide returns keyboard interaction to the chat');
+  check(resizeWorkspace <= 960, `responsive hide threshold measures the whole workspace row including its left panel: ${resizeWorkspace}px`);
+  check(await retainedMarkdown.evaluate((element) => element.isConnected) && await retainedDraft.evaluate((element) => element.value === '保留的草稿'), 'crossing 960px workspace threshold retains documents and the chat draft');
+  check(await page.locator('.conversation-shell').isVisible() && !(await retainedConversation.evaluate((element) => element.inert)), 'responsive auto-hide returns keyboard interaction to the chat');
   await page.setViewportSize({ width: 1440, height: 900 });
   await preview.waitFor({ state: 'visible' });
   check(Math.abs(await retainedMarkdown.evaluate((element) => element.scrollTop) - beforeClose) <= 1 && await preview.locator('[role="tab"]').count() === 4, 'widening restores the saved preview once with all tabs and the same Markdown position');
   await page.setViewportSize({ width: 960, height: 900 });
   await preview.waitFor({ state: 'hidden' });
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await preview.waitFor({ state: 'visible' });
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await preview.waitFor({ state: 'hidden' });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.waitForTimeout(220);
-  check(!(await preview.isVisible()), 'an explicit open and close clears native resize restoration intent');
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  check(!(await preview.isVisible()), 'an explicit open and close clears responsive resize restoration intent');
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await preview.waitFor({ state: 'visible' });
   await page.setViewportSize({ width: 960, height: 900 });
   await preview.waitFor({ state: 'hidden' });
@@ -229,10 +234,10 @@ async (page, { outputDir }) => {
   await page.waitForTimeout(220);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.waitForTimeout(220);
-  check(!(await preview.isVisible()), 'native Kg replaces the resize snapshot with closed when a second narrower threshold is crossed');
+  check(!(await preview.isVisible()), 'responsive breakpoint handling replaces the resize snapshot with closed when a second narrower threshold is crossed');
   await page.setViewportSize({ width: 720, height: 700 });
   await page.waitForTimeout(220);
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await preview.waitFor({ state: 'visible' });
   check(!(await page.locator('.conversation-shell').isVisible()), 'narrow windows show one readable file workspace');
   check(await retainedConversation.evaluate((element) => element.inert), 'FORGE small-window adaptation at 720px excludes the hidden conversation from keyboard interaction');
@@ -246,7 +251,7 @@ async (page, { outputDir }) => {
   check(await page.getByLabel('消息内容', { exact: true }).inputValue() === '保留的草稿', 'closing preview restores the original draft');
   check(await page.locator('.conversation-shell').isVisible() && !(await retainedConversation.evaluate((element) => element.inert)), 'closing preview restores chat and its keyboard interaction');
   await page.setViewportSize({ width: 1440, height: 900 }); await page.emulateMedia({ colorScheme: 'light' });
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   check(await preview.getByRole('tab').count() === 4, 'closing and reopening preview retains tabs');
   await preview.getByRole('button', { name: '刷新文件树', exact: true }).click();
   await preview.locator('.file-tree-row').filter({ hasText: 'source.ts' }).waitFor();
@@ -263,10 +268,39 @@ async (page, { outputDir }) => {
   await preview.locator('.file-markdown').getByRole('button', { name: 'Open code', exact: true }).click();
   await preview.getByLabel('src/a.ts 源码', { exact: true }).waitFor();
   check((await preview.getByLabel('src/a.ts 源码', { exact: true }).innerText()).includes('actualDirectoryFile'), 'directory imports strip the shared root and preserve relative file references');
+  const longName = `project-notes-${'accessible-file-name-'.repeat(8)}.md`;
+  await page.getByLabel('选择预览文件', { exact: true }).evaluate((input, name) => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(['# Long filename content'], name, { type: 'text/markdown' }));
+    transfer.items.add(new File([new Uint8Array(2 * 1024 * 1024 + 1)], 'oversized-text.txt', { type: 'text/plain' }));
+    transfer.items.add(new File([new Uint8Array(24 * 1024 * 1024 + 1)], 'oversized-document.pdf', { type: 'application/pdf' }));
+    input.files = transfer.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }, longName);
+  const longRow = preview.getByRole('button', { name: longName, exact: true });
+  await longRow.waitFor();
+  check(await longRow.getAttribute('title') === longName, 'the full long filename remains available through the real tree button name and tooltip');
+  await longRow.click();
+  const longTab = preview.getByRole('tab', { name: longName, exact: true });
+  await longTab.waitFor();
+  check(await longTab.getAttribute('title') === longName && await preview.getByRole('heading', { name: 'Long filename content', exact: true }).isVisible(), 'an ellipsized long tab retains its full accessible name, tooltip and actual rendered content');
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'a long filename cannot widen the document viewport');
+  await preview.getByRole('button', { name: 'oversized-text.txt', exact: true }).click();
+  await preview.getByRole('alert').waitFor();
+  check((await preview.getByRole('alert').innerText()).includes('文本超过 2 MB'), 'oversize text reports the actual 2 MB limit instead of showing stale content');
+  check(await preview.locator('.file-tab-panel:not([hidden]) .file-markdown').count() === 0, 'failed oversize text does not reuse another document renderer');
+  await preview.getByRole('button', { name: 'oversized-document.pdf', exact: true }).click();
+  await preview.getByRole('alert').waitFor();
+  check((await preview.getByRole('alert').innerText()).includes('文件超过 24 MB'), 'oversize PDF reports the actual 24 MB limit');
+  check(await preview.locator('.file-tab-panel:not([hidden]) object, .file-tab-panel:not([hidden]) .binary-preview').count() === 0, 'oversize binary does not create a renderer or an unrelated download');
+  await longTab.click();
+  await preview.getByRole('heading', { name: 'Long filename content', exact: true }).waitFor();
+  check(await preview.getByRole('alert').count() === 0, 'a valid file remains readable after oversize failures');
+
   await page.evaluate(async () => {
     document.querySelector('[aria-label="关闭文件预览"]').click();
     await new Promise(requestAnimationFrame);
-    document.querySelector('[aria-label="查看工作空间文件"]').click();
+    document.querySelector('[aria-label="从输入栏打开工作空间文件"]').click();
   });
   await page.waitForTimeout(200);
   check(await preview.isVisible() && !(await preview.evaluate((element) => element.inert)), 'a rapid close/open reverses the transition and restores keyboard interaction');
@@ -277,7 +311,7 @@ async (page, { outputDir }) => {
     return document.querySelector('.file-preview-workspace').hidden;
   });
   check(reduced, 'reduced motion closes preview in the next rendered frame');
-  await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
+  await page.getByRole('button', { name: '从输入栏打开工作空间文件', exact: true }).click();
   await page.evaluate(() => new Promise(requestAnimationFrame));
   check(await preview.isVisible(), 'reduced motion opens preview immediately');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'file workspace never overflows the window');

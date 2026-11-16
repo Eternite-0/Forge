@@ -18,10 +18,12 @@ async (page, { outputDir }) => {
       '# FORGE 项目交接记录', '', '本页是前端布局验收用的合成 Markdown。该文档用于验证真实文件预览、阅读层级、文件树和滚动区域，不代表执行过任何项目任务。',
       '', '## 变更概览', '', '- 独立呈现正文、文件树和文件路径。', '- 用小标题、列表和段落确认正文排版。', '- 文件标签可以切换，回到会话后草稿可恢复。',
       '', '## 验收范围', '', '已在浏览器中检查深色外壳、工作区与代码预览。设置页保留 FORGE 已有的功能。',
-      '', '### 阅读与查找', '', '文件树保留独立滚动，切换当前文件不会覆盖同一对话。'
+      '', '### 阅读与查找', '', '文件树保留独立滚动，切换当前文件不会覆盖同一对话。',
+      ...Array.from({ length: 25 }, (_, index) => `\n## 阅读测试 ${index + 1}\n\n合成段落用于校验正文滚动范围，与文件树的滚动互不影响。`),
+      '', '## 文档末尾'
     ].join('\n');
     const source = [
-      '"""Reference preview with deterministic local fixture text."""', '', 'from pathlib import Path', '', 'RESULT = "layout verification"', '',
+      '"""Reference preview with deterministic local fixture text, a longer synthetic first line that should wrap naturally next to the file tree."""', '', 'from pathlib import Path', '', 'RESULT = "layout verification"', '',
       'def read_preview(path):', '    path = Path(path)', '    return {"name": path.name, "expected": RESULT}', '',
       'def summarize(items):', '    return [read_preview(item) for item in items]', '', ...Array.from({ length: 22 }, (_, i) => `# Example ${String(i + 1).padStart(2, '0')}: source preview line`)
     ].join('\n');
@@ -37,7 +39,10 @@ async (page, { outputDir }) => {
         docs: [entry('docs/HANDOFF.md')],
       })[args.path] || [];
       if (command === 'workspace_file_read') return { path: args.path, kind: 'text', text: args.path.endsWith('.md') ? markdown : source, size: 200 };
-      if (command === 'workspace_file_diff') return { scope: 'worktree', text: `--- a/${args.path}\n+++ b/${args.path}\n@@ -0,0 +1,35 @@\n${source.split('\n').map(line => '+' + line).join('\n')}` };
+      if (command === 'workspace_file_diff') {
+        const lines = args.path === 'src/config.py' ? Array.from({ length: 6400 }, (_, i) => `SAMPLE_${i + 1} = "${i === 6200 ? 'unique_tail_probe' : 'synthetic'}"`) : source.split('\n');
+        return { scope: 'worktree', text: `--- a/${args.path}\n+++ b/${args.path}\n@@ -0,0 +1,${lines.length} @@\n${lines.map(line => '+' + line).join('\n')}` };
+      }
       throw new Error('unexpected synthetic native command: ' + command);
     } };
   }, taskEquivalents);
@@ -144,6 +149,15 @@ async (page, { outputDir }) => {
   check(Math.abs(activeSourceTab.x - 1491) <= 12, `source tabs start at the reference file-toolbar offset: ${activeSourceTab.x}`);
   const addedLine = await rect('.code-preview-diff .diff-added');
   const addedGutter = await rect('.code-preview-diff .diff-added > .source-line-number');
+  const diffRows = preview.locator('.code-preview-diff .source-lines:visible');
+  check(await diffRows.evaluate(element => element.classList.contains('is-wrapped') && element.scrollWidth === element.clientWidth && element.querySelector('[data-new-line="1"]').getBoundingClientRect().height > 40), 'short workspace diff wraps a long actual source row with no horizontal overflow');
+  await preview.getByRole('button', { name: '查找文件内容', exact: true }).click();
+  const wrapping = preview.getByRole('button', { name: '自动换行', exact: true });
+  check(await wrapping.getAttribute('aria-pressed') === 'true', 'wrap preference is exposed to keyboard and assistive technology');
+  await wrapping.press('Enter');
+  check(await diffRows.evaluate(element => !element.classList.contains('is-wrapped') && element.scrollWidth > element.clientWidth), 'keyboard can restore horizontal reading of long diff rows');
+  await wrapping.press('Enter');
+  await preview.getByRole('textbox', { name: '在文件中查找', exact: true }).press('Escape');
   check(addedLine.fills === 'rgb(26, 43, 27)' && addedGutter.fills === 'rgb(15, 28, 16)', 'source diff uses distinct sampled greens for added lines and the line-number gutter');
   check(await page.locator('.turn-diff.activity-group-files').first().evaluate(card => {
     const tile = card.querySelector('.turn-diff-icon').getBoundingClientRect();
@@ -160,7 +174,32 @@ async (page, { outputDir }) => {
   await preview.getByRole('heading', { name: 'FORGE 项目交接记录' }).waitFor();
   check(await preview.getByRole('tab', { name: 'analysis.py', exact: true }).count() === 1 && await preview.getByRole('tab', { name: 'HANDOFF.md', exact: true }).count() === 1, 'file tabs keep source and actual rendered Markdown open');
   await page.mouse.move(0, 0);
+  const markdownHeading = await rect('.document-rendered:not([hidden]) .file-markdown h1');
+  check(Math.abs(markdownHeading.x - 1260) <= 3 && Math.abs(markdownHeading.y - 149) <= 3, `Markdown content aligns to the reference reading inset: ${JSON.stringify(markdownHeading)}`);
   await capture('windows-reference-markdown');
+  const treePriorScroll = await tree.locator('.file-tree-scroll').evaluate(element => element.scrollTop);
+  const mdScroll = preview.locator('.file-tab-panel:visible .document-rendered:visible');
+  await mdScroll.evaluate(element => { element.scrollTop = element.scrollHeight; });
+  await page.waitForFunction(() => {
+    const body = document.querySelector('.file-tab-panel:not([hidden]) .document-rendered:not([hidden])');
+    const end = [...body.querySelectorAll('h2')].find(heading => heading.textContent === '文档末尾');
+    return body.scrollTop > 100 && end.getBoundingClientRect().bottom <= body.getBoundingClientRect().bottom;
+  });
+  check(await tree.locator('.file-tree-scroll').evaluate(element => element.scrollTop) === treePriorScroll, 'long Markdown scrolls to its final real section without moving the file tree');
+  await tree.locator('.changed-file[title="src/config.py"]').click();
+  if (await showDiff.getAttribute('aria-pressed') === 'false') await showDiff.click();
+  await preview.locator('.code-preview-diff:visible [data-new-line="1"]').waitFor();
+  check(await diffRows.evaluate(element => !element.classList.contains('is-wrapped') && element.querySelectorAll('.source-line').length <= 160), 'large diffs stay virtualized and do not enable automatic line wrapping');
+  await preview.getByRole('button', { name: '查找文件内容', exact: true }).click();
+  const fileSearch = preview.getByRole('textbox', { name: '在文件中查找', exact: true });
+  await fileSearch.fill('unique_tail_probe');
+  await fileSearch.press('Enter');
+  const nearEndRow = preview.locator('.code-preview-diff:visible [data-new-line="6201"]');
+  await nearEndRow.waitFor();
+  check(await nearEndRow.evaluate(element => {
+    const row = element.getBoundingClientRect(), pane = element.closest('.source-lines').getBoundingClientRect();
+    return element.classList.contains('search-match') && row.top >= pane.top && row.bottom <= pane.bottom;
+  }), 'Go to a match after row 6200 reaches the correct visible row of the virtualized diff');
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await page.locator('.titlebar').getByRole('menuitem', { name: '文件', exact: true }).click();
   await page.getByRole('menu', { name: '文件菜单' }).getByRole('menuitem', { name: /^设置…/ }).click();

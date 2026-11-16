@@ -46,12 +46,12 @@ function DiffTokens({ row }: { row: DiffRow }) {
   return <><Tokens line={row.content.slice(0, change.start)} /><span className="diff-word-change"><Tokens line={row.content.slice(change.start, change.end)} /></span><Tokens line={row.content.slice(change.end)} /></>;
 }
 type ReadingPosition = { top: number; left: number };
-export default function CodePreview({ text, path, diff = false, compact = false, initialScroll, onReadingPosition }: { text: string; path: string; diff?: boolean; compact?: boolean; initialScroll?: ReadingPosition; onReadingPosition?: (position: ReadingPosition) => void }) {
+export default function CodePreview({ text, path, diff = false, compact = false, wrapSmallDiff = false, initialScroll, onReadingPosition }: { text: string; path: string; diff?: boolean; compact?: boolean; wrapSmallDiff?: boolean; initialScroll?: ReadingPosition; onReadingPosition?: (position: ReadingPosition) => void }) {
   const rawLines = useMemo(() => text.split(/\r?\n/), [text]);
   const rows = useMemo(() => diff ? diffRows(rawLines) : [], [rawLines, diff]);
   const lines = useMemo(() => diff ? rows.map((row) => row.raw) : rawLines, [rawLines, rows, diff]);
   const lineHeight = 21.6;
-  const [wrap, setWrap] = useState(false), [query, setQuery] = useState(""), [match, setMatch] = useState(0), [top, setTop] = useState(() => initialScroll?.top || 0);
+  const [wrapPreference, setWrap] = useState<boolean | null>(null), [query, setQuery] = useState(""), [match, setMatch] = useState(0), [top, setTop] = useState(() => initialScroll?.top || 0);
   const [findOpen, setFindOpen] = useState(false);
   const findInput = useRef<HTMLInputElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
@@ -61,6 +61,7 @@ export default function CodePreview({ text, path, diff = false, compact = false,
   const searchNavigated = useRef(false);
   const matches = useMemo(() => query ? lines.flatMap((line, i) => line.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ? [i] : []) : [], [lines, query]);
   const allowWrap = lines.length <= 5000;
+  const wrap = allowWrap && (wrapPreference ?? (wrapSmallDiff && diff && lines.length <= 300));
   const openFind = () => { setFindOpen(true); requestAnimationFrame(() => findInput.current?.focus()); };
   useEffect(() => {
     const element = viewport.current?.closest(".code-preview");
@@ -69,7 +70,6 @@ export default function CodePreview({ text, path, diff = false, compact = false,
     return () => element.removeEventListener("forge-find", openFind);
   }, [compact]);
   const start = wrap ? 0 : Math.min(Math.max(0, lines.length - 1), Math.max(0, Math.floor(top / lineHeight) - 12)), end = wrap ? lines.length : Math.min(lines.length, start + 160);
-  useEffect(() => { if (!allowWrap) setWrap(false); }, [allowWrap]);
   useLayoutEffect(() => {
     const position = positions.current.get(path) || initialPosition.current || { top: 0, left: 0 };
     restoring.current = position;
@@ -85,7 +85,7 @@ export default function CodePreview({ text, path, diff = false, compact = false,
   const updateQuery = (value: string) => { setQuery(value); setMatch(0); searchNavigated.current = false; };
   const go = (direction: number) => { if (!matches.length) return; const next = searchNavigated.current ? match + direction : direction < 0 ? -1 : 0; const index = (next + matches.length) % matches.length; searchNavigated.current = true; setMatch(index); if (viewport.current) { if (wrap) viewport.current.querySelector(`[data-line="${matches[index] + 1}"]`)?.scrollIntoView({ block: "center" }); else viewport.current.scrollTop = Math.max(0, (matches[index] - 8) * lineHeight); } };
   return <div className={`code-preview${compact ? " code-preview-compact" : ""}${diff ? " code-preview-diff" : ""}`} onKeyDown={(event) => { if (!compact && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "f") { event.preventDefault(); openFind(); } }}>
-    {!compact && findOpen && <div className="source-controls"><label><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor"><circle cx="7" cy="7" r="4.5" /><path d="m10.5 10.5 3 3" /></svg><input ref={findInput} aria-label="在文件中查找" placeholder="在文件中查找" value={query} onChange={(event) => updateQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); go(event.shiftKey ? -1 : 1); } if (event.key === "Escape") { event.preventDefault(); updateQuery(""); setFindOpen(false); viewport.current?.focus(); } }} /></label>{query && <><span>{matches.length ? match + 1 : 0}/{matches.length}</span><button type="button" aria-label="上一个匹配" disabled={!matches.length} onClick={() => go(-1)}>↑</button><button type="button" aria-label="下一个匹配" disabled={!matches.length} onClick={() => go(1)}>↓</button></>}<button type="button" className={wrap ? "active" : ""} disabled={!allowWrap} title={allowWrap ? undefined : "超过 5,000 行的文件使用虚拟滚动，请横向阅读。"} aria-pressed={wrap} onClick={() => setWrap((value) => !value)}>自动换行</button><span>{lines.length.toLocaleString()} 行</span></div>}
+    {!compact && findOpen && <div className="source-controls"><label><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor"><circle cx="7" cy="7" r="4.5" /><path d="m10.5 10.5 3 3" /></svg><input ref={findInput} aria-label="在文件中查找" placeholder="在文件中查找" value={query} onChange={(event) => updateQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); go(event.shiftKey ? -1 : 1); } if (event.key === "Escape") { event.preventDefault(); updateQuery(""); setFindOpen(false); viewport.current?.focus(); } }} /></label>{query && <><span>{matches.length ? match + 1 : 0}/{matches.length}</span><button type="button" aria-label="上一个匹配" disabled={!matches.length} onClick={() => go(-1)}>↑</button><button type="button" aria-label="下一个匹配" disabled={!matches.length} onClick={() => go(1)}>↓</button></>}<button type="button" className={wrap ? "active" : ""} disabled={!allowWrap} title={allowWrap ? undefined : "超过 5,000 行的文件使用虚拟滚动，请横向阅读。"} aria-pressed={wrap} onClick={() => setWrap(!wrap)}>自动换行</button><span>{lines.length.toLocaleString()} 行</span></div>}
     <div ref={viewport} className={`source-lines${wrap ? " is-wrapped" : ""}`} tabIndex={0} aria-label={`${path} ${diff ? "更改" : "源码"}`} onScroll={(event) => { const element = event.currentTarget, position = { top: element.scrollTop, left: element.scrollLeft }; setTop(position.top); if (element.clientHeight > 0) { positions.current.set(path, position); onReadingPosition?.(position); } }}>
       <div style={{ paddingTop: start * lineHeight, paddingBottom: (lines.length - end) * lineHeight }}>
         {lines.slice(start, end).map((line, offset) => {

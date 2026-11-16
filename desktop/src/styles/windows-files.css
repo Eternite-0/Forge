@@ -32,20 +32,20 @@
 .windows-reference .preview-view-actions button:hover { background: light-dark(#e5e5e5, #333333); }
 .windows-reference .preview-view-actions button[aria-pressed="true"] { background: light-dark(#dedede, #393939); }
 .windows-reference .preview-file-tree { padding-top: 8px; background: var(--app-color-background-surface); }
-.windows-reference .file-tree-search { height: 28px; min-height: 28px; margin: 0 8px 3px; padding-inline: 10px; }
+.windows-reference .file-tree-search { height: 28px; min-height: 28px; margin: 0 8px 1px; padding-inline: 10px; }
 .windows-reference .file-tree-search input { height: 26px; font-size: 13px; }
-.windows-reference .file-tree-scopes { margin-bottom: 2px; }
+.windows-reference .file-tree-scopes { margin-bottom: 0; }
+.windows-reference .file-tree-scopes button { height: 28px; min-height: 28px; }
 .windows-reference :is(.file-tree-row, .file-tree-section-heading) { height: 28px; min-height: 28px; border-radius: 6px; font-size: 13px; }
 .windows-reference .file-tree-scroll { padding-inline: 5px; }
 .windows-reference .file-tree-row.selected[data-status*="A"] { color: var(--color-git-added); }
 .windows-reference .file-tree-row.selected[data-status*="M"] { color: var(--color-git-modified); }
-.windows-reference .document-rendered { padding: 8px 16px 24px; }
+.windows-reference .document-rendered { padding: 4px 16px 24px; }
 .windows-reference .markdown.file-markdown { font-size: 14px; line-height: 22px; }
 .windows-reference .markdown.file-markdown h1 { margin-bottom: 24px; font-size: 24px; line-height: 32px; }
 .windows-reference .markdown.file-markdown h2 { margin: 28px 0 20px; font-size: 21px; line-height: 28px; }
 .windows-reference .markdown.file-markdown h3 { font-size: 18px; line-height: 26px; }
-.windows-reference .file-preview-workspace .source-lines { padding-top: 0; font-size: 12px; line-height: 22px; }
-.windows-reference .file-preview-workspace .source-line { min-height: 22px; }
+.windows-reference .file-preview-workspace .source-lines { padding-top: 0; font-size: 12px; }
 .windows-reference .file-preview-workspace .source-line-number { width: 36px; flex-basis: 36px; padding-inline: 4px 8px; }
 .windows-reference .file-preview-workspace .code-preview-diff .diff-added {
   background: light-dark(color-mix(in lab, var(--app-color-background-surface) var(--diff-content-mix), var(--diff-added)), #1a2b1b);
