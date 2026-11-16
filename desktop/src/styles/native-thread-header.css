@@ -1,0 +1,42 @@
+.codex-shell .desktop-chrome { background: var(--app-color-background-surface); border-bottom-color: transparent; }
+@media (min-width: 1360px) {
+  .app-shell.codex-shell { --sidebar-width: 328px; }
+}
+.codex-shell .conversation-topbar {
+  block-size: 50px;
+  min-block-size: 50px;
+  padding: 5px 15px 5px 22px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  gap: 10px;
+}
+.codex-shell .conversation-topbar[data-home="true"] {
+  justify-content: flex-end;
+  block-size: 42px;
+  min-block-size: 42px;
+  border-color: transparent;
+}
+.codex-shell .conversation-topbar .topbar-title h1 {
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 550;
+}
+.thread-tool, .codex-shell .conversation-tasks-toggle {
+  min-height: 25px;
+  height: 25px;
+  padding-inline: 8px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  background: var(--app-color-background-surface);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.thread-tool:hover, .thread-tool[aria-expanded="true"] { background: var(--color-background-secondary-ghost-hover); color: var(--color-text); }
+.codex-shell .conversation-more-toggle { width: 29px; height: 29px; }
+.codex-shell .conversation-status { gap: 6px; }
+@media (max-width: 850px) {
+  .codex-shell .conversation-topbar { padding-inline: 12px; }
+}
+@media (max-width: 600px) {
+  .codex-shell .conversation-topbar .topbar-title h1 { font-size: 13px; }
+}

@@ -88,7 +88,15 @@ export default function CodePreview({ text, path, diff = false, compact = false,
     {!compact && findOpen && <div className="source-controls"><label><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor"><circle cx="7" cy="7" r="4.5" /><path d="m10.5 10.5 3 3" /></svg><input ref={findInput} aria-label="在文件中查找" placeholder="在文件中查找" value={query} onChange={(event) => updateQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); go(event.shiftKey ? -1 : 1); } if (event.key === "Escape") { event.preventDefault(); updateQuery(""); setFindOpen(false); viewport.current?.focus(); } }} /></label>{query && <><span>{matches.length ? match + 1 : 0}/{matches.length}</span><button type="button" aria-label="上一个匹配" disabled={!matches.length} onClick={() => go(-1)}>↑</button><button type="button" aria-label="下一个匹配" disabled={!matches.length} onClick={() => go(1)}>↓</button></>}<button type="button" className={wrap ? "active" : ""} disabled={!allowWrap} title={allowWrap ? undefined : "超过 5,000 行的文件使用虚拟滚动，请横向阅读。"} aria-pressed={wrap} onClick={() => setWrap((value) => !value)}>自动换行</button><span>{lines.length.toLocaleString()} 行</span></div>}
     <div ref={viewport} className={`source-lines${wrap ? " is-wrapped" : ""}`} tabIndex={0} aria-label={`${path} ${diff ? "更改" : "源码"}`} onScroll={(event) => { const element = event.currentTarget, position = { top: element.scrollTop, left: element.scrollLeft }; setTop(position.top); if (element.clientHeight > 0) { positions.current.set(path, position); onReadingPosition?.(position); } }}>
       <div style={{ paddingTop: start * lineHeight, paddingBottom: (lines.length - end) * lineHeight }}>
-        {lines.slice(start, end).map((line, offset) => { const number = start + offset, row = rows[number]; return <div className={`source-line${query && line.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ? " search-match" : ""}${diff ? ` diff-${row.kind}` : ""}`} data-line={number + 1} data-old-line={diff ? row.oldLine : undefined} data-new-line={diff ? row.newLine : undefined} key={number}><span className="source-line-number" aria-hidden="true">{diff ? row.newLine ?? row.oldLine ?? "" : number + 1}</span><code>{diff ? <DiffTokens row={row} /> : <Tokens line={line || " "} />}</code></div>; })}
+        {lines.slice(start, end).map((line, offset) => {
+          const number = start + offset, row = rows[number];
+          const change = diff && (row.kind === "added" || row.kind === "removed") ? row.kind : undefined;
+          return <div className={`source-line${query && line.toLocaleLowerCase().includes(query.toLocaleLowerCase()) ? " search-match" : ""}${diff ? ` diff-${row.kind}` : ""}`} data-line={number + 1} data-old-line={diff ? row.oldLine : undefined} data-new-line={diff ? row.newLine : undefined} key={number}>
+            <span className="source-line-number" aria-hidden="true">{change && <span className="diff-kind-symbol">{change === "added" ? "+" : "−"}</span>}{diff ? row.newLine ?? row.oldLine ?? "" : number + 1}</span>
+            {change && <span className="sr-only diff-kind-label">{change === "added" ? "新增：" : "删除："}</span>}
+            <code>{diff ? <DiffTokens row={row} /> : <Tokens line={line || " "} />}</code>
+          </div>;
+        })}
       </div>
     </div>
   </div>;

@@ -3,6 +3,7 @@ import type { WorkerRun } from "../../ConversationRuntime";
 import type { ProcessGroup } from "../../processTimeline";
 import { relativeFilePath } from "../../workspaceFiles";
 import TurnDiff from "../TurnDiff";
+import type { TurnDiffFile } from "../TurnDiff";
 import AgentActivityRow from "./AgentActivityRow";
 import AssistantMessage from "./AssistantMessage";
 import EventGroup from "./EventGroup";
@@ -32,7 +33,9 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
     return () => window.clearInterval(timer);
   }, [process.active, process.startedAtMs]);
   const saved = memory.processes.get(process.key);
-  const expanded = saved?.expanded ?? !process.answerId;
+  // Keep conversational progress visible, but do not open a stream of logs
+  // just because a background run has not produced an answer yet.
+  const expanded = saved?.expanded ?? (!process.answerId && process.records.some(record => record.type === "message"));
   const events = process.records.flatMap(record => record.type === "tools" || record.type === "agents" ? record.events : []);
   const failed = events.some(event => /failed/.test(event.status || "") || typeof (event.detail as Row | undefined)?.exit_code === "number" && (event.detail as Row).exit_code !== 0);
   const unknown = events.some(event => /unknown|uncertain/.test(event.status || ""));
@@ -41,12 +44,13 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
   const currentFailed = currentRuns.some(run => run.state === "failed");
   const currentUnknown = currentRuns.some(run => !run.state || /unknown|uncertain/.test(run.state));
   const elapsed = process.active && process.startedAtMs !== undefined ? Math.max(0, now - process.startedAtMs) : process.durationMs;
-  const duration = elapsed === undefined ? "用时 — 分钟 — 秒" : `用时 ${Math.floor(elapsed / 60000)} 分钟 ${Math.floor(elapsed / 1000) % 60} 秒`;
+  const duration = elapsed === undefined ? "" : `用时 ${Math.floor(elapsed / 60000)} 分钟 ${Math.floor(elapsed / 1000) % 60} 秒`;
+  const label = process.active ? "正在处理" : "处理记录";
   return <details className="process-transcript" data-process-key={process.key} data-scroll-key={`process:${process.key}`} data-active={process.active} open={expanded}>
-    <summary aria-label={`${expanded ? "收起" : "展开"}用时详情`} aria-expanded={expanded} onClick={event => {
+    <summary aria-label={`${expanded ? "收起" : "展开"}处理记录`} aria-expanded={expanded} onClick={event => {
       event.preventDefault(); onInspect();
       memory.processes!.set(process.key, { expanded: !expanded }); update(value => value + 1);
-    }}><span>{duration}</span>{(failed || currentFailed) && <small className="event-failed">{currentFailed ? "当前运行失败" : "含失败记录"}</small>}{(unknown || currentUnknown) && <small className="event-unknown">{currentUnknown ? "当前状态未知" : "含未知结果"}</small>}{mock && <small>含模拟记录</small>}<Chevron /></summary>
+    }}><span>{label}</span>{expanded && duration && <small>{duration}</small>}{(failed || currentFailed) && <small className="event-failed">{currentFailed ? "当前运行失败" : "含失败记录"}</small>}{(unknown || currentUnknown) && <small className="event-unknown">{currentUnknown ? "当前状态未知" : "含未知结果"}</small>}{mock && <small>含模拟记录</small>}<Chevron /></summary>
     <div className="process-content" hidden={!expanded} onClickCapture={() => { memory.processes!.set(process.key, { expanded: true }); }} onKeyDownCapture={() => { memory.processes!.set(process.key, { expanded: true }); }}>
       {process.records.map(record => {
         if (record.type === "message") return <AssistantMessage key={`message:${record.value.id}`} message={record.value} native={native} onInspect={onInspect} />;
@@ -60,9 +64,8 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
 }
 
 /** The closing file summary uses real successful receipts, independently of process visibility. */
-export function ProcessFileChanges({ process, memory, historyStats, onInspect, onOpenFile, onOpenHistory }: Pick<ProcessProps, "process" | "memory" | "historyStats" | "onInspect" | "onOpenFile" | "onOpenHistory">) {
-  const [, update] = useState(0);
-  const files = new Map<string, { path: string; receiptId: string; scrollKey: string; added?: number; removed?: number }>();
+export function processFileChanges(process: ProcessGroup, historyStats?: HistoryProps["historyStats"]): TurnDiffFile[] {
+  const files = new Map<string, TurnDiffFile>();
   const events = process.records.flatMap(record => record.type === "tools" ? record.events : []);
   for (const event of events) {
     const detail = event.detail as Row | undefined;
@@ -72,8 +75,15 @@ export function ProcessFileChanges({ process, memory, historyStats, onInspect, o
       files.set(path, { path, receiptId: event.event_id, scrollKey: `file:${eventKey(event)}`, ...historyStats?.[event.event_id] });
     } catch { /* Invalid recorded paths cannot become file actions. */ }
   }
-  if (!files.size) return null;
+  return [...files.values()];
+}
+
+export function ProcessFileChanges({ process, memory, historyStats, onInspect, onOpenFile, onOpenHistory }: Pick<ProcessProps, "process" | "memory" | "historyStats" | "onInspect" | "onOpenFile" | "onOpenHistory">) {
+  const [, update] = useState(0);
+  const files = processFileChanges(process, historyStats);
+  if (!files.length) return null;
+  const events = process.records.flatMap(record => record.type === "tools" ? record.events : []);
   const state = eventView(memory, events[0]);
-  return <TurnDiff files={[...files.values()]} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
+  return <TurnDiff files={files} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
     onExpandedChange={value => { state.groupFilesExpanded = value; update(count => count + 1); }} onInspect={onInspect} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} />;
 }

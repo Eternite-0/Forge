@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Row, VIEW_NAMES, SETTING_VIEWS, TASK_VIEWS, text, rows } from "../workspaceTypes";
 import type { SettingId } from "../SettingsView";
 import { relativeFilePath } from "../workspaceFiles";
+import { taskProgress } from "../taskProgress";
 import useWorkspaceState from "./useWorkspaceState";
 import useConversationViewport from "./useConversationViewport";
 import useWorkspacePreview from "./useWorkspacePreview";
@@ -44,7 +45,8 @@ export default function useWorkspaceController() {
     if (window.confirm(`${decision === "APPROVED" ? "批准" : "拒绝"}此操作？\n风险：${text(item.risk)}\n范围：${text(item.resource_scope)}\n计划版本：${text(item.plan_revision)}\n参数摘要：${text(item.parameter_digest)}`)) void perform(`/api/approvals/${encodeURIComponent(text(item.id))}/decision`, { decision, expected_digest: item.parameter_digest, expected_plan_revision: item.plan_revision });
   };
   const compactNavigation = sidebarCollapsed || previewOpen && previewExpanded;
-  const home = !messages.length && !timelineEvents.length && !outgoing.length && !workerActivity.items.length;
+  const hasTaskUpdates = !!connection && (workspace.pendingApprovals.length > 0 || taskProgress(workspace.quests, timelineEvents, messages).length > 0);
+  const home = !messages.length && !timelineEvents.length && !outgoing.length && !workerActivity.items.length && !hasTaskUpdates;
   const conversationFiles = [...new Set(timelineEvents.flatMap((event) => {
     const detail = event.detail && typeof event.detail === "object" ? event.detail as Row : {};
     if (event.kind !== "tool_receipt" || event.status !== "succeeded" || event.execution_mode !== "live" || typeof detail.exit_code === "number" && detail.exit_code !== 0 || !["file_write", "file_revise"].includes(text(detail.tool, "")) || typeof detail.path !== "string") return [];

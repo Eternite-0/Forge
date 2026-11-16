@@ -7,3 +7,11 @@
 @import "./styles/settings.css";
 @import "./styles/files.css";
 @import "./styles/panels.css";
+@import "./styles/simple-shell.css";
+@import "./styles/reference-theme.css";
+@import "./styles/reference-surfaces.css";
+@import "./styles/reference-motion.css";
+@import "./styles/codex-sidebar.css";
+@import "./styles/native-thread-header.css";
+@import "./styles/native-composer.css";
+@import "./styles/mac-shell.css";

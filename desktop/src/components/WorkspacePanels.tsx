@@ -18,7 +18,11 @@ export function WorkspaceFrame({ settingsOpen, setting, onSetting, onClose, titl
   settingsOpen: boolean; setting: SettingId; onSetting: (id: SettingId) => void; onClose: () => void; title: string; children: React.ReactNode; taskInspector?: boolean;
 }) {
   return settingsOpen ? <SettingsView selected={setting} onSelect={onSetting} onClose={onClose}><aside className="settings-page" aria-label={title}>{children}</aside></SettingsView>
-    : <aside className={"workspace-panel" + (taskInspector ? " task-inspector" : "")} aria-label={title}>{children}</aside>;
+    : <aside className={"workspace-panel" + (taskInspector ? " task-inspector" : "")} aria-label={title} onKeyDown={event => {
+      if (!taskInspector || event.defaultPrevented || event.key !== "Escape" || event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
+      event.preventDefault();
+      onClose();
+    }}>{children}</aside>;
 }
 
 export function SettingInfo({ setting }: { setting: SettingId }) {

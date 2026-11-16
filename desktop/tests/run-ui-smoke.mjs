@@ -7,7 +7,7 @@ import vm from 'node:vm';
 // Reuse an installed Playwright runtime; the application needs no new dependency.
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.FORGE_PLAYWRIGHT_MODULE || 'playwright');
-const fixture = process.argv[2] || 'ui-smoke.playwright.js';
+const fixture = process.argv[2] || 'ui-simple-shell.playwright.js';
 const directory = path.dirname(fileURLToPath(import.meta.url));
 const source = await readFile(path.resolve(directory, fixture), 'utf8');
 const smoke = vm.runInThisContext(`(${source})`, { filename: fixture });

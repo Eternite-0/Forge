@@ -1,16 +1,16 @@
 import ChatTimeline from "../ChatTimeline";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import AgentPanel from "./AgentPanel";
 import type { WorkerRun } from "../ConversationRuntime";
 import ConversationToolbar from "../ConversationToolbar";
 import ConversationComposer from "../ConversationComposer";
 import FilePreviewWorkspace, { PreviewDivider } from "../FilePreviewWorkspace";
 import { isNearBottom, shouldSubmitOnEnter } from "../logic";
-import { asRecord, text } from "../workspaceTypes";
+import { asRecord } from "../workspaceTypes";
 import type { WorkspaceController } from "../hooks/useWorkspaceController";
 
-export default function ConversationWorkspace({ workspace }: { workspace: WorkspaceController }) {
-  const { native, connection, setSuggestedRouterModel, runtimeStatus, workspaceOperation, restoreFenced, view, setSettingsOpen, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, coreInfo, routerInfo, workerActivity, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
+export default function ConversationWorkspace({ workspace, connectionSetup }: { workspace: WorkspaceController; connectionSetup?: ReactNode }) {
+  const { native, connection, runtimeStatus, workspaceOperation, restoreFenced, view, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, workerActivity, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspaceName, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
   const chatVisible = view === "chat" || (taskView && !settingsOpen);
   const [compactAgent, setCompactAgent] = useState(() => window.matchMedia("(max-width: 1180px)").matches);
   const [agentPreference, setAgentPreference] = useState(false);
@@ -57,11 +57,18 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
     const detail = asRecord(event.detail);
     return event.kind === "tool_receipt" && event.status === "succeeded" && event.execution_mode === "live" && detail.tool === "file_read" && typeof detail.path === "string" ? [detail.path] : [];
   }))];
+  const latestUserText = [...messages].reverse().find(message => message.role === "user")?.content;
+  const threadTitle = latestUserText?.replace(/\s+/g, " ").trim().slice(0, 180) || (home ? "FORGE" : "与 FORGE 对话");
   return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
-      <ConversationToolbar home={home} status={routerStatus} onOpenTasks={() => openTaskView("quests", "")} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent} sessionTitle={routerInfo.router_session_id ? `Router 会话：${text(routerInfo.router_session_id)}` : undefined} />
+      <ConversationToolbar home={home} status={routerStatus} title={threadTitle} changeCount={conversationFiles.length}
+        onOpenChanges={() => openPreview("conversation", undefined, conversationFiles)}
+        onOpenTasks={() => openTaskView("quests", "")} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent}
+        onOpenSettings={workspace.openSettings} onOpenMemory={() => selectSetting("memory")} onOpenActivity={() => openTaskView("activity", "")}
+        onConfigure={() => selectSetting("environment")} pendingCount={pendingApprovals.length} />
+      {connectionSetup}
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
-      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats}
+      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats} workspaceName={connection ? currentWorkspaceName : undefined}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
         historyBusy={historyBusy} timelineError={timelineError} conversationError={conversationError}
         approvalError={approvalLoadError} canRetry={!!connection && !sending && !writesBlocked} scrollRef={scrollRef}
@@ -75,16 +82,17 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
         approvalsBlocked={actionBusy || writesBlocked} onApprovalDecision={decideApproval} />
       {actionError && <p className="notice error action-error" role="alert">{actionError}</p>}
       {(hasNew || readingPaused) && <button className="new-messages" onClick={() => { manualPause.current = false; followBottom.current = true; setReadingPaused(false); setHasNew(false); if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }}>{hasNew ? "有新消息 · 回到最新 ↓" : "回到最新 ↓"}</button>}
-      <ConversationComposer connection={connection} inputRef={composerInput} value={draft} onChange={setDraft}
+      <ConversationComposer inputRef={composerInput} value={draft} onChange={setDraft}
         onKeyDown={(event) => { if (shouldSubmitOnEnter({ key: event.key, shiftKey: event.shiftKey, isComposing: event.nativeEvent.isComposing, keyCode: event.nativeEvent.keyCode })) { event.preventDefault(); void send(); } }}
-        onSend={() => void send()} onConfigure={(id, modelId) => { setSettingsOpen(true); selectSetting(id); setSuggestedRouterModel(modelId || null); }}
-        disabled={!connection || sending || writesBlocked || !draft.trim()} sending={sending} workspace={currentWorkspace} workspaceName={currentWorkspaceName}
-        native={native} model={routerModel} provider={text(coreInfo.provider_id, "")} status={routerStatus} visible={chatVisible} error={sendError} requestId={pending?.requestId} />
+        onSend={() => void send()} disabled={!connection || sending || writesBlocked || !draft.trim()} sending={sending}
+        model={workspace.routerModel} onFiles={() => openPreview("files")} onConfigure={() => selectSetting("environment")}
+        home={home} workspaceName={currentWorkspaceName} native={native} connected={!!connection}
+        error={outgoing.some(item => item.status === "failed") ? "" : sendError} requestId={pending?.requestId} />
     </main>
     {previewPresent && <PreviewDivider width={previewWidthPixels} minimum={previewBounds.minimum} maximum={previewBounds.maximum} onResize={resizePreview} onReset={() => resizePreview(initialPreviewWidth)} />}
     <FilePreviewWorkspace source={fileSource} native={native} identity={connectionKey} connection={connection} onRequest={revealRequest} onHistoryLoaded={recordHistoryStats} workspaceName={currentWorkspaceName} open={previewOpen} present={previewPresent} visible={chatVisible} expanded={previewExpanded} onToggleExpanded={() => { captureReadingPosition(); setPreviewExpanded((value) => !value); }} request={previewRequest} onClose={closePreview} onChanges={setWorkspaceChanges} />
-    <div id="conversation-agent-panel" className="agent-panel-slot" hidden={!agentOpen} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('[aria-label="切换 Agent 面板"]')?.focus(); } }}>
-      <AgentPanel key={connectionKey} state={workerActivity} sources={sources} events={timelineEvents} conversationFiles={conversationFiles.length} onConversationFiles={() => openPreview("conversation", undefined, conversationFiles)} filesChanged={workspaceChanges} onChanges={() => openPreview("changes")} onSource={path => openPreview("files", path || undefined)} onRun={revealRun} onActivity={() => openTaskView("activity", "")} onClose={() => { captureReadingPosition(); setAgentPreference(false); }} />
+    <div id="conversation-agent-panel" className="agent-panel-slot" hidden={!agentOpen} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('.conversation-more-toggle')?.focus(); } }}>
+      <AgentPanel key={connectionKey} state={workerActivity} sources={sources} events={timelineEvents} conversationFiles={conversationFiles.length} onConversationFiles={() => openPreview("conversation", undefined, conversationFiles)} filesChanged={workspaceChanges} onChanges={() => openPreview("changes")} onSource={path => openPreview("files", path || undefined)} onRun={revealRun} onActivity={() => openTaskView("activity", "")} onClose={() => { captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('.conversation-more-toggle')?.focus(); }} />
     </div>
 
     </div>;

@@ -1,0 +1,173 @@
+/* Match the visible application frame, not the macOS window controls or wallpaper. */
+.app-shell.simple-shell.mac-shell {
+  --app-shell-titlebar-height: 0px;
+  --sidebar-width: clamp(208px, 27.2vw, 300px);
+  --forge-sidebar-background: linear-gradient(155deg, light-dark(#eaf2fc,#202632) 0%, light-dark(#e5ecfc,#1d2231) 53%, light-dark(#e8e7fb,#22202e) 100%);
+  --color-text-secondary: light-dark(#545a64, #bbc2cf);
+  --color-text-tertiary: light-dark(#5b626e, #a7afbc);
+  --muted: var(--color-text-tertiary);
+  --forge-focus-ring: light-dark(#035eae, #78b9ff);
+  position: relative;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+}
+.app-shell.simple-shell.mac-shell.compact-navigation { grid-template-columns: 0 minmax(0, 1fr); }
+.mac-shell > :is(.rail, .chat-workspace, .settings-view, .workspace-panel) { grid-row: 1; }
+.mac-shell > .desktop-chrome {
+  position: absolute;
+  top: 0;
+  left: calc(var(--sidebar-width) - 37px);
+  width: 37px;
+  height: 40px;
+  align-items: center;
+  padding: 0 5px;
+  border: 0;
+  background: transparent;
+}
+.mac-shell.compact-navigation > .desktop-chrome { left: 0; }
+.mac-shell :is(button, summary, input, textarea, select, a):focus-visible {
+  outline-color: var(--forge-focus-ring);
+}
+.mac-shell .composer-body:focus-within {
+  outline: 1px solid var(--forge-focus-ring);
+  outline-offset: 1px;
+}
+.mac-shell .conversation-menu-item:focus-visible {
+  outline-offset: -2px;
+}
+.mac-shell .timeline :is(.turn-diff-actions button, .task-progress-summary, .process-transcript > summary),
+.mac-shell .quest-back { color: var(--color-text-secondary); }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]), .mac-shell .application-menubar {
+  opacity: 0;
+  pointer-events: none;
+}
+.mac-shell .application-menubar {
+  position: absolute;
+  inset-inline-start: 32px;
+  padding: 2px 5px;
+  border-radius: 8px;
+  background: var(--app-color-background-control);
+  box-shadow: var(--shadow-sm);
+}
+.mac-shell .application-menu > button { white-space: nowrap; }
+.mac-shell .titlebar-navigation { gap: 0; }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]) { position: absolute; inset-block-start: 40px; left: 0; background: var(--app-color-background-control); }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]):nth-of-type(2) { inset-block-start: 68px; }
+.mac-shell .desktop-chrome:is(:hover,:focus-within) :is(.application-menubar, .titlebar-navigation > button:not([aria-expanded])) {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mac-shell .conversation-topbar[data-home="true"] { justify-content: space-between; }
+.mac-shell .conversation-topbar[data-home="true"] .topbar-title h1 { font-size: 12px; font-weight: 520; }
+.mac-shell .conversation-topbar[data-home="true"] .conversation-tasks-toggle { border-color: transparent; }
+.mac-shell .conversation-topbar[data-home="false"] {
+  height: 42px;
+  min-height: 42px;
+  padding-block: 4px;
+}
+.mac-shell .conversation-topbar[data-home="false"] .topbar-title h1 { font-size: 13px; }
+.mac-shell .conversation-status { flex: none; gap: 4px; }
+.mac-shell .conversation-status > :is(.thread-tool, .thread-tasks-button) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-width: 28px;
+  min-height: 28px;
+  padding-inline: 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+}
+.mac-shell .conversation-status > :is(.thread-tool, .thread-tasks-button):hover {
+  background: var(--color-background-secondary-ghost-hover);
+}
+.mac-shell .conversation-menu-item > svg { flex: none; color: var(--color-text-secondary); }
+.mac-shell .conversation-shell:not(.home-state) .timeline { padding-block-start: 16px; }
+.mac-shell .conversation-list { --conversation-item-gap: 10px; }
+.mac-shell .conversation-list > .message.from-user:not(:first-child) { margin-block-start: 14px; }
+.mac-shell .conversation-list > .process-transcript { margin-block-start: 0; }
+.mac-shell.compact-navigation .conversation-topbar, .mac-shell.compact-navigation .settings-view { padding-inline-start: 43px; }
+@media (min-width: 761px) {
+  .app-shell.simple-shell.mac-shell:not(.compact-navigation) {
+    background: var(--forge-sidebar-background) left top / calc(var(--sidebar-width) + 13px) 100% no-repeat,
+      var(--app-color-background-surface);
+  }
+  .mac-shell:not(.compact-navigation) > .chat-workspace {
+    border-start-start-radius: 13px;
+    border-end-start-radius: 13px;
+  }
+  .mac-shell .conversation-topbar[data-home="true"] {
+    block-size: 34px;
+    min-block-size: 34px;
+    padding-inline: 13px;
+  }
+  .mac-shell.compact-navigation .conversation-topbar[data-home="true"] { padding-inline-start: 43px; }
+  .mac-shell .codex-sidebar .workspace-selector-wrap { padding-block-end: 3px; }
+  .mac-shell .codex-sidebar .sidebar-primary .nav-item {
+    min-height: 27px;
+    height: 27px;
+    color: var(--color-text);
+  }
+  .mac-shell .codex-sidebar .sidebar-project-summary {
+    padding-block-start: 15px;
+    border-block-start-color: transparent;
+  }
+  .mac-shell .codex-project-record > summary { min-height: 26px; }
+  .mac-shell .home-state .timeline { padding-block-start: clamp(60px, 21.6vh, 198px); }
+  .mac-shell .home-state > .composer-wrap { padding: 0 clamp(32px, 5.1vw, 58px) 2px; }
+  .mac-shell .home-state .composer-suggestions { gap: 7px; margin-bottom: 9px; }
+  .mac-shell .home-state .composer-suggestions > button { min-height: 50px; padding: 5px 10px; gap: 3px; }
+  .mac-shell .composer.composer-body {
+    min-height: 67px;
+    padding: 5px 5px 3px;
+    border-radius: 15px;
+  }
+  .mac-shell .composer-body textarea {
+    --composer-measured-min-height: 26px;
+    min-height: var(--composer-measured-min-height);
+    height: var(--composer-measured-min-height);
+    padding: 3px 4px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .mac-shell .composer-utilities { min-height: 28px; }
+  .mac-shell .composer-utility { min-height: 27px; }
+  .mac-shell .composer-body .send-button { width: 26px; height: 26px; }
+  .mac-shell .composer-workspace-context { min-height: 27px; padding-block-start: 1px; }
+  .mac-shell .home-state .empty-conversation h2 { font-size: 20px; line-height: 26px; }
+  .mac-shell .home-state .empty-conversation .welcome-project {
+    margin-block-start: 0;
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .mac-shell .home-state .empty-conversation::before { margin-block-end: 9px; }
+}
+@media (min-width: 761px) and (max-height: 480px) {
+  .mac-shell .home-state .timeline { padding-block-start: 16px; }
+}
+@media (max-width: 760px) {
+  .app-shell.simple-shell.mac-shell { grid-template-columns: 0 minmax(0, 1fr); }
+  .mac-shell > .desktop-chrome { left: 0; }
+  .mac-shell:not(.compact-navigation) > .desktop-chrome { z-index: 90; }
+  .mac-shell .conversation-topbar, .mac-shell .settings-view { padding-inline-start: 43px; }
+}
+@media (max-width: 360px) {
+  .mac-shell .conversation-status { gap: 2px; }
+  .mac-shell .conversation-topbar { gap: 5px; padding-inline-end: 7px; }
+  .mac-shell .conversation-topbar .router-status { font-size: 11px; white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell.simple-shell.mac-shell { transition: none; }
+  .mac-shell :is(.loading-spinner, .refresh-button.is-refreshing svg) { animation: none; }
+  .mac-shell :is(.sidebar-toggle, .conversation-more-toggle, .conversation-menu-item, .thread-tool, .send-button) { transition: none; }
+}
+@media (forced-colors: active) {
+  .app-shell.simple-shell.mac-shell { --forge-focus-ring: Highlight; }
+  .mac-shell .codex-sidebar .nav-item[aria-current="page"] { outline: 1px solid Highlight; outline-offset: -2px; }
+  .mac-shell .composer-body .send-button:disabled {
+    opacity: 1;
+    border: 1px solid GrayText;
+    color: GrayText;
+  }
+}

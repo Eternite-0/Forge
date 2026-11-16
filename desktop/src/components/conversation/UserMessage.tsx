@@ -16,8 +16,9 @@ export default function UserMessage({ message, outgoing, native, onInspect, canR
       </>}
     </div>
     <div className="message-body"><Markdown content={message?.content ?? outgoing?.content ?? ""} native={native} onInspect={onInspect} />
-      {outgoing?.status === "failed" && <div className="outgoing-error" role="alert">{outgoing.error || "请求未完成"} · 请求 ID：<code>{outgoing.requestId}</code>
-        <button className="text-button" disabled={!canRetry} onClick={() => onRetry?.(outgoing)}>使用原请求重试</button>
+      {outgoing?.status === "failed" && <div className="outgoing-error"><span role="alert">未发送</span>
+        <button className="text-button" disabled={!canRetry} onClick={() => onRetry?.(outgoing)}>重试</button>
+        <details><summary>查看发送失败原因</summary>{outgoing.error || "请求未完成"} · 请求 ID：<code>{outgoing.requestId}</code></details>
       </div>}
     </div>
   </article>;

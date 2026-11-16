@@ -6,7 +6,7 @@ import { statusLabel, toolLabel } from "../../presentation";
 import type { TimelineEvent, TimelineItem } from "../../timeline";
 
 export type Row = Record<string, unknown>;
-export type Quest = { id: string; title: string; status: string; version: number };
+export type Quest = { id: string; title: string; status: string; version: number; goal?: string };
 export const text = (value: unknown, fallback = "未知") => value == null || value === "" ? fallback : String(value);
 export type DisplayItem = Exclude<TimelineItem, { type: "event" }> | { type: "group"; questId: string | null; events: TimelineEvent[] };
 export type EventViewState = { expanded?: boolean; recordExpanded?: boolean; groupExpanded?: boolean; commandExpanded?: boolean; workerExpanded?: boolean; groupFilesExpanded?: boolean; inline?: InlineArtifactMemory };

@@ -210,3 +210,23 @@ button.worker-run:hover { background: var(--color-background-secondary-ghost-hov
 .conversation-actions-menu .popover-surface { padding: 5px; }
 .conversation-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 38px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--color-text); font: inherit; font-size: 14px; text-align: left; }
 .conversation-menu-item:hover, .conversation-menu-item:focus-visible { background: var(--color-background-secondary-ghost-hover); }
+
+/* A messenger has the same single-row action on the first and later turns. */
+.conversation-shell.home-state { justify-content: flex-start; padding: 0; overflow: hidden; }
+.home-state > .conversation-topbar { position: relative; inset: auto; }
+.home-state .timeline { flex: 1; justify-content: safe center; padding: 20px 16px calc(var(--conversation-footer-height, 76px) + 12px); }
+.home-state > .composer-wrap { position: absolute; padding-bottom: 18px; }
+.home-state > .composer-wrap::before { display: block; }
+.empty-conversation > p { max-width: 32ch; margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 22px; }
+.composer-wrap { padding: 0 20px 18px; }
+.composer-stack { max-width: 736px; }
+.composer.composer-body { display: flex; align-items: flex-end; gap: 10px; min-height: 56px; padding: 7px; padding-inline-start: 15px; border-radius: 19px; background: var(--app-color-background-surface-under); }
+.composer-body .composer-input { min-width: 0; flex: 1; }
+.composer-body textarea { height: 40px; min-height: 40px; max-height: 180px; padding-block: 8px; }
+.composer-body .send-button { width: 40px; height: 40px; }
+.composer-stack > .send-error { margin: 0 0 7px; font-size: 12px; line-height: 18px; overflow-wrap: anywhere; }
+.composer-stack > .send-error p { margin: 0; }
+@media (max-width: 480px) {
+  .composer-wrap { padding-inline: 12px; }
+  .home-state .empty-conversation h2 { font-size: 24px; }
+}
