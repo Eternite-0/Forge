@@ -59,11 +59,9 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
   }))];
   const latestUserText = [...messages].reverse().find(message => message.role === "user")?.content;
   const threadTitle = latestUserText?.replace(/\s+/g, " ").trim().slice(0, 180) || (home ? "FORGE" : "与 FORGE 对话");
-  const threadContext = connection ? [currentWorkspaceName, messages.length ? `${messages.length} 条已加载消息` : ""].filter(Boolean).join(" · ") : "";
   return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
-      <ConversationToolbar home={home} status={routerStatus} title={threadTitle} context={threadContext}
-        activityCount={timelineEvents.length} changeCount={conversationFiles.length} workerCount={workerActivity.items.length}
+      <ConversationToolbar home={home} status={routerStatus} title={threadTitle} changeCount={conversationFiles.length}
         onOpenChanges={() => openPreview("conversation", undefined, conversationFiles)}
         onOpenTasks={() => openTaskView("quests", "")} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent}
         onOpenSettings={workspace.openSettings} onOpenMemory={() => selectSetting("memory")} onOpenActivity={() => openTaskView("activity", "")}

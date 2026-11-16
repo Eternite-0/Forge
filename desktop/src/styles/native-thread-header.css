@@ -20,16 +20,6 @@
   line-height: 19px;
   font-weight: 550;
 }
-.thread-context {
-  margin: 2px 0 0;
-  overflow: hidden;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 14px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.thread-tools { display: flex; gap: 6px; }
 .thread-tool, .codex-shell .conversation-tasks-toggle {
   min-height: 25px;
   height: 25px;
@@ -48,6 +38,5 @@
   .codex-shell .conversation-topbar { padding-inline: 12px; }
 }
 @media (max-width: 600px) {
-  .thread-tools { display: none; }
   .codex-shell .conversation-topbar .topbar-title h1 { font-size: 13px; }
 }

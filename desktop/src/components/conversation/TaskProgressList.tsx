@@ -1,5 +1,6 @@
 import { questDisplayTitle, statusLabel } from "../../presentation";
 import type { TaskProgress } from "../../taskProgress";
+import ShellIcon from "../ShellIcon";
 import "../../styles/task-progress.css";
 
 export default function TaskProgressList({ cards, onQuest, onOpenHistory, visibleHistoryReceipts }: {
@@ -14,10 +15,10 @@ export default function TaskProgressList({ cards, onQuest, onOpenHistory, visibl
   return <section className="task-progress-list" aria-label="当前任务进展">
     {visible.map(({ quest, result }) => <div className="task-progress-row" key={quest.id} data-task-id={quest.id}>
       <button type="button" className="task-progress-summary" onClick={() => onQuest(quest.id)}>
-        <span className="task-progress-icon" data-state={quest.status} aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.3">{quest.status === "completed" ? <path d="m3 8 3 3 7-7" /> : <><circle cx="8" cy="8" r="5.5" /><path d="M8 4.5V8l2.5 1.5" /></>}</svg></span>
+        <span className="task-progress-icon" data-state={quest.status} aria-hidden="true"><ShellIcon size={16} name={quest.status === "completed" ? "check" : ["awaiting_approval", "blocked", "needs_input", "failed"].includes(quest.status) ? "alert" : "clock"} /></span>
         <span className="task-progress-title">{questDisplayTitle(quest.title, quest.id, quest.goal)}</span>
         <span className="task-progress-status">{statusLabel(quest.status)}</span>
-        <span aria-hidden="true">›</span>
+        <ShellIcon name="chevronRight" size={14} />
       </button>
       {quest.status === "completed" && !(result && visibleHistoryReceipts?.has(result.receiptId)) && <div className="task-progress-result">{result && onOpenHistory
         ? <button type="button" className="text-button" onClick={() => onOpenHistory(result.receiptId, result.path)}>查看最近文件记录<span>{result.path}</span></button>

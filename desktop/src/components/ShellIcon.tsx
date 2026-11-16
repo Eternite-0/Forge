@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export type ShellIconName = "compose" | "clock" | "memory" | "activity" | "settings" | "folder" | "search" | "document" | "plus" | "chevronDown" | "arrowUp" | "tasks" | "ellipsis";
+export type ShellIconName = "compose" | "clock" | "memory" | "activity" | "settings" | "folder" | "search" | "document" | "plus" | "chevronDown" | "arrowUp" | "tasks" | "ellipsis" | "changes" | "chevronRight" | "check" | "alert";
 
 /** One optical grid for shell controls. These are original outlines, not font glyphs. */
 export default function ShellIcon({ name, size = 18, ...props }: SVGProps<SVGSVGElement> & { name: ShellIconName; size?: number }) {
@@ -18,6 +18,10 @@ export default function ShellIcon({ name, size = 18, ...props }: SVGProps<SVGSVG
     arrowUp: <path d="M10 16V4M5.5 8.5 10 4l4.5 4.5" />,
     tasks: <><rect x="3" y="3" width="14" height="14" rx="2.5" /><path d="m6 8.5.9.9 1.7-1.8M10.5 8.5h3.2m-3.2 3.6h3.2M6.4 12.1h.6" /></>,
     ellipsis: <g fill="currentColor" stroke="none"><circle cx="4.8" cy="10" r="1.1" /><circle cx="10" cy="10" r="1.1" /><circle cx="15.2" cy="10" r="1.1" /></g>,
+    changes: <><path d="M5 2.8h10.2a1.8 1.8 0 0 1 1.8 1.8v10.8a1.8 1.8 0 0 1-1.8 1.8H5a1.8 1.8 0 0 1-1.8-1.8V4.6A1.8 1.8 0 0 1 5 2.8Z" /><path d="M7 7h6M10 4.8v4.4M7 13h6" /></>,
+    chevronRight: <path d="m8 6 4 4-4 4" />,
+    check: <path d="m4.5 10 3.5 3.5 7.5-8" />,
+    alert: <><circle cx="10" cy="10" r="7" /><path d="M10 6.5V10m0 3.3v.2" /></>,
   };
   return <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" {...props}>{paths[name]}</svg>;
 }

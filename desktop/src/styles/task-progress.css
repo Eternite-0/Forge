@@ -1,26 +1,28 @@
-.task-progress-list { display: flex; flex-direction: column; gap: 2px; margin-block: 12px 8px; }
+.task-progress-list { display: flex; flex-direction: column; gap: 2px; margin-block: 8px; }
 .task-progress-row { min-width: 0; border: 0; background: transparent; }
 .task-progress-summary { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; padding: 6px 4px; border: 0; border-radius: 7.5px; background: transparent; color: var(--color-text-secondary); text-align: left; }
 .task-progress-summary:hover { background: var(--color-background-secondary-ghost-hover); }
 .task-progress-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 .task-progress-status { flex: none; color: var(--color-text-secondary); font-size: 12px; }
-.task-progress-icon { display: grid; place-items: center; flex: none; width: 24px; height: 24px; border-radius: 6px; color: var(--color-text-secondary); background: var(--color-background-ghost); }
+.task-progress-icon { display: grid; place-items: center; flex: none; width: 20px; height: 24px; color: var(--color-text-secondary); }
+.task-progress-summary > svg { flex: none; }
 .task-progress-icon:is([data-state="awaiting_approval"], [data-state="blocked"], [data-state="needs_input"]) { color: var(--color-status-warning); }
 .task-progress-icon[data-state="failed"] { color: var(--color-status-error); }
-.task-progress-result { padding: 0 4px 8px 36px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; }
+.task-progress-result { padding: 0 4px 8px 32px; color: var(--color-text-secondary); font-size: 12px; line-height: 18px; }
 .task-progress-result button { display: flex; flex-wrap: wrap; gap: 4px 12px; text-align: left; font-size: 12px; }
 .task-progress-result button > span { color: var(--color-text-secondary); overflow-wrap: anywhere; }
 .task-progress-more { align-self: flex-start; padding: 6px 12px; color: var(--color-text-secondary); font-size: 12px; }
 
-/* Execution records remain in the reading column, not a stack of cards. */
-.timeline .turn-diff.activity-group-files { border: 0; border-radius: 0; background: transparent; overflow: visible; }
-.timeline .turn-diff-header { min-height: 42px; padding: 6px 0; gap: 8px; border: 0; }
-.timeline .turn-diff-icon { width: 30px; height: 30px; border-radius: 7.5px; }
+/* The actual file changes form a single compact review block under the reply. */
+.timeline .turn-diff.activity-group-files { border: 1px solid var(--color-border); border-radius: 10px; background: var(--app-color-background-surface); overflow: visible; }
+.timeline .turn-diff-header { min-height: 37px; padding: 4px 8px; gap: 7px; border-bottom: 1px solid var(--color-border-subtle); }
+.timeline .turn-diff-icon { width: 22px; height: 22px; background: transparent; }
 .timeline .turn-diff-icon > svg { width: 16px; height: 16px; }
 .timeline .turn-diff-title { font-size: 13px; line-height: 20px; }
-.timeline .turn-diff .turn-diff-file { min-height: 30px; height: 30px; padding: 0 4px; border-radius: 6px; }
+.timeline .turn-diff-files, .timeline .activity-more-files-body { padding: 2px 4px; }
+.timeline .turn-diff .turn-diff-file { min-height: 30px; height: 30px; padding: 0 6px; border-radius: 6px; }
 .timeline .turn-diff-path { color: var(--color-text-secondary); font: 12px/20px var(--font-sans); }
-.timeline .turn-diff-actions button { height: 24px; padding: 0 6px; border: 0; border-radius: 6px; background: transparent; color: var(--color-text-secondary); font-size: 12px; }
+.timeline .turn-diff-actions button { height: 28px; padding: 0 6px; border: 0; border-radius: 6px; background: transparent; color: var(--color-text-secondary); font-size: 12px; white-space: nowrap; }
 .timeline .turn-diff-actions button:hover { background: var(--color-background-secondary-ghost-hover); color: var(--color-text); }
 .timeline .process-transcript { margin-top: 8px; }
 .timeline .process-transcript > summary { min-height: 28px; font-size: 13px; line-height: 20px; }

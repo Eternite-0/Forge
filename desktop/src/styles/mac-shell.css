@@ -44,6 +44,33 @@
 .mac-shell .conversation-topbar[data-home="true"] { justify-content: space-between; }
 .mac-shell .conversation-topbar[data-home="true"] .topbar-title h1 { font-size: 12px; font-weight: 520; }
 .mac-shell .conversation-topbar[data-home="true"] .conversation-tasks-toggle { border-color: transparent; }
+.mac-shell .conversation-topbar[data-home="false"] {
+  height: 42px;
+  min-height: 42px;
+  padding-block: 4px;
+}
+.mac-shell .conversation-topbar[data-home="false"] .topbar-title h1 { font-size: 13px; }
+.mac-shell .conversation-status { flex: none; gap: 4px; }
+.mac-shell .conversation-status > :is(.thread-tool, .thread-tasks-button) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-width: 28px;
+  min-height: 28px;
+  padding-inline: 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+}
+.mac-shell .conversation-status > :is(.thread-tool, .thread-tasks-button):hover {
+  background: var(--color-background-secondary-ghost-hover);
+}
+.mac-shell .conversation-menu-item > svg { flex: none; color: var(--color-text-secondary); }
+.mac-shell .conversation-shell:not(.home-state) .timeline { padding-block-start: 16px; }
+.mac-shell .conversation-list { --conversation-item-gap: 10px; }
+.mac-shell .conversation-list > .message.from-user:not(:first-child) { margin-block-start: 14px; }
+.mac-shell .conversation-list > .process-transcript { margin-block-start: 0; }
 .mac-shell.compact-navigation .conversation-topbar, .mac-shell.compact-navigation .settings-view { padding-inline-start: 43px; }
 @media (min-width: 761px) {
   .app-shell.simple-shell.mac-shell:not(.compact-navigation) {
@@ -60,8 +87,6 @@
     padding-inline: 13px;
   }
   .mac-shell.compact-navigation .conversation-topbar[data-home="true"] { padding-inline-start: 43px; }
-  .mac-shell .conversation-topbar[data-home="true"] .thread-tasks-button { padding-inline: 5px; }
-  .mac-shell .conversation-topbar[data-home="true"] .thread-tasks-button > span:not(.task-attention-count) { display: none; }
   .mac-shell .codex-sidebar .workspace-selector-wrap { padding-block-end: 3px; }
   .mac-shell .codex-sidebar .sidebar-primary .nav-item {
     min-height: 27px;
@@ -77,12 +102,12 @@
   .mac-shell .home-state > .composer-wrap { padding: 0 clamp(32px, 5.1vw, 58px) 2px; }
   .mac-shell .home-state .composer-suggestions { gap: 7px; margin-bottom: 9px; }
   .mac-shell .home-state .composer-suggestions > button { min-height: 50px; padding: 5px 10px; gap: 3px; }
-  .mac-shell .home-state .composer.composer-body {
+  .mac-shell .composer.composer-body {
     min-height: 67px;
     padding: 5px 5px 3px;
     border-radius: 15px;
   }
-  .mac-shell .home-state .composer-body textarea {
+  .mac-shell .composer-body textarea {
     --composer-measured-min-height: 26px;
     min-height: var(--composer-measured-min-height);
     height: var(--composer-measured-min-height);
@@ -90,10 +115,10 @@
     font-size: 12px;
     line-height: 20px;
   }
-  .mac-shell .home-state .composer-utilities { min-height: 28px; }
-  .mac-shell .home-state .composer-utility { min-height: 27px; }
-  .mac-shell .home-state .composer-body .send-button { width: 26px; height: 26px; }
-  .mac-shell .home-state .composer-workspace-context { min-height: 27px; padding-block-start: 1px; }
+  .mac-shell .composer-utilities { min-height: 28px; }
+  .mac-shell .composer-utility { min-height: 27px; }
+  .mac-shell .composer-body .send-button { width: 26px; height: 26px; }
+  .mac-shell .composer-workspace-context { min-height: 27px; padding-block-start: 1px; }
   .mac-shell .home-state .empty-conversation h2 { font-size: 20px; line-height: 26px; }
   .mac-shell .home-state .empty-conversation .welcome-project {
     margin-block-start: 0;
