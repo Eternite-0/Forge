@@ -18,19 +18,21 @@ export default function ConversationComposer({ inputRef, value, onChange, onKeyD
   native: boolean;
   connected: boolean;
 }) {
+  const suggestions = [
+    { title: "了解这个项目", prompt: "请阅读当前工作空间，向我介绍这个项目的用途和主要结构。", icon: "◇" },
+    { title: "检查代码问题", prompt: "请检查当前项目的代码，找出值得优先修复的问题，先给我分析和建议。", icon: "⌕" },
+    { title: "整理一份计划", prompt: "请根据当前项目的情况，帮我整理一份清晰的下一步工作计划。", icon: "≡" },
+  ];
   return <footer className="composer-wrap composer-root">
     <div className="composer-stack">
       {error && <div className="send-error">
         <p role="alert">消息未能发送，草稿已保留。</p>
         <details><summary>查看发送失败原因</summary><div>{error}{requestId && <> · 请求 ID：<code>{requestId}</code></>}</div></details>
       </div>}
-      <div className={`composer-card${home ? " has-workspace-context" : ""}`}>
-      {home && <div className="composer-workspace-context">
-        <button type="button" onClick={onFiles} title={connected ? workspaceName : "连接后显示工作空间"} aria-label="查看当前工作空间文件">
-          <svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M3 6h5l2 2h7v8H3V6Zm0 0V4h5l2 2" /></svg><span>{connected ? workspaceName : "尚未连接工作空间"}</span>
-        </button>
-        <span className="composer-device-context"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><rect x="3" y="4" width="14" height="10" rx="1.5" /><path d="M7 17h6m-3-3v3" /></svg>{native ? "本机" : "浏览器"}</span>
+      {home && !value.trim() && <div className="composer-suggestions" role="group" aria-label="试试这些问题，点击填入草稿">
+        {suggestions.map(item => <button type="button" key={item.title} onClick={() => { onChange(item.prompt); inputRef.current?.focus(); }} title="填入草稿，不会自动发送"><span className="composer-suggestion-icon" aria-hidden="true">{item.icon}</span><span>{item.title}</span></button>)}
       </div>}
+      <div className="composer-card">
       <form className="composer composer-body" onSubmit={(event) => { event.preventDefault(); if (!disabled) onSend(); }}>
         <div className="composer-input"><textarea ref={inputRef} rows={1} value={value} onChange={(event) => onChange(event.target.value)} onKeyDown={onKeyDown}
           placeholder="发消息给 FORGE" aria-label="消息内容" aria-keyshortcuts="Enter" /></div>
@@ -46,6 +48,12 @@ export default function ConversationComposer({ inputRef, value, onChange, onKeyD
           </button>
         </div>
       </form>
+      <div className="composer-workspace-context">
+        <span className="composer-device-context">{native ? "本机" : "浏览器"}</span>
+        <button type="button" onClick={onFiles} title={connected ? workspaceName : "连接后显示工作空间"} aria-label="查看当前工作空间文件">
+          <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M3 6h5l2 2h7v8H3V6Zm0 0V4h5l2 2" /></svg><span>{connected ? workspaceName : "尚未连接工作空间"}</span>
+        </button>
+      </div>
       </div>
     </div>
   </footer>;

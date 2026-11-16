@@ -11,13 +11,13 @@ export default function App() {
   const workspace = useWorkspaceController();
   const { view, setting, settingsOpen, taskView, connection, native, connectionError, secretInput, connectBrowser, actionNotice, setActionNotice } = workspace;
   const shell = useRef<HTMLDivElement>(null);
-  const [narrow, setNarrow] = useState(() => window.matchMedia("(max-width: 1000px)").matches);
+  const [narrow, setNarrow] = useState(() => window.matchMedia("(max-width: 760px)").matches);
   const [sidebarOverlay, setSidebarOverlay] = useState(false);
   const taskPageOpen = narrow && taskView && !settingsOpen;
   const sidebarLayerOpen = narrow && sidebarOverlay && !taskPageOpen;
   const compact = narrow ? !sidebarOverlay : workspace.compactNavigation;
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 1000px)");
+    const media = window.matchMedia("(max-width: 760px)");
     const change = () => { setNarrow(media.matches); setSidebarOverlay(false); };
     media.addEventListener("change", change);
     return () => media.removeEventListener("change", change);
@@ -36,7 +36,7 @@ export default function App() {
   }, [taskPageOpen, connection]);
   useLayoutEffect(() => {
     if (!sidebarLayerOpen) return;
-    shell.current?.querySelector<HTMLButtonElement>('.codex-icon-rail button')?.focus({ preventScroll: true });
+    shell.current?.querySelector<HTMLButtonElement>('.codex-sidebar .conversation-entry')?.focus({ preventScroll: true });
     const content = Array.from(shell.current?.querySelectorAll<HTMLElement>(":scope > .chat-workspace, :scope > .settings-view") || []);
     content.forEach(element => element.setAttribute("inert", ""));
     return () => content.forEach(element => element.removeAttribute("inert"));
@@ -55,7 +55,7 @@ export default function App() {
   const connectionSetup = !connection && <section className="simple-connection" aria-label="连接 FORGE">
       <div className="connect-banner" role="status"><div><strong>{native ? "正在连接 FORGE" : "连接 FORGE"}</strong><p>{native ? "正在启动本地服务，请稍候。" : "输入本次启动密钥即可开始。密钥不会保存在浏览器中。"}</p>{connectionError && <p className="error">{connectionError}</p>}</div>{!native && <form className="connect-controls" onSubmit={(event) => { event.preventDefault(); void connectBrowser(); }}><input ref={secretInput} type="password" autoComplete="off" aria-label="Core 启动密钥" placeholder="本次启动密钥" /><button type="submit" className="button primary">连接</button></form>}</div>
     </section>;
-  return <div ref={shell} className={`app-shell simple-shell codex-shell${compact ? " compact-navigation" : ""}${view === "chat" && !settingsOpen ? " chat-open" : ""}${settingsOpen ? " settings-open" : ""}${taskView && !settingsOpen ? " tasks-open" : ""}${taskPageOpen ? " task-page-open" : ""}`}>
+  return <div ref={shell} className={`app-shell simple-shell codex-shell mac-shell${compact ? " compact-navigation" : ""}${view === "chat" && !settingsOpen ? " chat-open" : ""}${settingsOpen ? " settings-open" : ""}${taskView && !settingsOpen ? " tasks-open" : ""}${taskPageOpen ? " task-page-open" : ""}`}>
     <Titlebar route={settingsOpen ? `settings:${setting}` : view} onNavigate={navigate} sidebarCollapsed={compact} onToggleSidebar={() => {
       workspace.captureReadingPosition();
       if (narrow) setSidebarOverlay(value => !value); else workspace.setSidebarCollapsed(value => !value);

@@ -39,7 +39,7 @@ async (page) => {
   const more = page.getByRole('button', { name: '更多对话操作' });
   const rail = page.getByLabel('主导航');
   check(await rail.isVisible() && await page.locator('.desktop-chrome').isVisible(), 'desktop has the icon rail, workspace sidebar and titlebar');
-  check(await rail.evaluate(element => getComputedStyle(element).flexDirection === 'row' && element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'sidebar rail and project list render side by side at readable width');
+  check(await rail.evaluate(element => element.querySelector('.sidebar-panel').getBoundingClientRect().width > 160), 'the single Mac-style sidebar is visible at readable width');
   check(await rail.locator('.conversation-entry').count() === 1, 'sidebar keeps one genuine conversation');
   const fileMenu = page.locator('.titlebar').getByRole('menuitem', { name: '文件', exact: true });
   await fileMenu.press('ArrowDown');
@@ -53,6 +53,11 @@ async (page) => {
     return editor.top > innerHeight * .72 && greeting.top < innerHeight * .56 && editor.top > greeting.bottom;
   }), 'the welcome and low composer occupy distinct reference bands');
   check(await page.locator('.composer-workspace-context').isVisible(), 'the welcome composer has a real workspace context strip');
+  check(await page.locator('.composer-workspace-context').evaluate(element => element.getBoundingClientRect().top >= document.querySelector('.composer').getBoundingClientRect().bottom - 1), 'workspace context sits below the editor');
+  const suggestions = page.getByRole('group', { name: /点击填入草稿/ });
+  await suggestions.getByRole('button').first().click();
+  check((await composer.inputValue()).length > 0 && posts.length === 0, 'a starter card fills the draft without sending');
+  await composer.fill('');
   const ready = page.waitForResponse(response => new URL(response.url()).pathname === '/api/quests');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
@@ -97,7 +102,7 @@ async (page) => {
   check(await progress.locator('.task-progress-row').count() === 1 && await progress.getByRole('button', { name: /查看最近文件记录/ }).count() === 0 && (await turnFiles.innerText()).includes('reports/summary.md'), 'one task updates in place without duplicating the exact file receipt action');
   const threadHeader = page.locator('.conversation-topbar');
   check(await threadHeader.getByRole('heading', { name: '替我整理项目资料' }).isVisible() && await threadHeader.getByRole('button', { name: '改动 1' }).isVisible(), 'working header uses actual request title and change count');
-  check(await turnFiles.evaluate(element => Math.abs(element.getBoundingClientRect().width - document.querySelector('.composer').getBoundingClientRect().width) < 12 && element.getBoundingClientRect().width >= 900), 'working file rows and composer align across the broad reading area');
+  check(await turnFiles.evaluate(element => Math.abs(element.getBoundingClientRect().width - document.querySelector('.composer').getBoundingClientRect().width) < 12 && element.getBoundingClientRect().width >= Math.min(innerWidth * .6, 900)), 'working file rows and composer align across the available reading area');
   await page.setViewportSize({ width: 390, height: 650 });
   await rail.waitFor({ state: 'hidden' });
   await page.getByRole('button', { name: '展开工作空间侧栏' }).click();

@@ -12,8 +12,8 @@ export default function ConversationToolbar({ home, status, title, context, acti
   const menuTrigger = useRef<HTMLButtonElement>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   return <header className="topbar conversation-topbar" data-home={home} data-tauri-drag-region>
-    <div className={`topbar-title${home ? " sr-only" : ""}`}>
-      <h1 title={title}>{title}</h1>
+    <div className="topbar-title">
+      <h1 title={home ? "长期对话" : title}>{home ? "对话" : title}</h1>
       {!home && context && <p className="thread-context" title={context}>{context}</p>}
     </div>
     <div className="conversation-status">

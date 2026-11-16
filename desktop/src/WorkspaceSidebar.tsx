@@ -127,6 +127,11 @@ export default function WorkspaceSidebar({
         aria-hidden={!workspaceOpen}
         tabIndex={-1}
         onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            event.stopPropagation();
+            closeWorkspace();
+          }
           if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
             event.preventDefault();
             (currentRef.current || dialogRef.current)?.focus();
@@ -150,7 +155,7 @@ export default function WorkspaceSidebar({
       </div>
     </div>
     {searchOpen && <div className="sidebar-project-search" id={projectSearchId}><input ref={searchInput} type="search" value={projectQuery} aria-label="按项目名称或路径筛选" placeholder="筛选项目…" onChange={(event) => setProjectQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setSearchOpen(false); setProjectQuery(""); searchTrigger.current?.focus(); } }} /><span>仅筛选已加载项目</span></div>}
-    <div className="sidebar-primary"><h2 className="sidebar-section-label">对话</h2>{navigation}</div>
+    <div className="sidebar-primary">{navigation}</div>
     <div className="sidebar-scroll">
       {topNavigation && <div className="sidebar-tools"><h2 className="sidebar-section-label">工作记录</h2>{topNavigation}</div>}
       {connected && <section className="sidebar-project-summary" aria-label="项目上下文" data-project-key={workspaceProject.key} data-project-source="workspace">

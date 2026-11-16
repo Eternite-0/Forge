@@ -81,7 +81,7 @@
 
 /* At tablet/phone widths, Tasks is a page rather than a partial overlay.
    The mounted conversation is made inert by App, preserving draft and scroll. */
-@media (max-width: 1000px) {
+@media (max-width: 760px) {
   .app-shell > .workspace-panel.task-inspector {
     inset: 0;
     width: 100%;

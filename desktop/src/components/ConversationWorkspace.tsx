@@ -70,7 +70,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         onConfigure={() => selectSetting("environment")} pendingCount={pendingApprovals.length} />
       {connectionSetup}
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
-      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats}
+      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats} workspaceName={connection ? currentWorkspaceName : undefined}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
         historyBusy={historyBusy} timelineError={timelineError} conversationError={conversationError}
         approvalError={approvalLoadError} canRetry={!!connection && !sending && !writesBlocked} scrollRef={scrollRef}

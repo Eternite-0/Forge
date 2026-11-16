@@ -1,0 +1,52 @@
+/* Match the visible application frame, not the macOS window controls or wallpaper. */
+.app-shell.simple-shell.mac-shell {
+  --app-shell-titlebar-height: 0px;
+  --sidebar-width: clamp(208px, 27.2vw, 300px);
+  --forge-sidebar-background: linear-gradient(155deg, light-dark(#eaf2fc,#202632) 0%, light-dark(#e5ecfc,#1d2231) 53%, light-dark(#e8e7fb,#22202e) 100%);
+  position: relative;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+}
+.app-shell.simple-shell.mac-shell.compact-navigation { grid-template-columns: 0 minmax(0, 1fr); }
+.mac-shell > :is(.rail, .chat-workspace, .settings-view, .workspace-panel) { grid-row: 1; }
+.mac-shell > .desktop-chrome {
+  position: absolute;
+  top: 0;
+  left: calc(var(--sidebar-width) - 37px);
+  width: 37px;
+  height: 40px;
+  align-items: center;
+  padding: 0 5px;
+  border: 0;
+  background: transparent;
+}
+.mac-shell.compact-navigation > .desktop-chrome { left: 0; }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]), .mac-shell .application-menubar {
+  opacity: 0;
+  pointer-events: none;
+}
+.mac-shell .application-menubar {
+  position: absolute;
+  inset-inline-start: 32px;
+  padding: 2px 5px;
+  border-radius: 8px;
+  background: var(--app-color-background-control);
+  box-shadow: var(--shadow-sm);
+}
+.mac-shell .titlebar-navigation { gap: 0; }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]) { position: absolute; inset-block-start: 40px; left: 0; background: var(--app-color-background-control); }
+.mac-shell .titlebar-navigation > button:not([aria-expanded]):nth-of-type(2) { inset-block-start: 68px; }
+.mac-shell .desktop-chrome:is(:hover,:focus-within) :is(.application-menubar, .titlebar-navigation > button:not([aria-expanded])) {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mac-shell .conversation-topbar[data-home="true"] { justify-content: space-between; }
+.mac-shell .conversation-topbar[data-home="true"] .topbar-title h1 { font-size: 12px; font-weight: 520; }
+.mac-shell .conversation-topbar[data-home="true"] .conversation-tasks-toggle { border-color: transparent; }
+.mac-shell.compact-navigation .conversation-topbar, .mac-shell.compact-navigation .settings-view { padding-inline-start: 43px; }
+@media (max-width: 760px) {
+  .app-shell.simple-shell.mac-shell { grid-template-columns: 0 minmax(0, 1fr); }
+  .mac-shell > .desktop-chrome { left: 0; }
+  .mac-shell:not(.compact-navigation) > .desktop-chrome { z-index: 90; }
+  .mac-shell .conversation-topbar, .mac-shell .settings-view { padding-inline-start: 43px; }
+}

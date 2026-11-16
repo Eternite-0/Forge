@@ -14,10 +14,10 @@ import { groupEvents, text, type EventViewMemory, type HistoryProps, type Quest,
 
 export { default as SafeMarkdownPreview } from "./components/Markdown";
 
-export default function ChatTimeline({ messages, events, outgoing, quests, workerRuns, approvals, native,
+export default function ChatTimeline({ messages, events, outgoing, quests, workerRuns, approvals, native, workspaceName,
   connected, historyMore, historyBusy, timelineError, conversationError, approvalError,
   canRetry, scrollRef, onScroll, onInspect, onLoadOlder, onRetry, onQuest, onOpenFile, onOpenHistory, historyStats, connection, onHistoryLoaded, onApproval, approvalsBlocked, onApprovalDecision }: {
-  messages: ChatMessage[]; events: TimelineEvent[]; outgoing: Outgoing[]; quests: Quest[]; workerRuns: WorkerRun[]; approvals: Row[];
+  messages: ChatMessage[]; events: TimelineEvent[]; outgoing: Outgoing[]; quests: Quest[]; workerRuns: WorkerRun[]; approvals: Row[]; workspaceName?: string;
   native: boolean; connected: boolean; historyMore: boolean; historyBusy: boolean; timelineError: string;
   conversationError: string; approvalError: string; canRetry: boolean; scrollRef: RefObject<HTMLDivElement>;
   onScroll: () => void; onInspect: () => void; onLoadOlder: () => void; onRetry: (item: Outgoing) => void;
@@ -40,7 +40,7 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
     {timelineError && <p className="notice error" role="alert">过程记录暂不可用：{timelineError}</p>}
-    {!items.length && !workerRuns.length && !(connected && (progress.length || approvals.length)) && <div className="empty-conversation"><h2>今天想做什么？</h2></div>}
+    {!items.length && !workerRuns.length && !(connected && (progress.length || approvals.length)) && <div className="empty-conversation"><h2>今天想做什么？</h2>{workspaceName && <p className="welcome-project">{workspaceName}</p>}</div>}
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
