@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "audit_kind": "source_and_requirement_evidence_matrix",
+  "created_date": "2026-11-16",
+  "base_commit": "57a162d31f9b559353fecbde61f95dd72f878abd",
+  "branch": "codex/phase1-continuous",
+  "scope": "Capability Sprint A-G and L1/L2/L3; existing implementation distinguished from acceptance and new offline followups",
+  "closed_phase": {
+    "path": "docs/audit/superagent/checkpoint-pre-continuation/final-verification.json",
+    "sha256": "2ca3362bc06a321cd749036796afb891c1cc584bb1172becf23e2fa29db0a7dc",
+    "status": "incomplete_acceptance_failed",
+    "task_and_diagnostic_calls": 160,
+    "settled": 159,
+    "unknown_reserved": 1,
+    "known_charged_tokens": 1355207,
+    "separate_microprobe_calls": 12,
+    "ceiling_closed_not_reopened": true,
+    "old_final_evidence_modified_by_this_audit": false
+  },
+  "classification": {
+    "proven": "Concrete evidence for the stated bounded behavior; no general task-quality inference",
+    "missing_live_evidence": "Implementation and programmatic coverage exist; successful live acceptance is absent or failed",
+    "implementation_gap": "A specific absent or insufficient behavior in source, independently of live evidence",
+    "continuation_offline_fix": "New source or regression work after the closed final evidence, requiring separate acceptance"
+  },
+  "sprints": [
+    {
+      "id": "A",
+      "name": "Router Intelligence and multi-Workspace continuity",
+      "source": ["backend/src/forge_core/router.py", "backend/src/forge_core/workspace_discovery.py", "backend/src/forge_core/superagent_delegation.py"],
+      "programmatic_evidence": ["backend/tests/test_capability_router_projects.py", "backend/tests/test_project_identity_capability_sprint.py", "backend/tests/test_workspace_discovery_pump_capability_sprint.py", "backend/tests/test_router_control_capability_sprint.py", "backend/tests/test_router_notice_capability_sprint.py"],
+      "requirements": [
+        {"id": "A1", "requirement": "Accurate multi-Workspace intent and Quest association", "classification": "missing_live_evidence", "implemented": "Explicit project identity, scoped source selection and authoritative continuation links; scheduler discovery correction exists", "evidence_boundary": "Closed continuity run linked both tasks to beta; the later correction has offline evidence only", "minimal_next": "Rerun the unchanged two-project scenario and inspect actual Quest metadata and source scopes"},
+        {"id": "A2", "requirement": "Continuously coordinate several parallel tasks", "classification": "missing_live_evidence", "implemented": "Task lookup, coordination projection, hidden independent runs and original Router ownership", "evidence_boundary": "Closed live ownership intervals overlapped for three Workers and two tasks; both tasks did not complete", "minimal_next": "Observe independently accepted terminal results from both tasks at the same Router"},
+        {"id": "A3", "requirement": "Batch events and avoid unnecessary model calls", "classification": "proven", "implemented": "Fast Path, internal progress acknowledgment, progress batching and Thread pass-through", "evidence_boundary": "Both closed continuity followups passed through without an additional router_trigger inference", "minimal_next": "Retain the existing no-extra-call assertions in the new acceptance"},
+        {"id": "A4", "requirement": "Task priority, blocking judgment and proactive progress reports", "classification": "missing_live_evidence", "implemented": "Priorities, blocked coordination facts, result/progress events and bounded Router notices", "evidence_boundary": "Notice retries exhausted the old hard call ceiling; final reviewed completion was not delivered", "minimal_next": "Budget actual progress and completion notices inside original task call limits; verify processed notice source IDs"},
+        {"id": "A5", "requirement": "Judge Worker results, ask followups, redelegate and terminate", "classification": "missing_live_evidence", "implemented": "Independent review, bounded revision, source-bound help/reassignment and transactional lifecycle controls", "evidence_boundary": "Real Reviewer judgments occurred; controlled live expert replacement/followup/termination has not been accepted", "minimal_next": "Reuse the existing contracts and execute one bounded source-bound reassignment with explicit evidence classes"},
+        {"id": "A6", "requirement": "Router remains a reasoning coordinator rather than a registration/forwarding service", "classification": "missing_live_evidence", "implemented": "Model decisions, workspace-scoped memory/Recall and task/team selection are in the real Core lifecycle", "evidence_boundary": "Source proves the mechanism; autonomous multi-task completion and useful recovery remain unaccepted", "minimal_next": "Score actual original-user outcomes, not admission counts or Worker existence"}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Worker autonomy, tools and self-correction",
+      "source": ["backend/src/forge_core/worker_runtime.py", "backend/src/forge_core/adaptive_planning.py", "backend/src/forge_core/worker_recovery.py", "backend/src/forge_core/superagent_swarm.py"],
+      "programmatic_evidence": ["backend/tests/test_worker_intelligence_phase2.py", "backend/tests/test_superagent_swarm.py", "backend/tests/test_python_unittest_superagent.py", "backend/tests/test_worker_batch_authorization.py", "backend/tests/test_worker_write_scope_repair.py", "backend/tests/test_worker_python_receipt_visibility.py"],
+      "requirements": [
+        {"id": "B1", "requirement": "An independent model reasoning and tool-call loop", "classification": "proven", "implemented": "Private Worker messages, own model calls, tool checkpoints and governed actual execution", "evidence_boundary": "Closed L1/L3 made real source reads; L3 wrote and executed real Python"},
+        {"id": "B2", "requirement": "Plan internal subtasks and dependencies for complex work", "classification": "missing_live_evidence", "implemented": "Versioned team assignments and verified graph dependency fences", "evidence_boundary": "Hierarchical L2 started Research and Architect, but its dependent integrator never ran", "minimal_next": "Complete one full specialist-to-integrator dependency chain on fixed material"},
+        {"id": "B3", "requirement": "Bounded expert collaboration and dynamic expansion", "classification": "missing_live_evidence", "implemented": "Actual model tool transcript required for expansion/help; at most four cumulative Workers and depth one", "evidence_boundary": "SQLite/Gateway scripted fixtures cover expansion, fan-in and revocation; no accepted real-model expansion", "minimal_next": "Use an existing bounded expert request on the same parent mandate without adding budgets"},
+        {"id": "B4", "requirement": "Classify errors, adjust strategy, retry finitely and request help", "classification": "missing_live_evidence", "implemented": "Known error categories, bounded repair, exact R2 reauthorization and source-bound help", "evidence_boundary": "Real starter test failure/correction occurred; L3's original receipt-report acceptance still failed", "minimal_next": "Bind corrected code, successful tests and reported actual receipt IDs on a new task run"},
+        {"id": "B5", "requirement": "Pause, resume, cancel and crash recovery", "classification": "proven", "implemented": "Generation/lease fences and durable control state; unknown effects fail closed", "evidence_boundary": "Closed continuity restarted the same Router and Workers while awaiting R2 authorization; programmatic controls cover lifecycle behavior"},
+        {"id": "B6", "requirement": "Do not solve defects by increasing tokens, output or retries", "classification": "proven", "implemented": "Existing call/token/time/step/tool limits, fixed repair bounds and reserved/unknown accounting", "evidence_boundary": "Closed failure attempts consumed the same 160-call ceiling; later context declaration correction was documented separately from cumulative task spending", "minimal_next": "Freeze the new protocol before calls; preserve unchanged per-task limits and every failure"}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Adaptive Agent Swarm",
+      "source": ["backend/src/forge_core/superagent_swarm.py", "backend/src/forge_core/team_composition.py", "backend/src/forge_core/router_domain.py"],
+      "programmatic_evidence": ["backend/tests/test_superagent_swarm.py", "backend/tests/test_router_team_topology_capability_sprint.py", "backend/tests/test_team_intelligence_phase2.py", "backend/tests/test_superagent_provider_failover.py"],
+      "requirements": [
+        {"id": "C1", "requirement": "Single Worker baseline", "classification": "missing_live_evidence", "implemented": "Single topology and original independent loop", "evidence_boundary": "A closed single run failed on an earlier source version, so it is not a controlled current-source baseline", "minimal_next": "Execute the frozen L2 task once under single policy with the same budget"},
+        {"id": "C2", "requirement": "Parallel specialists", "classification": "missing_live_evidence", "implemented": "Independent assignments with bounded concurrency", "evidence_boundary": "Real Research/Architect ownership overlapped; only Research passed", "minimal_next": "Require accepted results from all specialists and their final integration"},
+        {"id": "C3", "requirement": "Sequential specialists", "classification": "missing_live_evidence", "implemented": "Declared successful-ancestor dependencies and source-verified delivery reading", "evidence_boundary": "The fixed sequential experiment blocked at its first Worker", "minimal_next": "Run the same frozen L2 once as Research to Architect to Reviewer"},
+        {"id": "C4", "requirement": "Hierarchical team", "classification": "missing_live_evidence", "implemented": "Parent assignments, bounded depth and verified fan-in", "evidence_boundary": "Real hierarchy was admitted; its final integrator did not start", "minimal_next": "Complete the original source-bound fan-in without synthetic PASS or result insertion"},
+        {"id": "C5", "requirement": "Dynamic expansion", "classification": "missing_live_evidence", "implemented": "Original transcript/mandate-bound expert expansion and cumulative resource accounting", "evidence_boundary": "Covered by offline model protocol tests only", "minimal_next": "A real-model help/expansion request is required for live dynamic-expansion acceptance"},
+        {"id": "C6", "requirement": "Model replacement", "classification": "continuation_offline_fix", "implemented": "Existing non-help reassign_expert branch excludes the failed provider/model pair and retains original allocations. New narrow proof distinguishes a fully received, uniquely bound Gateway rejected operation from unknown execution while preserving its unknown usage and every local/Gateway token/cost reservation", "evidence_boundary": "Dedicated programmatic tests cover actual Worker error generation, Gateway/native framing/complete HTTP 503, backup-model continuation, unknown/partial-body/source-tamper refusal and residual budget fences. No real Provider recovery call has been made by this audit", "minimal_next": "A separately labeled injected failure plus actual backup-model continuation can establish bounded mixed recovery evidence"},
+        {"id": "C7", "requirement": "Choose team/model by complexity, capability, reliability, tools, cost and latency, and compare single/fixed/dynamic policies", "classification": "missing_live_evidence", "implemented": "Role constraints, capability thresholds, source/confidence-aware utility, observed rates and latency penalties", "evidence_boundary": "Closed comparisons span source fixes and incomplete outcomes. They cannot show policy superiority", "minimal_next": "Use identical frozen tasks/material/oracle and equal caps; disclose n=1 per policy as exploratory"}
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Model Intelligence",
+      "source": ["backend/src/forge_core/registry.py", "backend/src/forge_core/model_performance.py", "backend/src/forge_core/model_intelligence.py", "backend/src/forge_core/capability_benchmark.py", "backend/src/forge_core/team_composition.py"],
+      "programmatic_evidence": ["backend/tests/test_model_registry_m3.py", "backend/tests/test_provider_declared_metadata_capability_sprint.py", "backend/tests/test_team_intelligence_phase2.py", "backend/tests/test_model_recovery_capability_sprint.py", "backend/tests/test_superagent_provider_failover.py"],
+      "requirements": [
+        {"id": "D1", "requirement": "Discover available models and capability information", "classification": "proven", "implemented": "Allowlisted Provider identity/context/output/tool/structured declarations with provenance; existing operator profiles are not overwritten", "evidence_boundary": "Discovery is declared metadata, not measured intelligence or a verified upstream identity"},
+        {"id": "D2", "requirement": "Measure actual latency, throughput and failure rate", "classification": "proven", "implemented": "Gateway observation records, transport rates, token throughput and latency summaries", "evidence_boundary": "Actual closed calls and both model microprobe traces exist. A transport success is never a task success"},
+        {"id": "D3", "requirement": "Track task success, tool success and Reviewer pass rate", "classification": "proven", "implemented": "Existing Core result/tool/review events feed measured rates; infrastructure review errors are distinguished from judgments", "evidence_boundary": "Metrics describe their observed denominators and provenance, not arbitrary-task reliability"},
+        {"id": "D4", "requirement": "Benchmark mathematics, programming, research, design, vision and planning", "classification": "implementation_gap", "implemented": "Six small text/code dimensions run with fixed oracles and zero HTTP retries; vision is explicitly unsupported", "evidence_boundary": "Twelve actual calls across deepseek-v4.1-flash and glm-5.3-flash are capability microprobes; one case per dimension cannot establish model strength. Vision execution remains unavailable", "minimal_next": "Retain unknown vision and small-sample limitations; do not invent measured scores or silently enable unsupported multimodal input"},
+        {"id": "D5", "requirement": "Record source, sample size, measurement time and confidence", "classification": "proven", "implemented": "Sourced immutable profile/measurement metadata and Wilson confidence for observed rates", "evidence_boundary": "New selection confidence uses online rates only at n>=5; that floor is not statistical sufficiency"},
+        {"id": "D6", "requirement": "Task-level dynamic model routing and fault fallback", "classification": "missing_live_evidence", "implemented": "TeamCompositionService supplies actual performance_snapshot; candidate scores use capability/tools/cost, sourced online outcome Wilson lower bounds and p95 latency. Settled failure replacement excludes original identity", "evidence_boundary": "Synthetic fixtures change routing/reassignment and new offline failover tests pass. No controlled real task routing comparison exists", "minimal_next": "Run identical bounded source tasks through two eligible actual models, then compare observed task outcome/calls/tokens/latency without claiming superiority"},
+        {"id": "D7", "requirement": "Use authorized local Providers, never print keys/change Provider files/increase budget", "classification": "proven", "implemented": "Native ProviderGateway and original credential resolver; Core policies and original accounting remain", "evidence_boundary": "This audit and its new tests make zero real Provider calls and do not access credentials"}
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Workspace and Chain of Recall",
+      "source": ["backend/src/forge_core/workspace_discovery.py", "backend/src/forge_core/recall_chain.py", "backend/src/forge_core/memory.py", "backend/src/forge_core/context_service.py"],
+      "programmatic_evidence": ["backend/tests/test_capability_router_projects.py", "backend/tests/test_recall_chain_superagent.py", "backend/tests/test_recall_archive_dependencies_superagent.py", "backend/tests/test_workspace_discovery_pump_capability_sprint.py", "backend/tests/test_worker_context_affordability.py"],
+      "requirements": [
+        {"id": "E1", "requirement": "Cross-project automatic identification", "classification": "missing_live_evidence", "implemented": "Generic project discovery, project IDs and source-bound followup identity", "evidence_boundary": "Closed two-project run was misassociated; discovery correction is only programmatically proven", "minimal_next": "Verify two independently identified project roots in new actual Quest/source metadata"},
+        {"id": "E2", "requirement": "Memory isolation among Workspaces", "classification": "proven", "implemented": "Project-focused lexical/semantic/object/archive memory and explicit cross-project opt-in", "evidence_boundary": "Programmatic scoped retrieval/revocation tests are strong; closed live project-link failure prevents claiming full continuity acceptance"},
+        {"id": "E3", "requirement": "Retrieve across Quests, Workers, Artifacts and decisions", "classification": "proven", "implemented": "Typed object references and original source/evidence readback", "evidence_boundary": "Recall graph covers the existing objects without a new parallel memory store"},
+        {"id": "E4", "requirement": "Multi-hop Recall", "classification": "missing_live_evidence", "implemented": "Bounded typed traversal and relation/source pagination already exist", "evidence_boundary": "Closed real traversal stopped incomplete at the fixed 64-node bound", "minimal_next": "Use existing targeted/paginated followup retrieval; do not raise the graph bound to hide the missing traversal"},
+        {"id": "E5", "requirement": "Restore context in a long-lived conversation", "classification": "missing_live_evidence", "implemented": "Persistent Router capsule, Worker archives/handoffs and source recovery", "evidence_boundary": "Five Router messages were compacted and Core restarted; accepted final recap after compaction was absent", "minimal_next": "Deliver a source-correct recap in the original conversation after restart and compaction"},
+        {"id": "E6", "requirement": "Keep original evidence traceable after compaction", "classification": "proven", "implemented": "Immutable originals, exact hash chains, source indices and governed readback", "evidence_boundary": "Programmatic corruption/revocation/readback tests cover the mechanism; source possession does not itself prove semantic recall quality"},
+        {"id": "E7", "requirement": "One conversation entrance for the user", "classification": "proven", "implemented": "Persistent main Router and hidden independent Workers report internally", "evidence_boundary": "Original Router identity survives the closed restart. Reviewed final completion delivery remains a separate unmet G gate"}
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Watchdog and Self-Recovery",
+      "source": ["backend/src/forge_core/watchdog.py", "backend/src/forge_core/runtime_progress.py", "backend/src/forge_core/worker_recovery.py", "backend/src/forge_core/model_performance.py"],
+      "programmatic_evidence": ["backend/tests/test_watchdog.py", "backend/tests/test_model_recovery_capability_sprint.py", "backend/tests/test_worker_productive_progress.py", "backend/tests/test_superagent_provider_failover.py"],
+      "requirements": [
+        {"id": "F1", "requirement": "Detect hung Workers separately from process heartbeat", "classification": "proven", "implemented": "Durable checkpoint fingerprint and bounded deduplicated help; heartbeat and lease renewal cannot reset its window", "evidence_boundary": "Existing tests cover live lease/no progress, concurrent Watchdogs and restart deduplication"},
+        {"id": "F2", "requirement": "Detect long periods of no actual task progress, even while inference/read activity continues", "classification": "continuation_offline_fix", "implemented": "New independent productive frontier uses distinct fixed tool-result content hashes, consumed inbox cursor and task-node state. Repeated thoughts, settled model calls and identical read receipts cannot reset it", "evidence_boundary": "Six new programmatic tests plus the existing recovery suite pass. It is a conservative diagnostic, not a semantic quality oracle or an automatic replay/termination policy", "minimal_next": "Inspect productive-frontier events during a bounded new real run and keep false-positive/recovery-quality conclusions exploratory"},
+        {"id": "F3", "requirement": "Detect Provider failures", "classification": "proven", "implemented": "Provenance-separated transport health, consecutive errors, cooldown and unknown/in-flight distinctions, including stopped Workers", "evidence_boundary": "Transport health detection exists. Successful live backup-model recovery is still missing"},
+        {"id": "F4", "requirement": "Detect abnormal execution environments", "classification": "proven", "implemented": "Revalidate per-run execution paths/environment before expired-lease recovery", "evidence_boundary": "Programmatic invalid-environment tests reject recovery; cwd isolation is not an OS security sandbox"},
+        {"id": "F5", "requirement": "Recover expired leases", "classification": "proven", "implemented": "CAS release/requeue with generation and owner fences; reconcile known Gateway usage first", "evidence_boundary": "Concurrent Watchdogs and stale-owner refusal are programmatically tested"},
+        {"id": "F6", "requirement": "Recover component crashes", "classification": "proven", "implemented": "Bounded supervise/restart with backoff and stable-operation restart credit", "evidence_boundary": "Programmatic loop factory/backoff tests plus actual host restart in closed continuity; this does not establish long-duration autonomous reliability"},
+        {"id": "F7", "requirement": "Protect unknown external side effects and never replay unknown operations", "classification": "proven", "implemented": "Unresolved tool/model/action intent fences; diagnostic recovery remains observe_only_unknown_effect", "evidence_boundary": "Unknown actions and calls block reassignment/recovery; new productive diagnostics leave lease, reservations and Worker state untouched"}
+      ]
+    },
+    {
+      "id": "TOOLS",
+      "name": "Tool Runtime",
+      "source": ["backend/src/forge_core/tool_domain.py", "backend/src/forge_core/tool_engine.py", "backend/src/forge_core/python_unittest_runner.py", "backend/src/forge_core/superagent_delegation.py"],
+      "programmatic_evidence": ["backend/tests/test_tool_engine.py", "backend/tests/test_python_unittest_superagent.py", "backend/tests/test_worker_batch_authorization.py"],
+      "requirements": [
+        {"id": "T1", "requirement": "Filesystem", "classification": "proven", "implemented": "Scoped actual reads/writes/revisions/list/create with original policy, approvals and receipts", "evidence_boundary": "Real L1 source reads and L3 writes occurred"},
+        {"id": "T2", "requirement": "Python", "classification": "proven", "implemented": "Fixed compile/evaluation/test tools and exact-manifest R2 CPython unittest with a private cwd and process-tree deadline", "evidence_boundary": "Real L3 ran visible tests; seven independent host holdouts passed. Neither constitutes a general OS sandbox"},
+        {"id": "T3", "requirement": "Git", "classification": "implementation_gap", "implemented": "Governed git_status only", "evidence_boundary": "Patch/commit/general Git mutation is not part of this tool contract", "minimal_next": "Document this gradual-expansion boundary; implement additional exact contracts only when required by a concrete task"},
+        {"id": "T4", "requirement": "Terminal", "classification": "implementation_gap", "implemented": "Fixed shell_inspect python_version probe only", "evidence_boundary": "No general terminal execution or package installation", "minimal_next": "Avoid claiming general terminal coverage; preserve minimal permissions"},
+        {"id": "T5", "requirement": "Browser", "classification": "implementation_gap", "implemented": "Approved allowlisted HTTPS browser_get", "evidence_boundary": "No interactive browser. Browser is not silently granted by the autonomous local SAFE_TOOLS mandate", "minimal_next": "Use explicit governed approval if a task needs an allowed read; do not add blanket network authority"},
+        {"id": "T6", "requirement": "MCP", "classification": "missing_live_evidence", "implemented": "Operator-preconfigured allowlisted server/tool calls with R2 approval", "evidence_boundary": "Autonomous local mandates do not grant MCP by default; no task-level live MCP acceptance in this Sprint", "minimal_next": "Keep exact configured tool approval; do not reinterpret general user intent as new MCP permission"},
+        {"id": "T7", "requirement": "GPU diagnostics", "classification": "proven", "implemented": "Bounded read-only GPU probe and explicit unsupported/unavailable results", "evidence_boundary": "Hardware availability is an observation, not a measured ability to run arbitrary GPU jobs"}
+      ]
+    },
+    {
+      "id": "G",
+      "name": "Real end-to-end acceptance",
+      "requirements": [
+        {"id": "L1", "requirement": "Recognize a local project, read actual files and produce independently correct repair recommendations", "classification": "proven", "implemented": "Actual Worker and Reviewer plus strict source/hash/line/quote checker", "evidence": "docs/audit/superagent/20261115T215924Z-capability-adaptive-45f4e4.json", "evidence_boundary": "One retained L1 task passed; the later combined task failed. Current-source reacceptance still required"},
+        {"id": "L2", "requirement": "Research an Agent framework, compare technical designs and deliver a reviewed specialist report", "classification": "missing_live_evidence", "evidence": "docs/audit/superagent/20261115T220426Z-capability-fixed-6e2553.json", "evidence_boundary": "Fixed run blocked at Research; later hierarchy passed Research but blocked Architect, so no final integrator or complete report", "minimal_next": "Complete one frozen-source L2 report with strict source citations and final Reviewer/integrator"},
+        {"id": "L3", "requirement": "Autonomously plan a small feature, write code, run/fix tests and deliver real code with exact evidence", "classification": "missing_live_evidence", "evidence": "docs/audit/superagent/20261115T221734Z-capability-continuity-300fa0.json", "evidence_boundary": "Actual code/Core completion/Reviewer PASS and seven host holdouts passed; original report referenced inferred action names rather than actual receipt IDs, so original acceptance failed. Two later extraction probes are not a task rerun", "minimal_next": "Full unchanged-task rerun on fixed source with current-hash test receipts and independent holdouts"},
+        {"id": "G_CONTINUITY", "requirement": "One scenario with two Workspaces, parallel Workers, pass-through, Core restart, compaction, Chain of Recall and final result at original Router", "classification": "missing_live_evidence", "evidence": "docs/audit/superagent/20261115T221734Z-capability-continuity-300fa0-independent-supplemental.json", "evidence_boundary": "Pass-through, three overlapping Worker ownership intervals, same-state restart and five compacted Router messages were observed; ownership is not CPU parallelism. Project links were wrong, Recall incomplete at its bound, and no reviewed final completion was delivered", "minimal_next": "A new scenario must pass every conjunct; use existing paginated Recall and reserve calls for actual final notices/recap"},
+        {"id": "G_EVIDENCE", "requirement": "Mark real Provider, Mock and programmatic evidence separately", "classification": "proven", "implemented": "Closed final evidence has explicit classes; new regression files label Mock/programmatic fixtures", "evidence_boundary": "A local HTTP/Gateway fixture with execution_mode=live is still scripted protocol evidence. An injected failure plus real backup is mixed evidence, not a naturally occurring Provider failure"}
+      ]
+    }
+  ],
+  "research": {
+    "adaptive_team_composition": {
+      "existing": "docs/audit/phase2/live-algorithm-study-v16-results.json",
+      "boundary": "90 actual policy-ablation rows and 135 calls used only deepseek-v4.1-flash; source reader was fixture-controlled, not autonomous Quest execution. Reusable methodology, not current task acceptance or diverse-model routing evidence",
+      "required_new": "Same frozen L2 task/material/oracle under single, fixed and dynamic team policies; equal original limits; preserve every failure and report exploratory n"
+    },
+    "task_centric_context": {
+      "existing": "v16 fixed distractor/context ablations and current source-bound archive/Recall tests",
+      "required_new": "Post-compaction original-task recap with exact source provenance and paginated Recall within existing bounds"
+    },
+    "self_recovery": {
+      "existing": "Expired lease/unknown effect/component crash tests plus closed actual Core restart",
+      "required_new": "Finite known-failure injection with preserved original allocation and actual backup-model work; measure restoration and evidence integrity rather than heartbeat alone"
+    },
+    "model_routing_comparison": {
+      "existing_task_level_comparison": false,
+      "microprobes_only": "Twelve actual calls compare six tiny dimensions across proxy-declared deepseek-v4.1-flash and glm-5.3-flash; these are not task-level model routing results",
+      "suggested_bounded_new_protocol": {
+        "status": "proposal_only_no_calls_by_this_agent",
+        "fits_parent_reserved_attempts": 16,
+        "actual_candidates": ["deepseek-v4.1-flash", "glm-5.3-flash"],
+        "precondition": "Both remain discoverable, enabled and compatible under the existing Provider and current tool/context metadata; fail closed if either is absent",
+        "task": "Same tiny source-referenced bug diagnosis and exact independently scored output under a one-Worker fixed contract",
+        "routing_rows": "Two actual models, one identical task each, maximum four model attempts per row including review; record selected identity/score/provenance and all actual Gateway use",
+        "recovery_row": "At most eight further attempts total: a one-shot explicitly injected complete HTTP 503 at a trusted probe proxy for the primary Worker, then the source-bound Worker blocked/reassign_expert branch and actual compatible backup-model continuation",
+        "injection_boundary": "The one-shot proxy rejection is programmatic, not an upstream natural failure. Native Gateway records rejected and the strict source-bound proof distinguishes known operation outcome from unknown usage. Keep local reserved and Gateway rejected token/cost reserves unchanged with actual usage NULL; do not invent a model response, usage or settlement",
+        "limits": "All calls also debit the new phase's fixed total; keep original per-task token/time/output/tool/retry limits; no extra calls when the reserved sixteen are exhausted",
+        "limitations": "n=1 per actual model, no causal superiority or general success-rate claim; local proxy 503 is mixed programmatic fault injection plus actual-model recovery evidence"
+      }
+    },
+    "required_metrics": ["independent_task_success", "model_identity_and_selection_sources", "actual_elapsed_seconds", "settled_and_unknown_attempts", "input_output_charged_tokens", "cost_if_trusted_price_else_null", "actual_tool_calls", "rework_count", "recovery_success_with_denominator", "evidence_completeness_with_denominator"],
+    "claims": "Exploratory only; no policy or model is declared optimal"
+  },
+  "minimum_unfinished_work": [
+    "Finish the genuine L2 context-affordability defect using original capacity and spending fences, without increasing limits",
+    "Freeze current source and acceptance protocol before new actual model calls",
+    "Reaccept correct project association and final reviewed completion to original Router, including post-compaction source-correct recall",
+    "Run the same fixed L2 under single/fixed/dynamic policies once; do not retrofit old source-version failures into a controlled comparison",
+    "Use the reserved bounded real-model routing/recovery experiment only with explicit injected-failure provenance",
+    "Keep vision/general Terminal/general Git/interactive Browser and long-duration recovery quality as explicit remaining capability boundaries"
+  ],
+  "continuation_changes_by_this_agent": {
+    "production": ["backend/src/forge_core/runtime_progress.py", "backend/src/forge_core/worker_model_usage.py", "backend/src/forge_core/worker_runtime.py error catch only", "backend/src/forge_core/superagent_swarm.py reassignment gates only", "backend/src/forge_core/model_performance.py health projection only"],
+    "tests": ["backend/tests/test_worker_productive_progress.py", "backend/tests/test_model_recovery_capability_sprint.py", "backend/tests/test_superagent_provider_failover.py"],
+    "new_audit": "docs/audit/superagent/capability-continuation-requirements.json",
+    "real_provider_calls": 0,
+    "provider_configuration_changes": false,
+    "frontend_changes": false,
+    "parallel_state_store_added": false,
+    "unknown_effect_replayed": false
+  }
+}

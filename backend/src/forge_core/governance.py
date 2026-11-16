@@ -20,6 +20,7 @@ ACTION_RISKS = MappingProxyType(
         "publish": "R2",
         "browser_get": "R2",
         "mcp_call": "R2",
+        "python_unittest": "R2",
         "delete": "R3",
     }
 )

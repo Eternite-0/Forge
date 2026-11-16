@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="9" time="2.831" timestamp="2026-11-16T07:41:16.398293+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_directory_create_idempotency" name="test_directory_create_ensures_only_authorized_ordinary_directory[True]" time="0.288"><failure message="AssertionError: assert ('blocked' == 'review_pending'&#10;  &#10;  - review_pending&#10;  + blocked)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1222/test_directory_create_ensures_0')
+existing = True
+
+    @pytest.mark.parametrize("existing", [True, False])
+    def test_directory_create_ensures_only_authorized_ordinary_directory(tmp_path, existing):
+        store, manager, model, worker, root = setup(tmp_path)
+        target = root if existing else root + "/report"
+        model.responses[:] = [tool("directory_create", {"path": target}), response(delivery())]
+        result = asyncio.run(manager.run(worker["id"]))
+&gt;       assert result["state"] == "review_pending" and result["repairs"] == 0
+E       AssertionError: assert ('blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked)
+
+backend\tests\test_directory_create_idempotency.py:28: AssertionError</failure></testcase><testcase classname="tests.test_directory_create_idempotency" name="test_directory_create_ensures_only_authorized_ordinary_directory[False]" time="0.291" /><testcase classname="tests.test_directory_create_idempotency" name="test_existing_file_is_not_reported_as_created_directory" time="0.286" /><testcase classname="tests.test_directory_create_idempotency" name="test_directory_create_does_not_accept_symlink_alias_even_within_grant[False]" time="0.297" /><testcase classname="tests.test_directory_create_idempotency" name="test_directory_create_does_not_accept_symlink_alias_even_within_grant[True]" time="0.278"><failure message="AssertionError: assert not True&#10; +  where True = exists()&#10; +    where exists = (WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1222/test_directory_create_does_not1/work/quest_fd5159098b92/real') / 'new').exists">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1222/test_directory_create_does_not1')
+linked_parent = True
+
+    @pytest.mark.parametrize("linked_parent", [False, True])
+    def test_directory_create_does_not_accept_symlink_alias_even_within_grant(
+        tmp_path, linked_parent
+    ):
+        store, manager, model, worker, root = setup(tmp_path)
+        real = tmp_path / root / "real"
+        real.mkdir()
+        alias = tmp_path / root / "alias"
+        try:
+            os.symlink(real, alias, target_is_directory=True)
+        except OSError:
+            if os.name != "nt":
+                pytest.skip("Creating directory symlinks is unavailable on this host")
+            import _winapi
+    
+            _winapi.CreateJunction(str(real), str(alias))
+        target = alias / "new" if linked_parent else alias
+        model.responses[:] = [tool("directory_create", {"path": str(target)})]
+        result = asyncio.run(manager.run(worker["id"]))
+        assert result["state"] == "blocked"
+&gt;       assert not (real / "new").exists()
+E       AssertionError: assert not True
+E        +  where True = exists()
+E        +    where exists = (WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1222/test_directory_create_does_not1/work/quest_fd5159098b92/real') / 'new').exists
+
+backend\tests\test_directory_create_idempotency.py:73: AssertionError</failure></testcase><testcase classname="tests.test_directory_create_idempotency" name="test_reparse_point_is_not_accepted_as_ordinary_directory[False]" time="0.212" /><testcase classname="tests.test_directory_create_idempotency" name="test_reparse_point_is_not_accepted_as_ordinary_directory[True]" time="0.252"><failure message="assert 1 == 0">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1222/test_reparse_point_is_not_acce1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000022234D2B950&gt;
+linked_parent = True
+
+    @pytest.mark.parametrize("linked_parent", [False, True])
+    def test_reparse_point_is_not_accepted_as_ordinary_directory(tmp_path, monkeypatch, linked_parent):
+        store, manager, model, worker, root = setup(tmp_path)
+        target = tmp_path / root
+        original = Path.lstat
+    
+        def lstat(path, *args, **kwargs):
+            info = original(path, *args, **kwargs)
+            if path == target:
+                return SimpleNamespace(st_mode=info.st_mode, st_file_attributes=0x400)
+            return info
+    
+        monkeypatch.setattr(Path, "lstat", lstat)
+        requested = root + "/new" if linked_parent else root
+        model.responses[:] = [tool("directory_create", {"path": requested})]
+        result = asyncio.run(manager.run(worker["id"]))
+        assert result["state"] == "blocked"
+        with store.connection() as connection:
+&gt;           assert connection.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 0
+E           assert 1 == 0
+
+backend\tests\test_directory_create_idempotency.py:96: AssertionError</failure></testcase><testcase classname="tests.test_directory_create_idempotency" name="test_arbitrary_fileexists_exception_without_directory_stays_uncertain" time="0.227" /><testcase classname="tests.test_directory_create_idempotency" name="test_unknown_directory_creation_is_never_automatically_replayed" time="0.217" /></testsuite></testsuites>

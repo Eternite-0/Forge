@@ -494,13 +494,19 @@ def _relations(connection, kind, record, offset=0):
     )
 
 
-def _node(connection, reference, conversation_id, run_id, relation_offset=0):
+def _node(connection, reference, conversation_id, run_id, relation_offset=0, project_id=None):
+    from .project_continuity import project_record_allowed
+
     kind, record = _load(connection, reference, conversation_id, run_id)
+    if not project_record_allowed(connection, kind, record, project_id):
+        raise DomainError("Recall object unavailable in this project context")
     relations, omitted = _relations(connection, kind, record, relation_offset)
     visible = []
     for link in relations:
         try:
-            _load(connection, link["ref"], conversation_id, run_id)
+            target_kind, target = _load(connection, link["ref"], conversation_id, run_id)
+            if not project_record_allowed(connection, target_kind, target, project_id):
+                continue
         except (ValueError, KeyError):
             continue
         visible.append(link)
@@ -546,6 +552,7 @@ def recall_object(
     *,
     conversation_id="main",
     run_id=None,
+    project_id=None,
     max_bytes=4096,
     offset=0,
     expected_hash=None,
@@ -559,7 +566,9 @@ def recall_object(
     if type(relation_offset) is not int or not 0 <= relation_offset <= 4096:
         raise ValueError("Invalid recall relation offset")
     _validate_scope(connection, conversation_id, run_id)
-    node, record = _node(connection, reference, conversation_id, run_id, relation_offset)
+    node, record = _node(
+        connection, reference, conversation_id, run_id, relation_offset, project_id
+    )
     if expected_hash is not None and expected_hash != node["source_hash"]:
         raise DomainError("Recall source changed")
     data = _json(record).encode("utf-8")
@@ -596,6 +605,7 @@ def recall_chain(
     *,
     conversation_id="main",
     run_id=None,
+    project_id=None,
     max_depth=2,
     max_nodes=24,
     max_bytes=16384,
@@ -622,7 +632,7 @@ def recall_chain(
             continue
         visited.add(reference)
         try:
-            node, _ = _node(connection, reference, conversation_id, run_id)
+            node, _ = _node(connection, reference, conversation_id, run_id, project_id=project_id)
         except (ValueError, KeyError):
             result["unavailable"].append(reference)
             continue

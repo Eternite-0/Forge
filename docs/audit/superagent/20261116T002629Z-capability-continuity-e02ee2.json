@@ -1,0 +1,266 @@
+{
+  "run_id": "20261116T002629Z-capability-continuity-e02ee2",
+  "strategy": "continuity",
+  "scenario_levels": [
+    "L2",
+    "L3"
+  ],
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "context_metadata": {
+    "source": "operator_declared",
+    "independently_measured": false,
+    "context_window": 100000000,
+    "fields": {
+      "context_length": 1000000,
+      "max_input_tokens": 1000000,
+      "max_output_tokens": 128000
+    },
+    "operator_context_window": 100000000,
+    "declaration_conflict_retained": true,
+    "execution_budget_grant": false
+  },
+  "source_sha256": "8aebd63885ae006e00c405a8968040d6c44a9de0837ecd6f74fa984e2cb40f3b",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0,
+    "aggregate_calls": 56
+  },
+  "status": "failed",
+  "checks": {
+    "pass_through_L2": true,
+    "pass_through_L3": true,
+    "observed_team_condition_L2": false,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "tasks": {
+    "L2": {
+      "quest_id": "quest_4423cc2f7620",
+      "source_sha256": "11b4340adda7e86e380c8611ccce9d06c0dd213272ffa6f99a97e214ddcbeda7",
+      "team_observation": {
+        "execution_team": {
+          "strategy": "hierarchical",
+          "assignments": [
+            {
+              "role": "research",
+              "depends_on": []
+            },
+            {
+              "role": "architect",
+              "depends_on": [
+                0
+              ]
+            }
+          ]
+        },
+        "independent_dispatches": [],
+        "selected_strategy": "hierarchical",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "research_1"
+        ],
+        "actual_dependencies": [
+          {
+            "source": "task_1",
+            "target": "task_2",
+            "condition": "success"
+          }
+        ]
+      }
+    },
+    "L3": {
+      "quest_id": "quest_a855618c49f2",
+      "source_sha256": "b1fa137e5190c749412a2ea65fa7040550043454b1a6b7259ffd8e2b6790bced",
+      "team_observation": {
+        "execution_team": null,
+        "independent_dispatches": [
+          {
+            "role": "coding",
+            "depends_on": []
+          }
+        ],
+        "selected_strategy": "single",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "coding"
+        ],
+        "actual_dependencies": []
+      }
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "blocked_observations": [
+    {
+      "run_id": "run_df52e380d4ce",
+      "state": "blocked",
+      "awaiting_authorization": 0,
+      "reason": "context_budget"
+    },
+    {
+      "run_id": "run_7255e9980943",
+      "state": "blocked",
+      "awaiting_authorization": 0,
+      "reason": "tool_unresolved"
+    }
+  ],
+  "failure_code": "workers_stopped_without_progress",
+  "primary_exception": {
+    "exception_type": "Failure"
+  },
+  "shutdown_drain": {
+    "provenance": "programmatic_host_shutdown_observation_no_new_work_or_replay",
+    "limit_seconds": 130,
+    "elapsed_seconds": 2.048,
+    "outcome": "drained",
+    "pending_futures": 0,
+    "last_accounting": {
+      "model_calls": 28,
+      "provider_reserved": 0,
+      "provider_unknown": 0,
+      "worker_model_reserved": 0,
+      "tool_inflight": 0,
+      "tool_unknown": 0,
+      "worker_tool_running": 0,
+      "worker_tool_unknown": 0,
+      "active_workers": 0
+    },
+    "future_errors": []
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 2
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 19,
+      "unattributed_non_worker": 9
+    },
+    "model_calls": 28,
+    "model_calls_by_purpose": {
+      "context_compaction": 2,
+      "independent_reviewer": 2,
+      "router": 2,
+      "router_notice": 7,
+      "worker": 15
+    },
+    "admission_states": {
+      "settled": 28
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 290808,
+    "known_charged_tokens": 290808,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 149.1698408126831,
+    "workers_by_state": {
+      "blocked": 2
+    },
+    "quests_by_state": {
+      "running": 2
+    },
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 2,
+      "value": 0.0
+    },
+    "tool_calls": 20,
+    "tool_states": {
+      "failed": 5,
+      "succeeded": 15
+    },
+    "tool_success_rate": {
+      "passed": 15,
+      "samples": 20,
+      "value": 0.75
+    },
+    "repair_events": 4,
+    "worker_repair_counters": 6,
+    "review_attempts": 2,
+    "review_verdicts": {
+      "NEEDS_REVISION": 2
+    },
+    "judged_review_pass_rate": {
+      "passed": 0,
+      "samples": 2,
+      "value": 0.0
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 12,
+      "samples": 12,
+      "value": 1.0
+    },
+    "context_archive_count": 2,
+    "core_source_read_count": 0,
+    "subscription_count": 2,
+    "trigger_delivery_count": 4,
+    "source_refs": [
+      "model_attempt:18b153ae51e24905ac39004bdb4362cb",
+      "model_attempt:eca0247bf398448888799d0967459f69",
+      "model_attempt:fa5b16ebd4634c38bd16484e73f4bb15",
+      "model_attempt:412532f1e7d84b6a82f475e5edcb1638",
+      "model_attempt:2048c0e90a574baab91f3cc4c3f0fdf8",
+      "model_attempt:ac76d1292bc6494cba5d352f4ecfa069",
+      "model_attempt:d87bff38bfa042528e500b4b3d5e4aae",
+      "model_attempt:aabf0968e4c04b499b5987ef81f4e9f0",
+      "model_attempt:1a3b7bc104f84b448af170a388fb0808",
+      "model_attempt:03c32e7467ab4e3e9f90f93685c9737f",
+      "model_attempt:a767a894588b47999478875b881cad88",
+      "model_attempt:7653ebbd69ee4920bc44529b121e6342",
+      "model_attempt:751393045e1c40318eeae727a8054fde",
+      "model_attempt:7e84dcd8433140d7a8ac083b51a2d1ba",
+      "model_attempt:4354b692e5fe4dc38c406505c7d2f614",
+      "model_attempt:9f973205752744b8a2f2a724f10697b1",
+      "model_attempt:d88261d33cb94b24a74c9248f43aa937",
+      "model_attempt:894c38db1cfb4d129e59fab4bfeeb3be",
+      "model_attempt:2351cb3c68fb458a951640acfd2b3c3f",
+      "model_attempt:1eb03b56c2f044ec8439689cb98ca3a5",
+      "model_attempt:a8b0056e22b54419b859ac3e9260be01",
+      "model_attempt:27dba1f2bd1f4fb0977ef70c91dd6851",
+      "model_attempt:aa60b07eff5c469c9619da7ed4f1cbf6",
+      "model_attempt:cad3e4303ad547268072ce6c862d57ae",
+      "model_attempt:da5c34fb2674442589e547f0881a9ec5",
+      "model_attempt:b5b87cafe74840d9a810180c7b26b540",
+      "model_attempt:dfa976a1d3ab4d8ea16a8774ccb2b1a2",
+      "model_attempt:3cc51776eb314023a661667df138f3ab",
+      "run:run_7255e9980943",
+      "run:run_df52e380d4ce",
+      "receipt:receipt_1759f0239701",
+      "receipt:receipt_1c4c6cece1a1",
+      "receipt:receipt_36566595da5e",
+      "receipt:receipt_3ec23e048b2a",
+      "receipt:receipt_567b803e3742",
+      "receipt:receipt_73adcd211022",
+      "receipt:receipt_8935e0859fef",
+      "receipt:receipt_960d6c0ae708",
+      "receipt:receipt_a05fd1e73c07",
+      "receipt:receipt_a5d5a61180c9",
+      "receipt:receipt_ea14d9933587",
+      "receipt:receipt_fb6c43329b7c",
+      "event:evt_eb9cf2b7f864",
+      "event:evt_01dbc473d21b"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "8fcb7bfbf79f64cc86431cb279c67630d86b4f7d2c939c4eb2bcd5ecb30f2281",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "elapsed_seconds": 174.821
+}

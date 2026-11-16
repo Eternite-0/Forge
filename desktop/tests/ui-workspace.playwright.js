@@ -85,7 +85,11 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/settings') body = settings;
     else if (url.pathname === '/api/budget') body = budget;
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
+    else if (url.pathname.endsWith('/plan/history')) body = [];
     else if (url.pathname === '/api/models') body = models;
+    else if (url.pathname.startsWith('/api/model-intelligence/')) body = { health: {}, performance: { measurements: {} }, capabilities: { measurements: {} } };
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
     else { status = 404; missing.push(url.pathname); body = { detail: 'fixture endpoint missing' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
@@ -119,10 +123,12 @@ async (page, { outputDir }) => {
   await workspaceDialog.waitFor();
   await page.keyboard.press('Control+,');
   await page.locator('.settings-view').waitFor();
-  check(await workspaceDialog.count() === 0 && await page.getByLabel('搜索设置').evaluate((element) => document.activeElement === element), 'opening settings closes the workspace picker and moves focus to settings search');
+  await page.getByLabel('搜索设置').waitFor();
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '搜索设置');
+  check(!(await workspaceDialog.isVisible()) && await page.getByLabel('搜索设置').evaluate((element) => document.activeElement === element), 'opening settings closes the retained workspace picker and moves focus to settings search');
   await page.getByRole('button', { name: '返回对话', exact: true }).click();
   await workspaceSelector.waitFor();
-  check(await workspaceDialog.count() === 0 && await workspaceSelector.getAttribute('aria-expanded') === 'false', 'returning from settings leaves the workspace picker closed');
+  check(!(await workspaceDialog.isVisible()) && await workspaceSelector.getAttribute('aria-expanded') === 'false', 'returning from settings leaves the workspace picker closed');
   for (const name of ['新聊天', '插件', 'Git', '导入', '已归档的聊天', '电脑操控']) {
     check(await page.getByRole('button', { name, exact: true }).count() === 0, `no decorative ${name} destination`);
   }
@@ -151,9 +157,9 @@ async (page, { outputDir }) => {
   await page.locator('.workspace-tabs').getByRole('button', { name: '后台任务', exact: true }).click();
   await page.locator('.quest-list .list-row').filter({ hasText: quests[0].title }).click();
   await page.locator('.quest-overview').getByRole('heading', { name: quests[0].title, exact: true }).waitFor();
-  await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 52) <= 1);
-  check(!(await rail.locator('.workspace-selector-wrap').isVisible()), 'task workspace hides the workspace selector');
-  check(Math.abs((await page.locator('.quest-list').boundingBox()).width - 272) <= 1 && Math.abs((await page.locator('.quest-detail').boundingBox()).x - 372) <= 1, 'task index uses 272px and leaves its details at x372 on desktop');
+  await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
+  check(await rail.locator('.workspace-selector-wrap').isVisible(), 'task details retain the single workspace sidebar');
+  check(await page.locator('.quest-list').isVisible() && await page.locator('.quest-detail').isVisible() && await page.getByLabel('消息内容').isVisible(), 'task drawer keeps its index and detail available beside the preserved conversation');
   check((await page.locator('.quest-overview').innerText()).includes(quests[0].goal), 'opening a Quest shows its actual goal');
   const tabs = page.locator('.workspace-tabs');
   check((await tabs.getByRole('button').allTextContents()).join('/') === '后台任务/任务团队/运行活动/审批中心', 'task workspace contains the four product tabs');
@@ -209,7 +215,7 @@ async (page, { outputDir }) => {
   await page.keyboard.press('Control+,');
   await page.locator('.settings-view').waitFor();
   const settingsNav = page.locator('.settings-nav');
-  check(await settingsNav.locator('.settings-nav-item').count() === 7, 'settings only includes the seven implemented categories');
+  check(await settingsNav.locator('.settings-nav-item').count() === 9 && await settingsNav.getByRole('button', { name: '记忆', exact: true }).count() === 1 && await settingsNav.getByRole('button', { name: '触发器', exact: true }).count() === 1, 'settings includes the nine implemented categories, including memory and triggers');
   await settingsNav.getByRole('button', { name: '模型库', exact: true }).click();
   await page.getByText(models[0].display_name, { exact: true }).waitFor();
   const modelCard = (name) => page.locator('.settings-page .data-row').filter({ has: page.getByText(name, { exact: true }) });
@@ -255,7 +261,8 @@ async (page, { outputDir }) => {
   await screenshot('forge-workspace-budget');
   budget = { token_limit: 0, concurrency_limit: 2, charged_tokens: 0, known_tokens: null, reserved_tokens: 0, active_reservations: 0,
     cost_limit_microunits: 0, currency: 'USD', recent_unsettled: null };
-  await page.getByRole('button', { name: '刷新当前视图', exact: true }).click();
+  await page.getByRole('menuitem', { name: '视图', exact: true }).click();
+  await page.getByRole('menuitem', { name: '刷新当前视图', exact: true }).click();
   await page.waitForFunction(() => [...document.querySelectorAll('.settings-row')].some((row) => row.querySelector('.settings-row-label')?.textContent === '已确认用量' && row.querySelector('.settings-row-value')?.textContent === '未知'));
   check(await valueFor('已确认用量').innerText() === '未知' && await valueFor('迁移期上界').innerText() === '未知', 'missing and null budget measurements stay unknown');
   check(await valueFor('未结算预留').innerText() === '0' && await valueFor('保守计入 Token').innerText() === '0', 'explicit zero budget measurements stay zero');
@@ -274,7 +281,7 @@ async (page, { outputDir }) => {
   await page.waitForTimeout(220);
   await rail.getByRole('button', { name: '记忆中心', exact: true }).click();
   await page.getByLabel('搜索记忆').waitFor();
-  check(await page.locator('.settings-view').count() === 0, 'memory is a primary workspace view');
+  check(await page.locator('.settings-view').count() === 1 && await page.locator('.settings-title').innerText() === '记忆', 'memory opens its implemented settings category');
   await rail.getByRole('button', { name: '对话', exact: true }).click();
   check(await page.getByLabel('消息内容').count() === 1 && await page.getByLabel('消息内容').inputValue() === 'workspace draft survives every task and settings view', 'all destinations share one preserved conversation and draft');
   check(mutations.length === 2 && missing.length === 0, 'workflow uses only the expected mocked Core endpoints and two explicit approvals');

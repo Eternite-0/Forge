@@ -23,6 +23,9 @@ class RoleSpec(BaseModel):
     tools: list[str] = Field(default_factory=list, max_length=32)
     input_tokens: int = Field(ge=0, le=1000000)
     output_tokens: int = Field(gt=0, le=1000000)
+    # Optional cumulative allocation. Legacy roles retain input + output as
+    # their allocation; a request estimate never claims the whole model window.
+    execution_token_budget: int | None = Field(default=None, gt=0, le=1000000)
     max_steps: int = Field(default=8, ge=1, le=32)
     max_tool_calls: int = Field(default=8, ge=0, le=64)
     max_duration_seconds: int = Field(default=60, ge=1, le=3600)
@@ -35,6 +38,11 @@ class RoleSpec(BaseModel):
 
     @model_validator(mode="after")
     def valid_requirements(self):
+        if (
+            self.execution_token_budget is not None
+            and self.execution_token_budget < self.input_tokens + self.output_tokens
+        ):
+            raise ValueError("Execution allocation cannot be smaller than the request estimate")
         if any(
             not name or not math.isfinite(value) or not 0 <= value <= 100
             for name, value in self.required_capabilities.items()
@@ -63,6 +71,14 @@ class RoleSpec(BaseModel):
         if self.output_schema is not None:
             _validate_output_schema(self.output_schema)
         return self
+
+
+def role_token_allocation(role):
+    return (
+        role.execution_token_budget
+        if role.execution_token_budget is not None
+        else role.input_tokens + role.output_tokens
+    )
 
 
 class CompositionLimits(BaseModel):
@@ -303,6 +319,10 @@ class TeamComposerEngine:
             # request independently fits the model window in WorkerManager.
             or model.context_window <= role.output_tokens
             or model.max_output_tokens < role.output_tokens
+            or (
+                role.execution_token_budget is not None
+                and role.input_tokens + role.output_tokens > model.context_window
+            )
         ):
             return "unknown_or_insufficient_context"
         if role.tools and (
@@ -400,7 +420,12 @@ class TeamComposerEngine:
             "tool_scope": sorted(role.tools),
             "depth": role.depth,
             "dynamic": role.dynamic,
-            "estimated_tokens": role.input_tokens + role.output_tokens,
+            "estimated_tokens": role_token_allocation(role),
+            **(
+                {"estimated_request_tokens": role.input_tokens + role.output_tokens}
+                if role.execution_token_budget is not None
+                else {}
+            ),
             "output_tokens": role.output_tokens,
             "model_max_output_tokens": model.max_output_tokens,
             "model_context_window": model.context_window,
@@ -449,8 +474,7 @@ class TeamComposerEngine:
             raise ValueError("Invalid role count or duplicate roles")
         if (
             token_budgets_enforced()
-            and sum(role.input_tokens + role.output_tokens for role in roles)
-            > limits.max_total_tokens
+            and sum(role_token_allocation(role) for role in roles) > limits.max_total_tokens
         ):
             raise ValueError("Token budget exceeded")
         if sum(role.max_tool_calls for role in roles) > limits.max_total_tool_calls:
@@ -868,8 +892,8 @@ class TeamCompositionService:
                     for name, minimum in node.get("required_capabilities", {}).items()
                 ):
                     raise DomainError("Role weakens approved task capability requirements")
-                used[role.task_node_key] = (
-                    used.get(role.task_node_key, 0) + role.input_tokens + role.output_tokens
+                used[role.task_node_key] = used.get(role.task_node_key, 0) + role_token_allocation(
+                    role
                 )
                 if token_budgets_enforced() and used[role.task_node_key] > node["budget_tokens"]:
                     raise DomainError("Team token budget exceeds task budget")

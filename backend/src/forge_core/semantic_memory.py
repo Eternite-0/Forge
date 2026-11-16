@@ -93,7 +93,7 @@ async def retrieve_semantic_context(
         or type(max_bytes) is not int
         or not 0 <= max_bytes <= 65536
         or type(context_limit) is not int
-        or not 1024 <= context_limit <= 1_000_000
+        or context_limit < 1024
         or type(output_limit) is not int
         or not 64 <= output_limit <= 2048
         or (cursor is not None and (not isinstance(cursor, str) or len(cursor) > 600))
@@ -107,6 +107,7 @@ async def retrieve_semantic_context(
         "created_after",
         "created_before",
         "source_types",
+        "project_id",
     }
     if set(filters) - allowed_filters:
         raise ValueError("Unknown semantic recall filter")

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:34:50.207900+00:00",
+  "condition_protocol": {
+    "path": "docs/audit/superagent/capability-completion-round3-protocol.json",
+    "sha256": "07e7ada2adba52d515010e2df7c45c7b7ada9dc55b4a5ed6cfb902b62adce8fd"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-round3-source-freeze.json",
+    "sha256": "3d3a73a2607601347a95e31f62f9c0473d1e015bec162e2e4dfa2565a29ffd93"
+  },
+  "source_unchanged": true,
+  "status": "failed",
+  "real_provider_report": {
+    "path": "docs/audit/superagent/20261116T053208Z-capability-continuity-549e73.json",
+    "sha256": "43953c7b89960d67dda77d8419bb631393451a558a9b294932e4814342dd4924"
+  },
+  "run_id": "20261116T053208Z-capability-continuity-549e73",
+  "accounting": {
+    "attempts": 25,
+    "settled": 25,
+    "states": {
+      "settled": 25
+    },
+    "charged_or_reserved_tokens": 218339,
+    "known_tokens": 218339,
+    "unsettled_tool_intents": 0
+  },
+  "checks": {
+    "pass_through_L2": true,
+    "pass_through_L3": true,
+    "observed_team_condition_L2": true,
+    "complete_thread_consumption": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "failure_code": "OperationalError"
+}

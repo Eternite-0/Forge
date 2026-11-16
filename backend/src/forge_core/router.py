@@ -16,6 +16,11 @@ from .event_domain import URGENT_EVENTS
 from .memory import MemoryService
 from .providers import ProviderGateway, schema_format_instruction
 from .router_domain import NoticeDecision, RouterDecision, TaskCapsule
+from .router_json_protocol import (
+    json_response_diagnostics,
+    normalize_router_json_transport,
+    strict_router_wire_schema,
+)
 from .router_recall import selected_requirements
 from .runtime import ModelCallContext, ModelRequest, UnconfiguredProvider
 
@@ -61,16 +66,49 @@ _TOOL_POLICY = (
     "Each tool round permits at most 4 tool calls; at most 3 tool rounds are available. "
     "The fourth model round has no tools and must return the final structured RouterDecision."
 )
+_EXECUTION_TEAM_TOPOLOGY_POLICY = (
+    " execution_team has exactly strategy and assignments; each assignment has only objective, "
+    "role and depends_on. Put explanations in the top-level rationale, never inside the team. "
+    "depends_on contains distinct earlier zero-based assignment indexes. single has exactly one "
+    "assignment with depends_on=[]. parallel has depends_on=[] for every assignment. sequential "
+    "has depends_on=[] for assignment 0 and [i-1] for assignment i: shape [[],[0],[1],...]. "
+    "hierarchical requires at least two assignments; every specialist has depends_on=[] and the "
+    "last integrator has depends_on=[0,...,n-2], where n is the total assignment count; for three "
+    "assignments the shape is [[],[],[0,1]]."
+)
+_EXECUTION_TEAM_REJECTION_CODES = {
+    "Expert dependencies must reference earlier distinct assignments": (
+        "team_dependencies_not_earlier_distinct"
+    ),
+    "Single strategy needs exactly one Worker": "team_single_worker_count",
+    "Independent expert strategy cannot contain dependencies": "team_independent_dependencies",
+    "Sequential experts must form a success chain": "team_sequential_success_chain",
+    "Hierarchical experts require independent specialists and one integrator": (
+        "team_hierarchical_fan_in"
+    ),
+}
 _AUTONOMOUS_DISPATCH_POLICY = (
     " For create_quest, independent_dispatches may assign 1-4 coarse objectives and preset "
     "roles to hidden Workers. Use multiple assignments only for independently executable "
     "deliverables, never sequential steps or a DAG. Each Worker plans its own task and reads "
-    "the complete original request for constraints. Omit the list when one Worker suffices. "
+    "the complete original request for constraints. Use [] when one Worker suffices. "
     "Core selects models from the Registry and enforces a shared host budget."
+    " Select the smallest team that covers the distinct deliverables within that shared "
+    "budget, including each Worker's reasoning, tools and independent review. Core already "
+    "reviews completed nodes independently. Add a Reviewer Worker when it owns an additional "
+    "requested evaluation or integration deliverable; routine Core review needs no extra Worker."
     " For status_query, summarize completed_context when present and cite its quest references. "
     "Core status=completed supports completion; delivery summaries are reviewed Worker claims. "
     "Do not add outcomes or artifacts absent from those sources."
-)
+    " Select project_id only from presented projects. A focused project scopes memory and task "
+    "identity; never attach a continuation to another project. For related specialist work you "
+    "may select execution_team instead of independent_dispatches: single, parallel, sequential "
+    "or hierarchical with at most four coarse assignments. "
+    "For a self-contained new request, use recalled_requirement_ids=[] unless an eligible "
+    "complete memory item is actually needed. Never use event, task or project IDs as memory IDs. "
+    "Use one Worker when useful; never force a team. For a user-requested pause/resume/cancel, "
+    "use continue_quest and task_control. These controls grant no tool authorization."
+) + _EXECUTION_TEAM_TOPOLOGY_POLICY
 _READ_TOOLS = [
     {
         "name": name,
@@ -104,6 +142,15 @@ _READ_TOOLS.append(
 
 def _json(value):
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def _read_tools(snapshot):
+    """Do not advertise archived-message reads before any archive exists."""
+    return [
+        tool
+        for tool in _READ_TOOLS
+        if tool["name"] != "read_context_source" or snapshot.get("archive_head")
+    ]
 
 
 def _router_initial_input_size(context, schema, tools, model_id, output_reserve, *, reasoning=None):
@@ -294,27 +341,33 @@ _OPTIONAL_DECISION_FIELDS = (
     "blockers",
     "recalled_requirement_ids",
     "independent_dispatches",
+    "execution_team",
+    "project_id",
+    "task_control",
 )
 
 
 def _decision_schema(compact=False, *, autonomous=False):
     """Router decision schema; a tight window advertises only the core fields.
 
-    The optional reasoning fields stay optional in the pydantic model, so omitting
-    them from the advertised schema never changes validation — it only stops the
-    schema itself from consuming a small window.
+    Local optional fields retain their defaults. The wire projection requires
+    every advertised property for strict-schema Providers, after compacting.
     """
     schema = RouterDecision.model_json_schema()
     if not compact and autonomous:
-        return schema
+        return strict_router_wire_schema(schema)
     properties = dict(schema.get("properties", {}))
-    omitted = _OPTIONAL_DECISION_FIELDS if compact else ("independent_dispatches",)
+    omitted = (
+        _OPTIONAL_DECISION_FIELDS
+        if compact
+        else ("independent_dispatches", "execution_team", "project_id", "task_control")
+    )
     for name in omitted:
         properties.pop(name, None)
     compacted = dict(schema)
     compacted["properties"] = properties
     compacted.pop("$defs", None)
-    return compacted
+    return strict_router_wire_schema(compacted)
 
 
 def _bounded_capsule(text, budget):
@@ -385,12 +438,47 @@ def _bounded_constraints(items, limit=10):
 def _decision_error_digest(exc, limit=6):
     """Bounded, non-sensitive description of a rejected decision."""
     if isinstance(exc, ValidationError):
+        fields = set(RouterDecision.model_fields) | {
+            "strategy",
+            "assignments",
+            "objective",
+            "role",
+            "depends_on",
+        }
         items = []
         for error in exc.errors()[:limit]:
-            location = ".".join(str(part) for part in error.get("loc", ()))
-            items.append((location + ": " + str(error.get("msg", "")))[:180])
+            location = (
+                ".".join(
+                    str(part) if type(part) is int or part in fields else "[unknown_field]"
+                    for part in error.get("loc", ())
+                )
+                or "[root]"
+            )
+            # Pydantic messages/inputs may echo arbitrary model text. Persist
+            # only its fixed error code and recognized contract field paths.
+            code = error.get("type", "validation_failed")
+            if not isinstance(code, str) or not re.fullmatch(r"[a-z_]{1,64}", code):
+                code = "validation_failed"
+            if code == "value_error" and error.get("loc") == ("execution_team",):
+                context = error.get("ctx")
+                reason = context.get("error") if type(context) is dict else None
+                # Recognize only the five literal messages owned by ExecutionTeam.
+                # Never serialize ctx, model input, arbitrary messages or ValueError subclasses.
+                if (
+                    type(reason) is ValueError
+                    and len(reason.args) == 1
+                    and type(reason.args[0]) is str
+                ):
+                    code = _EXECUTION_TEAM_REJECTION_CODES.get(reason.args[0], code)
+            items.append((location + ": " + code)[:180])
         return items or ["validation_failed"]
-    return [str(exc)[:180]]
+    recall_errors = {
+        "Recalled requirements require a new or updated Quest and unique IDs": "recall_selection_invalid",
+        "Recalled requirement must be an eligible complete presented source": "recall_source_not_presented_or_ineligible",
+        "Recalled requirement source changed or became ineligible": "recall_source_changed",
+        "Complete recalled requirements exceed the Quest recall bound": "recall_selection_bound",
+    }
+    return [recall_errors.get(str(exc), "decision_validation_failed")]
 
 
 class RouterService:
@@ -408,6 +496,7 @@ class RouterService:
         max_repairs=1,
         semantic_recall=False,
         autonomous=False,
+        use_registry_context=False,
     ):
         if (
             type(context_limit) is not int
@@ -421,6 +510,7 @@ class RouterService:
         self.max_repairs = max_repairs
         self.semantic_recall = semantic_recall
         self.autonomous = autonomous
+        self.use_registry_context = use_registry_context
         self.store, self.composer = store, composer
         self.provider = provider or UnconfiguredProvider()
         self.model_id = model_id
@@ -431,6 +521,108 @@ class RouterService:
         self.memory_service = MemoryService(store)
         self.store.ensure_router()
 
+    def effective_context_limit(self, profile):
+        """Use the registered model window, or a smaller explicit operator cap.
+
+        Unknown limits retain the conservative fallback. Context capacity does
+        not increase the independent cumulative model-call Token budget.
+        """
+        if profile is None or not profile.context_window:
+            return self.context_limit
+        return (
+            profile.context_window
+            if self.use_registry_context
+            else min(self.context_limit, profile.context_window)
+        )
+
+    def _read_archived_source(self, snapshot, arguments):
+        """Missing reads are observations; an indexed source still must verify."""
+        unavailable = {
+            "available": False,
+            "error_code": "context_source_unavailable",
+            "instruction": "Use presented context or scoped Recall; do not infer missing content.",
+        }
+        source_id = arguments["source_id"]
+        offset = arguments.get("offset_chars", 0)
+        maximum = arguments.get("max_chars", 2048)
+        if (
+            type(offset) is not int
+            or offset < 0
+            or type(maximum) is not int
+            or not 1 <= maximum <= 2048
+        ):
+            raise DomainError("Invalid context source range")
+        if not snapshot.get("archive_head"):
+            return unavailable, None
+        with self.store.connection() as db:
+            db.execute("BEGIN")
+            indexed = db.execute(
+                "SELECT 1 FROM context_archive_sources WHERE scope='router' AND scope_id='main' AND source_id=?",
+                (source_id,),
+            ).fetchone()
+            if indexed is None:
+                return unavailable, None
+            # Never turn corruption of an indexed source into a successful or
+            # missing read. Preserve the original hash/integrity verification.
+            source = dict(self.context_service._verify_source(db, "router", "main", source_id))
+            focus = (snapshot.get("project_context") or {}).get("focused_project_id")
+            if focus:
+                from .project_continuity import project_record_allowed
+
+                if not project_record_allowed(db, "message", source, focus):
+                    return unavailable, None
+        content = source["content"]
+        if offset > len(content):
+            raise DomainError("Invalid context source offset")
+        end = min(len(content), offset + maximum)
+        return {
+            "source_id": source_id,
+            "role": source["role"],
+            "offset_chars": offset,
+            "next_offset_chars": end if end < len(content) else None,
+            "complete": end == len(content),
+            "content": content[offset:end],
+            "source_sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
+        }, source
+
+    def _record_decision_rejection(self, stage, response, failure):
+        """Diagnostic only; never commits a rejected turn or its raw content."""
+        text = getattr(response, "text", None)
+        self.store.append_event(
+            ForgeEvent(
+                event_type="router.decision_rejected",
+                payload={
+                    "stage": stage,
+                    "response_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()
+                    if isinstance(text, str)
+                    else None,
+                    "errors": _decision_error_digest(failure),
+                    "response_shape": json_response_diagnostics(text),
+                    "execution_mode": "mock"
+                    if getattr(self.provider, "execution_mode", None) == "mock"
+                    else "live",
+                },
+            )
+        )
+
+    def _decision_text(self, stage, response):
+        """Audit transport conversion separately from decision acceptance."""
+        candidate, metadata = normalize_router_json_transport(response.text)
+        if metadata is not None:
+            self.store.append_event(
+                ForgeEvent(
+                    event_type="router.response_transport_normalized",
+                    payload={
+                        "stage": stage,
+                        **metadata,
+                        "execution_mode": "mock"
+                        if getattr(self.provider, "execution_mode", None) == "mock"
+                        else "live",
+                    },
+                )
+            )
+        return candidate
+
     def _sync_memory(self):
         for _ in range(100):
             with self.store.unit_of_work() as work:
@@ -440,6 +632,12 @@ class RouterService:
         raise DomainError("Memory indexing backlog exceeds safe limit")
 
     def _snapshot(self, connection, text=""):
+        from .project_continuity import (
+            coordination_context,
+            project_context,
+            project_record_allowed,
+            task_projects,
+        )
         from .store import Repository
 
         work = Repository(connection)
@@ -484,11 +682,59 @@ class RouterService:
         constraint_quest = (
             explicit_ids[0] if len(explicit_ids) == 1 else (capsule or {}).get("quest_id")
         )
+        project_focus = project_context(connection, text) if self.autonomous else None
+        focused = project_focus["focused_project_id"] if project_focus else None
+        if focused:
+            associated = {
+                row[0]
+                for row in connection.execute(
+                    "SELECT quest_id FROM task_project_links WHERE project_id=?", (focused,)
+                )
+            }
+            quests = [quest for quest in quests if quest["id"] in associated]
+            included = {quest["id"] for quest in quests}
+            if constraint_quest not in associated:
+                constraint_quest = None
+            messages = [
+                message
+                for message in messages
+                if project_record_allowed(connection, "message", message, focused)
+            ]
+            if capsule is not None:
+                # Mixed archive prose cannot safely be attributed to a project.
+                # Keep source-bound task facts and a project Recall continuation.
+                capsule = {
+                    "tasks": [task for task in capsule["tasks"] if task["quest_id"] in associated],
+                    "project_ref": "project:" + focused,
+                    "mixed_history_spilled": True,
+                }
+            else:
+                capsule = {"project_ref": "project:" + focused, "mixed_history_spilled": True}
         constraints = ConstraintService(self.store).context(
             quest_id=constraint_quest, limit=8, max_bytes=4096, connection=connection
         )
+        if focused:
+
+            def scoped_constraint(item):
+                for reference in item["source_refs"]:
+                    if reference.startswith("message:"):
+                        row = connection.execute(
+                            "SELECT * FROM messages WHERE id=?", (reference[8:],)
+                        ).fetchone()
+                        if row is None or not project_record_allowed(
+                            connection, "message", dict(row), focused
+                        ):
+                            return False
+                return True
+
+            selected = [item for item in constraints["items"] if scoped_constraint(item)]
+            constraints = {
+                **constraints,
+                "items": selected,
+                "omitted": constraints["omitted"] + len(constraints["items"]) - len(selected),
+            }
         memory = self.memory_service.retrieve_context(
-            text, quest_ids=explicit_ids, connection=connection
+            text, quest_ids=explicit_ids, connection=connection, project_id=focused
         )
         # General recall may omit many matching constraint/message sources while
         # the actual Quest identity search is complete. Keep its finite search
@@ -501,6 +747,7 @@ class RouterService:
             limit=100,
             max_bytes=65536,
             connection=connection,
+            project_id=focused,
         )
         recalled_ids = {
             quest_id
@@ -519,12 +766,24 @@ class RouterService:
                 "SELECT id,quest_id,kind,trusted,payload,created_at FROM evidence ORDER BY rowid DESC LIMIT 50"
             ).fetchall()
         ]
+        if focused:
+            events = [
+                event
+                for event in events
+                if project_record_allowed(connection, "event", event, focused)
+            ]
+            evidence = [
+                item
+                for item in evidence
+                if project_record_allowed(connection, "evidence", item, focused)
+            ]
         models = [
             dict(row)
             for row in connection.execute(
                 "SELECT id,profile,updated_at FROM models ORDER BY id LIMIT 100"
             ).fetchall()
         ]
+        links = task_projects(connection, quests) if self.autonomous else {}
         return {
             "state": state,
             "quests": quests,
@@ -540,6 +799,11 @@ class RouterService:
             "models": models,
             "quests_truncated": truncated,
             "completed_context": _completed_context(connection, quests) if self.autonomous else [],
+            "project_context": project_focus,
+            "task_projects": links,
+            "coordination": coordination_context(connection, quests, links)
+            if self.autonomous
+            else [],
         }
 
     def _semantic_quests(self, connection, snapshot, recall):
@@ -577,10 +841,8 @@ class RouterService:
 
     def _context(self, snapshot, text):
         # UTF-8 byte count conservatively bounds byte-pair tokens; reserve output separately.
-        effective_limit = self.context_limit
         profile = self._model_profile(snapshot)
-        if profile is not None and profile.context_window:
-            effective_limit = min(effective_limit, profile.context_window)
+        effective_limit = self.effective_context_limit(profile)
         if (
             profile is not None
             and profile.max_output_tokens is not None
@@ -590,7 +852,7 @@ class RouterService:
         compact = effective_limit < 65536
         schema_bytes = _decision_schema(compact=compact, autonomous=self.autonomous)
         instruction = schema_format_instruction(schema_bytes)
-        read_tools = list(_READ_TOOLS)
+        read_tools = _read_tools(snapshot)
         if self.autonomous:
             from .worker_superagent import RECALL_TOOL
 
@@ -650,6 +912,8 @@ class RouterService:
             "input": text,
         }
         if self.autonomous:
+            context["project_context"] = snapshot["project_context"]
+            context["coordination"] = snapshot["coordination"]
             context["recall"] = {
                 "root": "conversation:main",
                 "instruction": "Use recall_object with typed references (quest:, worker:, run:, thread:, trigger:, project:). "
@@ -657,6 +921,7 @@ class RouterService:
             }
             for quest in context["quests"]:
                 quest["reference"] = "quest:" + quest["id"]
+                quest["project_id"] = snapshot["task_projects"].get(quest["id"])
         if snapshot["constraints"]["items"]:
             context["constraints"] = snapshot["constraints"]
         explicit = set(re.findall(r"\bquest_[A-Za-z0-9]+\b", text)) | set(snapshot["recalled_ids"])
@@ -809,6 +1074,8 @@ class RouterService:
             or before["context_capsule"] != after["context_capsule"]
             or before["messages"] != after["messages"]
             or before.get("completed_context", []) != after.get("completed_context", [])
+            or before.get("project_context") != after.get("project_context")
+            or before.get("task_projects", {}) != after.get("task_projects", {})
         ):
             return False
         if notice_quest is not None:
@@ -831,7 +1098,14 @@ class RouterService:
         if (
             any(
                 before[key] != after[key]
-                for key in ("state", "messages", "models", "constraints", "archive_head")
+                for key in (
+                    "state",
+                    "messages",
+                    "models",
+                    "constraints",
+                    "archive_head",
+                    "project_context",
+                )
             )
             or before["quests_truncated"]
             or after["quests_truncated"]
@@ -881,6 +1155,71 @@ class RouterService:
             )
         return len(rows)
 
+    @staticmethod
+    def _ack_closed_approval_requests(connection):
+        """An obsolete request is a durable fact, not a new user decision."""
+        rows = connection.execute(
+            "SELECT i.event_id FROM event_inbox i "
+            "JOIN delegation_mandates m ON m.quest_id=i.quest_id AND m.state='active' "
+            "JOIN approvals a ON a.id=json_extract(i.payload,'$.approval_id') "
+            "AND a.quest_id=i.quest_id "
+            "WHERE i.consumer_id='router' AND i.event_type='approval.requested' "
+            "AND i.processed_at IS NULL AND i.notice_dead_at IS NULL "
+            "AND (i.notice_token IS NULL OR i.notice_next_attempt<=?) "
+            "AND (a.status!='PENDING' OR julianday(a.expires_at)<=julianday(?)) "
+            "ORDER BY i.seq LIMIT 100",
+            (time.time(), now_iso()),
+        ).fetchall()
+        for row in rows:
+            connection.execute(
+                "UPDATE event_inbox SET processed_at=?,notice_token=NULL "
+                "WHERE consumer_id='router' AND event_id=? AND processed_at IS NULL",
+                (now_iso(), row["event_id"]),
+            )
+        return len(rows)
+
+    @staticmethod
+    def _approval_notice_state(connection, grouped):
+        states = []
+        for item in grouped:
+            if item["event_type"] == "approval.requested":
+                row = connection.execute(
+                    "SELECT * FROM approvals WHERE id=? AND quest_id=?",
+                    (json.loads(item["payload"]).get("approval_id"), item["quest_id"]),
+                ).fetchone()
+                states.append(dict(row) if row else None)
+        return states
+
+    @staticmethod
+    def _pending_review_state(connection, grouped):
+        """Recognize exact current Core runs; model claims cannot establish this state."""
+        states = []
+        for item in grouped:
+            if item["event_type"] != "worker.result":
+                return []
+            payload = json.loads(item["payload"])
+            row = connection.execute(
+                "SELECT r.id,r.state,r.plan_id,r.node_key FROM worker_runs r "
+                "JOIN delegation_mandates m ON m.quest_id=r.quest_id AND m.state='active' "
+                "WHERE r.id=? AND r.quest_id=? AND r.worker_id=? AND r.plan_id=? "
+                "AND r.node_key=? AND r.state='review_pending' "
+                "AND NOT EXISTS (SELECT 1 FROM events e WHERE e.event_type='worker.result' "
+                "AND e.quest_id=r.quest_id AND json_extract(e.payload,'$.run_id')=r.id "
+                "AND e.seq>?)",
+                (
+                    payload.get("run_id"),
+                    item["quest_id"],
+                    item["worker_id"],
+                    payload.get("plan_id"),
+                    payload.get("task_node_key"),
+                    item["seq"],
+                ),
+            ).fetchone()
+            if row is None:
+                return []
+            states.append(dict(row))
+        return states
+
     async def handle_pending_events(self, dispatcher):
         """Process one notice with persistent bounded retry and per-event acknowledgement."""
         if not self.model_id:
@@ -893,12 +1232,14 @@ class RouterService:
         with self.store.unit_of_work() as work:
             connection = work.connection
             internal_acks = self._ack_internal_progress(connection) if self.autonomous else 0
+            if self.autonomous:
+                internal_acks += self._ack_closed_approval_requests(connection)
             connection.execute(
                 "UPDATE event_inbox SET notice_dead_at=?,notice_error='attempts_exhausted' WHERE consumer_id='router' AND processed_at IS NULL AND notice_dead_at IS NULL AND notice_attempts>=5 AND notice_next_attempt<=?",
                 (now_iso(), time.time()),
             )
             row = connection.execute(
-                f"""SELECT event_id,event_type,quest_id,worker_id FROM event_inbox WHERE consumer_id='router'
+                f"""SELECT event_id,event_type,quest_id,worker_id,seq,payload FROM event_inbox WHERE consumer_id='router'
                 AND processed_at IS NULL AND notice_dead_at IS NULL AND notice_attempts<5 AND notice_next_attempt<=?
                 AND event_type IN ({placeholders})
                 ORDER BY CASE WHEN event_type IN ({urgent_placeholders}) THEN 0 ELSE 1 END,seq LIMIT 1""",
@@ -907,6 +1248,59 @@ class RouterService:
             if row is None:
                 return bool(internal_acks)
             event_ids = [row["event_id"]]
+            if (
+                self.autonomous
+                and row["quest_id"]
+                and connection.execute(
+                    "SELECT 1 FROM delegation_mandates WHERE quest_id=? AND state='active'",
+                    (row["quest_id"],),
+                ).fetchone()
+                and (
+                    row["event_type"] == "approval.requested"
+                    or (
+                        row["event_type"] == "worker.blocked"
+                        and json.loads(row["payload"]).get("reason_code") == "approval_required"
+                    )
+                )
+            ):
+                # Core emits the request followed by its blocked run. Restrict
+                # batching to that adjacent pair, never other pending approvals.
+                offset = 1 if row["event_type"] == "approval.requested" else -1
+                peer = connection.execute(
+                    "SELECT event_id,event_type,payload FROM event_inbox "
+                    "WHERE consumer_id='router' AND quest_id=? AND seq=? "
+                    "AND processed_at IS NULL AND notice_dead_at IS NULL "
+                    "AND notice_attempts<5 AND notice_next_attempt<=?",
+                    (row["quest_id"], row["seq"] + offset, time.time()),
+                ).fetchone()
+                if peer is not None and (
+                    (
+                        offset == 1
+                        and peer["event_type"] == "worker.blocked"
+                        and json.loads(peer["payload"]).get("reason_code") == "approval_required"
+                    )
+                    or (offset == -1 and peer["event_type"] == "approval.requested")
+                ):
+                    event_ids = (
+                        [row["event_id"], peer["event_id"]]
+                        if offset == 1
+                        else [peer["event_id"], row["event_id"]]
+                    )
+            if (
+                self.autonomous
+                and row["quest_id"]
+                and row["event_type"] in {"worker.result", "quest.status_changed"}
+            ):
+                event_ids = [
+                    item["event_id"]
+                    for item in connection.execute(
+                        "SELECT event_id FROM event_inbox WHERE consumer_id='router' AND quest_id=? "
+                        "AND event_type IN ('worker.result','quest.status_changed') AND processed_at IS NULL "
+                        "AND notice_dead_at IS NULL AND notice_attempts<5 AND notice_next_attempt<=? "
+                        "ORDER BY seq LIMIT 20",
+                        (row["quest_id"], time.time()),
+                    )
+                ]
             if row["event_type"] == "worker.progress":
                 event_ids = [
                     item["event_id"]
@@ -974,21 +1368,31 @@ class RouterService:
                     return False
                 grouped.append(dict(item))
             snapshot = self._snapshot(connection, notice["quest_id"] or "")
+            approval_state = self._approval_notice_state(connection, grouped)
+            pending_review = (
+                self._pending_review_state(connection, grouped) if self.autonomous else []
+            )
             from .adaptive_planning import remaining_replan_context
 
             adaptive_plan = remaining_replan_context(
                 self.store, connection, notice["quest_id"], notice["event_id"]
             )
             result_summaries = []
+            completed_sources = []
             if any(
                 item["event_type"] == "quest.status_changed"
                 and json.loads(item["payload"]).get("to") == "completed"
                 for item in grouped
             ):
-                for result in connection.execute(
-                    "SELECT id,payload FROM events WHERE quest_id=? AND event_type='worker.result' ORDER BY seq DESC LIMIT 8",
+                quest = connection.execute(
+                    "SELECT * FROM quests WHERE id=?",
                     (notice["quest_id"],),
-                ):
+                ).fetchone()
+                completed_sources = _completed_context(connection, [dict(quest)]) if quest else []
+                for source in completed_sources[0]["deliveries"] if completed_sources else []:
+                    result = connection.execute(
+                        "SELECT id,payload FROM events WHERE id=?", (source["reference"][6:],)
+                    ).fetchone()
                     try:
                         delivery = json.loads(json.loads(result["payload"])["claim"])
                     except (ValueError, KeyError, TypeError):
@@ -996,6 +1400,8 @@ class RouterService:
                     result_summaries.append(
                         {
                             "source_event_id": result["id"],
+                            "source_sha256": source["source_sha256"],
+                            "trust": source["trust"],
                             "summary": str(delivery.get("summary", ""))[:1000],
                             "findings": [
                                 str(item)[:400] for item in delivery.get("findings", [])[:3]
@@ -1006,7 +1412,8 @@ class RouterService:
             connection.commit()
         compactions = 0
         while (
-            len(_json(snapshot["messages"]).encode("utf-8")) > self.context_limit // 2
+            len(_json(snapshot["messages"]).encode("utf-8"))
+            > self.effective_context_limit(self._model_profile(snapshot)) // 2
             or len(snapshot["messages"]) > 50
         ) and len(snapshot["messages"]) > 10:
             if compactions >= 100:
@@ -1031,6 +1438,10 @@ class RouterService:
         # event/evidence backlog on every tool step consumes the Quest budget
         # without adding authority or new observations. Originals remain in the
         # durable event log and source-indexed context for explicit recall.
+        # Notice instructions are supplied in their own system message below.
+        # The ordinary Router policy also contains unrelated routing/creation
+        # guidance; repeating it in this user-data view can crowd out facts.
+        context.pop("policy", None)
         context["events"] = []
         context["evidence"] = []
         context["memory"] = []
@@ -1055,6 +1466,7 @@ class RouterService:
                     "to",
                     "status",
                     "receipt_id",
+                    "approval_id",
                     "token_spent",
                     "tool_calls",
                 )
@@ -1140,24 +1552,38 @@ class RouterService:
                 quest_id=notice["quest_id"],
             ),
         )
-        response = await self.provider.generate(request)
-        try:
-            if (
-                getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
-                or len(response.text.encode("utf-8")) > self.output_reserve * 8
-            ):
-                raise ValueError("Invalid response")
-            decision = NoticeDecision.model_validate_json(response.text)
-            if decision.action in {"update_user", "replan_remaining"} and (
-                not decision.reply or len(decision.reply) > 10000
-            ):
-                raise ValueError("A bounded update is required")
-            if decision.action == "replan_remaining" and not adaptive_plan:
-                raise ValueError("Remaining planning is not available for this event")
-            if decision.action == "silent" and decision.reply is not None:
-                raise ValueError("Silent decisions cannot include a reply")
-        except (TypeError, ValueError, ValidationError) as exc:
-            raise DomainError("Invalid Router notice decision") from exc
+        if pending_review:
+            # This is a Core state update, not a model summary of an unreviewed claim.
+            # Keep the ordinary leased/CAS commit below and spend no Provider call.
+            decision = NoticeDecision(
+                action="update_user",
+                reply=(
+                    "后台 Worker 已提交交付，正在等待独立审查；尚未确认任务完成。\n"
+                    + "来源：quest:"
+                    + notice["quest_id"]
+                    + "；"
+                    + "；".join("event:" + item for item in event_ids)
+                ),
+            )
+        else:
+            response = await self.provider.generate(request)
+            try:
+                if (
+                    getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
+                    or len(response.text.encode("utf-8")) > self.output_reserve * 8
+                ):
+                    raise ValueError("Invalid response")
+                decision = NoticeDecision.model_validate_json(response.text)
+                if decision.action in {"update_user", "replan_remaining"} and (
+                    not decision.reply or len(decision.reply) > 10000
+                ):
+                    raise ValueError("A bounded update is required")
+                if decision.action == "replan_remaining" and not adaptive_plan:
+                    raise ValueError("Remaining planning is not available for this event")
+                if decision.action == "silent" and decision.reply is not None:
+                    raise ValueError("Silent decisions cannot include a reply")
+            except (TypeError, ValueError, ValidationError) as exc:
+                raise DomainError("Invalid Router notice decision") from exc
         with self.store.unit_of_work() as work:
             current = work.connection.execute(
                 "SELECT processed_at FROM event_inbox WHERE consumer_id='router' AND event_id=? AND notice_token=? AND notice_next_attempt>?",
@@ -1165,6 +1591,20 @@ class RouterService:
             ).fetchone()
             if current is None or current["processed_at"] is not None:
                 return False
+            if approval_state != self._approval_notice_state(work.connection, grouped):
+                return False
+            if pending_review and pending_review != self._pending_review_state(
+                work.connection, grouped
+            ):
+                return False
+            if completed_sources:
+                quest = work.connection.execute(
+                    "SELECT * FROM quests WHERE id=?", (notice["quest_id"],)
+                ).fetchone()
+                if completed_sources != (
+                    _completed_context(work.connection, [dict(quest)]) if quest else []
+                ):
+                    return False
             if not self._stable_context(
                 snapshot,
                 self._snapshot(work.connection, notice["quest_id"] or ""),
@@ -1191,7 +1631,15 @@ class RouterService:
                         metadata={
                             "source": "router_notice",
                             "event_id": notice["event_id"],
-                            "execution_mode": "mock" if mode == "mock" else "live",
+                            "source_event_ids": event_ids,
+                            "execution_mode": (
+                                "programmatic"
+                                if pending_review
+                                else "mock"
+                                if mode == "mock"
+                                else "live"
+                            ),
+                            **({"notice_phase": "review_pending"} if pending_review else {}),
                         },
                     )
                 )
@@ -1223,7 +1671,11 @@ class RouterService:
         compactions = 0
         while conflicts <= self.max_conflicts:
             with self.store.connection() as connection:
-                connection.execute("BEGIN")
+                # Project registration writes after the request-id replay read.
+                # Acquire the short transaction's writer lock before that read,
+                # avoiding WAL BUSY_SNAPSHOT upgrades during background progress.
+                # Commit below still releases it before any model is awaited.
+                connection.execute("BEGIN IMMEDIATE")
                 previous = connection.execute(
                     "SELECT * FROM router_turns WHERE request_id=?", (request_id,)
                 ).fetchone()
@@ -1231,10 +1683,17 @@ class RouterService:
                     if previous["input_hash"] != digest:
                         raise DomainError("Request ID already used for different input")
                     return json.loads(previous["result_json"])
+                if self.autonomous:
+                    from .workspace_discovery import WorkspaceDiscovery
+
+                    WorkspaceDiscovery(self.store).register_user_request(
+                        text, connection=connection
+                    )
                 snapshot = self._snapshot(connection, text)
                 connection.commit()
             if (
-                len(_json(snapshot["messages"]).encode("utf-8")) > self.context_limit // 2
+                len(_json(snapshot["messages"]).encode("utf-8"))
+                > self.effective_context_limit(self._model_profile(snapshot)) // 2
                 or len(snapshot["messages"]) > 50
             ) and len(snapshot["messages"]) > 10:
                 if compactions >= 100:
@@ -1249,7 +1708,7 @@ class RouterService:
                         self.context_service,
                         self.provider,
                         profile=profile,
-                        context_limit=self.context_limit,
+                        context_limit=self.effective_context_limit(profile),
                         output_limit=self.output_reserve,
                     ).compact(keep_recent=10)
                 else:
@@ -1265,11 +1724,10 @@ class RouterService:
                     provider=self.provider,
                     model_id=self.model_id,
                     provider_id=self.provider_id,
-                    context_limit=min(self.context_limit, profile.context_window)
-                    if profile and profile.context_window
-                    else self.context_limit,
+                    context_limit=self.effective_context_limit(profile),
                     output_limit=512,
-                    max_bytes=min(8192, self.context_limit // 4),
+                    max_bytes=min(8192, self.effective_context_limit(profile) // 4),
+                    project_id=(snapshot.get("project_context") or {}).get("focused_project_id"),
                     capabilities={"json_schema": True},
                     capability_sources={
                         "json_schema": profile.structured_output_support.source
@@ -1312,9 +1770,10 @@ class RouterService:
             ]
             consulted_sources = {}
             lookup_used = False
+            response = None
             try:
                 for _step in range(4):
-                    active_tools = list(_READ_TOOLS) if _step < 3 else None
+                    active_tools = _read_tools(snapshot) if _step < 3 else None
                     if active_tools is not None and self.autonomous:
                         from .worker_superagent import RECALL_TOOL
 
@@ -1435,7 +1894,12 @@ class RouterService:
 
                             lookup_used = True
                             jsonschema.validate(arguments, RECALL_TOOL["input_schema"])
-                            value = self.memory_service.recall_object(max_bytes=4096, **arguments)
+                            focus = (snapshot.get("project_context") or {}).get(
+                                "focused_project_id"
+                            )
+                            value = self.memory_service.recall_object(
+                                max_bytes=4096, project_id=focus, **arguments
+                            )
                         elif (
                             name == "read_context_source"
                             and isinstance(arguments, dict)
@@ -1444,33 +1908,9 @@ class RouterService:
                             and isinstance(arguments["source_id"], str)
                             and 1 <= len(arguments["source_id"]) <= 200
                         ):
-                            source_id = arguments["source_id"]
-                            offset = arguments.get("offset_chars", 0)
-                            maximum = arguments.get("max_chars", 2048)
-                            if (
-                                type(offset) is not int
-                                or offset < 0
-                                or type(maximum) is not int
-                                or not 1 <= maximum <= 2048
-                            ):
-                                raise DomainError("Invalid context source range")
-                            source = self.context_service.read_source("router", "main", source_id)
-                            content = source["content"]
-                            if offset > len(content):
-                                raise DomainError("Invalid context source offset")
-                            end = min(len(content), offset + maximum)
-                            value = {
-                                "source_id": source_id,
-                                "role": source["role"],
-                                "offset_chars": offset,
-                                "next_offset_chars": end if end < len(content) else None,
-                                "complete": end == len(content),
-                                "content": content[offset:end],
-                                "source_sha256": hashlib.sha256(
-                                    content.encode("utf-8")
-                                ).hexdigest(),
-                            }
-                            consulted_sources[source_id] = source
+                            value, source = self._read_archived_source(snapshot, arguments)
+                            if source is not None:
+                                consulted_sources[arguments["source_id"]] = source
                         else:
                             raise DomainError("Router requested an unauthorized tool")
                         assistant_calls.append(
@@ -1506,7 +1946,9 @@ class RouterService:
                     raise DomainError("Router response exceeds output budget")
                 decision, failure = None, None
                 try:
-                    decision = RouterDecision.model_validate_json(response.text)
+                    decision = RouterDecision.model_validate_json(
+                        self._decision_text("initial", response)
+                    )
                     with self.store.connection() as recall_connection:
                         selected_requirements(
                             self.memory_service, recall_connection, decision, context
@@ -1515,6 +1957,7 @@ class RouterService:
                     decision = None
                     failure = exc
                 if decision is None:
+                    self._record_decision_rejection("initial", response, failure)
                     # Reflect once: the Router sees its own contract violation and may
                     # correct it. Bounded by max_repairs and by the same output budget.
                     if not self.max_repairs:
@@ -1523,20 +1966,25 @@ class RouterService:
                         context,
                         messages,
                         failure,
+                        rejected_response=response.text,
                         capability_source=capability_source,
                         capability_sources=capability_sources,
                     )
                     try:
-                        decision = RouterDecision.model_validate_json(response.text)
+                        decision = RouterDecision.model_validate_json(
+                            self._decision_text("repair", response)
+                        )
                         with self.store.connection() as recall_connection:
                             selected_requirements(
                                 self.memory_service, recall_connection, decision, context
                             )
                     except (ValidationError, ValueError) as exc:
+                        self._record_decision_rejection("repair", response, exc)
                         raise DomainError("Invalid Router model decision") from exc
             except DomainError:
                 raise
             except (ValidationError, ValueError) as exc:
+                self._record_decision_rejection("tool_protocol", response, exc)
                 raise DomainError("Invalid Router model decision") from exc
             with self.store.unit_of_work() as work:
                 previous = work.connection.execute(
@@ -1596,6 +2044,7 @@ class RouterService:
         messages,
         failure,
         *,
+        rejected_response=None,
         capability_source,
         capability_sources,
     ):
@@ -1611,6 +2060,9 @@ class RouterService:
                     "Return a corrected RouterDecision for the same user message. Keep every "
                     "required field, keep candidates consistent with the chosen quest_id, and do "
                     "not claim any action was executed."
+                    " Select only complete eligible memory IDs from context.memory; "
+                    "use recalled_requirement_ids=[] when the current request is self-contained."
+                    + _EXECUTION_TEAM_TOPOLOGY_POLICY
                 ),
             }
         )
@@ -1618,6 +2070,11 @@ class RouterService:
         reflect_messages = [
             {"role": "system", "content": context["policy"]},
             *messages[1:],
+            *(
+                [{"role": "assistant", "content": rejected_response}]
+                if isinstance(rejected_response, str)
+                else []
+            ),
             {"role": "user", "content": repair},
         ]
         overhead = (
@@ -1681,6 +2138,9 @@ class RouterService:
         quests = {q["id"]: q for q in snapshot["quests"] if q["id"] in presented}
         intent = decision.intent
         target = quests.get(decision.quest_id)
+        focus = (snapshot.get("project_context") or {}).get("focused_project_id")
+        if target and focus and snapshot["task_projects"].get(target["id"]) != focus:
+            target = None
         explicit = set(re.findall(r"\bquest_[A-Za-z0-9]+\b", text))
         if intent in {"continue_quest", "update_quest", "status_query", "approval_response"}:
             # Multiple plausible targets are never silently resolved by recency.
@@ -1691,7 +2151,7 @@ class RouterService:
                 and not explicit
             )
             if not global_status and (
-                decision.quest_id not in quests
+                target is None
                 or len(set(decision.candidates)) != 1
                 or decision.candidates[0] != decision.quest_id
                 or (explicit and explicit != {decision.quest_id})
@@ -1710,8 +2170,25 @@ class RouterService:
                 )
             ):
                 intent = "ambiguous"
+        # A continuation inherits authoritative task identity. A model-selected
+        # project label cannot move its transcript into another project's memory.
+        message_project_id = focus
+        if self.autonomous and target is not None and intent != "ambiguous":
+            message_project_id = snapshot["task_projects"].get(target["id"])
+        elif self.autonomous and intent == "create_quest":
+            message_project_id = decision.project_id or focus
         user = ConversationMessage(
-            role="user", content=text, created_at=received_at, metadata={"request_id": request_id}
+            role="user",
+            content=text,
+            created_at=received_at,
+            metadata={
+                "request_id": request_id,
+                **(
+                    {"project_id": message_project_id}
+                    if self.autonomous and message_project_id
+                    else {}
+                ),
+            },
         )
         work.add_message(user)
         reply = decision.reply
@@ -1744,6 +2221,12 @@ class RouterService:
             )
             work.save_quest(quest)
             if self.autonomous:
+                from .project_continuity import bind_presented_project
+
+                bind_presented_project(
+                    work, quest.id, decision.project_id or focus, snapshot["project_context"]
+                )
+            if self.autonomous:
                 from .superagent_delegation import issue_mandate
                 from .superagent_events import TriggerService
 
@@ -1770,6 +2253,11 @@ class RouterService:
                         "superagent": True,
                         "thread_id": trigger["thread_id"],
                         "trigger_id": trigger["id"],
+                        **(
+                            {"execution_team": decision.execution_team.model_dump()}
+                            if decision.execution_team
+                            else {}
+                        ),
                         **(
                             {
                                 "independent_dispatches": [
@@ -1881,7 +2369,12 @@ class RouterService:
             reply = "请使用审批界面确认；模型不会代替用户审批。"
         elif intent == "continue_quest":
             result_quest_id = target["id"]
-            if self.autonomous:
+            if self.autonomous and decision.task_control:
+                from .router_control import control_task
+
+                control_task(work, target, decision.task_control, source_message_id=user.id)
+                reply = f"已对任务「{target['title']}」应用 {decision.task_control}，原执行与用量记录保留。"
+            elif self.autonomous:
                 from .superagent_events import TriggerService
 
                 triggers = TriggerService(self.store)
@@ -1901,10 +2394,11 @@ class RouterService:
                     addressed=True,
                     connection=work.connection,
                 )
-            reply = _safe_reply(
-                decision.reply,
-                f"已关联 Quest「{target['title']}」，当前状态为 {target['status']}。",
-            )
+            if not decision.task_control:
+                reply = _safe_reply(
+                    decision.reply,
+                    f"已关联 Quest「{target['title']}」，当前状态为 {target['status']}。",
+                )
         elif intent == "status_query":
             result_quest_id = target["id"] if target else None
             items = [target] if target else list(quests.values())
@@ -1958,6 +2452,8 @@ class RouterService:
             content=reply,
             metadata={
                 "intent": intent,
+                "project_id": message_project_id,
+                "task_control": decision.task_control,
                 "rationale": (decision.rationale or "")[:2000] or None,
                 "confidence": decision.confidence,
                 "needs_user_help": decision.needs_user_help,

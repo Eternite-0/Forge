@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:40:45.277178+00:00",
+  "stage_protocol": {
+    "path": "docs/audit/superagent/capability-completion-protocol.json",
+    "sha256": "118b021e37457ba8697e81dc1db06144c598a6c07afdf624f66a85f3140bdd56"
+  },
+  "condition": {
+    "round": 1,
+    "strategy": "specialists",
+    "call_limit": 32,
+    "tokens": 500000
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-round1-source-freeze.json",
+    "sha256": "caf027a97292657e03147f9463900d62dc0ff22276e4fc5d07d8ea150f15d817"
+  },
+  "prior_condition_results": []
+}

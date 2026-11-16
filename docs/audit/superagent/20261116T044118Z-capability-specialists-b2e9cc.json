@@ -1,0 +1,282 @@
+{
+  "run_id": "20261116T044118Z-capability-specialists-b2e9cc",
+  "strategy": "specialists",
+  "scenario_levels": [
+    "L2"
+  ],
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "context_metadata": {
+    "source": "operator_declared",
+    "independently_measured": false,
+    "context_window": 100000000,
+    "fields": {
+      "context_length": 1000000,
+      "max_input_tokens": 1000000,
+      "max_output_tokens": 128000
+    },
+    "operator_context_window": 100000000,
+    "declaration_conflict_retained": true,
+    "execution_budget_grant": false
+  },
+  "source_sha256": "ec37154ccbe7c801de7f525996d417c8528bef9a74038faed83ef538e260074b",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0,
+    "aggregate_calls": 32
+  },
+  "status": "failed",
+  "checks": {
+    "pass_through_L2": true,
+    "observed_team_condition_L2": true,
+    "complete_thread_consumption": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "tasks": {
+    "L2": {
+      "quest_id": "quest_6dadbf0e1cb2",
+      "source_sha256": "11b4340adda7e86e380c8611ccce9d06c0dd213272ffa6f99a97e214ddcbeda7",
+      "team_observation": {
+        "execution_team": {
+          "strategy": "hierarchical",
+          "assignments": [
+            {
+              "role": "research",
+              "depends_on": []
+            },
+            {
+              "role": "architect",
+              "depends_on": []
+            },
+            {
+              "role": "reviewer",
+              "depends_on": [
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        "independent_dispatches": [],
+        "selected_strategy": "hierarchical",
+        "actual_worker_count": 3,
+        "actual_roles": [
+          "research_1",
+          "architect_2",
+          "reviewer_3"
+        ],
+        "actual_dependencies": [
+          {
+            "source": "task_1",
+            "target": "task_3",
+            "condition": "success"
+          },
+          {
+            "source": "task_2",
+            "target": "task_3",
+            "condition": "success"
+          }
+        ]
+      }
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "restart_boundary_policy": "Host restart only after every original Worker is quiescent and all calls/effects settle; L3 exact approval is held while L2 reaches a terminal Worker state. This tests durable resumption, not interruption of active computation.",
+  "failure_code": "bounded_scenario_deadline",
+  "primary_exception": {
+    "exception_type": "Failure"
+  },
+  "shutdown_drain": {
+    "provenance": "programmatic_host_shutdown_observation_no_new_work_or_replay",
+    "limit_seconds": 130,
+    "elapsed_seconds": 130.0,
+    "outcome": "drain_deadline_no_replay",
+    "pending_futures": 0,
+    "last_accounting": {
+      "model_calls": 21,
+      "provider_reserved": 0,
+      "provider_unknown": 0,
+      "worker_model_reserved": 0,
+      "tool_inflight": 0,
+      "tool_unknown": 0,
+      "worker_tool_running": 0,
+      "worker_tool_unknown": 0,
+      "active_workers": 1
+    },
+    "future_errors": []
+  },
+  "worker_continuity_evidence": {
+    "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
+    "after_evidence_rowid": 0,
+    "thread_consumption": [
+      {
+        "level": "L2",
+        "phase": "task_followup",
+        "trigger_id": "trigger_bf7a115aa895",
+        "run_ids": [
+          "run_669de9de44d6",
+          "run_f8e6eaedab42"
+        ],
+        "complete_reads": [
+          {
+            "run_id": "run_669de9de44d6",
+            "source_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+            "source_size": 2467,
+            "page_count": 1,
+            "first_invocation": 7,
+            "last_result": 8,
+            "relations": [],
+            "call_ids": [
+              "call_6a30349b7bd93875d052865b3f91560a429268c8298b1472e0691c45ec874f0b"
+            ]
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "complete_thread_consumption": true,
+    "complete_relationship_chains": [],
+    "typed_multihop_recall": false,
+    "invalid_or_unconsumed_calls": 0,
+    "worker_archive_source_recovery_assessed": false,
+    "limitations": "Source delivery to later model turns is verified; semantic understanding is not. Host Router compaction and host relation enumeration do not establish Worker archive recovery."
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 3
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 19,
+      "unattributed_non_worker": 2
+    },
+    "model_calls": 21,
+    "model_calls_by_purpose": {
+      "independent_reviewer": 2,
+      "router": 1,
+      "router_notice": 1,
+      "worker": 17
+    },
+    "admission_states": {
+      "settled": 21
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 246009,
+    "known_charged_tokens": 246009,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 287.86430501937866,
+    "workers_by_state": {
+      "review_pending": 1,
+      "succeeded": 2
+    },
+    "quests_by_state": {
+      "running": 1
+    },
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 1,
+      "value": 0.0
+    },
+    "tool_calls": 23,
+    "tool_states": {
+      "succeeded": 23
+    },
+    "tool_success_rate": {
+      "passed": 23,
+      "samples": 23,
+      "value": 1.0
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 2,
+    "review_verdicts": {
+      "PASS": 2
+    },
+    "judged_review_pass_rate": {
+      "passed": 2,
+      "samples": 2,
+      "value": 1.0
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 20,
+      "samples": 20,
+      "value": 1.0
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 3,
+    "trigger_delivery_count": 6,
+    "source_refs": [
+      "model_attempt:c900195fb6af401eaa14563a98f3b805",
+      "model_attempt:ccf1790214cb430c9bc9abdf76bd11c4",
+      "model_attempt:ffffc639df214f00a94aa8a0e86bda96",
+      "model_attempt:45aa77150b4948e391bf786ff6d02d27",
+      "model_attempt:1ab05df505e440c1be00e32dd48903ff",
+      "model_attempt:7c435b9de0b842fd8dc64144216901c3",
+      "model_attempt:f93cca5129c64e078aa486bcced074ae",
+      "model_attempt:7fc339bc24e3449dbb3b6409ba5d98a9",
+      "model_attempt:407827ae080c47af80c695c056edf5f6",
+      "model_attempt:9dff385dc4324d06989bfbf7a5f4c70e",
+      "model_attempt:ff1dba6907ad494da07b48d7d14e7f69",
+      "model_attempt:547043f5e4744b608c0de88f2136a0b1",
+      "model_attempt:cd22e096ef7744e2b59d1737ffe35fc0",
+      "model_attempt:cee2650d465943e4bcb4b61c40391e54",
+      "model_attempt:77236790c910413c89e83023fa445d4c",
+      "model_attempt:9dee0a9ffa2c409b831083e3bc953f56",
+      "model_attempt:14f4685b81f0481f81b7a945337d8f90",
+      "model_attempt:4e1544d9acfa4f8d896d92be100b8146",
+      "model_attempt:cb4b8fd8b63646f6ae17944e048ba780",
+      "model_attempt:e6dffb1268924c34b22fa23ca7154732",
+      "model_attempt:1bd99eb793364bbe909e6fc7153de1b6",
+      "run:run_669de9de44d6",
+      "run:run_c8f0da1354d7",
+      "run:run_f8e6eaedab42",
+      "receipt:receipt_39fa1dcef90a",
+      "receipt:receipt_492475bfe767",
+      "receipt:receipt_5631fec521a5",
+      "receipt:receipt_5794ed10dc00",
+      "receipt:receipt_6c45a3d4094b",
+      "receipt:receipt_6f14b71e529c",
+      "receipt:receipt_7f9e5b457cde",
+      "receipt:receipt_8ea4aeb1d84f",
+      "receipt:receipt_9b2793cb341b",
+      "receipt:receipt_a3e8aecd3d90",
+      "receipt:receipt_a7d490d4d5b6",
+      "receipt:receipt_aeaf4d1d6e55",
+      "receipt:receipt_bbc9c666c2a3",
+      "receipt:receipt_bc3ed3d6a56e",
+      "receipt:receipt_c469c6099003",
+      "receipt:receipt_e98cc6f60a6b",
+      "receipt:receipt_eace3c20d72f",
+      "receipt:receipt_ecb0828c5f7a",
+      "receipt:receipt_ef93c72b443d",
+      "receipt:receipt_fc15e86fb05a",
+      "event:evt_7d3d5219dfbe",
+      "event:evt_c9c67eeaf2e0"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "6e5c3058adda12c4a948cac5d70f491ef330c7c3609da1735791c498c87fc40c",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "elapsed_seconds": 1030.352
+}

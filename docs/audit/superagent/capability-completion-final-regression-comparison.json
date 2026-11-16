@@ -1,0 +1,803 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:25:35.904065+00:00",
+  "audit_type": "independent_programmatic_read_only_regression_comparison",
+  "scope": "Round 2 exact frozen source only. This is an offline full-suite regression comparison, not live Provider acceptance or a general correctness claim.",
+  "result": "historical_13_unchanged_two_additional_full_suite_failures_one_reproduced",
+  "real_provider_calls_performed": 0,
+  "backend_or_wrapper_files_modified_by_this_audit": false,
+  "old_xml_modified": false,
+  "historical_13": {
+    "path": "docs/audit/superagent/capability-backend-final.xml",
+    "sha256": "cc59f011c13652d7bdebbd1a2c94dbdef26d0b4f6e2fac9d7e923445e9eba63e",
+    "summary": {
+      "tests": 2603,
+      "passed": 2587,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "xml_seconds": 556.739
+    },
+    "failures": {
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission": {
+        "message": "assert 4096 == 2048",
+        "diagnostic_sha256": "b21fb5e855dcd9e390a22b52d7d18c280180806fb3f2080936cf29449af746ad"
+      },
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "fe9973f1a2e85bc8536a8ff394cf80ef43cc791664d055ff9aedfe08b4f6c24c"
+      },
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "095344d33bf0e746c1f639e15cbc482aed7b3ac939a326aec56ae51a282b2fd9"
+      },
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin": {
+        "message": "assert 10313 > 12045",
+        "diagnostic_sha256": "a1c4c7efa885573b4d48ba1c2aefe7e4521265910bd165b52b618d729e8b5a8f"
+      },
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "2ee4677b8b0ddc4622ff1f4243e4044f6a3c7c931d7430f2c9c0c9a8f1c75d1b"
+      },
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom": {
+        "message": "assert 10577 > 12045",
+        "diagnostic_sha256": "bdcc800fbd88bc2cd4d9d4fcd162fc9e0d541590d311d74ab5525132184c5c97"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+        "diagnostic_sha256": "3cf96f468116ceac7f034d4676083f94b7522545d96e9ea275a235ec32bd1b5d"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+        "diagnostic_sha256": "0ad820091bf63f959a4ce4cd0e1e5270b555bc2bf7ea1f400c00b02f1e27fa44"
+      },
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool": {
+        "message": "assert 5 == 4",
+        "diagnostic_sha256": "cbe1e85c4f9ab74c891282d0db359be5ee951e3d95195c9581db544dbd8b8a76"
+      },
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown": {
+        "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+        "diagnostic_sha256": "3ce44198fd4d7bf18de8a8358fca2c81b941afe33cc6a1bf0125128536293706"
+      },
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "8ad2ccc2ed3e043895c5414c1bddbcc63b90aa003abb107c0a6dfe64bec57610"
+      },
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "f23b7eaee6c666c7e712bfa7e03072711405feedd491351b535831a719e98271"
+      },
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values": {
+        "message": "KeyError: 'rows'",
+        "diagnostic_sha256": "fa6d74865295a5448673b1eb0e0f208e530e0f3123e5883efb50a022558a7178"
+      }
+    },
+    "errors": {},
+    "skipped_case_ids": [
+      "tests.test_python_unittest_superagent::test_linked_source_is_rejected",
+      "tests.test_superagent_events::test_file_source_rejects_link_replaced_after_registration",
+      "tests.test_worker_environment_superagent::test_directory_resolution_does_not_create_unknown_or_linked_environments"
+    ]
+  },
+  "round1_full_suite": {
+    "path": "docs/audit/superagent/capability-completion-backend.xml",
+    "sha256": "bd2188560607057102b7adaac0edd833bbd5f61607245cf41933eca998603740",
+    "summary": {
+      "tests": 2869,
+      "passed": 2853,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "xml_seconds": 722.099
+    },
+    "failures": {
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission": {
+        "message": "assert 4096 == 2048",
+        "diagnostic_sha256": "1cb3f38781d06de5e7301171be637a2b2b96c617fa69fc960ed484671b8dcacf"
+      },
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "6785530eb557ae8d3bb299839d34e010950650919b97f6825a6c93bfe319cb6c"
+      },
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "358c6c4a67219ad16b6447d35d73d422f16805f906eb3256a1094a118bbff6c4"
+      },
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin": {
+        "message": "assert 10313 > 12045",
+        "diagnostic_sha256": "2ead809258cbe8330149179451feb294452a61689563b6f48f1333ff3dcd2cab"
+      },
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "4a9483333dd7fe5ad9043d36fdfa6be943bfdc5dd18e7620c0794368499bbd4b"
+      },
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom": {
+        "message": "assert 10577 > 12045",
+        "diagnostic_sha256": "db6d72a67005a6188b68ad0376388f64c7052a4a3b516050ad2285733a06a2c2"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+        "diagnostic_sha256": "8e2106f1873ff8f85aa2f467ef283ef5e72d03505681a2d07396eed7719a1897"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+        "diagnostic_sha256": "31608733ef321420767669db81ba1c4300c97a4faadd1883b0e0679bf9903533"
+      },
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool": {
+        "message": "assert 5 == 4",
+        "diagnostic_sha256": "3026da746c15f53875d061c7b252288b8de0b396ef5f2e704951b7d5c38a5593"
+      },
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown": {
+        "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+        "diagnostic_sha256": "bb420cb406aeb83efb38343afe84ba83678758cb225ebae9a8a5d266c4f1d932"
+      },
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "d3ca46892ebb40fdd38cc63aeaae0387b12444e7ad925c86edb2a999295ae5e6"
+      },
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "c1e1b6b53764e25dd5a54db4a2d3f83f64ca22c6b09c49804af9f31f79768279"
+      },
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values": {
+        "message": "KeyError: 'rows'",
+        "diagnostic_sha256": "a450f978abd947e68a779f331a1de6b51720e624fcf12f2d8cbeac711e85c278"
+      }
+    },
+    "errors": {},
+    "skipped_case_ids": [
+      "tests.test_python_unittest_superagent::test_linked_source_is_rejected",
+      "tests.test_superagent_events::test_file_source_rejects_link_replaced_after_registration",
+      "tests.test_worker_environment_superagent::test_directory_resolution_does_not_create_unknown_or_linked_environments"
+    ]
+  },
+  "original_historical_14_preserved": {
+    "path": "docs/audit/superagent/capability-final-backend.xml",
+    "sha256": "0982aa9a5e6fd6d1a15f6ad958cc5a91d4ee92853c24cf04307cb33cd16fb7fc",
+    "summary": {
+      "tests": 2812,
+      "passed": 2795,
+      "failures": 14,
+      "errors": 0,
+      "skipped": 3,
+      "xml_seconds": 642.604
+    },
+    "failures": {
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission": {
+        "message": "assert 4096 == 2048",
+        "diagnostic_sha256": "8d6dafe31f4b8f79e1ceb4481d17a128d476d57653f7555437c3e70405d40683"
+      },
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "ddb9c9bd724bf4b40add26bb05ec03b8cfd4838ad136ca6d824b4e9d7cd17f71"
+      },
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "b096a8549642c9dcf3da034e20fe410d120e9454ea914da6f843547f9db12d50"
+      },
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin": {
+        "message": "assert 10313 > 12045",
+        "diagnostic_sha256": "2269611d81a10cd559d1555375d50e4e1d73ad7a1445543795019d42d981a696"
+      },
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "8c9c5a5e4633055371e9add1e27932ae2fc0d4001cbf3c7edbc5dd16b46fb278"
+      },
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom": {
+        "message": "assert 10577 > 12045",
+        "diagnostic_sha256": "d52baaa585e0582ef147f38293117579a1588df70e9680859b3c9dc0be09a7d5"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+        "diagnostic_sha256": "5baa7000ff22f56fa661ef2778c7c7ada580517c3f0f038995e0c5dd82680245"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+        "diagnostic_sha256": "aaadc5111c03b888fd4d7a7bc922211517be179cc20f853520823b6eefff28e5"
+      },
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool": {
+        "message": "assert 5 == 4",
+        "diagnostic_sha256": "a8722cc8a27d0c19dc85ed0655a676832f5a048b18366e35607ad9fbc37d3c37"
+      },
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown": {
+        "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+        "diagnostic_sha256": "1f9fb8a2bc810d2a89d69c538912f963ca092008b990298307159a4d0ad7df9f"
+      },
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "3b2039e49c0cfec83c42e23b4fd2dda5ef8c4a51ff58baa6ce472f1a05a2b119"
+      },
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "6fa1ea778b2081b3bf1f9379e28e70445d9cd886059063b357ba33f17f2e4211"
+      },
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values": {
+        "message": "KeyError: 'rows'",
+        "diagnostic_sha256": "bc67573ad5874e90fb6e0dba5a4928252ddbdd0defd0196b00c22677f331030d"
+      },
+      "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap": {
+        "message": "Failed: DID NOT RAISE DomainError",
+        "diagnostic_sha256": "fcc6191af95ad9c3a57991490c89f2bdbabe64c65bf2a7a013f522aeb7a497d5"
+      }
+    },
+    "errors": {},
+    "skipped_case_ids": [
+      "tests.test_python_unittest_superagent::test_linked_source_is_rejected",
+      "tests.test_superagent_events::test_file_source_rejects_link_replaced_after_registration",
+      "tests.test_worker_environment_superagent::test_directory_resolution_does_not_create_unknown_or_linked_environments"
+    ]
+  },
+  "current_full_suite": {
+    "path": "docs/audit/superagent/capability-completion-final-backend.xml",
+    "sha256": "5c2ff28a963a71f8f832c195a9291fc9185593f281fc6f4896657bba3b6533a1",
+    "summary": {
+      "tests": 2900,
+      "passed": 2882,
+      "failures": 15,
+      "errors": 0,
+      "skipped": 3,
+      "xml_seconds": 646.967
+    },
+    "failures": {
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission": {
+        "message": "assert 4096 == 2048",
+        "diagnostic_sha256": "f86511b95284ef2d0350fc6aeb7858900ebe0e2268b99856d419cca3eac1fbd2"
+      },
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "06de66966c3ca82238a925fee5b950a94f6ef077decc5ff728b45bd661ad0980"
+      },
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps": {
+        "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+        "diagnostic_sha256": "2b8eb64381ff7eea2e68a1ef2854d05cc67d68a4a904b39eb4f1abf13504f64f"
+      },
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin": {
+        "message": "assert 10313 > 12045",
+        "diagnostic_sha256": "79926f971d12764782d12300c698c7810ca5e9aebd55dc546617c3fed0e1f337"
+      },
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "51291bd51adb04711e16224b82fd0333e1d66ce3499edf0d4d6423a4d08d04d9"
+      },
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom": {
+        "message": "assert 10577 > 12045",
+        "diagnostic_sha256": "73c8a3b41b8bdbe2feb9e36da2744c0d508956a27e9c3e090b918df83415171c"
+      },
+      "tests.test_lifecycle_m7::test_actual_desktop_core_restart_keeps_router_and_changes_generation": {
+        "message": "sqlite3.OperationalError: disk I/O error",
+        "diagnostic_sha256": "4a6bb58ac225c9e33bce4aec6ee12715b8024176cf7c2cc00170974d116d1cb4"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+        "diagnostic_sha256": "622af2d744d0692935f024f36d7c69b3138577dde519ab10a5241520008b3e24"
+      },
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]": {
+        "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+        "diagnostic_sha256": "acd1f9389ad7bc9cd9289a12bd8114e31e1617ee3a3396f0a79fdf2680416567"
+      },
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool": {
+        "message": "assert 5 == 4",
+        "diagnostic_sha256": "9abd1e87631305db92a69f8fb32f77ffb3be452860a407141098f17b9c5b8ac6"
+      },
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown": {
+        "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+        "diagnostic_sha256": "ff4d455cc5f7541a6c83019a86efe76fb2f1e216b6030ce94b1a6251d68aa9e7"
+      },
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "051ffc0e7cfc9b46fe01f488329abdcba7f7156937697a3311cec0b169ff8db3"
+      },
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure": {
+        "message": "IndexError: list index out of range",
+        "diagnostic_sha256": "6d47e429dfa66c91e249743514fdcc2e2f76707683f9b1774affc9593ebd09c8"
+      },
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values": {
+        "message": "KeyError: 'rows'",
+        "diagnostic_sha256": "5835e71774da488fbd55b3d19b69c01191fa29aadbb19ecd67b415c38f9e459b"
+      },
+      "tests.test_worker_first_archive_phase2::test_registry_reduction_preserves_tiny_request_tool_set_after_first_step": {
+        "message": "AssertionError: assert ('blocked' == 'review_pending'\n  \n  - review_pending\n  + blocked)",
+        "diagnostic_sha256": "1a79381a3adc8f26ad56673e77c083587aafb9164ee80b55cd26f8e7e5a2fe36"
+      }
+    },
+    "errors": {},
+    "skipped_case_ids": [
+      "tests.test_python_unittest_superagent::test_linked_source_is_rejected",
+      "tests.test_superagent_events::test_file_source_rejects_link_replaced_after_registration",
+      "tests.test_worker_environment_superagent::test_directory_resolution_does_not_create_unknown_or_linked_environments"
+    ],
+    "log": {
+      "path": ".local/superagent/capability-completion-final-backend.log",
+      "sha256": "28d464cb60198a5abebd73c9fd53e01364c2f5072bb6bb841facac3e33604316"
+    },
+    "pytest_summary_line": "15 failed, 2882 passed, 3 skipped, 1 warning in 647.14s (0:10:47)",
+    "warning_count_from_summary": 1
+  },
+  "current_source_binding": {
+    "path": "docs/audit/superagent/capability-completion-round2-source-freeze.json",
+    "sha256": "dde83945207b0bbf994b3a7572c52f23b7c7176475bcddfabcf3403b35408da9",
+    "file_count": 355,
+    "all_frozen_files_match_at_audit": true,
+    "mismatched_paths": [],
+    "binding_note": "Any future source changes require their own validation and must not inherit this exact-source result."
+  },
+  "comparison_against_historical_13": {
+    "same_failed_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "new_failed_case_ids": [
+      "tests.test_lifecycle_m7::test_actual_desktop_core_restart_keeps_router_and_changes_generation",
+      "tests.test_worker_first_archive_phase2::test_registry_reduction_preserves_tiny_request_tool_set_after_first_step"
+    ],
+    "previous_no_longer_failed": [],
+    "failure_messages_unchanged": 13,
+    "changed_failure_messages": [],
+    "diagnostic_text_hash_changes": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "new_error_case_ids": [],
+    "new_test_case_ids": [
+      "tests.test_capability_continuation_gates::test_final_handback_requires_reviewed_completion_event_in_original_router_message",
+      "tests.test_capability_continuation_gates::test_operator_model_window_wins_without_changing_execution_budget",
+      "tests.test_capability_continuation_gates::test_operator_window_is_validated[-1]",
+      "tests.test_capability_continuation_gates::test_operator_window_is_validated[0]",
+      "tests.test_capability_continuation_gates::test_operator_window_is_validated[100M]",
+      "tests.test_capability_continuation_gates::test_operator_window_is_validated[True]",
+      "tests.test_capability_continuation_gates::test_parallel_workers_of_same_task_are_not_independent_task_parallelism",
+      "tests.test_capability_continuation_gates::test_two_projects_gate_checks_task_identity_not_just_number_of_roots",
+      "tests.test_capability_continuity_evidence::test_actual_core_proofs_and_transcripts_allow_only_complete_same_run_pages",
+      "tests.test_capability_continuity_evidence::test_full_pages_require_every_character_and_original_hash[False]",
+      "tests.test_capability_continuity_evidence::test_full_pages_require_every_character_and_original_hash[True]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[batch]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[complete]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[gap]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[hash]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[length]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[overlap]",
+      "tests.test_capability_continuity_evidence::test_partial_forged_overlapping_or_same_turn_pages_do_not_pass[text]",
+      "tests.test_capability_continuity_evidence::test_real_scripted_worker_traverses_only_returned_relations_and_recovers_full_hashes",
+      "tests.test_capability_continuity_evidence::test_relation_chain_requires_returned_refs_and_later_turns",
+      "tests.test_capability_continuity_evidence::test_standalone_specialists_keeps_same_l2_and_requires_actual_distinct_roles",
+      "tests.test_capability_continuity_evidence::test_stored_success_label_cannot_replace_source_proof_or_full_consumption[partial]",
+      "tests.test_capability_continuity_evidence::test_stored_success_label_cannot_replace_source_proof_or_full_consumption[payload]",
+      "tests.test_capability_continuity_evidence::test_stored_success_label_cannot_replace_source_proof_or_full_consumption[proof]",
+      "tests.test_capability_continuity_evidence::test_stored_success_label_cannot_replace_source_proof_or_full_consumption[transcript]",
+      "tests.test_capability_continuity_evidence::test_stored_success_label_cannot_replace_source_proof_or_full_consumption[unconsumed]",
+      "tests.test_compaction_rejection_diagnostics::test_diagnostics_cannot_expose_unknown_finish_or_provider_identity",
+      "tests.test_compaction_rejection_diagnostics::test_feedback_distinguishes_cumulative_balance_and_current_request_allowance",
+      "tests.test_compaction_rejection_diagnostics::test_native_low_input_budget_output_reservation_is_reduced_and_still_validated",
+      "tests.test_compaction_rejection_diagnostics::test_nontext_or_unencodable_diagnostics_do_not_echo_values[7]",
+      "tests.test_compaction_rejection_diagnostics::test_nontext_or_unencodable_diagnostics_do_not_echo_values[None]",
+      "tests.test_compaction_rejection_diagnostics::test_nontext_or_unencodable_diagnostics_do_not_echo_values[\\ud800]",
+      "tests.test_compaction_rejection_diagnostics::test_nontext_or_unencodable_diagnostics_do_not_echo_values[text2]",
+      "tests.test_compaction_rejection_diagnostics::test_plain_handoff_text_is_not_json_and_is_not_normalized",
+      "tests.test_compaction_rejection_diagnostics::test_request_output_allowance_tracks_actual_summary_byte_limit[1000]",
+      "tests.test_compaction_rejection_diagnostics::test_request_output_allowance_tracks_actual_summary_byte_limit[400000]",
+      "tests.test_compaction_rejection_diagnostics::test_request_output_allowance_tracks_actual_summary_byte_limit[4]",
+      "tests.test_compaction_rejection_diagnostics::test_request_output_allowance_tracks_actual_summary_byte_limit[6000]",
+      "tests.test_compaction_rejection_diagnostics::test_request_output_allowance_tracks_actual_summary_byte_limit[65536]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[blank-empty_text-live]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[blank-empty_text-mock]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[oversized-summary_byte_limit-live]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[oversized-summary_byte_limit-mock]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[tools-unexpected_tool_calls-live]",
+      "tests.test_compaction_rejection_diagnostics::test_settled_native_rejection_keeps_only_fixed_metadata[tools-unexpected_tool_calls-mock]",
+      "tests.test_compaction_rejection_diagnostics::test_source_bound_rejection_records_fixed_stage_without_exception_content",
+      "tests.test_directory_create_idempotency::test_arbitrary_fileexists_exception_without_directory_stays_uncertain",
+      "tests.test_directory_create_idempotency::test_directory_create_does_not_accept_symlink_alias_even_within_grant[False]",
+      "tests.test_directory_create_idempotency::test_directory_create_does_not_accept_symlink_alias_even_within_grant[True]",
+      "tests.test_directory_create_idempotency::test_directory_create_ensures_only_authorized_ordinary_directory[False]",
+      "tests.test_directory_create_idempotency::test_directory_create_ensures_only_authorized_ordinary_directory[True]",
+      "tests.test_directory_create_idempotency::test_existing_file_is_not_reported_as_created_directory",
+      "tests.test_directory_create_idempotency::test_reparse_point_is_not_accepted_as_ordinary_directory[False]",
+      "tests.test_directory_create_idempotency::test_reparse_point_is_not_accepted_as_ordinary_directory[True]",
+      "tests.test_directory_create_idempotency::test_unknown_directory_creation_is_never_automatically_replayed",
+      "tests.test_model_recovery_capability_sprint::test_capsule_checkpoint_advances_activity_but_not_outcomes_or_reclaim",
+      "tests.test_review_capacity_preview_phase2::test_legacy_complete_packet_has_no_raw_cap_and_hash_remains_unchanged",
+      "tests.test_review_scope_wire::test_ordinary_compact_wire_has_smaller_actual_native_reservation_without_new_limits",
+      "tests.test_review_scope_wire::test_ordinary_review_losslessly_deduplicates_citations_and_hostile_markers",
+      "tests.test_review_scope_wire::test_review_instructions_distinguish_mandatory_defects_without_rewriting_verdict[NEEDS_REVISION]",
+      "tests.test_review_scope_wire::test_review_instructions_distinguish_mandatory_defects_without_rewriting_verdict[PASS]",
+      "tests.test_review_unaffordable_convergence::test_exact_minimum_fits_and_cannot_be_labeled_unaffordable[0]",
+      "tests.test_review_unaffordable_convergence::test_exact_minimum_fits_and_cannot_be_labeled_unaffordable[1]",
+      "tests.test_review_unaffordable_convergence::test_real_gateway_payload_measurement_without_a_review_http_call",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[awaiting_authorization]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[disabled]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_rejected]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_reserved]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_settled]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_unknown]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[generation]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[incomplete_claim]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[intent]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[judgment]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[lease]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[mode]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[model_reservation]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[new_result]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[node_status]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[packet]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[pending_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[plan]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[provider]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[quest_paused]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[remaining]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[running_core_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[team]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[unclosed_claim]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[unknown_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[worker_status]",
+      "tests.test_review_unaffordable_convergence::test_typed_failure_is_specific_and_no_ready_release_occurs",
+      "tests.test_review_unaffordable_convergence::test_unaffordable_tick_atomically_blocks_without_claim_call_or_judgment",
+      "tests.test_reviewer_capacity_phase2::test_immutable_receipts_exceeding_actual_context_cannot_get_capacity_revision",
+      "tests.test_reviewer_capacity_phase2::test_repeated_immutable_sources_keep_all_receipts_but_share_wire_text",
+      "tests.test_reviewer_context_phase2::test_exhausted_review_round_blocks_current_result_without_extra_revision",
+      "tests.test_reviewer_repair_phase2::test_oversized_review_native_request_emits_context_diagnostic_without_truncation",
+      "tests.test_router_intake_legacy_capacity_sprint::test_current_user_text_only_and_model_selected_path_does_not_register",
+      "tests.test_router_intake_legacy_capacity_sprint::test_explicit_envelope_retains_raw_and_component_contract_limits",
+      "tests.test_router_intake_legacy_capacity_sprint::test_first_and_second_explicit_roots_present_before_model_and_bind_separate_quests",
+      "tests.test_router_intake_legacy_capacity_sprint::test_legacy_actual_context_shortage_still_never_admits_model_review",
+      "tests.test_router_intake_legacy_capacity_sprint::test_legacy_complete_packet_over_65k_uses_native_model_and_original_cumulative_admission",
+      "tests.test_router_intake_legacy_capacity_sprint::test_legacy_preview_reports_native_headroom_without_invented_raw_cap",
+      "tests.test_router_intake_legacy_capacity_sprint::test_named_project_registration_keeps_parser_identity_and_ambiguity[duplicate]",
+      "tests.test_router_intake_legacy_capacity_sprint::test_named_project_registration_keeps_parser_identity_and_ambiguity[missing]",
+      "tests.test_router_intake_legacy_capacity_sprint::test_named_project_registration_keeps_parser_identity_and_ambiguity[multiple]",
+      "tests.test_router_intake_legacy_capacity_sprint::test_named_project_registration_keeps_parser_identity_and_ambiguity[relative]",
+      "tests.test_router_intake_legacy_capacity_sprint::test_registration_changes_only_existing_project_metadata_and_no_authority",
+      "tests.test_router_intake_legacy_capacity_sprint::test_registration_rolls_back_with_snapshot_transaction",
+      "tests.test_router_intake_legacy_capacity_sprint::test_replay_and_conflicting_request_id_do_not_scan_new_paths",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[  \\n-empty-expected_value]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[-empty-expected_value]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[Here is the decision: {\"a\":1}-letter-expected_value]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[\\ufeff{\"a\":1}-bom-unexpected_bom]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[\\xa0{\"a\":1}-non_json_whitespace-expected_value]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[{\"a\":\"\\\\q\"}-object-invalid_escape]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[{\"a\":\"line\\nvalue\"}-object-invalid_control_character]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[{\"a\":-object-expected_value]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[{\"a\":1,}-object-expected_property_name]",
+      "tests.test_router_json_protocol::test_error_shapes_have_only_fixed_metadata[{\"a\":1} explanation-object-extra_data]",
+      "tests.test_router_json_protocol::test_exact_single_json_fence_is_audited_without_reflection_or_validator_bypass",
+      "tests.test_router_json_protocol::test_failed_fenced_reflection_does_not_add_a_second_repair",
+      "tests.test_router_json_protocol::test_fenced_invalid_initial_is_reflected_raw_once_and_fenced_repair_is_validated",
+      "tests.test_router_json_protocol::test_fenced_task_creation_keeps_atomic_turn_and_does_not_self_conflict",
+      "tests.test_router_json_protocol::test_json_rejection_keeps_only_safe_shape_and_original_hash",
+      "tests.test_router_json_protocol::test_native_gateway_schema_tool_rounds_reflection_and_original_framing[131072]",
+      "tests.test_router_json_protocol::test_native_gateway_schema_tool_rounds_reflection_and_original_framing[32768]",
+      "tests.test_router_json_protocol::test_nested_team_refs_resolve_and_list_defaults_are_required_arrays",
+      "tests.test_router_json_protocol::test_no_private_fields_values_or_parser_messages_are_returned",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[ ```json\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```JSON\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[````json\\n{}\\n````]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json extra\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json {} ```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\n{}\\n```\\n]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\n{}\\n```\\n```json\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\n{}\\n```\\nafter]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\n{}\\r\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\n{}]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```json\\r\\n{}\\r\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[```python\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonexact_transport_is_rejected_unchanged[before\\n```json\\n{}\\n```]",
+      "tests.test_router_json_protocol::test_nonstandard_constants_have_fixed_codes[-Infinity]",
+      "tests.test_router_json_protocol::test_nonstandard_constants_have_fixed_codes[Infinity]",
+      "tests.test_router_json_protocol::test_nonstandard_constants_have_fixed_codes[NaN]",
+      "tests.test_router_json_protocol::test_nonstandard_constants_have_fixed_codes[{\"x\":NaN}]",
+      "tests.test_router_json_protocol::test_nontext_diagnostics_are_fixed_metadata[3]",
+      "tests.test_router_json_protocol::test_nontext_diagnostics_are_fixed_metadata[None]",
+      "tests.test_router_json_protocol::test_nontext_diagnostics_are_fixed_metadata[value2]",
+      "tests.test_router_json_protocol::test_nontext_diagnostics_are_fixed_metadata[value3]",
+      "tests.test_router_json_protocol::test_normalization_does_not_refund_output_bytes_or_change_idempotency",
+      "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text0-json_value_limit]",
+      "tests.test_router_json_protocol::test_parser_resource_limits_have_bounded_fixed_diagnostics[text1-nesting_limit]",
+      "tests.test_router_json_protocol::test_projection_preserves_properties_named_default_and_schema_constraints",
+      "tests.test_router_json_protocol::test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-False]",
+      "tests.test_router_json_protocol::test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-True]",
+      "tests.test_router_json_protocol::test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-False]",
+      "tests.test_router_json_protocol::test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-True]",
+      "tests.test_router_json_protocol::test_transport_conversion_still_requires_original_schema_topology_and_recall[body1-priority: less_than_equal]",
+      "tests.test_router_json_protocol::test_transport_conversion_still_requires_original_schema_topology_and_recall[body2-recall_source_not_presented_or_ineligible]",
+      "tests.test_router_json_protocol::test_transport_conversion_still_requires_original_schema_topology_and_recall[body3-execution_team: team_dependencies_not_earlier_distinct]",
+      "tests.test_router_json_protocol::test_transport_conversion_still_requires_original_schema_topology_and_recall[{\"intent\":-[root]: json_invalid]",
+      "tests.test_router_json_protocol::test_unicode_positions_count_characters_while_size_counts_utf8_bytes",
+      "tests.test_router_json_protocol::test_valid_json_wrong_root_remains_schema_rejection[\"private\"-string]",
+      "tests.test_router_json_protocol::test_valid_json_wrong_root_remains_schema_rejection[42-number]",
+      "tests.test_router_json_protocol::test_valid_json_wrong_root_remains_schema_rejection[[]-array]",
+      "tests.test_router_json_protocol::test_valid_json_wrong_root_remains_schema_rejection[false-boolean]",
+      "tests.test_router_json_protocol::test_valid_json_wrong_root_remains_schema_rejection[null-null]",
+      "tests.test_router_notice_capability_sprint::test_approval_decided_during_inference_cannot_publish_an_outdated_request",
+      "tests.test_router_notice_capability_sprint::test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[APPROVED]",
+      "tests.test_router_notice_capability_sprint::test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[EXPIRED]",
+      "tests.test_router_notice_capability_sprint::test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[REJECTED]",
+      "tests.test_router_notice_capability_sprint::test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[elapsed]",
+      "tests.test_router_notice_capability_sprint::test_completion_batch_retains_terminal_source_even_when_result_is_first",
+      "tests.test_router_notice_capability_sprint::test_completion_delivery_source_change_fences_summary_commit",
+      "tests.test_router_notice_capability_sprint::test_completion_summary_contains_only_latest_successful_current_plan_delivery",
+      "tests.test_router_notice_capability_sprint::test_legacy_or_manual_closed_approval_keeps_existing_notice_behavior[False-True]",
+      "tests.test_router_notice_capability_sprint::test_legacy_or_manual_closed_approval_keeps_existing_notice_behavior[True-False]",
+      "tests.test_router_notice_capability_sprint::test_pending_review_fact_requires_exact_source_bound_run[plan_id]",
+      "tests.test_router_notice_capability_sprint::test_pending_review_fact_requires_exact_source_bound_run[run_id]",
+      "tests.test_router_notice_capability_sprint::test_pending_review_fact_requires_exact_source_bound_run[task_node_key]",
+      "tests.test_router_notice_capability_sprint::test_pending_review_relays_only_core_status_without_a_provider_call",
+      "tests.test_router_notice_capability_sprint::test_pending_review_state_change_is_fenced_before_status_publication",
+      "tests.test_router_notice_capability_sprint::test_same_authorization_checkpoint_batches_and_preserves_all_source_ids",
+      "tests.test_router_project_intake_independent_sprint::test_background_trigger_payload_never_uses_authenticated_user_registration",
+      "tests.test_router_project_intake_independent_sprint::test_discovery_probes_only_eight_explicit_paths",
+      "tests.test_router_project_intake_independent_sprint::test_explicit_revisit_of_old_project_is_presented_without_refreshing_other_projects",
+      "tests.test_router_project_intake_independent_sprint::test_first_request_discovers_current_user_only_not_prior_user_or_assistant",
+      "tests.test_router_project_intake_independent_sprint::test_manual_mode_never_registers_named_projects",
+      "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_keeps_complete_evidence_and_native_admission_limits",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[disabled_tokens]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[later_pass]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[new_result]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[packet]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[plan]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[remaining]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[running]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[stale_claim]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[team]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[unknown_gateway]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[unknown_intent]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[unknown_model]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[unknown_tool]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[wrong_mode]",
+      "tests.test_stall_recovery_capability_sprint::test_exhaustion_never_overrides_stale_authority_or_unknown_fences[wrong_worker]",
+      "tests.test_stall_recovery_capability_sprint::test_existing_blocked_marker_recovers_after_restart_once",
+      "tests.test_stall_recovery_capability_sprint::test_http_fixture_requires_exact_settled_native_reviewer_proof[None]",
+      "tests.test_stall_recovery_capability_sprint::test_http_fixture_requires_exact_settled_native_reviewer_proof[duplicate]",
+      "tests.test_stall_recovery_capability_sprint::test_http_fixture_requires_exact_settled_native_reviewer_proof[identity]",
+      "tests.test_stall_recovery_capability_sprint::test_http_fixture_requires_exact_settled_native_reviewer_proof[purpose]",
+      "tests.test_stall_recovery_capability_sprint::test_http_fixture_requires_exact_settled_native_reviewer_proof[unknown]",
+      "tests.test_stall_recovery_capability_sprint::test_only_current_settled_result_at_actual_limit_converges[deadline]",
+      "tests.test_stall_recovery_capability_sprint::test_only_current_settled_result_at_actual_limit_converges[repair]",
+      "tests.test_stall_recovery_capability_sprint::test_only_current_settled_result_at_actual_limit_converges[review_rounds]",
+      "tests.test_stall_recovery_capability_sprint::test_only_current_settled_result_at_actual_limit_converges[steps]",
+      "tests.test_stall_recovery_capability_sprint::test_only_current_settled_result_at_actual_limit_converges[token]",
+      "tests.test_stall_recovery_capability_sprint::test_stall_help_is_valid_delivered_and_observation_only[False]",
+      "tests.test_stall_recovery_capability_sprint::test_stall_help_is_valid_delivered_and_observation_only[True]",
+      "tests.test_stall_recovery_capability_sprint::test_watchdog_help_cannot_authorize_reassignment_or_expansion",
+      "tests.test_superagent_failover_driver::test_exact_actual_source_and_all_three_live_receipts_pass[\\n]",
+      "tests.test_superagent_failover_driver::test_exact_actual_source_and_all_three_live_receipts_pass[\\r\\n]",
+      "tests.test_superagent_failover_driver::test_fault_is_exactly_once_and_bound_to_one_native_worker_attempt",
+      "tests.test_superagent_failover_driver::test_final_router_handback_requires_completed_quest_notice",
+      "tests.test_superagent_failover_driver::test_other_requests_retain_actual_bytes_and_credential_on_local_forwarding",
+      "tests.test_superagent_failover_driver::test_output_lf_does_not_satisfy_actual_crlf_source",
+      "tests.test_superagent_failover_driver::test_output_receipts_alone_cannot_prove_original_source[changed_source]",
+      "tests.test_superagent_failover_driver::test_output_receipts_alone_cannot_prove_original_source[missing_source_receipt]",
+      "tests.test_superagent_failover_driver::test_output_receipts_alone_cannot_prove_original_source[mock_receipt]",
+      "tests.test_superagent_failover_driver::test_output_receipts_alone_cannot_prove_original_source[wrong_source_receipt]",
+      "tests.test_superagent_failover_driver::test_profiles_are_actual_model_identities_with_unmeasured_priors",
+      "tests.test_superagent_failover_driver::test_prompt_shape_or_ambiguous_ledger_never_authorizes_fault[concurrent]",
+      "tests.test_superagent_failover_driver::test_prompt_shape_or_ambiguous_ledger_never_authorizes_fault[malformed]",
+      "tests.test_superagent_failover_driver::test_prompt_shape_or_ambiguous_ledger_never_authorizes_fault[other_model]",
+      "tests.test_superagent_failover_driver::test_prompt_shape_or_ambiguous_ledger_never_authorizes_fault[router]",
+      "tests.test_superagent_failover_driver::test_prompt_shape_or_ambiguous_ledger_never_authorizes_fault[wrong_route]",
+      "tests.test_superagent_failover_driver::test_proxy_cannot_forward_credentials_to_an_unrequested_destination[http://127.0.0.1:8788/other]",
+      "tests.test_superagent_failover_driver::test_proxy_cannot_forward_credentials_to_an_unrequested_destination[http://localhost:8788/v1]",
+      "tests.test_superagent_failover_driver::test_proxy_cannot_forward_credentials_to_an_unrequested_destination[http://u:p@127.0.0.1:8788/v1]",
+      "tests.test_superagent_failover_driver::test_proxy_cannot_forward_credentials_to_an_unrequested_destination[https://remote.invalid/v1]",
+      "tests.test_superagent_failover_driver::test_read_only_drain_waits_for_router_and_two_seconds_of_stability",
+      "tests.test_superagent_failover_driver::test_rejected_usage_unknown_is_allowlisted_only_with_exact_native_proof",
+      "tests.test_superagent_failover_driver::test_unknown_or_incomplete_rejections_are_never_allowlisted[network]",
+      "tests.test_superagent_failover_driver::test_unknown_or_incomplete_rejections_are_never_allowlisted[partial]",
+      "tests.test_superagent_provider_failover::test_complete_http_rejection_replaces_model_but_retains_all_unknown_usage_reservations",
+      "tests.test_superagent_provider_failover::test_provider_replacement_cannot_exceed_residual_original_mandate[max_tools-32]",
+      "tests.test_superagent_provider_failover::test_provider_replacement_cannot_exceed_residual_original_mandate[max_workers-1]",
+      "tests.test_superagent_provider_failover::test_provider_replacement_refuses_unknown_calls_without_changing_state[gateway]",
+      "tests.test_superagent_provider_failover::test_provider_replacement_refuses_unknown_calls_without_changing_state[tool]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[compaction]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[duplicate]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[identity]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[purpose]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[unknown]",
+      "tests.test_superagent_provider_failover::test_rejection_proof_requires_one_exact_worker_gateway_source[workspace]",
+      "tests.test_superagent_provider_failover::test_settled_provider_failure_selects_different_model_without_refunding_original_allocation",
+      "tests.test_superagent_provider_failover::test_transport_or_incomplete_rejection_remains_unknown_and_cannot_replace[network]",
+      "tests.test_superagent_provider_failover::test_transport_or_incomplete_rejection_remains_unknown_and_cannot_replace[partial]",
+      "tests.test_worker_context_affordability::test_compactor_selects_an_affordable_whole_prefix_without_widening_budget",
+      "tests.test_worker_context_affordability::test_existing_handoff_is_counted_before_whole_settled_tail_selection",
+      "tests.test_worker_context_affordability::test_handoff_fallback_keeps_unsettled_or_unreceipted_tail_live[missing_receipt]",
+      "tests.test_worker_context_affordability::test_handoff_fallback_keeps_unsettled_or_unreceipted_tail_live[pending]",
+      "tests.test_worker_context_affordability::test_handoff_fallback_keeps_unsettled_or_unreceipted_tail_live[uncertain]",
+      "tests.test_worker_context_affordability::test_large_model_window_cannot_admit_an_unaffordable_compaction",
+      "tests.test_worker_context_affordability::test_registry_capacity_does_not_become_a_cumulative_execution_grant",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[False-Worker context budget exceeded after compaction-compacted_input_allowance_exceeded]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[False-Worker context budget exceeded-request_input_allowance_exceeded]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[True-Worker context budget exceeded after compaction-compacted_input_allowance_exceeded]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[True-Worker context budget exceeded-request_input_allowance_exceeded]",
+      "tests.test_worker_path_semantics::test_environment_paths_follow_persisted_task_link_without_grant_or_creation",
+      "tests.test_worker_path_semantics::test_external_project_identity_does_not_change_tool_scope",
+      "tests.test_worker_path_semantics::test_initial_measurement_includes_real_superagent_paths_and_bounds_runtime[anthropic]",
+      "tests.test_worker_path_semantics::test_initial_measurement_includes_real_superagent_paths_and_bounds_runtime[deepseek]",
+      "tests.test_worker_path_semantics::test_initial_measurement_includes_real_superagent_paths_and_bounds_runtime[openai_compatible]",
+      "tests.test_worker_path_semantics::test_missing_project_link_is_explicit_and_does_not_infer_from_task_text",
+      "tests.test_worker_path_semantics::test_worker_prompt_separates_tool_paths_from_project_and_private_cwd[None-False]",
+      "tests.test_worker_path_semantics::test_worker_prompt_separates_tool_paths_from_project_and_private_cwd[None-True]",
+      "tests.test_worker_path_semantics::test_worker_prompt_separates_tool_paths_from_project_and_private_cwd[native-input-roundtrip-v1-False]",
+      "tests.test_worker_path_semantics::test_worker_prompt_separates_tool_paths_from_project_and_private_cwd[native-input-roundtrip-v1-True]",
+      "tests.test_worker_productive_progress::test_active_but_unknown_effect_is_only_diagnosed_and_not_replayed",
+      "tests.test_worker_productive_progress::test_consumed_followup_resets_outcome_window_without_treating_capsule_revision_as_output",
+      "tests.test_worker_productive_progress::test_new_source_content_resets_outcome_window_but_old_content_does_not",
+      "tests.test_worker_productive_progress::test_repeated_read_and_inference_activity_does_not_hide_unchanged_outcome",
+      "tests.test_worker_productive_progress::test_settled_model_calls_and_thoughts_alone_do_not_advance_outcomes",
+      "tests.test_worker_productive_progress::test_two_watchdogs_deduplicate_active_nonproductive_frontier",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[foreign_run]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[intent_mode]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[invalid_parameters_json]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[invalid_result_json]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[noncanonical_parameters]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[parameter_digest]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[parameters]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[plan_revision]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[receipt_mode]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[result_digest]",
+      "tests.test_worker_settled_failure_receipts::test_corrupt_storage_cannot_bind_failure_or_leave_running_worker[unknown_intent]",
+      "tests.test_worker_settled_failure_receipts::test_settled_failure_still_supports_original_bounded_correction",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[directory_list-no_repairs]",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[directory_list-repairs_spent]",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[directory_list-steps_spent]",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[file_read-no_repairs]",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[file_read-repairs_spent]",
+      "tests.test_worker_settled_failure_receipts::test_settled_local_failure_keeps_receipt_when_correction_is_exhausted[file_read-steps_spent]",
+      "tests.test_worker_settled_failure_receipts::test_unbound_or_uncertain_failure_never_becomes_a_settled_call[call_id]",
+      "tests.test_worker_settled_failure_receipts::test_unbound_or_uncertain_failure_never_becomes_a_settled_call[intent_id]",
+      "tests.test_worker_settled_failure_receipts::test_unbound_or_uncertain_failure_never_becomes_a_settled_call[output]",
+      "tests.test_worker_settled_failure_receipts::test_unbound_or_uncertain_failure_never_becomes_a_settled_call[receipt_id]",
+      "tests.test_worker_settled_failure_receipts::test_unbound_or_uncertain_failure_never_becomes_a_settled_call[state]",
+      "tests.test_worker_settled_failure_receipts::test_unknown_action_keeps_original_intent_and_never_replays_after_reopen"
+    ],
+    "removed_test_case_ids": [
+      "tests.test_model_recovery_capability_sprint::test_completed_checkpoint_resets_progress_window_but_reclaim_does_not",
+      "tests.test_review_capacity_preview_phase2::test_raw_cap_and_complete_rejected_packet_hash_remain_unchanged",
+      "tests.test_reviewer_capacity_phase2::test_immutable_receipts_exceeding_cap_cannot_get_capacity_revision",
+      "tests.test_reviewer_context_phase2::test_exhausted_review_round_reports_specific_limit_without_model_call",
+      "tests.test_reviewer_repair_phase2::test_oversized_review_packet_emits_specific_diagnostic_without_silent_truncation",
+      "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[False-Worker context budget exceeded after compaction-compacted_context_limit]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[False-Worker context budget exceeded-request_context_limit]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[True-Worker context budget exceeded after compaction-compacted_context_limit]",
+      "tests.test_worker_context_diagnostics::test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_text[True-Worker context budget exceeded-request_context_limit]"
+    ],
+    "note": "Full diagnostic text includes temporary paths and per-run context. Exact failure.message comparison is reported separately."
+  },
+  "comparison_against_round1": {
+    "same_failed_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "new_failed_case_ids": [
+      "tests.test_lifecycle_m7::test_actual_desktop_core_restart_keeps_router_and_changes_generation",
+      "tests.test_worker_first_archive_phase2::test_registry_reduction_preserves_tiny_request_tool_set_after_first_step"
+    ],
+    "previous_no_longer_failed": [],
+    "failure_messages_unchanged": 13,
+    "changed_failure_messages": [],
+    "diagnostic_text_hash_changes": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "new_error_case_ids": [],
+    "new_test_case_ids": [
+      "tests.test_review_unaffordable_convergence::test_exact_minimum_fits_and_cannot_be_labeled_unaffordable[0]",
+      "tests.test_review_unaffordable_convergence::test_exact_minimum_fits_and_cannot_be_labeled_unaffordable[1]",
+      "tests.test_review_unaffordable_convergence::test_real_gateway_payload_measurement_without_a_review_http_call",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[awaiting_authorization]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[disabled]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_rejected]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_reserved]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_settled]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[gateway_unknown]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[generation]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[incomplete_claim]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[intent]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[judgment]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[lease]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[mode]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[model_reservation]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[new_result]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[node_status]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[packet]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[pending_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[plan]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[provider]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[quest_paused]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[remaining]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[running_core_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[team]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[unclosed_claim]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[unknown_tool]",
+      "tests.test_review_unaffordable_convergence::test_stale_authority_or_unsettled_work_never_converges[worker_status]",
+      "tests.test_review_unaffordable_convergence::test_typed_failure_is_specific_and_no_ready_release_occurs",
+      "tests.test_review_unaffordable_convergence::test_unaffordable_tick_atomically_blocks_without_claim_call_or_judgment"
+    ],
+    "removed_test_case_ids": [],
+    "note": "Full diagnostic text includes temporary paths and per-run context. Exact failure.message comparison is reported separately."
+  },
+  "historical_xml_hashes_preserved": {
+    "docs/audit/superagent/capability-backend-final.xml": true,
+    "docs/audit/superagent/capability-completion-backend.xml": true,
+    "docs/audit/superagent/capability-final-backend.xml": true
+  },
+  "targeted_followup": {
+    "authorization": "Root explicitly requested the two new failed cases unchanged, without source or fixture edits.",
+    "path": "docs/audit/superagent/capability-completion-round2-failure-followup.xml",
+    "sha256": "8c6d71b4e46d4003cae067cc798250ec210f6b1b4ed4c7e4f44a069524f49900",
+    "summary": {"tests": 2, "passed": 1, "failures": 1, "errors": 0, "skipped": 0, "pytest_seconds": 4.15},
+    "original_full_suite_failure_count_unchanged": 15,
+    "cases": [
+      {
+        "case_id": "tests.test_lifecycle_m7::test_actual_desktop_core_restart_keeps_router_and_changes_generation",
+        "full_suite_message": "sqlite3.OperationalError: disk I/O error",
+        "followup_state": "passed",
+        "attribution": "The full-suite trace fails while opening the killed desktop Core's database at PRAGMA journal_mode=WAL, after two graceful restarts and one intentional hard kill. The unchanged isolated followup passed. This supports an intermittent SQLite/WAL lifecycle or environment failure but does not establish its root cause or repair it."
+      },
+      {
+        "case_id": "tests.test_worker_first_archive_phase2::test_registry_reduction_preserves_tiny_request_tool_set_after_first_step",
+        "followup_state": "failed_same_assertion",
+        "read_only_original_database_observation": {
+          "source": "C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1287/test_registry_reduction_preser0/core.sqlite3",
+          "open_mode": "SQLite URI mode=ro",
+          "worker_state": "blocked",
+          "model_steps": 1,
+          "repairs": 1,
+          "actual_charged_tokens": 40,
+          "reason_code": "request_input_allowance_exceeded",
+          "terminal_reason_code": "context_budget",
+          "approved_model_context_window": 64000,
+          "reduced_registry_context_window": 7000,
+          "effective_model_context_limit": 7000,
+          "input_allowance": 3617,
+          "remaining_cumulative_tokens": 32960,
+          "independent_review_started": false
+        },
+        "attribution": "The first incomplete delivery was settled and produced legitimate repair feedback. The fixture then reduced Registry context to 7000. The complete second request no longer fits its 3617-byte message allowance, so Core correctly blocks at its actual context boundary before another model call. This case passed round1. The round2 ordinary-review guidance adds 820 UTF-8 bytes to the initial system message, consuming tiny-context headroom. This is a reproducible source/prompt regression relative to the fixture's required two-step behavior, separate from cumulative token affordability and the new preadmission review convergence helper. Preserve the 7000 Registry window and unchanged tools, assertions, execution authority, and accounting while correcting prompt overhead."
+      }
+    ]
+  },
+  "interpretation": "The exact round2 backend suite recorded 2882 passed, 15 failed, 3 skipped, 0 errors and 1 warning. All 13 historical failure IDs and failure.message values are unchanged; two additional full-suite failures remain in the original XML. The two-case unchanged followup passed the restart case and reproduced the tiny-context case. It does not replace or rewrite the 15-failure full-suite result. This comparison makes no live task acceptance claim."
+}

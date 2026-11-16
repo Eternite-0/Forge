@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:31:49.672884+00:00",
+  "stage_protocol": {
+    "path": "docs/audit/superagent/capability-completion-protocol.json",
+    "sha256": "118b021e37457ba8697e81dc1db06144c598a6c07afdf624f66a85f3140bdd56"
+  },
+  "condition": {
+    "round": 3,
+    "strategy": "continuity",
+    "call_limit": 64,
+    "tokens": 1000000,
+    "only_after_concrete_diagnosed_source_correction": true
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-round3-source-freeze.json",
+    "sha256": "3d3a73a2607601347a95e31f62f9c0473d1e015bec162e2e4dfa2565a29ffd93"
+  },
+  "prior_condition_results": [
+    {
+      "path": "docs/audit/superagent/capability-completion-round1-result.json",
+      "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe"
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round2-result.json",
+      "sha256": "ad46cd8819c9b0783bda9901139fa6a747221d4d15dcc2f52a77d8467171327c"
+    }
+  ]
+}

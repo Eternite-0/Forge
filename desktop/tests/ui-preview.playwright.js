@@ -64,13 +64,13 @@ async (page, { outputDir }) => {
   check(await preview.locator('.file-markdown h1').innerText() === 'FORGE 文件预览', 'Markdown renders the imported content');
   for (const width of [1440, 1280]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 340) <= 1);
+    await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await assertReadablePreview(preview, `split preview ${width}`, true);
     await shot(`markdown-split-${width}`);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 340) <= 1);
+  await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
   check(await page.evaluate(() => !window.previewUnsafe), 'Markdown HTML does not execute');
   check(await preview.locator('.file-markdown img').count() === 0 && unsafeRequests === 0, 'Markdown never loads external images');
   check(await preview.locator('.file-markdown a[href^="javascript:"]').count() === 0, 'dangerous links are never rendered as anchors');
@@ -145,7 +145,7 @@ async (page, { outputDir }) => {
   await preview.getByRole('tab', { name: 'README.md', exact: true }).click();
   for (const width of [1440, 1280]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 52) <= 1);
+    await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width === 0);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await assertReadablePreview(preview, `expanded preview ${width}`, true);
     await shot(`markdown-expanded-${width}`);
@@ -201,7 +201,7 @@ async (page, { outputDir }) => {
   await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
   await page.waitForTimeout(200);
   check(Math.abs(await preview.locator('.document-rendered:visible').evaluate((element) => element.scrollTop) - beforeClose) <= 1, 'animated close and reopen retain the document reading position');
-  await page.evaluate(() => document.documentElement.dataset.theme = 'dark'); await shot('markdown-dark');
+  await page.emulateMedia({ colorScheme: 'dark' }); await shot('markdown-dark');
   const retainedMarkdown = await preview.locator('.document-rendered:visible').elementHandle();
   await page.setViewportSize({ width: 960, height: 900 });
   await preview.waitFor({ state: 'hidden' });
@@ -245,7 +245,7 @@ async (page, { outputDir }) => {
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   check(await page.getByLabel('消息内容', { exact: true }).inputValue() === '保留的草稿', 'closing preview restores the original draft');
   check(await page.locator('.conversation-shell').isVisible() && !(await retainedConversation.evaluate((element) => element.inert)), 'closing preview restores chat and its keyboard interaction');
-  await page.setViewportSize({ width: 1440, height: 900 }); await page.evaluate(() => delete document.documentElement.dataset.theme);
+  await page.setViewportSize({ width: 1440, height: 900 }); await page.emulateMedia({ colorScheme: 'light' });
   await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
   check(await preview.getByRole('tab').count() === 4, 'closing and reopening preview retains tabs');
   await preview.getByRole('button', { name: '刷新文件树', exact: true }).click();

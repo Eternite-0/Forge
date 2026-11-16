@@ -8,6 +8,7 @@ import httpx
 import pytest
 import test_worker_intelligence_phase2 as worker_fixture
 from test_reviewer_capacity_phase2 import PASS, pending
+from test_reviewer_context_phase2 import reconstruct
 from test_worker_intelligence_phase2 import delivery, prepared, response, tool
 
 from forge_core.domain import DomainError, ProtocolSupport
@@ -15,9 +16,9 @@ from forge_core.independent_review import (
     IndependentReviewService,
     _hash,
     _json,
+    _legacy_review_messages,
     _packet,
     _review_messages,
-    _ReviewBoundaryError,
     review_capacity_preview,
 )
 from forge_core.model_call_budget import ModelCallBudgetLedger
@@ -287,20 +288,18 @@ def test_actual_revision_updates_sizes_without_reusing_previous_delivery(tmp_pat
     assert preview(store, worker, model)["complete"]
 
 
-def test_raw_cap_and_complete_rejected_packet_hash_remain_unchanged(tmp_path, monkeypatch):
+def test_legacy_complete_packet_has_no_raw_cap_and_hash_remains_unchanged(tmp_path, monkeypatch):
     store, manager, model, worker, original, _ = pending(tmp_path, monkeypatch)
     before = _json(original), _hash(original)
     result = preview(store, worker, model)
     assert result["available"] and result["complete"]
     assert result["raw_packet_bytes"] == len(before[0].encode()) > 65536
-    assert result["raw_headroom"] < 0
+    assert result["raw_packet_cap"] is None and result["raw_headroom"] is None
     with store.connection() as connection:
         connection.execute("BEGIN")
         row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
-        with pytest.raises(_ReviewBoundaryError) as caught:
-            _packet(store, connection, row)
-        assert caught.value.code == "review_packet_too_large"
-        assert (_json(caught.value.packet), _hash(caught.value.packet)) == before
+        complete = _packet(store, connection, row)
+        assert (_json(complete), _hash(complete)) == before
     assert manager.get(worker["id"])["state"] == "review_pending"
 
 
@@ -327,10 +326,17 @@ def test_shared_representation_thresholds_preserve_every_byte(raw_size, source_s
     packet["padding"] = "x" * (raw_size - len(_json(packet).encode()))
     assert len(_json(packet).encode()) == raw_size
     before = _hash(packet)
-    messages = _review_messages(packet, {"role": "system", "content": "offline representation"})
-    assert len(messages) == (3 if raw_size > 32768 and source_size > 4096 else 2)
-    if len(messages) == 3:
-        assert messages[1]["content"].endswith(source)
+    system = {"role": "system", "content": "offline representation"}
+    legacy = _legacy_review_messages(packet, system)
+    assert len(legacy) == (3 if raw_size > 32768 and source_size > 4096 else 2)
+    if len(legacy) == 3:
+        assert legacy[1]["content"].endswith(source)
     else:
-        assert json.loads(messages[-1]["content"])["receipts"][0]["output"]["content"] == source
+        assert json.loads(legacy[-1]["content"])["receipts"][0]["output"]["content"] == source
+    messages = _review_messages(packet, system)
+    assert reconstruct(messages) == packet
+    assert _hash(reconstruct(messages)) == before
+    assert len(json.dumps(messages, ensure_ascii=False).encode()) <= len(
+        json.dumps(legacy, ensure_ascii=False).encode()
+    )
     assert _hash(packet) == before

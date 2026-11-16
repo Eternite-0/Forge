@@ -30,6 +30,8 @@ async (page, { outputDir }) => {
     else if (['/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: generation, workspace_root: `D:/Synthetic/${generation}`, context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
@@ -51,7 +53,10 @@ async (page, { outputDir }) => {
   await line('receipt_inline').waitFor({ state: 'attached' });
   const readCount = (id) => requests.filter((request) => request.path === `/api/artifacts/receipts/${id}/diff`).length;
   check(readCount('receipt_inline') === 0 && readCount('receipt_pending') === 0, 'folded activity fetches no receipt diff');
-  const group = page.locator('.event-group');
+  const process = page.locator('.process-transcript');
+  await process.locator(':scope > summary').click();
+  check(readCount('receipt_inline') === 0 && readCount('receipt_pending') === 0, 'opening the ordered process still avoids receipt reads');
+  const group = page.locator('.process-content > .process-tool-summary');
   await group.locator(':scope > summary').click();
   check(readCount('receipt_inline') === 0 && readCount('receipt_pending') === 0, 'opening only the activity group still avoids file reads');
   await line('receipt_inline').locator(':scope > summary').click();
@@ -121,6 +126,8 @@ async (page, { outputDir }) => {
   await page.getByLabel('Core 启动密钥').fill('bb'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await line('receipt_pending').waitFor({ state: 'attached' });
+  const nextProcess = line('receipt_pending').locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+  if (!(await nextProcess.evaluate((element) => element.open))) await nextProcess.locator(':scope > summary').click();
   const nextGroup = line('receipt_pending').locator('xpath=ancestor::details[contains(@class,"event-group")]');
   if (!(await nextGroup.evaluate((element) => element.open))) await nextGroup.locator(':scope > summary').click();
   if (!(await line('receipt_pending').evaluate((element) => element.open))) await line('receipt_pending').locator(':scope > summary').click();

@@ -135,6 +135,66 @@ def _gateway_usage(connection, record, row):
     return value, True
 
 
+def completed_gateway_rejection_proof(connection, call_id):
+    """Prove a completed rejection without settling or refunding unknown usage.
+
+    The Gateway writes ``rejected`` only after fully receiving the HTTP rejection.
+    A unique, exact Worker/context-bound record distinguishes that known outcome
+    from a network timeout, interrupted body or still-running request. Local and
+    Gateway reserves remain charged in full; this grants no response/tool/replay
+    authority. Compaction requests deliberately retain their existing fences.
+    Native Gateway framing and the local request estimate may differ; both
+    original reservations are returned and retained, never equated or refunded.
+    """
+    try:
+        record = connection.execute(
+            "SELECT * FROM worker_model_reservations WHERE call_id=? AND state='reserved'",
+            (call_id,),
+        ).fetchone()
+        if record is None:
+            return None
+        row = _bound_run(connection, record)
+        context = json.loads(record["context_json"])
+        if row is None or context.get("purpose", "worker") != "worker":
+            return None
+        attempts = connection.execute(
+            "SELECT * FROM model_budget_attempts WHERE call_id=?", (call_id,)
+        ).fetchall()
+        if len(attempts) != 1:
+            return None
+        attempt = attempts[0]
+        if (
+            attempt["state"] != "rejected"
+            or attempt["purpose"] != "worker"
+            or attempt["workspace_id"] != context["workspace_id"]
+            or attempt["quest_id"] != row["quest_id"]
+            or attempt["worker_run_id"] != row["id"]
+            or attempt["provider_id"] != record["provider_id"]
+            or attempt["model_id"] != record["model_id"]
+            or any(attempt[name] is not None for name in ("input_charged", "output_charged", "cost_charged"))
+            or type(attempt["input_reserved"]) is not int
+            or attempt["input_reserved"] <= 0
+            or attempt["output_reserved"] != record["output_limit"]
+        ):
+            return None
+        return {
+            "call_id": call_id,
+            "run_id": row["id"],
+            "attempt_id": attempt["attempt_id"],
+            "execution_mode": record["execution_mode"],
+            "operation_status": "completed_rejection",
+            "usage_status": "unknown",
+            "reservation_retained": True,
+            "local_reserved_tokens": record["reserved_tokens"],
+            "gateway_input_reserved": attempt["input_reserved"],
+            "gateway_output_reserved": attempt["output_reserved"],
+            "gateway_cost_reserved": attempt["cost_reserved"],
+            "source_reference": "model_attempt:" + attempt["attempt_id"],
+        }
+    except (ValueError, TypeError, KeyError, IndexError):
+        return None
+
+
 def _actual_cost(record, inp, out):
     if record["reserved_cost_microunits"] is None:
         return None

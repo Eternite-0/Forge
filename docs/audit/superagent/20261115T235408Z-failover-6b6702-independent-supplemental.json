@@ -1,0 +1,195 @@
+{
+  "audit_type": "independent_read_only_supplemental_not_task_reacceptance",
+  "run_id": "20261115T235408Z-failover-6b6702",
+  "created_at": "2026-11-16T00:02:35.938282+00:00",
+  "access": {
+    "sqlite": "mode=ro; one BEGIN snapshot; no Store initialization",
+    "provider_calls_by_auditor": 0,
+    "database_sha256_before": "224adcd2aaf793e5bd5c09324472d015fb7798e8241f48ac27bcd1b1f1b049c6",
+    "database_sha256_after": "224adcd2aaf793e5bd5c09324472d015fb7798e8241f48ac27bcd1b1f1b049c6",
+    "database_file_hash_stable_during_audit": true,
+    "original_report_sha256": "e276621197e80ff6d5770a28914a3c4d42f8335d8f084f2166a07b4a19b35cb9",
+    "historical_records_rewritten": false
+  },
+  "result": "FAIL: model replacement occurred, but Worker never completed, output differs from actual source bytes, no Reviewer or final Router handback",
+  "worker_states": [
+    {
+      "id": "run_b9b1bd4cb9ce",
+      "worker_id": "worker_fa7ed0ebaafc",
+      "quest_id": "quest_60b7f8c38d64",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "cancelled",
+      "steps": 1,
+      "repairs": 0,
+      "token_limit": 500000,
+      "token_spent": 24896,
+      "tool_spent": 0
+    },
+    {
+      "id": "run_2aa950e0683e",
+      "worker_id": "worker_3cc5036aa8f1",
+      "quest_id": "quest_60b7f8c38d64",
+      "model_id": "glm-5.3-flash",
+      "state": "blocked",
+      "steps": 6,
+      "repairs": 1,
+      "token_limit": 500000,
+      "token_spent": 33865,
+      "tool_spent": 8
+    }
+  ],
+  "actual_block": {
+    "seq": 55,
+    "event_type": "worker.blocked",
+    "payload": {
+      "protocol_version": 2,
+      "plan_id": "plan_b9777ecae8e2",
+      "task_node_key": "task",
+      "run_id": "run_2aa950e0683e",
+      "reason_code": "model_error",
+      "failure_category": "provider",
+      "provider_error_code": "budget_exhausted",
+      "exception_type": "ProviderError"
+    }
+  },
+  "budget": {
+    "configured_workspace_token_ceiling": 100000,
+    "http_attempt_ceiling": 16,
+    "gateway_recorded_attempts": 11,
+    "real_upstream_settled_attempts": 10,
+    "known_actual_tokens_all_settled_attempts": 45594,
+    "conservative_workspace_tokens_final": 71482,
+    "conservative_workspace_tokens_before_final_worker_rejection": 68248,
+    "last_unsent_worker_local_reservation": {
+      "call_id": "model_call_ea281620ffda",
+      "run_id": "run_2aa950e0683e",
+      "reserved_tokens": 33317,
+      "state": "refunded",
+      "input_tokens": 0,
+      "output_tokens": 0
+    },
+    "explanation": "Gateway raises budget_exhausted before sending when cumulative charged/reserved usage plus the full new payload/output reserve would exceed the workspace ceiling. The injected rejection retains 25888 Gateway tokens with unknown usage. The last Worker reservation was refunded because no HTTP request started; no failed Gateway attempt exists for this unsent request. The local Worker limit of 500000 was not exhausted. Admission refusal is not evidence that 100000 actual tokens were spent."
+  },
+  "exact_bytes": {
+    "source_path": "inputs/value.txt",
+    "source_bytes": 20,
+    "source_repr": "b'FORGE_RECOVERED_42\\r\\n'",
+    "source_sha256": "b15db93ce0905c0593241f333ded2f6c5e2de32c9cd983ed524d44306fb08489",
+    "artifact_path": "work\\quest_60b7f8c38d64\\recovered.txt",
+    "artifact_bytes": 19,
+    "artifact_repr": "b'FORGE_RECOVERED_42\\n'",
+    "artifact_sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+    "actual_source_equals_artifact": false,
+    "original_driver_check": true,
+    "corrected_source_bound_check": false,
+    "driver_defect": "verify_superagent_failover.py:355 initializes input with write_text(MARKER+'\\n'), which creates CRLF on Windows, while line229 validates output against a separate hardcoded LF byte string. It does not validate equality with actual source bytes. Original receipt_ok only binds output write/read hashes, not input source hash.",
+    "tool_normalization_claim_supported": false,
+    "tool_normalization_evidence": "All three persisted mutation parameters already contain LF only; ToolEngine encodes content as UTF-8 and writes binary bytes. The model's claims that the tool removed CR are contradicted by its supplied parameters.",
+    "mutation_parameter_evidence": [
+      {
+        "intent_id": "action_a1adabcf2bfb",
+        "tool": "file_write",
+        "state": "succeeded",
+        "parameter_content_repr": "'FORGE_RECOVERED_42\\n'",
+        "parameter_bytes": 19,
+        "parameter_sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+        "source_bytes_equal": false
+      },
+      {
+        "intent_id": "action_134b5bd17c32",
+        "tool": "file_revise",
+        "state": "succeeded",
+        "parameter_content_repr": "'FORGE_RECOVERED_42\\n'",
+        "parameter_bytes": 19,
+        "parameter_sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+        "source_bytes_equal": false
+      },
+      {
+        "intent_id": "action_b4cd954f78d9",
+        "tool": "file_revise",
+        "state": "succeeded",
+        "parameter_content_repr": "'FORGE_RECOVERED_42\\n'",
+        "parameter_bytes": 19,
+        "parameter_sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+        "source_bytes_equal": false
+      }
+    ]
+  },
+  "receipt_digest_verification": "all six immutable receipts matched their recorded result_digest",
+  "receipts": [
+    {
+      "receipt_id": "receipt_d0db60ef74a3",
+      "intent_id": "action_1c1c1814b370",
+      "tool": "file_read",
+      "state": "succeeded",
+      "sha256": "b15db93ce0905c0593241f333ded2f6c5e2de32c9cd983ed524d44306fb08489",
+      "bytes": null
+    },
+    {
+      "receipt_id": "receipt_bae0de74e2a2",
+      "intent_id": "action_4c2c2c793641",
+      "tool": "directory_list",
+      "state": "succeeded",
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "receipt_id": "receipt_5464976623bc",
+      "intent_id": "action_a1adabcf2bfb",
+      "tool": "file_write",
+      "state": "succeeded",
+      "sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+      "bytes": 19
+    },
+    {
+      "receipt_id": "receipt_87391f273c69",
+      "intent_id": "action_134b5bd17c32",
+      "tool": "file_revise",
+      "state": "succeeded",
+      "sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+      "bytes": 19
+    },
+    {
+      "receipt_id": "receipt_e5583f95a08d",
+      "intent_id": "action_b4cd954f78d9",
+      "tool": "file_revise",
+      "state": "succeeded",
+      "sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+      "bytes": 19
+    },
+    {
+      "receipt_id": "receipt_fedf67721ff6",
+      "intent_id": "action_6731f8ef34b2",
+      "tool": "file_read",
+      "state": "succeeded",
+      "sha256": "cbb3fbdf826ddd8ca0f59af11da1c84af01c4c7c06c103dc1307244e45709f42",
+      "bytes": null
+    }
+  ],
+  "side_effect_safety": {
+    "uncertain_action_intents": 0,
+    "uncertain_worker_tools": 0,
+    "inflight_action_intents": 0,
+    "review_results": 0,
+    "quest_completed_events": 0,
+    "all_action_intents_succeeded": true,
+    "all_noninjected_gateway_attempts_settled": true,
+    "injected_rejection_reservation_retained": true,
+    "auditor_replayed_operations": 0,
+    "input_unchanged_from_source_read_receipt": true
+  },
+  "directory_regression_comparison": {
+    "old_run": "20261115T232817Z-failover-35753c",
+    "old_unknown_action_intents": 1,
+    "new_unknown_action_intents": 0,
+    "new_directory_create_calls": 0,
+    "interpretation": "No unknown tool outcome recurred, but this model did not invoke directory_create. This real run does not directly revalidate idempotent directory handling; that path has separate offline regression evidence."
+  },
+  "remaining_acceptance": {
+    "reviewer_pass": false,
+    "quest_complete": false,
+    "same_router_final_result": false,
+    "router_pending_from_driver": 48,
+    "original_driver_final_accounting_error": "OperationalError"
+  }
+}

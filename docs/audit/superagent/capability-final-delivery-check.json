@@ -1,0 +1,13 @@
+{
+  "status": "validated_with_retained_acceptance_failure",
+  "ruff_changed_python_files": 81,
+  "diff_check_passed": true,
+  "production_source_unchanged_after_freeze": true,
+  "one_test_contract_followup": [
+    "backend/tests/test_specialist_artifact_projection.py"
+  ],
+  "all_index_hashes_valid": 30,
+  "historical_checkpoint_hashes_valid": 8,
+  "goal_achieved": false,
+  "github_push_performed": false
+}

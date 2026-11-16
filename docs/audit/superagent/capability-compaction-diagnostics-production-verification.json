@@ -1,0 +1,150 @@
+{
+  "schema_version": "compaction-diagnostics-production-verification-v1",
+  "created_at": "2026-11-16T00:20:03.737076+00:00",
+  "status": "integrated_and_targeted_programmatic_regressions_passed_pending_parent_real_Provider_acceptance",
+  "branch": "codex/phase1-continuous",
+  "baseline_commit": "57a162d31f9b559353fecbde61f95dd72f878abd",
+  "provenance": "production_source_pytest_SQLite_MockTransport_and_offline_loopback_no_real_Provider_calls",
+  "provider_calls": 0,
+  "credentials_read": false,
+  "provider_configuration_modified": false,
+  "historical_databases_modified": false,
+  "historical_evidence_deleted_or_relabelled": false,
+  "authorized_patch": {
+    "path": ".local/compaction-diagnostics-draft-20261116/compaction-diagnostics.patch",
+    "sha256": "967a81e2a63b4f7345cf54a569cebc6cfc52f1e387934def227da065ddc7aa94",
+    "candidate_exact_byte_match": true,
+    "applied_with": "built_in_apply_patch_after_original_source_and_patch_hash_checks"
+  },
+  "prior_source_freeze": {
+    "path": "docs/audit/superagent/capability-repair-source-freeze.json",
+    "sha256": "2fc684e188b0605d8b829575d2b5fbf406b5ad5fec0ec79a77c273c43e0e7346",
+    "files_checked": 342,
+    "owned_changed_paths": [
+      "backend/src/forge_core/worker_model_compaction.py",
+      "backend/src/forge_core/worker_runtime.py"
+    ],
+    "observed_changes": [
+      {
+        "path": "backend/src/forge_core/router.py",
+        "old_sha256": "c6e2565f45e42461168c0a6234e60094f0aef92d4cbac1f4a6fa5387525e483a",
+        "current_sha256": "f9a24ba4cd81c0a827b2dfd9d38339827ecf35ba69242819e412cddd4eed40d2"
+      },
+      {
+        "path": "backend/src/forge_core/worker_model_compaction.py",
+        "old_sha256": "8cd253bff1f94875875c12f8db923929605fa37f7de6cd0d255bda0a3305cf23",
+        "current_sha256": "5f15d0a999c1d782b321be80d230f3bb33ae1f9105c5141fd08c319380a3e8e6"
+      },
+      {
+        "path": "backend/src/forge_core/worker_runtime.py",
+        "old_sha256": "4b2cd8101ba99cdf6ee52d2ed7c79e0451f03682c60e9bd7d14d897dc15bafcb",
+        "current_sha256": "685b590aec59d420bc88c3b3502d7a5aa738708d6d3aaa4da6ed80c01d0dc09b"
+      },
+      {
+        "path": "backend/scripts/verify_superagent_failover.py",
+        "old_sha256": "8e6a5ff848ed516b74e5e12e7db152043cfd3f0b762ee33e1581ed5bd9ac54fa",
+        "current_sha256": "c2bae2b1d040010fa913c1c9b6aae8f7fdb3c0424e6b22074de5333e9e66da5d"
+      },
+      {
+        "path": "backend/tests/test_superagent_failover_driver.py",
+        "old_sha256": "e7ade3b7064f82b3c46a8dbf669213755407678082f6a2cbb07f57461522e464",
+        "current_sha256": "5581c7ea29afe2166c45a210b9eab38e29db38fe948025c68c66799cf54f46e7"
+      }
+    ],
+    "other_changes_not_made_by_this_subtask": [
+      {
+        "path": "backend/src/forge_core/router.py",
+        "old_sha256": "c6e2565f45e42461168c0a6234e60094f0aef92d4cbac1f4a6fa5387525e483a",
+        "current_sha256": "f9a24ba4cd81c0a827b2dfd9d38339827ecf35ba69242819e412cddd4eed40d2"
+      },
+      {
+        "path": "backend/scripts/verify_superagent_failover.py",
+        "old_sha256": "8e6a5ff848ed516b74e5e12e7db152043cfd3f0b762ee33e1581ed5bd9ac54fa",
+        "current_sha256": "c2bae2b1d040010fa913c1c9b6aae8f7fdb3c0424e6b22074de5333e9e66da5d"
+      },
+      {
+        "path": "backend/tests/test_superagent_failover_driver.py",
+        "old_sha256": "e7ade3b7064f82b3c46a8dbf669213755407678082f6a2cbb07f57461522e464",
+        "current_sha256": "5581c7ea29afe2166c45a210b9eab38e29db38fe948025c68c66799cf54f46e7"
+      }
+    ],
+    "note": "Other agents are integrating concurrent authorized corrections after thaw; parent must freeze and verify the combined source."
+  },
+  "final_owned_source_hashes": {
+    "backend/src/forge_core/worker_model_compaction.py": "5f15d0a999c1d782b321be80d230f3bb33ae1f9105c5141fd08c319380a3e8e6",
+    "backend/src/forge_core/worker_runtime.py": "685b590aec59d420bc88c3b3502d7a5aa738708d6d3aaa4da6ed80c01d0dc09b",
+    "backend/tests/test_compaction_rejection_diagnostics.py": "d46fafe74e08e2e34a4959bdbe28bcbab0e5bde7b4de143a60457757e492a187"
+  },
+  "changes": [
+    "After exact Gateway and local usage settlement, rejected compaction responses record a finite fixed diagnostic event bound to original call/run/generation and input/frontier hashes. Response text/excerpts/tool names/exception messages are never persisted.",
+    "Record response SHA256, actual UTF8 bytes, original summary byte cap, allowlisted finish class, tool count, identity-match booleans and fixed rejection predicates. Source-bound validation failure records its fixed checkpoint stage and preserves the original exception.",
+    "Reduce compaction max_output_tokens to min(self.output_limit,max(1,summary_bytes//4)); preserve the original dynamic summary-byte cap and final UTF8 byte validator. The ratio is a conservative estimate, not a byte guarantee.",
+    "Feedback separates actual remaining cumulative tokens from current_request_token_allowance. Both use existing input-framing accounting and grant no new execution authority."
+  ],
+  "unchanged_boundaries": [
+    "Original response acceptance expression and source-bound checkpoint validators",
+    "Model context capacity, cumulative budget, permissions, tool authorizations and retry limits",
+    "Unknown-call and unknown-tool reservations and no-replay rules",
+    "Raw handoff is plain text; no JSON requirement, arbitrary fence removal or repair added"
+  ],
+  "test_evidence": [
+    {
+      "path": "docs/audit/superagent/capability-compaction-diagnostics-before.xml",
+      "sha256": "3ba642243a3b99f52706224a72325bcaea8b4e4b1ba938fa001dcf18e9f59cef",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "8",
+        "skipped": "0",
+        "tests": "9",
+        "time": "3.112",
+        "timestamp": "2026-11-16T08:03:35.450868+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-compaction-output-bound-before.xml",
+      "sha256": "49293f747776df8cdd4f9288a6bb9e5910709851c0b14787c46dba343f033601",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "4",
+        "skipped": "0",
+        "tests": "20",
+        "time": "4.802",
+        "timestamp": "2026-11-16T08:07:03.765193+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-compaction-diagnostics-production.xml",
+      "sha256": "44be51051ed7f0096b4e21ed8fe9844b191b6e0824f5b70a3a7eba9b0dc96865",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "68",
+        "time": "19.101",
+        "timestamp": "2026-11-16T08:17:25.002549+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    }
+  ],
+  "targeted_test_files": [
+    "backend/tests/test_compaction_rejection_diagnostics.py",
+    "backend/tests/test_worker_model_compaction_v29.py",
+    "backend/tests/test_worker_context_affordability.py",
+    "backend/tests/test_worker_context_diagnostics.py"
+  ],
+  "static_checks": {
+    "ruff_E4_E7_E9_F_I_with_backend_pyproject": "passed_for_all_three_changed_source_and_test_files",
+    "git_diff_check": "passed"
+  },
+  "limitations": [
+    "No real Provider or task acceptance executed in this integration subtask. Parent frozen-source acceptance is required.",
+    "Synthetic technical-live fixture tags use MockTransport/offline loopback and do not represent real model execution or quality.",
+    "Historical invalid_compaction_handoff responses lack per-predicate evidence. This correction does not establish whether their cause was byte size, tools, finish or source digest.",
+    "The prior read-only audit remains a historical observation of the342-file source and its53-attempt phase; it is not overwritten by this correction."
+  ]
+}

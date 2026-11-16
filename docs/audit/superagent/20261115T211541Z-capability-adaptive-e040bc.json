@@ -1,0 +1,102 @@
+{
+  "run_id": "20261115T211541Z-capability-adaptive-e040bc",
+  "strategy": "adaptive",
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "source_sha256": "b7c0cfff9fe3f3170930e860aa92f4641763a6170e06dc25461eb235dc0d14a5",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0
+  },
+  "status": "failed",
+  "checks": {
+    "final_calls_settled": false,
+    "fixed_aggregate_calls": true
+  },
+  "tasks": {},
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "failure_code": "core_api_status_409",
+  "primary_exception": {
+    "exception_type": "Failure"
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {},
+    "gateway_attempt_modes_from_worker_scope": {
+      "unattributed_non_worker": 4
+    },
+    "model_calls": 4,
+    "model_calls_by_purpose": {
+      "memory_semantic_retrieval": 2,
+      "router": 1,
+      "router_reflect": 1
+    },
+    "admission_states": {
+      "reserved": 1,
+      "settled": 3
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": null,
+    "known_charged_tokens": 10477,
+    "unknown_usage_attempts": 1,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 0.0,
+    "workers_by_state": {},
+    "quests_by_state": {},
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "tool_calls": 0,
+    "tool_states": {},
+    "tool_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 0,
+    "review_verdicts": {},
+    "judged_review_pass_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 0,
+    "trigger_delivery_count": 0,
+    "source_refs": [
+      "model_attempt:677f30657bac4713bf137e4f3b70abe1",
+      "model_attempt:d17ba86ed7de43778cc34cc12381be78",
+      "model_attempt:386c9917b24d4969be909cd310a1da01",
+      "model_attempt:bf5f597db74d41dba3e63a7f4e386fb8"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "de61c23793a24af909bde94f6530b1c30e1a2346ace3ce79017a888b763ce126",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "elapsed_seconds": 23.548
+}

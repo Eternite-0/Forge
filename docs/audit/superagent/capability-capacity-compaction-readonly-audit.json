@@ -1,0 +1,513 @@
+{
+  "schema_version": "capacity-compaction-readonly-audit-v1",
+  "created_at": "2026-11-16T00:00:08.825230+00:00",
+  "provenance": "independent_read_only_frozen_source_and_SQLite_observation_not_new_model_execution",
+  "provider_calls": 0,
+  "tests_run": 0,
+  "credentials_read": false,
+  "provider_configuration_modified": false,
+  "source_modified": false,
+  "database_writes": false,
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-repair-source-freeze.json",
+    "sha256": "2fc684e188b0605d8b829575d2b5fbf406b5ad5fec0ec79a77c273c43e0e7346",
+    "checked_files": 342,
+    "all_match": true,
+    "mismatches": []
+  },
+  "audited_source_hashes": {
+    "backend/src/forge_core/worker_runtime.py": "4b2cd8101ba99cdf6ee52d2ed7c79e0451f03682c60e9bd7d14d897dc15bafcb",
+    "backend/src/forge_core/worker_model_compaction.py": "8cd253bff1f94875875c12f8db923929605fa37f7de6cd0d255bda0a3305cf23",
+    "backend/src/forge_core/context_service.py": "456723f1c0342ed9eae71180233f553e6a7a865042796f0bfcbebf7c630abe64",
+    "backend/src/forge_core/independent_review.py": "e021057b0d438c9a35d6a4cd6ddc7269c31b1023c2cdb42b09b45de5e8bb5ff7",
+    "backend/src/forge_core/model_compaction.py": "893d4fa0059f79607140f18d2d040a69edabd2c220768c631700516d4d668828",
+    "backend/src/forge_core/router.py": "c6e2565f45e42461168c0a6234e60094f0aef92d4cbac1f4a6fa5387525e483a",
+    "backend/src/forge_core/semantic_memory.py": "86ad1e02bb7ec6b0ad57ca7568988c463e84b0488edd034f37fa210a103c29ff",
+    "backend/src/forge_core/model_call_budget.py": "26a43fa2823c1b3afbaee8710ebc11ba7d90c73a120f1495a40f92980ab4aff8",
+    "backend/src/forge_core/providers/__init__.py": "daa872fd000f14a15179af8256bf08a7765bb9c7186fe919c2af959f58651b0a",
+    "backend/src/forge_core/worker_envelope.py": "2fca1d2697fe9f9db9a3859e5a8d72d489ddc2ef6e5fe007546c14aa544430ae",
+    "backend/src/forge_api/main.py": "d58a3e11750b6da674cd75fbc119b0601a7ce0d0f6a3a0fcecebde671712fa87",
+    "backend/scripts/verify_superagent_capability.py": "6658c1c86f474e5aba4545698954ac8bf1c2eb9b4ca79abc46bf37295bf761cc",
+    "backend/scripts/verify_superagent_failover.py": "8e6a5ff848ed516b74e5e12e7db152043cfd3f0b762ee33e1581ed5bd9ac54fa"
+  },
+  "capacity_conclusion": "No cumulative-balance value is written into the model context_limit in the audited execution, Worker compaction, Router, Router compaction, semantic recall or Reviewer request paths. DeepSeek100M is an explicit operator declaration, not a measured Provider capacity and not an execution-budget grant.",
+  "request_paths": [
+    {
+      "component": "Worker",
+      "capacity": "min(worker_runs.model_context_window, matching Registry model windows)",
+      "request_allowance": "min(model capacity, remaining cumulative allocation or cycle current_request_allowance)",
+      "actual_request_context_limit": "model_context_limit, not request_allowance",
+      "references": [
+        "worker_runtime.py:2457",
+        "worker_runtime.py:2559",
+        "worker_runtime.py:2778"
+      ]
+    },
+    {
+      "component": "Worker compactor",
+      "capacity": "min(caller model_context_limit, original run model_context_window)",
+      "request_allowance": "whole exchanges fitted independently to model capacity and remaining cumulative allocation after held reserves",
+      "actual_request_context_limit": "self.context_limit",
+      "references": [
+        "worker_model_compaction.py:39",
+        "worker_model_compaction.py:86",
+        "worker_model_compaction.py:210",
+        "worker_model_compaction.py:232"
+      ]
+    },
+    {
+      "component": "Reviewer",
+      "capacity": "original run model_context_window",
+      "request_allowance": "complete native input and bounded output independently constrained by model context, remaining cumulative allocation and any approved envelope",
+      "actual_request_context_limit": "row.model_context_window",
+      "references": [
+        "independent_review.py:222",
+        "independent_review.py:233",
+        "independent_review.py:2069"
+      ]
+    },
+    {
+      "component": "Router/notice/reflection",
+      "capacity": "Registry window, or min(Registry window, explicit smaller operator cap)",
+      "actual_request_context_limit": "context.budget.effective_limit",
+      "references": [
+        "router.py:520",
+        "router.py:1537",
+        "router.py:1830",
+        "router.py:2086"
+      ]
+    },
+    {
+      "component": "Router compactor and semantic recall",
+      "capacity": "Router effective capacity, bounded again by selected model window for compactor",
+      "actual_request_context_limit": "declared capacity; not cumulative balance",
+      "references": [
+        "model_compaction.py:87",
+        "model_compaction.py:109",
+        "semantic_memory.py:198"
+      ]
+    },
+    {
+      "component": "Gateway/Ledger",
+      "capacity": "native serialized payload bytes plus output reserve checked before sending",
+      "cumulative_budget": "atomic SQLite scopes include actual settled charges or retained reservations plus historical opening and this request; unknown/rejected usage stays reserved",
+      "references": [
+        "providers/__init__.py:371",
+        "providers/__init__.py:605",
+        "model_call_budget.py:454"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "CAP-001",
+      "kind": "confirmed_boundary",
+      "summary": "The observed DeepSeek Worker runs retain100M model windows while their token allocations are166667/166666. The replacement GLM profile has its separate1M window. Lower request input allowances do not rewrite these capacities."
+    },
+    {
+      "id": "CAP-002",
+      "kind": "latent_feedback_label_defect_not_exercised_by_observed_continuity_workers",
+      "references": [
+        "worker_runtime.py:2449",
+        "worker_runtime.py:2508"
+      ],
+      "summary": "With a review/worker capacity policy, cycle.current_request_allowance replaces remaining, but the prompt key remains remaining_cumulative_tokens. It can describe current-request allowance as cumulative balance. Original gates remain separate. Observed continuity capsules have neither capacity policy."
+    },
+    {
+      "id": "CAP-003",
+      "kind": "observed_diagnostic_gap",
+      "references": [
+        "worker_model_compaction.py:272",
+        "context_service.py:886",
+        "worker_runtime.py:2594"
+      ],
+      "summary": "invalid_compaction_handoff merges several response and source-bound checks. Rejection events omit compaction call_id, response hash, byte count, finish/tool metadata and fixed subreason. The failed response is not saved to worker_messages or an archive, so its concrete shape/category cannot be recovered."
+    },
+    {
+      "id": "CAP-004",
+      "kind": "diagnostic_timestamp_scope_gap",
+      "references": [
+        "worker_runtime.py:2459",
+        "worker_runtime.py:2602"
+      ],
+      "summary": "request_token_allowance is calculated before a compaction call; cumulative_token_remaining is reread after the failed call has settled. The event can show allowance50223 vs later balance36826, or50052 vs40680. These are different accounting instants, not evidence of a request admitted beyond its budget."
+    },
+    {
+      "id": "CAP-005",
+      "kind": "safe_availability_limit_static_only",
+      "references": [
+        "model_compaction.py:187",
+        "router.py:841",
+        "model_call_budget.py:465"
+      ],
+      "summary": "Router and Router compactor size to model capacity without proactively selecting a smaller affordable complete prefix. A payload that fits the model may still be safely rejected at cumulative Gateway admission. This is not context-capacity mixing and is not established as an observed task failure here."
+    },
+    {
+      "id": "CAP-006",
+      "kind": "observability_limit",
+      "summary": "Actual ModelRequest.context_limit is not durably snapshotted for every call. Frozen source, explicit driver cap, Registry/run records and context-rejection diagnostics bind the runtime capacity, but ledger reservations alone cannot prove every transmitted request field. Serialized UTF8-byte sizing is a conservative token upper bound, not tokenized capacity measurement."
+    }
+  ],
+  "compaction_interpretation": {
+    "protocol": "Plain-text handoff. No JSON schema or JSON parsing is required; JSON/fence syntax is not a supported inferred cause.",
+    "known": "Four Gateway/local compaction calls settled. First two produced source-bound archives; last two were followed by invalid_compaction_handoff and no second archive for the corresponding run.",
+    "known_failed_stage_candidates": [
+      "response_has_tool_calls",
+      "response_incomplete_finish",
+      "response_not_text_or_blank",
+      "response_utf8_bytes_exceed_dynamic_summary_limit",
+      "response_provider_or_model_binding_mismatch",
+      "source_bound_handoff_shape_size_or_input_digest_mismatch"
+    ],
+    "source_invariants": "Native Gateway already returns a string, validates finish/usage and stamps configured provider/requested model identity. Truncation/refusal raises ProviderError earlier. These source facts narrow candidates but do not replace missing per-call subreason evidence.",
+    "unknown": "No persisted rejected-response text or hash, actual response bytes, finish reason, tool count or failed predicate. Cannot attribute the two rejections to oversized text, tool calls, source digest, fence, prose or truncation from token counts alone.",
+    "minimal_future_diagnostics": "Record one fixed compaction rejection event with original call_id/run/generation/frontier/input digest, response SHA256, UTF8-byte count and allowed summary-byte limit, allowlisted finish class, tool count and fixed predicate codes. Keep raw response private, do not normalize/repair arbitrary handoff text, increase budgets/retries, or weaken original checkpoint fences."
+  },
+  "public_continuity_report": {
+    "path": "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f.json",
+    "sha256": "cf2a26856b11592810a1987ba33f2d3bd8a3d3ecc7e48b698e02ff43488a680e",
+    "status": "failed",
+    "failure_code": "router_did_not_create_independent_task",
+    "context_metadata": {
+      "source": "operator_declared",
+      "independently_measured": false,
+      "context_window": 100000000,
+      "fields": {
+        "context_length": 1000000,
+        "max_input_tokens": 1000000,
+        "max_output_tokens": 128000
+      },
+      "operator_context_window": 100000000,
+      "declaration_conflict_retained": true,
+      "execution_budget_grant": false
+    },
+    "limits": {
+      "task_calls": 32,
+      "task_tokens": 500000,
+      "task_seconds": 900,
+      "gateway_retries": 0,
+      "aggregate_calls": 64
+    }
+  },
+  "runtime_observations": [
+    {
+      "run_id": "20261115T235303Z-capability-continuity-251a4f",
+      "snapshot_at": "2026-11-16T00:00:08.820007+00:00",
+      "database_access": "SQLite URI mode=ro; PRAGMA query_only=ON; BEGIN read snapshot; no Store/migrations",
+      "connection_total_changes": 0,
+      "profiles": [
+        {
+          "id": "deepseek-v4.1-flash",
+          "provider": "wb-local",
+          "model_id": "deepseek-v4.1-flash",
+          "context_window": 100000000,
+          "max_output_tokens": 8192
+        }
+      ],
+      "worker_runs": [
+        {
+          "id": "run_c0bb31f63973",
+          "model_id": "deepseek-v4.1-flash",
+          "state": "blocked",
+          "token_limit": 166667,
+          "token_spent": 129841,
+          "model_context_window": 100000000,
+          "output_limit": 8192,
+          "model_max_output_tokens": 8192
+        },
+        {
+          "id": "run_eab8762bc484",
+          "model_id": "deepseek-v4.1-flash",
+          "state": "blocked",
+          "token_limit": 166666,
+          "token_spent": 125986,
+          "model_context_window": 100000000,
+          "output_limit": 8192,
+          "model_max_output_tokens": 8192
+        }
+      ],
+      "attempts_by_purpose_state": [
+        {
+          "purpose": "context_compaction",
+          "state": "settled",
+          "count": 4
+        },
+        {
+          "purpose": "independent_reviewer",
+          "state": "settled",
+          "count": 2
+        },
+        {
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "count": 3
+        },
+        {
+          "purpose": "router",
+          "state": "settled",
+          "count": 4
+        },
+        {
+          "purpose": "router_notice",
+          "state": "settled",
+          "count": 4
+        },
+        {
+          "purpose": "worker",
+          "state": "settled",
+          "count": 14
+        }
+      ],
+      "compaction_attempts": [
+        {
+          "call_id": "model_call_ef2535d223aa",
+          "worker_run_id": "run_c0bb31f63973",
+          "input_reserved": 53670,
+          "output_reserved": 8192,
+          "input_charged": 14416,
+          "output_charged": 2185,
+          "state": "settled",
+          "created_at": 1794786870.9712355
+        },
+        {
+          "call_id": "model_call_73555e71f2e3",
+          "worker_run_id": "run_eab8762bc484",
+          "input_reserved": 58987,
+          "output_reserved": 8192,
+          "input_charged": 15063,
+          "output_charged": 2501,
+          "state": "settled",
+          "created_at": 1794786879.7245452
+        },
+        {
+          "call_id": "model_call_0d938fc7827b",
+          "worker_run_id": "run_c0bb31f63973",
+          "input_reserved": 38139,
+          "output_reserved": 8192,
+          "input_charged": 10475,
+          "output_charged": 2922,
+          "state": "settled",
+          "created_at": 1794786883.4717333
+        },
+        {
+          "call_id": "model_call_48fcd213dac6",
+          "worker_run_id": "run_eab8762bc484",
+          "input_reserved": 27182,
+          "output_reserved": 8192,
+          "input_charged": 7039,
+          "output_charged": 2333,
+          "state": "settled",
+          "created_at": 1794786893.2129152
+        }
+      ],
+      "compaction_local_reservations": [
+        {
+          "call_id": "model_call_ef2535d223aa",
+          "run_id": "run_c0bb31f63973",
+          "state": "settled",
+          "reserved_tokens": 61862,
+          "output_limit": 8192,
+          "input_tokens": 14416,
+          "output_tokens": 2185,
+          "created_at": "2026-11-15T23:54:30.308194+00:00",
+          "settled_at": "2026-11-15T23:54:42.490644+00:00"
+        },
+        {
+          "call_id": "model_call_73555e71f2e3",
+          "run_id": "run_eab8762bc484",
+          "state": "settled",
+          "reserved_tokens": 67179,
+          "output_limit": 8192,
+          "input_tokens": 15063,
+          "output_tokens": 2501,
+          "created_at": "2026-11-15T23:54:39.098053+00:00",
+          "settled_at": "2026-11-15T23:54:52.441428+00:00"
+        },
+        {
+          "call_id": "model_call_0d938fc7827b",
+          "run_id": "run_c0bb31f63973",
+          "state": "settled",
+          "reserved_tokens": 46331,
+          "output_limit": 8192,
+          "input_tokens": 10475,
+          "output_tokens": 2922,
+          "created_at": "2026-11-15T23:54:42.675478+00:00",
+          "settled_at": "2026-11-15T23:54:56.254042+00:00"
+        },
+        {
+          "call_id": "model_call_48fcd213dac6",
+          "run_id": "run_eab8762bc484",
+          "state": "settled",
+          "reserved_tokens": 35374,
+          "output_limit": 8192,
+          "input_tokens": 7039,
+          "output_tokens": 2333,
+          "created_at": "2026-11-15T23:54:52.553753+00:00",
+          "settled_at": "2026-11-15T23:55:02.901844+00:00"
+        }
+      ],
+      "context_rejections": [
+        {
+          "event_id": "evt_bec838e176f7",
+          "created_at": "2026-11-15T23:54:56.265625+00:00",
+          "run_id": "run_c0bb31f63973",
+          "reason_code": "invalid_compaction_handoff",
+          "model_context_window": 100000000,
+          "effective_model_context_limit": 100000000,
+          "request_token_allowance": 50223,
+          "input_allowance": 33375,
+          "input_allowance_limited_by": "cumulative_tokens",
+          "cumulative_token_limit": 166667,
+          "cumulative_token_remaining": 36826,
+          "cumulative_token_limits_enforced": true
+        },
+        {
+          "event_id": "evt_a9d75ba66795",
+          "created_at": "2026-11-15T23:55:02.916517+00:00",
+          "run_id": "run_eab8762bc484",
+          "reason_code": "invalid_compaction_handoff",
+          "model_context_window": 100000000,
+          "effective_model_context_limit": 100000000,
+          "request_token_allowance": 50052,
+          "input_allowance": 33192,
+          "input_allowance_limited_by": "cumulative_tokens",
+          "cumulative_token_limit": 166666,
+          "cumulative_token_remaining": 40680,
+          "cumulative_token_limits_enforced": true
+        }
+      ],
+      "archives_metadata_only": [
+        {
+          "id": 1,
+          "scope": "worker",
+          "scope_id": "run_c0bb31f63973",
+          "created_at": "2026-11-15T23:54:42.532975+00:00",
+          "source_hash": "71832431bca4f5d3be2335d375a28863379d43da208d256b4d1df4771260dcda",
+          "capsule_hash": "7cac2e8bc154b3d3f7cf72be1757cdd425a101edfc07ef09a13b5afbb843cf0f",
+          "summary_utf8_bytes": 7733,
+          "summary_sha256": "e7878c16dcda1adc2ba43817b6dc85455784cf437de1564b83cca25807a80546",
+          "source_count": 14,
+          "input_digest": "db25093a7723b6581e06810f828c19bd934ddf173437fdee87c78061b4f50097"
+        },
+        {
+          "id": 2,
+          "scope": "worker",
+          "scope_id": "run_eab8762bc484",
+          "created_at": "2026-11-15T23:54:52.472602+00:00",
+          "source_hash": "094414aca4a259bd39b8c5a53afcdd4a87ab65844d97a47b0112e90885b8828b",
+          "capsule_hash": "223e5c2c3bf10582883b4286056b2ffe18b25485de370ec71e39a04a3f73b2f3",
+          "summary_utf8_bytes": 9343,
+          "summary_sha256": "2602c4a08600b2a54913fc30743616ae5d40ae44f7c84c71aeb63e2a1c55bc28",
+          "source_count": 14,
+          "input_digest": "c5f2d0eb9ad798c0a31a427f8e46e22dbaffe4c9903a01579b3d5a9dd091343e"
+        }
+      ],
+      "worker_capacity_policy_presence": [
+        {
+          "run_id": "run_c0bb31f63973",
+          "has_worker_capacity": false,
+          "has_review_envelope": false
+        },
+        {
+          "run_id": "run_eab8762bc484",
+          "has_worker_capacity": false,
+          "has_review_envelope": false
+        }
+      ],
+      "persisted_actual_ModelRequest_context_limit": false
+    },
+    {
+      "run_id": "20261115T235408Z-failover-6b6702",
+      "snapshot_at": "2026-11-16T00:00:08.824500+00:00",
+      "database_access": "SQLite URI mode=ro; PRAGMA query_only=ON; BEGIN read snapshot; no Store/migrations",
+      "connection_total_changes": 0,
+      "profiles": [
+        {
+          "id": "deepseek-v4.1-flash",
+          "provider": "wb-local",
+          "model_id": "deepseek-v4.1-flash",
+          "context_window": 100000000,
+          "max_output_tokens": 8192
+        },
+        {
+          "id": "glm-5.3-flash",
+          "provider": "wb-local",
+          "model_id": "glm-5.3-flash",
+          "context_window": 1000000,
+          "max_output_tokens": 8192
+        }
+      ],
+      "worker_runs": [
+        {
+          "id": "run_b9b1bd4cb9ce",
+          "model_id": "deepseek-v4.1-flash",
+          "state": "cancelled",
+          "token_limit": 500000,
+          "token_spent": 24896,
+          "model_context_window": 100000000,
+          "output_limit": 8192,
+          "model_max_output_tokens": 8192
+        },
+        {
+          "id": "run_2aa950e0683e",
+          "model_id": "glm-5.3-flash",
+          "state": "blocked",
+          "token_limit": 500000,
+          "token_spent": 33865,
+          "model_context_window": 1000000,
+          "output_limit": 8192,
+          "model_max_output_tokens": 8192
+        }
+      ],
+      "attempts_by_purpose_state": [
+        {
+          "purpose": "memory_semantic_retrieval",
+          "state": "settled",
+          "count": 1
+        },
+        {
+          "purpose": "router",
+          "state": "settled",
+          "count": 1
+        },
+        {
+          "purpose": "router_notice",
+          "state": "settled",
+          "count": 2
+        },
+        {
+          "purpose": "worker",
+          "state": "rejected",
+          "count": 1
+        },
+        {
+          "purpose": "worker",
+          "state": "settled",
+          "count": 6
+        }
+      ],
+      "compaction_attempts": [],
+      "compaction_local_reservations": [],
+      "context_rejections": [],
+      "archives_metadata_only": [],
+      "worker_capacity_policy_presence": [
+        {
+          "run_id": "run_b9b1bd4cb9ce",
+          "has_worker_capacity": false,
+          "has_review_envelope": false
+        },
+        {
+          "run_id": "run_2aa950e0683e",
+          "has_worker_capacity": false,
+          "has_review_envelope": false
+        }
+      ],
+      "persisted_actual_ModelRequest_context_limit": false
+    }
+  ],
+  "limitations": [
+    "In-progress/final runtime snapshots are observations at their recorded time, not new acceptance or success claims.",
+    "No original Provider config or credentials were read; only code, public evidence and whitelisted database columns were inspected.",
+    "No rejected compaction response can be reconstructed from hashes or usage. Historical outcomes remain unchanged."
+  ]
+}

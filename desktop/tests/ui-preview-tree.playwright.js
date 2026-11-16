@@ -42,6 +42,8 @@ async (page, { outputDir }) => {
     else if (['/api/timeline', '/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'tree-fixture', workspace_root: 'D:/Synthetic/TreeFixture', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
@@ -142,7 +144,7 @@ async (page, { outputDir }) => {
   const nativeRatio = (startingWidth - 320) / (startingMaximum - 320);
   for (const width of [1152, 1280, 1400, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 340) <= 1);
+    await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
     await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const geometry = await preview.evaluate((panel) => {
       const bounds = (selector) => document.querySelector(selector).getBoundingClientRect();
@@ -156,15 +158,15 @@ async (page, { outputDir }) => {
     const maximum = Math.max(320, geometry.workspace - 352), expected = 320 + nativeRatio * (maximum - 320);
     check(Math.abs(geometry.preview - expected) <= 2 && geometry.preview >= 319 && geometry.preview <= maximum + 1, `${width}px window: native DUYS preserves its normalized ratio between 320px and workspace minus 352px: ${JSON.stringify(geometry)}`);
     check(Math.abs(geometry.tree - Math.min(250, Math.max(200, geometry.preview * .6))) <= 1 && geometry.document > 0 && geometry.overflow <= 1, `${width}px window: native shared 250px file tree respects its 200px/60% bounds: ${JSON.stringify(geometry)}`);
-    check(Math.abs(geometry.navigation - 340) <= 1, `${width}px window: resizing the preview retains the user's workspace navigation choice`);
+    check(Math.abs(geometry.navigation - 260) <= 1, `${width}px window: resizing the preview retains the single 260px workspace sidebar`);
     check(geometry.shortNames.length === 4 && geometry.shortNames.every((name) => name.available > 0 && name.text <= name.available + 1), `${width}px window: short filenames remain fully readable in both tree sections: ${JSON.stringify(geometry.shortNames)}`);
     await page.mouse.move(0, 0);
     await page.screenshot({ path: `${outputDir}/scale-preview-tree-${width}.png`, fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 340) <= 1);
+  await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
   await preview.getByRole('button', { name: '展开文件预览', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width <= 53);
+  await page.waitForFunction(() => document.querySelector('.rail')?.getBoundingClientRect().width === 0);
   check(!(await page.getByLabel('主导航').locator('.workspace-selector-wrap').isVisible()) && await page.locator('.conversation-shell').evaluate((element) => element.inert), 'expanded preview hides the workspace panel and removes the retained conversation from keyboard interaction');
   await page.mouse.move(0, 0); await page.waitForTimeout(220);
   await page.screenshot({ path: `${outputDir}/simple-preview-tree-expanded.png`, fullPage: true });

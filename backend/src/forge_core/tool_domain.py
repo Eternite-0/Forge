@@ -102,6 +102,19 @@ _OUTPUTS = {
         "result_json": _STRING,
         "subset": _STRING,
     },
+    "python_unittest": {
+        **_PROCESS,
+        "path": _STRING,
+        "manifest_sha256": _HASH,
+        "manifest_json": _STRING,
+        "test_module": _STRING,
+        "tests_run": {"type": "integer"},
+        "failures": {"type": "integer"},
+        "errors": {"type": "integer"},
+        "skipped": {"type": "integer"},
+        "result_json": _STRING,
+        "runtime": _STRING,
+    },
 }
 
 
@@ -192,7 +205,7 @@ CONTRACTS = (
     ),
     _contract(
         "directory_create",
-        "Create a workspace directory",
+        "Ensure an authorized workspace directory exists. An existing ordinary, unlinked directory is accepted; success does not claim it was newly created. Parent directories must exist.",
         {"path": _PATH},
         ["path"],
         "R1",
@@ -257,6 +270,29 @@ CONTRACTS = (
         "R0",
         "workspace.test",
         "bounded pure function interpretation in an isolated child process",
+    ),
+    _contract(
+        "python_unittest",
+        "Run real CPython stdlib unittest on an explicit test_module and exact file manifest "
+        "inside this task's work directory. manifest is {relative_python_path:sha256}, 1-32 files "
+        "and 256 KiB total. Only these files are copied to the run's private test directory. "
+        "Requires independent R2 approval of these exact parameters; Python executes with the "
+        "OS user's privileges and this is not an OS sandbox. No shell, package installation or "
+        "caller-selected interpreter arguments. Nonzero exit is a real test failure.",
+        {
+            "path": _PATH,
+            "manifest": {"type": "object"},
+            "test_module": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z][A-Za-z0-9_]*)*",
+            },
+        },
+        ["path", "manifest", "test_module"],
+        "R2",
+        "process.python.test",
+        "executes approved Python code as the OS user; arbitrary code effects require independent authorization",
     ),
     _contract(
         "browser_get",

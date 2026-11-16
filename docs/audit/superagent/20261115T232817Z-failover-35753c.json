@@ -1,0 +1,182 @@
+{
+  "run_id": "20261115T232817Z-failover-35753c",
+  "status": "failed",
+  "execution_mode": "live",
+  "experiment": "intentional_single_http_503_model_replacement_not_natural_failure",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "limits": {
+    "http_attempts": 16,
+    "tokens": 100000,
+    "seconds": 300,
+    "retries": 0
+  },
+  "source_sha256": "defff838ab2a4b222dd1290e0cedca9d018a481c9ef288035d34c22ea56a8c98",
+  "checks": {
+    "native_model_reassignment": true,
+    "alternative_model_completed_real_worker": false,
+    "real_artifact_matches_exact_acceptance": false,
+    "replacement_source_bound_write_and_read_receipts": false,
+    "independent_reviewer_pass": false,
+    "quest_completed": false,
+    "same_original_router_delivered_result": false,
+    "all_noninjected_attempts_settled": true,
+    "known_rejection_reservation_retained_without_refund": true,
+    "no_unknown_tool_outcomes": false
+  },
+  "driver_sha256": "8e6a5ff848ed516b74e5e12e7db152043cfd3f0b762ee33e1581ed5bd9ac54fa",
+  "comparison_scope": "one_failover_condition_no_claim_of_optimal_model_or_team",
+  "model_context_declarations": {
+    "deepseek-v4.1-flash": {
+      "source": "operator_declared",
+      "independently_measured": false,
+      "context_window": 100000000,
+      "fields": {
+        "context_length": 1000000,
+        "max_input_tokens": 1000000,
+        "max_output_tokens": 128000
+      },
+      "operator_context_window": 100000000,
+      "declaration_conflict_retained": true,
+      "execution_budget_grant": false
+    },
+    "glm-5.3-flash": {
+      "source": "provider_declared",
+      "independently_measured": false,
+      "context_window": 1000000,
+      "fields": {
+        "context_length": 1000000,
+        "max_input_tokens": 1000000,
+        "max_output_tokens": 131072
+      },
+      "operator_context_window": null,
+      "declaration_conflict_retained": false,
+      "execution_budget_grant": false
+    }
+  },
+  "injected_attempts": [
+    {
+      "attempt_id": "11b37da500e84dc6980b6937433987bb",
+      "purpose": "worker",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "rejected",
+      "input_charged": null,
+      "output_charged": null
+    }
+  ],
+  "real_upstream_attempts": [
+    {
+      "attempt_id": "ca947ae8154a430db882c6bf964951b4",
+      "purpose": "memory_semantic_retrieval",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "settled",
+      "input_charged": 501,
+      "output_charged": 24
+    },
+    {
+      "attempt_id": "1c4355ec940140c981e6a4b82da3b626",
+      "purpose": "router",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "settled",
+      "input_charged": 4243,
+      "output_charged": 589
+    },
+    {
+      "attempt_id": "93204c5b15604daabfe292d1956cd7ac",
+      "purpose": "worker",
+      "model_id": "glm-5.3-flash",
+      "state": "settled",
+      "input_charged": 4220,
+      "output_charged": 513
+    },
+    {
+      "attempt_id": "b72373560d804a1896a718ef30e52751",
+      "purpose": "worker",
+      "model_id": "glm-5.3-flash",
+      "state": "settled",
+      "input_charged": 4574,
+      "output_charged": 110
+    },
+    {
+      "attempt_id": "3afcd2d8f07f43049b422b425c7e9f77",
+      "purpose": "router_notice",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "settled",
+      "input_charged": 3134,
+      "output_charged": 10
+    }
+  ],
+  "known_rejection_usage_unknown": [
+    {
+      "call_id": "model_call_1f25e99daee3",
+      "run_id": "run_1ff11dd1261c",
+      "attempt_id": "11b37da500e84dc6980b6937433987bb",
+      "execution_mode": "live",
+      "operation_status": "completed_rejection",
+      "usage_status": "unknown",
+      "reservation_retained": true,
+      "local_reserved_tokens": 24750,
+      "gateway_input_reserved": 17550,
+      "gateway_output_reserved": 8192,
+      "gateway_cost_reserved": null,
+      "source_reference": "model_attempt:11b37da500e84dc6980b6937433987bb",
+      "reserved_tokens": 24750,
+      "reserved_cost_microunits": null
+    }
+  ],
+  "worker_models": [
+    {
+      "id": "run_1ff11dd1261c",
+      "model_id": "deepseek-v4.1-flash",
+      "state": "cancelled",
+      "execution_mode": "live"
+    },
+    {
+      "id": "run_b373e3afa3bb",
+      "model_id": "glm-5.3-flash",
+      "state": "blocked",
+      "execution_mode": "live"
+    }
+  ],
+  "artifact_sha256": null,
+  "local_reserved_count": 1,
+  "unresolved_other_local_reservations": 0,
+  "failure_type": "TimeoutError",
+  "shutdown_drain": {
+    "provenance": "programmatic_host_read_only_drain_no_new_work_or_replay",
+    "max_seconds": 90,
+    "elapsed_seconds": 89.834,
+    "outcome": "deadline_preserving_unknown_no_replay",
+    "last_counters": {
+      "model_calls": 6,
+      "provider_reserved": 0,
+      "provider_unknown": 0,
+      "worker_model_unresolved": 0,
+      "known_rejection_usage_unknown_reservations": 1,
+      "tool_inflight": 0,
+      "tool_unknown": 1,
+      "worker_tool_inflight": 0,
+      "worker_tool_unknown": 1,
+      "active_workers": 0,
+      "router_pending": 27,
+      "router_dead": 0
+    },
+    "read_error_types": []
+  },
+  "injected_faults": [
+    {
+      "attempt_id": "11b37da500e84dc6980b6937433987bb",
+      "purpose": "worker",
+      "worker_run_id": "run_1ff11dd1261c",
+      "model_id": "deepseek-v4.1-flash",
+      "provider_id": "wb-local",
+      "http_status": 503,
+      "provenance": "intentional_host_fault_injection_not_natural_provider_failure",
+      "forwarded_upstream": false,
+      "request_sha256": "6c9b55d937c8a3efc962d62afd2c196cf0c4bab24963766d7c23c41260af3309"
+    }
+  ],
+  "forwarded_http_requests_including_discovery": 6,
+  "forwarding_error_types": [],
+  "accounting_limitations": "The injected rejection has unknown usage and retains its complete local reservation. Only its unique completed_gateway_rejection_proof distinguishes a completed operation from an unresolved call. Every other reserved/unknown outcome prevents acceptance. No host retry, usage invention, refund or state repair is performed.",
+  "elapsed_seconds": 268.054
+}

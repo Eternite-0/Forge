@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { errorMessage, operatorConfig, type OperatorForm } from "./logic";
 import { SettingsSection } from "./SettingsView";
 
@@ -6,8 +6,9 @@ type Row = Record<string, unknown>;
 const text = (value: unknown, fallback = "未知"): string => value == null || value === "" ? fallback : String(value);
 
 /** Same revision-bound settings submission, grouped by the decisions the user makes. */
-export default function OperatorSettings({ settings, budget, blocked, save }: {
+export default function OperatorSettings({ settings, budget, blocked, save, suggestedRouterModel }: {
   settings: Row; budget: Row; blocked: boolean; save: (value: unknown) => void;
+  suggestedRouterModel?: string | null;
 }) {
   const saved = settings.config && typeof settings.config === "object" ? settings.config as Row : {};
   const provider = saved.provider && typeof saved.provider === "object" ? saved.provider as Row : {};
@@ -23,6 +24,7 @@ export default function OperatorSettings({ settings, budget, blocked, save }: {
   const [error, setError] = useState("");
   const [connectionOptions, setConnectionOptions] = useState(() => !!saved.provider && (!provider.id || !provider.credential_ref));
   const [advanced, setAdvanced] = useState(false);
+  useEffect(() => { if (suggestedRouterModel) setForm((old) => ({ ...old, routerModel: suggestedRouterModel })); }, [suggestedRouterModel]);
   const change = <K extends keyof OperatorForm>(key: K, value: OperatorForm[K]) => setForm((old) => ({ ...old, [key]: value }));
   const revealOptions = (formElement?: HTMLFormElement) => {
     // Native validation can run before React commits; make invalid hidden fields focusable immediately.

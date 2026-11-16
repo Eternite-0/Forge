@@ -24,6 +24,8 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else if (url.pathname === '/api/models') body = [];
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
     else { status = 404; body = { detail: `risk fixture endpoint missing: ${url.pathname}` }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
@@ -31,7 +33,11 @@ async (page, { outputDir }) => {
   await page.goto('http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
-  const group = page.locator('.event-group'), summary = group.locator(':scope > summary');
+  const process = page.locator('.process-transcript'), processSummary = process.locator(':scope > summary');
+  await processSummary.waitFor();
+  check((await processSummary.innerText()).includes('含失败记录') && (await processSummary.innerText()).includes('含未知结果') && (await processSummary.innerText()).includes('含模拟记录'), 'collapsed process preserves failure, unknown and mock provenance before opening its tools');
+  await processSummary.click();
+  const group = page.locator('.process-content > .process-tool-summary'), summary = group.locator(':scope > summary');
   await summary.waitFor();
   check((await summary.innerText()).includes('独立语义验证失败') && (await summary.innerText()).includes('独立语义验证结果未知') && !(await summary.innerText()).includes('验证通过'), 'failed and unknown semantic checks never become a passed headline');
   check(!(await summary.innerText()).includes('计划已批准') && await group.locator('.event-line').count() === 5, 'routine lifecycle information stays available without cluttering the work summary');
@@ -75,8 +81,11 @@ async (page, { outputDir }) => {
   await commandLine.locator(':scope > summary').click();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(220);
-  check(await commandLine.locator(':scope > summary .event-label').evaluate((element) => element.scrollWidth > element.clientWidth), 'the narrow risk fixture genuinely truncates its long command label');
-  check(await risksFit(), 'narrow activity rows preserve complete failure and unknown status beside truncated text');
+  check(await commandLine.locator(':scope > summary .event-label').evaluate((element) => {
+    const style = getComputedStyle(element), box = element.getBoundingClientRect();
+    return style.whiteSpace === 'normal' && box.height > parseFloat(style.lineHeight) && element.scrollWidth <= element.clientWidth + 1;
+  }), 'the narrow risk fixture wraps its complete long command label within the available width');
+  check(await risksFit(), 'narrow activity rows preserve complete failure and unknown status beside wrapped command text');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'long command and semantic risk rows cause no horizontal document overflow');
   await page.mouse.move(0, 0);
   await page.screenshot({ path: `${outputDir}/simple-risk-status-small.png`, fullPage: true });

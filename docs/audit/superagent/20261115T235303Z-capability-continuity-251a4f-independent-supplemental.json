@@ -1,0 +1,702 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T00:00:10.360665+00:00",
+  "run_id": "20261115T235303Z-capability-continuity-251a4f",
+  "provenance": "independent_programmatic_read_only_database_and_artifact_audit",
+  "audit_actions": {
+    "sqlite_uri_mode": "ro",
+    "provider_calls": 0,
+    "source_script_test_edits": 0,
+    "original_report_or_database_edits": 0,
+    "tests_rerun": 0
+  },
+  "original_report": {
+    "path": "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f.json",
+    "sha256": "cf2a26856b11592810a1987ba33f2d3bd8a3d3ecc7e48b698e02ff43488a680e",
+    "status": "failed",
+    "failure_code": "router_did_not_create_independent_task"
+  },
+  "source_freeze": {
+    "frozen_file_count": 342,
+    "changed_files": [],
+    "current_acceptance_source_sha256": "217fda1d3e587cbeb7836769bd807f42f790964c63b3aad71beae68da3ea8a02",
+    "matches_original_report": true
+  },
+  "database": {
+    "path": ".local/superagent/20261115T235303Z-capability-continuity-251a4f/data/forge.sqlite3",
+    "quick_check": "ok"
+  },
+  "scope": {
+    "physical_project_roots": [
+      "inputs/projects/project_alpha",
+      "inputs/projects/project_beta"
+    ],
+    "recorded_projects": [
+      {
+        "id": "project_cb6f5a60ca3e414aa15e7b8c",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261115T235303Z-capability-continuity-251a4f\\inputs\\projects\\project_beta",
+        "name": "project_beta"
+      }
+    ],
+    "actual_quest_project_links": [
+      {
+        "quest_id": "quest_8e9bc0798d84",
+        "project_id": "project_cb6f5a60ca3e414aa15e7b8c",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261115T235303Z-capability-continuity-251a4f\\inputs\\projects\\project_beta"
+      }
+    ],
+    "quests": [
+      {
+        "id": "quest_8e9bc0798d84",
+        "title": "Research DeepSeek Super-agent prototype vs FORGE implications",
+        "status": "running",
+        "plan_revision": 1
+      }
+    ],
+    "two_workspace_task_association_verified": false,
+    "L3_admission": {
+      "user_message_id": "msg_d4a0721b1e5c",
+      "assistant_message_id": "msg_c000027d34a0",
+      "committed_intent": "chat",
+      "needs_user_help": true,
+      "reason": "Router did not see project_alpha among presented projects and asked for confirmation; no L3 Quest was created"
+    }
+  },
+  "workers": [
+    {
+      "id": "run_c0bb31f63973",
+      "worker_id": "worker_fa801bf2a493",
+      "quest_id": "quest_8e9bc0798d84",
+      "state": "blocked",
+      "plan_id": "plan_1d520d6f358f",
+      "node_key": "task_1",
+      "plan_revision": 1,
+      "role_id": "research_1",
+      "execution_mode": "live",
+      "steps": 10,
+      "step_limit": 32,
+      "repairs": 1,
+      "tool_spent": 9,
+      "tool_limit": 11,
+      "token_spent": 129841,
+      "token_limit": 166667
+    },
+    {
+      "id": "run_eab8762bc484",
+      "worker_id": "worker_40f87dddd6f4",
+      "quest_id": "quest_8e9bc0798d84",
+      "state": "blocked",
+      "plan_id": "plan_1d520d6f358f",
+      "node_key": "task_2",
+      "plan_revision": 1,
+      "role_id": "architect_2",
+      "execution_mode": "live",
+      "steps": 10,
+      "step_limit": 32,
+      "repairs": 1,
+      "tool_spent": 9,
+      "tool_limit": 11,
+      "token_spent": 125986,
+      "token_limit": 166666
+    }
+  ],
+  "ownership": {
+    "meaning": "durable observed ownership intervals, not CPU parallelism",
+    "intervals": [
+      {
+        "run_id": "run_c0bb31f63973",
+        "started_at": "2026-11-15T23:53:23.019642+00:00",
+        "ended_at": "2026-11-15T23:54:06.576680+00:00"
+      },
+      {
+        "run_id": "run_eab8762bc484",
+        "started_at": "2026-11-15T23:53:23.679895+00:00",
+        "ended_at": "2026-11-15T23:54:14.656785+00:00"
+      },
+      {
+        "run_id": "run_c0bb31f63973",
+        "started_at": "2026-11-15T23:54:13.073219+00:00",
+        "ended_at": "2026-11-15T23:54:56.270447+00:00"
+      },
+      {
+        "run_id": "run_eab8762bc484",
+        "started_at": "2026-11-15T23:54:20.842773+00:00",
+        "ended_at": "2026-11-15T23:55:02.925181+00:00"
+      }
+    ],
+    "max_parallel_workers": 2,
+    "max_parallel_distinct_quests": 1,
+    "cross_quest_parallelism_verified": false
+  },
+  "current_plan": [
+    {
+      "id": "plan_1d520d6f358f",
+      "quest_id": "quest_8e9bc0798d84",
+      "revision": 1,
+      "status": "approved",
+      "digest": "dc2f1a3eab1ff0d876c2eaf8a8c16abf0fd01bf4276321690b2331da393dc827"
+    }
+  ],
+  "current_nodes": [
+    {
+      "plan_id": "plan_1d520d6f358f",
+      "node_key": "task_1",
+      "status": "blocked",
+      "worker_id": "worker_fa801bf2a493"
+    },
+    {
+      "plan_id": "plan_1d520d6f358f",
+      "node_key": "task_2",
+      "status": "blocked",
+      "worker_id": "worker_40f87dddd6f4"
+    },
+    {
+      "plan_id": "plan_1d520d6f358f",
+      "node_key": "task_3",
+      "status": "proposed",
+      "worker_id": null
+    }
+  ],
+  "reviews": [
+    {
+      "plan_id": "plan_1d520d6f358f",
+      "task_node_key": "task_1",
+      "run_id": "run_c0bb31f63973",
+      "result_event_id": "evt_290f5d5f0092",
+      "packet_sha256": "95265295a0bf9e598b73ad7619702e7fc7261254bab3ff1dd7a89d9718b0f8f8",
+      "call_id": "review_call_4ffe441462a7",
+      "provider_id": "wb-local",
+      "model_id": "deepseek-v4.1-flash",
+      "execution_mode": "live",
+      "review_context": "independent_same_model",
+      "error_code": null,
+      "verdict": "NEEDS_REVISION",
+      "event_id": "evt_ccc32d6cb368",
+      "result_source_same_quest": true,
+      "result_source_same_worker": true
+    },
+    {
+      "plan_id": "plan_1d520d6f358f",
+      "task_node_key": "task_2",
+      "run_id": "run_eab8762bc484",
+      "result_event_id": "evt_ad7b2b15d933",
+      "packet_sha256": "9ec11f12c82040abca2956c878c005eb227cbb57561da255034cc53271c95b0a",
+      "call_id": "review_call_df9298dcc746",
+      "provider_id": "wb-local",
+      "model_id": "deepseek-v4.1-flash",
+      "execution_mode": "live",
+      "review_context": "independent_same_model",
+      "error_code": null,
+      "verdict": "NEEDS_REVISION",
+      "event_id": "evt_1b3ed6441731",
+      "result_source_same_quest": true,
+      "result_source_same_worker": true
+    }
+  ],
+  "L2_real_specialist_work": {
+    "actual_roles": [
+      "research_1",
+      "architect_2"
+    ],
+    "all_three_supplied_sources_read_by_each_specialist": true,
+    "research_output": "work/quest_8e9bc0798d84/source_flow_analysis.md",
+    "architect_output": "work/quest_8e9bc0798d84/forge_design_implications.json",
+    "both_artifacts_revised_with_live_receipts": true,
+    "integrator_started": false,
+    "final_research_json_present": false,
+    "final_task_success_established": false
+  },
+  "artifact_hashes": [
+    {
+      "path": "work/quest_8e9bc0798d84/forge_design_implications.json",
+      "bytes": 13096,
+      "sha256": "006a56fc6deaa2d8054114fc50917d5b5bd6e013016e13be9352bdf07a916145",
+      "latest_receipt_id": "receipt_0e7c94eb01df",
+      "latest_receipt_hash_matches": true,
+      "review_of_final_revised_bytes_observed": false
+    },
+    {
+      "path": "work/quest_8e9bc0798d84/source_flow_analysis.md",
+      "bytes": 12324,
+      "sha256": "b5560db8176f66d8dad8403d9d6a91892ce14fdb16a3b3556eaa32b84a43ad0e",
+      "latest_receipt_id": "receipt_79e6f2a49ab1",
+      "latest_receipt_hash_matches": true,
+      "review_of_final_revised_bytes_observed": false
+    }
+  ],
+  "tool_receipts": [
+    {
+      "intent_id": "action_ce66fa4fbc37",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_b83c8f020824",
+      "path": "inputs/projects/project_beta/l2",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_1d30f1f5321c",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_0ede0722b61f",
+      "path": "work",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_94f8891e7739",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_99562aa03f03",
+      "path": "inputs/projects/project_beta/l2/scenario.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "ede2e3739cb8e9eeeb6bbf787ec357b86dae62ef244b46e56b00c2d9eb897c62",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_2812d0be28bb",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_ef72cecf0af9",
+      "path": "inputs/projects/project_beta/l2/deepseek_readme.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "3ef5dced147170146cc2b91aca3870cf8bfb84f952a8c16262a7175ab018cfbf",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_7177ebc74264",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_f3c776900e8a",
+      "path": "inputs/projects/project_beta/l2/deepseek_intake.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_7a68fbb98848",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_f37e9c0f808b",
+      "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "2257025548c4799bbda7753936730a80b9f029406c2da08289acb658a40a3c1b",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_690a92ea36f7",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_create",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_2d1628fcc3d4",
+      "path": "work/quest_8e9bc0798d84",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_a8015409b49a",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_cd805e84bbbf",
+      "path": "work",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_27be052f7d09",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_ca3e7a2154b6",
+      "path": "inputs/projects/project_beta/l2",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_885dcc7e83a3",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_c13ca024a9d6",
+      "path": "work/quest_8e9bc0798d84",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true
+    },
+    {
+      "intent_id": "action_0cc2860c21b4",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_564001f419dc",
+      "path": "inputs/projects/project_beta/l2/deepseek_readme.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "3ef5dced147170146cc2b91aca3870cf8bfb84f952a8c16262a7175ab018cfbf",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_714f4e8b8192",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_6108774bff31",
+      "path": "inputs/projects/project_beta/l2/deepseek_intake.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_36cf83234d55",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_7304944f39d0",
+      "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "2257025548c4799bbda7753936730a80b9f029406c2da08289acb658a40a3c1b",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_d4b4cf64ee9f",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_c76bfb23d69f",
+      "path": "work/quest_8e9bc0798d84/source_flow_analysis.md",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "written_sha256": "b83e5eb740093de3fd3c6a0d7210e965d219b0ab4018ec96dc7c6c2274f3cafc",
+      "prior_receipt_id": null,
+      "prior_sha256": null
+    },
+    {
+      "intent_id": "action_4a102785d156",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_eeca7805dd4f",
+      "path": "work/quest_8e9bc0798d84/forge_design_implications.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "written_sha256": "2026e91c68a0851e64cb5bd35ec4e9661cccac779660bf36b43c5a2e18ee8991",
+      "prior_receipt_id": null,
+      "prior_sha256": null
+    },
+    {
+      "intent_id": "action_4f6c4c1b1257",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_7c38725c99a1",
+      "path": "inputs/projects/project_beta/l2/deepseek_intake.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "source_file_sha256": "d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97",
+      "raw_content_matches_file": true,
+      "file_digest_matches": true
+    },
+    {
+      "intent_id": "action_a690fd8bd8eb",
+      "run_id": "run_c0bb31f63973",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_revise",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_79e6f2a49ab1",
+      "path": "work/quest_8e9bc0798d84/source_flow_analysis.md",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "written_sha256": "b5560db8176f66d8dad8403d9d6a91892ce14fdb16a3b3556eaa32b84a43ad0e",
+      "prior_receipt_id": "receipt_c76bfb23d69f",
+      "prior_sha256": "b83e5eb740093de3fd3c6a0d7210e965d219b0ab4018ec96dc7c6c2274f3cafc"
+    },
+    {
+      "intent_id": "action_36deef8fab6a",
+      "run_id": "run_eab8762bc484",
+      "quest_id": "quest_8e9bc0798d84",
+      "tool_name": "file_revise",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "receipt_id": "receipt_0e7c94eb01df",
+      "path": "work/quest_8e9bc0798d84/forge_design_implications.json",
+      "receipt_digest_valid": true,
+      "parameter_digest_valid": true,
+      "receipt_mode_matches": true,
+      "written_sha256": "006a56fc6deaa2d8054114fc50917d5b5bd6e013016e13be9352bdf07a916145",
+      "prior_receipt_id": "receipt_eeca7805dd4f",
+      "prior_sha256": "2026e91c68a0851e64cb5bd35ec4e9661cccac779660bf36b43c5a2e18ee8991"
+    }
+  ],
+  "compaction": {
+    "archives": [
+      {
+        "id": 1,
+        "scope": "worker",
+        "scope_id": "run_c0bb31f63973",
+        "source_count": 14,
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "original_source_rows_retained_and_hash_valid": true,
+        "model_handoff_status": "unverified"
+      },
+      {
+        "id": 2,
+        "scope": "worker",
+        "scope_id": "run_eab8762bc484",
+        "source_count": 14,
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "original_source_rows_retained_and_hash_valid": true,
+        "model_handoff_status": "unverified"
+      }
+    ],
+    "context_rejections": [
+      {
+        "event_id": "evt_bec838e176f7",
+        "worker_id": "worker_fa801bf2a493",
+        "run_id": "run_c0bb31f63973",
+        "reason_code": "invalid_compaction_handoff",
+        "model_context_window": 100000000,
+        "effective_model_context_limit": 100000000,
+        "request_token_allowance": 50223,
+        "input_allowance": 33375,
+        "input_allowance_limited_by": "cumulative_tokens",
+        "cumulative_token_limit": 166667,
+        "cumulative_token_remaining": 36826,
+        "cumulative_token_limits_enforced": true
+      },
+      {
+        "event_id": "evt_a9d75ba66795",
+        "worker_id": "worker_40f87dddd6f4",
+        "run_id": "run_eab8762bc484",
+        "reason_code": "invalid_compaction_handoff",
+        "model_context_window": 100000000,
+        "effective_model_context_limit": 100000000,
+        "request_token_allowance": 50052,
+        "input_allowance": 33192,
+        "input_allowance_limited_by": "cumulative_tokens",
+        "cumulative_token_limit": 166666,
+        "cumulative_token_remaining": 40680,
+        "cumulative_token_limits_enforced": true
+      }
+    ],
+    "router_archive_count": 0,
+    "successful_compacted_continuation_established": false
+  },
+  "trigger_pass_through": {
+    "subscriptions": [
+      {
+        "thread_id": "thread_a390080aa1bb",
+        "run_id": "run_c0bb31f63973",
+        "active": 1
+      },
+      {
+        "thread_id": "thread_a390080aa1bb",
+        "run_id": "run_eab8762bc484",
+        "active": 1
+      }
+    ],
+    "triggers": [
+      {
+        "id": "trigger_35a81402995d",
+        "status": "routed",
+        "reason": "candidate",
+        "quest_id": "quest_8e9bc0798d84"
+      }
+    ],
+    "deliveries": [
+      {
+        "trigger_id": "trigger_35a81402995d",
+        "run_id": "run_c0bb31f63973",
+        "handed_back": 0
+      },
+      {
+        "trigger_id": "trigger_35a81402995d",
+        "run_id": "run_eab8762bc484",
+        "handed_back": 0
+      }
+    ],
+    "follow_up_pass_through_trigger_observed": false,
+    "limitation": "Existing deliveries are from the initial routed conversation trigger; they do not establish follow-up event pass-through."
+  },
+  "router": {
+    "identity": [
+      {
+        "conversation_id": "main",
+        "router_session_id": "router_98275c5a90b4",
+        "revision": 5
+      }
+    ],
+    "notices": [
+      {
+        "message_id": "msg_9d901e4eb1ba",
+        "conversation_id": "main",
+        "execution_mode": "programmatic",
+        "notice_phase": "review_pending",
+        "source_event_ids": [
+          "evt_290f5d5f0092"
+        ],
+        "source_event_types": [
+          "worker.result"
+        ],
+        "source_quest_ids": [
+          "quest_8e9bc0798d84"
+        ],
+        "reviewed_completion": false
+      },
+      {
+        "message_id": "msg_a66ed8b80f36",
+        "conversation_id": "main",
+        "execution_mode": "programmatic",
+        "notice_phase": "review_pending",
+        "source_event_ids": [
+          "evt_ad7b2b15d933"
+        ],
+        "source_event_types": [
+          "worker.result"
+        ],
+        "source_quest_ids": [
+          "quest_8e9bc0798d84"
+        ],
+        "reviewed_completion": false
+      },
+      {
+        "message_id": "msg_dd5a352f080a",
+        "conversation_id": "main",
+        "execution_mode": "live",
+        "notice_phase": null,
+        "source_event_ids": [
+          "evt_d01a462d2cc3"
+        ],
+        "source_event_types": [
+          "worker.blocked"
+        ],
+        "source_quest_ids": [
+          "quest_8e9bc0798d84"
+        ],
+        "reviewed_completion": false
+      }
+    ],
+    "unprocessed_final_blocked_notice": [
+      {
+        "consumer_id": "router",
+        "event_id": "evt_77a6832dad10",
+        "notice_attempts": 3,
+        "notice_error": "processing_failed",
+        "notice_dead_at": null,
+        "processed_at": null
+      }
+    ],
+    "final_reviewed_completion_returned": false,
+    "core_restart_verified": false,
+    "typed_multihop_recall_verified": false
+  },
+  "L3_final_candidate_and_test_receipt_binding": {
+    "quest_created": false,
+    "candidate_sha256": null,
+    "successful_test_receipt_id": null,
+    "verified": false,
+    "reason": "No L3 Quest or development artifact was produced in this run."
+  },
+  "accounting": {
+    "gateway_attempt_count": 31,
+    "admission_states": [
+      {
+        "state": "settled",
+        "count": 31
+      }
+    ],
+    "charged_tokens": 332091,
+    "uncertain_tools": [],
+    "all_receipt_hashes_and_parameter_bindings_valid": true
+  },
+  "conclusion": {
+    "capability_acceptance_passed": false,
+    "exploratory_only": true,
+    "confirmed_gaps": [
+      "New project_alpha was not presented before Router inference, so the L3 independent Quest was not admitted.",
+      "Both real specialists revised outputs but rejected their compacted handoffs and became blocked before a second worker.result or final review.",
+      "The integrator never started; no final research.json or L3 code was delivered.",
+      "The final blocked notice remained unprocessed after three attempts; settled model calls do not establish notification completion."
+    ],
+    "not_established": [
+      "Two project task associations",
+      "Cross-Quest parallel ownership",
+      "Follow-up Thread pass-through",
+      "Core restart",
+      "Successful context recovery",
+      "Typed multi-hop Recall",
+      "Final reviewed result returned to original Router",
+      "L3 final candidate and successful test receipt hash binding"
+    ]
+  }
+}

@@ -1,0 +1,569 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:10:18.275884+00:00",
+  "provenance": "offline_source_and_existing_evidence_audit_not_new_model_acceptance",
+  "audit_program": {
+    "path": ".local/superagent/audit_completion_continuity_gates.py",
+    "sha256": "bd476a9d0abae896a605dfc8cbcfd9d5195fbc604ec7947e06ff7a59f128a75d"
+  },
+  "actions": {
+    "provider_calls": 0,
+    "credential_reads": 0,
+    "live_database_writes": 0,
+    "source_edits": 0,
+    "historical_evidence_edits": 0,
+    "model_or_tool_replays": 0,
+    "sqlite_uri_mode": "ro",
+    "sqlite_query_only": true,
+    "writes": "new local audit program and this new audit JSON only"
+  },
+  "source_snapshot": {
+    "basis": {
+      "path": "docs/audit/superagent/capability-completion-round1-source-freeze.json",
+      "sha256": "caf027a97292657e03147f9463900d62dc0ff22276e4fc5d07d8ea150f15d817"
+    },
+    "round1_file_count": 354,
+    "current_differences_from_round1": [
+      {
+        "path": "backend/src/forge_core/independent_review.py",
+        "round1_sha256": "15b5f3b9ee7f38840c6c8b9f238e9fb0b860011704d97bb334f9a30f2a9e76b8",
+        "current_sha256": "80ef9c498bb45ae60b87132e0b11df9f117560ac2675e310b59cfe60d9c24cfa"
+      },
+      {
+        "path": "backend/src/forge_core/worker_prompts.py",
+        "round1_sha256": "328ec8f761812eeaea0fffe4b648e8e779d6c2c4ee898665032a75708b584735",
+        "current_sha256": "a855bf9df41573c0f98e12df09ea780937f83a4047d731efaba8657e880bdd5e"
+      }
+    ],
+    "note": "Round 1 was collected and closed before these diagnosed corrections. This is a hash snapshot, not a later round source freeze or a textual diff against unavailable prior source bodies.",
+    "preserved_limit_and_evidence_sources": [
+      {
+        "path": "backend/scripts/capability_sprint_scenarios.py",
+        "sha256": "44d13bd7d3aa94a9b2ad4916c7ae7cf77864fc9d86e368240bc91a4c2d0ff53c",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/scripts/capability_continuity_evidence.py",
+        "sha256": "8652c285ebc81ba65e2c6d4138955916d0d6487d61cec48f758b1b1140ad02f2",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/scripts/verify_superagent_capability.py",
+        "sha256": "e294f877acb531348d40935706fe7ef7d83773f40a36b9a43b3daeae508c16a3",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/src/forge_core/review_envelope.py",
+        "sha256": "224e2407705432840979d0e10ebe5efb373ea75d3d72a6bd7f0e307008e82852",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/src/forge_core/model_call_budget.py",
+        "sha256": "26a43fa2823c1b3afbaee8710ebc11ba7d90c73a120f1495a40f92980ab4aff8",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/src/forge_core/token_policy.py",
+        "sha256": "3b04015b77aba16606610e6f1ad46088d7ae050100ee78893d5b500141296c57",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/src/forge_core/providers/__init__.py",
+        "sha256": "daa872fd000f14a15179af8256bf08a7765bb9c7186fe919c2af959f58651b0a",
+        "matches_round1_freeze": true
+      },
+      {
+        "path": "backend/src/forge_core/worker_schema.py",
+        "sha256": "a2ddb6410f32d35a6309476645b3012913cc213109fc1408bea3fd3b4ede9841",
+        "matches_round1_freeze": true
+      }
+    ]
+  },
+  "unchanged_limits": {
+    "calls": 32,
+    "tokens": 500000,
+    "observation_seconds": 900,
+    "shutdown_drain_seconds": 130,
+    "gateway_retries": 0,
+    "worker_output_tokens": 8192,
+    "router_output_tokens": 4096,
+    "deadline_note": "Driver observation bound plus settlement drain, not a hard admission deadline.",
+    "model_context_window": 100000000,
+    "context_source": "explicit_user_declaration_with_discovery_conflict_retained",
+    "new_stage_maximum_attempts": 160,
+    "new_stage_maximum_charged_or_reserved_tokens": 2500000,
+    "protocol": {
+      "path": "docs/audit/superagent/capability-completion-protocol.json",
+      "sha256": "118b021e37457ba8697e81dc1db06144c598a6c07afdf624f66a85f3140bdd56"
+    },
+    "no_budget_increase_no_retry_reset_no_historical_replay": true
+  },
+  "closed_round1": {
+    "result": {
+      "path": "docs/audit/superagent/capability-completion-round1-result.json",
+      "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe"
+    },
+    "status": "failed",
+    "failure_code": "bounded_scenario_deadline",
+    "accounting": {
+      "attempts": 21,
+      "settled": 21,
+      "states": {
+        "settled": 21
+      },
+      "charged_or_reserved_tokens": 246009,
+      "known_tokens": 246009,
+      "unsettled_tool_intents": 0
+    },
+    "source_unchanged_at_collection": true,
+    "diagnosis": {
+      "path": "docs/audit/superagent/20261116T044118Z-capability-specialists-b2e9cc-independent-budget-diagnosis.json",
+      "sha256": "198916107040d8b791583dfd73af0ed3547bef33b439f1ebeccbdad80db07967"
+    },
+    "budget_facts": {
+      "limiting_factor": "remaining_cumulative_worker_budget_cannot_cover_complete_native_input_and_minimum_verdict",
+      "exception_type": "DomainError",
+      "exception_message": "Independent review budget exhausted",
+      "minimum_verdict_tokens": 1024,
+      "remaining_cumulative_tokens": 84691,
+      "native_input_reservation": 98556,
+      "minimum_required_reservation": 99580,
+      "minimum_deficit": 14889,
+      "full_8192_verdict_deficit": 22057,
+      "canonical_packet_bytes": 97502,
+      "model_context_window": 100000000,
+      "model_context_is_not_the_limit": true,
+      "legacy_and_current_native_wire_equal": true,
+      "transport_savings_for_actual_final_packet": 0,
+      "live_review_started_for_integrator": false,
+      "the_unstarted_final_packet_hash_is_a_reconstruction_not_a_historical_review_started_attestation": true
+    },
+    "acceptance_boundary": "No independent final Integrator review call or PASS exists. A generated artifact and source-valid citations do not satisfy final task acceptance."
+  },
+  "ordinary_delivery_guidance_correction": {
+    "source": {
+      "path": "backend/src/forge_core/worker_prompts.py",
+      "sha256": "a855bf9df41573c0f98e12df09ea780937f83a4047d731efaba8657e880bdd5e"
+    },
+    "added_source_block": "    if not capacity and any(\n        isinstance(item, str) and (item.startswith(\"json_review:\") or item == \"delivery_review\")\n        for item in capsule[\"success_criteria\"]\n    ):\n        policy += (\n            \" Keep analytical delivery within the original execution and review allowance. \"\n            \"When complete required analysis and citations are already in an assigned artifact \"\n            \"available to independent review and intended downstream readers, state them there \"\n            \"once. In the completion delivery use brief findings and exact artifact path/receipt \"\n            \"references instead of copying its full analysis or citation table again. Preserve \"\n            \"every approved output-schema field, required inline evidence and downstream-required \"\n            \"detail. Do not create an unassigned artifact to shorten a read-only delivery. \"\n            \"Add optional analytical detail only when it changes the decision and leaves capacity \"\n            \"for independent review; this guidance sets no new size limit. Explicitly requested \"\n            \"complete code, source reproductions and detailed reports remain required in full.\"\n        )\n",
+    "scope": "No explicit capacity contract and a json_review:* or delivery_review criterion; both intermediate and final nodes, after compact-policy replacement.",
+    "preserved_contracts": [
+      "Every approved output-schema field, required inline evidence and downstream-required detail remains mandatory.",
+      "Artifact delegation applies only to assigned complete artifacts available to independent review and intended downstream readers.",
+      "Read-only tasks do not gain authority to create an unassigned artifact.",
+      "Complete requested code, source reproductions and detailed reports remain required in full.",
+      "No hard byte cap, increased budget, new permission or automatic PASS is introduced."
+    ],
+    "empirical_effect_on_new_model_output": "not_established_by_this_audit",
+    "limitations": "Prompt guidance cannot ensure model compliance or guarantee lower total evidence size or successful review admission."
+  },
+  "validation": {
+    "prompt_related_regression": {
+      "path": "docs/audit/superagent/capability-completion-delivery-guidance.xml",
+      "sha256": "098bc81025b0ffc140ccaf3b7f5a66d328382fb15cfbb03f59e76cd43ba3f864",
+      "tests": 131,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 131,
+      "case_classes": {
+        "tests.test_worker_path_semantics": 10,
+        "tests.test_reviewer_context_phase2": 26,
+        "tests.test_review_capacity_preview_phase2": 22,
+        "tests.test_specialist_artifact_projection": 7,
+        "tests.test_superagent_swarm": 37,
+        "tests.test_worker_intelligence_phase2": 29
+      }
+    },
+    "round1_full_suite": {
+      "path": "docs/audit/superagent/capability-completion-backend.xml",
+      "sha256": "bd2188560607057102b7adaac0edd833bbd5f61607245cf41933eca998603740",
+      "tests": 2869,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2853,
+      "case_classes": {
+        "tests.test_acceptance_checks_phase2": 33,
+        "tests.test_acceptance_core_reads_v17": 4,
+        "tests.test_adaptive_planning_v17": 7,
+        "tests.test_agent_protocol_v2_phase2": 40,
+        "tests.test_alpha_demo_m7": 14,
+        "tests.test_api": 1,
+        "tests.test_api_trust": 8,
+        "tests.test_artifact_diff_ui": 21,
+        "tests.test_background_busy_m7": 4,
+        "tests.test_benchmark_m3": 3,
+        "tests.test_capability_call_ceiling": 10,
+        "tests.test_capability_continuation_gates": 8,
+        "tests.test_capability_continuity_evidence": 18,
+        "tests.test_capability_development_receipts": 15,
+        "tests.test_capability_router_projects": 11,
+        "tests.test_capability_sprint_metrics": 14,
+        "tests.test_capability_sprint_scenarios": 14,
+        "tests.test_code_test_harness_phase2": 14,
+        "tests.test_compaction_rejection_diagnostics": 20,
+        "tests.test_composer_concurrency_phase2": 21,
+        "tests.test_composer_contract_phase2": 21,
+        "tests.test_composer_lifecycle_v28": 5,
+        "tests.test_composer_reassignment_v29": 7,
+        "tests.test_composer_repair_phase2": 4,
+        "tests.test_composer_request_v28": 6,
+        "tests.test_composer_resources_v21": 25,
+        "tests.test_composition_capacity_v28": 20,
+        "tests.test_concurrency": 11,
+        "tests.test_constraints_phase2": 8,
+        "tests.test_context_m6": 18,
+        "tests.test_core": 7,
+        "tests.test_core_measured_planner_v19": 17,
+        "tests.test_core_measured_serial_v17": 10,
+        "tests.test_core_prefetch_predecessor_v23": 5,
+        "tests.test_core_source_prefetch_v23": 21,
+        "tests.test_core_source_repair": 5,
+        "tests.test_core_supervisor": 9,
+        "tests.test_cumulative_node_budget_phase2": 3,
+        "tests.test_cumulative_team_budget_phase2": 10,
+        "tests.test_delivery_diagnostics_v22": 18,
+        "tests.test_delivery_path_v23": 3,
+        "tests.test_desktop_api_m7": 12,
+        "tests.test_desktop_host_m7": 6,
+        "tests.test_directory_create_idempotency": 9,
+        "tests.test_driver_terminal_composition_v21": 5,
+        "tests.test_driver_terminal_planning_v19": 4,
+        "tests.test_event_dispatcher": 16,
+        "tests.test_evidence_gate": 3,
+        "tests.test_execution_evidence": 4,
+        "tests.test_file_revise_phase2": 21,
+        "tests.test_final_budget_observation_v30": 7,
+        "tests.test_governance": 9,
+        "tests.test_gpu_tools_superagent": 8,
+        "tests.test_hypothesis_read_review_v26": 4,
+        "tests.test_hypothesis_sources_v26": 24,
+        "tests.test_intelligence_benchmark_phase2": 3,
+        "tests.test_lifecycle_m7": 5,
+        "tests.test_live_algorithm_benchmark_phase2": 106,
+        "tests.test_live_context_probe_offline": 10,
+        "tests.test_m4_adversarial": 6,
+        "tests.test_m4_integration": 15,
+        "tests.test_m5_lifespan_execution": 4,
+        "tests.test_memory_m6": 13,
+        "tests.test_migrations": 30,
+        "tests.test_model_call_budget": 18,
+        "tests.test_model_compaction_v29": 33,
+        "tests.test_model_recovery_capability_sprint": 18,
+        "tests.test_model_registry_m3": 9,
+        "tests.test_native_delivery_contract_phase2": 36,
+        "tests.test_node_verifier_m5": 7,
+        "tests.test_numeric_harness": 7,
+        "tests.test_persistent_router": 21,
+        "tests.test_phase2_driver": 17,
+        "tests.test_phase2_integration_security": 5,
+        "tests.test_phase2_provider_config": 56,
+        "tests.test_planner_capacity_v17": 13,
+        "tests.test_planner_dataflow_v21": 40,
+        "tests.test_planner_diagnostics_v19": 14,
+        "tests.test_planner_guidance_v24": 8,
+        "tests.test_planner_operator_budget_phase2": 16,
+        "tests.test_planner_protocol_v23": 39,
+        "tests.test_planner_protocol_v25": 39,
+        "tests.test_planner_protocol_v26": 59,
+        "tests.test_planner_protocol_v28": 18,
+        "tests.test_planner_repair_v30": 4,
+        "tests.test_planner_router_input_v18": 8,
+        "tests.test_planner_source_preview_v22": 21,
+        "tests.test_predecessor_context_v17": 2,
+        "tests.test_predecessor_delivery_v17": 35,
+        "tests.test_prefetch_context_acceptance_v23": 6,
+        "tests.test_project_context": 2,
+        "tests.test_project_identity_capability_sprint": 5,
+        "tests.test_provider_declared_metadata_capability_sprint": 4,
+        "tests.test_providers": 27,
+        "tests.test_publish_evidence_phase2": 10,
+        "tests.test_python_unittest_superagent": 28,
+        "tests.test_quest_graph": 18,
+        "tests.test_recall_archive_dependencies_superagent": 8,
+        "tests.test_recall_chain_superagent": 14,
+        "tests.test_receipt_read_m7": 2,
+        "tests.test_receipt_read_repair_phase2": 10,
+        "tests.test_registry_router_context_capability_sprint": 7,
+        "tests.test_remaining_dag_v16": 11,
+        "tests.test_review_capacity_preview_phase2": 22,
+        "tests.test_review_envelope_phase2": 24,
+        "tests.test_review_scope_wire": 4,
+        "tests.test_reviewer_capacity_phase2": 20,
+        "tests.test_reviewer_context_phase2": 26,
+        "tests.test_reviewer_gateway_guard_phase2": 7,
+        "tests.test_reviewer_repair_phase2": 11,
+        "tests.test_reviewer_serial_capacity_phase2": 2,
+        "tests.test_router_control_capability_sprint": 12,
+        "tests.test_router_decision_diagnostics_capability_sprint": 5,
+        "tests.test_router_intake_legacy_capacity_sprint": 13,
+        "tests.test_router_intelligence_phase2": 26,
+        "tests.test_router_json_protocol": 58,
+        "tests.test_router_model_compaction_v29": 1,
+        "tests.test_router_notice_capability_sprint": 16,
+        "tests.test_router_project_intake_independent_sprint": 5,
+        "tests.test_router_quest_lookup_phase2": 5,
+        "tests.test_router_recall_binding_v28": 9,
+        "tests.test_router_responsiveness_superagent": 43,
+        "tests.test_router_semantic_recall_v16": 4,
+        "tests.test_router_source_unavailable_capability_sprint": 6,
+        "tests.test_router_team_topology_capability_sprint": 13,
+        "tests.test_schema_gateway_m6": 7,
+        "tests.test_security_adversarial": 3,
+        "tests.test_semantic_evidence_m7": 11,
+        "tests.test_semantic_gate_m7": 4,
+        "tests.test_semantic_lineage_v16": 10,
+        "tests.test_semantic_memory_phase2": 24,
+        "tests.test_semantic_revision_phase2": 30,
+        "tests.test_semantic_suite_m7": 4,
+        "tests.test_serial_capacity_v17": 17,
+        "tests.test_serial_runtime_v17": 3,
+        "tests.test_settings": 9,
+        "tests.test_shared_correction_v26": 5,
+        "tests.test_source_capacity_v20": 13,
+        "tests.test_source_wire_v28": 36,
+        "tests.test_specialist_artifact_projection": 7,
+        "tests.test_stall_recovery_capability_sprint": 29,
+        "tests.test_startup": 1,
+        "tests.test_superagent_acceptance_driver": 8,
+        "tests.test_superagent_delegation": 18,
+        "tests.test_superagent_events": 26,
+        "tests.test_superagent_failover_driver": 24,
+        "tests.test_superagent_loop": 23,
+        "tests.test_superagent_provider_failover": 14,
+        "tests.test_superagent_swarm": 37,
+        "tests.test_team_composition_m5": 14,
+        "tests.test_team_intelligence_phase2": 7,
+        "tests.test_team_lifespan_m5": 1,
+        "tests.test_team_reassignment_m5": 9,
+        "tests.test_timeline_file_preview": 11,
+        "tests.test_tool_engine": 23,
+        "tests.test_transactions": 18,
+        "tests.test_trigger_late_attach_superagent": 2,
+        "tests.test_typed_planner_v20": 29,
+        "tests.test_unbounded_acceptance_v29": 34,
+        "tests.test_unbounded_tokens_v29": 6,
+        "tests.test_verified_capacity_v16": 35,
+        "tests.test_verify_superagent_capability": 26,
+        "tests.test_watchdog": 18,
+        "tests.test_worker_batch_authorization": 6,
+        "tests.test_worker_budget_feedback_phase2": 4,
+        "tests.test_worker_context_affordability": 7,
+        "tests.test_worker_context_diagnostics": 20,
+        "tests.test_worker_context_tail_phase2": 7,
+        "tests.test_worker_core_provenance_superagent": 21,
+        "tests.test_worker_envelope_v16": 5,
+        "tests.test_worker_environment_superagent": 4,
+        "tests.test_worker_executable_tools_v30": 2,
+        "tests.test_worker_first_archive_phase2": 12,
+        "tests.test_worker_intelligence_phase2": 29,
+        "tests.test_worker_lifespan_m5": 2,
+        "tests.test_worker_lineage_v16": 5,
+        "tests.test_worker_model_compaction_v29": 21,
+        "tests.test_worker_model_usage_migration_phase2": 21,
+        "tests.test_worker_model_usage_phase2": 31,
+        "tests.test_worker_path_semantics": 10,
+        "tests.test_worker_productive_progress": 6,
+        "tests.test_worker_python_receipt_visibility": 2,
+        "tests.test_worker_report_guidance_phase2": 6,
+        "tests.test_worker_request_framing_v17": 5,
+        "tests.test_worker_review_preview_feedback_phase2": 1,
+        "tests.test_worker_runtime": 49,
+        "tests.test_worker_settled_failure_receipts": 24,
+        "tests.test_worker_task_sources_v23": 45,
+        "tests.test_worker_token_policy_v28": 11,
+        "tests.test_worker_tool_integration": 1,
+        "tests.test_worker_trigger_backpressure_superagent": 1,
+        "tests.test_worker_write_scope_repair": 9,
+        "tests.test_workspace_backup_m7": 22,
+        "tests.test_workspace_discovery": 11,
+        "tests.test_workspace_discovery_pump_capability_sprint": 1,
+        "tests.test_workspace_scope_m7": 8
+      }
+    },
+    "historical_failure_comparison": {
+      "path": "docs/audit/superagent/capability-completion-regression-comparison.json",
+      "sha256": "431e2782b6abc61f9c4fd9701b30e30f7f1865b8eddd91155c84812b5ddab88a"
+    },
+    "scope_note": "The 131-case regression passed after ordinary-delivery guidance. The 2869-case full-suite result belongs to the prior round1 freeze, retains 13 historical failures and 3 skips, and is not a new full-suite result for current corrections."
+  },
+  "discarded_wire_prototype": {
+    "program": {
+      "path": ".local/superagent/review_wire_lossless_prototype.py",
+      "sha256": "29300c3f1585a4943a3270ec9d07d2fdd27439e8dd42f88d9cef954614e18c7b"
+    },
+    "results": {
+      "path": ".local/superagent/review-wire-lossless-prototype-results.json",
+      "sha256": "7c80c0b67be61a95441da7d15a97cec1c0052425f8a988782ffa6ceca13fb0bc"
+    },
+    "packet_sha256": "baf08bc5f648d1e6d37e85dd911a08d8251d272498062fe202bbee89092860bb",
+    "baseline_actual_native_input_reservation": 98556,
+    "remaining_cumulative_tokens": 84691,
+    "repeated_structures_at_least_256_bytes": 0,
+    "text_threshold_candidates": [
+      64,
+      128,
+      256,
+      512
+    ],
+    "best_plain_text_candidate_native": 105210,
+    "best_exact_slice_or_parse_json_path_candidate_native": 100001,
+    "all_candidate_canonical_packet_and_sha256_roundtrips": true,
+    "hostile_keys_and_unicode_roundtrip": true,
+    "database_main_sha256_unchanged": true,
+    "production_wire_change": false,
+    "conclusion": "These candidates did not reduce the real Gateway payload below the existing legacy view. No compression or evidence omission was adopted; complex new wire semantics were stopped."
+  },
+  "continuity_gates": {
+    "helper_source": {
+      "path": "backend/scripts/capability_continuity_evidence.py",
+      "sha256": "8652c285ebc81ba65e2c6d4138955916d0d6487d61cec48f758b1b1140ad02f2"
+    },
+    "driver_source": {
+      "path": "backend/scripts/verify_superagent_capability.py",
+      "sha256": "e294f877acb531348d40935706fe7ef7d83773f40a36b9a43b3daeae508c16a3"
+    },
+    "tests_source": {
+      "path": "backend/tests/test_capability_continuity_evidence.py",
+      "sha256": "145646cae4c84dab3ab69a3af04e99a6e1e85d05a0b0f2a8da2f00b0cf174900"
+    },
+    "driver_source_digest_includes_helper": true,
+    "required_conditions": [
+      "Actual succeeded read_trigger/recall_object calls from live-tagged task Workers; a model claim or host recall enumeration cannot satisfy the gate.",
+      "Exactly one trusted Core worker_core_source proof with the actual run/call identity, verified source hashes and current source/tool authority through _verify_worker_context_call.",
+      "One actual assistant invocation and one matching tool response in order, followed by a later assistant turn; results without subsequent model consumption fail.",
+      "Contiguous complete Trigger pages in Unicode character offsets or Recall pages in UTF-8 byte offsets, consistent totals/hash, exact page lengths and completion flag, and final full-source SHA-256.",
+      "Duplicate pages cannot fill a gap; page invocations must occur on strictly later turns after the preceding page result.",
+      "A same-run chain starting at the original request message and following two actually returned typed relations, reconstructing all three sources completely before each later hop.",
+      "Only runs actually delivered the selected Thread continuation can supply that continuation's Recall evidence.",
+      "Post-restart gates accept only Core proof evidence rowids strictly beyond the recorded restart frontier; pre-restart reads cannot satisfy them.",
+      "The driver sends a separate post-restart full continuation request and bounded relation Recall instruction while retaining original task/tool/model-step and spending limits.",
+      "Restart occurs only at a quiescent settled boundary with exact R2 approval held; no unknown model/tool outcome is interrupted, refunded or replayed to manufacture recovery."
+    ],
+    "explicit_nonclaims": [
+      "A later model turn proves source delivery, not semantic understanding.",
+      "Host Router-history compaction is not Worker archive/source recovery; worker_archive_source_recovery_assessed remains false.",
+      "Any lawful returned two-hop relation chain may pass; project-to-current-Quest is preferred guidance, not a hardcoded special-case validator.",
+      "Multiple complete versions of one reference may replace an earlier reconstruction and cause a conservative temporal-chain false negative.",
+      "A review_pending Worker can prevent the settled restart boundary and hold another task's R2 approval until the fixed deadline; this remains an honest failed continuity condition."
+    ]
+  },
+  "historical_read_only_gate_check": {
+    "original_report": {
+      "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2.json",
+      "sha256": "83f900fc770596e6409abc09fdc4b1f862242ab8d410389d7331693aaeced686"
+    },
+    "database": {
+      "path": ".local/superagent/20261116T002629Z-capability-continuity-e02ee2/data/forge.sqlite3",
+      "main_sha256_before": "29a976bc70dbe6a2354d0ad015f535f04f5393ed8a084d7d4e9757a5d99cf10e",
+      "main_sha256_after": "29a976bc70dbe6a2354d0ad015f535f04f5393ed8a084d7d4e9757a5d99cf10e",
+      "unchanged": true
+    },
+    "observation": {
+      "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
+      "after_evidence_rowid": 0,
+      "thread_consumption": [
+        {
+          "level": "L3",
+          "phase": "historical_followup_partial_read",
+          "trigger_id": "trigger_24cbcd967228",
+          "run_ids": [
+            "run_7255e9980943"
+          ],
+          "complete_reads": [],
+          "passed": false
+        }
+      ],
+      "complete_thread_consumption": false,
+      "complete_relationship_chains": [
+        {
+          "run_id": "run_7255e9980943",
+          "quest_id": "quest_a855618c49f2",
+          "references": [
+            "message:msg_95e4f9d3e0ca",
+            "project:project_5c69c6261aa7712fd89f43db",
+            "quest:quest_a855618c49f2"
+          ],
+          "sources": [
+            {
+              "source_sha256": "f1a7a0c5ef679cb06365b506e745ed68af6bf91ed81c09f6ac47e1760878b03f",
+              "source_size": 2571,
+              "page_count": 1,
+              "first_invocation": 15,
+              "last_result": 16,
+              "relations": [
+                "project:project_5c69c6261aa7712fd89f43db"
+              ],
+              "call_ids": [
+                "call_a16858612808eca00c5beb33b27ab41d793cfb1129417ee65ad48f9f12c6f595"
+              ]
+            },
+            {
+              "source_sha256": "75732eed8415f1ef9617ec4cab0c8af76ef5475eaeb0b1e4fbdea4ba13a36048",
+              "source_size": 284,
+              "page_count": 1,
+              "first_invocation": 17,
+              "last_result": 18,
+              "relations": [
+                "quest:quest_a855618c49f2"
+              ],
+              "call_ids": [
+                "call_b11f28a46eea870eda9db88362b66c8c84e36b709e00ee8da1147ce45b6d6ab9"
+              ]
+            },
+            {
+              "source_sha256": "dd6bfe786ba8a8efb39c3f3afb300b1efdd4ca49cd73173c40c000dbffa22bf4",
+              "source_size": 1277,
+              "page_count": 1,
+              "first_invocation": 19,
+              "last_result": 20,
+              "relations": [
+                "event:evt_00422007bbff",
+                "event:evt_234290a6e2a1",
+                "event:evt_2663c51def7e",
+                "event:evt_335e44f99bdf",
+                "event:evt_46277e0e894f",
+                "event:evt_9a759e1d73ea",
+                "event:evt_f88d8caf4059",
+                "message:msg_95e4f9d3e0ca",
+                "plan:plan_ae32a3a41291",
+                "project:project_5c69c6261aa7712fd89f43db",
+                "thread:thread_bc3479a2380b",
+                "trigger:trigger_e1fd452c0900",
+                "worker:worker_5da9a6a461e6",
+                "workspace:1413b426501f26c9283d3531"
+              ],
+              "call_ids": [
+                "call_9efd325b8f9853aae4a1de8ede30c19b8fe11b12053e96fb1c0b5844961cf9c7"
+              ]
+            }
+          ]
+        }
+      ],
+      "typed_multihop_recall": true,
+      "invalid_or_unconsumed_calls": 0,
+      "worker_archive_source_recovery_assessed": false,
+      "limitations": "Source delivery to later model turns is verified; semantic understanding is not. Host Router compaction and host relation enumeration do not establish Worker archive recovery."
+    },
+    "partial_trigger": {
+      "trigger_id": "trigger_24cbcd967228",
+      "read_characters": 2048,
+      "total_characters": 2414,
+      "remaining_offset": 2048,
+      "complete_consumption_correctly_rejected": true
+    },
+    "restart_frontier_negative_control": {
+      "evidence_rowid": 17,
+      "typed_multihop_recall": false,
+      "complete_thread_consumption": false,
+      "pre_frontier_reads_cannot_satisfy_post_restart": true
+    },
+    "interpretation": "The historical Worker actually read a complete original-message/project/Quest chain, while reading only 2048 of the 2414-character follow-up. The strengthened helper accepts the complete Recall chain and rejects full Thread consumption without changing the historical report or claiming restart acceptance."
+  },
+  "limitations": [
+    "This offline audit makes zero model calls and establishes no new task or full continuity acceptance.",
+    "Current corrections require a separately frozen, budget-bounded real condition before their model behavior is accepted.",
+    "Other independent audits cover receipt/source provenance and review-budget convergence in more detail; their historical evidence is preserved."
+  ]
+}

@@ -1,4 +1,172 @@
-# FORGE Super-agent backend correction
+# FORGE Super-agent implementation report
+
+## Migration delivery — 2026-11-16
+
+The user requested delivery for continued work in another environment. No further
+real-model condition will run here. The latest closed condition,
+`20261116T055126Z-capability-continuity-f87e7e`, passed its actual L2 and L3 tasks:
+multi-specialist research with strict citation checks, real failing Python tests,
+code correction, successful tests, seven independent holdouts, Reviewer PASS and
+reviewed delivery to the original Router. Combined acceptance still failed its
+three checks: `complete_thread_consumption`,
+`post_restart_complete_thread_consumption` and `typed_multihop_recall`. Delivered
+previews did not prove complete Thread reads, and host relationship enumeration
+did not establish actual Worker Recall. All **33 calls settled, using 376561
+tokens**; the completion stage totals **99 settled attempts and 1089785
+charged-or-reserved tokens**. Earlier stages retain their separate accounting and
+unknown effects.
+
+The delivery source adds a final completion gate for complete, source-bound
+Worker pagination or an actual successful handback with a persisted reason.
+Missing pages preserve the charged draft and produce bounded feedback under the
+original limits; damaged sources block atomically under the existing lease and
+transaction fences. No Recall, model verdict or successful evidence is invented.
+The current correction passed **101 targeted tests with one existing skip in
+33.90s**; see the [original XML](audit/superagent/capability-thread-read-targeted.xml).
+It has **no new live acceptance or full-suite result**. The earlier full suite's
+**2886 passed / 13 historical failures / 3 skipped** belongs only to its round3
+frozen source and cannot validate the new production changes.
+
+See the [next-environment handoff](SUPERAGENT_NEXT_ENV_HANDOFF.md) and
+[verification index](audit/superagent/final-verification.json) for migration and
+evidence boundaries. Provider configuration, the explicit 100M context
+declaration, per-task 32-call/500000-token limits, output limits and zero Gateway
+retries remain unchanged. This backend work did not modify the frontend or
+commit/push Git. The proposed 60-attempt/1000000-token condition helper is an
+unexecuted draft; neither prepare nor live execution is authorized in this
+environment after the delivery request.
+
+All sections below preserve historical stage observations. Their present-tense
+status statements apply to those recorded sources, not this delivery source.
+
+## Resumed backend correction — 2026-11-16
+
+The failed chat was continued on the same branch and working tree. Worker
+environment context now distinguishes the FORGE storage/tool path base, the
+persisted task-project association and private process directories. Project
+identity does not grant filesystem access or rewrite tool arguments. The
+initial-request measurement includes the same Super-agent/environment context
+and Recall/Trigger tools; dynamic per-step progress/receipt messages remain
+subject to actual complete-request admission rather than a claimed exact preview.
+
+Settled tool failures are source-checked and persisted before correction admission.
+Run/call/intent/plan/mode, parameters and result hashes must match. Exhausted
+repair or step limits therefore retain actual receipts without another model
+call or a fabricated self-repair event. Unbound, corrupted or uncertain outcomes
+remain blocked against replay. Existing transactions, leases, permissions and
+budgets remain authoritative.
+
+The fresh real L3 `20261116T041952Z-capability-development-d5b385` passed:
+actual failed tests, code correction, successful exact-manifest tests, seven
+independent holdouts, Reviewer NEEDS_REVISION then PASS, Thread continuation
+and reviewed final delivery to the original Router. All 24 calls settled,
+using 232275 tokens, on the unchanged 351-file freeze. Targeted regression:
+222 passed / 2 existing Windows skips; Ruff and diff checks passed. This source
+has no new full-suite run. Earlier full-suite and failed live reports retain
+their own source attribution in the preserved pre-resumption index.
+
+This closes one L3 condition, not full capability acceptance. Multi-specialist
+L2 and the complete combined restart/compaction/Recall condition remain open.
+See [resumed verification](audit/superagent/capability-resumed-verification.json)
+and [current index](audit/superagent/final-verification.json). The following
+345-file stage and its failures are historical.
+
+## Capability Sprint continuation — 2026-11-16
+
+Base: `57a162d31f9b559353fecbde61f95dd72f878abd`, branch
+`codex/phase1-continuous`. The original architecture-correction acceptance below
+is historical. Current capability acceptance is recorded separately in the
+[Sprint report](SUPERAGENT_CAPABILITY_SPRINT_REPORT.md),
+[experiments](SUPERAGENT_EXPERIMENTS.md) and
+`audit/superagent/final-verification.json`; implementation alone is not task
+acceptance. The frontend belongs to a separate conversation and is outside
+this change. No GitHub push is performed.
+
+This continuation keeps the persistent Router, independent Worker loop,
+Dispatcher, durable event inbox/subscriptions, existing SQLite transactions,
+CAS, Outbox, action evidence and permissions. It adds no parallel state system.
+
+The latest source is frozen at 345 backend Python files. Final real acceptance
+`20261116T002629Z-capability-continuity-e02ee2` failed with 28/28 settled calls.
+It established correct beta/alpha task association, two distinct tasks running
+in parallel and direct Thread continuations for both. L2 entered real reviews
+above the removed legacy packet threshold and two revisions, then stopped at
+its unchanged cumulative request affordability boundary. L3 used incorrect
+project-relative tool paths and exhausted bounded repair; it produced no code
+or test receipt. Same-state restart, completed multi-hop recovery and final
+reviewed completion back to Router were not reached in this final condition.
+Earlier complete L1 and single-Worker L2 successes are separately attributed;
+they do not complete the required multi-specialist L2/L3 scenario. The final
+full suite recorded 2795 passed, 14 failed, 3 skipped. Thirteen failures match
+the historical set; one obsolete implicit packet-cap test is corrected in a
+separate test-only follow-up with 61 passing cases. The original full-suite result is retained in
+`audit/superagent/final-verification.json`; no production source changes after
+the real acceptance and full suite are folded into that result.
+
+Explicit current-user paths now register only bounded project metadata before
+Router inference, including a named historical project outside the newest 32.
+They never grant tool access. Legacy review packets without an approved review
+envelope use actual complete native/model/budget admission; explicit envelopes
+and per-artifact limits retain their original bounds. Worker compaction reduces
+its output request to the existing acceptable summary byte allowance and still
+validates actual UTF-8 size. Safe rejection diagnostics include call/source and
+response hashes, byte counts and fixed subreason codes, never rejected content.
+These changes increase neither task budgets nor retries. General convergence
+for deterministic unrepairable review BLOCKED remains a documented gap.
+
+| Capability | Current implementation and boundary |
+| --- | --- |
+| Router continuity | Project-focused task/memory/Recall/source selection, authoritative continuation links, explicit cross-project retrieval, coordination facts, and transactional pause/resume/cancel. Project identity grants no filesystem permission. |
+| Router reasoning recovery | Wire-only strict schema; exact single lowercase LF JSON fence compatibility with raw/normalized hashes; content-free syntax/position diagnostics. Original decision/Recall validation, output budget and one reflection remain. Absent archive sources return an unavailable observation; indexed source corruption remains fail-closed. |
+| Worker autonomy | Existing independent reasoning/tool/checkpoint loop, exact-manifest CPython unittest, consumed-approval test repair, provably unexecuted path/source repair, and ordered individual R2 approvals for multi-call model batches. Unknown operations remain blocked. |
+| Expert collaboration | Versioned v2 mandates reuse the existing graph scheduler for single/parallel/sequential/hierarchical assignments. Source-bound help can request bounded expansion or replacement; at most four cumulative Workers and depth one. Legacy mandates keep their prior scope. |
+| Model intelligence | Allowlisted Provider declaration metadata, benchmark source/sample/time/confidence, measured online performance and transport-health projection in existing records. Identity discovery is not measurement; vision and unpriced cost remain unknown. |
+| Context | Model capacity follows an explicit operator declaration when provided, otherwise Registry metadata. Request affordability and cumulative execution allocations are separate. Worker and Compactor ModelRequest.context_limit retain model capacity; spill/archive originals retain hashes and scoped readback. |
+| Recovery | Independent productive fingerprints; schema-valid Watchdog help reaches Dispatcher inboxes. Current settled review exhaustion converges atomically after packet/authority/unknown-effect checks and survives an existing blocked marker. Leases, budgets and unknown-effect fences remain; no replay of unknown calls or side effects. |
+
+The user explicitly declares a **100000000-token DeepSeek context window**;
+the continuation uses this declaration. Discovery's 1000000-token input and
+128000-token output metadata remains attributed as conflicting Provider data,
+not an override of the user declaration or an independently measured capacity.
+Acceptance output allowances remain 8192 for Workers and 4096 for Router.
+Original Provider configuration is not edited. Actual complete request
+reservations remain bounded by the unchanged task spending ceilings; a lower
+remaining balance never becomes a smaller model capacity.
+
+`python_unittest` uses the current OS account, an exact SHA-256 file manifest,
+R2 approval, private cwd, minimal environment and ten-second process-tree limit.
+It supports imports/classes/stdlib tests and provides source-bound receipts.
+These controls are not an OS sandbox. Model-written tests, a real model Reviewer
+and independent host holdouts are different evidence classes. A completed Core
+task can still fail independent artifact acceptance.
+
+Final verification must bind successful L3 tests to the delivered candidate
+hash, check strict source citations for L1/L2, recheck budgets after draining,
+and preserve all failed/unknown experiments. General Terminal execution and
+unrestricted package installation are not newly enabled; existing Browser,
+Git, MCP and GPU probe tools retain their governed scopes. Long-term arbitrary
+task success and a superior team/routing algorithm are not established by
+the small experiment set.
+
+Current-sprint outcome is **partial, full acceptance failed**. L1 has an
+independently passing real task. L3 generated correct held-out code but failed
+the original receipt-report gate; the receipt visibility fix subsequently
+passed two targeted real Provider projections, not a task rerun. L2 did not
+complete its expert team. The combined run established pass-through, ownership
+overlap, same-state restart and bounded Recall, but not correct project links
+or a final reviewed completion notice. Subsequent discovery correction has
+programmatic coverage only. All original failures remain retained. See the
+current Sprint report and final machine-readable evidence for exact boundaries.
+
+Final production-source regression: **2587 passed, 13 historical failures,
+3 skipped** in 556.83 seconds, with no new failed cases. All 59 changed Python
+files pass Ruff. The full-suite evidence and later eleven-case test-only lint
+followup are recorded separately; targeted suite counts overlap. Actual
+task/diagnostic calls total 160 (159 settled, one retained unknown outcome),
+plus twelve separate model microprobes. These counts and tests do not establish
+complete L2/L3 or long-duration autonomous acceptance.
+
+## Historical architecture correction
 
 Date: 2026-11-16. Base: `4b220d8bdbd834bbadda53d0baa7756e9c1bb90f`.
 The frontend is unchanged. Research preceded implementation; see the

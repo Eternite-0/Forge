@@ -1,0 +1,731 @@
+{
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "status": "passed",
+  "status_scope": "measurement_driver_completion_not_all_probe_answers_correct",
+  "driver_sha256": "d3569ca762f0f88615beeaf2b82d0e76453d82308282aa665a37d4f7c9162076",
+  "limits": {
+    "max_calls": 16,
+    "token_limit": 100000,
+    "timeout_seconds": 900
+  },
+  "models": [
+    {
+      "profile_id": "sprint-probe-eb1394ac7fc44dc3",
+      "model_id": "deepseek-v4.1-flash",
+      "probe": {
+        "id": "benchmark_e9cf19ba5d95",
+        "provider_id": "wb-local",
+        "model_id": "deepseek-v4.1-flash",
+        "mode": "live",
+        "suite_version": "forge-capability-micro-v1",
+        "created_at": "2026-11-15T20:55:39.169213+00:00",
+        "results": [
+          {
+            "dimension": "mathematics",
+            "case_id": "mathematics-1",
+            "call_id": "call_a6176146050b",
+            "prompt_sha256": "b1907f4f5adf927efb3c742e4dd5cd42bcd6598143b3c5b2f436b83afdba4be5",
+            "oracle_sha256": "37505b106251736f91cdf97ab76b57a553ff32e7a5b2fb76b0e915c25d859e76",
+            "response_sha256": "d67267aae473f70d016dcb50f9f815ad90f93afa31f2d5fc56a0ccee22a85a4d",
+            "usage": {
+              "input_tokens": 46,
+              "output_tokens": 9,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 3.121885500004282
+          },
+          {
+            "dimension": "coding",
+            "case_id": "coding-1",
+            "call_id": "call_81257b963996",
+            "prompt_sha256": "d9c4f8c937c3d18103a3029d83713163ae7336a2d2fd3a64d2c9b06eba3f9903",
+            "oracle_sha256": "18db5aaa30cd63cab882ec5782c02e83002964aaa0be493b67e8a42ee5c1dd93",
+            "response_sha256": "f3007ee546ee71e4bd13b5d94c46daced1059205a5c839f53dc51e11871cb6de",
+            "usage": {
+              "input_tokens": 77,
+              "output_tokens": 39,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 3.173110700008692
+          },
+          {
+            "dimension": "research",
+            "case_id": "research-1",
+            "call_id": "call_26e0539b0273",
+            "prompt_sha256": "a564e9f37e686be3397b8e73fd0b63be9494a6e875387ff903160b8836aab415",
+            "oracle_sha256": "c066877637d2ebccd6b8605c425db88a1480aadf85938aaf3aa99da87ae46665",
+            "response_sha256": "30f6ec1f7bd055d2b51408dc1fecb2ed6f2c2668d92f41daa6222bc7191db0af",
+            "usage": {
+              "input_tokens": 84,
+              "output_tokens": 17,
+              "cached_input_tokens": 0
+            },
+            "passed": false,
+            "status": "judged",
+            "elapsed_seconds": 2.682914900011383
+          },
+          {
+            "dimension": "planning",
+            "case_id": "planning-1",
+            "call_id": "call_0ddd563f7831",
+            "prompt_sha256": "5c063af13305ad0bc56de1b62d8a4319de8358737bdf553cedfa648421d85c55",
+            "oracle_sha256": "b16f81756414b2c9086fe20527d1692c2a56a6508ebbd7d7514fe2a87bc03fc2",
+            "response_sha256": "93f87ef13b163388c4deb497b3daae23d8c5d47c6bb9a0a1dbeecc4e048090c6",
+            "usage": {
+              "input_tokens": 62,
+              "output_tokens": 14,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 2.992291300004581
+          },
+          {
+            "dimension": "architecture",
+            "case_id": "architecture-1",
+            "call_id": "call_fe0ac7ebde5e",
+            "prompt_sha256": "941533c489be90e5545746ea2f7be4f21a0d4cd9be2bc261db04412897ab0896",
+            "oracle_sha256": "4e6a15ac35c7c7401bf1c3b365aaa6599ada7271e16bc34963df3eee26c6ae2e",
+            "response_sha256": "103db3395bca13f65d40c9ce13415ca3de76140e6dc046576794593bac4b6e89",
+            "usage": {
+              "input_tokens": 89,
+              "output_tokens": 23,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 2.0384493000165094
+          },
+          {
+            "dimension": "design",
+            "case_id": "design-1",
+            "call_id": "call_9b71e65ccbec",
+            "prompt_sha256": "188ed669bf8fce41367e298be383985d23c95771764412777591f12dba72fe5c",
+            "oracle_sha256": "c21d8591fade70649f305649c2532b8da18a09dcb1ccddc996fa691deab253cf",
+            "response_sha256": "884aa8d9f16d046060b2390666a82b629c818cff3125e6f72985e908c7d989d5",
+            "usage": {
+              "input_tokens": 69,
+              "output_tokens": 19,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 2.090214500000002
+          },
+          {
+            "dimension": "vision",
+            "status": "unsupported",
+            "passed": null,
+            "reason_code": "text_only_suite"
+          }
+        ],
+        "n_samples": 6,
+        "limitations": "One public microcase per dimension; design tests literal accessibility requirements, not visual quality. No general capability estimate or Registry override."
+      },
+      "intelligence": {
+        "performance": {
+          "provider_id": "wb-local",
+          "model_id": "deepseek-v4.1-flash",
+          "execution_mode": "live",
+          "source": "core_execution_observation",
+          "measurements": {
+            "average_latency_seconds": {
+              "value": 2.6772754833315653,
+              "n_samples": 6,
+              "confidence": null,
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:39.165007+00:00"
+            },
+            "p95_latency_seconds": {
+              "value": 3.1669775000191294,
+              "n_samples": 6,
+              "confidence": null,
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:39.165007+00:00"
+            },
+            "transport_success_rate": {
+              "value": 1.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.6096657120978346,
+                "upper": 1
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:39.165007+00:00"
+            },
+            "transport_error_rate": {
+              "value": 0.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 2.7755575615628914e-17,
+                "upper": 0.3903342879021653
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:39.165007+00:00"
+            },
+            "transport_timeout_rate": {
+              "value": 0.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 2.7755575615628914e-17,
+                "upper": 0.3903342879021653
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:39.165007+00:00"
+            }
+          },
+          "source_refs": [
+            "model_observation:observation_828ae66b1617",
+            "model_observation:observation_782b14b27687",
+            "model_observation:observation_111c4a4c86ed",
+            "model_observation:observation_77fa82a9896e",
+            "model_observation:observation_8bea52b8e301",
+            "model_observation:observation_fc98bf27eb94"
+          ],
+          "source_refs_omitted": 0,
+          "snapshot_sha256": "4465a7d334c9b291468c98e641965fc30adaa555fc452441247bd1a119166eed",
+          "sample_limit": 256,
+          "sample_truncated": {
+            "gateway": false,
+            "workers": false
+          },
+          "unknown_usage_attempts": 0,
+          "limitations": "Recent bounded execution observations; transport success is not task success; no general capability estimate."
+        },
+        "health": {
+          "provider_id": "wb-local",
+          "model_id": "deepseek-v4.1-flash",
+          "execution_mode": "live",
+          "source": "core_execution_observation",
+          "recommendation": "available",
+          "consecutive_failures": 0,
+          "failure_threshold": 3,
+          "transport_failure_rate": {
+            "value": 0.0,
+            "n_samples": 6,
+            "confidence": {
+              "method": "wilson_95",
+              "lower": 2.7755575615628914e-17,
+              "upper": 0.3903342879021653
+            }
+          },
+          "transport_timeout_rate": {
+            "value": 0.0,
+            "n_samples": 6,
+            "confidence": {
+              "method": "wilson_95",
+              "lower": 2.7755575615628914e-17,
+              "upper": 0.3903342879021653
+            }
+          },
+          "unknown_attempts": 0,
+          "in_flight_calls": 0,
+          "unknown_sample_truncated": false,
+          "provider_cooldown_until": null,
+          "source_refs": [
+            "model_observation:observation_828ae66b1617",
+            "model_observation:observation_782b14b27687",
+            "model_observation:observation_111c4a4c86ed",
+            "model_observation:observation_77fa82a9896e",
+            "model_observation:observation_8bea52b8e301",
+            "model_observation:observation_fc98bf27eb94"
+          ],
+          "source_refs_omitted": 0,
+          "snapshot_sha256": "799b9a992ef9819cf5f25738050244a8eeb48a21e0bef670dfcd631345312627",
+          "sample_limit": 32,
+          "observed_at": "2026-11-15T20:55:39.165007+00:00",
+          "limitations": "Transport health and Worker-bound unsettled accounting only; provenance of non-Worker Gateway attempts is not inferred. Not model quality or permission to replay any call."
+        },
+        "capabilities": {
+          "provider_id": "wb-local",
+          "model_id": "deepseek-v4.1-flash",
+          "execution_mode": "live",
+          "source": "fixed_capability_microprobe",
+          "suite_version": "forge-capability-micro-v1",
+          "measured_at": "2026-11-15T20:55:39.169213+00:00",
+          "measurements": {
+            "mathematics": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "coding": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "research": {
+              "value": 0.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0,
+                "upper": 0.7934506856227626
+              }
+            },
+            "planning": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "architecture": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "design": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "vision": null
+          },
+          "source_refs": [
+            "benchmark:benchmark_e9cf19ba5d95"
+          ],
+          "sample_truncated": false,
+          "limitations": "Repeated fixed public cases are not independent samples of general capability; unsupported vision remains unknown."
+        }
+      }
+    },
+    {
+      "profile_id": "sprint-probe-0d8724178b098d01",
+      "model_id": "glm-5.3-flash",
+      "probe": {
+        "id": "benchmark_022d1f6332ad",
+        "provider_id": "wb-local",
+        "model_id": "glm-5.3-flash",
+        "mode": "live",
+        "suite_version": "forge-capability-micro-v1",
+        "created_at": "2026-11-15T20:55:59.812684+00:00",
+        "results": [
+          {
+            "dimension": "mathematics",
+            "case_id": "mathematics-1",
+            "call_id": "call_cf8ef9bd321a",
+            "prompt_sha256": "b1907f4f5adf927efb3c742e4dd5cd42bcd6598143b3c5b2f436b83afdba4be5",
+            "oracle_sha256": "37505b106251736f91cdf97ab76b57a553ff32e7a5b2fb76b0e915c25d859e76",
+            "response_sha256": "d67267aae473f70d016dcb50f9f815ad90f93afa31f2d5fc56a0ccee22a85a4d",
+            "usage": {
+              "input_tokens": 52,
+              "output_tokens": 54,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 2.9403563999803737
+          },
+          {
+            "dimension": "coding",
+            "case_id": "coding-1",
+            "call_id": "call_39c4e13cd573",
+            "prompt_sha256": "d9c4f8c937c3d18103a3029d83713163ae7336a2d2fd3a64d2c9b06eba3f9903",
+            "oracle_sha256": "18db5aaa30cd63cab882ec5782c02e83002964aaa0be493b67e8a42ee5c1dd93",
+            "response_sha256": "9240ba4b337e083885a6af497f7acd09e0a872bf0087d5a2614bacb5ac1d6190",
+            "usage": {
+              "input_tokens": 81,
+              "output_tokens": 52,
+              "cached_input_tokens": 0
+            },
+            "passed": false,
+            "status": "judged",
+            "reason_code": "invalid_response_contract",
+            "elapsed_seconds": 2.6824040999927092
+          },
+          {
+            "dimension": "research",
+            "case_id": "research-1",
+            "call_id": "call_e8fa2ee1a0a8",
+            "prompt_sha256": "a564e9f37e686be3397b8e73fd0b63be9494a6e875387ff903160b8836aab415",
+            "oracle_sha256": "c066877637d2ebccd6b8605c425db88a1480aadf85938aaf3aa99da87ae46665",
+            "response_sha256": "30f6ec1f7bd055d2b51408dc1fecb2ed6f2c2668d92f41daa6222bc7191db0af",
+            "usage": {
+              "input_tokens": 89,
+              "output_tokens": 167,
+              "cached_input_tokens": 0
+            },
+            "passed": false,
+            "status": "judged",
+            "elapsed_seconds": 4.275811400002567
+          },
+          {
+            "dimension": "planning",
+            "case_id": "planning-1",
+            "call_id": "call_f0ee36e0a7f0",
+            "prompt_sha256": "5c063af13305ad0bc56de1b62d8a4319de8358737bdf553cedfa648421d85c55",
+            "oracle_sha256": "b16f81756414b2c9086fe20527d1692c2a56a6508ebbd7d7514fe2a87bc03fc2",
+            "response_sha256": "c8e9fc4ec493261efa173939a67e3035ecdc7173b8b86d9298cadbf7d820f156",
+            "usage": {
+              "input_tokens": 67,
+              "output_tokens": 30,
+              "cached_input_tokens": 0
+            },
+            "passed": false,
+            "status": "judged",
+            "reason_code": "invalid_response_contract",
+            "elapsed_seconds": 2.441336499992758
+          },
+          {
+            "dimension": "architecture",
+            "case_id": "architecture-1",
+            "call_id": "call_14b6483d9123",
+            "prompt_sha256": "941533c489be90e5545746ea2f7be4f21a0d4cd9be2bc261db04412897ab0896",
+            "oracle_sha256": "4e6a15ac35c7c7401bf1c3b365aaa6599ada7271e16bc34963df3eee26c6ae2e",
+            "response_sha256": "103db3395bca13f65d40c9ce13415ca3de76140e6dc046576794593bac4b6e89",
+            "usage": {
+              "input_tokens": 90,
+              "output_tokens": 41,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 3.0326728000072762
+          },
+          {
+            "dimension": "design",
+            "case_id": "design-1",
+            "call_id": "call_5a6ce73b0223",
+            "prompt_sha256": "188ed669bf8fce41367e298be383985d23c95771764412777591f12dba72fe5c",
+            "oracle_sha256": "c21d8591fade70649f305649c2532b8da18a09dcb1ccddc996fa691deab253cf",
+            "response_sha256": "884aa8d9f16d046060b2390666a82b629c818cff3125e6f72985e908c7d989d5",
+            "usage": {
+              "input_tokens": 73,
+              "output_tokens": 70,
+              "cached_input_tokens": 0
+            },
+            "passed": true,
+            "status": "judged",
+            "elapsed_seconds": 3.2384332999936305
+          },
+          {
+            "dimension": "vision",
+            "status": "unsupported",
+            "passed": null,
+            "reason_code": "text_only_suite"
+          }
+        ],
+        "n_samples": 6,
+        "limitations": "One public microcase per dimension; design tests literal accessibility requirements, not visual quality. No general capability estimate or Registry override."
+      },
+      "intelligence": {
+        "performance": {
+          "provider_id": "wb-local",
+          "model_id": "glm-5.3-flash",
+          "execution_mode": "live",
+          "source": "core_execution_observation",
+          "measurements": {
+            "average_latency_seconds": {
+              "value": 3.0942690000035022,
+              "n_samples": 6,
+              "confidence": null,
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:59.807395+00:00"
+            },
+            "p95_latency_seconds": {
+              "value": 4.268506700027501,
+              "n_samples": 6,
+              "confidence": null,
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:59.807395+00:00"
+            },
+            "transport_success_rate": {
+              "value": 1.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.6096657120978346,
+                "upper": 1
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:59.807395+00:00"
+            },
+            "transport_error_rate": {
+              "value": 0.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 2.7755575615628914e-17,
+                "upper": 0.3903342879021653
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:59.807395+00:00"
+            },
+            "transport_timeout_rate": {
+              "value": 0.0,
+              "n_samples": 6,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 2.7755575615628914e-17,
+                "upper": 0.3903342879021653
+              },
+              "source": "core_execution_observation",
+              "execution_mode": "live",
+              "measured_at": "2026-11-15T20:55:59.807395+00:00"
+            }
+          },
+          "source_refs": [
+            "model_observation:observation_ee9f989e51d0",
+            "model_observation:observation_1f20966bed60",
+            "model_observation:observation_fec0eb1434cf",
+            "model_observation:observation_fb024f0bee97",
+            "model_observation:observation_d510cc1ecd24",
+            "model_observation:observation_d953316d982e"
+          ],
+          "source_refs_omitted": 0,
+          "snapshot_sha256": "21eac90c5875edd673b65aefa710ff07e6d1114c3062739ddecf07614c00ee03",
+          "sample_limit": 256,
+          "sample_truncated": {
+            "gateway": false,
+            "workers": false
+          },
+          "unknown_usage_attempts": 0,
+          "limitations": "Recent bounded execution observations; transport success is not task success; no general capability estimate."
+        },
+        "health": {
+          "provider_id": "wb-local",
+          "model_id": "glm-5.3-flash",
+          "execution_mode": "live",
+          "source": "core_execution_observation",
+          "recommendation": "available",
+          "consecutive_failures": 0,
+          "failure_threshold": 3,
+          "transport_failure_rate": {
+            "value": 0.0,
+            "n_samples": 6,
+            "confidence": {
+              "method": "wilson_95",
+              "lower": 2.7755575615628914e-17,
+              "upper": 0.3903342879021653
+            }
+          },
+          "transport_timeout_rate": {
+            "value": 0.0,
+            "n_samples": 6,
+            "confidence": {
+              "method": "wilson_95",
+              "lower": 2.7755575615628914e-17,
+              "upper": 0.3903342879021653
+            }
+          },
+          "unknown_attempts": 0,
+          "in_flight_calls": 0,
+          "unknown_sample_truncated": false,
+          "provider_cooldown_until": null,
+          "source_refs": [
+            "model_observation:observation_ee9f989e51d0",
+            "model_observation:observation_1f20966bed60",
+            "model_observation:observation_fec0eb1434cf",
+            "model_observation:observation_fb024f0bee97",
+            "model_observation:observation_d510cc1ecd24",
+            "model_observation:observation_d953316d982e"
+          ],
+          "source_refs_omitted": 0,
+          "snapshot_sha256": "5ab6f34f87049a0666c2758d8c2e004303801286148962cfcdc2b0377f80aa4b",
+          "sample_limit": 32,
+          "observed_at": "2026-11-15T20:55:59.807395+00:00",
+          "limitations": "Transport health and Worker-bound unsettled accounting only; provenance of non-Worker Gateway attempts is not inferred. Not model quality or permission to replay any call."
+        },
+        "capabilities": {
+          "provider_id": "wb-local",
+          "model_id": "glm-5.3-flash",
+          "execution_mode": "live",
+          "source": "fixed_capability_microprobe",
+          "suite_version": "forge-capability-micro-v1",
+          "measured_at": "2026-11-15T20:55:59.812684+00:00",
+          "measurements": {
+            "mathematics": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "coding": {
+              "value": 0.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0,
+                "upper": 0.7934506856227626
+              }
+            },
+            "research": {
+              "value": 0.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0,
+                "upper": 0.7934506856227626
+              }
+            },
+            "planning": {
+              "value": 0.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0,
+                "upper": 0.7934506856227626
+              }
+            },
+            "architecture": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "design": {
+              "value": 1.0,
+              "n_samples": 1,
+              "confidence": {
+                "method": "wilson_95",
+                "lower": 0.20654931437723745,
+                "upper": 1
+              }
+            },
+            "vision": null
+          },
+          "source_refs": [
+            "benchmark:benchmark_022d1f6332ad"
+          ],
+          "sample_truncated": false,
+          "limitations": "Repeated fixed public cases are not independent samples of general capability; unsupported vision remains unknown."
+        }
+      }
+    }
+  ],
+  "checks": {
+    "all_requested_models_probed": true,
+    "final_calls_settled": true,
+    "fixed_call_ceiling": true,
+    "fixed_token_ceiling": true
+  },
+  "discovered_model_count": 11,
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {},
+    "gateway_attempt_modes_from_worker_scope": {
+      "unattributed_non_worker": 12
+    },
+    "model_calls": 12,
+    "model_calls_by_purpose": {
+      "capability_benchmark": 12
+    },
+    "admission_states": {
+      "settled": 12
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ],
+      [
+        "wb-local",
+        "glm-5.3-flash"
+      ]
+    ],
+    "charged_tokens": 1414,
+    "known_charged_tokens": 1414,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 0.0,
+    "workers_by_state": {},
+    "quests_by_state": {},
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "tool_calls": 0,
+    "tool_states": {},
+    "tool_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 0,
+    "review_verdicts": {},
+    "judged_review_pass_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 0,
+    "trigger_delivery_count": 0,
+    "source_refs": [
+      "model_attempt:7b5677a01fdf4aa58f7341afffcf4470",
+      "model_attempt:322a315494f14b0f83404f8edd41eaad",
+      "model_attempt:99dfe75d22f4426d89c05e39f0c288c7",
+      "model_attempt:5c272ffe951e41e18f03794656f6ed5c",
+      "model_attempt:0c26c99e08fc4d01aa05c3e34e82ac9a",
+      "model_attempt:118e8f8ad80743bfab3d37f3e6fc560a",
+      "model_attempt:a88fa145f36f4e3e976a41a1538c3da6",
+      "model_attempt:943adec56fa94214bfdc765e9cb884f2",
+      "model_attempt:22f4254b768746fa84c671c331dcaed1",
+      "model_attempt:c234b48ce35b4144b8f551c95050db3b",
+      "model_attempt:5d5bbd89dc1644e1a09361514b49d9ed",
+      "model_attempt:a9c0898322484132b2d8900e8c554914"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "251acf619e727cf1b8718cd0977887147b4e5953d6e24b5b43a93e6af3d73bb9",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  }
+}

@@ -1,8 +1,66 @@
 # FORGE v4 — General-purpose Super-agent
 
+The desktop frontend now has a six-stage Codex-style refactor, with a single
+260px sidebar, inline Worker runs and UI paths for the current 50 authenticated
+API routes. See the [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md),
+[API-to-UI map](desktop/API-UI-COVERAGE.md) and [desktop instructions](desktop/README.md).
+
 FORGE is a self-built, general-purpose DeepSeek-style Super-agent desktop
 application: one persistent Router conversation coordinates hidden, isolated
 Workers and continuously receives events.
+
+The current backend capability sprint adds project-focused context, bounded
+specialist dependencies and expansion, real CPython unittest execution, model
+microbenchmarks and progress-based stall detection. Read the
+[capability report](docs/SUPERAGENT_CAPABILITY_SPRINT_REPORT.md) and
+[experiment record](docs/SUPERAGENT_EXPERIMENTS.md) for current acceptance and
+limitations. No frontend redesign or external Agent execution backend is added.
+Current full capability acceptance has **not passed**. The latest closed joint
+condition completed actual multi-specialist L2 research and L3 development,
+including real failed tests, code correction, successful exact-manifest receipts,
+seven independent holdouts and reviewed delivery to the original Router.
+All 33 calls settled, using 376561 tokens, with no unsettled tool operation.
+Complete Thread consumption and actual post-restart relationship Recall failed;
+those original failures remain recorded. The completion stage totals 99 settled
+attempts and 1089785 charged-or-reserved tokens.
+
+The latest production correction gates final delivery on actual complete
+source-bound Thread reads or an explicit proved handback. It preserves charged
+drafts and original budgets, and grants no new permissions. This correction has
+targeted offline verification; it has **not** received a new real Provider run or
+a new full-backend regression. The prior full suite's 2886 passed, 13 failed and
+3 skipped remain attributed to its earlier frozen source.
+
+The user requested a combined GitHub delivery of the backend and desktop work
+on `codex/phase1-continuous`. Further real calls are deferred. Read the
+[GitHub continuation guide](docs/GITHUB_CONTINUATION.md) for a fresh checkout,
+current checks and remaining acceptance, and the
+[backend handoff](docs/SUPERAGENT_NEXT_ENV_HANDOFF.md) for original budget
+boundaries. The user's explicit DeepSeek **100M** context declaration takes
+precedence while conflicting discovery metadata remains attributed. Model
+capacity, request affordability and cumulative spending are separate. Exact
+reports, test counts and source hashes are indexed in
+[final verification](docs/audit/superagent/final-verification.json).
+
+`python_unittest` executes approved Python with the current OS account. It uses
+an exact SHA-256 manifest, an R2 approval, a private working directory, a minimal
+environment and a ten-second process-tree limit; this is not an OS sandbox.
+Changed source requires another exact approval. The existing `python_test`
+restricted-function tool remains available separately.
+
+Authenticated model-intelligence APIs provide identity discovery
+(`POST /api/model-intelligence/discover`), existing-record performance/health
+(`GET /api/model-intelligence/{profile_id}`), and bounded text microprobes
+(`POST /api/model-intelligence/benchmark`, with `profile_id` and optional
+`dimensions`). Discovery does not establish capability. The six fixed probes
+record source, sample size, time, usage and confidence; vision remains unknown.
+These endpoints use the configured Provider and existing Registry/benchmark
+records. They require no additional dependencies or environment variables.
+
+An optional trusted `FORGE_MODEL_CALL_LIMIT` sets a positive total HTTP-attempt
+ceiling for the existing workspace ledger. Settled, rejected, reserved and
+unknown attempts all count; restarting Core does not refund attempts. This cap
+is independent of model context capacity and cumulative Token/cost ceilings.
 
 ## Engineering status — 2026-11-16
 
@@ -87,8 +145,11 @@ recorded acceptance.
 The model-driven Router requires explicit provider configuration. Set the process environment
 variables `FORGE_PROVIDER_ID`, `FORGE_PROVIDER_KIND` (for example `openai_compatible`),
 `FORGE_PROVIDER_BASE_URL`, `FORGE_PROVIDER_CREDENTIAL_REF` (for example
-`FORGE_PROVIDER_KEY_EXAMPLE`), `FORGE_ROUTER_MODEL_ID`, and
-`FORGE_ROUTER_CONTEXT_LIMIT` (an operator-supplied maximum context window). Put the actual
+`FORGE_PROVIDER_KEY_EXAMPLE`), and `FORGE_ROUTER_MODEL_ID`.
+`FORGE_ROUTER_CONTEXT_LIMIT` optionally caps the registered model context window.
+When omitted, Router uses the Model Registry window. Current local DeepSeek
+Provider metadata reports 1000000 input tokens and 128000 output tokens. This capacity is separate from
+cumulative task spending limits and is not an independently measured maximum. Put the actual
 credential only in the process environment variable named by the credential reference. Set
 `FORGE_PROVIDER_SUPPORTS_TOOLS=true` and `FORGE_PROVIDER_SUPPORTS_JSON_SCHEMA=true` only when
 the provider supports them. Without configuration the Core starts but Router message calls fail

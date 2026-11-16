@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "execution_mode": "live",
+  "scope": "targeted_receipt_projection_not_autonomous_task_reacceptance",
+  "source_run": "20261115T221734Z-capability-continuity-300fa0",
+  "source_database_access": "read_only_no_replay",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "provider_context_window": 1000000,
+  "limits": {
+    "calls": 2,
+    "tokens": 10000,
+    "gateway_retries": 0
+  },
+  "observations": [
+    {
+      "original_receipt_id": "receipt_3686055deabb",
+      "projection_sha256": "a2cdcfd96024e673b91a1671c0b9113f99cc6d0d3023ae588a6c7957b17d42e0",
+      "response_sha256": "02b4ece6d895a76afce892808b92ddbc5af99d738489bac9b086303af8b6eee7",
+      "passed": true,
+      "usage": {
+        "input_tokens": 1459,
+        "output_tokens": 66,
+        "cached_input_tokens": 0,
+        "cache_creation_input_tokens": null
+      },
+      "finish_reason": "stop"
+    },
+    {
+      "original_receipt_id": "receipt_f8d9ec144f3e",
+      "projection_sha256": "4c52dbe1c60e3e9b284c448e993860ecc8c93d3640dc61c3458a3db7db2d6b1e",
+      "response_sha256": "d1f24e017d870344c1dcd8f3968819a4660eaad6f5d61477e37816cd239ed273",
+      "passed": true,
+      "usage": {
+        "input_tokens": 839,
+        "output_tokens": 73,
+        "cached_input_tokens": 128,
+        "cache_creation_input_tokens": null
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "attempts": [
+    {
+      "purpose": "receipt_visibility_probe",
+      "state": "settled",
+      "input_charged": 1459,
+      "output_charged": 66
+    },
+    {
+      "purpose": "receipt_visibility_probe",
+      "state": "settled",
+      "input_charged": 839,
+      "output_charged": 73
+    }
+  ]
+}

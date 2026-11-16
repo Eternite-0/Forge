@@ -1,5 +1,37 @@
 # FORGE 项目状态
 
+2026-11-16 迁移交付：用户要求尽快换环境继续，本环境停止新增真实模型验收。最新已关闭条件 `20261116T055126Z-capability-continuity-f87e7e` 的 **L2、L3 实际任务均通过**：L2 多专家研究及严格引用检查通过，L3 经真实失败测试、代码修订、成功测试和 7 项独立留出检查后由 Reviewer PASS；原 Router 收到审阅后的完成。整体仍失败，未通过的检查为 `complete_thread_consumption`、`post_restart_complete_thread_consumption`、`typed_multihop_recall`。预览送达不能证明完整 Thread 原文已读，宿主列举关系不能替代 Worker 实际 Recall。该条件 **33/33 调用 settled、376561 tokens**；当前完成阶段累计 **99 attempts 全部 settled、1089785 charged-or-reserved tokens**，此前其他阶段账目和未知效果独立保留。
+
+交付源码新增完整读取／实际 handback 门槛：最终交付须有当前 Worker 的完整分页读取及来源证明，或真实成功并具有持久理由的显式 handback；缺页时保留已计费草稿，以原预算和期限进行有界反馈，来源损坏时在受租约保护的事务中阻塞。此修复的离线针对性回归为 **101 passed / 1 existing skip，33.90s**，见 [原始测试 XML](audit/superagent/capability-thread-read-targeted.xml)。**当前修复尚未进行新的真实模型验收或全量回归**；旧全套 **2886 passed / 13 historical failures / 3 skipped** 仅属于此前 round3 冻结源码，不为当前生产改动背书。
+
+迁移继续请先读 [新环境交接](SUPERAGENT_NEXT_ENV_HANDOFF.md)及 [验证索引](audit/superagent/final-verification.json)。原 Provider 配置、100M 显式上下文声明、单任务 32 calls／500000 tokens、输出和重试边界均保留；前端未由本轮修改，Git 未 commit／push。拟议 60 attempts／1000000 tokens 新条件的 helper 仅为未执行草稿，本环境不运行 prepare 或 live。
+
+以下全部为保留的历史阶段结论，其“本轮”“当前”等表述仅指各自记录时间，不覆盖上述迁移交付状态。
+
+2026-11-16，已在新会话接续“重构 FORGE 为 DeepSeek Super-agent”。本轮修复两个已证实缺陷：明确 Worker 文件工具以 FORGE storage 为相对路径基准，项目身份和私有 cwd 不增加权限；已结算的失败工具回执在修复次数或步数耗尽时仍先验证来源并持久化，未知操作继续禁止重放。保留当前分支、原 Provider 配置、100M 用户声明、预算与权限边界，未修改前端或提交/推送。
+
+**真实自主 L3 首次完整通过本轮条件。** `20261116T041952Z-capability-development-d5b385` 实际编写代码，执行精确授权的 CPython 测试，经历真实失败后修订并通过；7 项独立隐藏测试通过，最终代码哈希与成功回执一致；独立 Reviewer 先 NEEDS_REVISION 后 PASS，最终审阅结果回传原 Router，Thread 直达也通过。24/24 调用 settled、232,275 Token，没有新增未知调用或工具结果。相关联合回归 **222 passed / 2 skipped**，静态检查通过；未重跑本轮源码的完整后端套件，原全量历史失败不改写。
+
+**完整 Super-agent 验收仍未完成。** 多专家 L2，以及同一条件中的双项目并行、重启、压缩、完整 Recall 与最终交回仍待通过。续跑累计 155/160 attempts（153 settled、2 次未转发的历史故障注入 rejected），已知 1,510,691 Token；历史拒绝未知用量和 1 个未知工具结果保留。本轮一次性条件已结束，不再追加真实探针。当前入口：[机器验收索引](audit/superagent/final-verification.json)、[本轮验证](audit/superagent/capability-resumed-verification.json)。以下记录为此前阶段，原索引字节保存在 [接续前验收记录](audit/superagent/capability-pre-resumption-final-verification.json)。
+
+最终修复源码（2026-11-16，345 文件冻结）已按用户声明使用 DeepSeek **100M** 模型窗口，完整请求可负担额度与累计任务预算分别限制。已去除无显式 envelope 任务的旧 65,536 字节审阅总包阈值，保留实际模型窗口、完整 native 请求预留、累计额度、费用、单产物及显式 envelope 限制。补齐新项目在 Router 推理前的有界元数据登记、压缩交接诊断和摘要输出约束、合法 Watchdog 告警、返工耗尽收敛、现存真实目录处理及严格字节验收。原 Provider 配置、前端、数据库体系、事务/CAS/Outbox/权限与未知操作防重放均保留。
+
+**完整能力验收仍失败，目标未完成。** 新的最终联合运行 `20261116T002629Z-capability-continuity-e02ee2`：28/28 调用 settled；两个独立 Quest 正确关联 beta/alpha，真实并行与双方 Thread pass-through 已验证。L2 Research 通过大于旧阈值的真实 Reviewer 准入并两次返工，随后因原可负担请求额度停止，Architect 未执行；L3 错用项目相对路径、耗尽有限修复后停止，未产生代码或测试。未到达本次联合重启、完整 Recall 和最终完成交回。早一阶段 L1 和单 Worker L2 完整通过，不能替代最终多专家/L3验收。最终完整回归 **2795 passed / 14 failed / 3 skipped**；13 项为相同历史失败，新增一项是遗漏迁移的旧 65K 测试合同，正单独纠正和重验，原 XML 不变。准确结果统一索引到 [机器验收](audit/superagent/final-verification.json)。本轮未提交或推送 GitHub。
+
+旧 65K 测试合同已单独纠正并通过 **61 项跟进回归**，仍验证完整产物/哈希/回执不裁剪、实际 64K 模型窗口和原累计预算拒绝不足请求；仅该测试文件变化，最终生产源码和 14 失败的原全量 XML 保持不变。剩余未解决测试为原 13 项历史失败，不将跟进结果改写为全量通过。
+
+本次续跑三个闭合条件阶段共 **131 attempts**，其中 129 次真实上游调用 settled、2 次未转发上游的故障注入 rejected，已知 1,278,416 Token；两次拒绝用量未知并完整保留预留，另保留一个旧工具未知结果。未增加原 160 次续跑调用上限，未提高单任务预算、输出或重试。最初 160 次任务/诊断阶段与 12 次微评测另行保留，不能混算或抹去其历史未知调用。以下记录是历史阶段。
+
+最新续跑（2026-11-16）：已按用户明确声明使用 DeepSeek **100,000,000 Token 模型窗口**，单次请求的可负担额度、累计执行预算分别约束；余额不会改写模型容量。API 的 1M 声明仅作为冲突来源保留，未修改原 Provider 配置。新的冻结阶段已结束：L1 本地项目分析、单 Worker L2 研究完整通过；双项目联合场景在 Router JSON 校验前失败；固定团队暴露返工耗尽后的 `review_pending` 悬挂；注入一次 HTTP503 验证了自动切模，但备用 Worker 的目录操作结果未知，未重放。完整能力验收仍未通过，继续修复具体缺口。
+
+该阶段 50 次 attempts：49 次真实上游调用全部 settled、1 次未转发上游的故障注入 rejected；已知 515,841 Token，拒绝调用用量未知并保留全部预留，另有 1 个工具结果未知。原 160 次阶段独立闭账，不能混为本轮成功。冻结源码 338 文件全部匹配；全套回归 2652 passed / 14 failed / 3 skipped，其中新增失败已定位为旧测试将模型窗口误当累计余额的断言冲突，尚待纠正及重新验证。见 [阶段闭账](audit/superagent/capability-continuation-closure.json)。以下是保留的历史阶段记录。
+
+2026-11-16 Capability Sprint 继续 `57a162d`，后端改进已实施，**完整能力验收尚未通过**。本轮未重做前端、未提交或推送 GitHub。L1 有真实 Worker、Reviewer 与严格引用检查通过；L3 已产生真实代码并通过 7 项独立测试，但最终报告回执绑定失败；L2 多专家研究未完成。联合场景验证了并行、Thread pass-through、原 Router/Worker 重启、真实历史压缩与有界多跳 Recall，但双项目关联和最终审阅完成通知失败。
+
+已修复模型窗口/累计配额混用、Router 有界纠错、Worker 批次逐项审批、Python 结果回执呈现、专家审阅正文遗漏和自动项目重验调度；保留事务、CAS、Outbox、权限与未知副作用防重放。Provider `/models` 实际声明输入 1,000,000 Token、输出 128,000，与用户口头的 100M 不一致；默认按 Registry 声明，显式较小 operator cap 仍有效。未更改 Provider 配置。
+
+任务与针对性诊断共 **160 次真实调用（159 settled、1 次历史 reserved/结果未知）**；另有 12 次模型微评测，全部 settled。任务/诊断已知用量 1,355,207 Token，未知调用用量及货币费用保持未知，未增加实验上限。最后两次只验证修复后的真实回执可见性，不能追认为 L3 重验。最终生产源码全量回归 **2587 passed、13 项历史 failed、3 skipped**，无新增失败；59 份改动 Python 文件 Ruff 通过。完整边界见 [Capability Sprint 报告](SUPERAGENT_CAPABILITY_SPRINT_REPORT.md)、[实验记录](SUPERAGENT_EXPERIMENTS.md)及 [机器可读验收](audit/superagent/final-verification.json)。以下 Phase 2 记录原样保留为历史，不是本轮最新结论。
+
 当前落地（2026-11-16）：后端 V30 已接入任务适配交付/输出容量、两次有界修复及预取后可执行工具呈现，累计 Token 上限默认关闭。V29 的八个失败用例已修复并定向通过。最新真实 L1 进入独立审阅和返工，15 次调用全部结算，但最终内容判断仍未通过；本次未跑 L2/L3 或全量验收。前端由另一个会话维护。见 [最新交接](PHASE2_HANDOFF.md)。以下为保留的历史记录。
 
 最新验收（2026-11-15）：V24 全套 1,734 项通过、1 个已有 warning / 465.71 秒；静态与原证据保留性检查通过。strict L1/L2/L3 均在 Planner 阶段失败，15 次真实调用全部结算 87,044 Token，无 Worker 或中途重启。三个补充探针也未进入 Worker。当前 V25 修复让模型明确选择容量档位，原预算、任务标准和审批不变。Phase 2 尚未完成，以下此前记录保留；最新证据见 [V24 历史边界](audit/phase2/acceptance-independent-v24-boundary.md)。

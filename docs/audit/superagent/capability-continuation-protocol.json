@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "phase": "capability-continuation-after-context-and-notice-corrections",
+  "status": "frozen_before_provider_calls",
+  "previous_phase": {
+    "status": "closed",
+    "attempts": 160,
+    "settled": 159,
+    "unknown_outcome": 1,
+    "records_are_immutable": true,
+    "unknown_operations_must_not_be_replayed": true
+  },
+  "purpose": "Validate concrete Harness corrections on fresh tasks; retain all original acceptance criteria and failures.",
+  "provider": {
+    "base_url": "http://127.0.0.1:8788/v1",
+    "primary_model": "deepseek-v4.1-flash",
+    "alternate_model": "glm-5.3-flash",
+    "upstream_identity": "unverified_proxy_reported_identity",
+    "context_window": 100000000,
+    "context_source": "explicit_user_declaration",
+    "discovery_conflicts_must_be_retained": true,
+    "configuration_must_not_be_modified": true,
+    "worker_output_limit": 8192,
+    "router_output_limit": 4096
+  },
+  "limits": {
+    "phase_attempts": 160,
+    "phase_task_tokens": 2600000,
+    "per_task_attempts_maximum": 32,
+    "per_task_tokens": 500000,
+    "per_task_seconds": 900,
+    "gateway_retries": 0,
+    "repeated_conditions": 0,
+    "unknown_usage_and_cost_must_remain_unknown": true
+  },
+  "conditions": [
+    {
+      "strategy": "continuity",
+      "levels": [
+        "L2",
+        "L3"
+      ],
+      "attempt_ceiling": 64,
+      "tokens": 1000000
+    },
+    {
+      "strategy": "project",
+      "levels": [
+        "L1"
+      ],
+      "attempt_ceiling": 16,
+      "tokens": 500000
+    },
+    {
+      "strategy": "single",
+      "levels": [
+        "L2"
+      ],
+      "attempt_ceiling": 32,
+      "tokens": 500000
+    },
+    {
+      "strategy": "fixed",
+      "levels": [
+        "L2"
+      ],
+      "attempt_ceiling": 32,
+      "tokens": 500000
+    },
+    {
+      "strategy": "model_recovery_probe",
+      "attempt_ceiling": 16,
+      "tokens": 100000,
+      "seconds": 300,
+      "provenance": "mixed_explicit_fault_injection_plus_real_provider_fallback_not_natural_provider_failure"
+    }
+  ],
+  "task_tokens_note": "Five task conditions retain 500000 per task; the separately attributed model-recovery probe reserves 100000. No task allowance, output limit or retry count is increased. No reservation is refunded by restart.",
+  "gates": [
+    "unchanged_frozen_backend_source",
+    "actual_source_files_and_exact_citations",
+    "real_cpython_tests_and_final_candidate_receipt_binding",
+    "independent_host_holdouts",
+    "correct_task_to_two_workspace_association",
+    "distinct_task_and_worker_ownership_overlap",
+    "direct_thread_pass_through",
+    "same_router_and_workers_after_settled_boundary_restart",
+    "compaction_of_actual_history_with_original_hashes_retained",
+    "bounded_typed_chain_of_recall",
+    "reviewed_final_completion_delivered_to_original_router",
+    "all_calls_accounted_after_shutdown_drain"
+  ],
+  "interpretation": "One sample per team condition is exploratory. Do not select a winning algorithm, erase failures, relabel Mock as real, or treat Core completion as independent task acceptance. An unsuccessful condition is not retried in this phase.",
+  "frozen_at": "2026-11-15T23:13:49.498452+00:00",
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-continuation-source-freeze.json",
+    "sha256": "33644c9563bc74c92945d840c3edbfca80c8b97a80ece933f92b006893215d63"
+  },
+  "driver_source_sha256": "b595f77bba6215278c74bc59cbfdc850b7d7c81680877dac3adf80864cf140cc"
+}

@@ -32,6 +32,44 @@ class ProviderError(RuntimeError):
         super().__init__(f"Provider error: {code}")
 
 
+def _discovered_model(item, provider_id):
+    """Allowlisted Provider declarations; these are not measured capabilities."""
+    result = {"id": item["id"], "provider_id": provider_id}
+    declarations, invalid = {}, []
+    for target, fields in (
+        ("context_window", ("context_window", "context_length", "max_input_tokens")),
+        ("max_output_tokens", ("max_output_tokens",)),
+        ("supports_tool_calls", ("supports_tool_calls",)),
+        ("supports_structured_output", ("supports_structured_output", "supports_json_schema")),
+    ):
+        boolean = target.startswith("supports_")
+        valid = {}
+        for field in fields:
+            if field not in item:
+                continue
+            value = item[field]
+            if (type(value) is bool if boolean else type(value) is int and value > 0):
+                valid[field] = value
+            else:
+                invalid.append(field)
+        if valid:
+            # Conflicting limits take the smaller ceiling. Protocol conflict is
+            # fail-closed: explicit false wins; unknown remains absent.
+            result[target] = min(valid.values())
+            declarations[target] = {
+                "source_fields": valid,
+                "conflicting": len(set(valid.values())) > 1,
+                "selection": "all_declared_true" if boolean else "minimum_declared",
+            }
+    if declarations or invalid:
+        result["declaration_provenance"] = {
+            "source": "provider_declared",
+            "fields": declarations,
+            "invalid_fields": sorted(invalid),
+        }
+    return result
+
+
 class ProviderGateway:
     def __init__(
         self,
@@ -713,7 +751,7 @@ class ProviderGateway:
                         for item in data
                     ):
                         raise ValueError
-                    return [{"id": item["id"], "provider_id": self.config.id} for item in data]
+                    return [_discovered_model(item, self.config.id) for item in data]
         except TimeoutError:
             raise ProviderError("timeout") from None
         except httpx.TimeoutException:

@@ -1,6 +1,6 @@
 # FORGE desktop
 
-React 18、Tauri 2、TypeScript、Vite 与单文件纯 CSS。保留每个工作空间的一条长期对话：Router 负责协调，Worker 使用私有执行上下文，后台任务和交付回到同一条对话。
+React 18、Tauri 2、TypeScript、Vite 与分层原生 CSS。保留每个工作空间的一条长期对话：Router 负责协调，Worker 使用私有执行上下文，后台任务和交付回到同一条对话。
 
 ```powershell
 npm test
@@ -12,23 +12,33 @@ npm run dev -- --port 5173
 
 ## 导航、任务与设置
 
-普通布局使用 52px 图标栏＋288px 项目面板，顶部页面内缩 8px、右/下边距 4px。HTML 保留 16px rem 基准，UI 使用独立 14px 字号，因此原生 `--spacing:.25rem` 正确解析为 4px。当前真实工作空间作为可展开项目，只有一个对话入口。设置、任务、记忆和收起模式仅保留图标栏；Ctrl+, 打开设置。当前没有跨空间切换接口，空间菜单只显示当前目录。
+普通布局使用 260px 单栏侧边栏与 36px 标题栏，可完全收起侧栏；760px 以下侧栏为浮层。标题栏提供返回/前进、文件/编辑/视图/帮助菜单和组件心跳入口。HTML 保留 16px rem 基准，UI 使用独立 14px 字号，`--spacing:.25rem` 解析为 4px。当前真实工作空间作为可展开项目，只有一个对话入口；置顶与最近分组不会伪造额外会话。项目发现只读展示后端已发现目录，未提供跨空间切换、项目 CRUD 或目录授权。Ctrl+, 打开设置。
 
 后台任务按明确的 project/workspace ID、路径或 metadata 归属分组；缺省归当前工作空间，不从任务名称猜项目。同名但不同 ID 的项目保持独立。组内需处理、运行任务优先，已结束任务默认折叠；支持搜索项目名称/路径/任务、筛选与键盘导航。计数仅表示已加载记录，轮询保留选择、折叠和滚动。
 
 `/api/settings` 与任务读取提供 version 1 的 `project_context`：当前 workspace 的 ID、名称、根目录及默认项目键，明确 `scope=current_workspace`。侧栏与任务共用 `projectContext.ts`，同时解析 Core 实际存储的 JSON 字符串 metadata 与对象。metadata 仅用于分组，不授予目录权限；契约明确不支持跨空间切换或项目 CRUD。
 
-设置按现有功能分为三组七项：常规、键盘快捷键、模型库、运行配置、用量与预算、供应商凭据、备份与恢复。分类栏 288px；按原生 jxU8/AWNZ/b5fQ 调用链移植，内容列最大 768px（含内部 20px 边距），导航行 30px、实际标签 14px/21px，设置行标签 13px/18.5714px、说明 12px/16px。表单选择原生 compact 输入与 md 按钮变体，28px 高、13px 字号；不同原生变体并非都为 28px。设置组使用 1px 边框、16px 圆角，支持 superellipse 时为 20px。参考 DSH 的配置层级，模型列表首层只显示名称、供应商、模型 ID、启用状态和编辑入口；能力、价格、测量和技术记录放在详情中。新档案自动生成 ID，评分与能力声明按需展开，未知值不推断为支持。
+设置按现有功能分为三组九项：常规、键盘快捷键、模型库、运行配置、用量与预算、记忆、触发器、供应商凭据、备份与恢复。采用左导航与右内容两栏，窄屏切换为顶部横向导航。分类栏通常为 288px，内容列最大 768px（含内部 20px 边距），导航行 30px、实际标签 14px/21px，设置行标签 13px/18.5714px、说明 12px/16px。表单选择 compact 输入与 md 按钮变体，28px 高、13px 字号。模型档案保留新增、编辑、启停，能力、价格与技术记录按需展开，未知值不推断为支持。
+
+模型发现与固定样例测量使用现有 Provider；只有点击按钮才会调用，测量会消耗预算且失败不自动重试。触发器提供事件源注册、事件接收、定时任务和文件监听语义表单。后端只提供 pending 事件列表，UI 不将其冒充全部源、定时任务或监听清单；创建回执仅保留于本次打开页面。
 
 运行配置同页提供供应商连接、Router 与 API Key；已有连接的标识和能力声明默认折叠，首次启用且缺少必填标识时自动展开。预算、并发和网络范围在高级设置中。配置与密钥仍分别保存：配置保持版本确认，保存密钥沿用系统凭据库及重启流程；“检查是否存在”只检查本机凭据，不冒充模型连接测试。旧“供应商凭据”入口继续可用。API Key 仅存于密码输入控件，既不进入配置 JSON，也不进入浏览器存储。
 
 ## 对话与文件工作区
 
-聊天默认最大 736px 居中，16px/24px 用户气泡与助手正文。输入栏按原生放在滚动区底部的绝对定位层，通过 ResizeObserver 实测高度预留阅读空间，空白层允许指针穿透。输入框不再常驻路径和变更条；对话文件计数移到 Worker 浮层。普通后台任务默认折叠为计数，审批和需要处理的任务直接可见。21px 活动摘要逐层展开，技术字段收在记录详情；失败、未知与模拟标记独立显示，长命令不能裁掉风险信息。不生成思考正文或时长。
+聊天默认最大 736px 居中，正文 14px/430 字重，会话项间距 16px，用户气泡圆角 12.5px，助手正文无气泡。Composer 采用方案 B，保留 textarea、IME 和请求 ID 重试语义；外框圆角 15px，与消息列等宽。输入栏位于滚动区底部的绝对定位层，通过 ResizeObserver 实测高度预留阅读空间，空白层允许指针穿透。底部提供上下文、权限和模型入口；模型选择进入运行配置预填，保存并重启 Core 后生效。当前没有会话临时模型、分支切换或推理强度 API，因此不提供无效控制。
+
+右侧 Agent 卡片承载子智能体概览、变更和来源，取代旧 Worker 浮层。卡片按本机原生资源核对为 300px 宽、16px 圆角、16px 彩色花形头像；使用原生黄/粉/绿 SVG 的明暗版本，同一 Worker 在卡片和对话中保持一致。宽屏默认显示，1180px 以下默认隐藏，工具栏 Agent 按钮可打开浮层；文件预览或任务抽屉打开时暂时隐藏卡片。来源仅来自已加载、真实成功的文件读取回执；后台进程仅展示已记录且正在运行的真实命令。
+
+对话按用户消息划分显示区间，执行过程在同一阅读列中交错呈现助手进度、灰色工具摘要和子智能体动态。相邻同状态的子智能体事件合并为多头像与姓名句子，工具摘要点击后才展开原始命令、文件和回执。历史动态按真实事件显示；`worker.result` 表示已返回结果，仍需区分后续验证；没有生命周期事件的 activity 快照明确显示“当前状态”，不伪造开始或完成时刻。工具保留原来的时间顺序，每个回执仅显示一次，不再集中搬到子智能体条目内。
+
+出现可外置的尾回复后，未操作的过程默认收起，最终回复及文件变更总结保持可见。手动展开过程或内部详情后，轮询和完成不会将其收起。当前消息 API 没有明确的最终回复通道；外置使用尾部普通助手回复且本显示区间没有已知活动运行的规则，任务通知和标记为 commentary 的消息仍在过程内，这只是显示分组，不判断任务已完成。折叠头显示“用时 X 分钟 Y 秒”：从本显示区间的用户请求时间起算，缺失时使用最早有效记录时间；活动运行每秒更新，结束后固定为尾回复或最后持久记录的时间差。它表示该区间的墙钟时间，不是模型推理或计费时长。记录缺少有效起止时间时显示“用时 — 分钟 — 秒”，单条无终止时间的运行快照不填零。点击右侧运行会打开外层过程并定位精确 Run 的详情。任务、计划、团队、审批和活动仍使用右侧抽屉，聊天、草稿、回执缓存与阅读位置继续保留。失败、未知与模拟标记独立显示，不生成思考正文。
+
+会话及记忆页提供 Chain of Recall 引用卡，按真实引用读取内容和关联分页；活动抽屉可按事件序号读取事件流。顶栏心跳按服务端 Unix 秒和超时区分正常、过期、未知和读取失败。
 
 命令卡按原始桌面 bundle 实现 Shell 标题、命令/输出分别复制、144px 输出独立滚动、右下真实退出状态；圆角 12.5px、边框 0.8px，长命令可完整展开。文件写入/修订展开后直接读取精确不可变回执，在会话内显示路径、增删数和 diff，不必先打开右栏。diff 为 12px/21.6px、单行号、4px 红绿色条与整行底色，最大高 240px；原/新行号来自实际 unified diff hunk。折叠时不读取，展开后在内存保留回执及双轴阅读位置，轮询和活动拆组不重置；连接/空间/代次变化清除缓存。完整历史入口继续保留。
 
-活动组中真实成功的写入/修订按路径去重，默认显示 3 个文件，可展开更多并预览；刷新与重分组保留展开和阅读锚点。Worker 的独立执行详情按 run ID 匹配，显示真实角色、模型、状态及已记录步数/工具次数，历史事件与最新执行状态区分；记录未加载时明确提示。
+活动组中真实成功的写入/修订按路径去重，使用独立 turn diff 块，默认显示 3 个文件，可展开更多并预览；增删数只来自实际加载的不可变回执。刷新、活动独立轮询插入和结束折叠保留阅读锚点；底部阅读时继续跟随。历史事件与最新执行状态区分，记录未加载时明确提示。
 
 工具栏的文件按钮，或对话里的文件引用，可打开右侧预览。文档在左、文件树在右；树内同时提供已更改目录与所有文件，过滤针对已加载文件，状态来自真实 Git。支持文件标签、面包屑、预览/源码切换、键盘切换/关闭、可拖动和键盘调整的分隔条、独立滚动及刷新。展开按钮可将预览扩展为完整文件工作区，保留聊天 DOM、草稿和阅读位置。开合继续使用用户要求的 150ms 宽度/透明度过渡，退出保留文档 DOM 并禁用隐藏控件，支持快速反向切换与减少动效。窗口缩放按原生 Root.H/Kg/g3 的断点变化收起/恢复右栏：工作区（含可见左导航）跨到 960px 以下且项目栏打开，或跨到 720px 以下时收起，放宽后恢复一次；手动开关清除恢复记录，连续更窄的断点按原文覆盖当时开关状态。展开意图、文件标签和滚动继续保留。FORGE 没有原生的 route/owner lease/tab retain 特例；720px 以下主动打开文件仍为全宽单面板，水平导航也是 FORGE 适配。
 
@@ -79,6 +89,13 @@ node tests/run-ui-smoke.mjs ui-settings-save.playwright.js
 node tests/run-ui-smoke.mjs ui-risk-status.playwright.js
 node tests/run-ui-smoke.mjs ui-inline-diff.playwright.js
 node tests/run-ui-smoke.mjs ui-preview-tree.playwright.js
+node tests/run-ui-smoke.mjs ui-forge-refactor.playwright.js
+node tests/run-ui-smoke.mjs ui-agent-panel.playwright.js
+node tests/run-ui-smoke.mjs ui-process-transcript.playwright.js
+node tests/run-ui-smoke.mjs ui-forge-controls.playwright.js
+node tests/run-ui-smoke.mjs ui-forge-settings.playwright.js
+node tests/run-ui-smoke.mjs ui-activity-scroll.playwright.js
+node tests/run-ui-smoke.mjs ui-approval-failure.playwright.js
 $env:FORGE_PLAYWRIGHT_CHANNEL = 'msedge'
 node tests/run-ui-smoke.mjs ui-preview.playwright.js
 node tests/run-ui-scale.mjs
@@ -88,4 +105,4 @@ node tests/run-ui-scale.mjs
 
 原生开发地址固定为 `http://127.0.0.1:5173`，与 Vite 脚本一致；debug 导航仅允许本机 5173，release 顶层导航限制保留。本轮隔离窗口连接真实嵌入 Core，Windows AppliedDPI=120（125%），实际读取文件并显示 PDF 正文；后续窗口自动操作被用户 Esc 停止，没有继续操作用户窗口。
 
-详细文件改动、实际输出、数值和未验收范围见 [REFACTOR-REPORT.md](D:/Competition_this/Agent/desktop/REFACTOR-REPORT.md)，28 项状态见 [UI-TODO.md](D:/Competition_this/Agent/desktop/UI-TODO.md)。没有 localStorage/sessionStorage。受控 Windows 150% 原生 DPI、原生下载落盘及完整原生页面矩阵仍未验收；跨空间管理不在用户确认的当前空间范围内。
+本轮六阶段改造见 [CODEX-REFACTOR-REPORT.md](D:/Competition_this/Agent/desktop/CODEX-REFACTOR-REPORT.md)，全部 50 条 `/api` 路由及 `/health` 的真实 UI 入口见 [API-UI-COVERAGE.md](D:/Competition_this/Agent/desktop/API-UI-COVERAGE.md)。旧文件预览与原生验证记录见 [REFACTOR-REPORT.md](D:/Competition_this/Agent/desktop/REFACTOR-REPORT.md)。没有 localStorage/sessionStorage。本轮没有执行真实付费 Provider、原生 release 打包或新增 Windows DPI 矩阵；既有 Tauri 契约保持不变。

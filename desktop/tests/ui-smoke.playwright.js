@@ -33,6 +33,9 @@ async (page) => {
     else if (url.pathname === '/api/timeline') body = { items: [{ kind: 'tool_receipt', event_id: 'receipt-1', seq: null, created_at: '2026-01-01T00:00:02Z', quest_id: null, title: 'Tool execution recorded', status: 'succeeded', detail: { tool: 'file_read', path: 'input.txt', result_sha256: 'a'.repeat(64) }, execution_mode: 'mock' }], next_before: null, has_more: false };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, context_limit: 8192, restore_fenced: false, environment_overrides: [] };
+    else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else { status = 404; body = { detail: 'fixture endpoint missing' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
@@ -58,6 +61,8 @@ async (page) => {
   await page.waitForTimeout(100);
   if (sent.length !== 2 || await draft.inputValue() !== 'next draft') throw new Error('IME composition submitted a message');
   const activity = page.locator('.event-group > summary').filter({ hasText: '已读取文件' });
+  const process = activity.locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+  if (!(await process.evaluate(element => element.open))) await process.locator(':scope > summary').click();
   await activity.waitFor();
   await activity.scrollIntoViewIfNeeded();
   await activity.click();

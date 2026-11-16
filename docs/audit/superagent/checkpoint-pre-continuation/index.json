@@ -1,0 +1,47 @@
+{
+  "stage": "before capability continuation corrections",
+  "old_experiment_stage": "closed_160_attempts",
+  "files": [
+    {
+      "path": "README.md",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/README.md",
+      "sha256": "49cc8d16469834111629b8be953b2699272ef61c1a66c143bb26db7539a2fb30"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/STATUS.md",
+      "sha256": "04db4c8c996294788fbd4db5de7a7742a6c5d34d26d94a6e30208ec5c5fc7c5a"
+    },
+    {
+      "path": "docs/SUPERAGENT_IMPLEMENTATION_REPORT.md",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/SUPERAGENT_IMPLEMENTATION_REPORT.md",
+      "sha256": "515354772dc7f9c30deac29beb457300019c6c5aaf2889cd2136b2abc557fd28"
+    },
+    {
+      "path": "docs/SUPERAGENT_CAPABILITY_SPRINT_REPORT.md",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/SUPERAGENT_CAPABILITY_SPRINT_REPORT.md",
+      "sha256": "e8804ad219f619dfdd829e0b9e7708510dbcb7df9080546a0bd4e27f4c9cc6d9"
+    },
+    {
+      "path": "docs/SUPERAGENT_EXPERIMENTS.md",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/SUPERAGENT_EXPERIMENTS.md",
+      "sha256": "829b337a9b32e4e1a37687fbf30d7105b52038959ece0d792190af787950b422"
+    },
+    {
+      "path": "docs/audit/superagent/final-verification.json",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/final-verification.json",
+      "sha256": "2ca3362bc06a321cd749036796afb891c1cc584bb1172becf23e2fa29db0a7dc"
+    },
+    {
+      "path": "docs/audit/superagent/capability-independent-audit.json",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/capability-independent-audit.json",
+      "sha256": "cc7b704aee109200f313b085d5c33ca6b6aef97718fc1b2e83a66d8bef56bd5b"
+    },
+    {
+      "path": "docs/audit/superagent/.final-source-check.json",
+      "copy": "docs/audit/superagent/checkpoint-pre-continuation/.final-source-check.json",
+      "sha256": "df831ca2ed7fe7b21e04e23c31687ff5fc5cb3811835b72d8d603b89988f1514"
+    }
+  ],
+  "readme_frontend_edits_are_external": true
+}

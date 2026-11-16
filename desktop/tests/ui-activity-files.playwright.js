@@ -27,6 +27,8 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/quests' || url.pathname === '/api/approvals/pending' || url.pathname === '/api/activity') body = { items: [], has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'activity-files-fixture', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else { unexpected.push(url.pathname); status = 404; }
@@ -35,13 +37,14 @@ async (page, { outputDir }) => {
   await page.goto('http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ef'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
-  const group = page.locator('[data-scroll-key="group:tool_receipt:e0"]');
-  await group.locator(':scope > summary').click();
-  const list = group.locator('.activity-group-files');
-  await list.getByText('本组记录的文件', { exact: true }).waitFor();
+  const process = page.locator('.process-transcript');
+  const list = page.locator('.conversation-list > .activity-group-files');
+  await list.waitFor();
+  check(!(await process.evaluate((element) => element.open)) && await list.isVisible(), 'the closing file summary stays visible after the reply while process details are collapsed');
   check(await list.locator('.activity-file-row:visible').count() === 3, 'file list initially shows three recorded paths');
   check(await list.locator('.activity-file-row').count() === 7, 'successful live writes are deduplicated by validated relative path');
   check(!(await list.textContent()).match(/failed\.ts|mock\.ts|unknown\.ts|exit\.ts|outside\.ts|read-only\.ts/), 'failed, mock, unknown, nonzero-exit, invalid and read-only receipts do not enter the edited-file list');
+  await process.locator(':scope > summary').click();
   const more = list.locator('.activity-more-files');
   check((await more.locator(':scope > summary').innerText()).includes('再显示 4 个文件'), 'more-files count reflects only the remaining distinct paths');
   await more.locator(':scope > summary').focus(); await page.keyboard.press('Space');
@@ -65,11 +68,11 @@ async (page, { outputDir }) => {
   const anchorOffset = await fileOffset();
   messages = [...messages, { id: 'late-split', role: 'assistant', content: 'Synthetic message splitting the receipt group.', created_at: '2026-01-01T00:00:01.500Z', metadata: { execution_mode: 'mock' } }];
   await page.locator('.message.from-agent').filter({ hasText: 'Synthetic message splitting' }).waitFor();
-  const split = page.locator('[data-scroll-key="group:tool_receipt:e1"] .activity-more-files');
-  check(await split.evaluate((element) => element.open), 'group splitting restores more-files expansion from the member event memory');
-  check(await split.locator('.activity-file-row:visible').count() === 4, 'split group keeps its real remaining file set available');
+  const split = page.locator('.conversation-list > .activity-group-files .activity-more-files');
+  check(await split.evaluate((element) => element.open), 'splitting a tool summary retains the closing more-files expansion');
+  check(await list.locator('.activity-file-row:visible').count() === 7 && await split.locator('.activity-file-row:visible').count() === 4, 'the closing file summary retains every distinct successful path after a tool group splits');
   check(Math.abs(await fileOffset() - anchorOffset) <= 1, 'group splitting preserves the same file reading anchor within one pixel');
-  check(!(await page.locator('.activity-group-files').innerText()).includes('本轮'), 'activity file groups do not claim unsupported chat-turn or historical-diff semantics');
+  check(!(await page.locator('.activity-group-files').allInnerTexts()).some((content) => content.includes('本轮')), 'activity file groups do not claim unsupported chat-turn or historical-diff semantics');
   await page.mouse.move(0, 0); await page.screenshot({ path: `${outputDir}/activity-files-expanded.png`, fullPage: true });
   check(unexpected.length === 0, `grouped files introduce no new HTTP endpoints or writes${unexpected.length ? `: ${unexpected.join(', ')}` : ''}`);
   return { status: 'passed', fixture: 'synthetic HTTP projection only; no file bytes', checks: checks.length, screenshots: 1, results: checks };

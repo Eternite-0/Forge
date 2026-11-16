@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:56:03.042643+00:00",
+  "protocol": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-protocol.json",
+    "sha256": "79c3b482be98ac8af660d9d9c1dd9005185a9c799529a175c39d3a229139aa2a"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+    "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029"
+  },
+  "source_unchanged": true,
+  "real_provider_report": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e.json",
+    "sha256": "8d2fec6685b2258b3ab33faac957d439e630cec8b84d1bd89d9fd28ac6ec0c29"
+  },
+  "status": "failed",
+  "run_id": "20261116T055126Z-capability-continuity-f87e7e",
+  "accounting": {
+    "attempts": 33,
+    "settled": 33,
+    "states": {
+      "settled": 33
+    },
+    "charged_or_reserved_tokens": 376561,
+    "known_tokens": 376561,
+    "unsettled_tool_intents": 0
+  },
+  "stage_attempts": 99,
+  "stage_charged_or_reserved_tokens": 1089785,
+  "checks": {
+    "pass_through_L2": true,
+    "pass_through_L3": true,
+    "restart_graceful_stop_confirmed": true,
+    "restart_exact_pending_approvals_preserved": true,
+    "restart_original_router_and_workers": true,
+    "compaction_of_real_history": true,
+    "post_restart_thread_pass_through": true,
+    "observed_team_condition_L2": true,
+    "artifact_L2": true,
+    "artifact_L3": true,
+    "source_bound_tests_L3": true,
+    "complete_thread_consumption": false,
+    "post_restart_complete_thread_consumption": false,
+    "typed_multihop_recall": false,
+    "two_detected_project_roots": true,
+    "correct_task_project_associations": true,
+    "parallel_workers": true,
+    "parallel_independent_tasks": true,
+    "mid_scenario_restart_while_development_waited": true,
+    "router_recap_after_compaction": true,
+    "subscription_pass_through_observed": true,
+    "final_results_original_router": true,
+    "hidden_live_workers": true,
+    "source_unchanged": true,
+    "final_graceful_stop_confirmed": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "failure_code": null,
+  "prior_failures_retained": true,
+  "stage_live_calls_closed": true
+}

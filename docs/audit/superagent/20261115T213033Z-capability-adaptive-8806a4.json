@@ -1,0 +1,185 @@
+{
+  "run_id": "20261115T213033Z-capability-adaptive-8806a4",
+  "strategy": "adaptive",
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "context_metadata": {
+    "source": "provider_declared_not_independently_measured",
+    "context_window": 1000000,
+    "fields": {
+      "context_length": 1000000,
+      "max_input_tokens": 1000000,
+      "max_output_tokens": 128000
+    }
+  },
+  "source_sha256": "a2ac6df84112598dca2ca2dd2e8ae2835ffdf640f41b52471617e2e18b9bcb42",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0
+  },
+  "status": "failed",
+  "checks": {
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true
+  },
+  "tasks": {
+    "L1": {
+      "quest_id": "quest_e599b31ffbb6",
+      "source_sha256": "69e9c22dbb21b2fc68c4db1311be5ec97ff52d5f064ed9c23e9d87bca3bec02f",
+      "team_observation": {
+        "execution_team": null,
+        "independent_dispatches": [
+          {
+            "role": "coding",
+            "depends_on": []
+          }
+        ],
+        "selected_strategy": "single",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "coding"
+        ],
+        "actual_dependencies": []
+      }
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "failure_code": "core_api_status_409",
+  "primary_exception": {
+    "exception_type": "CoreAPIError",
+    "http_status": 409,
+    "detail_sha256": "c3d989987397bd31a594b11be4f931793c098e84506dedabbf69eeada0fc1933",
+    "detail_code": "invalid_router_model_decision"
+  },
+  "shutdown_drain": {
+    "provenance": "programmatic_host_shutdown_observation_no_new_work_or_replay",
+    "limit_seconds": 130,
+    "elapsed_seconds": 3.919,
+    "outcome": "drained",
+    "pending_futures": 0,
+    "last_accounting": {
+      "model_calls": 10,
+      "provider_reserved": 0,
+      "provider_unknown": 0,
+      "worker_model_reserved": 0,
+      "tool_inflight": 0,
+      "tool_unknown": 0,
+      "worker_tool_running": 0,
+      "worker_tool_unknown": 0,
+      "active_workers": 0
+    },
+    "future_errors": [
+      {
+        "level": "L2",
+        "exception_type": "CoreAPIError",
+        "http_status": 409,
+        "detail_sha256": "c3d989987397bd31a594b11be4f931793c098e84506dedabbf69eeada0fc1933",
+        "detail_code": "invalid_router_model_decision"
+      }
+    ]
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 1
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 4,
+      "unattributed_non_worker": 6
+    },
+    "model_calls": 10,
+    "model_calls_by_purpose": {
+      "memory_semantic_retrieval": 2,
+      "router": 2,
+      "router_notice": 1,
+      "router_reflect": 1,
+      "worker": 4
+    },
+    "admission_states": {
+      "settled": 10
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 70535,
+    "known_charged_tokens": 70535,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 29.01751399040222,
+    "workers_by_state": {
+      "blocked": 1
+    },
+    "quests_by_state": {
+      "running": 1
+    },
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 1,
+      "value": 0.0
+    },
+    "tool_calls": 7,
+    "tool_states": {
+      "failed": 1,
+      "succeeded": 6
+    },
+    "tool_success_rate": {
+      "passed": 6,
+      "samples": 7,
+      "value": 0.8571428571428571
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 0,
+    "review_verdicts": {},
+    "judged_review_pass_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 6,
+      "samples": 6,
+      "value": 1.0
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 1,
+    "trigger_delivery_count": 1,
+    "source_refs": [
+      "model_attempt:6d37392f23e44ee586391a507a6c3ee3",
+      "model_attempt:5f945f6beee34692979cd534ba3cfa5a",
+      "model_attempt:805f027546ae4259bb53cc2ab1038e5a",
+      "model_attempt:444acce50dbf4530ae17e3c4fba83610",
+      "model_attempt:b5e2512feb9942348c4c9112296dc529",
+      "model_attempt:60d0c5a6078e408a832767bcd8a2c9a8",
+      "model_attempt:9addee399bad4f2eaa371a9cca2598f1",
+      "model_attempt:c3e273efdf2e4c0890c15dce11b9a335",
+      "model_attempt:ae12b475c3be4c6e8fa9f9d85cd0b892",
+      "model_attempt:13cdd5c1155e45f69ff06f4cfa85896f",
+      "run:run_4b7e170e7fb5",
+      "receipt:receipt_0e878cd3837a",
+      "receipt:receipt_9656b4d2f288",
+      "receipt:receipt_a179f5f2c560",
+      "receipt:receipt_b77029ea50e3",
+      "receipt:receipt_bfd3465e699c",
+      "receipt:receipt_eaeb82f755a2"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "4a2cb987a5ca7ccff59ce21a92feeec55eb20e99b6c35febe9db6c1ed6bf9786",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "elapsed_seconds": 35.558
+}

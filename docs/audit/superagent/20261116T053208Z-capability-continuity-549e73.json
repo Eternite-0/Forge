@@ -1,0 +1,343 @@
+{
+  "run_id": "20261116T053208Z-capability-continuity-549e73",
+  "strategy": "continuity",
+  "scenario_levels": [
+    "L2",
+    "L3"
+  ],
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "context_metadata": {
+    "source": "operator_declared",
+    "independently_measured": false,
+    "context_window": 100000000,
+    "fields": {
+      "context_length": 1000000,
+      "max_input_tokens": 1000000,
+      "max_output_tokens": 128000
+    },
+    "operator_context_window": 100000000,
+    "declaration_conflict_retained": true,
+    "execution_budget_grant": false
+  },
+  "source_sha256": "b286334ad853bf41be0e2ba22eb28b948f76bd2e9b1b40b4a9b5583ade85b840",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0,
+    "aggregate_calls": 64
+  },
+  "status": "failed",
+  "checks": {
+    "pass_through_L2": true,
+    "pass_through_L3": true,
+    "observed_team_condition_L2": true,
+    "complete_thread_consumption": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "tasks": {
+    "L2": {
+      "quest_id": "quest_dbaa954f6d49",
+      "source_sha256": "11b4340adda7e86e380c8611ccce9d06c0dd213272ffa6f99a97e214ddcbeda7",
+      "team_observation": {
+        "execution_team": {
+          "strategy": "hierarchical",
+          "assignments": [
+            {
+              "role": "research",
+              "depends_on": []
+            },
+            {
+              "role": "architect",
+              "depends_on": []
+            },
+            {
+              "role": "reviewer",
+              "depends_on": [
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        "independent_dispatches": [],
+        "selected_strategy": "hierarchical",
+        "actual_worker_count": 2,
+        "actual_roles": [
+          "research_1",
+          "architect_2"
+        ],
+        "actual_dependencies": [
+          {
+            "source": "task_1",
+            "target": "task_3",
+            "condition": "success"
+          },
+          {
+            "source": "task_2",
+            "target": "task_3",
+            "condition": "success"
+          }
+        ]
+      }
+    },
+    "L3": {
+      "quest_id": "quest_8268720beb31",
+      "source_sha256": "b1fa137e5190c749412a2ea65fa7040550043454b1a6b7259ffd8e2b6790bced",
+      "team_observation": {
+        "execution_team": null,
+        "independent_dispatches": [
+          {
+            "role": "coding",
+            "depends_on": []
+          }
+        ],
+        "selected_strategy": "single",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "coding"
+        ],
+        "actual_dependencies": []
+      }
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "restart_boundary_policy": "Host restart only after every original Worker is quiescent and all calls/effects settle; L3 exact approval is held while L2 reaches a terminal Worker state. This tests durable resumption, not interruption of active computation.",
+  "failure_code": "OperationalError",
+  "primary_exception": {
+    "exception_type": "OperationalError",
+    "sqlite_errorcode": 1546,
+    "sqlite_errorname": "SQLITE_IOERR_TRUNCATE"
+  },
+  "shutdown_drain": {
+    "provenance": "programmatic_host_shutdown_observation_no_new_work_or_replay",
+    "limit_seconds": 130,
+    "elapsed_seconds": 0.0,
+    "outcome": "core_already_stopped_no_replay",
+    "pending_futures": 0,
+    "last_accounting": null,
+    "future_errors": []
+  },
+  "worker_continuity_evidence": {
+    "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
+    "after_evidence_rowid": 0,
+    "thread_consumption": [
+      {
+        "level": "L2",
+        "phase": "before_restart",
+        "trigger_id": "trigger_907783566d83",
+        "run_ids": [
+          "run_5b602d667cd5",
+          "run_f440abefb156"
+        ],
+        "complete_reads": [
+          {
+            "run_id": "run_5b602d667cd5",
+            "source_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+            "source_size": 2467,
+            "page_count": 1,
+            "first_invocation": 7,
+            "last_result": 8,
+            "relations": [],
+            "call_ids": [
+              "call_0a127f625bd8c2e4c5db41582a76055a6547222f1e49eb4738ea93fa0b89fc9d"
+            ]
+          },
+          {
+            "run_id": "run_f440abefb156",
+            "source_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+            "source_size": 2467,
+            "page_count": 1,
+            "first_invocation": 13,
+            "last_result": 14,
+            "relations": [],
+            "call_ids": [
+              "call_ce46197b874bd295d390dfce399ea9dbba3e07731e88e5c11d99d7c3ee9b934e"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "level": "L3",
+        "phase": "before_restart",
+        "trigger_id": "trigger_56037b083552",
+        "run_ids": [
+          "run_e8814fef572a"
+        ],
+        "complete_reads": [
+          {
+            "run_id": "run_e8814fef572a",
+            "source_sha256": "00fab89ee546af61fbf76ee12aee93602225f7d5055ea4b5d784c76c64767a2e",
+            "source_size": 2467,
+            "page_count": 1,
+            "first_invocation": 7,
+            "last_result": 8,
+            "relations": [],
+            "call_ids": [
+              "call_6541b71ffdf3d8067f0a1e4b3c5dd8f2b1532d7e91de006b6e1650c9854770c0"
+            ]
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "complete_thread_consumption": true,
+    "complete_relationship_chains": [],
+    "typed_multihop_recall": false,
+    "invalid_or_unconsumed_calls": 0,
+    "worker_archive_source_recovery_assessed": false,
+    "limitations": "Source delivery to later model turns is verified; semantic understanding is not. Host Router compaction and host relation enumeration do not establish Worker archive recovery."
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 3
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 20,
+      "unattributed_non_worker": 5
+    },
+    "model_calls": 25,
+    "model_calls_by_purpose": {
+      "independent_reviewer": 2,
+      "router": 3,
+      "router_notice": 2,
+      "worker": 18
+    },
+    "admission_states": {
+      "settled": 25
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 218339,
+    "known_charged_tokens": 218339,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 89.15740489959717,
+    "workers_by_state": {
+      "blocked": 1,
+      "succeeded": 2
+    },
+    "quests_by_state": {
+      "running": 2
+    },
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 2,
+      "value": 0.0
+    },
+    "tool_calls": 24,
+    "tool_states": {
+      "pending": 1,
+      "succeeded": 23
+    },
+    "tool_success_rate": {
+      "passed": 23,
+      "samples": 23,
+      "value": 1.0
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 2,
+    "review_verdicts": {
+      "PASS": 2
+    },
+    "judged_review_pass_rate": {
+      "passed": 2,
+      "samples": 2,
+      "value": 1.0
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 19,
+      "samples": 19,
+      "value": 1.0
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 3,
+    "trigger_delivery_count": 6,
+    "source_refs": [
+      "model_attempt:c7ffafb23108428da67f78c0934a5beb",
+      "model_attempt:587157c2924c4d90ac124476838470f7",
+      "model_attempt:9ec34838c45c4cbfbef4ece77d148d03",
+      "model_attempt:eb9da424105241128a8e28eeee08d04a",
+      "model_attempt:d1a3f98cccad44daa9d76ed2c059ac2f",
+      "model_attempt:e045035b585d4a209a03765fac733759",
+      "model_attempt:9e5cd7c71bf947fc8a560f9101a4a20f",
+      "model_attempt:5317880c8123434a95ba2bdf5aaa5102",
+      "model_attempt:8d869f16c3934034bc8eb3b7f3495b73",
+      "model_attempt:538f7bd7d9d54bda8cc4b62f251bbd40",
+      "model_attempt:3da986f81cbf42c0806a011e0cfdd7b3",
+      "model_attempt:814658e625004b89bd0a2e1ca3b34c5b",
+      "model_attempt:2a929283f3eb4296b221f844b3adfb60",
+      "model_attempt:f955fdb3e5ac4525a0b0b174c995d386",
+      "model_attempt:027e6e9fd6d24f35b7c057fe2caba3f6",
+      "model_attempt:adf678302f67497a991a9d637d3417a7",
+      "model_attempt:203571e55fc243d1ba2e07aa21bb08b7",
+      "model_attempt:1d0e2f4f2a2a411ca05f9b59ae9e5ef3",
+      "model_attempt:d2ef031bed6e4d8681d3f50049dfd48d",
+      "model_attempt:ab62726dce5a47e496d92576a0d48769",
+      "model_attempt:3697423fd51c418bbda2bf85ce9f884c",
+      "model_attempt:20d84ae1b25640a384597c968b516b65",
+      "model_attempt:f082fed650334bb2b723e81d63b2200b",
+      "model_attempt:d785f32a6e8c48fc927af79b25776298",
+      "model_attempt:bae40d19d585489eb8c7707234d1742d",
+      "run:run_5b602d667cd5",
+      "run:run_e8814fef572a",
+      "run:run_f440abefb156",
+      "receipt:receipt_10aa682e7d68",
+      "receipt:receipt_1be775b258a6",
+      "receipt:receipt_2697b4cd6d9a",
+      "receipt:receipt_2a754dc28136",
+      "receipt:receipt_3d5f5a846ea9",
+      "receipt:receipt_48dc993d64a3",
+      "receipt:receipt_4ea5c4dc394f",
+      "receipt:receipt_698a10418407",
+      "receipt:receipt_6b62dec7999b",
+      "receipt:receipt_8838dcf3c669",
+      "receipt:receipt_9b85871780b0",
+      "receipt:receipt_a61d2bb5c5cc",
+      "receipt:receipt_b80945b70712",
+      "receipt:receipt_b9acc17c89c7",
+      "receipt:receipt_ba135ba12dd5",
+      "receipt:receipt_bceec9ca4ed2",
+      "receipt:receipt_bd23aaf8d241",
+      "receipt:receipt_e8acc8fa73cb",
+      "receipt:receipt_f83a9346a43b",
+      "event:evt_903e3c7f1889",
+      "event:evt_c42c28999d7b"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "4c2819d37bf19a4aea3af344a2e325d8648b75110209028933c8d79894d1a79a",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "sqlite_read_observations": [
+    {
+      "stage": "core_snapshot",
+      "attempt": 1,
+      "will_retry": true,
+      "exception_type": "OperationalError",
+      "sqlite_errorcode": 1546,
+      "sqlite_errorname": "SQLITE_IOERR_TRUNCATE"
+    }
+  ],
+  "elapsed_seconds": 90.902
+}

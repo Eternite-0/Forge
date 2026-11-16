@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="4.040" timestamp="2026-11-16T13:23:48.098645+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_lifecycle_m7" name="test_actual_desktop_core_restart_keeps_router_and_changes_generation" time="3.260" /><testcase classname="tests.test_worker_first_archive_phase2" name="test_registry_reduction_preserves_tiny_request_tool_set_after_first_step" time="0.224"><failure message="AssertionError: assert ('blocked' == 'review_pending'&#10;  &#10;  - review_pending&#10;  + blocked)">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1288/test_registry_reduction_preser0')
+
+    def test_registry_reduction_preserves_tiny_request_tool_set_after_first_step(tmp_path):
+        store, manager, model, worker = prepared(
+            tmp_path, [response({"summary": "incomplete"}), response(delivery())]
+        )
+        original_generate = model.generate
+    
+        async def shrink_registry(request):
+            assert [item["name"] for item in request.tools] == ["file_read"]
+            if not model.requests:
+                with store.unit_of_work() as work:
+                    profile = json.loads(
+                        work.connection.execute("SELECT profile FROM models").fetchone()[0]
+                    )
+                    profile["id"] = "lower-registry-window"
+                    profile["context_window"] = 7000
+                    work.save_model(ModelProfile(**profile))
+            else:
+                assert request.context_limit == 7000
+            return await original_generate(request)
+    
+        model.generate = shrink_registry
+        result = asyncio.run(manager.run(worker["id"]))
+&gt;       assert result["state"] == "review_pending" and result["steps"] == 2
+E       AssertionError: assert ('blocked' == 'review_pending'
+E         
+E         - review_pending
+E         + blocked)
+
+backend\tests\test_worker_first_archive_phase2.py:215: AssertionError</failure></testcase></testsuite></testsuites>

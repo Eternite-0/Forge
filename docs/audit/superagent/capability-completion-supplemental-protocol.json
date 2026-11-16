@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:51:11.263398+00:00",
+  "authorization": "User: 持续推进，把这几个任务验收通过。",
+  "original_stage_protocol": {
+    "path": "docs/audit/superagent/capability-completion-protocol.json",
+    "sha256": "118b021e37457ba8697e81dc1db06144c598a6c07afdf624f66a85f3140bdd56"
+  },
+  "prior_results": [
+    {
+      "path": "docs/audit/superagent/capability-completion-round1-result.json",
+      "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe"
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round2-result.json",
+      "sha256": "ad46cd8819c9b0783bda9901139fa6a747221d4d15dcc2f52a77d8467171327c"
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round3-result.json",
+      "sha256": "165722a2b5e43cce38d335e7921398c3d2220803facac543e15ae2d56a23dd13"
+    }
+  ],
+  "prior_attempts_retained": 66,
+  "prior_tokens_retained": 713224,
+  "stage_attempt_ceiling_unchanged": 160,
+  "stage_token_ceiling_unchanged": 2500000,
+  "condition": {
+    "strategy": "continuity",
+    "call_limit": 64,
+    "tokens": 1000000
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+    "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029"
+  },
+  "changed_previously_frozen_files": [
+    "backend/scripts/phase2/live_core.py",
+    "backend/scripts/verify_superagent_capability.py"
+  ],
+  "concrete_driver_corrections": [
+    "Require actual completed L2 Quest/DAG and reviewed Router notice, not only idle existing Workers.",
+    "Use the existing private Core control pipe and require confirmed normal shutdown before restarting."
+  ],
+  "unchanged_task_limits": {
+    "calls": 32,
+    "tokens": 500000,
+    "observation_seconds": 900,
+    "shutdown_drain_seconds": 130,
+    "gateway_retries": 0,
+    "worker_output_tokens": 8192,
+    "router_output_tokens": 4096,
+    "deadline_note": "Driver observation bound plus settlement drain, not a hard admission deadline."
+  },
+  "no_reset_refund_or_replay": true,
+  "stop_policy": "Exactly one fresh isolated condition after these diagnosed source corrections. Retain every prior failure and stop live calls after this outcome; never reopen earlier databases for execution.",
+  "causal_limit": "The earlier SQLITE_IOERR_TRUNCATE remains observed with unknown exact cause; the independently proven driver boundary and hard-stop defects do not prove its complete cause."
+}

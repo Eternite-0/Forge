@@ -1,0 +1,491 @@
+{
+  "audit_kind": "independent_read_only_post_stop_continuity_diagnostics",
+  "recorded_at": "2026-11-15T22:25:16.549648+00:00",
+  "original_report_path": "docs/audit/superagent/20261115T221734Z-capability-continuity-300fa0.json",
+  "original_report_sha256": "ddc41d96ab373f75dfaa4374490230af7b3efe91c1076468c998d01ae182018e",
+  "original_run_id": "20261115T221734Z-capability-continuity-300fa0",
+  "original_status": "failed",
+  "original_failure_code": "router_notice_dead_lettered",
+  "does_not_reclassify_acceptance": true,
+  "execution_mode_of_observed_run": "live",
+  "diagnostic_execution_mode": "programmatic_read_only",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "database_read_mode": "sqlite_mode_ro_single_transaction",
+  "read_snapshot_sha256": "76b1a355768788c7465b652253033cd362e9494f893fd7897bb4e523cc95b5e4",
+  "provider_calls_made_by_this_audit": 0,
+  "candidate_or_tool_code_executed_by_this_audit": 0,
+  "source_or_database_mutated_by_this_audit": false,
+  "git_commits_or_pushes_performed": false,
+  "router_identity": {
+    "current": {
+      "conversation_id": "main",
+      "router_session_id": "router_75aa5b5dc656",
+      "revision": 10,
+      "capsule_version": 2
+    },
+    "core_starts": [
+      {
+        "event_ref": "event:evt_566776b4e084",
+        "created_at": "2026-11-15T22:17:35.914919+00:00",
+        "router_session_id": "router_75aa5b5dc656",
+        "workspace_id": "dd2fb844cef50a8db0fa04b1",
+        "generation": "4c3b17b5f90fd647d1cbc8b867a28c16"
+      },
+      {
+        "event_ref": "event:evt_67266541ac9b",
+        "created_at": "2026-11-15T22:18:55.379122+00:00",
+        "router_session_id": "router_75aa5b5dc656",
+        "workspace_id": "dd2fb844cef50a8db0fa04b1",
+        "generation": "0f2b0438ce20469a0dcda5cdab64d1ca"
+      }
+    ],
+    "same_original_router_across_observed_core_starts": true
+  },
+  "workers": [
+    {
+      "run_id": "run_810ef322cb79",
+      "quest_id": "quest_8043d11ce564",
+      "worker_id": "worker_aea2e8cf32b7",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "role_id": "research_1"
+    },
+    {
+      "run_id": "run_78ba267b0f85",
+      "quest_id": "quest_8043d11ce564",
+      "worker_id": "worker_aebf5d4c2a7e",
+      "state": "blocked",
+      "execution_mode": "live",
+      "role_id": "architect_2"
+    },
+    {
+      "run_id": "run_2668cc253ab7",
+      "quest_id": "quest_15339e71e9f7",
+      "worker_id": "worker_4af362cbab1a",
+      "state": "succeeded",
+      "execution_mode": "live",
+      "role_id": "coding"
+    }
+  ],
+  "project_association": {
+    "expected_distinct_input_roots": 2,
+    "actual_distinct_linked_projects": 1,
+    "links": [
+      {
+        "level": "L2",
+        "quest_id": "quest_8043d11ce564",
+        "expected_project_path": "inputs/projects/project_beta",
+        "expected_root_sha256": "062c08ca58bc5ad5603f00e5f8b98c707533f18f75b79a6f5bb5e4b7d2c24032",
+        "link_present": true,
+        "project_id": "project_e9116a6370ed1cae33be7164",
+        "actual_project_path": "inputs/projects/project_beta",
+        "actual_root_sha256": "062c08ca58bc5ad5603f00e5f8b98c707533f18f75b79a6f5bb5e4b7d2c24032",
+        "matches_expected_project": true
+      },
+      {
+        "level": "L3",
+        "quest_id": "quest_15339e71e9f7",
+        "expected_project_path": "inputs/projects/project_alpha",
+        "expected_root_sha256": "6e6314ecb6cb98ddd802799ec542ef6f8400a6b41d9a6f49d8c9522da6e8b45a",
+        "link_present": true,
+        "project_id": "project_e9116a6370ed1cae33be7164",
+        "actual_project_path": "inputs/projects/project_beta",
+        "actual_root_sha256": "062c08ca58bc5ad5603f00e5f8b98c707533f18f75b79a6f5bb5e4b7d2c24032",
+        "matches_expected_project": false
+      }
+    ],
+    "two_expected_project_associations_verified": false,
+    "interpretation": "Materials reside in two real project roots, but both Quest links point to project_beta. L3 expected project_alpha. Two-project association acceptance is false."
+  },
+  "parallel_ownership": {
+    "provenance": "durable worker.accepted through result/blocked/failed/paused/cancelled event bounds; repeated claims do not overwrite an active interval",
+    "max_parallel_worker_ownership": 3,
+    "max_parallel_quest_ownership": 2,
+    "intervals": [
+      {
+        "run_id": "run_2668cc253ab7",
+        "quest_id": "quest_15339e71e9f7",
+        "started_at": "2026-11-15T22:17:57.807464+00:00",
+        "start_event_ref": "event:evt_447d1b6fc19e",
+        "ended_at": "2026-11-15T22:18:07.766105+00:00",
+        "end_event_ref": "event:evt_a492436742ab",
+        "ended_by": "worker.blocked"
+      },
+      {
+        "run_id": "run_78ba267b0f85",
+        "quest_id": "quest_8043d11ce564",
+        "started_at": "2026-11-15T22:17:45.516406+00:00",
+        "start_event_ref": "event:evt_adc963991330",
+        "ended_at": "2026-11-15T22:18:18.968199+00:00",
+        "end_event_ref": "event:evt_c12fae24b9af",
+        "ended_by": "worker.result"
+      },
+      {
+        "run_id": "run_810ef322cb79",
+        "quest_id": "quest_8043d11ce564",
+        "started_at": "2026-11-15T22:17:45.943315+00:00",
+        "start_event_ref": "event:evt_d2b39fc5ac1e",
+        "ended_at": "2026-11-15T22:18:46.714596+00:00",
+        "end_event_ref": "event:evt_374de39a9e8e",
+        "ended_by": "worker.result"
+      },
+      {
+        "run_id": "run_78ba267b0f85",
+        "quest_id": "quest_8043d11ce564",
+        "started_at": "2026-11-15T22:18:24.549237+00:00",
+        "start_event_ref": "event:evt_430f2bff4cca",
+        "ended_at": "2026-11-15T22:18:51.859362+00:00",
+        "end_event_ref": "event:evt_8ff43305e1ad",
+        "ended_by": "worker.blocked"
+      },
+      {
+        "run_id": "run_2668cc253ab7",
+        "quest_id": "quest_15339e71e9f7",
+        "started_at": "2026-11-15T22:18:56.585533+00:00",
+        "start_event_ref": "event:evt_92c9a9fa85c6",
+        "ended_at": "2026-11-15T22:19:03.655299+00:00",
+        "end_event_ref": "event:evt_ae98b2cb1f56",
+        "ended_by": "worker.blocked"
+      },
+      {
+        "run_id": "run_2668cc253ab7",
+        "quest_id": "quest_15339e71e9f7",
+        "started_at": "2026-11-15T22:19:04.646499+00:00",
+        "start_event_ref": "event:evt_09d84de20b4a",
+        "ended_at": "2026-11-15T22:19:28.716609+00:00",
+        "end_event_ref": "event:evt_aadf9dceae7e",
+        "ended_by": "worker.result"
+      }
+    ],
+    "overlap_segments": [
+      {
+        "started_at": "2026-11-15T22:17:45.943315+00:00",
+        "ended_at": "2026-11-15T22:17:57.807464+00:00",
+        "seconds": 11.864149,
+        "run_ids": [
+          "run_78ba267b0f85",
+          "run_810ef322cb79"
+        ],
+        "quest_ids": [
+          "quest_8043d11ce564"
+        ]
+      },
+      {
+        "started_at": "2026-11-15T22:17:57.807464+00:00",
+        "ended_at": "2026-11-15T22:18:07.766105+00:00",
+        "seconds": 9.958641,
+        "run_ids": [
+          "run_2668cc253ab7",
+          "run_78ba267b0f85",
+          "run_810ef322cb79"
+        ],
+        "quest_ids": [
+          "quest_15339e71e9f7",
+          "quest_8043d11ce564"
+        ]
+      },
+      {
+        "started_at": "2026-11-15T22:18:07.766105+00:00",
+        "ended_at": "2026-11-15T22:18:18.968199+00:00",
+        "seconds": 11.202094,
+        "run_ids": [
+          "run_78ba267b0f85",
+          "run_810ef322cb79"
+        ],
+        "quest_ids": [
+          "quest_8043d11ce564"
+        ]
+      },
+      {
+        "started_at": "2026-11-15T22:18:24.549237+00:00",
+        "ended_at": "2026-11-15T22:18:46.714596+00:00",
+        "seconds": 22.165359,
+        "run_ids": [
+          "run_78ba267b0f85",
+          "run_810ef322cb79"
+        ],
+        "quest_ids": [
+          "quest_8043d11ce564"
+        ]
+      }
+    ],
+    "unclosed_run_ids": [],
+    "limitation": "Ownership overlap can include waiting for Provider capacity. It does not establish simultaneous model computation, CPU utilization or OS security isolation."
+  },
+  "pass_through": {
+    "original_report_checks": {
+      "pass_through_L2": true,
+      "pass_through_L3": true
+    },
+    "durable_deliveries": [
+      {
+        "thread_id": "thread_727c68663d4e",
+        "status": "passed_through",
+        "payload_sha256": "85257708d589570847df165502026e882685a875e3988c7ee811f4560a2a4ec2",
+        "run_id": "run_78ba267b0f85",
+        "handed_back": 0,
+        "quest_id": "quest_8043d11ce564",
+        "trigger_ref": "trigger:trigger_d6b9d935ab3a"
+      },
+      {
+        "thread_id": "thread_727c68663d4e",
+        "status": "passed_through",
+        "payload_sha256": "85257708d589570847df165502026e882685a875e3988c7ee811f4560a2a4ec2",
+        "run_id": "run_810ef322cb79",
+        "handed_back": 0,
+        "quest_id": "quest_8043d11ce564",
+        "trigger_ref": "trigger:trigger_d6b9d935ab3a"
+      },
+      {
+        "thread_id": "thread_1b49fc6041c1",
+        "status": "passed_through",
+        "payload_sha256": "9b16da73b83779322fc5b0a6e7c2baf8c37d8cc3cf1ac9378aa01fddf5a9fb43",
+        "run_id": "run_2668cc253ab7",
+        "handed_back": 0,
+        "quest_id": "quest_15339e71e9f7",
+        "trigger_ref": "trigger:trigger_ac4ab4f7da6d"
+      }
+    ],
+    "durable_status_corroborates_pass_through_but_no_router_call_delta_recomputed": true
+  },
+  "context_compaction_and_recall": {
+    "original_compacted_source_count": 5,
+    "hash_checked_archives": [
+      {
+        "scope": "worker",
+        "scope_id": "run_78ba267b0f85",
+        "source_hash": "338102ea5e700ab196712948504e57e60d94ee174279d0b7db06e95ab8d8d1a0",
+        "capsule_hash": "d44cde7f9daf397052d9caa62c466f7637e97efd2fb2158e6b0e1224f9e1bb7c",
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "archive_ref": "archive:1"
+      },
+      {
+        "scope": "router",
+        "scope_id": "main",
+        "source_hash": "37c52ee2bbd3d352ffd20bdd50e3ceaa2253c684a9f75df87ca5eb200372d980",
+        "capsule_hash": "991a17ca088c66a7805eca09f22a10e8667bdae7a205f89a146796d70286aaa6",
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "archive_ref": "archive:2"
+      }
+    ],
+    "original_typed_recall_check": true,
+    "recall_incomplete": true,
+    "recall_ref_count": 61,
+    "recall_refs_sha256": "c0785ec71b040ceff851009f8cd8ca88cac507091f0f6bb20428e581dd6c86ce",
+    "interpretation": "Host fault injection compacted actual model history and traversed typed references. Recall was explicitly incomplete; no complete-history restoration claim is established."
+  },
+  "router_notifications": {
+    "assistant_notice_messages": [
+      {
+        "message_ref": "message:msg_9eb77e25b6cc",
+        "conversation_id": "main",
+        "message_created_at": "2026-11-15T22:18:12.739011+00:00",
+        "content_sha256": "1266eafabaa487bd9c3a75f96d6e6a53ffccac1d4200d6107b396229b837df8e",
+        "content_bytes": 453,
+        "metadata_sha256": "59acfaab0cac39a3515c90174c64c8aac766301837504031ff386bade3978196",
+        "event_ref": "event:evt_49b0e534fc22",
+        "event_type": "approval.requested",
+        "event_created_at": "2026-11-15T22:18:07.760801+00:00",
+        "quest_id": "quest_15339e71e9f7",
+        "run_id": null,
+        "execution_mode": "live",
+        "inbox": {
+          "processed_at": "2026-11-15T22:18:12.739087+00:00",
+          "notice_dead_at": null,
+          "notice_attempts": 1,
+          "notice_error": null
+        }
+      },
+      {
+        "message_ref": "message:msg_42052bcf2802",
+        "conversation_id": "main",
+        "message_created_at": "2026-11-15T22:19:09.917673+00:00",
+        "content_sha256": "99d03dcdabb86bf8bfddc5f151444f8c9676b3d30be450b597c0bd1986d7c4a3",
+        "content_bytes": 426,
+        "metadata_sha256": "20e8d83c8d594df759e83979d1cfd5a432e1e1e9061baf6af3ca590f7bd2bb9c",
+        "event_ref": "event:evt_ae98b2cb1f56",
+        "event_type": "worker.blocked",
+        "event_created_at": "2026-11-15T22:19:03.655299+00:00",
+        "quest_id": "quest_15339e71e9f7",
+        "run_id": "run_2668cc253ab7",
+        "execution_mode": "live",
+        "inbox": {
+          "processed_at": "2026-11-15T22:19:09.917769+00:00",
+          "notice_dead_at": null,
+          "notice_attempts": 1,
+          "notice_error": null
+        }
+      },
+      {
+        "message_ref": "message:msg_e2361e253976",
+        "conversation_id": "main",
+        "message_created_at": "2026-11-15T22:19:31.889550+00:00",
+        "content_sha256": "4d8fe4ede87b6c1f5b0fa508abeb5e0310d77c2af609d8f33d0967e89e4976e8",
+        "content_bytes": 293,
+        "metadata_sha256": "7c5cccc91665a4528010f47a554d381fb70687e5e6892401648faf9fc4728c7c",
+        "event_ref": "event:evt_aadf9dceae7e",
+        "event_type": "worker.result",
+        "event_created_at": "2026-11-15T22:19:28.716609+00:00",
+        "quest_id": "quest_15339e71e9f7",
+        "run_id": "run_2668cc253ab7",
+        "execution_mode": "live",
+        "inbox": {
+          "processed_at": "2026-11-15T22:19:31.889625+00:00",
+          "notice_dead_at": null,
+          "notice_attempts": 1,
+          "notice_error": null
+        }
+      }
+    ],
+    "l3_timeline": [
+      {
+        "event_ref": "event:evt_aadf9dceae7e",
+        "seq": 170,
+        "event_type": "worker.result",
+        "created_at": "2026-11-15T22:19:28.716609+00:00",
+        "run_id": "run_2668cc253ab7",
+        "verdict": null,
+        "from": null,
+        "to": null,
+        "payload_sha256": "04cde776e2f13b7d54130e90cf1f45a4e4c7faa8326a0946269da725d7011203",
+        "router_inbox": {
+          "processed_at": "2026-11-15T22:19:31.889625+00:00",
+          "notice_dead_at": null,
+          "notice_attempts": 1,
+          "notice_error": null
+        },
+        "assistant_message_refs": [
+          "message:msg_e2361e253976"
+        ]
+      },
+      {
+        "event_ref": "event:evt_503632757d73",
+        "seq": 173,
+        "event_type": "review.result",
+        "created_at": "2026-11-15T22:19:33.247272+00:00",
+        "run_id": "run_2668cc253ab7",
+        "verdict": "PASS",
+        "from": null,
+        "to": null,
+        "payload_sha256": "1078e80cc1a9a583ff23c31add16e0f945262c9696259c49e346341109697ad9",
+        "router_inbox": {
+          "processed_at": null,
+          "notice_dead_at": null,
+          "notice_attempts": 0,
+          "notice_error": null
+        },
+        "assistant_message_refs": []
+      },
+      {
+        "event_ref": "event:evt_ffa7f23d1442",
+        "seq": 174,
+        "event_type": "task.verified",
+        "created_at": "2026-11-15T22:19:33.393675+00:00",
+        "run_id": null,
+        "verdict": null,
+        "from": null,
+        "to": null,
+        "payload_sha256": "63e0059b62e3919f136d51962344b8a0edc1d1b90d6cb8a8410c24f916dfa295",
+        "router_inbox": {
+          "processed_at": null,
+          "notice_dead_at": null,
+          "notice_attempts": 0,
+          "notice_error": null
+        },
+        "assistant_message_refs": []
+      },
+      {
+        "event_ref": "event:evt_526f96af8ded",
+        "seq": 175,
+        "event_type": "quest.status_changed",
+        "created_at": "2026-11-15T22:19:33.431028+00:00",
+        "run_id": null,
+        "verdict": null,
+        "from": "running",
+        "to": "completed",
+        "payload_sha256": "d54af83cdda099a3954d459695010af98c00d5610a97b71115f2e67da521dca3",
+        "router_inbox": {
+          "processed_at": null,
+          "notice_dead_at": null,
+          "notice_attempts": 4,
+          "notice_error": "processing_failed"
+        },
+        "assistant_message_refs": []
+      }
+    ],
+    "l3_worker_claim_notice_in_original_conversation": true,
+    "l3_reviewed_completion_notice_in_original_conversation": false,
+    "l3_completion_notice_count": 0,
+    "l3_claim_notice_precedes_independent_review_and_quest_completion": true,
+    "dead_letters": [
+      {
+        "event_id": "evt_6820e7d847e0",
+        "event_type": "approval.requested",
+        "quest_id": "quest_15339e71e9f7",
+        "processed_at": null,
+        "notice_dead_at": "2026-11-15T22:20:23.270732+00:00",
+        "notice_attempts": 5,
+        "notice_error": "processing_failed"
+      }
+    ],
+    "final_all_task_results_returned_to_original_router_verified": false,
+    "interpretation": "L3 Worker claim was messaged in main before Reviewer PASS and Core completion. Later task.verified and quest completed notices have no assistant message and remain unprocessed. Therefore final reviewed completion delivery is not established. L2 has no result notice assistant message in this snapshot."
+  },
+  "l3_acceptance_boundary": {
+    "original_artifact_holdout_passed": true,
+    "original_holdout_tests_run": 7,
+    "original_source_bound_test_receipt_check": {
+      "provenance": "programmatic_read_only_core_evidence",
+      "checks": {
+        "nonempty_test_receipt_ids": false,
+        "live_source_bound_test_receipts": false,
+        "successful_test_matches_final_candidate": false,
+        "same_independently_checked_artifacts": true
+      },
+      "candidate_sha256": "efbf650775780adcca6c2a9b4e19443b074331b7b49c0fc77a747c8743e93a2b",
+      "artifact_sha256": "5dca518e85ad89929a3d8c6ec5d7402021ca73985e5ba2a810bbb143788f2f44",
+      "error_code": "development_test_evidence_rejected",
+      "passed": false
+    },
+    "l3_end_to_end_acceptance": false,
+    "interpretation": "Host holdout success and Core completion remain partial observations. The original source-bound test receipt gate failed and final reviewed completion notice is absent; L3 is not reclassified as passed."
+  },
+  "accounting": {
+    "model_calls": 40,
+    "admission_states": {
+      "settled": 40
+    },
+    "known_charged_tokens": 345739,
+    "scopes": [
+      {
+        "quest_id": null,
+        "calls": 4,
+        "charged_or_reserved_tokens": 27211
+      },
+      {
+        "quest_id": "quest_15339e71e9f7",
+        "calls": 16,
+        "charged_or_reserved_tokens": 125726
+      },
+      {
+        "quest_id": "quest_8043d11ce564",
+        "calls": 20,
+        "charged_or_reserved_tokens": 192802
+      }
+    ],
+    "all_current_run_calls_settled": true,
+    "within_current_run_hard_call_ceiling": true,
+    "per_task_budget_within_fixed_bounds": true,
+    "current_run_cost_microunits": null
+  },
+  "limitations": [
+    "This supplemental never edits reports, Core state, artifacts, model decisions, Provider settings or source code.",
+    "No acceptance predicate in the original report is overwritten; overall and L3 end-to-end outcomes remain failed.",
+    "Two project association is a failed continuity condition despite distinct input folders and successful L3 file processing.",
+    "The final reviewed completion notification did not arrive; an earlier unreviewed Worker claim notification must not be presented as final acceptance.",
+    "Programmatic read-only diagnosis is separate from real model execution, host holdout tests and Mock regression checks.",
+    "The observed upstream model identity, true cost and model throughput are not independently attested."
+  ]
+}

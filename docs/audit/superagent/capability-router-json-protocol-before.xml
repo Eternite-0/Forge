@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="6" time="0.816" timestamp="2026-11-16T07:41:45.764686+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-False]" time="0.008"><failure message="AssertionError: assert {'candidates'...ply', 'title'} == {'blockers', ...'intent', ...}&#10;  &#10;  Extra items in the right set:&#10;  'priority'&#10;  'next_action'&#10;  'blockers'&#10;  'needs_user_help'&#10;  'task_kind'...&#10;  &#10;  ...Full output truncated, use '-vv' to show">compact = False, autonomous = False
+
+    @pytest.mark.parametrize("compact,autonomous", [(False, False), (True, False), (False, True), (True, True)])
+    def test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults(compact, autonomous):
+        original = RouterDecision.model_json_schema()
+        snapshot = copy.deepcopy(original)
+        schema = _decision_schema(compact=compact, autonomous=autonomous)
+    
+        def check(node):
+            if isinstance(node, dict):
+                if node.get("type") == "object":
+                    assert set(node.get("required", [])) == set(node.get("properties", {}))
+                    assert node.get("additionalProperties") is False
+                assert "default" not in node
+                for value in node.values():
+                    check(value)
+            elif isinstance(node, list):
+                for value in node:
+                    check(value)
+    
+&gt;       check(schema)
+
+backend\tests\test_router_json_protocol.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+node = {'additionalProperties': False, 'description': 'Structured Router decision protocol.\n\nThe first six fields are the o...pe': 'null'}], 'title': 'Goal'}, ...}, 'required': ['intent', 'reply', 'title', 'goal', 'quest_id', 'candidates'], ...}
+
+    def check(node):
+        if isinstance(node, dict):
+            if node.get("type") == "object":
+&gt;               assert set(node.get("required", [])) == set(node.get("properties", {}))
+E               AssertionError: assert {'candidates'...ply', 'title'} == {'blockers', ...'intent', ...}
+E                 
+E                 Extra items in the right set:
+E                 'priority'
+E                 'next_action'
+E                 'blockers'
+E                 'needs_user_help'
+E                 'task_kind'...
+E                 
+E                 ...Full output truncated, use '-vv' to show
+
+backend\tests\test_router_json_protocol.py:36: AssertionError</failure></testcase><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-False]" time="0.010" /><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[False-True]" time="0.005"><failure message="AssertionError: assert {'candidates'...ply', 'title'} == {'blockers', ..., 'goal', ...}&#10;  &#10;  Extra items in the right set:&#10;  'priority'&#10;  'next_action'&#10;  'blockers'&#10;  'independent_dispatches'&#10;  'task_kind'...&#10;  &#10;  ...Full output truncated, use '-vv' to show">compact = False, autonomous = True
+
+    @pytest.mark.parametrize("compact,autonomous", [(False, False), (True, False), (False, True), (True, True)])
+    def test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults(compact, autonomous):
+        original = RouterDecision.model_json_schema()
+        snapshot = copy.deepcopy(original)
+        schema = _decision_schema(compact=compact, autonomous=autonomous)
+    
+        def check(node):
+            if isinstance(node, dict):
+                if node.get("type") == "object":
+                    assert set(node.get("required", [])) == set(node.get("properties", {}))
+                    assert node.get("additionalProperties") is False
+                assert "default" not in node
+                for value in node.values():
+                    check(value)
+            elif isinstance(node, list):
+                for value in node:
+                    check(value)
+    
+&gt;       check(schema)
+
+backend\tests\test_router_json_protocol.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+node = {'$defs': {'ExecutionAssignment': {'additionalProperties': False, 'properties': {'objective': {'maxLength': 1200, 'min...e': 'null'}], 'title': 'Title'}, 'goal': {'anyOf': [{'type': 'string'}, {'type': 'null'}], 'title': 'Goal'}, ...}, ...}
+
+    def check(node):
+        if isinstance(node, dict):
+            if node.get("type") == "object":
+&gt;               assert set(node.get("required", [])) == set(node.get("properties", {}))
+E               AssertionError: assert {'candidates'...ply', 'title'} == {'blockers', ..., 'goal', ...}
+E                 
+E                 Extra items in the right set:
+E                 'priority'
+E                 'next_action'
+E                 'blockers'
+E                 'independent_dispatches'
+E                 'task_kind'...
+E                 
+E                 ...Full output truncated, use '-vv' to show
+
+backend\tests\test_router_json_protocol.py:36: AssertionError</failure></testcase><testcase classname="tests.test_router_json_protocol" name="test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults[True-True]" time="0.009" /><testcase classname="tests.test_router_json_protocol" name="test_exact_single_json_fence_is_audited_without_reflection_or_validator_bypass" time="0.093"><failure message="forge_core.domain.DomainError: Invalid Router model decision">self = &lt;forge_core.router.RouterService object at 0x000001AA373E8050&gt;
+text = 'Hello', request_id = 'fence'
+
+    async def handle_user_message(self, text, *, request_id=None):
+        if not isinstance(text, str) or not text.strip():
+            raise DomainError("Message must not be empty")
+        received_at = now_iso()
+        self._sync_memory()
+        request_id = request_id or new_id("turn")
+        if not isinstance(request_id, str) or not 1 &lt;= len(request_id) &lt;= 200:
+            raise DomainError("Invalid request ID")
+        digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        conflicts = 0
+        compactions = 0
+        while conflicts &lt;= self.max_conflicts:
+            with self.store.connection() as connection:
+                connection.execute("BEGIN")
+                previous = connection.execute(
+                    "SELECT * FROM router_turns WHERE request_id=?", (request_id,)
+                ).fetchone()
+                if previous:
+                    if previous["input_hash"] != digest:
+                        raise DomainError("Request ID already used for different input")
+                    return json.loads(previous["result_json"])
+                snapshot = self._snapshot(connection, text)
+                connection.commit()
+            if (
+                len(_json(snapshot["messages"]).encode("utf-8"))
+                &gt; self.effective_context_limit(self._model_profile(snapshot)) // 2
+                or len(snapshot["messages"]) &gt; 50
+            ) and len(snapshot["messages"]) &gt; 10:
+                if compactions &gt;= 100:
+                    raise DomainError("Router compaction backlog exceeds per-call limit")
+                if isinstance(self.provider, ProviderGateway):
+                    from .model_compaction import RouterModelCompactor
+    
+                    profile = self._model_profile(snapshot)
+                    if profile is None:
+                        raise DomainError("Model compaction requires the registered Router profile")
+                    await RouterModelCompactor(
+                        self.context_service,
+                        self.provider,
+                        profile=profile,
+                        context_limit=self.effective_context_limit(profile),
+                        output_limit=self.output_reserve,
+                    ).compact(keep_recent=10)
+                else:
+                    # Historical in-process adapters have no native Gateway.
+                    # Their deterministic archive tests preserve the old path.
+                    self.context_service.compact_router(keep_recent=10)
+                compactions += 1
+                continue
+            if self.semantic_recall and self.model_id and len(text.encode("utf-8")) &lt;= 8192:
+                profile = self._model_profile(snapshot)
+                snapshot["semantic_memory"] = await self.memory_service.retrieve_semantic_context(
+                    text,
+                    provider=self.provider,
+                    model_id=self.model_id,
+                    provider_id=self.provider_id,
+                    context_limit=self.effective_context_limit(profile),
+                    output_limit=512,
+                    max_bytes=min(8192, self.effective_context_limit(profile) // 4),
+                    project_id=(snapshot.get("project_context") or {}).get("focused_project_id"),
+                    capabilities={"json_schema": True},
+                    capability_sources={
+                        "json_schema": profile.structured_output_support.source
+                        if profile and profile.structured_output_support
+                        else "mock"
+                    },
+                )
+                with self.store.connection() as connection:
+                    self._semantic_quests(connection, snapshot, snapshot["semantic_memory"])
+            context, cursor = self._context(snapshot, text)
+            if not self.model_id:
+                raise DomainError("Router model is not configured")
+            capability_source = "mock"
+            capability_sources = {"tools": "mock", "json_schema": "mock"}
+            if getattr(self.provider, "execution_mode", None) != "mock":
+                profile = self._model_profile(snapshot)
+                if (
+                    profile is None
+                    or not profile.enabled
+                    or profile.provider != self.provider_id
+                    or profile.tool_calling_support is None
+                    or not profile.tool_calling_support.supported
+                    or profile.structured_output_support is None
+                    or not profile.structured_output_support.supported
+                ):
+                    raise DomainError("Router model capability is unknown or unsupported")
+                capability_source = f"registry:{profile.tool_calling_support.source},{profile.structured_output_support.source}"
+                capability_sources = {
+                    "tools": profile.tool_calling_support.source,
+                    "json_schema": profile.structured_output_support.source,
+                }
+            schema = _decision_schema(
+                compact=context["budget"]["effective_limit"] &lt; 65536,
+                autonomous=self.autonomous,
+            )
+            policy = context["policy"]
+            messages = [
+                {"role": "system", "content": policy},
+                {"role": "user", "content": _json(context)},
+            ]
+            consulted_sources = {}
+            lookup_used = False
+            response = None
+            try:
+                for _step in range(4):
+                    active_tools = _read_tools(snapshot) if _step &lt; 3 else None
+                    if active_tools is not None and self.autonomous:
+                        from .worker_superagent import RECALL_TOOL
+    
+                        active_tools.append(RECALL_TOOL)
+                    remaining_rounds = max(0, 3 - _step)
+                    remaining_bytes = max(
+                        0,
+                        context["budget"]["effective_limit"]
+                        - self.output_reserve
+                        - len(
+                            _json(
+                                {"messages": messages, "tools": active_tools, "schema": schema}
+                            ).encode("utf-8")
+                        )
+                        - len((policy + _TOOL_POLICY).encode("utf-8"))
+                        - len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        - 512,
+                    )
+                    round_messages = [
+                        {
+                            "role": "system",
+                            "content": policy
+                            + _TOOL_POLICY
+                            + f" Remaining tool rounds: {remaining_rounds}. Maximum calls per tool round: 4. Approximate remaining input capacity: {remaining_bytes} UTF-8 bytes; output reserve: {self.output_reserve} tokens.",
+                        },
+                        *messages[1:],
+                    ]
+                    if not active_tools:
+                        round_messages.append(
+                            {
+                                "role": "system",
+                                "content": "No tool rounds remain. Return the final structured RouterDecision now.",
+                            }
+                        )
+                    if (
+                        len(
+                            _json(
+                                {
+                                    "messages": round_messages,
+                                    "tools": active_tools,
+                                    "schema": schema,
+                                }
+                            ).encode("utf-8")
+                        )
+                        + len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        + 512
+                        &gt; context["budget"]["effective_limit"] - self.output_reserve
+                    ):
+                        raise DomainError("Router tool context budget exceeded")
+                    request = ModelRequest(
+                        model_id=self.model_id,
+                        provider_id=self.provider_id,
+                        messages=round_messages,
+                        tools=active_tools,
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {
+                                "name": "router_decision",
+                                "strict": True,
+                                "schema": schema,
+                            },
+                        },
+                        max_output_tokens=self.output_reserve,
+                        context_limit=context["budget"]["effective_limit"],
+                        model_capabilities={"tools": True, "json_schema": True},
+                        capability_source=capability_source,
+                        model_capability_sources=capability_sources,
+                        budget_context=ModelCallContext(
+                            call_id=new_id("call"),
+                            purpose="router",
+                            workspace_id=self.store.workspace.id,
+                        ),
+                    )
+                    response = await self.provider.generate(request)
+                    calls = getattr(response, "tool_calls", [])
+                    if not calls:
+                        break
+                    if active_tools is None:
+                        raise DomainError("Router final round cannot call tools")
+                    if len(calls) &gt; 4:
+                        raise DomainError("Too many Router tool calls")
+                    assistant_calls = []
+                    tool_messages = []
+                    for call in calls:
+                        if (
+                            not isinstance(call, dict)
+                            or not isinstance(call.get("id"), str)
+                            or not 1 &lt;= len(call["id"]) &lt;= 200
+                        ):
+                            raise DomainError("Router requested an unauthorized tool")
+                        name = call["name"]
+                        keys = {
+                            "list_quests": "quests",
+                            "list_events": "events",
+                            "list_evidence": "evidence",
+                            "list_models": "models",
+                        }
+                        arguments = call.get("arguments")
+                        if name in keys and arguments == {}:
+                            lookup_used = True
+                            value = snapshot[keys[name]]
+                        elif (
+                            name == "recall_object"
+                            and self.autonomous
+                            and isinstance(arguments, dict)
+                        ):
+                            import jsonschema
+    
+                            from .worker_superagent import RECALL_TOOL
+    
+                            lookup_used = True
+                            jsonschema.validate(arguments, RECALL_TOOL["input_schema"])
+                            focus = (snapshot.get("project_context") or {}).get(
+                                "focused_project_id"
+                            )
+                            value = self.memory_service.recall_object(
+                                max_bytes=4096, project_id=focus, **arguments
+                            )
+                        elif (
+                            name == "read_context_source"
+                            and isinstance(arguments, dict)
+                            and set(arguments) &lt;= {"source_id", "offset_chars", "max_chars"}
+                            and "source_id" in arguments
+                            and isinstance(arguments["source_id"], str)
+                            and 1 &lt;= len(arguments["source_id"]) &lt;= 200
+                        ):
+                            value, source = self._read_archived_source(snapshot, arguments)
+                            if source is not None:
+                                consulted_sources[arguments["source_id"]] = source
+                        else:
+                            raise DomainError("Router requested an unauthorized tool")
+                        assistant_calls.append(
+                            {
+                                "id": call["id"],
+                                "type": "function",
+                                "function": {"name": name, "arguments": _json(arguments)},
+                            }
+                        )
+                        tool_messages.append(
+                            {
+                                "role": "tool",
+                                "tool_call_id": call["id"],
+                                "content": _json(value),
+                            }
+                        )
+                    messages.append(
+                        {
+                            "role": "assistant",
+                            "content": response.text or "",
+                            "tool_calls": assistant_calls,
+                        }
+                    )
+                    messages.extend(tool_messages)
+                else:
+                    raise DomainError("Router tool step limit exceeded")
+                if getattr(response, "finish_reason", None) not in {None, "stop", "mock"}:
+                    raise DomainError("Router response did not complete")
+                if (
+                    not isinstance(response.text, str)
+                    or len(response.text.encode("utf-8")) &gt; self.output_reserve * 8
+                ):
+                    raise DomainError("Router response exceeds output budget")
+                decision, failure = None, None
+                try:
+                    decision = RouterDecision.model_validate_json(response.text)
+                    with self.store.connection() as recall_connection:
+                        selected_requirements(
+                            self.memory_service, recall_connection, decision, context
+                        )
+                except (ValidationError, ValueError) as exc:
+                    decision = None
+                    failure = exc
+                if decision is None:
+                    self._record_decision_rejection("initial", response, failure)
+                    # Reflect once: the Router sees its own contract violation and may
+                    # correct it. Bounded by max_repairs and by the same output budget.
+                    if not self.max_repairs:
+                        raise DomainError("Invalid Router model decision") from failure
+                    response = await self._reflect(
+                        context,
+                        messages,
+                        failure,
+                        rejected_response=response.text,
+                        capability_source=capability_source,
+                        capability_sources=capability_sources,
+                    )
+                    try:
+&gt;                       decision = RouterDecision.model_validate_json(response.text)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                       pydantic_core._pydantic_core.ValidationError: 1 validation error for RouterDecision
+E                         Invalid JSON: expected value at line 1 column 1 [type=json_invalid, input_value='```json\n{"intent": "cha... "candidates": []}\n```', input_type=str]
+E                           For further information visit https://errors.pydantic.dev/2.14/v/json_invalid
+
+backend\src\forge_core\router.py:1931: ValidationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1223/test_exact_single_json_fence_i0')
+
+    def test_exact_single_json_fence_is_audited_without_reflection_or_validator_bypass(tmp_path):
+        store = Store(tmp_path / "fence.sqlite3")
+        body = json.dumps(decision())
+        text = "```json\n" + body + "\n```"
+        provider = ScriptedMock(response(text))
+&gt;       result = asyncio.run(router(store, provider).handle_user_message("Hello", request_id="fence"))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_json_protocol.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.router.RouterService object at 0x000001AA373E8050&gt;
+text = 'Hello', request_id = 'fence'
+
+    async def handle_user_message(self, text, *, request_id=None):
+        if not isinstance(text, str) or not text.strip():
+            raise DomainError("Message must not be empty")
+        received_at = now_iso()
+        self._sync_memory()
+        request_id = request_id or new_id("turn")
+        if not isinstance(request_id, str) or not 1 &lt;= len(request_id) &lt;= 200:
+            raise DomainError("Invalid request ID")
+        digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        conflicts = 0
+        compactions = 0
+        while conflicts &lt;= self.max_conflicts:
+            with self.store.connection() as connection:
+                connection.execute("BEGIN")
+                previous = connection.execute(
+                    "SELECT * FROM router_turns WHERE request_id=?", (request_id,)
+                ).fetchone()
+                if previous:
+                    if previous["input_hash"] != digest:
+                        raise DomainError("Request ID already used for different input")
+                    return json.loads(previous["result_json"])
+                snapshot = self._snapshot(connection, text)
+                connection.commit()
+            if (
+                len(_json(snapshot["messages"]).encode("utf-8"))
+                &gt; self.effective_context_limit(self._model_profile(snapshot)) // 2
+                or len(snapshot["messages"]) &gt; 50
+            ) and len(snapshot["messages"]) &gt; 10:
+                if compactions &gt;= 100:
+                    raise DomainError("Router compaction backlog exceeds per-call limit")
+                if isinstance(self.provider, ProviderGateway):
+                    from .model_compaction import RouterModelCompactor
+    
+                    profile = self._model_profile(snapshot)
+                    if profile is None:
+                        raise DomainError("Model compaction requires the registered Router profile")
+                    await RouterModelCompactor(
+                        self.context_service,
+                        self.provider,
+                        profile=profile,
+                        context_limit=self.effective_context_limit(profile),
+                        output_limit=self.output_reserve,
+                    ).compact(keep_recent=10)
+                else:
+                    # Historical in-process adapters have no native Gateway.
+                    # Their deterministic archive tests preserve the old path.
+                    self.context_service.compact_router(keep_recent=10)
+                compactions += 1
+                continue
+            if self.semantic_recall and self.model_id and len(text.encode("utf-8")) &lt;= 8192:
+                profile = self._model_profile(snapshot)
+                snapshot["semantic_memory"] = await self.memory_service.retrieve_semantic_context(
+                    text,
+                    provider=self.provider,
+                    model_id=self.model_id,
+                    provider_id=self.provider_id,
+                    context_limit=self.effective_context_limit(profile),
+                    output_limit=512,
+                    max_bytes=min(8192, self.effective_context_limit(profile) // 4),
+                    project_id=(snapshot.get("project_context") or {}).get("focused_project_id"),
+                    capabilities={"json_schema": True},
+                    capability_sources={
+                        "json_schema": profile.structured_output_support.source
+                        if profile and profile.structured_output_support
+                        else "mock"
+                    },
+                )
+                with self.store.connection() as connection:
+                    self._semantic_quests(connection, snapshot, snapshot["semantic_memory"])
+            context, cursor = self._context(snapshot, text)
+            if not self.model_id:
+                raise DomainError("Router model is not configured")
+            capability_source = "mock"
+            capability_sources = {"tools": "mock", "json_schema": "mock"}
+            if getattr(self.provider, "execution_mode", None) != "mock":
+                profile = self._model_profile(snapshot)
+                if (
+                    profile is None
+                    or not profile.enabled
+                    or profile.provider != self.provider_id
+                    or profile.tool_calling_support is None
+                    or not profile.tool_calling_support.supported
+                    or profile.structured_output_support is None
+                    or not profile.structured_output_support.supported
+                ):
+                    raise DomainError("Router model capability is unknown or unsupported")
+                capability_source = f"registry:{profile.tool_calling_support.source},{profile.structured_output_support.source}"
+                capability_sources = {
+                    "tools": profile.tool_calling_support.source,
+                    "json_schema": profile.structured_output_support.source,
+                }
+            schema = _decision_schema(
+                compact=context["budget"]["effective_limit"] &lt; 65536,
+                autonomous=self.autonomous,
+            )
+            policy = context["policy"]
+            messages = [
+                {"role": "system", "content": policy},
+                {"role": "user", "content": _json(context)},
+            ]
+            consulted_sources = {}
+            lookup_used = False
+            response = None
+            try:
+                for _step in range(4):
+                    active_tools = _read_tools(snapshot) if _step &lt; 3 else None
+                    if active_tools is not None and self.autonomous:
+                        from .worker_superagent import RECALL_TOOL
+    
+                        active_tools.append(RECALL_TOOL)
+                    remaining_rounds = max(0, 3 - _step)
+                    remaining_bytes = max(
+                        0,
+                        context["budget"]["effective_limit"]
+                        - self.output_reserve
+                        - len(
+                            _json(
+                                {"messages": messages, "tools": active_tools, "schema": schema}
+                            ).encode("utf-8")
+                        )
+                        - len((policy + _TOOL_POLICY).encode("utf-8"))
+                        - len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        - 512,
+                    )
+                    round_messages = [
+                        {
+                            "role": "system",
+                            "content": policy
+                            + _TOOL_POLICY
+                            + f" Remaining tool rounds: {remaining_rounds}. Maximum calls per tool round: 4. Approximate remaining input capacity: {remaining_bytes} UTF-8 bytes; output reserve: {self.output_reserve} tokens.",
+                        },
+                        *messages[1:],
+                    ]
+                    if not active_tools:
+                        round_messages.append(
+                            {
+                                "role": "system",
+                                "content": "No tool rounds remain. Return the final structured RouterDecision now.",
+                            }
+                        )
+                    if (
+                        len(
+                            _json(
+                                {
+                                    "messages": round_messages,
+                                    "tools": active_tools,
+                                    "schema": schema,
+                                }
+                            ).encode("utf-8")
+                        )
+                        + len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        + 512
+                        &gt; context["budget"]["effective_limit"] - self.output_reserve
+                    ):
+                        raise DomainError("Router tool context budget exceeded")
+                    request = ModelRequest(
+                        model_id=self.model_id,
+                        provider_id=self.provider_id,
+                        messages=round_messages,
+                        tools=active_tools,
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {
+                                "name": "router_decision",
+                                "strict": True,
+                                "schema": schema,
+                            },
+                        },
+                        max_output_tokens=self.output_reserve,
+                        context_limit=context["budget"]["effective_limit"],
+                        model_capabilities={"tools": True, "json_schema": True},
+                        capability_source=capability_source,
+                        model_capability_sources=capability_sources,
+                        budget_context=ModelCallContext(
+                            call_id=new_id("call"),
+                            purpose="router",
+                            workspace_id=self.store.workspace.id,
+                        ),
+                    )
+                    response = await self.provider.generate(request)
+                    calls = getattr(response, "tool_calls", [])
+                    if not calls:
+                        break
+                    if active_tools is None:
+                        raise DomainError("Router final round cannot call tools")
+                    if len(calls) &gt; 4:
+                        raise DomainError("Too many Router tool calls")
+                    assistant_calls = []
+                    tool_messages = []
+                    for call in calls:
+                        if (
+                            not isinstance(call, dict)
+                            or not isinstance(call.get("id"), str)
+                            or not 1 &lt;= len(call["id"]) &lt;= 200
+                        ):
+                            raise DomainError("Router requested an unauthorized tool")
+                        name = call["name"]
+                        keys = {
+                            "list_quests": "quests",
+                            "list_events": "events",
+                            "list_evidence": "evidence",
+                            "list_models": "models",
+                        }
+                        arguments = call.get("arguments")
+                        if name in keys and arguments == {}:
+                            lookup_used = True
+                            value = snapshot[keys[name]]
+                        elif (
+                            name == "recall_object"
+                            and self.autonomous
+                            and isinstance(arguments, dict)
+                        ):
+                            import jsonschema
+    
+                            from .worker_superagent import RECALL_TOOL
+    
+                            lookup_used = True
+                            jsonschema.validate(arguments, RECALL_TOOL["input_schema"])
+                            focus = (snapshot.get("project_context") or {}).get(
+                                "focused_project_id"
+                            )
+                            value = self.memory_service.recall_object(
+                                max_bytes=4096, project_id=focus, **arguments
+                            )
+                        elif (
+                            name == "read_context_source"
+                            and isinstance(arguments, dict)
+                            and set(arguments) &lt;= {"source_id", "offset_chars", "max_chars"}
+                            and "source_id" in arguments
+                            and isinstance(arguments["source_id"], str)
+                            and 1 &lt;= len(arguments["source_id"]) &lt;= 200
+                        ):
+                            value, source = self._read_archived_source(snapshot, arguments)
+                            if source is not None:
+                                consulted_sources[arguments["source_id"]] = source
+                        else:
+                            raise DomainError("Router requested an unauthorized tool")
+                        assistant_calls.append(
+                            {
+                                "id": call["id"],
+                                "type": "function",
+                                "function": {"name": name, "arguments": _json(arguments)},
+                            }
+                        )
+                        tool_messages.append(
+                            {
+                                "role": "tool",
+                                "tool_call_id": call["id"],
+                                "content": _json(value),
+                            }
+                        )
+                    messages.append(
+                        {
+                            "role": "assistant",
+                            "content": response.text or "",
+                            "tool_calls": assistant_calls,
+                        }
+                    )
+                    messages.extend(tool_messages)
+                else:
+                    raise DomainError("Router tool step limit exceeded")
+                if getattr(response, "finish_reason", None) not in {None, "stop", "mock"}:
+                    raise DomainError("Router response did not complete")
+                if (
+                    not isinstance(response.text, str)
+                    or len(response.text.encode("utf-8")) &gt; self.output_reserve * 8
+                ):
+                    raise DomainError("Router response exceeds output budget")
+                decision, failure = None, None
+                try:
+                    decision = RouterDecision.model_validate_json(response.text)
+                    with self.store.connection() as recall_connection:
+                        selected_requirements(
+                            self.memory_service, recall_connection, decision, context
+                        )
+                except (ValidationError, ValueError) as exc:
+                    decision = None
+                    failure = exc
+                if decision is None:
+                    self._record_decision_rejection("initial", response, failure)
+                    # Reflect once: the Router sees its own contract violation and may
+                    # correct it. Bounded by max_repairs and by the same output budget.
+                    if not self.max_repairs:
+                        raise DomainError("Invalid Router model decision") from failure
+                    response = await self._reflect(
+                        context,
+                        messages,
+                        failure,
+                        rejected_response=response.text,
+                        capability_source=capability_source,
+                        capability_sources=capability_sources,
+                    )
+                    try:
+                        decision = RouterDecision.model_validate_json(response.text)
+                        with self.store.connection() as recall_connection:
+                            selected_requirements(
+                                self.memory_service, recall_connection, decision, context
+                            )
+                    except (ValidationError, ValueError) as exc:
+                        self._record_decision_rejection("repair", response, exc)
+&gt;                       raise DomainError("Invalid Router model decision") from exc
+E                       forge_core.domain.DomainError: Invalid Router model decision
+
+backend\src\forge_core\router.py:1938: DomainError</failure></testcase><testcase classname="tests.test_router_json_protocol" name="test_json_rejection_keeps_only_safe_shape_and_original_hash" time="0.062"><failure message="KeyError: 'response_shape'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1223/test_json_rejection_keeps_only0')
+
+    def test_json_rejection_keeps_only_safe_shape_and_original_hash(tmp_path):
+        store = Store(tmp_path / "rejected.sqlite3")
+        marker = "PRIVATE_MODEL_CONTENT_NEVER_LOGGED_2cf1"
+        text = "Here is the decision: " + json.dumps(decision(reply=marker))
+        provider = ScriptedMock(response(text))
+        instance = router(store, provider)
+        instance.max_repairs = 0
+        with pytest.raises(DomainError, match="Invalid Router model decision"):
+            asyncio.run(instance.handle_user_message("Hello", request_id="shape"))
+        rejected = events(store, "router.decision_rejected")[0]
+        assert rejected["response_sha256"] == hashlib.sha256(text.encode()).hexdigest()
+&gt;       assert rejected["response_shape"]["utf8_bytes"] == len(text.encode())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'response_shape'
+
+backend\tests\test_router_json_protocol.py:82: KeyError</failure></testcase></testsuite></testsuites>

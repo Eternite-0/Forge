@@ -1,0 +1,370 @@
+{
+  "audit_kind": "independent_read_only_post_stop_accounting_and_citation_diagnosis",
+  "recorded_at": "2026-11-15T21:57:13.135842+00:00",
+  "original_run_id": "20261115T214924Z-capability-adaptive-35c07f",
+  "original_report_sha256": "f622ce36d5a29f229a55d0cdb543d64df8a4bd9365b323e0fcfb3eb3351c3f44",
+  "original_status": "failed",
+  "does_not_reclassify_acceptance": true,
+  "source_files_changed": false,
+  "provider_calls_made_by_this_audit": 0,
+  "tools_or_candidate_code_executed_by_this_audit": 0,
+  "git_commits_or_pushes_performed": false,
+  "latest_observed_report": {
+    "model_calls": 18,
+    "known_charged_tokens": 213727,
+    "original_checks": {
+      "artifact_L1": false,
+      "final_calls_settled": true,
+      "fixed_aggregate_calls": true
+    },
+    "core_quest_completion": {
+      "passed": 1,
+      "samples": 1,
+      "value": 1.0
+    },
+    "review_verdicts": {
+      "NEEDS_REVISION": 2,
+      "PASS": 1
+    },
+    "artifact_sha256": "8418622136cfd4b6023185259cbf5aad567cf7a6578326120d2caf65a577a79c",
+    "artifact_independent_check": {
+      "execution_mode": "programmatic_independent",
+      "level": "L1",
+      "checks": {
+        "source_inputs_unchanged": true,
+        "report_summary": true,
+        "grounded_findings_structure": true,
+        "exact_source_citations": false
+      },
+      "semantic_quality_assessed": false,
+      "artifact_sha256": "8418622136cfd4b6023185259cbf5aad567cf7a6578326120d2caf65a577a79c",
+      "passed": false
+    }
+  },
+  "l1_citation_diagnostics": {
+    "provenance": "programmatic_exact_quote_location_in_retained_original_source_packets_no_artifact_or_input_mutation",
+    "sources_covered": [
+      "forge_environment",
+      "forge_projects"
+    ],
+    "missing_source_ids": [],
+    "citations": [
+      {
+        "finding": 1,
+        "citation": 1,
+        "source_id": "forge_projects",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          213,
+          219
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "b89650f66981ac021bdfa42b3745b541bec19584c4f13aaa27e1a4d8aaaccf1a",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          211,
+          214
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      },
+      {
+        "finding": 1,
+        "citation": 2,
+        "source_id": "forge_projects",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          220,
+          224
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "5f10f3016a151a8f506462e1f8eb9ec7c3bd20b16f510fa133171d81cff58c29",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          215,
+          219
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      },
+      {
+        "finding": 2,
+        "citation": 1,
+        "source_id": "forge_projects",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          44,
+          52
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "39f005685045fa5a9d74f6d34d2d719c3f5d07d39daf5f9f56baf526a90bb2f3",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          51,
+          57
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      },
+      {
+        "finding": 2,
+        "citation": 2,
+        "source_id": "forge_projects",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          160,
+          168
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "97e4500d126d9a9774fef1983593f34385323cfa03c715745d9f5ddd82df4ba3",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          167,
+          174
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      },
+      {
+        "finding": 3,
+        "citation": 1,
+        "source_id": "forge_environment",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          32,
+          46
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "6730b11baf838d66e0da241ab603a143c9a543d3cf82c47eec3ecdeb4de55b51",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          29,
+          44
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      },
+      {
+        "finding": 3,
+        "citation": 2,
+        "source_id": "forge_environment",
+        "source_sha256_matches": true,
+        "claimed_range": [
+          47,
+          54
+        ],
+        "range_shape_valid": true,
+        "quote_sha256": "6ab9cdaf0370d10b051f5132f6bb924472212f12262b06a9fe79b9a38f5d28e3",
+        "quote_present_in_full_original": true,
+        "quote_unique_in_full_original": true,
+        "actual_quote_range": [
+          45,
+          52
+        ],
+        "quote_present_in_claimed_range": false,
+        "source_packet_has_numbered_display": false
+      }
+    ],
+    "interpretation": "All six citations use correct source hashes and verbatim quotes from the original sources, but none of their claimed line ranges contains its quote. Both modules are covered. Packets have original content/first_line/last_line but no numbered display. This is a presentation gap and an actual failed provenance predicate; it does not authorize repairing or reclassifying the retained result."
+  },
+  "read_only_database_observations": [
+    {
+      "run_id": "20261115T210429Z-capability-adaptive-b78221",
+      "report_path": "docs/audit/superagent/20261115T210429Z-capability-adaptive-b78221.json",
+      "report_sha256": "5207952242cd650bbb962fa4d673dc6bb0ffc0f3e544cfbd9bf77e0ec272c6b0",
+      "original_status": "failed",
+      "original_failure_code": "ProbeFailure",
+      "source_sha256_at_execution": "0f24f76b6fe1ee6af9cbc4a05ff2356817295427b48c8f1a55ec45a6db284dc6",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 24,
+      "admission_states": {
+        "settled": 24
+      },
+      "known_charged_tokens": 145125,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 6,
+          "charged_or_reserved_tokens": 47545
+        },
+        {
+          "quest_id": "quest_0d1c85a014ef",
+          "calls": 10,
+          "charged_or_reserved_tokens": 51422
+        },
+        {
+          "quest_id": "quest_8a00c08fdbe2",
+          "calls": 8,
+          "charged_or_reserved_tokens": 46158
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    },
+    {
+      "run_id": "20261115T211541Z-capability-adaptive-e040bc",
+      "report_path": "docs/audit/superagent/20261115T211541Z-capability-adaptive-e040bc.json",
+      "report_sha256": "722c0e6bc464425e3e8081a4c470da437389c04ecdb81726a561db8c01a47c5e",
+      "original_status": "failed",
+      "original_failure_code": "core_api_status_409",
+      "source_sha256_at_execution": "b7c0cfff9fe3f3170930e860aa92f4641763a6170e06dc25461eb235dc0d14a5",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 4,
+      "admission_states": {
+        "reserved": 1,
+        "settled": 3
+      },
+      "known_charged_tokens": 10477,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 4,
+          "charged_or_reserved_tokens": 14536
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    },
+    {
+      "run_id": "20261115T212125Z-capability-single-730d18",
+      "report_path": "docs/audit/superagent/20261115T212125Z-capability-single-730d18.json",
+      "report_sha256": "987335182d9b889c2d97af949f02b0e0d465461087ef0da8914cda75173dc050",
+      "original_status": "failed",
+      "original_failure_code": "workers_stopped_without_progress",
+      "source_sha256_at_execution": "15cc13f3d1c513e09d56ac40726c7bc66c2eb896f95e425f12cc20421796c9f5",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 10,
+      "admission_states": {
+        "settled": 10
+      },
+      "known_charged_tokens": 70933,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 2,
+          "charged_or_reserved_tokens": 5976
+        },
+        {
+          "quest_id": "quest_2b43ac858fb8",
+          "calls": 8,
+          "charged_or_reserved_tokens": 64957
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    },
+    {
+      "run_id": "20261115T213033Z-capability-adaptive-8806a4",
+      "report_path": "docs/audit/superagent/20261115T213033Z-capability-adaptive-8806a4.json",
+      "report_sha256": "416d7681da10b797256649d56648930b64a0e25e03fbd448aedefe3750796a23",
+      "original_status": "failed",
+      "original_failure_code": "core_api_status_409",
+      "source_sha256_at_execution": "a2ac6df84112598dca2ca2dd2e8ae2835ffdf640f41b52471617e2e18b9bcb42",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 10,
+      "admission_states": {
+        "settled": 10
+      },
+      "known_charged_tokens": 70535,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 5,
+          "charged_or_reserved_tokens": 37997
+        },
+        {
+          "quest_id": "quest_e599b31ffbb6",
+          "calls": 5,
+          "charged_or_reserved_tokens": 32538
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    },
+    {
+      "run_id": "20261115T213801Z-capability-development-1cf69f",
+      "report_path": "docs/audit/superagent/20261115T213801Z-capability-development-1cf69f.json",
+      "report_sha256": "aea541eb5c739998d2708eb8640b24a22f9c2702ae6b408b2c036bea1fd29c33",
+      "original_status": "failed",
+      "original_failure_code": "workers_stopped_without_progress",
+      "source_sha256_at_execution": "5590b016aaada0744d5e9cf94862f3956b30730b5c93baa0e3ed82ce7511f30e",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 20,
+      "admission_states": {
+        "settled": 20
+      },
+      "known_charged_tokens": 137290,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 2,
+          "charged_or_reserved_tokens": 5865
+        },
+        {
+          "quest_id": "quest_3872a032579f",
+          "calls": 18,
+          "charged_or_reserved_tokens": 131425
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    },
+    {
+      "run_id": "20261115T214924Z-capability-adaptive-35c07f",
+      "report_path": "docs/audit/superagent/20261115T214924Z-capability-adaptive-35c07f.json",
+      "report_sha256": "f622ce36d5a29f229a55d0cdb543d64df8a4bd9365b323e0fcfb3eb3351c3f44",
+      "original_status": "failed",
+      "original_failure_code": "core_api_status_409",
+      "source_sha256_at_execution": "6de00b59ad37a5bfce5fb2e7fc168d5fe080faaf574983f156174805f652c1d3",
+      "database_read_mode": "sqlite_mode_ro_single_transaction",
+      "model_calls": 18,
+      "admission_states": {
+        "settled": 18
+      },
+      "known_charged_tokens": 213727,
+      "scopes": [
+        {
+          "quest_id": null,
+          "calls": 4,
+          "charged_or_reserved_tokens": 25034
+        },
+        {
+          "quest_id": "quest_c66fbd0abef0",
+          "calls": 14,
+          "charged_or_reserved_tokens": 188693
+        }
+      ],
+      "per_task_budget_within_fixed_bounds": true,
+      "acceptance_reclassified": false
+    }
+  ],
+  "retained_task_totals": {
+    "attempted_runs": 6,
+    "successful_acceptance_runs": 0,
+    "model_calls": 86,
+    "admission_states": {
+      "settled": 85,
+      "reserved": 1
+    },
+    "known_charged_tokens": 648087,
+    "actual_total_tokens": null,
+    "unknown_usage_attempts": 1,
+    "task_call_ceiling": 160,
+    "remaining_task_calls": 74,
+    "microprobe_calls_excluded": 12,
+    "microprobe_known_tokens_excluded": 1414,
+    "cost_microunits": null
+  },
+  "limitations": [
+    "SQLite aggregate records are admission/accounting evidence, not independent upstream usage attestation.",
+    "The one reserved historical call remains unsettled and must not be replayed. Total actual tokens and price remain unknown.",
+    "Core completion and Reviewer PASS do not override the independent citation failure.",
+    "This supplemental audit changes neither original reports nor Core state and is not final L1/L2/L3 acceptance.",
+    "The current source/driver may differ from execution hashes; this audit records execution provenance without claiming a frozen-source rerun."
+  ]
+}

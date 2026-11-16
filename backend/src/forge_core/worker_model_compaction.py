@@ -1,6 +1,7 @@
 """Fenced, exactly-accounted model handoffs for hidden Worker histories."""
 
 import asyncio
+import hashlib
 import json
 
 from .context_service import (
@@ -10,13 +11,53 @@ from .context_service import (
     _worker_batch_boundaries,
     _worker_handoff_input,
 )
-from .domain import DomainError, new_id
+from .domain import DomainError, ForgeEvent, new_id
 from .model_compaction import HANDOFF_PROMPT, verified_compaction_usage
 from .providers import ProviderError, ProviderGateway
 from .runtime import ModelCallContext, ModelRequest
 from .token_policy import token_budgets_enforced
 from .worker_envelope import capacity_policy, cycle_allowance
 from .worker_model_usage import refund_unsent_worker_model_call, reserve_worker_model_call
+
+
+def _handoff_response_diagnostics(response, summary_bytes, provider_id, model_id):
+    """Fixed transport facts only; never store text or exception messages."""
+    text = response.text
+    encoded = None
+    if isinstance(text, str):
+        try:
+            encoded = text.encode("utf-8")
+        except UnicodeEncodeError:
+            pass
+    reasons = []
+    if response.tool_calls:
+        reasons.append("unexpected_tool_calls")
+    if not isinstance(response.finish_reason, str) or response.finish_reason not in {
+        "stop", "end_turn", "stop_sequence"
+    }:
+        reasons.append("incomplete_finish")
+    if not isinstance(text, str):
+        reasons.append("response_not_text")
+    elif not text.strip():
+        reasons.append("empty_text")
+    if encoded is not None and len(encoded) > summary_bytes:
+        reasons.append("summary_byte_limit")
+    if response.provider_id != provider_id:
+        reasons.append("provider_binding_mismatch")
+    if response.model_id != model_id:
+        reasons.append("model_binding_mismatch")
+    finish = response.finish_reason
+    return {
+        "response_sha256": hashlib.sha256(encoded).hexdigest() if encoded is not None else None,
+        "response_utf8_bytes": len(encoded) if encoded is not None else None,
+        "summary_limit_utf8_bytes": summary_bytes,
+        "finish_class": finish
+        if isinstance(finish, str) and finish in {"stop", "end_turn", "stop_sequence", "tool_calls", "tool_use"}
+        else ("missing" if finish is None else "other"),
+        "tool_call_count": len(response.tool_calls) if isinstance(response.tool_calls, list) else None,
+        "provider_binding_matches": response.provider_id == provider_id,
+        "model_binding_matches": response.model_id == model_id,
+    }, reasons
 
 
 class WorkerModelCompactor:
@@ -44,6 +85,32 @@ class WorkerModelCompactor:
 
     def _fence(self, connection):
         return self.manager._fenced(connection, self.run_id, self.token)
+
+    def _record_handoff_rejection(self, prepared, selected, request, response, digest, summary_bytes, *, stage):
+        metadata, reasons = _handoff_response_diagnostics(
+            response, summary_bytes, self.provider_id, self.model_id
+        )
+        self.manager.store.append_event(
+            ForgeEvent(
+                event_type="worker.compaction_handoff_rejected",
+                quest_id=prepared["snapshot"]["run"]["quest_id"],
+                worker_id=prepared["snapshot"]["run"]["worker_id"],
+                payload={
+                    "provenance": "worker_compaction_rejection_v1",
+                    "stage": stage,
+                    "run_id": self.run_id,
+                    "generation": prepared["snapshot"]["run"]["generation"],
+                    "call_id": request.budget_context.call_id,
+                    "input_digest": digest,
+                    "frontier_sha256": _hash(prepared["snapshot"]),
+                    "source_count": len(selected),
+                    "reason_codes": ["source_bound_handoff_validation"] if stage == "checkpoint" else reasons,
+                    "usage_state": "gateway_and_local_settled",
+                    "execution_mode": prepared["snapshot"]["run"]["execution_mode"],
+                    **metadata,
+                },
+            )
+        )
 
     def _checkpoint_fence(self, connection, request, usage):
         row = self._fence(connection)
@@ -82,7 +149,9 @@ class WorkerModelCompactor:
                 },
                 {"role": "user", "content": _json(packet)},
             ],
-            max_output_tokens=self.output_limit,
+            # Conservative sizing only; Token count does not guarantee byte size.
+            # The original UTF-8 summary limit remains mandatory after response.
+            max_output_tokens=min(self.output_limit, max(1, summary_bytes // 4)),
             context_limit=self.context_limit,
             max_retries=0,
             timeout_seconds=max(
@@ -201,6 +270,18 @@ class WorkerModelCompactor:
             return {"messages": prepared["messages"], "source_count": 0}
         boundaries = _worker_batch_boundaries(prepared["selected"])
         call_id = new_id("model_call")
+        with self.manager.store.unit_of_work() as work:
+            connection = work.connection
+            row = self._fence(connection)
+            policy = capacity_policy(prepared["task"])
+            cycle = cycle_allowance(connection, row, policy) if policy else None
+            held = cycle["held_after_current_request"] if cycle else 0
+            request_allowance = (
+                max(0, row["token_limit"] - row["token_spent"] - held)
+                if token_budgets_enforced()
+                else None
+            )
+        allocation_limited = False
         low, high = 0, len(boundaries)
         while low < high:
             middle = (low + high + 1) // 2
@@ -208,14 +289,24 @@ class WorkerModelCompactor:
                 prepared, prepared["selected"][: boundaries[middle - 1]], call_id, input_budget
             )
             try:
-                self.provider._payload(request, False)
+                payload = self.provider._payload(request, False)
             except ProviderError as exc:
                 if exc.code != "context_exceeded":
                     raise DomainError("Invalid Worker compaction request") from None
                 high = middle - 1
             else:
-                low = middle
+                native_input = len(json.dumps(payload, ensure_ascii=False).encode()) + 64
+                if (
+                    request_allowance is not None
+                    and native_input + request.max_output_tokens > request_allowance
+                ):
+                    allocation_limited = True
+                    high = middle - 1
+                else:
+                    low = middle
         if not low:
+            if allocation_limited:
+                raise DomainError("Worker compaction token allocation exhausted")
             raise DomainError("Complete earliest Worker exchange does not fit model context")
         selected = prepared["selected"][: boundaries[low - 1]]
         request, digest, summary_bytes = self._request(prepared, selected, call_id, input_budget)
@@ -257,14 +348,24 @@ class WorkerModelCompactor:
             or response.provider_id != self.provider_id
             or response.model_id != self.model_id
         ):
+            self._record_handoff_rejection(
+                prepared, selected, request, response, digest, summary_bytes, stage="response"
+            )
             raise DomainError("Invalid Worker compaction handoff")
-        self.service._worker_context(
-            self.run_id,
-            input_budget=input_budget,
-            source_readback_available=source_readback_available,
-            _fence=lambda connection: self._checkpoint_fence(connection, request, response.usage),
-            _expected=prepared["snapshot"],
-            _handoff={"text": response.text, "input_digest": digest},
-            _max_sources=len(selected),
-        )
+        try:
+            self.service._worker_context(
+                self.run_id,
+                input_budget=input_budget,
+                source_readback_available=source_readback_available,
+                _fence=lambda connection: self._checkpoint_fence(connection, request, response.usage),
+                _expected=prepared["snapshot"],
+                _handoff={"text": response.text, "input_digest": digest},
+                _max_sources=len(selected),
+            )
+        except DomainError as exc:
+            if str(exc) == "Invalid source-bound Worker model handoff":
+                self._record_handoff_rejection(
+                    prepared, selected, request, response, digest, summary_bytes, stage="checkpoint"
+                )
+            raise
         return {"source_count": len(selected), "source_ids": [row["ordinal"] for row in selected]}

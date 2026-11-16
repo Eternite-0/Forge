@@ -57,6 +57,8 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/budget') body = { token_limit: 10000, known_tokens: 0, reserved_tokens: 0, opening_tokens: 0, charged_tokens: 0, active_reservations: 0, concurrency_limit: 2 };
     else if (url.pathname === '/api/models') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
+    else if (url.pathname === '/api/projects/discovered' || url.pathname === '/api/events' || url.pathname === '/api/triggers') body = [];
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
     else { missing.push(url.pathname); status = 404; body = { detail: 'interaction fixture endpoint missing' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
@@ -111,8 +113,8 @@ async (page, { outputDir }) => {
   await page.keyboard.press('Escape');
   check(!(await workspaceDialog.isVisible()) && await draft.inputValue() === preservedDraft, 'closing workspace picker preserves the conversation draft');
   await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
-  check(!(await rail.locator('.workspace-selector-wrap').isVisible()) && await rail.locator('.utility-nav > button').count() === 2 && await rail.locator('.conversation-nav > button').count() === 1, 'global collapse keeps the three primary destinations available');
-  check(await rail.getByRole('button', { name: '对话', exact: true }).count() === 1 && await rail.getByRole('button', { name: '对话', exact: true }).isVisible(), 'collapsed navigation keeps one visible conversation entry');
+  check(!(await rail.isVisible()) && await rail.locator('.utility-nav > button').count() === 3 && await rail.locator('.conversation-nav > button').count() === 1, 'global collapse hides the single sidebar while preserving its navigation DOM');
+  check(await rail.getByRole('button', { name: '对话', exact: true, includeHidden: true }).count() === 1 && !(await rail.getByRole('button', { name: '对话', exact: true, includeHidden: true }).isVisible()), 'collapsed navigation retains one mounted conversation entry');
   check(await originalConversationEntry.evaluate((element) => element.isConnected), 'collapsing navigation moves the existing conversation entry without remounting it');
   check(await originalTimeline.evaluate((element) => element.isConnected) && await draft.inputValue() === preservedDraft, 'sidebar collapse preserves the conversation and draft');
   await page.getByRole('button', { name: '展开工作空间侧栏', exact: true }).click();
@@ -121,7 +123,7 @@ async (page, { outputDir }) => {
   const list = page.locator('.quest-list'), filters = list.locator('.quest-filters'), search = page.getByLabel('搜索任务');
   const row = (id) => list.locator(`button.list-row[aria-label*=" ${id} "]`);
   await row('quest-alpha').waitFor();
-  check(!(await rail.locator('.workspace-selector-wrap').isVisible()), 'task workspace hides the workspace selector');
+  check(await rail.locator('.workspace-selector-wrap').isVisible(), 'task drawer keeps the workspace selector available');
   await row('quest-alpha').click();
   await page.locator('.quest-plan-nodes .plan-node').first().waitFor();
   const overview = page.locator('.quest-overview');
@@ -197,9 +199,9 @@ async (page, { outputDir }) => {
   await row('quest-alpha').click();
   await overview.getByRole('heading', { name: 'Alpha 调研交付', exact: true }).waitFor();
   await page.locator('.quest-plan-nodes .plan-node').first().waitFor();
-  const detail = page.locator('.quest-detail');
+  const detail = page.locator('.task-inspector .quest-body');
   const indexScroll = list.locator(':scope > .list');
-  check(await indexScroll.evaluate((element) => element.scrollHeight > element.clientHeight) && await detail.evaluate((element) => element.scrollHeight > element.clientHeight), 'long task lists and plans have separate scrolling regions');
+  check(await indexScroll.evaluate((element) => element.scrollHeight > element.clientHeight) && await detail.evaluate((element) => element.scrollHeight > element.clientHeight), 'long task index scrolls within the task drawer body');
   await detail.evaluate((element) => { element.scrollTop = 240; });
   const detailPosition = await detail.evaluate((element) => element.scrollTop);
   await indexScroll.evaluate((element) => { element.scrollTop = 320; });
@@ -247,13 +249,13 @@ async (page, { outputDir }) => {
   await settingsSearch.press('Enter');
   check(await page.locator('.settings-title').innerText() === '模型库' && await settingsNav.getByRole('button', { name: '模型库', exact: true }).evaluate((element) => document.activeElement === element), 'Enter activates and focuses the first matching setting');
   await page.getByRole('button', { name: '清除设置搜索', exact: true }).click();
-  check(await settingsNav.locator('.settings-nav-item').count() === 7 && await settingsSearch.evaluate((element) => document.activeElement === element), 'settings clear restores all entries and search focus');
+  check(await settingsNav.locator('.settings-nav-item').count() === 9 && await settingsSearch.evaluate((element) => document.activeElement === element), 'settings clear restores all entries and search focus');
   await settingsSearch.fill('no-such-fixture-setting');
   await settingsNav.getByRole('button', { name: '显示全部设置', exact: true }).click();
-  check(await settingsSearch.inputValue() === '' && await settingsNav.locator('.settings-nav-item').count() === 7, 'settings empty results have a working reset');
+  check(await settingsSearch.inputValue() === '' && await settingsNav.locator('.settings-nav-item').count() === 9, 'settings empty results have a working reset');
   await settingsSearch.fill('Registry');
   await settingsSearch.press('Escape');
-  check(await settingsSearch.inputValue() === '' && await settingsNav.locator('.settings-nav-item').count() === 7, 'Escape clears settings search');
+  check(await settingsSearch.inputValue() === '' && await settingsNav.locator('.settings-nav-item').count() === 9, 'Escape clears settings search');
   await settingsNav.getByRole('button', { name: '模型库', exact: true }).focus();
   await page.keyboard.press('Home');
   check(await page.locator('.settings-title').innerText() === '常规', 'settings Home activates the first visible category');

@@ -134,7 +134,10 @@ def test_router_invalid_repair_is_bounded_and_has_no_turn_side_effects(tmp_path)
     with pytest.raises(DomainError, match="Invalid Router model decision"):
         asyncio.run(router(store, provider).handle_user_message("do it", request_id="invalid"))
     assert len(provider.requests) == 2
-    assert store.list_messages() == [] and store.list_quests() == [] and store.list_events() == []
+    assert store.list_messages() == [] and store.list_quests() == []
+    assert [event["event_type"] for event in store.list_events()] == [
+        "router.decision_rejected", "router.decision_rejected"
+    ]
     assert store.ensure_router() == before
     with store.connection() as connection:
         assert connection.execute("SELECT count(*) FROM constraint_records").fetchone()[0] == 0

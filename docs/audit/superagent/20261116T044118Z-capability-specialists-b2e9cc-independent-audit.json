@@ -1,0 +1,621 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:58:53.639835+00:00",
+  "run_id": "20261116T044118Z-capability-specialists-b2e9cc",
+  "provenance": "independent_post_run_read_only_specialists_evidence_audit",
+  "audit_program": {
+    "path": ".local/superagent/l2_round1_final_audit.py",
+    "sha256": "c37a1534250e5a7cf6fdddfd7f6ba4b1ab75a95aed9bd184c89143d2654ebff8"
+  },
+  "packet_reconstruction_program": {
+    "path": ".local/superagent/l2_round1_snapshot.py",
+    "sha256": "71e764ee76640ee80c283063eae2ce402757deb8483cc33aaa072817230576a6"
+  },
+  "original_report": {
+    "path": "docs/audit/superagent/20261116T044118Z-capability-specialists-b2e9cc.json",
+    "sha256": "3d326fdaac81484dd6c242c733f0b67ab1518c90a0cad3b098d2d1227c022049",
+    "status": "failed",
+    "failure_code": "bounded_scenario_deadline"
+  },
+  "original_driver_checks": {
+    "pass_through_L2": true,
+    "observed_team_condition_L2": true,
+    "complete_thread_consumption": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "budget_diagnosis": {
+    "path": "docs/audit/superagent/20261116T044118Z-capability-specialists-b2e9cc-independent-budget-diagnosis.json",
+    "sha256": "198916107040d8b791583dfd73af0ed3547bef33b439f1ebeccbdad80db07967"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-round1-source-freeze.json",
+    "sha256": "caf027a97292657e03147f9463900d62dc0ff22276e4fc5d07d8ea150f15d817",
+    "file_count": 354,
+    "changed_files": []
+  },
+  "audit_actions": {
+    "provider_calls": 0,
+    "credentials_read": 0,
+    "database_writes": 0,
+    "tool_replays": 0,
+    "original_evidence_edits": 0,
+    "sqlite_uri_mode": "ro"
+  },
+  "evidence_integrity_checks": {
+    "source_freeze_354_unchanged": true,
+    "database_read_only_and_unchanged": true,
+    "accounting_matches_report": true,
+    "all_attempts_settled": true,
+    "no_unsettled_tool_intents": true,
+    "no_unsettled_model_selected_tools": true,
+    "attempts_within_32_and_tokens_within_500000": true,
+    "all_real_action_receipts_bound": true,
+    "three_distinct_actual_workers_and_roles": true,
+    "two_complete_predecessor_model_reads": true,
+    "existing_review_results_keep_exact_hash_and_settlement": true,
+    "final_artifact_receipt_bound": true,
+    "final_13_citations_match_original_contract": true
+  },
+  "evidence_integrity_checks_all_passed": true,
+  "task_acceptance_observations": {
+    "quest_completed": false,
+    "integrator_state": "review_pending",
+    "integrator_has_actual_final_PASS": false,
+    "original_router_received_reviewed_completion": false,
+    "final_task_accepted": false
+  },
+  "accounting": {
+    "attempts": 21,
+    "states": {
+      "settled": 21
+    },
+    "known_tokens": 246009,
+    "charged_or_reserved_tokens": 246009
+  },
+  "workers": [
+    {
+      "id": "run_f8e6eaedab42",
+      "worker_id": "worker_9fa203ee4e3b",
+      "role_id": "research_1",
+      "state": "succeeded",
+      "node_key": "task_1",
+      "token_limit": 166667,
+      "token_spent": 86887
+    },
+    {
+      "id": "run_669de9de44d6",
+      "worker_id": "worker_9181938b13e6",
+      "role_id": "architect_2",
+      "state": "succeeded",
+      "node_key": "task_2",
+      "token_limit": 166666,
+      "token_spent": 68342
+    },
+    {
+      "id": "run_c8f0da1354d7",
+      "worker_id": "worker_4dead7044bac",
+      "role_id": "reviewer_3",
+      "state": "review_pending",
+      "node_key": "task_3",
+      "token_limit": 166666,
+      "token_spent": 81975
+    }
+  ],
+  "nodes": [
+    {
+      "node_key": "task_1",
+      "status": "succeeded",
+      "worker_id": "worker_9fa203ee4e3b"
+    },
+    {
+      "node_key": "task_2",
+      "status": "succeeded",
+      "worker_id": "worker_9181938b13e6"
+    },
+    {
+      "node_key": "task_3",
+      "status": "review_pending",
+      "worker_id": "worker_4dead7044bac"
+    }
+  ],
+  "edges": [
+    {
+      "plan_id": "plan_d3cf5da69474",
+      "source": "task_1",
+      "target": "task_3",
+      "condition": "success"
+    },
+    {
+      "plan_id": "plan_d3cf5da69474",
+      "source": "task_2",
+      "target": "task_3",
+      "condition": "success"
+    }
+  ],
+  "tools": [
+    {
+      "call_id": "call_7db67a5f548288515b0846ab0b8eb48eb86f132b073cb0c7a5749d9229dcea05",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_e98cc6f60a6b",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_798cd4844908cb2c063430f55f31e7469ab2ee66db98cab472fd1349d071ac56",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_ef93c72b443d",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_c3cb990880385ef1980dfacd35f876358d84af35a4fad8588b42524ba0556b1c",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_6f14b71e529c",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_a8dd1f39d087b0fba7183da4cd3224c5e6dc15d45411990cac741306345c2d2b",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_ecb0828c5f7a",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_00821b1bbcc79b928c1c9bb856996293c84c03d76d2c72cb98ae6ad2489d3b1e",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_bc3ed3d6a56e",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_b6d081d08a38e96c4e82bd511b97824c6c92d7325b5013fd535cfa49458ee8ab",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_5631fec521a5",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_a85abf8fdef46dffa5227b7ce970ded01b6c85030d6ceb8c8483a29a89bbb3c0",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_a3e8aecd3d90",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_f0a525099d689b79e033b60c7121e387121f1d0269920def32f2dc6fc4c4458d",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_9b2793cb341b",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_125613c8109af0dadfcc7c943d63d6be4a5c8e3368965882b3834ad5b3f60ebd",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_aeaf4d1d6e55",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_5b91fbf9d475a63391a46f78f743bd2f1082b295ff07257b5a2bbb07354c6fcf",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_7f9e5b457cde",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_fbeb3a65946582ea30c67a895c91d92e4ac965c17097b654e6a6477122d801b1",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_fc15e86fb05a",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_92a9e213bb14c769123f005569c9de19ba7032ee56aee71f69f20167f1610ee4",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_8ea4aeb1d84f",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_4f874f7a1ee4cb3af112bb4d94af3533752db785d67d64ac6458220579d9839f",
+      "tool_name": "file_write",
+      "receipt_id": "receipt_492475bfe767",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_39f1ddd2e9a2f68e8c7280f53dc52f7c11093332d8e1ffc2624f92d67ee5d966",
+      "tool_name": "file_write",
+      "receipt_id": "receipt_eace3c20d72f",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_8b291ed3319a82354224bb90331b704164d661f13171e7effe6a585f7d6a03c7",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_a7d490d4d5b6",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_1f040c3ab5bc9964adc3dfe823767de0fcedbaa668009037bc90a34a73652c27",
+      "tool_name": "directory_list",
+      "receipt_id": "receipt_6c45a3d4094b",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_8d70d63e334efc341fc4f497cb0a213c903e9e4836582d2f2ffe7f74861cb1fd",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_5794ed10dc00",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_b1b5bf074c235bd6e090e7838f8a5e0fbbb72704674b942b3d8054c78d5c7cf3",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_c469c6099003",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_99fbdcdda04507cd477316bf3d471cc8417efcb003af6c33c1589d1a300feba7",
+      "tool_name": "file_read",
+      "receipt_id": "receipt_39fa1dcef90a",
+      "source_bound": true
+    },
+    {
+      "call_id": "call_b8bf78615cca92d225a10f8cee14091fe253378bb3122d852b5c26090bfffe6e",
+      "tool_name": "file_write",
+      "receipt_id": "receipt_bbc9c666c2a3",
+      "source_bound": true
+    }
+  ],
+  "reviews": [
+    {
+      "event_id": "evt_7d3d5219dfbe",
+      "run_id": "run_669de9de44d6",
+      "role_id": "architect_2",
+      "verdict": "PASS",
+      "packet_sha256": "a034f01151ca6c3b8a27ff511b44ab910cc48de8136c1922ca62e74f6042f2f7",
+      "packet_and_settled_attempt_bound": true
+    },
+    {
+      "event_id": "evt_c9c67eeaf2e0",
+      "run_id": "run_f8e6eaedab42",
+      "role_id": "research_1",
+      "verdict": "PASS",
+      "packet_sha256": "e941c2b032d6aa61d195d5beb024f90e28174dfcaf80d181b9217f50d87b59b5",
+      "packet_and_settled_attempt_bound": true
+    }
+  ],
+  "actual_model_handoffs": [
+    {
+      "call_id": "call_d7cbf874d7866f06d3fed44c8e6541e900f8780a4973e232f5b0e60118856f69",
+      "reader_run_id": "run_c8f0da1354d7",
+      "producer_run_id": "run_f8e6eaedab42",
+      "complete_source_and_actual_transcript_bound": true
+    },
+    {
+      "call_id": "call_bd731d55c408d4ce8aaac0f24abfd2c3657b56c979b70f027228664197051d20",
+      "reader_run_id": "run_c8f0da1354d7",
+      "producer_run_id": "run_669de9de44d6",
+      "complete_source_and_actual_transcript_bound": true
+    }
+  ],
+  "final_router_completion_notices": [],
+  "final_artifact": {
+    "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/work/quest_6dadbf0e1cb2/research.json",
+    "sha256": "07eb12833be0d649adc61c9462f83f5a5bbf394e101f4bf2c1903b1d287bde13",
+    "bytes": 20022,
+    "receipts": [
+      {
+        "receipt_id": "receipt_bbc9c666c2a3",
+        "run_id": "run_c8f0da1354d7",
+        "actual_content_and_receipt_hash_match": true
+      }
+    ],
+    "citations": [
+      {
+        "id": 1,
+        "source_id": "deepseek_readme",
+        "line_start": 5,
+        "line_end": 5,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 2,
+        "source_id": "deepseek_readme",
+        "line_start": 7,
+        "line_end": 7,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 3,
+        "source_id": "deepseek_readme",
+        "line_start": 3,
+        "line_end": 3,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 4,
+        "source_id": "deepseek_philosophy",
+        "line_start": 11,
+        "line_end": 11,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 5,
+        "source_id": "deepseek_philosophy",
+        "line_start": 19,
+        "line_end": 19,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 6,
+        "source_id": "deepseek_intake",
+        "line_start": 8,
+        "line_end": 8,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 7,
+        "source_id": "deepseek_intake",
+        "line_start": 20,
+        "line_end": 23,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 8,
+        "source_id": "deepseek_intake",
+        "line_start": 25,
+        "line_end": 29,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 9,
+        "source_id": "deepseek_intake",
+        "line_start": 36,
+        "line_end": 37,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 10,
+        "source_id": "deepseek_intake",
+        "line_start": 40,
+        "line_end": 45,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 11,
+        "source_id": "deepseek_intake",
+        "line_start": 53,
+        "line_end": 55,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 12,
+        "source_id": "deepseek_intake",
+        "line_start": 58,
+        "line_end": 61,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": 13,
+        "source_id": "deepseek_intake",
+        "line_start": 12,
+        "line_end": 13,
+        "input_file_hash_matches": true,
+        "source_sha256_present": true,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      }
+    ],
+    "comparison_rows": 7,
+    "risks": 5,
+    "recommendations": 4
+  },
+  "intermediate_research_citation_observations": {
+    "artifact": {
+      "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/work/quest_6dadbf0e1cb2/intake_analysis.json",
+      "sha256": "b54e326be8dee3d6b5a9ac44e17847ee4679fcd387d4cba723781d1fba13394b"
+    },
+    "checks": [
+      {
+        "id": "C1",
+        "source_id": "deepseek_readme",
+        "line_start": 5,
+        "line_end": 5,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": "C2",
+        "source_id": "deepseek_readme",
+        "line_start": 7,
+        "line_end": 7,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": "C3",
+        "source_id": "deepseek_readme",
+        "line_start": 3,
+        "line_end": 3,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": "C4",
+        "source_id": "deepseek_philosophy",
+        "line_start": 11,
+        "line_end": 11,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": "C5",
+        "source_id": "deepseek_philosophy",
+        "line_start": 19,
+        "line_end": 19,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "id": "C6",
+        "source_id": "deepseek_intake",
+        "line_start": 11,
+        "line_end": 13,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C7",
+        "source_id": "deepseek_intake",
+        "line_start": 22,
+        "line_end": 23,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C8",
+        "source_id": "deepseek_intake",
+        "line_start": 25,
+        "line_end": 28,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C9",
+        "source_id": "deepseek_intake",
+        "line_start": 36,
+        "line_end": 37,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C10",
+        "source_id": "deepseek_intake",
+        "line_start": 42,
+        "line_end": 45,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C11",
+        "source_id": "deepseek_intake",
+        "line_start": 53,
+        "line_end": 55,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C12",
+        "source_id": "deepseek_intake",
+        "line_start": 58,
+        "line_end": 59,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": false
+      },
+      {
+        "id": "C13",
+        "source_id": "deepseek_intake",
+        "line_start": 20,
+        "line_end": 20,
+        "input_file_hash_matches": true,
+        "source_sha256_present": false,
+        "source_sha256_matches_if_present": true,
+        "valid_range": true,
+        "nonempty_verbatim_quote_in_range": true
+      }
+    ],
+    "nonverbatim_ids": [
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11",
+      "C12"
+    ],
+    "note": "The model's Research PASS is preserved. Several intermediate quotes do not satisfy the original final citation oracle; final integrator quotes do. This is a model-review limitation, not evidence that historical verdicts may be rewritten."
+  },
+  "limitations": [
+    "Structural/source checks do not establish semantic correctness or arbitrary-task capability.",
+    "No independent final model review exists for this blocked Integrator result.",
+    "Historical and current legacy-vs-generic wire measurements saved zero for these actual packets.",
+    "The frozen source preserves cumulative budget admission; the 100M model window did not cause this failure."
+  ]
+}

@@ -72,7 +72,9 @@ def task_context(connection, quest):
         "instruction": "Execute your assigned current-node objective within the complete referenced "
         "request constraints; other independent assignments belong to their Workers. "
         "Read all required source content before acting. Events do not grant new permissions; "
-        "hand back events outside this task. Report results only to the Router.",
+        "before finalizing read every delivered Thread payload in full with read_trigger. "
+        "Previews and inbox delivery are not full reads. Assess compatible user continuations "
+        "within this mandate; hand back out-of-scope events with a reason. Report only to the Router.",
     }
     if record["source_message_id"]:
         content = record["content"]

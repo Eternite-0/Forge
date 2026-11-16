@@ -119,12 +119,12 @@ def _reader(store, connection, run_id, historical):
     is_current = current["id"] == plan["id"]
     if (
         current["status"] != "approved"
-        or current["approved_by"] != "local_user"
+        or not current["approved_by"]
         or not current["approved_at"]
         or plan["quest_id"] != reader["quest_id"]
         or plan["revision"] != reader["plan_revision"]
         or plan["digest"] != reader["plan_digest"]
-        or plan["approved_by"] != "local_user"
+        or not plan["approved_by"]
         or not plan["approved_at"]
         or plan["status"] not in ({"approved"} if is_current else {"superseded"})
         or node["worker_id"] != reader["worker_id"]
@@ -132,6 +132,17 @@ def _reader(store, connection, run_id, historical):
         or reader["execution_mode"] != "live"
     ):
         raise DomainError("Completed-delivery reader assignment changed")
+    from .superagent_delegation import validate_contract_authority
+
+    for approved in {row["id"]: row for row in (current, plan)}.values():
+        validate_contract_authority(
+            connection,
+            reader["quest_id"],
+            approved["approved_by"],
+            "plan",
+            approved["revision"],
+            approved["digest"],
+        )
     _graph(current)
     graph = _graph(plan)
     contract = _contract(graph, node)

@@ -1,0 +1,529 @@
+{
+  "schema_version": 2,
+  "created_at": "2026-11-16T00:43:30.251329+00:00",
+  "scope": "FORGE capability sprint continuing 57a162d; final corrected source",
+  "status": "incomplete_acceptance_failed",
+  "goal_achieved": false,
+  "branch": "codex/phase1-continuous",
+  "head": "57a162d31f9b559353fecbde61f95dd72f878abd",
+  "commit_or_push_performed": false,
+  "frontend_changes_by_this_sprint": false,
+  "provider": {
+    "base_url": "http://127.0.0.1:8788/v1",
+    "model_id": "deepseek-v4.1-flash",
+    "identity": "unverified_proxy_reported_identity",
+    "context_window": 100000000,
+    "context_source": "explicit_user_declaration_not_independently_measured",
+    "discovered_context_window": 1000000,
+    "declaration_conflict_retained": true,
+    "capacity_is_not_execution_budget": true,
+    "provider_configuration_modified": false,
+    "worker_output_allowance": 8192,
+    "router_output_allowance": 4096,
+    "gateway_retries": 0
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-final-source-freeze.json",
+    "sha256": "5df3c2c51dd5d576fea573a2a942c1af1885f3218edf6d6c76f384be4e353a72",
+    "file_count": 345,
+    "manifest_sha256": "cf95f0e943c2b3862fb2991f1a61a06e08c70666752364e900c919783170f12b",
+    "post_provider_run_matches_verified_by_independent_audit": true,
+    "production_source_matches_at_delivery": true,
+    "test_only_changes_after_full_suite": [
+      {
+        "path": "backend/tests/test_specialist_artifact_projection.py",
+        "current_sha256": "53166953d71b5cf473c1b3bbfc333c14ce53828f34ff5870acdd7af30b912047"
+      }
+    ]
+  },
+  "regression": {
+    "final_full_suite_unchanged_original_result": {
+      "path": "docs/audit/superagent/capability-final-backend.xml",
+      "sha256": "0982aa9a5e6fd6d1a15f6ad958cc5a91d4ee92853c24cf04307cb33cd16fb7fc",
+      "tests": 2812,
+      "failures": 14,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2795,
+      "seconds": 642.604,
+      "failed_cases": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+        "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+      ]
+    },
+    "new_failed_cases_in_original_full_suite": [
+      "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+    ],
+    "test_only_contract_followup": {
+      "path": "docs/audit/superagent/capability-specialist-legacycap-followup.xml",
+      "sha256": "8155a80af6b388e6adfc0e96217cc3ba156b10a3e8f6cab58374a6cc92d4be24",
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 61,
+      "seconds": 23.138,
+      "failed_cases": []
+    },
+    "unresolved_new_failed_cases": [],
+    "followup_note": "The full-suite 14-failure result is preserved. One obsolete implicit legacy packet-cap test was corrected and rerun separately; no production source changed and no full-suite result is relabelled.",
+    "historical_failed_cases": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "previous_342_file_full_suite": {
+      "path": "docs/audit/superagent/capability-repair-backend.xml",
+      "sha256": "58ad9c47057ff8cb1b9d7bab2f0c2f1e15ee6c099ffd2ff1693ff2cb8d5532f7",
+      "tests": 2767,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2751,
+      "seconds": 848.462,
+      "failed_cases": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+      ]
+    },
+    "preliminary_338_file_full_suite": {
+      "path": "docs/audit/superagent/capability-continuation-backend.xml",
+      "sha256": "899763434380f0460127da3134123313e910f6b151536a8a02fd0735d45762de",
+      "tests": 2669,
+      "failures": 14,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2652,
+      "seconds": 688.448,
+      "failed_cases": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+        "tests.test_worker_first_archive_phase2::test_first_real_oversized_batch_archives_then_reads_own_source_with_full_reservation"
+      ]
+    },
+    "targeted_counts_overlap_do_not_sum": true
+  },
+  "static_checks": {
+    "ruff_changed_python_passed": true,
+    "backend_docs_diff_check_passed": true,
+    "desktop_other_conversation_excluded": true
+  },
+  "closed_original_phase": {
+    "path": "docs/audit/superagent/checkpoint-pre-continuation/final-verification.json",
+    "sha256": "2ca3362bc06a321cd749036796afb891c1cc584bb1172becf23e2fa29db0a7dc",
+    "attempts": 160,
+    "settled": 159,
+    "model_operation_unknown": 1,
+    "known_tokens": 1355207
+  },
+  "closed_continuation_phases": [
+    {
+      "path": "docs/audit/superagent/capability-continuation-closure.json",
+      "sha256": "cd42b3a3f19d7c8b526c4780383ece4c47a4b4953e192f679ab76066523d27d8"
+    },
+    {
+      "path": "docs/audit/superagent/capability-repair-closure.json",
+      "sha256": "47c41ef6c58272255c944ee37d650300b5adccf19a2cf3d907b78a400d538266"
+    }
+  ],
+  "final_protocol": {
+    "path": "docs/audit/superagent/capability-final-continuity-protocol.json",
+    "sha256": "53e114e2f308d6a49c47edde19b7d10dab740349473b9d4fd8efc774afd0444e"
+  },
+  "final_real_task": {
+    "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2.json",
+    "sha256": "83f900fc770596e6409abc09fdc4b1f862242ab8d410389d7331693aaeced686",
+    "run_id": "20261116T002629Z-capability-continuity-e02ee2",
+    "status": "failed",
+    "checks": {
+      "pass_through_L2": true,
+      "pass_through_L3": true,
+      "observed_team_condition_L2": false,
+      "final_calls_settled": true,
+      "fixed_aggregate_calls": true,
+      "fixed_admission_call_ceiling": true,
+      "final_per_task_budget": true,
+      "source_unchanged_after_drain": true
+    },
+    "failure_code": "workers_stopped_without_progress",
+    "metrics": {
+      "provenance": "programmatic_read_only_core_evidence",
+      "worker_execution_modes": {
+        "live": 2
+      },
+      "gateway_attempt_modes_from_worker_scope": {
+        "live": 19,
+        "unattributed_non_worker": 9
+      },
+      "model_calls": 28,
+      "model_calls_by_purpose": {
+        "context_compaction": 2,
+        "independent_reviewer": 2,
+        "router": 2,
+        "router_notice": 7,
+        "worker": 15
+      },
+      "admission_states": {
+        "settled": 28
+      },
+      "provider_model_pairs": [
+        [
+          "wb-local",
+          "deepseek-v4.1-flash"
+        ]
+      ],
+      "charged_tokens": 290808,
+      "known_charged_tokens": 290808,
+      "unknown_usage_attempts": 0,
+      "cost_microunits": null,
+      "cost_currency": null,
+      "observed_event_span_seconds": 149.1698408126831,
+      "workers_by_state": {
+        "blocked": 2
+      },
+      "quests_by_state": {
+        "running": 2
+      },
+      "core_completed_quest_rate": {
+        "passed": 0,
+        "samples": 2,
+        "value": 0.0
+      },
+      "tool_calls": 20,
+      "tool_states": {
+        "failed": 5,
+        "succeeded": 15
+      },
+      "tool_success_rate": {
+        "passed": 15,
+        "samples": 20,
+        "value": 0.75
+      },
+      "repair_events": 4,
+      "worker_repair_counters": 6,
+      "review_attempts": 2,
+      "review_verdicts": {
+        "NEEDS_REVISION": 2
+      },
+      "judged_review_pass_rate": {
+        "passed": 0,
+        "samples": 2,
+        "value": 0.0
+      },
+      "review_infrastructure_errors": 0,
+      "recovery_events": 0,
+      "recovered_run_current_success_rate": {
+        "passed": 0,
+        "samples": 0,
+        "value": null
+      },
+      "receipt_integrity_rate": {
+        "passed": 12,
+        "samples": 12,
+        "value": 1.0
+      },
+      "context_archive_count": 2,
+      "core_source_read_count": 0,
+      "subscription_count": 2,
+      "trigger_delivery_count": 4,
+      "source_refs": [
+        "model_attempt:18b153ae51e24905ac39004bdb4362cb",
+        "model_attempt:eca0247bf398448888799d0967459f69",
+        "model_attempt:fa5b16ebd4634c38bd16484e73f4bb15",
+        "model_attempt:412532f1e7d84b6a82f475e5edcb1638",
+        "model_attempt:2048c0e90a574baab91f3cc4c3f0fdf8",
+        "model_attempt:ac76d1292bc6494cba5d352f4ecfa069",
+        "model_attempt:d87bff38bfa042528e500b4b3d5e4aae",
+        "model_attempt:aabf0968e4c04b499b5987ef81f4e9f0",
+        "model_attempt:1a3b7bc104f84b448af170a388fb0808",
+        "model_attempt:03c32e7467ab4e3e9f90f93685c9737f",
+        "model_attempt:a767a894588b47999478875b881cad88",
+        "model_attempt:7653ebbd69ee4920bc44529b121e6342",
+        "model_attempt:751393045e1c40318eeae727a8054fde",
+        "model_attempt:7e84dcd8433140d7a8ac083b51a2d1ba",
+        "model_attempt:4354b692e5fe4dc38c406505c7d2f614",
+        "model_attempt:9f973205752744b8a2f2a724f10697b1",
+        "model_attempt:d88261d33cb94b24a74c9248f43aa937",
+        "model_attempt:894c38db1cfb4d129e59fab4bfeeb3be",
+        "model_attempt:2351cb3c68fb458a951640acfd2b3c3f",
+        "model_attempt:1eb03b56c2f044ec8439689cb98ca3a5",
+        "model_attempt:a8b0056e22b54419b859ac3e9260be01",
+        "model_attempt:27dba1f2bd1f4fb0977ef70c91dd6851",
+        "model_attempt:aa60b07eff5c469c9619da7ed4f1cbf6",
+        "model_attempt:cad3e4303ad547268072ce6c862d57ae",
+        "model_attempt:da5c34fb2674442589e547f0881a9ec5",
+        "model_attempt:b5b87cafe74840d9a810180c7b26b540",
+        "model_attempt:dfa976a1d3ab4d8ea16a8774ccb2b1a2",
+        "model_attempt:3cc51776eb314023a661667df138f3ab",
+        "run:run_7255e9980943",
+        "run:run_df52e380d4ce",
+        "receipt:receipt_1759f0239701",
+        "receipt:receipt_1c4c6cece1a1",
+        "receipt:receipt_36566595da5e",
+        "receipt:receipt_3ec23e048b2a",
+        "receipt:receipt_567b803e3742",
+        "receipt:receipt_73adcd211022",
+        "receipt:receipt_8935e0859fef",
+        "receipt:receipt_960d6c0ae708",
+        "receipt:receipt_a05fd1e73c07",
+        "receipt:receipt_a5d5a61180c9",
+        "receipt:receipt_ea14d9933587",
+        "receipt:receipt_fb6c43329b7c",
+        "event:evt_eb9cf2b7f864",
+        "event:evt_01dbc473d21b"
+      ],
+      "source_refs_omitted": 0,
+      "snapshot_sha256": "8fcb7bfbf79f64cc86431cb279c67630d86b4f7d2c939c4eb2bcd5ecb30f2281",
+      "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+    },
+    "source_sha256": "8aebd63885ae006e00c405a8968040d6c44a9de0837ecd6f74fa984e2cb40f3b",
+    "tasks": {
+      "L2": {
+        "quest_id": "quest_4423cc2f7620",
+        "source_sha256": "11b4340adda7e86e380c8611ccce9d06c0dd213272ffa6f99a97e214ddcbeda7",
+        "team_observation": {
+          "execution_team": {
+            "strategy": "hierarchical",
+            "assignments": [
+              {
+                "role": "research",
+                "depends_on": []
+              },
+              {
+                "role": "architect",
+                "depends_on": [
+                  0
+                ]
+              }
+            ]
+          },
+          "independent_dispatches": [],
+          "selected_strategy": "hierarchical",
+          "actual_worker_count": 1,
+          "actual_roles": [
+            "research_1"
+          ],
+          "actual_dependencies": [
+            {
+              "source": "task_1",
+              "target": "task_2",
+              "condition": "success"
+            }
+          ]
+        }
+      },
+      "L3": {
+        "quest_id": "quest_a855618c49f2",
+        "source_sha256": "b1fa137e5190c749412a2ea65fa7040550043454b1a6b7259ffd8e2b6790bced",
+        "team_observation": {
+          "execution_team": null,
+          "independent_dispatches": [
+            {
+              "role": "coding",
+              "depends_on": []
+            }
+          ],
+          "selected_strategy": "single",
+          "actual_worker_count": 1,
+          "actual_roles": [
+            "coding"
+          ],
+          "actual_dependencies": []
+        }
+      }
+    },
+    "limits": {
+      "task_calls": 32,
+      "task_tokens": 500000,
+      "task_seconds": 900,
+      "gateway_retries": 0,
+      "aggregate_calls": 56
+    }
+  },
+  "accepted_scenarios": {
+    "L1": "20261115T231549Z-capability-project-4348f1",
+    "single_L2": "20261115T231841Z-capability-single-db92c8",
+    "multi_specialist_L2": null,
+    "autonomous_L3": null,
+    "complete_joint_continuity": null
+  },
+  "accounting": {
+    "continuation_attempts": 131,
+    "continuation_attempt_ceiling": 160,
+    "continuation_known_tokens": 1278416,
+    "continuation_token_ceiling": 2600000,
+    "continuation_injected_rejections": 2,
+    "continuation_real_upstream_calls": 129,
+    "continuation_rejection_usage_unknown_reservations_retained": 2,
+    "continuation_unknown_tool_operations_preserved": 1,
+    "all_capability_task_diagnostic_attempts": 291,
+    "all_capability_task_diagnostic_known_tokens": 2633623,
+    "independent_microprobe_calls": 12,
+    "independent_microprobe_known_tokens": 1414,
+    "cost_microunits": null,
+    "unknown_usage_imputed": false,
+    "historical_unknown_operation_replayed": false
+  },
+  "evidence_classes": {
+    "real_provider": "Actual configured proxy/model calls and real Worker/tool/Reviewer task flow; identities are proxy-reported.",
+    "fault_injection": "Two separately labelled local one-shot HTTP503 conditions, not natural failures; neither task passed.",
+    "mock": "Scripted MockTransport/local HTTP tests, including technical execution_mode=live provenance fixtures; no model-quality claim.",
+    "programmatic": "Host holdouts, citation/hash/receipt checks, source-freeze hashes and read-only independent audits."
+  },
+  "preserved_reports": [
+    {
+      "path": "docs/audit/superagent/20261115T231351Z-capability-continuity-4ccdec.json",
+      "sha256": "52042c78ecae5ba3b2d3d09955de7361e78f2ae61aa7e997c9ce1a929b0e2a72",
+      "run_id": "20261115T231351Z-capability-continuity-4ccdec",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T231549Z-capability-project-4348f1.json",
+      "sha256": "72f383bd5370fffd80f6081835dacef191a24714ea789c6b318c9ee661d08269",
+      "run_id": "20261115T231549Z-capability-project-4348f1",
+      "status": "passed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T231841Z-capability-single-db92c8.json",
+      "sha256": "30a55e207e4ee434fd2b862a666545b03351f04b323ca087995e2c6fe8a19b0b",
+      "run_id": "20261115T231841Z-capability-single-db92c8",
+      "status": "passed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T232055Z-capability-fixed-fe94ad.json",
+      "sha256": "5d9c97e09ed59e07413d6b0618b5ef579fdcca944a6db6f95eaeb8e1a021434b",
+      "run_id": "20261115T232055Z-capability-fixed-fe94ad",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T232817Z-failover-35753c.json",
+      "sha256": "4335dd82c26fd37a951ae0a46b62150be22aac8b640b73653aedf7e2f3056f81",
+      "run_id": "20261115T232817Z-failover-35753c",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f.json",
+      "sha256": "cf2a26856b11592810a1987ba33f2d3bd8a3d3ecc7e48b698e02ff43488a680e",
+      "run_id": "20261115T235303Z-capability-continuity-251a4f",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T235734Z-capability-project-b550f2.json",
+      "sha256": "1be98085d3d733876496548fe2ee6e622bd596828f2be1c325ae46b04e21bd77",
+      "run_id": "20261115T235734Z-capability-project-b550f2",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T235408Z-failover-6b6702.json",
+      "sha256": "e276621197e80ff6d5770a28914a3c4d42f8335d8f084f2166a07b4a19b35cb9",
+      "run_id": "20261115T235408Z-failover-6b6702",
+      "status": "failed"
+    },
+    {
+      "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2.json",
+      "sha256": "83f900fc770596e6409abc09fdc4b1f862242ab8d410389d7331693aaeced686",
+      "run_id": "20261116T002629Z-capability-continuity-e02ee2",
+      "status": "failed"
+    }
+  ],
+  "independent_supplementals": [
+    {
+      "path": "docs/audit/superagent/20261115T214924Z-capability-adaptive-35c07f-independent-supplemental.json",
+      "sha256": "2c206e38fabdbeeaeeae06344db934f69aac9e506eb4be520eafaa6df0219984"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T221734Z-capability-continuity-300fa0-independent-supplemental.json",
+      "sha256": "6f6c8978442b51055ad964b953674930f5eea7d2270223faa1a170f97943c9a2"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f-independent-supplemental.json",
+      "sha256": "b6232918dd1d9ad71167867ab851e48196bd64483942ce1ddf03e9421137fc58"
+    },
+    {
+      "path": "docs/audit/superagent/20261115T235408Z-failover-6b6702-independent-supplemental.json",
+      "sha256": "74621e270e1762945fdb35fcfca6dd47895b4107ea3979478d3bbab34374591a"
+    },
+    {
+      "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2-independent-supplemental.json",
+      "sha256": "9757b7f84fb865aa87ebc2555d6047115fe92f717d752f5c5f903dae0892c220"
+    }
+  ],
+  "validation_manifests": [
+    {
+      "path": "docs/audit/superagent/capability-compaction-diagnostics-production-verification.json",
+      "sha256": "236d4cfd0e934308272d6e7adfafdbe535ac2b1c5b563e9456b88c0c3def2532"
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-verification.json",
+      "sha256": "3d661b703c6e87c10d810ab3d80829dceac26a35b3eb18bd2f9459061a10b845"
+    },
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-verification.json",
+      "sha256": "3051ce1870615fba78a3465723dc9b83095031c7a340d85172a55e4f0706186d"
+    }
+  ],
+  "comparison": {
+    "path": "docs/audit/superagent/capability-continuation-comparison.json",
+    "sha256": "5cbbdb7a7bb469897aadf5fb8ee42b9fdaff0af5850248f5c678e64ab74d423f"
+  },
+  "test_contract_followup_audit": {
+    "path": "docs/audit/superagent/capability-specialist-legacycap-followup-audit.json",
+    "sha256": "5843c1efb3fd55a5f7c87852fe5e46ee66effd2f50cfb77d1d9597b743d71aa1"
+  },
+  "static_validation": {
+    "path": "docs/audit/superagent/capability-final-static.json",
+    "sha256": "9a01db58f5b0efe55dc7e140c52f4097bd1bdcc362f2d440b2ab36e901278d6b"
+  },
+  "limitations": [
+    "Small task samples do not establish long-duration reliability or optimal team/model routing.",
+    "Historical unknown model/tool outcomes remain unresolved and must never be replayed.",
+    "The failover driver oracle was corrected; its prior false-positive LF artifact check remains explicitly overridden by an independent supplemental, without rewriting the original report.",
+    "General terminal execution, unrestricted package installation and an OS security sandbox are not newly enabled.",
+    "Deterministic unrepairable review BLOCKED convergence is not fully generalized; the concrete implicit legacy packet ceiling is removed while explicit envelopes and real request budgets remain.",
+    "Prices, unsupported vision/GPU task performance and true upstream identity remain unknown."
+  ]
+}

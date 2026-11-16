@@ -286,7 +286,7 @@ def test_unsettled_live_provenance_stub_does_not_authorize_reviewer_truncation_r
         assert connection.execute("SELECT COUNT(*) FROM model_budget_attempts").fetchone()[0] == 0
 
 
-def test_oversized_review_packet_emits_specific_diagnostic_without_silent_truncation(tmp_path):
+def test_oversized_review_native_request_emits_context_diagnostic_without_truncation(tmp_path):
     store, manager, model, run = prepared(
         tmp_path,
         [tool("file_read", {"path": "work/input.txt"}), response(delivery("x" * 58000))],
@@ -296,7 +296,7 @@ def test_oversized_review_packet_emits_specific_diagnostic_without_silent_trunca
     service = IndependentReviewService(manager)
     assert asyncio.run(service.tick())
     assert not asyncio.run(service.tick())
-    assert events(store, "review.blocked")[-1]["reason_code"] == "review_packet_too_large"
+    assert events(store, "review.blocked")[-1]["reason_code"] == "review_context_limit"
     assert len(model.requests) == 2 and not events(store, "review.started")
 
 

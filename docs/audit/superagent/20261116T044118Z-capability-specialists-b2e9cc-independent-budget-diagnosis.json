@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:51:12.835984+00:00",
+  "run_id": "20261116T044118Z-capability-specialists-b2e9cc",
+  "provenance": "independent_read_only_in_flight_budget_diagnosis_not_final_acceptance",
+  "audit_program": {
+    "path": ".local/superagent/l2_round1_snapshot.py",
+    "sha256": "71e764ee76640ee80c283063eae2ce402757deb8483cc33aaa072817230576a6"
+  },
+  "condition_protocol": {
+    "path": "docs/audit/superagent/capability-completion-round1-protocol.json",
+    "sha256": "26e947a369726aae1fe3b4bcb53ef014b02af1d5a0780decfcd89a92c869497f"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-round1-source-freeze.json",
+    "sha256": "caf027a97292657e03147f9463900d62dc0ff22276e4fc5d07d8ea150f15d817",
+    "file_count": 354,
+    "changed_files": []
+  },
+  "actions": {
+    "provider_calls": 0,
+    "credential_reads": 0,
+    "live_database_writes": 0,
+    "frozen_source_changes": 0,
+    "model_or_tool_replays": 0,
+    "sqlite_uri_mode": "ro",
+    "sqlite_query_only": true
+  },
+  "diagnosis": {
+    "limiting_factor": "remaining_cumulative_worker_budget_cannot_cover_complete_native_input_and_minimum_verdict",
+    "exception_type": "DomainError",
+    "exception_message": "Independent review budget exhausted",
+    "minimum_verdict_tokens": 1024,
+    "remaining_cumulative_tokens": 84691,
+    "native_input_reservation": 98556,
+    "minimum_required_reservation": 99580,
+    "minimum_deficit": 14889,
+    "full_8192_verdict_deficit": 22057,
+    "canonical_packet_bytes": 97502,
+    "model_context_window": 100000000,
+    "model_context_is_not_the_limit": true,
+    "legacy_and_current_native_wire_equal": true,
+    "transport_savings_for_actual_final_packet": 0,
+    "live_review_started_for_integrator": false,
+    "the_unstarted_final_packet_hash_is_a_reconstruction_not_a_historical_review_started_attestation": true
+  },
+  "packet_measurements": [
+    {
+      "packet_sha256": "e941c2b032d6aa61d195d5beb024f90e28174dfcaf80d181b9217f50d87b59b5",
+      "canonical_packet_bytes": 65534,
+      "top_level_component_bytes": {
+        "quest_id": 20,
+        "plan_id": 19,
+        "plan_digest": 66,
+        "plan_revision": 1,
+        "node_key": 8,
+        "team_digest": 66,
+        "provider_id": 10,
+        "model_id": 21,
+        "execution_mode": 6,
+        "run_id": 18,
+        "result_event_id": 18,
+        "original_goal": 760,
+        "objective": 600,
+        "success_criteria": 19,
+        "original_request": 2131,
+        "updated_request": 4,
+        "user_constraints": 7914,
+        "contract": 1233,
+        "delivery": 7293,
+        "receipts": 30140,
+        "artifacts": 14765,
+        "trust": 98
+      },
+      "native_current_input_reservation": 66523,
+      "native_legacy_input_reservation": 66523,
+      "remaining_cumulative_tokens": 79780,
+      "current_model_context_window": 100000000,
+      "reservation_result": {
+        "admitted_reserve": 74715,
+        "output_tokens": 8192
+      },
+      "run_id": "run_f8e6eaedab42",
+      "role_id": "research_1",
+      "state": "succeeded",
+      "started_packet_hashes": [
+        "e941c2b032d6aa61d195d5beb024f90e28174dfcaf80d181b9217f50d87b59b5"
+      ],
+      "matches_review_started": true
+    },
+    {
+      "packet_sha256": "a034f01151ca6c3b8a27ff511b44ab910cc48de8136c1922ca62e74f6042f2f7",
+      "canonical_packet_bytes": 44352,
+      "top_level_component_bytes": {
+        "quest_id": 20,
+        "plan_id": 19,
+        "plan_digest": 66,
+        "plan_revision": 1,
+        "node_key": 8,
+        "team_digest": 66,
+        "provider_id": 10,
+        "model_id": 21,
+        "execution_mode": 6,
+        "run_id": 18,
+        "result_event_id": 18,
+        "original_goal": 760,
+        "objective": 383,
+        "success_criteria": 19,
+        "original_request": 2131,
+        "updated_request": 4,
+        "user_constraints": 7914,
+        "contract": 1233,
+        "delivery": 5915,
+        "receipts": 25316,
+        "artifacts": 2,
+        "trust": 98
+      },
+      "native_current_input_reservation": 44511,
+      "native_legacy_input_reservation": 44511,
+      "remaining_cumulative_tokens": 98324,
+      "current_model_context_window": 100000000,
+      "reservation_result": {
+        "admitted_reserve": 52703,
+        "output_tokens": 8192
+      },
+      "run_id": "run_669de9de44d6",
+      "role_id": "architect_2",
+      "state": "succeeded",
+      "started_packet_hashes": [
+        "a034f01151ca6c3b8a27ff511b44ab910cc48de8136c1922ca62e74f6042f2f7"
+      ],
+      "matches_review_started": true
+    },
+    {
+      "packet_sha256": "baf08bc5f648d1e6d37e85dd911a08d8251d272498062fe202bbee89092860bb",
+      "canonical_packet_bytes": 97502,
+      "top_level_component_bytes": {
+        "quest_id": 20,
+        "plan_id": 19,
+        "plan_digest": 66,
+        "plan_revision": 1,
+        "node_key": 8,
+        "team_digest": 66,
+        "provider_id": 10,
+        "model_id": 21,
+        "execution_mode": 6,
+        "run_id": 18,
+        "result_event_id": 18,
+        "original_goal": 760,
+        "objective": 487,
+        "success_criteria": 19,
+        "original_request": 2131,
+        "updated_request": 4,
+        "user_constraints": 7914,
+        "contract": 1357,
+        "delivery": 9743,
+        "receipts": 40913,
+        "artifacts": 18950,
+        "trust": 98,
+        "predecessor_deliveries": 14523
+      },
+      "native_current_input_reservation": 98556,
+      "native_legacy_input_reservation": 98556,
+      "remaining_cumulative_tokens": 84691,
+      "current_model_context_window": 100000000,
+      "reservation_result": {
+        "error_type": "DomainError",
+        "error": "Independent review budget exhausted"
+      },
+      "run_id": "run_c8f0da1354d7",
+      "role_id": "reviewer_3",
+      "state": "review_pending",
+      "started_packet_hashes": [],
+      "matches_review_started": false
+    }
+  ],
+  "review_blocked_events": [
+    {
+      "id": "evt_68caa0b92243",
+      "created_at": "2026-11-16T04:43:08.912990+00:00",
+      "payload": {
+        "protocol_version": 2,
+        "plan_id": "plan_d3cf5da69474",
+        "task_node_key": "task_3",
+        "run_id": "run_c8f0da1354d7",
+        "result_event_id": "evt_5ab3236d29f2",
+        "reason_code": "review_contract_or_budget_failed"
+      }
+    }
+  ],
+  "snapshot_accounting": {
+    "attempts": 21,
+    "settled": 21,
+    "known_tokens": 246009,
+    "charged_or_reserved_tokens": 246009,
+    "unsettled_tool_intents": 0
+  },
+  "current_artifact": {
+    "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/work/quest_6dadbf0e1cb2/research.json",
+    "sha256": "07eb12833be0d649adc61c9462f83f5a5bbf394e101f4bf2c1903b1d287bde13",
+    "bytes": 20022,
+    "citations": [
+      {
+        "source_id": "deepseek_readme",
+        "line_start": 5,
+        "line_end": 5,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_readme",
+        "line_start": 7,
+        "line_end": 7,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_readme",
+        "line_start": 3,
+        "line_end": 3,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_philosophy",
+        "line_start": 11,
+        "line_end": 11,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_philosophy",
+        "line_start": 19,
+        "line_end": 19,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 8,
+        "line_end": 8,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 20,
+        "line_end": 23,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 25,
+        "line_end": 29,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 36,
+        "line_end": 37,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 40,
+        "line_end": 45,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 53,
+        "line_end": 55,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 58,
+        "line_end": 61,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      },
+      {
+        "source_id": "deepseek_intake",
+        "line_start": 12,
+        "line_end": 13,
+        "source_file_hash_matches": true,
+        "source_sha256_matches": true,
+        "line_range_valid": true,
+        "nonempty_verbatim_quote_in_range": true
+      }
+    ],
+    "cited_sources": [
+      "deepseek_intake",
+      "deepseek_philosophy",
+      "deepseek_readme"
+    ],
+    "comparison_rows": 7,
+    "risks": 5,
+    "recommendations": 4,
+    "citation_structure_is_not_semantic_acceptance": true
+  },
+  "wait_path": {
+    "review_blocked_fences_same_result": {
+      "path": "backend/src/forge_core/independent_review.py",
+      "line": 1510
+    },
+    "review_blocked_handler_keeps_review_pending": {
+      "path": "backend/src/forge_core/independent_review.py",
+      "line": 1957
+    },
+    "worker_control_loop_excludes_review_pending": {
+      "path": "backend/src/forge_core/worker_runtime.py",
+      "line": 3528
+    },
+    "driver_immediate_failures_only_failed_or_blocked": {
+      "path": "backend/scripts/verify_superagent_capability.py",
+      "line": 1105
+    },
+    "consequence": "No same-result automatic review retry or terminal transition is present. With no other failures, driver continues the original 900-second observation and reaches bounded_scenario_deadline or per_task_deadline.",
+    "driver_deadline_branch": {
+      "path": "backend/scripts/verify_superagent_capability.py",
+      "line": 1138
+    }
+  },
+  "limitations": [
+    "This is an in-flight snapshot; final run status and report were unavailable at capture.",
+    "The first two reconstructed packets exactly match real review.started hashes and original reservations; the final unadmitted packet has no review.started hash to compare.",
+    "Native input reservations are byte-based Gateway accounting units, not measured model token usage.",
+    "The unchanged budget blocked actual final review; existing Research/Architect PASSs do not establish final task acceptance.",
+    "Historical wire savings were zero; no optimization success, 100M context exhaustion, or model failure is claimed."
+  ],
+  "database_quick_check": "ok"
+}

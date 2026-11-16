@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:35:07.418950+00:00",
+  "provenance": "independent_source_review_and_existing_offline_regression_evidence_no_model_calls",
+  "audit_program": {
+    "path": ".local/superagent/round3_patch_independent_audit.py",
+    "sha256": "d71d70033ed48e44623bf34fd42572c67cf131c644bb3ae705e7d6ec8fe1ac77"
+  },
+  "source_freeze_round2": {
+    "path": "docs/audit/superagent/capability-completion-round2-source-freeze.json",
+    "sha256": "dde83945207b0bbf994b3a7572c52f23b7c7176475bcddfabcf3403b35408da9"
+  },
+  "source_freeze_round3": {
+    "path": "docs/audit/superagent/capability-completion-round3-source-freeze.json",
+    "sha256": "3d3a73a2607601347a95e31f62f9c0473d1e015bec162e2e4dfa2565a29ffd93"
+  },
+  "source_delta": [
+    {
+      "path": "backend/src/forge_core/router.py",
+      "old_sha256": "8adaa3e80b3d5441afe9b15c6b8f46d60dc2677dc679de1edfbdf63e68a13a87",
+      "new_sha256": "94908de7760a5985593af1addfe39313f2f31d2122320af31929d876e5e7e9f8"
+    },
+    {
+      "path": "backend/src/forge_core/worker_prompts.py",
+      "old_sha256": "a855bf9df41573c0f98e12df09ea780937f83a4047d731efaba8657e880bdd5e",
+      "new_sha256": "bc58286146378c6604fddf7e08c07695967edde81ebac90b841b8e1a2de1d974"
+    },
+    {
+      "path": "backend/tests/test_router_intake_notice_convergence.py",
+      "old_sha256": null,
+      "new_sha256": "49deb1ccc520db9178df8050ad8ce2cfab3ec352b769a4924c4dd633795a5b06"
+    }
+  ],
+  "changed_after_freeze": [],
+  "checks": {
+    "round3_freeze_356_files_unchanged": true,
+    "delta_only_router_prompt_and_new_regression_test": true,
+    "notice_only_policy_key_removed_in_measurement": true,
+    "actual_notice_sources_and_full_constraints_retained": true,
+    "original_projection_limit_not_raised": true,
+    "system_policy_retained_separately": true,
+    "offline_diagnostics_do_not_touch_original_database_or_provider": true,
+    "intake_repro_is_SQLITE_BUSY_SNAPSHOT517": true,
+    "notice_after_fix_reaches_only_NoNetwork_boundary": true,
+    "guidance_scoped_to_write_review_and_no_capacity": true,
+    "guidance_preserves_schema_inline_downstream_and_full_reports": true
+  },
+  "checks_all_passed": true,
+  "blocking_findings": [],
+  "source_review": {
+    "intake": "BEGIN IMMEDIATE occurs before request-id read/project registration/snapshot; commit releases the writer lock before compaction, semantic recall or model generation. Existing replay, snapshot and later CAS/retry machinery remain. No retry or attempt ceiling changes were made.",
+    "notice": "Only notice-local user-data policy duplication is removed. The _POLICY plus notice-specific instructions remain in the system message. Event sources, completed delivery summaries, constraints and completed_context are retained. The 16000-byte projection bound and complete native-wire model-context gate remain.",
+    "worker_guidance": "The no-capacity artifact delivery guidance now requires write/revise capability and a review criterion, avoiding irrelevant artifact-writing guidance for read-only nodes. Short delivery references are conditional on complete assigned artifacts being available to review/downstream; complete assigned schema, inline evidence and requested reports remain mandatory."
+  },
+  "offline_notice_measurement": {
+    "before": {
+      "path": ".local/superagent/round2-notice-field-measurement/measurement.json",
+      "sha256": "1e79d5a6610f6b30d0aace8b9b02f5b36f666b20226076dbab9f1713e03c85fd"
+    },
+    "after": {
+      "path": ".local/superagent/round2-notice-field-measurement-after-fix-verified/measurement.json",
+      "sha256": "88e1af4d83956eb16134c997e0e2feda62214b0a47a127f855435f80126fdea6"
+    },
+    "before_canonical_projection_bytes": 18337,
+    "after_canonical_projection_bytes": 13698,
+    "effect": "Removes 4639 bytes of repeated ordinary Router policy from this offline notice projection; this is not review-packet compression or observed live delivery."
+  },
+  "diagnostic_evidence": [
+    {
+      "path": ".local/superagent/round2-intake-snapshot-conflict-offline/diagnosis.json",
+      "sha256": "9fa3d6e2756cc5b8d86de9d809df9a3f85f58c4731e88d13a146969cd7cae326"
+    },
+    {
+      "path": ".local/superagent/round2-notice-diagnosis-offline/diagnosis.json",
+      "sha256": "6ae447fd889d2843ae56cbbfb78528b42735ede7b241653ccfb44bb769c10421"
+    },
+    {
+      "path": ".local/superagent/round2-notice-diagnosis-after-fix-offline/diagnosis.json",
+      "sha256": "9622f2acdf4bce51eace2936305ef9d2be841e768bf15832ad27ecb0cf2aacb2"
+    }
+  ],
+  "regression_evidence": [
+    {
+      "path": ".local/superagent/router-intake-notice-before.xml",
+      "sha256": "3a2d547cc6a65417987296c8b164abf02642c2ec106223c49ab76d182ad6c21d",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "2",
+          "skipped": "0",
+          "tests": "2",
+          "time": "1.421",
+          "timestamp": "2026-11-16T13:28:08.530498+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    },
+    {
+      "path": ".local/superagent/router-intake-notice-after.xml",
+      "sha256": "9cf3377006471b695776486404319aa317e470115be6b1ca7c735bf246494a31",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "2",
+          "time": "1.354",
+          "timestamp": "2026-11-16T13:28:26.705859+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-intake-notice-regression.xml",
+      "sha256": "4c5c179417f1d23e5ca27700ab28171c3811c6e4da7149705b2d7965ea3db2e2",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "121",
+          "time": "22.040",
+          "timestamp": "2026-11-16T13:29:12.804748+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-guidance-scope-followup.xml",
+      "sha256": "64702d5a34911c34511df531a4ec6548f9162850e6009487a8d5849417212b5c",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "80",
+          "time": "20.000",
+          "timestamp": "2026-11-16T13:26:58.975946+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    }
+  ],
+  "independent_existing_test_rerun": {
+    "command": "python -m pytest backend/tests/test_router_intake_notice_convergence.py -q -p no:cacheprovider",
+    "passed": 2,
+    "failed": 0,
+    "seconds": 2.71,
+    "real_provider_calls": 0
+  },
+  "historical_database": {
+    "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3",
+    "sha256": "3ac219815317a9fa744270e4e70c746bbf9a816a4d9d9fc99e726a18fc8ee306"
+  },
+  "limits": {
+    "per_task_calls": 32,
+    "per_task_tokens": 500000,
+    "round3_calls": 64,
+    "round3_tokens": 1000000,
+    "gateway_retries": 0,
+    "stage_max_calls": 160,
+    "stage_max_tokens": 2500000
+  },
+  "limitations": [
+    "The deterministic 517 reproduction explains a real source defect and matches the historical pre-model footprint; the original HTTP500 lacks an original stack, so exact historical causality remains unproven.",
+    "Offline copy diagnostics are not replays of the closed acceptance run and do not upgrade its failed verdict or original Router delivery.",
+    "Related offline tests and source checks do not establish round3 live acceptance; its evidence must be collected separately.",
+    "The earlier historical review-packet wire savings remain zero."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "run_id": "20261115T210429Z-capability-adaptive-b78221",
+  "strategy": "adaptive",
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "source_sha256": "0f24f76b6fe1ee6af9cbc4a05ff2356817295427b48c8f1a55ec45a6db284dc6",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0
+  },
+  "status": "failed",
+  "checks": {
+    "pass_through_L1": true,
+    "pass_through_L2": true
+  },
+  "tasks": {
+    "L1": {
+      "quest_id": "quest_8a00c08fdbe2",
+      "source_sha256": "69e9c22dbb21b2fc68c4db1311be5ec97ff52d5f064ed9c23e9d87bca3bec02f"
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "blocked_observations": [
+    {
+      "run_id": "run_06f6fef5fd93",
+      "state": "blocked",
+      "awaiting_authorization": 0,
+      "reason": "context_budget"
+    },
+    {
+      "run_id": "run_503dfd1968e6",
+      "state": "blocked",
+      "awaiting_authorization": 0,
+      "reason": "context_budget"
+    }
+  ],
+  "failure_code": "ProbeFailure",
+  "diagnostic_errors": [
+    {
+      "stage": "task_observations",
+      "exception_type": "OperationalError"
+    },
+    {
+      "stage": "metrics",
+      "exception_type": "OperationalError"
+    },
+    {
+      "stage": "final_snapshot",
+      "exception_type": "OperationalError"
+    }
+  ],
+  "elapsed_seconds": 88.538
+}

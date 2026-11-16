@@ -70,8 +70,8 @@ def test_first_real_oversized_batch_archives_then_reads_own_source_with_full_res
         )
         reservation = serialized + request.max_output_tokens + 64 + 16 * len(request.messages)
         assert current["token_spent"] == settled_spent + reservation
-        assert reservation <= request.context_limit <= initial["model_context_window"]
-        assert request.context_limit <= initial["token_limit"] - settled_spent
+        assert reservation <= request.context_limit == initial["model_context_window"]
+        assert reservation <= initial["token_limit"] - settled_spent
         assert current["token_spent"] <= initial["token_limit"]
         assert current["steps"] == call_index + 1 <= initial["step_limit"]
         names = [item["name"] for item in request.tools]

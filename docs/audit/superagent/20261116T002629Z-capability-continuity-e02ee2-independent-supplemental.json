@@ -1,0 +1,699 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T00:35:14.426954+00:00",
+  "run_id": "20261116T002629Z-capability-continuity-e02ee2",
+  "provenance": "independent_programmatic_read_only_database_artifact_and_source_audit",
+  "audit_actions": {
+    "sqlite_uri_mode": "ro",
+    "provider_calls": 0,
+    "source_test_script_edits": 0,
+    "original_report_database_edits": 0,
+    "operation_replays": 0
+  },
+  "original_report": {
+    "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2.json",
+    "sha256": "83f900fc770596e6409abc09fdc4b1f862242ab8d410389d7331693aaeced686",
+    "status": "failed",
+    "failure_code": "workers_stopped_without_progress"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-final-source-freeze.json",
+    "sha256": "5df3c2c51dd5d576fea573a2a942c1af1885f3218edf6d6c76f384be4e353a72",
+    "manifest_sha256": "cf95f0e943c2b3862fb2991f1a61a06e08c70666752364e900c919783170f12b",
+    "frozen_file_count": 345,
+    "changed_files": [],
+    "acceptance_source_sha256": "8aebd63885ae006e00c405a8968040d6c44a9de0837ecd6f74fa984e2cb40f3b",
+    "matches_report": true
+  },
+  "database": {
+    "path": ".local/superagent/20261116T002629Z-capability-continuity-e02ee2/data/forge.sqlite3",
+    "quick_check": "ok"
+  },
+  "scope": {
+    "recorded_projects": [
+      {
+        "id": "project_860f258a7ede3ca9150da1d9",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T002629Z-capability-continuity-e02ee2\\inputs\\projects\\project_beta",
+        "name": "project_beta"
+      },
+      {
+        "id": "project_5c69c6261aa7712fd89f43db",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T002629Z-capability-continuity-e02ee2\\inputs\\projects\\project_alpha",
+        "name": "project_alpha"
+      }
+    ],
+    "actual_quest_project_links": [
+      {
+        "quest_id": "quest_4423cc2f7620",
+        "project_id": "project_860f258a7ede3ca9150da1d9",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T002629Z-capability-continuity-e02ee2\\inputs\\projects\\project_beta"
+      },
+      {
+        "quest_id": "quest_a855618c49f2",
+        "project_id": "project_5c69c6261aa7712fd89f43db",
+        "root": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T002629Z-capability-continuity-e02ee2\\inputs\\projects\\project_alpha"
+      }
+    ],
+    "correct_two_project_task_associations": true,
+    "quests": [
+      {
+        "id": "quest_4423cc2f7620",
+        "status": "running",
+        "plan_revision": 1
+      },
+      {
+        "id": "quest_a855618c49f2",
+        "status": "running",
+        "plan_revision": 1
+      }
+    ],
+    "single_core_workspace_note": "Two local project roots are associated inside one persistent Core workspace; this does not claim separate OS sandboxes."
+  },
+  "workers": [
+    {
+      "id": "run_df52e380d4ce",
+      "worker_id": "worker_ee0a99e359ca",
+      "quest_id": "quest_4423cc2f7620",
+      "plan_id": "plan_cc6e8a75341f",
+      "node_key": "task_1",
+      "plan_revision": 1,
+      "role_id": "research_1",
+      "execution_mode": "live",
+      "state": "blocked",
+      "steps": 11,
+      "step_limit": 32,
+      "repairs": 2,
+      "token_spent": 195639,
+      "token_limit": 250000,
+      "tool_spent": 8,
+      "tool_limit": 16,
+      "lease_token": null,
+      "lease_until": null
+    },
+    {
+      "id": "run_7255e9980943",
+      "worker_id": "worker_5da9a6a461e6",
+      "quest_id": "quest_a855618c49f2",
+      "plan_id": "plan_ae32a3a41291",
+      "node_key": "task",
+      "plan_revision": 1,
+      "role_id": "coding",
+      "execution_mode": "live",
+      "state": "blocked",
+      "steps": 8,
+      "step_limit": 32,
+      "repairs": 4,
+      "token_spent": 61329,
+      "token_limit": 500000,
+      "tool_spent": 12,
+      "tool_limit": 32,
+      "lease_token": null,
+      "lease_until": null
+    }
+  ],
+  "ownership": {
+    "meaning": "Observed accepted ownership intervals, not continuous CPU activity",
+    "intervals": [
+      {
+        "run_id": "run_7255e9980943",
+        "quest_id": "quest_a855618c49f2",
+        "started_at": "2026-11-16T00:26:53.199919+00:00",
+        "ended_at": "2026-11-16T00:27:17.679767+00:00",
+        "start_event_id": "evt_00714a794997",
+        "end_event_id": "evt_2bb9e9cbe35d",
+        "closing_type": "worker.blocked"
+      },
+      {
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "started_at": "2026-11-16T00:26:46.852892+00:00",
+        "ended_at": "2026-11-16T00:27:37.834101+00:00",
+        "start_event_id": "evt_cb0882dbf796",
+        "end_event_id": "evt_b256f51650a6",
+        "closing_type": "worker.result"
+      },
+      {
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "started_at": "2026-11-16T00:27:44.288217+00:00",
+        "ended_at": "2026-11-16T00:28:26.870510+00:00",
+        "start_event_id": "evt_06322a8991ec",
+        "end_event_id": "evt_cfd47bda8a28",
+        "closing_type": "worker.result"
+      },
+      {
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "started_at": "2026-11-16T00:28:32.523100+00:00",
+        "ended_at": "2026-11-16T00:29:03.530207+00:00",
+        "start_event_id": "evt_87f18776a94b",
+        "end_event_id": "evt_b80fbb70f8da",
+        "closing_type": "worker.blocked"
+      }
+    ],
+    "max_parallel_workers": 2,
+    "max_parallel_distinct_quests": 2,
+    "different_quest_overlaps": [
+      {
+        "quest_ids": [
+          "quest_4423cc2f7620",
+          "quest_a855618c49f2"
+        ],
+        "run_ids": [
+          "run_df52e380d4ce",
+          "run_7255e9980943"
+        ],
+        "started_at": "2026-11-16T00:26:53.199919+00:00",
+        "ended_at": "2026-11-16T00:27:17.679767+00:00",
+        "seconds": 24.479848
+      }
+    ],
+    "cross_quest_parallelism_verified": true
+  },
+  "thread_pass_through": {
+    "follow_up_triggers": [
+      {
+        "id": "trigger_1880a121a0ca",
+        "event_id": "evt_ec4414b11937",
+        "thread_id": "thread_2a2478448db3",
+        "status": "passed_through",
+        "reason": "subscribed",
+        "quest_id": null,
+        "payload_sha256": "85257708d589570847df165502026e882685a875e3988c7ee811f4560a2a4ec2",
+        "deliveries": [
+          {
+            "run_id": "run_df52e380d4ce",
+            "handed_back": 0,
+            "created_at": "2026-11-16T00:26:52.690601+00:00"
+          }
+        ],
+        "worker_inbox": [
+          {
+            "run_id": "run_df52e380d4ce",
+            "event_id": "evt_ec4414b11937",
+            "consumed": 1
+          }
+        ],
+        "original_subscription_matches": true
+      },
+      {
+        "id": "trigger_24cbcd967228",
+        "event_id": "evt_1ed386f6a867",
+        "thread_id": "thread_bc3479a2380b",
+        "status": "passed_through",
+        "reason": "subscribed",
+        "quest_id": null,
+        "payload_sha256": "9b16da73b83779322fc5b0a6e7c2baf8c37d8cc3cf1ac9378aa01fddf5a9fb43",
+        "deliveries": [
+          {
+            "run_id": "run_7255e9980943",
+            "handed_back": 0,
+            "created_at": "2026-11-16T00:26:53.975761+00:00"
+          }
+        ],
+        "worker_inbox": [
+          {
+            "run_id": "run_7255e9980943",
+            "event_id": "evt_1ed386f6a867",
+            "consumed": 1
+          }
+        ],
+        "original_subscription_matches": true
+      }
+    ],
+    "both_follow_up_deliveries_verified": true,
+    "router_user_decision_call_count": 2,
+    "router_notice_calls_separate": 7,
+    "meaning": "Follow-ups routed deterministically to subscribed existing Workers without a new user Router decision; host injected these continuation events as test data, never as new execution authority."
+  },
+  "review_native_admission_proof": {
+    "review_started_event_id": "evt_adc103cb6611",
+    "review_result_event_id": "evt_eb9cf2b7f864",
+    "result_event_id": "evt_b256f51650a6",
+    "reconstructed_raw_packet_bytes": 68486,
+    "reconstructed_packet_sha256": "15bca56d6f9f77db9a16ea526b4124d7f8a593389f6c5e0e6cc8cd192901c4f1",
+    "matches_durable_review_started_hash": true,
+    "explicit_review_envelope_present": false,
+    "worker_reservation_tokens": 77322,
+    "gateway_attempt": {
+      "attempt_id": "2351cb3c68fb458a951640acfd2b3c3f",
+      "call_id": "review_call_0d2638eeeb6a",
+      "purpose": "independent_reviewer",
+      "worker_run_id": "run_df52e380d4ce",
+      "quest_id": "quest_4423cc2f7620",
+      "state": "settled",
+      "input_reserved": 69130,
+      "output_reserved": 8192,
+      "input_charged": 17938,
+      "output_charged": 497
+    },
+    "complete_packet_exceeded_removed_legacy_65536_gate": true,
+    "independent_live_review_observed": true,
+    "does_not_establish_review_pass": true,
+    "reconstruction_method": "Pure observation projection over existing read-only immutable source messages, original write intent content, receipts, result and approved contract; no Store constructor, Gateway, review service, Provider or tool execution."
+  },
+  "current_plans": [
+    {
+      "id": "plan_cc6e8a75341f",
+      "quest_id": "quest_4423cc2f7620",
+      "revision": 1,
+      "status": "approved",
+      "digest": "2b1606078ac177005dbf0c6a93de34b639adf19aefe0c7c0f74723a4e9accba5"
+    },
+    {
+      "id": "plan_ae32a3a41291",
+      "quest_id": "quest_a855618c49f2",
+      "revision": 1,
+      "status": "approved",
+      "digest": "623e301e317fa673828d32499808ed9034c788bbb952c5666cca68381bf36549"
+    }
+  ],
+  "current_nodes": [
+    {
+      "plan_id": "plan_cc6e8a75341f",
+      "node_key": "task_1",
+      "status": "blocked",
+      "worker_id": "worker_ee0a99e359ca"
+    },
+    {
+      "plan_id": "plan_cc6e8a75341f",
+      "node_key": "task_2",
+      "status": "proposed",
+      "worker_id": null
+    },
+    {
+      "plan_id": "plan_ae32a3a41291",
+      "node_key": "task",
+      "status": "blocked",
+      "worker_id": "worker_5da9a6a461e6"
+    }
+  ],
+  "reviews": [
+    {
+      "event_id": "evt_eb9cf2b7f864",
+      "plan_id": "plan_cc6e8a75341f",
+      "task_node_key": "task_1",
+      "run_id": "run_df52e380d4ce",
+      "result_event_id": "evt_b256f51650a6",
+      "call_id": "review_call_0d2638eeeb6a",
+      "packet_sha256": "15bca56d6f9f77db9a16ea526b4124d7f8a593389f6c5e0e6cc8cd192901c4f1",
+      "execution_mode": "live",
+      "review_context": "independent_same_model",
+      "error_code": null,
+      "verdict": "NEEDS_REVISION",
+      "source_quest_worker_matches": true,
+      "revision_goals": [
+        "Re-verify every citation's line_start/line_end against the numbered_content blocks and tighten multi-line quotes so the verbatim quote exactly reproduces the full range (especially C1–C16 spanning >1 line), replacing any that omit leading comments or trailing tokens within the declared range.",
+        "Remove or clearly mark as outside the supplied evidence any illustrative 'article-only' capability names (multi-repository/multi-tenant autonomy, etc.) so the prototype/article split is only asserted at the strength of README lines 3 and 5.",
+        "Add a short explicit note per citation confirming it was verified against the source content (not just the packet hash), and ensure no claim states or implies runtime/execution observation from static inspection."
+      ]
+    },
+    {
+      "event_id": "evt_01dbc473d21b",
+      "plan_id": "plan_cc6e8a75341f",
+      "task_node_key": "task_1",
+      "run_id": "run_df52e380d4ce",
+      "result_event_id": "evt_cfd47bda8a28",
+      "call_id": "review_call_f0117f40fd01",
+      "packet_sha256": "850c419b16d73a5fce80433d1eb05ca1e83e46293b390b88ad4882c9b04c4ffa",
+      "execution_mode": "live",
+      "review_context": "independent_same_model",
+      "error_code": null,
+      "verdict": "NEEDS_REVISION",
+      "source_quest_worker_matches": true,
+      "revision_goals": [
+        "Optional within node scope: add a machine-checkable note per citation or in reading_method stating which key names must be dropped (C1–C17) when the integrator maps them into research.json's {source_id,source_sha256,line_start,line_end,quote} shape, to reduce integration error."
+      ]
+    }
+  ],
+  "L2_work": {
+    "actual_specialist_roles": [
+      "research_1"
+    ],
+    "architect_integrator_started": false,
+    "research_source_reads": [
+      {
+        "receipt_id": "receipt_960d6c0ae708",
+        "intent_id": "action_fe10100da292",
+        "execution_mode": "live",
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "tool_name": "file_read",
+        "risk": "R0",
+        "state": "succeeded",
+        "path": "inputs/projects/project_beta/l2/deepseek_intake.json",
+        "result_digest_valid": true,
+        "parameter_digest_valid": true,
+        "file_sha256": "d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97",
+        "file_digest_matches": true
+      },
+      {
+        "receipt_id": "receipt_a05fd1e73c07",
+        "intent_id": "action_c5489b15200f",
+        "execution_mode": "live",
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "tool_name": "file_read",
+        "risk": "R0",
+        "state": "succeeded",
+        "path": "inputs/projects/project_beta/l2/scenario.json",
+        "result_digest_valid": true,
+        "parameter_digest_valid": true,
+        "file_sha256": "cca2f2f4bb51bd46db7390dc62250f3e87108ac5f81808211a4811e3c80200a7",
+        "file_digest_matches": true
+      },
+      {
+        "receipt_id": "receipt_1c4c6cece1a1",
+        "intent_id": "action_73810f56b3d3",
+        "execution_mode": "live",
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "tool_name": "file_read",
+        "risk": "R0",
+        "state": "succeeded",
+        "path": "inputs/projects/project_beta/l2/deepseek_readme.json",
+        "result_digest_valid": true,
+        "parameter_digest_valid": true,
+        "file_sha256": "3ef5dced147170146cc2b91aca3870cf8bfb84f952a8c16262a7175ab018cfbf",
+        "file_digest_matches": true
+      },
+      {
+        "receipt_id": "receipt_567b803e3742",
+        "intent_id": "action_24dba05f4771",
+        "execution_mode": "live",
+        "run_id": "run_df52e380d4ce",
+        "quest_id": "quest_4423cc2f7620",
+        "tool_name": "file_read",
+        "risk": "R0",
+        "state": "succeeded",
+        "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json",
+        "result_digest_valid": true,
+        "parameter_digest_valid": true,
+        "file_sha256": "2257025548c4799bbda7753936730a80b9f029406c2da08289acb658a40a3c1b",
+        "file_digest_matches": true
+      }
+    ],
+    "revised_intermediate_artifact": [
+      {
+        "path": "work/quest_4423cc2f7620/source_analysis.json",
+        "bytes": 25943,
+        "sha256": "5446828303e358473918ff45379842584d117d7c1c3042f57ac4694837b5847f",
+        "latest_receipt_id": "receipt_ea14d9933587",
+        "latest_receipt_hash_matches": true,
+        "final_review_pass_observed": false
+      }
+    ],
+    "final_research_json_exists": false,
+    "multi_expert_task_completion_established": false,
+    "second_review_caveat": "Second reviewer returned NEEDS_REVISION with an optional intermediate-to-integrator mapping note despite findings describing assigned coverage as met; the exact verdict remains authoritative and is not reclassified PASS."
+  },
+  "L3_failure_receipt_presentation": {
+    "run_id": "run_7255e9980943",
+    "call_id": "call_03781fbb54cc0302d19839109988a6c86989023489ac7f14581e1c75775d11f7",
+    "tool_name": "directory_list",
+    "arguments_json": "{\"path\":\"l3\"}",
+    "worker_tool_state": "failed",
+    "worker_receipt_id": null,
+    "worker_result_json": null,
+    "intent_id": "action_3b33c9b6fb57",
+    "intent_state": "failed",
+    "risk": "R0",
+    "resource_scope": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T002629Z-capability-continuity-e02ee2\\l3",
+    "actual_receipt_id": "receipt_73adcd211022",
+    "actual_receipt_json": "{\"error_code\":\"resource_unavailable\"}",
+    "result_digest": "b2c57eb011b0cc174eddaee9afcc8a95ba6228a3280c077133b9b3bb411a49d1",
+    "receipt_digest_valid": true,
+    "interpretation": "Failed read-only R0 directory_list has a durable failed action intent and hashed failure receipt; Worker tool row omitted its receipt/result presentation. This is not an unknown external side effect and was not replayed."
+  },
+  "L3_final_candidate_and_test_receipt": {
+    "quest_created": true,
+    "candidate_present": false,
+    "candidate_sha256": null,
+    "development_json_present": false,
+    "python_unittest_receipts": 0,
+    "approval_count": 0,
+    "final_hash_binding_verified": false,
+    "observed_failed_path_examples": [
+      "l3/starter.py",
+      "l3"
+    ],
+    "interpretation": "Worker used project-relative paths against the Core workspace root, then exhausted its existing four repair attempts; project identity metadata never relocates the execution root."
+  },
+  "compaction_and_recall": {
+    "archives": [
+      {
+        "id": 1,
+        "scope": "worker",
+        "scope_id": "run_df52e380d4ce",
+        "source_count": 15,
+        "source_hash_valid": true,
+        "capsule_hash_valid": true,
+        "original_source_rows_hash_valid": true,
+        "model_handoff_status": "unverified"
+      },
+      {
+        "id": 2,
+        "scope": "worker",
+        "scope_id": "run_df52e380d4ce",
+        "source_count": 2,
+        "source_hash_valid": true,
+        "capsule_hash_valid": true,
+        "original_source_rows_hash_valid": true,
+        "model_handoff_status": "unverified"
+      }
+    ],
+    "actual_worker_relation_chain": [
+      {
+        "run_id": "run_7255e9980943",
+        "call_id": "call_a16858612808eca00c5beb33b27ab41d793cfb1129417ee65ad48f9f12c6f595",
+        "reference": "message:msg_95e4f9d3e0ca",
+        "state": "succeeded",
+        "complete": true,
+        "source_hash": "f1a7a0c5ef679cb06365b506e745ed68af6bf91ed81c09f6ac47e1760878b03f",
+        "returned_content_hash_valid": true,
+        "related_refs": [
+          "project:project_5c69c6261aa7712fd89f43db"
+        ]
+      },
+      {
+        "run_id": "run_7255e9980943",
+        "call_id": "call_b11f28a46eea870eda9db88362b66c8c84e36b709e00ee8da1147ce45b6d6ab9",
+        "reference": "project:project_5c69c6261aa7712fd89f43db",
+        "state": "succeeded",
+        "complete": true,
+        "source_hash": "75732eed8415f1ef9617ec4cab0c8af76ef5475eaeb0b1e4fbdea4ba13a36048",
+        "returned_content_hash_valid": true,
+        "related_refs": [
+          "quest:quest_a855618c49f2"
+        ]
+      },
+      {
+        "run_id": "run_7255e9980943",
+        "call_id": "call_9efd325b8f9853aae4a1de8ede30c19b8fe11b12053e96fb1c0b5844961cf9c7",
+        "reference": "quest:quest_a855618c49f2",
+        "state": "succeeded",
+        "complete": true,
+        "source_hash": "dd6bfe786ba8a8efb39c3f3afb300b1efdd4ca49cd73173c40c000dbffa22bf4",
+        "returned_content_hash_valid": true,
+        "related_refs": [
+          "trigger:trigger_e1fd452c0900",
+          "message:msg_95e4f9d3e0ca",
+          "thread:thread_bc3479a2380b",
+          "workspace:1413b426501f26c9283d3531",
+          "project:project_5c69c6261aa7712fd89f43db",
+          "thread:thread_bc3479a2380b",
+          "worker:worker_5da9a6a461e6",
+          "plan:plan_ae32a3a41291",
+          "event:evt_9a759e1d73ea",
+          "event:evt_2663c51def7e",
+          "event:evt_335e44f99bdf",
+          "event:evt_00422007bbff",
+          "event:evt_46277e0e894f",
+          "event:evt_234290a6e2a1",
+          "event:evt_f88d8caf4059"
+        ]
+      }
+    ],
+    "actual_worker_two_hop_recall_verified": true,
+    "chain_scope": "Current-task message → project → Quest; not post-restart or compressed Router recall",
+    "router_archive_count": 0,
+    "core_restart_verified": false,
+    "host_protocol_after_restart_multihop_recall_reached": false,
+    "context_rejections": [
+      {
+        "event_id": "evt_6159ab064c3d",
+        "run_id": "run_df52e380d4ce",
+        "reason_code": "request_input_allowance_exceeded",
+        "model_context_window": 100000000,
+        "effective_model_context_limit": 100000000,
+        "request_token_allowance": 54361,
+        "input_allowance": 37470,
+        "input_allowance_limited_by": "cumulative_tokens",
+        "cumulative_token_limit": 250000,
+        "cumulative_token_remaining": 54361,
+        "cumulative_token_limits_enforced": true
+      }
+    ],
+    "successful_continuation_after_worker_compaction_established": false,
+    "note": "Both Worker archives retain hashes and original evidence; archival alone does not establish successful continuation."
+  },
+  "router_final_result": {
+    "identity": [
+      {
+        "conversation_id": "main",
+        "router_session_id": "router_19f3ea59c8b8",
+        "revision": 6
+      }
+    ],
+    "notices": [
+      {
+        "message_id": "msg_231ae4647292",
+        "conversation_id": "main",
+        "execution_mode": "programmatic",
+        "notice_phase": "review_pending",
+        "source_event_ids": [
+          "evt_b256f51650a6"
+        ],
+        "source_event_types": [
+          "worker.result"
+        ],
+        "source_quest_ids": [
+          "quest_4423cc2f7620"
+        ],
+        "reviewed_final_completion": false
+      },
+      {
+        "message_id": "msg_0e63b58ccbae",
+        "conversation_id": "main",
+        "execution_mode": "programmatic",
+        "notice_phase": "review_pending",
+        "source_event_ids": [
+          "evt_cfd47bda8a28"
+        ],
+        "source_event_types": [
+          "worker.result"
+        ],
+        "source_quest_ids": [
+          "quest_4423cc2f7620"
+        ],
+        "reviewed_final_completion": false
+      },
+      {
+        "message_id": "msg_deb5d6528908",
+        "conversation_id": "main",
+        "execution_mode": "live",
+        "notice_phase": null,
+        "source_event_ids": [
+          "evt_b80fbb70f8da"
+        ],
+        "source_event_types": [
+          "worker.blocked"
+        ],
+        "source_quest_ids": [
+          "quest_4423cc2f7620"
+        ],
+        "reviewed_final_completion": false
+      }
+    ],
+    "blocked_event_processing": [
+      {
+        "consumer_id": "router",
+        "event_id": "evt_2bb9e9cbe35d",
+        "processed_at": "2026-11-16T00:27:29.726723+00:00",
+        "notice_attempts": 3,
+        "notice_error": "processing_failed",
+        "notice_dead_at": null
+      },
+      {
+        "consumer_id": "router",
+        "event_id": "evt_b80fbb70f8da",
+        "processed_at": "2026-11-16T00:29:22.707638+00:00",
+        "notice_attempts": 4,
+        "notice_error": "processing_failed",
+        "notice_dead_at": null
+      }
+    ],
+    "final_reviewed_completion_returned": false,
+    "L3_blocked_notice_visible_message": false,
+    "note": "L3 blocked event was marked processed after three notice attempts but no corresponding visible main-message exists. L2 blocked event produced one live main-message. Neither event is final reviewed completion."
+  },
+  "inputs_unchanged": [
+    {
+      "path": "inputs/projects/project_beta/l2/deepseek_readme.json",
+      "sha256": "3ef5dced147170146cc2b91aca3870cf8bfb84f952a8c16262a7175ab018cfbf",
+      "matches_seeded_file_hash": true
+    },
+    {
+      "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json",
+      "sha256": "2257025548c4799bbda7753936730a80b9f029406c2da08289acb658a40a3c1b",
+      "matches_seeded_file_hash": true
+    },
+    {
+      "path": "inputs/projects/project_beta/l2/deepseek_intake.json",
+      "sha256": "d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97",
+      "matches_seeded_file_hash": true
+    },
+    {
+      "path": "inputs/projects/project_alpha/l3/starter.py",
+      "sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+      "matches_seeded_file_hash": true
+    },
+    {
+      "path": "inputs/projects/project_alpha/l3/test_candidate.py",
+      "sha256": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226",
+      "matches_seeded_file_hash": true
+    }
+  ],
+  "accounting": {
+    "gateway_attempt_count": 28,
+    "admission_states": [
+      {
+        "state": "settled",
+        "count": 28
+      }
+    ],
+    "known_charged_tokens": 290808,
+    "aggregate_call_ceiling": 56,
+    "unsettled_or_unknown_gateway_attempts": [],
+    "unsettled_or_unknown_action_intents": [],
+    "receipt_count": 12,
+    "all_receipt_and_parameter_hashes_valid": true,
+    "tool_states": [
+      {
+        "state": "failed",
+        "count": 5
+      },
+      {
+        "state": "succeeded",
+        "count": 15
+      }
+    ],
+    "operation_replays_by_auditor": 0
+  },
+  "conclusion": {
+    "overall_acceptance_passed": false,
+    "exploratory_only": true,
+    "verified_real_behaviors": [
+      "Two explicit project roots presented and linked to two actual independent Quests",
+      "Two distinct Quests owned live hidden Workers concurrently",
+      "Both follow-up thread events passed through to subscribed Workers",
+      "Complete legacy review packet68486 bytes admitted through live Gateway77322-token reservation with exact packet hash",
+      "Actual current-task two-hop Recall via source-hashed object relations",
+      "Worker archives preserve source and capsule hashes and original evidence"
+    ],
+    "remaining_failures": [
+      "L3 path handling and Worker failure-receipt presentation prevented any code or tests",
+      "L2 received two NEEDS_REVISION verdicts, attempted bounded correction and stopped at actual cumulative request allowance",
+      "Architect integrator never ran; no final research.json or reviewed final result",
+      "Host Core restart and post-restart Router compaction/Recall protocol were not reached",
+      "L3 blocked event processed marker did not result in a visible original Router message"
+    ],
+    "does_not_claim": [
+      "Production readiness",
+      "Optimal adaptive topology",
+      "Cross-restart recovery success",
+      "Successful development task",
+      "Unknown side effect from the known failed R0 directory list"
+    ]
+  }
+}

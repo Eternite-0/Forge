@@ -1,0 +1,475 @@
+{
+  "created_at": "2026-11-15T23:10:58.453677+00:00",
+  "scope": "production backend before full regression",
+  "files": [
+    {
+      "path": "backend/src/forge_api/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "backend/src/forge_api/__main__.py",
+      "sha256": "b3ee740e8e74a4495745702923999c2d5faf9a27b6456743e86d1c46739c3d56"
+    },
+    {
+      "path": "backend/src/forge_api/desktop_host.py",
+      "sha256": "cb4510115e7236d00868d937b88bdfa3ce4052eff14f0be0803f5c7493706fbc"
+    },
+    {
+      "path": "backend/src/forge_api/main.py",
+      "sha256": "d58a3e11750b6da674cd75fbc119b0601a7ce0d0f6a3a0fcecebde671712fa87"
+    },
+    {
+      "path": "backend/src/forge_api/maintenance.py",
+      "sha256": "7694fa1dd7ae2487a1cc4b8d75ae7efe3de5a2ffdc891e9d0d0b36c405f71bd0"
+    },
+    {
+      "path": "backend/src/forge_api/security.py",
+      "sha256": "13fdb1fc18d0ff40151ef589fa120668d9adc9f1ce087c3a508a0ff280278135"
+    },
+    {
+      "path": "backend/src/forge_api/supervisor.py",
+      "sha256": "e88b546a5993afc4beb10c85906f94db69c68f129cc8fe40b40ba8990811f690"
+    },
+    {
+      "path": "backend/src/forge_core/__init__.py",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "backend/src/forge_core/adaptive_planning.py",
+      "sha256": "af2f6d257981779c747bd684bc8e9918e414821110695e8b374af2c307c00837"
+    },
+    {
+      "path": "backend/src/forge_core/agent_protocol.py",
+      "sha256": "5518cee32b560aa4fe1d8ac154b92bcf2075810f90679e9337e9c0c6050918b9"
+    },
+    {
+      "path": "backend/src/forge_core/artifact_diff.py",
+      "sha256": "a90693b98fd5d82e132e993075f97ffa3a28b176879730b59e080c3108b0e260"
+    },
+    {
+      "path": "backend/src/forge_core/artifact_revision.py",
+      "sha256": "70f7fff762e68253117e51ec138de276ceb9fcd213102c8a4392ca8f4e0c5e2d"
+    },
+    {
+      "path": "backend/src/forge_core/benchmark.py",
+      "sha256": "e98be37a878648d53fe64f109461d1741df6751810154ec80fa2bb1ddc3f0a3f"
+    },
+    {
+      "path": "backend/src/forge_core/budget_policy.py",
+      "sha256": "89fb1cf2eb1170775c7ff33c5e0925f9a61326d1d27bd2be53d5ff2daad06758"
+    },
+    {
+      "path": "backend/src/forge_core/capability_benchmark.py",
+      "sha256": "668134e6c6dce92d521c87db37cbe06538933f9260bcc75b2d0a507bf5107774"
+    },
+    {
+      "path": "backend/src/forge_core/capacity_preflight.py",
+      "sha256": "a57323fce97e5a08f00ca88d6f95bf432fb9a972d06a4bfb849b8a45b3ce1ddf"
+    },
+    {
+      "path": "backend/src/forge_core/code_test_harness.py",
+      "sha256": "57538d7ede2a9335aaa10b5c5c6f2ef9705103d8e500a810f93ed14a51d8dce1"
+    },
+    {
+      "path": "backend/src/forge_core/composer_request.py",
+      "sha256": "c78cb7dc3bbc71a66149552241376edc5055dc6089c8bb12d8607d261245749c"
+    },
+    {
+      "path": "backend/src/forge_core/composer_resources.py",
+      "sha256": "7907e3d6429135f8f3758474b0d1bfc48f22d47465788d6e6c519f0ea889e14e"
+    },
+    {
+      "path": "backend/src/forge_core/composition_capacity.py",
+      "sha256": "8ef5cd0a948936f2267466c171d7ca5dbd7fbb55ffcb37abdf141b8678471052"
+    },
+    {
+      "path": "backend/src/forge_core/composition_cycles.py",
+      "sha256": "60ff613773662aecb819bd85228e6fa1d454000e4ba2fb835778bdb672fd504c"
+    },
+    {
+      "path": "backend/src/forge_core/constraint_schema.py",
+      "sha256": "a6cfff1106c61bce7a7dd393e240e1fd528bae427882fbcf5ca25b96bafda663"
+    },
+    {
+      "path": "backend/src/forge_core/constraints.py",
+      "sha256": "c92031876fee5000bacb928f61419865fb9c372a75634732646cad18cdb62a0a"
+    },
+    {
+      "path": "backend/src/forge_core/context_schema.py",
+      "sha256": "139174ec94751b9ccc2174a2b9f5d39db9a633f2265a13bfc3edefe2598572d9"
+    },
+    {
+      "path": "backend/src/forge_core/context_service.py",
+      "sha256": "456723f1c0342ed9eae71180233f553e6a7a865042796f0bfcbebf7c630abe64"
+    },
+    {
+      "path": "backend/src/forge_core/dispatcher.py",
+      "sha256": "5931206ad72cf761420dbaf1fc662cd5565bb30f8d101004a65340623897d7c0"
+    },
+    {
+      "path": "backend/src/forge_core/dispatcher_schema.py",
+      "sha256": "8f8ba0538ccae40ea487938688e457ed3ffe6bd4f6cda5c844e005fb0acfad7e"
+    },
+    {
+      "path": "backend/src/forge_core/domain.py",
+      "sha256": "0e1e32821fad6697e5f19169c6491eba7a7d33b1dbed4b7eee18184706d9eabd"
+    },
+    {
+      "path": "backend/src/forge_core/event_domain.py",
+      "sha256": "ececd029cb3218ebc87faf86fea15bf30b7093aad2296d8bf6b215f343a60aea"
+    },
+    {
+      "path": "backend/src/forge_core/evidence.py",
+      "sha256": "041db2ae43475c6e53a224c23012af4064b0fb49d1a5083ea1ab764c7f8d2080"
+    },
+    {
+      "path": "backend/src/forge_core/governance.py",
+      "sha256": "a9d817ef4078f9612e2f3464ed418f85b78d77d2bfbc12705cb6b32ebf5275b3"
+    },
+    {
+      "path": "backend/src/forge_core/gpu_tools.py",
+      "sha256": "903642d0a3ac7bc138aa704dec8be7d42ac10ff54133b27aba7b124bfa3154dd"
+    },
+    {
+      "path": "backend/src/forge_core/graph_domain.py",
+      "sha256": "d95c8be70e50771056850f7f6e1261bdfdd7e91baad5f9959e0f3040622f794e"
+    },
+    {
+      "path": "backend/src/forge_core/graph_schema.py",
+      "sha256": "52c1bb7fe68d8f868675b51797e8c1c440598e42b409870762c43e436a4c1603"
+    },
+    {
+      "path": "backend/src/forge_core/hierarchical_plans.py",
+      "sha256": "08aa5d3688ff00343022487a86999cde4f46124945bc91127428107a6ea9fe68"
+    },
+    {
+      "path": "backend/src/forge_core/hypothesis_sources.py",
+      "sha256": "c0e86a9886e74b03802ad61cf111be4179f8cd9c4ee8c693fc72da5ad41c2dee"
+    },
+    {
+      "path": "backend/src/forge_core/independent_review.py",
+      "sha256": "2ebf36adda673ee5dbac9e82e7d99aa18d3d55c945a3a4d639304008feaf724a"
+    },
+    {
+      "path": "backend/src/forge_core/lifecycle.py",
+      "sha256": "01abe6c41f93eb703f78442384c8d839a3f97f1608a4b4ba8ae5578d2ae21bee"
+    },
+    {
+      "path": "backend/src/forge_core/memory.py",
+      "sha256": "154f0c8d1c8e170a0b0b034131a19acc5db5abf03e902e42e300baac844c91bf"
+    },
+    {
+      "path": "backend/src/forge_core/memory_schema.py",
+      "sha256": "5dd829583940b74510b6fb1f48da37d6be01868acffb0e85bdbc1b103be04031"
+    },
+    {
+      "path": "backend/src/forge_core/migrations.py",
+      "sha256": "1464320a207aa1cc795639f8c123af99bc2e48fbfc0122658c9218e11f701a8c"
+    },
+    {
+      "path": "backend/src/forge_core/model_budget_schema.py",
+      "sha256": "03728934ad1c693a66132eb54a7159e5f7e8c858f68ffa21137fac182bcb9425"
+    },
+    {
+      "path": "backend/src/forge_core/model_call_budget.py",
+      "sha256": "26a43fa2823c1b3afbaee8710ebc11ba7d90c73a120f1495a40f92980ab4aff8"
+    },
+    {
+      "path": "backend/src/forge_core/model_compaction.py",
+      "sha256": "893d4fa0059f79607140f18d2d040a69edabd2c220768c631700516d4d668828"
+    },
+    {
+      "path": "backend/src/forge_core/model_intelligence.py",
+      "sha256": "9aa3ea3cbd9d4bbc2d5426aade528baed9db10063c09b9dadffe004ab1f2c210"
+    },
+    {
+      "path": "backend/src/forge_core/model_performance.py",
+      "sha256": "32d84b0d4246e0c06b7156544b58bdd819327820ab934a819e073a081e192dcb"
+    },
+    {
+      "path": "backend/src/forge_core/numeric_harness.py",
+      "sha256": "68e51f32732e6254db06fa155f68eb7dfc0ef61f8371ef07c716c6cdc1f75b99"
+    },
+    {
+      "path": "backend/src/forge_core/operator_settings.py",
+      "sha256": "2ac1964760f0fbb8c569654ae6485c44c74f178c796ff035feb658ade4b07e13"
+    },
+    {
+      "path": "backend/src/forge_core/plan_lineage.py",
+      "sha256": "c4453ef82f71db85badc5e1092e752c5134dd64ef77f1cba6f0775f8ebb66744"
+    },
+    {
+      "path": "backend/src/forge_core/planner_capacity_preview_v23.py",
+      "sha256": "9869104c4fb8e4476aa55d57e55db26da18f88b926a5934e35366ff9579842f4"
+    },
+    {
+      "path": "backend/src/forge_core/planner_capacity_preview_v25.py",
+      "sha256": "66feb6766fea5f6291737eb57276d8418cd18e5e20bdfbcb839fc0aafcd4e7fc"
+    },
+    {
+      "path": "backend/src/forge_core/planner_capacity_preview_v26.py",
+      "sha256": "5c65daaa8298d87811755b8b8b0bd7eb3433bbf70e377eb7402d6bcb3fa5c0a6"
+    },
+    {
+      "path": "backend/src/forge_core/planner_dataflow.py",
+      "sha256": "10fa1f704f3b38f9e9518ed628d829adcf4ece4a8d49308e92ba60d6aefaee20"
+    },
+    {
+      "path": "backend/src/forge_core/planner_dataflow_v23.py",
+      "sha256": "4e402939c28ca694e7204e262e72511117c37cd68980163006395c14e2508797"
+    },
+    {
+      "path": "backend/src/forge_core/planner_dataflow_v25.py",
+      "sha256": "cd0c010874fd4751c091b90a123fb2ae508dc7305162873146b98621d8cdd8ab"
+    },
+    {
+      "path": "backend/src/forge_core/planner_dataflow_v26.py",
+      "sha256": "26b5a9d293269f513568dc030b2a0c8efd5a28eb4859910fb0724f3942fd9a69"
+    },
+    {
+      "path": "backend/src/forge_core/planner_diagnostics.py",
+      "sha256": "299a8283bca67c753963755094f41416f134cc0fbd8682cd5fcfcf060fc778ad"
+    },
+    {
+      "path": "backend/src/forge_core/planner_guidance_v24.py",
+      "sha256": "80fd9e781b8fafcae9cd5556bf17e1030d58176f7d1dd25b1eecd21b31f66fa2"
+    },
+    {
+      "path": "backend/src/forge_core/planner_input_roundtrip.py",
+      "sha256": "cda048cc2cf6d211330e4af754a4312e6814eaa2a7f06e8ebda168a69440912a"
+    },
+    {
+      "path": "backend/src/forge_core/planner_resource_policy.py",
+      "sha256": "be8f93e2836f4ef2aecf5dc5ab0864e8794139b766faafd4cb5d68705386d54c"
+    },
+    {
+      "path": "backend/src/forge_core/planner_source_preview.py",
+      "sha256": "2d0e5ce32d128089f70820f10540839f90d6e7fa3b782f8c68697a8a6796ff6c"
+    },
+    {
+      "path": "backend/src/forge_core/predecessor_delivery.py",
+      "sha256": "ee3eb7be2d0e8041b9a87c7d2d8346b9f72e457193665a827625c7bc8b18725c"
+    },
+    {
+      "path": "backend/src/forge_core/project_context.py",
+      "sha256": "7c62313c438662fcbb841a709b516e8f485d2ef7c6a04fe5fe1b004fc9c6f8ad"
+    },
+    {
+      "path": "backend/src/forge_core/project_continuity.py",
+      "sha256": "6f0327c5c5835aebd57b75c6ce28a6458d764bf4fd4f642094c5aa4f702f9506"
+    },
+    {
+      "path": "backend/src/forge_core/provider_pool.py",
+      "sha256": "099981c7ded2d3f2eebb458784d36a1087a48ed9a9e2d1d446eed71dae7b6899"
+    },
+    {
+      "path": "backend/src/forge_core/providers/__init__.py",
+      "sha256": "daa872fd000f14a15179af8256bf08a7765bb9c7186fe919c2af959f58651b0a"
+    },
+    {
+      "path": "backend/src/forge_core/providers/config.py",
+      "sha256": "0a71803188c6acb98c79780be3ffb2080057639bba18038b1927ce73f15cc6fe"
+    },
+    {
+      "path": "backend/src/forge_core/python_unittest_runner.py",
+      "sha256": "a9615de1ffe269b38ff1bca3071f3f2cf222e589f649f561e2d3129be7f61619"
+    },
+    {
+      "path": "backend/src/forge_core/quest_graph.py",
+      "sha256": "64efc806396cdad2457d9c3b5d4e0db29d98215a8697a31ea638a9f97c7e5413"
+    },
+    {
+      "path": "backend/src/forge_core/quest_service.py",
+      "sha256": "90cb1dc26dcb19a6e6d3eaaf1945da63ae44f5917333a309ca963663de290956"
+    },
+    {
+      "path": "backend/src/forge_core/recall_chain.py",
+      "sha256": "269b4d709b510e6a6c6693d391739c3fbde5b69f755273ff95ec240bf38d3bbf"
+    },
+    {
+      "path": "backend/src/forge_core/registry.py",
+      "sha256": "3eabd0a609430fc0f411d3520454210838150145ac4a1a5a698cc56d1159c3fc"
+    },
+    {
+      "path": "backend/src/forge_core/registry_schema.py",
+      "sha256": "1288d91a5677a054caecfd4102562cac64d77cd28216f20b21306cc1b6e865c8"
+    },
+    {
+      "path": "backend/src/forge_core/review_envelope.py",
+      "sha256": "224e2407705432840979d0e10ebe5efb373ea75d3d72a6bd7f0e307008e82852"
+    },
+    {
+      "path": "backend/src/forge_core/router.py",
+      "sha256": "b48b29c5178421a3e5f3948b6b7c0a20fd1803cbb3df339da31330a94f9bdc3a"
+    },
+    {
+      "path": "backend/src/forge_core/router_control.py",
+      "sha256": "bcafa4d6df4e4e065ce891c49d05bc2591c409f0ff10bb46d08e3765477fc8b9"
+    },
+    {
+      "path": "backend/src/forge_core/router_domain.py",
+      "sha256": "25739409b2640afbe74260757713fc1ac96f32c181b3c12e8ef0d2b6c7f17e71"
+    },
+    {
+      "path": "backend/src/forge_core/router_recall.py",
+      "sha256": "31c8218084cf76dcdfa01c8f0d8d97503914a5b62551e24d53f9f41a4cf2867d"
+    },
+    {
+      "path": "backend/src/forge_core/runtime.py",
+      "sha256": "6e3940ca4962ac5d44fceb46f497c51c4126bb95969dc6c1246db972f7a203be"
+    },
+    {
+      "path": "backend/src/forge_core/runtime_progress.py",
+      "sha256": "819785078c4ed4627b83182861a592c70c5bf551d65237c5f90b2e4c87b0270c"
+    },
+    {
+      "path": "backend/src/forge_core/security_domain.py",
+      "sha256": "c0990d671ed34f8b8a8a05922cf4ccbe1d5412a925ea57749ecc580b42aeedc9"
+    },
+    {
+      "path": "backend/src/forge_core/semantic_evidence.py",
+      "sha256": "8fa557116ab264facad65c4c0dfe32da981d4726a8a8fed4f417ddebe0e64abc"
+    },
+    {
+      "path": "backend/src/forge_core/semantic_memory.py",
+      "sha256": "86ad1e02bb7ec6b0ad57ca7568988c463e84b0488edd034f37fa210a103c29ff"
+    },
+    {
+      "path": "backend/src/forge_core/semantic_suite.py",
+      "sha256": "459313bbf01441129a76eab47a8d935f2f9ee25ed722b7b432860a64e5f2b12e"
+    },
+    {
+      "path": "backend/src/forge_core/settings.py",
+      "sha256": "6911f1f4643ae730b8371561d77817a9fb2494d285a19b070088a8c766fee947"
+    },
+    {
+      "path": "backend/src/forge_core/source_capacity.py",
+      "sha256": "947f7ce8da25ed1a8a7d697fafab60ccacd1e4a64f08d918dd63790d14738562"
+    },
+    {
+      "path": "backend/src/forge_core/source_wire.py",
+      "sha256": "2603ece5f0c8d5ba95385bc36361214e6c6855db1398f8b52c877ceb849ff3ec"
+    },
+    {
+      "path": "backend/src/forge_core/store.py",
+      "sha256": "f6468ad2671710e2f7c0d4328354d34a3a88221ed85b5b975964d57b6462fbb7"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_delegation.py",
+      "sha256": "b95be9bb2b7e91cf26406a145704015a8dc2b284dc574cbd6582a725cc2f04b8"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_events.py",
+      "sha256": "3ae140b496b2aa32cf832d09e2d1d0e79f398ec47dd28f4591b3efbfb8842eb6"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_loop.py",
+      "sha256": "f1744b4e16d978a1b5699a34e86a0a762ee247207e18ac44648c420453515ba7"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_schema.py",
+      "sha256": "33c5ef69bfa598033a3286178936bdaedcfbc5e30ed69b71361089e6a59e3cf9"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_sources.py",
+      "sha256": "4e81b4dfd42f76283471ae4bc037d2e77c448d4c4fdf4501491adfc1b7d53726"
+    },
+    {
+      "path": "backend/src/forge_core/superagent_swarm.py",
+      "sha256": "867ef5a73b23c1c6e90d3b61421eac8d267a7a5f456b7ab7599354202abf50b0"
+    },
+    {
+      "path": "backend/src/forge_core/team_composition.py",
+      "sha256": "2c2b318cbd2f00747dfc46dd44aaa62073ee8aa2487d3b1de7c38417e2818b7d"
+    },
+    {
+      "path": "backend/src/forge_core/team_schema.py",
+      "sha256": "780c6f490e360e8ba5bc2df51b820ceb9aac0a2b852a64d4f2d513d5616364dc"
+    },
+    {
+      "path": "backend/src/forge_core/timeline.py",
+      "sha256": "fbd1aff7a680465f7cd1bc55537fd85e67f2c81e42b21456b1349d1f99ca4b65"
+    },
+    {
+      "path": "backend/src/forge_core/token_policy.py",
+      "sha256": "3b04015b77aba16606610e6f1ad46088d7ae050100ee78893d5b500141296c57"
+    },
+    {
+      "path": "backend/src/forge_core/tool_domain.py",
+      "sha256": "3463728b129c03c26de16e5ccbf6415417ffadaf7246a83df538b984b3d623a4"
+    },
+    {
+      "path": "backend/src/forge_core/tool_engine.py",
+      "sha256": "f15c383e5ed214d45249d3ed520c3a29fa162537ad32740ac149bbfa1a7b982f"
+    },
+    {
+      "path": "backend/src/forge_core/tool_schema.py",
+      "sha256": "20dc1d909b01d111cb6560cb38e00fab240c6a6ed2c53c01bdd981a2d22e3f0c"
+    },
+    {
+      "path": "backend/src/forge_core/watchdog.py",
+      "sha256": "f20bf1af426dd91517e59b3d39372becbcfdaee6c69434474f865043f7126042"
+    },
+    {
+      "path": "backend/src/forge_core/worker_core_provenance.py",
+      "sha256": "1cac05fe8a8e6e7f56dc04305642651e2b44d54583730c8fab145ace184b076d"
+    },
+    {
+      "path": "backend/src/forge_core/worker_envelope.py",
+      "sha256": "2fca1d2697fe9f9db9a3859e5a8d72d489ddc2ef6e5fe007546c14aa544430ae"
+    },
+    {
+      "path": "backend/src/forge_core/worker_environment.py",
+      "sha256": "58db1c4a61218d01fa85fcf8fcbd4d80a0e82e8d8d3aeec0b3a24e1eb532c9bb"
+    },
+    {
+      "path": "backend/src/forge_core/worker_model_compaction.py",
+      "sha256": "8cd253bff1f94875875c12f8db923929605fa37f7de6cd0d255bda0a3305cf23"
+    },
+    {
+      "path": "backend/src/forge_core/worker_model_usage.py",
+      "sha256": "63384d8bf50b6c664b89c65a889a2cb2b70b93600bc8ba6319d5964d455b334d"
+    },
+    {
+      "path": "backend/src/forge_core/worker_prefetch.py",
+      "sha256": "fed7cfc2d12052b119664194a8ecf1836ded9e6b979f3073853b7caec0a82c09"
+    },
+    {
+      "path": "backend/src/forge_core/worker_prompts.py",
+      "sha256": "286679952e7970940ffd3d056a2cbea168e2c2ac538840dfbf6dd1c871438af0"
+    },
+    {
+      "path": "backend/src/forge_core/worker_recovery.py",
+      "sha256": "f955249b0283b38c29828c4bd014d3f5c6128b6408a64d2415b0566b1437be0c"
+    },
+    {
+      "path": "backend/src/forge_core/worker_runtime.py",
+      "sha256": "4b2cd8101ba99cdf6ee52d2ed7c79e0451f03682c60e9bd7d14d897dc15bafcb"
+    },
+    {
+      "path": "backend/src/forge_core/worker_schema.py",
+      "sha256": "a2ddb6410f32d35a6309476645b3012913cc213109fc1408bea3fd3b4ede9841"
+    },
+    {
+      "path": "backend/src/forge_core/worker_superagent.py",
+      "sha256": "3d000f958317928c78c00235fd1d96c06396dd2101133d6cc99c3e3c86e1d961"
+    },
+    {
+      "path": "backend/src/forge_core/worker_task_sources.py",
+      "sha256": "741384e1d3e421165027d3c21a9a14f74dbb47bc153f97471af6a2e2d3edb319"
+    },
+    {
+      "path": "backend/src/forge_core/workspace_backup.py",
+      "sha256": "2f8acaf91f9afbbdcaf9161104d71b606c489cbcd6b9d160d52f686d122f17a0"
+    },
+    {
+      "path": "backend/src/forge_core/workspace_discovery.py",
+      "sha256": "7ccd4bdc7f62ca6c22e762737e26713120d47fef97b1933ca74979583411f0df"
+    },
+    {
+      "path": "backend/src/forge_core/workspace_lock.py",
+      "sha256": "0cb15f6d0608908a9946f60a24a9bc1e121c6ecd3f485b7730b4b71617eea260"
+    }
+  ],
+  "sha256": "a982ad864fdb84b9f5de074f358bf8be16552ccd812c38bc7bf5e9231b6d309d"
+}

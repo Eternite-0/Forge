@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_provider_calls",
+  "purpose": "Verify concrete corrections after the closed continuation, without reopening failures or raising any task allowance.",
+  "prior_phase_closure": "docs/audit/superagent/capability-continuation-closure.json",
+  "combined_accounting_boundary": {
+    "original_continuation_attempt_limit": 160,
+    "original_continuation_token_limit": 2600000,
+    "closed_phase_attempts": 50,
+    "closed_phase_known_tokens": 515841,
+    "closed_phase_unknown_usage_remains_reserved": true,
+    "new_segment_attempt_limit": 96,
+    "new_segment_token_limit": 1600000,
+    "combined_attempt_maximum": 146,
+    "combined_known_token_maximum": 2115841,
+    "unused_allowance_does_not_refund_or_resolve_any_prior_attempt": true
+  },
+  "conditions": [
+    {
+      "strategy": "continuity",
+      "levels": [
+        "L2",
+        "L3"
+      ],
+      "attempt_limit": 64,
+      "token_limit": 1000000,
+      "per_task_attempt_limit": 32,
+      "per_task_token_limit": 500000,
+      "per_task_seconds": 900,
+      "samples": 1
+    },
+    {
+      "strategy": "model_recovery_probe",
+      "attempt_limit": 16,
+      "token_limit": 100000,
+      "seconds": 300,
+      "samples": 1,
+      "fault": "one intentional worker HTTP503, not forwarded upstream",
+      "required_outcome": "native model replacement, exact real artifact, settled real Reviewer, original Router completion, no unknown tool outcome, original rejection reservation retained"
+    },
+    {
+      "strategy": "project",
+      "levels": [
+        "L1"
+      ],
+      "attempt_limit": 16,
+      "token_limit": 500000,
+      "per_task_seconds": 900,
+      "samples": 1,
+      "purpose": "Final-source regression of Router admission, real project tools, review and completion after the transport/tool corrections"
+    }
+  ],
+  "unchanged_controls": {
+    "primary_model": "deepseek-v4.1-flash",
+    "alternate_model": "glm-5.3-flash",
+    "context_window": 100000000,
+    "context_source": "explicit_user_declaration",
+    "provider_metadata_conflict_retained": true,
+    "worker_output_limit": 8192,
+    "router_output_limit": 4096,
+    "gateway_retries": 0,
+    "original_provider_configuration_untouched": true,
+    "independent_acceptance_criteria_unchanged": true,
+    "no_replay_of_historical_unknown_operations": true
+  },
+  "stop_policy": "One execution per condition on the new frozen source. No in-segment rerun, output increase, task budget increase, automatic response repair, unknown usage imputation, refund, or historical success relabelling. Preserve every failed condition. Explicit exact whole JSON fence normalization is attributed separately from Provider strict JSON conformance.",
+  "required_reports": [
+    "real Provider outcome and actual artifacts",
+    "separately attributed fault injection and programmatic checks",
+    "original final artifact-to-receipt binding",
+    "two correct workspace associations and distinct-task parallel ownership",
+    "thread pass-through, stopped-boundary restart, original hash-preserving context compaction and bounded Chain of Recall",
+    "reviewed final completion returned to original Router",
+    "post-drain attempts, unknown outcomes, exact source hashes and full regression"
+  ],
+  "interpretation": "Exploratory small samples. No team or routing algorithm superiority claim. A failed acceptance remains failed even when a later targeted test demonstrates a code correction.",
+  "frozen_at": "2026-11-15T23:52:42.469186+00:00",
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-repair-source-freeze.json",
+    "sha256": "2fc684e188b0605d8b829575d2b5fbf406b5ad5fec0ec79a77c273c43e0e7346",
+    "files": 342
+  },
+  "driver_file_sha256": "6658c1c86f474e5aba4545698954ac8bf1c2eb9b4ca79abc46bf37295bf761cc",
+  "failover_driver_file_sha256": "8e6a5ff848ed516b74e5e12e7db152043cfd3f0b762ee33e1581ed5bd9ac54fa"
+}

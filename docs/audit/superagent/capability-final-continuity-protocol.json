@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_provider_calls",
+  "purpose": "One final joint task after concrete intake, review-capacity and compaction-request corrections. Preserve all previous failures.",
+  "closed_phases": [
+    "docs/audit/superagent/capability-continuation-closure.json",
+    "docs/audit/superagent/capability-repair-closure.json"
+  ],
+  "accounting": {
+    "original_continuation_attempt_limit": 160,
+    "original_continuation_token_limit": 2600000,
+    "prior_attempts": 103,
+    "prior_known_tokens": 987608,
+    "prior_completed_rejections_usage_unknown": 2,
+    "prior_unknown_tool_outcomes": 1,
+    "final_attempt_limit": 56,
+    "final_token_limit": 1000000,
+    "combined_attempt_maximum": 159,
+    "combined_known_token_maximum": 1987608,
+    "no_unknown_usage_imputation_or_refund": true
+  },
+  "condition": {
+    "strategy": "continuity",
+    "levels": [
+      "L2",
+      "L3"
+    ],
+    "samples": 1,
+    "aggregate_attempt_limit": 56,
+    "per_task_attempt_limit": 32,
+    "per_task_token_limit": 500000,
+    "per_task_seconds": 900,
+    "worker_output_limit": 8192,
+    "router_output_limit": 4096,
+    "gateway_retries": 0,
+    "model_context_window": 100000000,
+    "model_context_source": "explicit_user_declaration"
+  },
+  "correction_scope": [
+    "Discover metadata for bounded explicit real-user paths before Router inference, including a named older project outside the latest 32.",
+    "For tasks without an explicit review envelope, remove the implicit 65536-byte total review-packet limit; retain per-artifact bounds, complete native framing, explicit envelopes, model capacity, cumulative budget and cost admission.",
+    "Constrain compaction max_output_tokens to the existing acceptable summary byte allowance using a conservative estimate; retain the mandatory UTF8 check and source/usage/fencing validation. Add content-free exact rejection diagnostics.",
+    "Advise the Router to account for the shared budget and existing independent Core reviews when selecting distinct expert deliverables.",
+    "Correct the separate fault-injection oracle to bind actual pre-start source bytes and source/read/write receipts; no extra real failover run is authorized by this protocol."
+  ],
+  "unchanged_acceptance": [
+    "Real multi-specialist framework research with exact attributed citations and independent review",
+    "Real Python implementation, approved exact-manifest tests, failure correction or honest absence, final-candidate test receipt binding, independent host holdouts",
+    "Two correctly associated project roots, parallel ownership of distinct tasks, hidden Workers, direct Thread follow-up, same-state Core restart, original-hash context compaction and bounded typed Recall",
+    "Reviewed final completion returned to the original persistent Router",
+    "All final attempts/effects accounted after drain, with historical unknown operations never replayed"
+  ],
+  "stop_policy": "Exactly one execution. No repeat after any failure, no additional Provider phase after this condition, no output or per-task budget increase, no reflection/retry increase. Programmatic fixes and honest reporting remain allowed. Full original failed reports stay immutable.",
+  "interpretation": "This is a source correction acceptance, not an independent repeated sample or proof of an optimal team policy. Prior full regression belongs to its 342-file freeze; final-source targeted checks are separately attributed.",
+  "frozen_at": "2026-11-16T00:26:03.619989+00:00",
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-final-source-freeze.json",
+    "sha256": "5df3c2c51dd5d576fea573a2a942c1af1885f3218edf6d6c76f384be4e353a72",
+    "files": 345
+  },
+  "driver_file_sha256": "6658c1c86f474e5aba4545698954ac8bf1c2eb9b4ca79abc46bf37295bf761cc"
+}

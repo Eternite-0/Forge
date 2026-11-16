@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="96" time="34.527" timestamp="2026-11-16T06:52:42.718978+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_router_notice_capability_sprint" name="test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[APPROVED]" time="0.245" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[REJECTED]" time="0.327" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[EXPIRED]" time="0.292" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_closed_automatic_approval_request_is_acknowledged_without_model_or_authority_change[elapsed]" time="0.232" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_legacy_or_manual_closed_approval_keeps_existing_notice_behavior[False-True]" time="0.208" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_legacy_or_manual_closed_approval_keeps_existing_notice_behavior[True-False]" time="0.160" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_same_authorization_checkpoint_batches_and_preserves_all_source_ids" time="0.246"><failure message="TypeError: the JSON object must be str, bytes or bytearray, not dict">rig = (&lt;forge_core.store.Store object at 0x0000012945126CF0&gt;, &lt;forge_core.router.RouterService object at 0x0000012945127460&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x00000129451278A0&gt;)
+
+    def test_same_authorization_checkpoint_batches_and_preserves_all_source_ids(rig):
+        store, router, _events = rig
+        quest, worker = background_task(store)
+        approval = request_approval(store, quest)
+        requested = next(
+            item for item in store.list_events() if json.loads(item["payload"]).get("approval_id") == approval["id"]
+        )
+        blocked = ForgeEvent(
+            event_type="worker.blocked", quest_id=quest.id, worker_id=worker.id,
+            payload={"reason_code": "approval_required", "failure_category": "authorization"},
+        )
+        store.append_event(blocked)
+        unrelated = request_approval(store, quest)
+        dispatcher = Dispatcher(store)
+        deliver_all(dispatcher)
+    
+        def notify(request, _count):
+            notice = json.loads(request.messages[1]["content"])["notice"]
+            assert notice["source_event_ids"] == [requested["id"], blocked.id]
+            assert notice["events"][0]["payload"]["approval_id"] == approval["id"]
+            return response({"action": "update_user", "reply": "Waiting for the exact requested authorization."})
+    
+        before = authorization_state(store)
+        model = router.provider = MockProvider(notify)
+        assert asyncio.run(router.handle_pending_events(dispatcher))
+        assert len(model.requests) == 1 and authorization_state(store) == before
+        message = store.list_messages()[-1]
+        assert json.loads(message["metadata"])["source_event_ids"] == [requested["id"], blocked.id]
+        inbox = dispatcher.inbox("router")
+        assert all(item["processed_at"] for item in inbox if item["event_id"] in (requested["id"], blocked.id))
+&gt;       assert not next(
+            item for item in inbox if json.loads(item["payload"]).get("approval_id") == unrelated["id"]
+        )["processed_at"]
+
+backend\tests\test_router_notice_capability_sprint.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+backend\tests\test_router_notice_capability_sprint.py:107: in &lt;genexpr&gt;
+    item for item in inbox if json.loads(item["payload"]).get("approval_id") == unrelated["id"]
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+s = {'mandate_id': 'mandate_968ddbbde08c', 'policy': 'local-superagent-v2'}
+cls = None, object_hook = None, parse_float = None, parse_int = None
+parse_constant = None, object_pairs_hook = None, kw = {}
+
+    def loads(s, *, cls=None, object_hook=None, parse_float=None,
+            parse_int=None, parse_constant=None, object_pairs_hook=None, **kw):
+        """Deserialize ``s`` (a ``str``, ``bytes`` or ``bytearray`` instance
+        containing a JSON document) to a Python object.
+    
+        ``object_hook`` is an optional function that will be called with the
+        result of any object literal decode (a ``dict``). The return value of
+        ``object_hook`` will be used instead of the ``dict``. This feature
+        can be used to implement custom decoders (e.g. JSON-RPC class hinting).
+    
+        ``object_pairs_hook`` is an optional function that will be called with the
+        result of any object literal decoded with an ordered list of pairs.  The
+        return value of ``object_pairs_hook`` will be used instead of the ``dict``.
+        This feature can be used to implement custom decoders.  If ``object_hook``
+        is also defined, the ``object_pairs_hook`` takes priority.
+    
+        ``parse_float``, if specified, will be called with the string
+        of every JSON float to be decoded. By default this is equivalent to
+        float(num_str). This can be used to use another datatype or parser
+        for JSON floats (e.g. decimal.Decimal).
+    
+        ``parse_int``, if specified, will be called with the string
+        of every JSON int to be decoded. By default this is equivalent to
+        int(num_str). This can be used to use another datatype or parser
+        for JSON integers (e.g. float).
+    
+        ``parse_constant``, if specified, will be called with one of the
+        following strings: -Infinity, Infinity, NaN.
+        This can be used to raise an exception if invalid JSON numbers
+        are encountered.
+    
+        To use a custom ``JSONDecoder`` subclass, specify it with the ``cls``
+        kwarg; otherwise ``JSONDecoder`` is used.
+        """
+        if isinstance(s, str):
+            if s.startswith('\ufeff'):
+                raise JSONDecodeError("Unexpected UTF-8 BOM (decode using utf-8-sig)",
+                                      s, 0)
+        else:
+            if not isinstance(s, (bytes, bytearray)):
+&gt;               raise TypeError(f'the JSON object must be str, bytes or bytearray, '
+                                f'not {s.__class__.__name__}')
+E               TypeError: the JSON object must be str, bytes or bytearray, not dict
+
+C:\Python313\Lib\json\__init__.py:339: TypeError</failure></testcase><testcase classname="tests.test_router_notice_capability_sprint" name="test_approval_decided_during_inference_cannot_publish_an_outdated_request" time="0.625" /><testcase classname="tests.test_router_notice_capability_sprint" name="test_pending_review_relays_only_core_status_without_a_provider_call" time="0.242"><failure message="sqlite3.OperationalError: no such column: quest_id">rig = (&lt;forge_core.store.Store object at 0x00000129451A5250&gt;, &lt;forge_core.router.RouterService object at 0x00000129451A5750&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x00000129451A5B50&gt;)
+
+    def test_pending_review_relays_only_core_status_without_a_provider_call(rig):
+        store, router, _events = rig
+&gt;       quest, event = pending_review_task(store)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_notice_capability_sprint.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000129451A5250&gt;
+
+    def pending_review_task(store):
+        quest, event = completed_task(store, "PRIVATE_UNREVIEWED_MODEL_CLAIM")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+&gt;           work.connection.execute("UPDATE task_nodes SET status='running' WHERE quest_id=?", (quest.id,))
+E           sqlite3.OperationalError: no such column: quest_id
+
+backend\tests\test_router_notice_capability_sprint.py:136: OperationalError</failure></testcase><testcase classname="tests.test_router_notice_capability_sprint" name="test_pending_review_fact_requires_exact_source_bound_run[run_id]" time="0.204"><failure message="sqlite3.OperationalError: no such column: quest_id">rig = (&lt;forge_core.store.Store object at 0x00000129452B1750&gt;, &lt;forge_core.router.RouterService object at 0x00000129452B2150&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x00000129452B2550&gt;)
+field = 'run_id'
+
+    @pytest.mark.parametrize("field", ["run_id", "plan_id", "task_node_key"])
+    def test_pending_review_fact_requires_exact_source_bound_run(rig, field):
+        store, router, _events = rig
+&gt;       _quest, event = pending_review_task(store)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_notice_capability_sprint.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x00000129452B1750&gt;
+
+    def pending_review_task(store):
+        quest, event = completed_task(store, "PRIVATE_UNREVIEWED_MODEL_CLAIM")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+&gt;           work.connection.execute("UPDATE task_nodes SET status='running' WHERE quest_id=?", (quest.id,))
+E           sqlite3.OperationalError: no such column: quest_id
+
+backend\tests\test_router_notice_capability_sprint.py:136: OperationalError</failure></testcase><testcase classname="tests.test_router_notice_capability_sprint" name="test_pending_review_fact_requires_exact_source_bound_run[plan_id]" time="0.230"><failure message="sqlite3.OperationalError: no such column: quest_id">rig = (&lt;forge_core.store.Store object at 0x0000012945299A90&gt;, &lt;forge_core.router.RouterService object at 0x0000012945299D60&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x000001294529A120&gt;)
+field = 'plan_id'
+
+    @pytest.mark.parametrize("field", ["run_id", "plan_id", "task_node_key"])
+    def test_pending_review_fact_requires_exact_source_bound_run(rig, field):
+        store, router, _events = rig
+&gt;       _quest, event = pending_review_task(store)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_notice_capability_sprint.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x0000012945299A90&gt;
+
+    def pending_review_task(store):
+        quest, event = completed_task(store, "PRIVATE_UNREVIEWED_MODEL_CLAIM")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+&gt;           work.connection.execute("UPDATE task_nodes SET status='running' WHERE quest_id=?", (quest.id,))
+E           sqlite3.OperationalError: no such column: quest_id
+
+backend\tests\test_router_notice_capability_sprint.py:136: OperationalError</failure></testcase><testcase classname="tests.test_router_notice_capability_sprint" name="test_pending_review_fact_requires_exact_source_bound_run[task_node_key]" time="0.359"><failure message="sqlite3.OperationalError: no such column: quest_id">rig = (&lt;forge_core.store.Store object at 0x000001294529AF30&gt;, &lt;forge_core.router.RouterService object at 0x000001294529B200&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x000001294529B5C0&gt;)
+field = 'task_node_key'
+
+    @pytest.mark.parametrize("field", ["run_id", "plan_id", "task_node_key"])
+    def test_pending_review_fact_requires_exact_source_bound_run(rig, field):
+        store, router, _events = rig
+&gt;       _quest, event = pending_review_task(store)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_notice_capability_sprint.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x000001294529AF30&gt;
+
+    def pending_review_task(store):
+        quest, event = completed_task(store, "PRIVATE_UNREVIEWED_MODEL_CLAIM")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+&gt;           work.connection.execute("UPDATE task_nodes SET status='running' WHERE quest_id=?", (quest.id,))
+E           sqlite3.OperationalError: no such column: quest_id
+
+backend\tests\test_router_notice_capability_sprint.py:136: OperationalError</failure></testcase><testcase classname="tests.test_router_notice_capability_sprint" name="test_pending_review_state_change_is_fenced_before_status_publication" time="0.321"><failure message="sqlite3.OperationalError: no such column: quest_id">rig = (&lt;forge_core.store.Store object at 0x0000012945247CB0&gt;, &lt;forge_core.router.RouterService object at 0x0000012945247A10&gt;, &lt;forge_core.superagent_events.TriggerService object at 0x0000012945176430&gt;)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000129451B4890&gt;
+
+    def test_pending_review_state_change_is_fenced_before_status_publication(rig, monkeypatch):
+        store, router, _events = rig
+&gt;       quest, _event = pending_review_task(store)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\test_router_notice_capability_sprint.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x0000012945247CB0&gt;
+
+    def pending_review_task(store):
+        quest, event = completed_task(store, "PRIVATE_UNREVIEWED_MODEL_CLAIM")
+        with store.unit_of_work() as work:
+            work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+&gt;           work.connection.execute("UPDATE task_nodes SET status='running' WHERE quest_id=?", (quest.id,))
+E           sqlite3.OperationalError: no such column: quest_id
+
+backend\tests\test_router_notice_capability_sprint.py:136: OperationalError</failure></testcase><testcase classname="tests.test_router_responsiveness_superagent" name="test_autonomous_routine_progress_is_durably_acknowledged_without_inference[worker.progress-None]" time="0.279" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_autonomous_routine_progress_is_durably_acknowledged_without_inference[quest.status_changed-approved]" time="0.223" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_autonomous_routine_progress_is_durably_acknowledged_without_inference[quest.status_changed-queued]" time="0.175" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_autonomous_routine_progress_is_durably_acknowledged_without_inference[quest.status_changed-running]" time="0.218" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_manual_progress_keeps_its_existing_router_notice_behavior[False-True]" time="0.330" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_manual_progress_keeps_its_existing_router_notice_behavior[True-False]" time="0.237" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[worker.result-None]" time="0.207" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[worker.blocked-None]" time="0.151" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[worker.failed-None]" time="0.155" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[worker.help_requested-None]" time="0.154" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[approval.requested-None]" time="0.144" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[quest.status_changed-completed]" time="0.161" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[quest.status_changed-failed]" time="0.247" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[quest.status_changed-cancelled]" time="0.173" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[quest.status_changed-needs_input]" time="0.146" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_actionable_and_terminal_notifications_still_reach_router[quest.status_changed-paused]" time="0.140" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[False-approved]" time="0.107" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[False-queued]" time="0.113" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[False-running]" time="0.124" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[False-completed]" time="0.144" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[False-failed]" time="0.121" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[True-approved]" time="0.421" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[True-queued]" time="0.147" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[True-running]" time="0.131" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[True-completed]" time="0.135" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_new_independent_task_is_not_reinferred_for_unrelated_worker_lifecycle[True-failed]" time="0.142" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[goal]" time="0.254" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[metadata]" time="0.243" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[state]" time="0.197" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[message]" time="0.315" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[model]" time="0.127" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_preserves_semantic_and_conversation_cas[archive]" time="0.267" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_continuation_still_reinfers_after_the_existing_task_changes" time="0.164" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_create_after_explicit_task_lookup_keeps_full_context_fencing" time="0.236" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_independent_create_cannot_carry_a_changed_selected_requirement" time="0.347" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_completed_task_uses_a_source_linked_natural_router_recap" time="0.244" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_legacy_or_unfinished_status_never_adopts_a_model_completion_claim[False-completed]" time="0.375" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_legacy_or_unfinished_status_never_adopts_a_model_completion_claim[True-running]" time="0.628" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_completed_status_without_a_succeeded_source_delivery_keeps_core_facts" time="0.232" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_completed_recap_reinfers_if_its_delivery_source_changes" time="0.267" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_historical_recap_handles_multiple_completed_tasks_and_keeps_mixed_states_factual[False]" time="0.396" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_historical_recap_handles_multiple_completed_tasks_and_keeps_mixed_states_factual[True]" time="0.654" /><testcase classname="tests.test_router_responsiveness_superagent" name="test_autonomous_nested_source_backlog_fits_native_gateway_without_losing_recap_sources" time="0.419" /><testcase classname="tests.test_superagent_loop" name="test_semantic_batch_dispatches_independent_work_and_ignores_noise" time="0.174" /><testcase classname="tests.test_superagent_loop" name="test_semantic_attach_reuses_hidden_worker_then_bypasses_router" time="0.186" /><testcase classname="tests.test_superagent_loop" name="test_semantic_invalid_batch_never_partially_creates_tasks[duplicate]" time="0.123" /><testcase classname="tests.test_superagent_loop" name="test_semantic_invalid_batch_never_partially_creates_tasks[missing]" time="0.140" /><testcase classname="tests.test_superagent_loop" name="test_semantic_invalid_batch_never_partially_creates_tasks[wrong_id]" time="0.347" /><testcase classname="tests.test_superagent_loop" name="test_semantic_inflight_subscription_invalidates_cold_start_decision" time="0.170" /><testcase classname="tests.test_superagent_loop" name="test_semantic_main_router_never_claims_foreign_conversation_and_rejects_foreign_attach" time="0.104" /><testcase classname="tests.test_superagent_loop" name="test_router_reads_spilled_trigger_through_actual_model_tool_round" time="0.093" /><testcase classname="tests.test_superagent_loop" name="test_failed_inference_can_resume_after_lease_expiry_without_duplicate_task" time="0.129" /><testcase classname="tests.test_superagent_loop" name="test_semantic_trigger_source_reaches_worker_prompt_and_actual_scoped_read" time="0.442" /><testcase classname="tests.test_superagent_loop" name="test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_only_via_router" time="1.224" /><testcase classname="tests.test_superagent_loop" name="test_actual_api_lifespan_polls_persistent_sources_and_records_component_health" time="0.565" /><testcase classname="tests.test_superagent_loop" name="test_router_dispatches_multiple_independent_workers_without_replacing_original_source" time="0.277" /><testcase classname="tests.test_superagent_loop" name="test_legacy_router_retains_single_task_semantics_and_its_original_schema" time="0.101" /><testcase classname="tests.test_superagent_loop" name="test_compact_router_keeps_six_field_schema_and_defaults_to_one_worker" time="0.213" /><testcase classname="tests.test_superagent_loop" name="test_router_invalid_dispatches_have_no_partial_user_turn[assignments0]" time="0.198" /><testcase classname="tests.test_superagent_loop" name="test_router_invalid_dispatches_have_no_partial_user_turn[assignments1]" time="0.190" /><testcase classname="tests.test_superagent_loop" name="test_router_invalid_dispatches_have_no_partial_user_turn[assignments2]" time="0.267" /><testcase classname="tests.test_superagent_loop" name="test_trigger_dispatch_carries_independent_assignments_into_internal_contracts" time="0.319" /><testcase classname="tests.test_superagent_loop" name="test_compact_trigger_schema_omits_optional_assignment_definitions" time="0.080" /><testcase classname="tests.test_superagent_loop" name="test_trigger_cannot_assign_new_workers_when_it_does_not_dispatch[ignore]" time="0.182" /><testcase classname="tests.test_superagent_loop" name="test_trigger_cannot_assign_new_workers_when_it_does_not_dispatch[attach]" time="0.147" /><testcase classname="tests.test_superagent_loop" name="test_watchdog_loop_survives_heartbeat_storage_failures_with_backoff" time="3.297" /><testcase classname="tests.test_m4_adversarial" name="test_cancelled_quest_never_has_ready_plan_or_plan_control" time="0.096" /><testcase classname="tests.test_m4_adversarial" name="test_concurrent_notice_failure_does_not_dead_letter_successful_inflight" time="0.254" /><testcase classname="tests.test_m4_adversarial" name="test_expired_notice_attempt_is_fenced_from_new_attempt" time="0.181" /><testcase classname="tests.test_m4_adversarial" name="test_expired_notice_success_cannot_ack_new_inflight_attempt" time="0.184" /><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[False]" time="0.382" /><testcase classname="tests.test_m4_adversarial" name="test_expired_planner_attempt_cannot_modify_new_attempt[True]" time="0.562" /><testcase classname="tests.test_background_busy_m7" name="test_router_notice_busy_does_not_consume_failure_budget" time="0.415" /><testcase classname="tests.test_background_busy_m7" name="test_router_notice_waits_for_real_gateway_slot_longer_than_two_seconds" time="2.678" /><testcase classname="tests.test_background_busy_m7" name="test_background_planner_and_composer_busy_do_not_consume_retries[planner]" time="0.338" /><testcase classname="tests.test_background_busy_m7" name="test_background_planner_and_composer_busy_do_not_consume_retries[composer]" time="0.319" /><testcase classname="tests.test_adaptive_planning_v17" name="test_router_feedback_stages_a_source_bound_replan_request_without_approval" time="0.763" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[running]" time="0.567" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[no_completed]" time="0.696" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[different_source]" time="0.663" /><testcase classname="tests.test_adaptive_planning_v17" name="test_replan_offer_rejects_unsafe_or_duplicate_feedback[proposed_plan]" time="0.650" /><testcase classname="tests.test_adaptive_planning_v17" name="test_expired_adaptive_planner_cannot_stage_or_ack_a_new_attempt" time="0.865" /><testcase classname="tests.test_adaptive_planning_v17" name="test_background_planner_dispatches_feedback_in_remaining_mode" time="0.750" /></testsuite></testsuites>

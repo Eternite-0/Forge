@@ -1,0 +1,809 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:35:48.566977+00:00",
+  "provenance": "independent_programmatic_closed_evidence_read_only_diagnosis",
+  "audit_program": {
+    "path": ".local/superagent/l2_failure_diagnosis.py",
+    "sha256": "4cd385bced5cc8c427efdde465e0781c4897831277792dd8ff5dacb534caf382"
+  },
+  "actions": {
+    "provider_calls": 0,
+    "code_or_tool_execution": 0,
+    "operation_replays": 0,
+    "original_evidence_edits": 0,
+    "sqlite_uri_mode": "ro"
+  },
+  "failed_multispecialist_L2": {
+    "run_id": "20261116T002629Z-capability-continuity-e02ee2",
+    "original_report": {
+      "path": "docs/audit/superagent/20261116T002629Z-capability-continuity-e02ee2.json",
+      "sha256": "83f900fc770596e6409abc09fdc4b1f862242ab8d410389d7331693aaeced686"
+    },
+    "quest_id": "quest_4423cc2f7620",
+    "run_id_of_first_worker": "run_df52e380d4ce",
+    "state": "blocked",
+    "worker_token_limit": 250000,
+    "worker_token_spent": 195639,
+    "worker_token_remaining": 54361,
+    "review_packets": [
+      {
+        "round": 1,
+        "review_started_event_id": "evt_adc103cb6611",
+        "review_result_event_id": "evt_eb9cf2b7f864",
+        "packet_sha256": "15bca56d6f9f77db9a16ea526b4124d7f8a593389f6c5e0e6cc8cd192901c4f1",
+        "matches_original_packet_hash": true,
+        "raw_packet_bytes": 68486,
+        "complete_top_level_field_bytes": {
+          "quest_id": 20,
+          "plan_id": 19,
+          "plan_digest": 66,
+          "plan_revision": 1,
+          "node_key": 8,
+          "team_digest": 66,
+          "provider_id": 10,
+          "model_id": 21,
+          "execution_mode": 6,
+          "run_id": 18,
+          "result_event_id": 18,
+          "original_goal": 844,
+          "objective": 447,
+          "success_criteria": 19,
+          "original_request": 2130,
+          "updated_request": 4,
+          "user_constraints": 7928,
+          "contract": 1233,
+          "delivery": 6311,
+          "receipts": 30130,
+          "artifacts": 18765,
+          "trust": 98
+        },
+        "delivery_field_bytes": {
+          "summary": 931,
+          "findings": 2287,
+          "decisions": 703,
+          "artifacts": 48,
+          "evidence_references": 936,
+          "unresolved_issues": 663,
+          "confidence": 4,
+          "next_actions": 615
+        },
+        "verdict": "NEEDS_REVISION",
+        "findings": [
+          "The node's evidence artifact exists and is receipt-backed (receipt_36566595da5e, sha256 74f782fd…), but its declared citation set has range mismatches against the numbered originals: C13 spans philosophy lines 19–20 yet its quote's second sentence belongs to line 20's list item while the line-specificity is lost, and C16 merges intake lines 11–13 into a single block quote whose line breaks do not match the numbered lines exactly — reviewers cannot verify per-line provenance (evidence: source 0 numbered_content lines 11–13 vs C16; source 3 lines 19–20 vs C13).",
+          "The objective required distinguishing the public prototype, the architecture article, and unimplemented capabilities; the node correctly notes the article/docs-007 are absent, but then still asserts an 'article_only_or_not_implemented' bucket with illustrative capabilities ('multi-repository/multi-tenant autonomy, richer proactive modes beyond record-only') that are not traced to any supplied line — this is an unsupported inference, even though it is labeled a hypothesis.",
+          "C10 in the citation set is a multi-line README quote (line 7) spanning readme 7, and C5's line_end 45 covers intake lines 38–45 where the final quote line omits the comment context from lines 40–41; quote ranges generally line up but several multi-line quotes need re-verification for exact whitespace and full-range coverage per the 'exact numbered original source lines' constraint."
+        ],
+        "revision_goals": [
+          "Re-verify every citation's line_start/line_end against the numbered_content blocks and tighten multi-line quotes so the verbatim quote exactly reproduces the full range (especially C1–C16 spanning >1 line), replacing any that omit leading comments or trailing tokens within the declared range.",
+          "Remove or clearly mark as outside the supplied evidence any illustrative 'article-only' capability names (multi-repository/multi-tenant autonomy, etc.) so the prototype/article split is only asserted at the strength of README lines 3 and 5.",
+          "Add a short explicit note per citation confirming it was verified against the source content (not just the packet hash), and ensure no claim states or implies runtime/execution observation from static inspection."
+        ],
+        "reserved_tokens": 77322
+      },
+      {
+        "round": 2,
+        "review_started_event_id": "evt_1909ab276abc",
+        "review_result_event_id": "evt_01dbc473d21b",
+        "packet_sha256": "850c419b16d73a5fce80433d1eb05ca1e83e46293b390b88ad4882c9b04c4ffa",
+        "matches_original_packet_hash": true,
+        "raw_packet_bytes": 75947,
+        "complete_top_level_field_bytes": {
+          "quest_id": 20,
+          "plan_id": 19,
+          "plan_digest": 66,
+          "plan_revision": 1,
+          "node_key": 8,
+          "team_digest": 66,
+          "provider_id": 10,
+          "model_id": 21,
+          "execution_mode": 6,
+          "run_id": 18,
+          "result_event_id": 18,
+          "original_goal": 844,
+          "objective": 447,
+          "success_criteria": 19,
+          "original_request": 2130,
+          "updated_request": 4,
+          "user_constraints": 7928,
+          "contract": 1233,
+          "delivery": 7651,
+          "receipts": 30832,
+          "artifacts": 24184,
+          "trust": 98
+        },
+        "delivery_field_bytes": {
+          "summary": 855,
+          "findings": 2536,
+          "decisions": 983,
+          "artifacts": 169,
+          "evidence_references": 1333,
+          "unresolved_issues": 887,
+          "confidence": 4,
+          "next_actions": 760
+        },
+        "verdict": "NEEDS_REVISION",
+        "findings": [
+          "Citation anchoring required by the objective and user constraints is now met: sampled ranges C5 (38–46), C6 (49–55), C7 (56–61), C12 (line 7) reproduce the original source lines verbatim without N: prefixes, matching Complete untrusted sources 0 and 2.",
+          "Required content coverage is satisfied: all three sources are cited (deepseek_intake C1–C9, deepseek_readme C10–C12, deepseek_philosophy C13–C17), with six comparison rows, four risks and four recommendations, and no observed-execution claims.",
+          "Format mismatch with the downstream deliverable schema persists: the artifact's citations carry extra `verified`/`note` fields and use top-level keys comparison_rows/risks/recommendations instead of the specified `comparison`; this is acceptable only as an intermediate handoff because research.json is not this node's artifact, but the integrator must not copy these shapes verbatim."
+        ],
+        "revision_goals": [
+          "Optional within node scope: add a machine-checkable note per citation or in reading_method stating which key names must be dropped (C1–C17) when the integrator maps them into research.json's {source_id,source_sha256,line_start,line_end,quote} shape, to reduce integration error."
+        ],
+        "reserved_tokens": 85024
+      }
+    ],
+    "artifact_versions": [
+      {
+        "intent_id": "action_07545b784c91",
+        "tool_name": "file_write",
+        "artifact_path": "work/quest_4423cc2f7620/source_analysis.json",
+        "content_sha256": "74f782fd2491c485c65ea890d9e05d75928998df4891ec1416b0d74084a5900c",
+        "matches_write_receipt_sha256": true,
+        "bytes": 20228,
+        "top_level_field_bytes": {
+          "node": 8,
+          "quest_id": 20,
+          "scope_note": 362,
+          "sources": 1249,
+          "citations": 7369,
+          "flow_map": 1417,
+          "prototype_vs_article": 1243,
+          "comparison_rows": 2647,
+          "risks": 1666,
+          "recommendations": 1425,
+          "limitations": 487,
+          "receipts": 425
+        },
+        "citation_count": 16,
+        "citations": [
+          {
+            "id": "C1",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C2",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C3",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C4",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C5",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C6",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C7",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C8",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C9",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C10",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C11",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C12",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C13",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C14",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C15",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": "C16",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          }
+        ]
+      },
+      {
+        "intent_id": "action_c50cc8495a2b",
+        "tool_name": "file_revise",
+        "artifact_path": "work/quest_4423cc2f7620/source_analysis.json",
+        "content_sha256": "5446828303e358473918ff45379842584d117d7c1c3042f57ac4694837b5847f",
+        "matches_write_receipt_sha256": true,
+        "bytes": 25943,
+        "top_level_field_bytes": {
+          "node": 8,
+          "quest_id": 20,
+          "revision": 1,
+          "reading_method": 562,
+          "scope_note": 416,
+          "sources": 1282,
+          "citations": 10973,
+          "flow_map": 1586,
+          "prototype_vs_article": 1395,
+          "comparison_rows": 2972,
+          "risks": 1670,
+          "recommendations": 1497,
+          "limitations": 510,
+          "receipts": 815
+        },
+        "citation_count": 17,
+        "citations": [
+          {
+            "id": "C1",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C2",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C3",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C4",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C5",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C6",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C7",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C8",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C9",
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C10",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C11",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C12",
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C13",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C14",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C15",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C16",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": "C17",
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          }
+        ]
+      }
+    ],
+    "actual_quest_usage_by_purpose": {
+      "worker": {
+        "calls": 7,
+        "input_charged": 100371,
+        "output_charged": 16759,
+        "input_reserved": 400352
+      },
+      "independent_reviewer": {
+        "calls": 2,
+        "input_charged": 37861,
+        "output_charged": 799,
+        "input_reserved": 145962
+      },
+      "context_compaction": {
+        "calls": 2,
+        "input_charged": 34369,
+        "output_charged": 5480,
+        "input_reserved": 131654
+      },
+      "router_notice": {
+        "calls": 4,
+        "input_charged": 12948,
+        "output_charged": 292,
+        "input_reserved": 56772
+      }
+    },
+    "worker_archives": [
+      {
+        "id": 1,
+        "source_count": 15,
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "capsule_bytes": 24058,
+        "capsule_field_bytes": {
+          "completed_steps": 3066,
+          "evidence_refs": 497,
+          "history_recall": 114,
+          "hypotheses": 3822,
+          "model_handoff": 10672,
+          "next_action": 7,
+          "source_event_cursor": 1,
+          "task": 5747
+        }
+      },
+      {
+        "id": 2,
+        "source_count": 2,
+        "source_hash_matches": true,
+        "capsule_hash_matches": true,
+        "capsule_bytes": 23309,
+        "capsule_field_bytes": {
+          "completed_steps": 3505,
+          "evidence_refs": 497,
+          "history_recall": 114,
+          "hypotheses": 3822,
+          "model_handoff": 9484,
+          "next_action": 7,
+          "source_event_cursor": 1,
+          "task": 5747
+        }
+      }
+    ],
+    "context_rejections": [
+      {
+        "run_id": "run_df52e380d4ce",
+        "reason_code": "request_input_allowance_exceeded",
+        "model_context_window": 100000000,
+        "effective_model_context_limit": 100000000,
+        "request_token_allowance": 54361,
+        "input_allowance": 37470,
+        "input_allowance_limited_by": "cumulative_tokens",
+        "cumulative_token_limit": 250000,
+        "cumulative_token_remaining": 54361,
+        "cumulative_token_limits_enforced": true
+      }
+    ],
+    "database_quick_check": "ok"
+  },
+  "passed_single_worker_L2": {
+    "run_id": "20261115T231841Z-capability-single-db92c8",
+    "original_report": {
+      "path": "docs/audit/superagent/20261115T231841Z-capability-single-db92c8.json",
+      "sha256": "30a55e207e4ee434fd2b862a666545b03351f04b323ca087995e2c6fe8a19b0b"
+    },
+    "quest_id": "quest_74346ab1f1de",
+    "run_id_of_first_worker": "run_9b4a0b8894c3",
+    "state": "succeeded",
+    "worker_token_limit": 500000,
+    "worker_token_spent": 144422,
+    "worker_token_remaining": 355578,
+    "review_packets": [
+      {
+        "round": 1,
+        "review_started_event_id": "evt_a9639fdb21d3",
+        "review_result_event_id": "evt_713b13b184f9",
+        "packet_sha256": "6efe01415dc719d1c34488989b4b88da4f7d647f81c521df5e88edb1119ebccb",
+        "matches_original_packet_hash": false,
+        "raw_packet_bytes": null,
+        "complete_top_level_field_bytes": null,
+        "delivery_field_bytes": null,
+        "verdict": "NEEDS_REVISION",
+        "findings": [
+          "Citation integrity defect: the deepseek_intake citation at lines 25-29 quotes `const filter = this.options.scope.scope(trigger)`, which is line 25 only; lines 26-29 contain unrelated code, so the quote is not verbatim from the full declared range (source 0 numbered_content L25-29).",
+          "Malformed/partial citation defect: the deepseek_intake citation at line_start 2/line_end 2 quotes `Timeline: trigger ingestion, thread correlation, subscription fan-out, and evaluation queuing.`, but the original line 2 is `import { key } from './ids.ts'`; the quoted text also deviates from the actual doc comment wording at line 1 (source 0 L1-2).",
+          "Substantive coverage is largely present: all three sources are cited, flow/filtering/pass-through/Eval fallback are analyzed, ≥2 comparison rows, ≥2 risks and ≥2 recommendations exist, README line 5 separates article-only designs, and the delivery explicitly disclaims observed execution (delivery summary, decisions, unresolved_issues)."
+        ],
+        "revision_goals": [
+          "Fix every citation so the quote is a verbatim substring of the cited line_start..line_end range in the corresponding numbered source; in particular replace the line 25-29 intake quote with either range 25-25 using line 25 text or a quote actually spanning lines 25-29 (e.g. include lines 26-28 content).",
+          "Replace the line 2-2 intake citation: either cite line 1 for the header comment using its exact text, or cite line 2 with the exact text `import { key } from './ids.ts'`; do not paraphrase or reorder source wording inside quotes.",
+          "Re-verify all remaining citations against the numbered originals (readme L3/5/7, philosophy L11/19/20) and re-issue research.json via file_revise with the prior receipt_1dfd1ace71ae and SHA-256 3032104a8fe2ca60a22c6c004b73f226bb457b200350d47c92e45d4025ac33fc; keep the required {summary,citations,comparison,risks,recommendations} schema, ≥2 comparisons/risks/recommendations, cite all three sources, and preserve the no-observed-execution disclaimer."
+        ],
+        "reserved_tokens": 70343
+      },
+      {
+        "round": 2,
+        "review_started_event_id": "evt_d551899e2435",
+        "review_result_event_id": "evt_5f58720b4f8c",
+        "packet_sha256": "e33688dad10079fedb1c45a1443cc25a5018a495ba43db02a5eb7a9309228689",
+        "matches_original_packet_hash": false,
+        "raw_packet_bytes": null,
+        "complete_top_level_field_bytes": null,
+        "delivery_field_bytes": null,
+        "verdict": "PASS",
+        "findings": [
+          "research.json at work/quest_74346ab1f1de/research.json (receipt_a7cd3a8250cf, sha256 9a5d95fa…) contains the required schema {summary,citations,comparison,risks,recommendations} with 5 comparison rows, 4 risks and 4 recommendations, exceeding the ≥2 minima (source packet 3).",
+          "All three supplied sources are cited: deepseek_readme (L3, L5, L7), deepseek_philosophy (L11, L19, L20) and deepseek_intake (L1, L2, L25-29, L58); every quote is a verbatim substring of its cited numbered range with no 'N: ' prefixes, and the earlier fabricated line-2 and paraphrased 25-29 quotes were corrected.",
+          "Scope discipline holds: the prototype/doc/article distinction is made explicit in summary, comparison row 5 and risk 1; the artifact repeatedly states it is source inspection only, proposes (not claims) tests, and inputs were only read (receipts 11f97430cda7, ab2594d2baa7, 90145b531d11)."
+        ],
+        "revision_goals": [],
+        "reserved_tokens": 71764
+      }
+    ],
+    "artifact_versions": [
+      {
+        "intent_id": "action_25d8f808005e",
+        "tool_name": "file_write",
+        "artifact_path": "work/quest_74346ab1f1de/research.json",
+        "content_sha256": "3032104a8fe2ca60a22c6c004b73f226bb457b200350d47c92e45d4025ac33fc",
+        "matches_write_receipt_sha256": true,
+        "bytes": 13947,
+        "top_level_field_bytes": {
+          "summary": 1974,
+          "citations": 1870,
+          "comparison": 4177,
+          "risks": 2983,
+          "recommendations": 2020
+        },
+        "citation_count": 8,
+        "citations": [
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": false,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          }
+        ]
+      },
+      {
+        "intent_id": "action_6e82181c78bd",
+        "tool_name": "file_revise",
+        "artifact_path": "work/quest_74346ab1f1de/research.json",
+        "content_sha256": "9a5d95fa8dd38d40223f7505b33e95fd63d81408b866f995b6e967711b8cdf4c",
+        "matches_write_receipt_sha256": true,
+        "bytes": 14797,
+        "top_level_field_bytes": {
+          "summary": 2130,
+          "citations": 2464,
+          "comparison": 4177,
+          "risks": 2983,
+          "recommendations": 2020
+        },
+        "citation_count": 10,
+        "citations": [
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_readme",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_philosophy",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": true
+          },
+          {
+            "id": null,
+            "source_id": "deepseek_intake",
+            "source_sha256_matches": true,
+            "valid_line_range": true,
+            "quote_verbatim_within_range": true,
+            "whole_range_equals_quote_not_a_required_criterion": false
+          }
+        ]
+      }
+    ],
+    "actual_quest_usage_by_purpose": {
+      "worker": {
+        "calls": 8,
+        "input_charged": 101428,
+        "output_charged": 10192,
+        "input_reserved": 407079
+      },
+      "independent_reviewer": {
+        "calls": 2,
+        "input_charged": 31989,
+        "output_charged": 813,
+        "input_reserved": 125723
+      },
+      "router_notice": {
+        "calls": 1,
+        "input_charged": 3764,
+        "output_charged": 142,
+        "input_reserved": 15787
+      }
+    },
+    "worker_archives": [],
+    "context_rejections": [],
+    "database_quick_check": "ok"
+  },
+  "findings": [
+    "Both failed-team review packets reconstruct byte-for-byte to their durable original hashes. Original verdicts remain unchanged.",
+    "Every initial team artifact citation meets the original hash/range/verbatim-substring contract; demanding entire-range reproduction and per-citation self-verification added requirements. This does not prove claim support or turn the first failed review into PASS.",
+    "The first review also identified unsupported illustrative article-only capability claims, which remain substantive defects to repair.",
+    "The second review explicitly accepted citation anchoring and required content coverage; its only requested change was optional downstream schema-mapping guidance. That optional request nevertheless caused another NEEDS_REVISION.",
+    "Research duplicated final integrator content and produced larger artifacts and delivery text. Its fixed 250k allocation then paid two reviews and two compactions without reaching the integrator. This is cumulative request affordability, not exhaustion of the declared 100M model window."
+  ],
+  "minimum_corrections_without_policy_or_acceptance_relaxation": [
+    "State the existing citation contract precisely in reviewer guidance: a nonempty verbatim quote within its exact attributed range, while still checking claim support. Do not invent mandatory full-range copies or self-verification notes.",
+    "Require NEEDS_REVISION goals to identify a failed mandatory CURRENT-node criterion. Optional improvements and downstream formatting advice remain nonblocking findings; never override or rewrite historical model verdicts.",
+    "Keep intermediate role assignments nonoverlapping and their handoffs concise with exact references. Preserve all assigned facts and citations, complete source/receipt bytes, original final-output schemas and all independent acceptance checks.",
+    "Any transport optimization must be lossless and prove canonical reconstruction to the original packet/source hash. Budget, permissions, retries, review rounds and acceptance criteria remain unchanged."
+  ],
+  "limitations": [
+    "This is a diagnosis of closed runs, not new task acceptance or a model-quality ranking.",
+    "The single-Worker and team observations are different source/run conditions; no controlled causal comparison is claimed."
+  ]
+}

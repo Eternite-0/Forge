@@ -194,7 +194,8 @@ def test_independent_assignments_share_host_caps_and_recover_without_duplication
         ]
         assert sum(node["budget_tokens"] for node in plan["nodes"]) == policy["max_tokens"]
         assert sum(member["estimated_tokens"] for member in members) <= policy["max_tokens"]
-        assert sum(member["max_tool_calls"] for member in members) == policy["max_tools"]
+        assert sum(member["max_tool_calls"] for member in members) == policy["initial_tool_budget"]
+        assert policy["initial_tool_budget"] < policy["max_tools"]
         assert sum(member["max_duration_seconds"] for member in members) == policy["max_seconds"]
         assert body["limits"]["max_concurrency"] == min(count, 2)
         assert all(member["input_contract"] and member["output_schema"] for member in members)

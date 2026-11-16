@@ -1,0 +1,47 @@
+{
+  "schema_version": 4,
+  "created_at": "2026-11-16T06:36:05.661537+00:00",
+  "status": "incomplete_acceptance_handoff_requested",
+  "goal_achieved": false,
+  "current_stage": {
+    "path": "docs/audit/superagent/capability-completion-handoff-verification.json",
+    "sha256": "9ba167532800222a2e129c080b6045731cbee40a598366ff1087e8880f5b1a8c"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-handoff-source-freeze.json",
+    "sha256": "407fa38caafb6299f659185b6ccc6377a62b073d1c0672644e4d0614fbacd94a"
+  },
+  "frozen_source_still_matches": true,
+  "latest_real_condition": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e.json",
+    "sha256": "8d2fec6685b2258b3ab33faac957d439e630cec8b84d1bd89d9fd28ac6ec0c29"
+  },
+  "real_L2_status": "passed_on_retained_source",
+  "real_L3_status": "passed_on_retained_source",
+  "combined_continuity_status": "failed",
+  "current_fix_real_acceptance": "not_run",
+  "current_targeted_regression": {
+    "path": "docs/audit/superagent/capability-thread-read-targeted.xml",
+    "sha256": "8c183eb7289edb7538b134d3943ef4f7035e31ae202d1452fc3d5331ad9caf5c",
+    "tests": 102,
+    "passed": 101,
+    "failed": 0,
+    "skipped": 1
+  },
+  "historical_full_suite_is_not_current_source_result": true,
+  "remaining_acceptance": [
+    "complete_thread_consumption",
+    "post_restart_complete_thread_consumption",
+    "typed_multihop_recall"
+  ],
+  "handoff": {
+    "path": "docs/SUPERAGENT_NEXT_ENV_HANDOFF.md",
+    "sha256": "f4b64bb4a00c6ee4b24b73c275b5a9d5395b3f464632d5450069fc0fe78a3ae7"
+  },
+  "previous_stage": {
+    "path": "docs/audit/superagent/capability-pre-completion-final-verification.json",
+    "sha256": "b7cc0dc399bff689e1742a765a583dafddfa86475988a90bb70da7b1353a8a36"
+  },
+  "commit_or_push_performed": false,
+  "frontend_changes_by_this_phase": false
+}

@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="11" skipped="0" tests="13" time="4.544" timestamp="2026-11-16T08:14:50.946765+08:00" hostname="DESKTOP-PBHPH69"><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_first_and_second_explicit_roots_present_before_model_and_bind_separate_quests" time="0.191"><failure message="RuntimeError: coroutine raised StopIteration">request = ModelRequest(model_id='mock-model', messages=[{'role': 'system', 'content': "You are FORGE's persistent Router. Return...workspace_id='017803e27f8550dbc816fca3', quest_id=None, worker_run_id=None, parent_call_id=None), context_limit=131072)
+ordinal = 1
+
+    def decide(request, ordinal):
+        context = json.loads(request.messages[1]["content"])
+        projects = context["project_context"]
+        focused = projects["focused_project_id"]
+&gt;       root = next(item["root"] for item in projects["projects"] if item["id"] == focused)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:47: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_first_and_second_explicit0')
+
+    def test_first_and_second_explicit_roots_present_before_model_and_bind_separate_quests(tmp_path):
+        store, router, roots = setup_projects(tmp_path)
+        requests = []
+    
+        def decide(request, ordinal):
+            context = json.loads(request.messages[1]["content"])
+            projects = context["project_context"]
+            focused = projects["focused_project_id"]
+            root = next(item["root"] for item in projects["projects"] if item["id"] == focused)
+            assert root == str(roots[ordinal - 1])
+            assert projects["grants_tool_access"] is False
+            assert context["quests"] == []
+            requests.append(context)
+            return response(conversational_decision())
+    
+        router.provider = MockProvider(decide)
+&gt;       created = [asyncio.run(router.handle_user_message(f'Analyze "{root}".', request_id=str(i)))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   for i, root in enumerate(roots)]
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\asyncio\runners.py:195: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:725: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;forge_core.router.RouterService object at 0x000001CCB11E4D70&gt;
+text = 'Analyze "C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1245\\test_first_and_second_explicit0\\project_beta".'
+request_id = '0'
+
+    async def handle_user_message(self, text, *, request_id=None):
+        if not isinstance(text, str) or not text.strip():
+            raise DomainError("Message must not be empty")
+        received_at = now_iso()
+        self._sync_memory()
+        request_id = request_id or new_id("turn")
+        if not isinstance(request_id, str) or not 1 &lt;= len(request_id) &lt;= 200:
+            raise DomainError("Invalid request ID")
+        digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        conflicts = 0
+        compactions = 0
+        while conflicts &lt;= self.max_conflicts:
+            with self.store.connection() as connection:
+                connection.execute("BEGIN")
+                previous = connection.execute(
+                    "SELECT * FROM router_turns WHERE request_id=?", (request_id,)
+                ).fetchone()
+                if previous:
+                    if previous["input_hash"] != digest:
+                        raise DomainError("Request ID already used for different input")
+                    return json.loads(previous["result_json"])
+                snapshot = self._snapshot(connection, text)
+                connection.commit()
+            if (
+                len(_json(snapshot["messages"]).encode("utf-8"))
+                &gt; self.effective_context_limit(self._model_profile(snapshot)) // 2
+                or len(snapshot["messages"]) &gt; 50
+            ) and len(snapshot["messages"]) &gt; 10:
+                if compactions &gt;= 100:
+                    raise DomainError("Router compaction backlog exceeds per-call limit")
+                if isinstance(self.provider, ProviderGateway):
+                    from .model_compaction import RouterModelCompactor
+    
+                    profile = self._model_profile(snapshot)
+                    if profile is None:
+                        raise DomainError("Model compaction requires the registered Router profile")
+                    await RouterModelCompactor(
+                        self.context_service,
+                        self.provider,
+                        profile=profile,
+                        context_limit=self.effective_context_limit(profile),
+                        output_limit=self.output_reserve,
+                    ).compact(keep_recent=10)
+                else:
+                    # Historical in-process adapters have no native Gateway.
+                    # Their deterministic archive tests preserve the old path.
+                    self.context_service.compact_router(keep_recent=10)
+                compactions += 1
+                continue
+            if self.semantic_recall and self.model_id and len(text.encode("utf-8")) &lt;= 8192:
+                profile = self._model_profile(snapshot)
+                snapshot["semantic_memory"] = await self.memory_service.retrieve_semantic_context(
+                    text,
+                    provider=self.provider,
+                    model_id=self.model_id,
+                    provider_id=self.provider_id,
+                    context_limit=self.effective_context_limit(profile),
+                    output_limit=512,
+                    max_bytes=min(8192, self.effective_context_limit(profile) // 4),
+                    project_id=(snapshot.get("project_context") or {}).get("focused_project_id"),
+                    capabilities={"json_schema": True},
+                    capability_sources={
+                        "json_schema": profile.structured_output_support.source
+                        if profile and profile.structured_output_support
+                        else "mock"
+                    },
+                )
+                with self.store.connection() as connection:
+                    self._semantic_quests(connection, snapshot, snapshot["semantic_memory"])
+            context, cursor = self._context(snapshot, text)
+            if not self.model_id:
+                raise DomainError("Router model is not configured")
+            capability_source = "mock"
+            capability_sources = {"tools": "mock", "json_schema": "mock"}
+            if getattr(self.provider, "execution_mode", None) != "mock":
+                profile = self._model_profile(snapshot)
+                if (
+                    profile is None
+                    or not profile.enabled
+                    or profile.provider != self.provider_id
+                    or profile.tool_calling_support is None
+                    or not profile.tool_calling_support.supported
+                    or profile.structured_output_support is None
+                    or not profile.structured_output_support.supported
+                ):
+                    raise DomainError("Router model capability is unknown or unsupported")
+                capability_source = f"registry:{profile.tool_calling_support.source},{profile.structured_output_support.source}"
+                capability_sources = {
+                    "tools": profile.tool_calling_support.source,
+                    "json_schema": profile.structured_output_support.source,
+                }
+            schema = _decision_schema(
+                compact=context["budget"]["effective_limit"] &lt; 65536,
+                autonomous=self.autonomous,
+            )
+            policy = context["policy"]
+            messages = [
+                {"role": "system", "content": policy},
+                {"role": "user", "content": _json(context)},
+            ]
+            consulted_sources = {}
+            lookup_used = False
+            response = None
+            try:
+                for _step in range(4):
+                    active_tools = _read_tools(snapshot) if _step &lt; 3 else None
+                    if active_tools is not None and self.autonomous:
+                        from .worker_superagent import RECALL_TOOL
+    
+                        active_tools.append(RECALL_TOOL)
+                    remaining_rounds = max(0, 3 - _step)
+                    remaining_bytes = max(
+                        0,
+                        context["budget"]["effective_limit"]
+                        - self.output_reserve
+                        - len(
+                            _json(
+                                {"messages": messages, "tools": active_tools, "schema": schema}
+                            ).encode("utf-8")
+                        )
+                        - len((policy + _TOOL_POLICY).encode("utf-8"))
+                        - len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        - 512,
+                    )
+                    round_messages = [
+                        {
+                            "role": "system",
+                            "content": policy
+                            + _TOOL_POLICY
+                            + f" Remaining tool rounds: {remaining_rounds}. Maximum calls per tool round: 4. Approximate remaining input capacity: {remaining_bytes} UTF-8 bytes; output reserve: {self.output_reserve} tokens.",
+                        },
+                        *messages[1:],
+                    ]
+                    if not active_tools:
+                        round_messages.append(
+                            {
+                                "role": "system",
+                                "content": "No tool rounds remain. Return the final structured RouterDecision now.",
+                            }
+                        )
+                    if (
+                        len(
+                            _json(
+                                {
+                                    "messages": round_messages,
+                                    "tools": active_tools,
+                                    "schema": schema,
+                                }
+                            ).encode("utf-8")
+                        )
+                        + len(
+                            _json(
+                                {"role": "system", "content": schema_format_instruction(schema)}
+                            ).encode("utf-8")
+                        )
+                        + 512
+                        &gt; context["budget"]["effective_limit"] - self.output_reserve
+                    ):
+                        raise DomainError("Router tool context budget exceeded")
+                    request = ModelRequest(
+                        model_id=self.model_id,
+                        provider_id=self.provider_id,
+                        messages=round_messages,
+                        tools=active_tools,
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {
+                                "name": "router_decision",
+                                "strict": True,
+                                "schema": schema,
+                            },
+                        },
+                        max_output_tokens=self.output_reserve,
+                        context_limit=context["budget"]["effective_limit"],
+                        model_capabilities={"tools": True, "json_schema": True},
+                        capability_source=capability_source,
+                        model_capability_sources=capability_sources,
+                        budget_context=ModelCallContext(
+                            call_id=new_id("call"),
+                            purpose="router",
+                            workspace_id=self.store.workspace.id,
+                        ),
+                    )
+&gt;                   response = await self.provider.generate(request)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   RuntimeError: coroutine raised StopIteration
+
+backend\src\forge_core\router.py:1840: RuntimeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_registration_changes_only_existing_project_metadata_and_no_authority" time="0.192"><failure message="AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_registration_changes_only0')
+
+    def test_registration_changes_only_existing_project_metadata_and_no_authority(tmp_path):
+        store, _, roots = setup_projects(tmp_path)
+        tables = ["quests", "task_project_links", "workers", "worker_runs", "task_grants", "approvals",
+                  "delegation_mandates", "delegation_contracts", "action_intents", "model_budget_attempts"]
+        before = {name: table_rows(store, name) for name in tables}
+        with store.connection() as c:
+            c.execute("BEGIN")
+&gt;           records = WorkspaceDiscovery(store).register_user_request(f'Inspect "{roots[0]}"', connection=c)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:70: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_replay_and_conflicting_request_id_do_not_scan_new_paths" time="0.112"><failure message="AttributeError: &lt;class 'forge_core.workspace_discovery.WorkspaceDiscovery'&gt; has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_replay_and_conflicting_re0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CCB1117E10&gt;
+
+    def test_replay_and_conflicting_request_id_do_not_scan_new_paths(tmp_path, monkeypatch):
+        store, router, roots = setup_projects(tmp_path)
+        router.provider = MockProvider(lambda *_: response(conversational_decision()))
+        text = f'Inspect "{roots[0]}"'
+        original = asyncio.run(router.handle_user_message(text, request_id="stable"))
+    
+        def forbidden(*_args, **_kwargs):
+            raise AssertionError("Replay/conflict must precede discovery")
+    
+&gt;       monkeypatch.setattr(WorkspaceDiscovery, "register_user_request", forbidden)
+E       AttributeError: &lt;class 'forge_core.workspace_discovery.WorkspaceDiscovery'&gt; has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:85: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_named_project_registration_keeps_parser_identity_and_ambiguity[missing]" time="0.152"><failure message="AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_named_project_registratio0')
+case = 'missing'
+
+    @pytest.mark.parametrize("case", ["missing", "relative", "multiple", "duplicate"])
+    def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path, case):
+        store, _, roots = setup_projects(tmp_path)
+        text = {"missing": f'Inspect "{tmp_path / "absent"}"', "relative": 'Inspect "project_alpha"',
+                "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
+                "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"'}[case]
+        with store.connection() as c:
+            c.execute("BEGIN")
+&gt;           records = WorkspaceDiscovery(store).register_user_request(text, connection=c)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:101: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_named_project_registration_keeps_parser_identity_and_ambiguity[relative]" time="0.143"><failure message="AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_named_project_registratio1')
+case = 'relative'
+
+    @pytest.mark.parametrize("case", ["missing", "relative", "multiple", "duplicate"])
+    def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path, case):
+        store, _, roots = setup_projects(tmp_path)
+        text = {"missing": f'Inspect "{tmp_path / "absent"}"', "relative": 'Inspect "project_alpha"',
+                "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
+                "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"'}[case]
+        with store.connection() as c:
+            c.execute("BEGIN")
+&gt;           records = WorkspaceDiscovery(store).register_user_request(text, connection=c)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:101: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_named_project_registration_keeps_parser_identity_and_ambiguity[multiple]" time="0.121"><failure message="AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_named_project_registratio2')
+case = 'multiple'
+
+    @pytest.mark.parametrize("case", ["missing", "relative", "multiple", "duplicate"])
+    def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path, case):
+        store, _, roots = setup_projects(tmp_path)
+        text = {"missing": f'Inspect "{tmp_path / "absent"}"', "relative": 'Inspect "project_alpha"',
+                "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
+                "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"'}[case]
+        with store.connection() as c:
+            c.execute("BEGIN")
+&gt;           records = WorkspaceDiscovery(store).register_user_request(text, connection=c)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:101: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_named_project_registration_keeps_parser_identity_and_ambiguity[duplicate]" time="0.099"><failure message="AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_named_project_registratio3')
+case = 'duplicate'
+
+    @pytest.mark.parametrize("case", ["missing", "relative", "multiple", "duplicate"])
+    def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path, case):
+        store, _, roots = setup_projects(tmp_path)
+        text = {"missing": f'Inspect "{tmp_path / "absent"}"', "relative": 'Inspect "project_alpha"',
+                "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
+                "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"'}[case]
+        with store.connection() as c:
+            c.execute("BEGIN")
+&gt;           records = WorkspaceDiscovery(store).register_user_request(text, connection=c)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'WorkspaceDiscovery' object has no attribute 'register_user_request'
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:101: AttributeError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_current_user_text_only_and_model_selected_path_does_not_register" time="0.095"><failure message="AssertionError: assert set() == {'C:\\Users\\...project_beta'}&#10;  &#10;  Extra items in the right set:&#10;  'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1245\\test_current_user_text_only_an0\\project_beta'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_current_user_text_only_an0')
+
+    def test_current_user_text_only_and_model_selected_path_does_not_register(tmp_path):
+        store, router, roots = setup_projects(tmp_path)
+        router.provider = MockProvider(lambda *_: response({**conversational_decision("chat"),
+                                                           "reply": f'I found "{roots[1]}"'}))
+        asyncio.run(router.handle_user_message(f'Inspect "{roots[0]}"', request_id="scope"))
+&gt;       assert {p["root"] for p in WorkspaceDiscovery(store).list_projects()} == {str(roots[0])}
+E       AssertionError: assert set() == {'C:\\Users\\...project_beta'}
+E         
+E         Extra items in the right set:
+E         'C:\\Users\\msi\\AppData\\Local\\Temp\\pytest-of-msi\\pytest-1245\\test_current_user_text_only_an0\\project_beta'
+E         Use -v to get more diff
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:112: AssertionError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_registration_rolls_back_with_snapshot_transaction" time="0.080" /><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_legacy_complete_packet_over_65k_uses_native_model_and_original_cumulative_admission" time="0.541"><failure message="forge_core.independent_review._ReviewBoundaryError: Independent review reached a bounded input limit">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_legacy_complete_packet_ov0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CCB11C7E30&gt;
+
+    def test_legacy_complete_packet_over_65k_uses_native_model_and_original_cumulative_admission(
+        tmp_path, monkeypatch
+    ):
+&gt;       store, manager, model, worker, packet, _ = generous_approved_pending(tmp_path, monkeypatch)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.local\test_intake_legacy_capacity_candidate_b550f2.py:145: in generous_approved_pending
+    return pending(tmp_path, monkeypatch, successor=False, raw_oversize=False,
+backend\tests\test_reviewer_capacity_phase2.py:105: in pending
+    packet = _packet(store, connection, row)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x000001CCB12A1550&gt;
+connection = &lt;sqlite3.Connection object at 0x000001CCB12ECB80&gt;
+run = &lt;sqlite3.Row object at 0x000001CCB1269DE0&gt;, parse_diagnostics = False
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        predecessors = _review_predecessor_deliveries(store, connection, run)
+        if not any(
+            item.get("execution_mode") == run["execution_mode"] for item in receipts
+        ) and not any(
+            item["output"].get("execution_mode") == run["execution_mode"] for item in predecessors
+        ):
+            raise DomainError("Independent review requires successful tool evidence")
+        observation_sources = _specialist_artifact_sources(store, connection, run, selected, artifacts)
+        observations, _, _ = _review_artifacts(
+            store, observation_sources, artifacts, parse_diagnostics=parse_diagnostics
+        )
+        if member.get("review_envelope") is not None:
+            for item in observations:
+                if "format_error" in item:
+                    # New contracts must not treat unparsed artifact size as zero.
+                    # Preserve the historical diagnostic packet for legacy callers.
+                    data = _read_artifact(Path(item["path"]))
+                    item["canonical_content_bytes"] = len(_json(data.decode("utf-8")).encode("utf-8"))
+        packet = _review_observation(
+            run,
+            assignment,
+            result["id"],
+            delivery,
+            receipts,
+            observations,
+            predecessor_deliveries=predecessors,
+        )
+        if len(_json(packet).encode("utf-8")) &gt; 65536:
+&gt;           raise _ReviewBoundaryError("review_packet_too_large", packet=packet)
+E           forge_core.independent_review._ReviewBoundaryError: Independent review reached a bounded input limit
+
+backend\src\forge_core\independent_review.py:475: _ReviewBoundaryError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_legacy_preview_reports_native_headroom_without_invented_raw_cap" time="0.624"><failure message="forge_core.independent_review._ReviewBoundaryError: Independent review reached a bounded input limit">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1245/test_legacy_preview_reports_na0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CCB12DCF30&gt;
+
+    def test_legacy_preview_reports_native_headroom_without_invented_raw_cap(tmp_path, monkeypatch):
+&gt;       store, manager, model, worker, packet, _ = generous_approved_pending(tmp_path, monkeypatch)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:174: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.local\test_intake_legacy_capacity_candidate_b550f2.py:145: in generous_approved_pending
+    return pending(tmp_path, monkeypatch, successor=False, raw_oversize=False,
+backend\tests\test_reviewer_capacity_phase2.py:105: in pending
+    packet = _packet(store, connection, row)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+store = &lt;forge_core.store.Store object at 0x000001CCB12EC8C0&gt;
+connection = &lt;sqlite3.Connection object at 0x000001CCB12EC040&gt;
+run = &lt;sqlite3.Row object at 0x000001CCB129B310&gt;, parse_diagnostics = False
+
+    def _packet(store, connection, run, *, parse_diagnostics=False):
+        """Build a bounded reproducible observation; record provenance, not claim truth."""
+        assignment = _review_assignment(store, connection, run)
+        member, selected = assignment[2], assignment[4]
+        result = connection.execute(
+            "SELECT * FROM events WHERE event_type='worker.result' AND worker_id=? "
+            "AND json_extract(payload,'$.run_id')=? ORDER BY seq DESC LIMIT 1",
+            (run["worker_id"], run["id"]),
+        ).fetchone()
+        final = connection.execute(
+            "SELECT message_json FROM worker_messages WHERE run_id=? AND role='assistant' ORDER BY ordinal DESC LIMIT 1",
+            (run["id"],),
+        ).fetchone()
+        if result is None or final is None:
+            raise DomainError("Independent review delivery is unavailable")
+        raw = json.loads(final[0])
+        event = json.loads(result["payload"])
+        if raw.get("tool_calls") or raw.get("content") != event.get("claim"):
+            raise DomainError("Independent review delivery provenance is invalid")
+        delivery = json.loads(raw["content"])
+        jsonschema.validate(delivery, member["output_schema"])
+        if any(item in {"delivery_review", "json_review:@delivery"} for item in selected):
+            if not isinstance(delivery, dict) or not set(DELIVERY_FIELDS) &lt;= set(delivery):
+                raise DomainError("Structured delivery needs all eight delivery fields")
+            confidence = delivery.get("confidence")
+            if (
+                type(confidence) not in (int, float)
+                or not math.isfinite(confidence)
+                or not 0 &lt;= confidence &lt;= 1
+            ):
+                raise DomainError("Invalid delivery confidence")
+        receipts, artifacts = _review_receipts(store, connection, run)
+        predecessors = _review_predecessor_deliveries(store, connection, run)
+        if not any(
+            item.get("execution_mode") == run["execution_mode"] for item in receipts
+        ) and not any(
+            item["output"].get("execution_mode") == run["execution_mode"] for item in predecessors
+        ):
+            raise DomainError("Independent review requires successful tool evidence")
+        observation_sources = _specialist_artifact_sources(store, connection, run, selected, artifacts)
+        observations, _, _ = _review_artifacts(
+            store, observation_sources, artifacts, parse_diagnostics=parse_diagnostics
+        )
+        if member.get("review_envelope") is not None:
+            for item in observations:
+                if "format_error" in item:
+                    # New contracts must not treat unparsed artifact size as zero.
+                    # Preserve the historical diagnostic packet for legacy callers.
+                    data = _read_artifact(Path(item["path"]))
+                    item["canonical_content_bytes"] = len(_json(data.decode("utf-8")).encode("utf-8"))
+        packet = _review_observation(
+            run,
+            assignment,
+            result["id"],
+            delivery,
+            receipts,
+            observations,
+            predecessor_deliveries=predecessors,
+        )
+        if len(_json(packet).encode("utf-8")) &gt; 65536:
+&gt;           raise _ReviewBoundaryError("review_packet_too_large", packet=packet)
+E           forge_core.independent_review._ReviewBoundaryError: Independent review reached a bounded input limit
+
+backend\src\forge_core\independent_review.py:475: _ReviewBoundaryError</failure></testcase><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_legacy_actual_context_shortage_still_never_admits_model_review" time="0.934" /><testcase classname=".local.test_intake_legacy_capacity_candidate_b550f2" name="test_explicit_envelope_retains_raw_and_component_contract_limits" time="0.001"><failure message="ImportError: cannot import name '_review_raw_packet_cap' from 'forge_core.independent_review' (D:\Competition_this\Agent\backend\src\forge_core\independent_review.py)">def test_explicit_envelope_retains_raw_and_component_contract_limits():
+&gt;       from forge_core.independent_review import _review_raw_packet_cap
+E       ImportError: cannot import name '_review_raw_packet_cap' from 'forge_core.independent_review' (D:\Competition_this\Agent\backend\src\forge_core\independent_review.py)
+
+.local\test_intake_legacy_capacity_candidate_b550f2.py:200: ImportError</failure></testcase></testsuite></testsuites>

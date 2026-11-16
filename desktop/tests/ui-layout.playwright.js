@@ -20,7 +20,7 @@ async (page, { outputDir }) => {
     { id: 'approve-fixture', quest_id: 'quest-fixture', action_type: 'file_write', risk: 'medium', resource_scope: 'output/approved.txt', plan_revision: 7, parameter_digest: digest, status: 'PENDING', reason: 'Synthetic write request', expires_at: '2026-12-01T00:00:00Z' },
     { id: 'reject-fixture', quest_id: 'quest-fixture', action_type: 'file_write', risk: 'medium', resource_scope: 'output/rejected.txt', plan_revision: 7, parameter_digest: digest, status: 'PENDING', reason: 'Synthetic rejection request', expires_at: '2026-12-01T00:00:00Z' },
   ];
-  const decisions = [], confirms = [];
+  const decisions = [], confirms = [], missing = [];
   let failApproval = true;
   let timelineReads = 0;
   let saved = [
@@ -52,9 +52,11 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else if (url.pathname === '/api/models') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
+    else if (url.pathname === '/api/projects/discovered' || url.pathname === '/api/events' || url.pathname === '/api/triggers') body = [];
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
     else if (url.pathname === '/api/activity') body = { items: [], next_before: null, has_more: false };
-    else { status = 404; body = { detail: 'fixture endpoint missing' }; }
+    else { missing.push(`${request.method()} ${url.pathname}`); status = 404; body = { detail: 'fixture endpoint missing' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
   await page.goto('http://127.0.0.1:5173/');
@@ -62,11 +64,10 @@ async (page, { outputDir }) => {
   await home.locator('.empty-conversation h2').waitFor();
   const rail = page.getByLabel('主导航');
   const checkSettingsShell = async (state) => {
-    await page.waitForFunction(() => Math.abs(document.querySelector('.rail').getBoundingClientRect().width - 52) <= 1);
-    near((await box(rail)).width, 52, `${state}: only the icon rail remains`);
-    check(!(await rail.locator('.workspace-selector-wrap').isVisible()), `${state}: workspace selector is hidden`);
+    near((await box(rail)).width, 260, `${state}: single workspace sidebar remains available`);
+    check(await rail.locator('.workspace-selector-wrap').isVisible(), `${state}: workspace selector remains available`);
     check(await page.getByRole('button', { name: '新聊天', exact: true }).count() === 0, `${state}: no new-chat action is offered`);
-    near((await box(page.locator('.settings-nav'))).x, 52, `${state}: settings navigation follows the icon rail`);
+    near((await box(page.locator('.settings-nav'))).x, 260, `${state}: settings navigation follows the workspace sidebar`);
     near((await box(page.locator('.settings-nav'))).width, 288, `${state}: settings navigation width`);
     const content = await box(page.locator('.settings-content'));
     const inner = await box(page.locator('.settings-content-inner'));
@@ -74,18 +75,18 @@ async (page, { outputDir }) => {
     near(inner.x + inner.width / 2, content.x + content.width / 2, `${state}: settings content is centered`);
     near(parseFloat(await style(page.locator('.settings-content-inner'), 'padding-left')), 20, `${state}: native px-panel is inside the centered column`);
   };
-  check(await rail.locator('.utility-nav > button').count() === 2 && await rail.locator('.conversation-nav > button').count() === 1, 'two utility destinations and one conversation entry');
+  check(await rail.locator('.utility-nav > button').count() === 3 && await rail.locator('.conversation-nav > button').count() === 1, 'three utility destinations and one conversation entry');
   check(await rail.getByRole('button', { name: '对话', exact: true }).count() === 1 && await rail.getByRole('button', { name: '后台任务', exact: true }).count() === 1 && await rail.getByRole('button', { name: '记忆中心', exact: true }).count() === 1, 'primary destinations remain uniquely accessible');
   check(await rail.getByRole('button', { name: '设置', exact: true }).count() === 1, 'one profile settings entry');
   check(await rail.getByRole('button', { name: '新聊天', exact: true }).count() === 0, 'single conversation has no new-chat action');
   check(!(await rail.innerText()).includes('最近会话'), 'sidebar does not imply multiple recent conversations');
-  near(parseFloat(await page.locator('.app-shell').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ')[0])), 340, 'combined conversation sidebar column width');
-  near((await box(rail.locator('.primary-rail'))).width, 52, 'reference primary icon rail width');
-  near((await box(rail.locator('.sidebar-panel'))).width, 288, 'reference workspace sidebar width');
+  near(parseFloat(await page.locator('.app-shell').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ')[0])), 260, 'single conversation sidebar column width');
+  check(await rail.locator('.primary-rail').count() === 0, 'workspace navigation uses one sidebar');
+  near((await box(rail.locator('.sidebar-panel'))).width, 259, 'workspace sidebar fills its single column');
   near((await box(page.locator('.desktop-chrome'))).height, 36, 'desktop chrome height');
   near((await box(page.locator('.desktop-chrome'))).width, 1440, 'desktop chrome spans the window');
   check(!(await home.locator('.topbar').isVisible()) && await home.locator('.topbar').evaluate((element) => element.getBoundingClientRect().height === 0), 'empty conversation has no header or header placeholder');
-  check(await home.locator('.worker-drawer').evaluate((element) => element.clientHeight === 0 && element.getAttribute('aria-hidden') === 'true'), 'empty conversation has no Worker dashboard row');
+  check(await home.locator('.worker-drawer').count() === 0 || !(await home.locator('.worker-drawer').isVisible()), 'empty conversation has no Worker dashboard row');
   near(parseFloat(await style(home.locator('h2'), 'font-size')), 28, 'homepage heading size');
   const guidance = await box(home.locator('.empty-conversation p'));
   check(guidance.width > 200 && guidance.height >= 18, 'homepage exposes readable functional guidance');
@@ -94,12 +95,12 @@ async (page, { outputDir }) => {
   near(homeComposer.width, 736, 'homepage composer width');
   near(homeComposer.height, 98, 'normal conversation composer height');
   near(parseFloat(await style(home.locator('.composer'), 'min-height')), 98, 'composer keeps its declared minimum height');
-  near(homeComposer.x, 520, 'homepage composer matches the reference centered position');
+  near(homeComposer.x, 482, 'homepage composer matches the centered workspace position');
   near(homeComposer.x + homeComposer.width / 2, homeShell.x + homeShell.width / 2, 'homepage composer is centered');
   check(await home.locator('.composer-context').count() === 1, 'normal conversation retains its accessible workspace context');
   check(await home.locator('.composer-context').evaluate((element) => { const style = getComputedStyle(element), rect = element.getBoundingClientRect(); return style.position === 'absolute' && rect.width <= 1 && rect.height <= 1; }), 'workspace context occupies no visible composer row');
-  check(await style(home.locator('.composer'), 'background-color') === 'rgb(255, 255, 255)', 'normal conversation editor uses the reference white input surface');
-  near(parseFloat(await style(home.locator('.composer'), 'border-radius')), 22, 'normal conversation editor radius');
+  check(await style(home.locator('.composer'), 'background-color') === 'rgba(13, 13, 13, 0.03)', 'normal conversation editor uses the subtle input surface');
+  near(parseFloat(await style(home.locator('.composer'), 'border-radius')), 15, 'normal conversation editor radius');
   check(await home.getByRole('button', { name: '查看 Router 配置', exact: true }).count() === 1, 'Router model has one functional composer destination');
   check(await home.locator('.composer-keyboard').evaluate((element) => { const style = getComputedStyle(element); return style.position === 'absolute' && element.getBoundingClientRect().width <= 1; }), 'keyboard instructions remain accessible without replacing composer controls');
   await screenshot('forge-home-light');
@@ -118,12 +119,12 @@ async (page, { outputDir }) => {
   await screenshot('forge-home-small');
   await page.keyboard.press('Control+,');
   await page.locator('.settings-view').waitFor();
-  check(!(await rail.locator('.workspace-selector-wrap').isVisible()), 'small disconnected settings hides the workspace selector');
-  check(!(await smallKey.isVisible()) && !(await smallConnect.isVisible()), 'small disconnected settings hides the connection form');
-  near((await box(rail)).height, 45, 'small disconnected settings leaves only a compact 44px navigation row and divider');
+  await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
+  check(!(await rail.isVisible()) && !(await smallKey.isVisible()) && !(await smallConnect.isVisible()), 'small disconnected settings can close the overlay sidebar and connection form');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1 && document.documentElement.scrollHeight <= window.innerHeight + 1 && document.body.scrollHeight <= window.innerHeight + 1), 'small disconnected settings has no document overflow');
   await screenshot('forge-settings-disconnected-small');
-  await rail.getByRole('button', { name: '对话', exact: true }).click();
+  await page.getByRole('button', { name: '返回对话', exact: true }).click();
+  await page.getByRole('button', { name: '展开工作空间侧栏', exact: true }).click();
   check(await smallKey.isVisible() && await smallConnect.isVisible(), 'leaving small disconnected settings restores the connection entry');
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.waitForTimeout(220);
@@ -132,8 +133,8 @@ async (page, { outputDir }) => {
   await checkSettingsShell('disconnected settings');
   await screenshot('forge-settings-disconnected');
   await rail.getByRole('button', { name: '对话', exact: true }).click();
-  await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('.app-shell')).gridTemplateColumns.split(' ')[0]) - 340) <= 1);
-  near((await box(rail)).width, 340, 'leaving disconnected settings restores the reference sidebar');
+  await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('.app-shell')).gridTemplateColumns.split(' ')[0]) - 260) <= 1);
+  near((await box(rail)).width, 260, 'leaving disconnected settings keeps the workspace sidebar');
   check(await rail.locator('.workspace-selector-wrap').isVisible() && await smallKey.isVisible() && await smallConnect.isVisible(), 'leaving disconnected settings restores the sidebar and connection entry');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
@@ -144,18 +145,18 @@ async (page, { outputDir }) => {
   const contentBox = await box(assistant), shellBox = await box(page.locator('.conversation-shell'));
   near(contentBox.width, 736, 'conversation content matches the required centered width');
   near(contentBox.width, Math.min(736, shellBox.width - 48), 'conversation content keeps at least 24px side insets');
-  near(contentBox.x, 520, 'conversation content starts at the reference centered position');
+  near(contentBox.x, 482, 'conversation content starts at the centered workspace position');
   near(contentBox.x + contentBox.width / 2, shellBox.x + shellBox.width / 2, 'message content is centered');
-  near(parseFloat(await style(user.locator('.message-body'), 'border-radius')), 20, 'user bubble radius');
+  near(parseFloat(await style(user.locator('.message-body'), 'border-radius')), 12.5, 'user bubble radius');
   check(await style(user.locator('.message-body'), 'background-color') === 'rgba(13, 13, 13, 0.05)', 'user bubble background');
   check(await style(user.locator('.markdown p'), 'white-space') === 'pre-wrap', 'user message paragraphs retain intentional line breaks');
   check(await style(assistant.locator('.message-body'), 'background-color') === 'rgba(0, 0, 0, 0)', 'assistant has no bubble');
-  near(parseFloat(await style(assistant.locator('.message-body'), 'font-size')), 16, 'assistant type size');
+  near(parseFloat(await style(assistant.locator('.message-body'), 'font-size')), 14, 'assistant type size');
   const paragraphBoxes = await assistant.locator('.markdown > p').evaluateAll((elements) => elements.slice(0, 2).map((element) => { const bounds = element.getBoundingClientRect(); return { top: bounds.top, height: bounds.height }; }));
   check(paragraphBoxes.length === 2, 'paragraph rhythm fixture contains two separate text paragraphs');
-  near(paragraphBoxes[1].top - paragraphBoxes[0].top, 36, 'assistant paragraphs use 24px line height plus 12px spacing without an extra blank line');
+  near(paragraphBoxes[1].top - paragraphBoxes[0].top, 33, 'assistant paragraphs use 21px line height plus 12px spacing without an extra blank line');
   const group = page.locator('.event-group').first(), summary = group.locator(':scope > summary');
-  check(await summary.locator('.event-label').innerText() === '已读取文件运行了命令', 'activity summaries concatenate without separators');
+  check(await summary.locator('.event-label').innerText() === '已读取文件 · 运行了命令', 'activity summary retains both recorded tool categories');
   near((await box(summary)).height, 21, 'activity summary height');
   near((await box(summary.locator('svg').first())).width, 16, 'activity icon width');
   near((await box(summary.locator('svg').first())).height, 16, 'activity icon height');
@@ -264,11 +265,11 @@ async (page, { outputDir }) => {
   near((await box(page.locator('.settings-nav-group').first())).height, 30, 'b5fQ.RQ group heading centers its label in a 30px minimum row');
   near(parseFloat(await style(page.locator('.settings-nav-section').first(), 'row-gap')), 4, 'b5fQ.RQ separates its heading and list by one spacing unit');
   near(parseFloat(await style(page.locator('.settings-nav-items').first(), 'row-gap')), 1, 'b5fQ.c0 plain navigation list uses one-pixel row gaps');
-  check(await page.locator('.settings-nav-item svg').count() === 7, 'each implemented settings category has its inline icon');
+  check(await page.locator('.settings-nav-item svg').count() === 9, 'each implemented settings category has its inline icon');
   near((await box(page.locator('.settings-nav-item svg').first())).width, 16, 'settings category icon width');
   check(await page.locator('.settings-nav-section').count() === 3, 'three product settings groups');
-  check(await page.locator('.settings-nav-item').count() === 7, 'seven implemented settings categories');
-  for (const name of ['常规', '模型库', '环境', '存储', '连接', '键盘快捷键', '备份与恢复']) {
+  check(await page.locator('.settings-nav-item').count() === 9, 'nine implemented settings categories');
+  for (const name of ['常规', '模型库', '环境', '存储', '连接', '键盘快捷键', '备份与恢复', '记忆', '触发器']) {
     check(await page.locator('.settings-nav').getByRole('button', { name, exact: true }).count() === 1, `settings preserves the ${name} destination`);
   }
   for (const name of ['后台任务', '任务团队', '运行活动', '审批中心', '记忆中心', '插件', 'Git', '导入', '已归档的聊天', '电脑操控']) {
@@ -281,8 +282,8 @@ async (page, { outputDir }) => {
   near(parseFloat(await style(page.locator('.settings-nav-item').first(), 'line-height')), 18.5714, 'b5fQ outer navigation row inherits text-sm leading');
   near(parseFloat(await style(page.locator('.settings-nav-item > span').first(), 'font-size')), 14, 'b5fQ inner navigation label overrides to text-base');
   near(parseFloat(await style(page.locator('.settings-nav-item > span').first(), 'line-height')), 21, 'b5fQ inner navigation label uses text-base leading');
-  check(await style(page.locator('.settings-nav-item').first(), 'font-weight') === '400', 'settings navigation keeps regular type weight');
-  check(await style(page.locator('.settings-nav-item.active'), 'background-color') === 'rgba(13, 13, 13, 0.055)', 'settings active background is gray');
+  check(await style(page.locator('.settings-nav-item').first(), 'font-weight') === '430', 'settings navigation follows the shared body type weight');
+  check(await style(page.locator('.settings-nav-item.active'), 'background-color') === 'rgba(13, 13, 13, 0.1)', 'settings active background is gray');
   check(await page.locator('.settings-title').innerText() === '常规', 'settings opens to General');
   near(parseFloat(await style(page.locator('.settings-title'), 'font-size')), 28, 'settings content title size');
   near(parseFloat(await style(page.locator('.settings-title'), 'line-height')), 33.6, 'settings content title line height');
@@ -313,12 +314,12 @@ async (page, { outputDir }) => {
   await page.getByLabel('搜索设置').fill('Registry');
   check(await page.locator('.settings-nav-item').count() === 1, 'settings search filters categories');
   await page.getByLabel('搜索设置').fill('');
-  await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
+  await page.emulateMedia({ colorScheme: 'dark' });
   check(await style(page.locator('.settings-content'), 'background-color') === 'rgb(17, 17, 17)', 'dark theme uses the specified content surface');
   await screenshot('forge-settings-dark');
   await rail.getByRole('button', { name: '对话', exact: true }).click();
-  await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('.app-shell')).gridTemplateColumns.split(' ')[0]) - 340) <= 1);
-  near((await box(rail)).width, 340, 'leaving connected settings restores the reference sidebar');
+  await page.waitForFunction(() => Math.abs(parseFloat(getComputedStyle(document.querySelector('.app-shell')).gridTemplateColumns.split(' ')[0]) - 260) <= 1);
+  near((await box(rail)).width, 260, 'leaving connected settings keeps the workspace sidebar');
   check(await rail.locator('.workspace-selector-wrap').isVisible(), 'leaving connected settings restores the workspace selector');
   check(await page.getByLabel('消息内容').inputValue() === 'draft preserved across settings', 'single-conversation draft survives settings navigation');
   check(await originalNode.evaluate((element) => element.isConnected && element.open), 'expanded event survives settings navigation');
@@ -356,7 +357,7 @@ async (page, { outputDir }) => {
   await summary.click();
   await page.waitForFunction(() => document.querySelector('.event-group > .detail-collapsible')?.style.height === 'auto');
   check(await summary.getAttribute('aria-expanded') === 'true' && await style(groupPanel, 'opacity') === '1', 'reduced motion expands the activity correctly');
-  await page.evaluate(() => { delete document.documentElement.dataset.theme; });
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.setViewportSize({ width: 640, height: 800 });
   await page.waitForTimeout(220);
   await page.getByLabel('消息内容').waitFor();
@@ -366,12 +367,13 @@ async (page, { outputDir }) => {
   await screenshot('forge-chat-small');
   await page.keyboard.press('Control+,');
   await page.locator('.settings-view').waitFor();
-  check(!(await rail.locator('.workspace-selector-wrap').isVisible()), 'small connected settings hides the workspace selector');
-  near((await box(rail)).height, 45, 'small connected settings leaves only a compact 44px navigation row and divider');
+  await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
+  check(!(await rail.isVisible()), 'small connected settings closes the workspace overlay');
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'small settings window has no horizontal overflow');
   check(await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight + 1 && document.body.scrollHeight <= window.innerHeight + 1), 'small settings window keeps scrolling inside the workspace');
   await screenshot('forge-settings-small');
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));
   check(storage.local === 0 && storage.session === 0, 'browser storage remains empty');
+  check(missing.length === 0, `layout routes have complete fixtures: ${missing.join(', ')}`);
   return { status: 'passed', fixture: 'synthetic HTTP only', checks: checks.length, decisions: decisions.length, screenshots: shots, storage };
 }

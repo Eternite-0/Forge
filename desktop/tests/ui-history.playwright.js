@@ -38,6 +38,8 @@ async (page, { outputDir }) => {
     else if (['/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: generation === 'history-generation-1' ? 'history-space-one' : 'history-space-two', workspace_root: generation === 'history-generation-1' ? 'D:/Synthetic/HistoryOne' : 'D:/Synthetic/HistoryTwo', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };
     else if (url.pathname.startsWith('/api/artifacts/receipts/')) {
@@ -71,6 +73,8 @@ async (page, { outputDir }) => {
   const readCount = (id) => requests.filter(({ path }) => path === `/api/artifacts/receipts/${id}/diff`).length;
   const openHistory = async (id) => {
     const event = line(id), group = event.locator('xpath=ancestor::details[contains(@class,"event-group")]');
+    const process = event.locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+    if (!(await process.evaluate(element => element.open))) await process.locator(':scope > summary').click();
     if (!(await group.evaluate((element) => element.open))) await group.locator(':scope > summary').click();
     if (!(await event.evaluate((element) => element.open))) await event.locator(':scope > summary').click();
     await event.getByRole('button', { name: `查看文件历史 ${definitions.find(([key]) => key === id)[1]}`, exact: true }).click();

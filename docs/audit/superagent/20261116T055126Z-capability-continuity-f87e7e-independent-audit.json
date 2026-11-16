@@ -1,0 +1,1903 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T06:19:08.660963+00:00",
+  "run_id": "20261116T055126Z-capability-continuity-f87e7e",
+  "provenance": "independent_closed_run_read_only_source_packet_tool_approval_Thread_and_budget_audit",
+  "audit_program": {
+    "path": ".local/superagent/supplemental_closed_independent_audit.py",
+    "sha256": "117db7c1fa1fdfe0f430e2293a64b396d6df902234a19f7e971428e90d6cdd56"
+  },
+  "original_report": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e.json",
+    "sha256": "8d2fec6685b2258b3ab33faac957d439e630cec8b84d1bd89d9fd28ac6ec0c29",
+    "status": "failed"
+  },
+  "closed_condition": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-result.json",
+    "sha256": "e171d42160bfc106f006754d4d46786d0ec11f0ca447d42765e10af1809dfbeb"
+  },
+  "condition_protocol": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-protocol.json",
+    "sha256": "79c3b482be98ac8af660d9d9c1dd9005185a9c799529a175c39d3a229139aa2a"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+    "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029",
+    "file_count": 359,
+    "independent_snapshot": {
+      "at": "2026-11-16T06:19:08.159073+00:00",
+      "snapshot_root": ".local/superagent/f87e7e-independent-frozen-source",
+      "manifest": {
+        "path": ".local/superagent/f87e7e-independent-frozen-source/snapshot-manifest.json",
+        "sha256": "8f61a4f2175e9b9e9e37e34af98e85b4c34b07af06c8c0a2dd6069bed50843ed"
+      },
+      "changed_files": []
+    }
+  },
+  "checks": {
+    "all_359_frozen_files_match": true,
+    "closed_report_protocol_and_prior_results_bound": true,
+    "database_main_unchanged_and_quick_check_ok": true,
+    "33_calls_settled_376561_tokens": true,
+    "no_unknown_model_or_tool_effects": true,
+    "all_native_receipts_bound_to_calls_and_actual_model_transcript": true,
+    "two_trigger_reads_and_one_full_predecessor_read_source_and_model_bound": true,
+    "actual_paths_and_write_scopes_bound": true,
+    "writes_match_actual_receipts_and_final_artifacts": true,
+    "three_live_PASSs_exact_complete_canonical_packets": true,
+    "L2_12_exact_citations_all_three_sources": true,
+    "L2_and_L3_artifact_hashes_match_original_independent_driver": true,
+    "two_exact_consumed_R2_test_manifests_and_real_results": true,
+    "starter_failure_revision_then_final_success_bound": true,
+    "two_quests_and_all_three_nodes_completed_with_original_Router_handoff": true,
+    "two_distinct_projects_correctly_linked": true,
+    "two_matching_lifecycle_pairs_same_Router": true,
+    "stored_Router_archive_source_and_capsule_hashes_match": true,
+    "full_and_post_frontier_Thread_Recall_reports_reconstruct_exactly": true,
+    "all_seven_deliveries_entered_user_transcript_before_later_model_turn": true,
+    "post_restart_delivery_not_left_in_unpulled_inbox": true,
+    "stage_99_settled_1089785_tokens_and_prior_failures_retained": true,
+    "stage_and_task_limits_preserved_without_reset": true,
+    "failed_combined_verdict_and_exact_three_missing_observations_preserved": true
+  },
+  "evidence_integrity_checks_all_passed": true,
+  "actions": {
+    "real_model_calls": 0,
+    "credential_reads": 0,
+    "SQL_database_writes": 0,
+    "Store_constructed": false,
+    "task_resumptions": 0,
+    "tool_replays": 0,
+    "code_or_test_executions": 0,
+    "sqlite_mode": "ro",
+    "query_only": true,
+    "explicit_read_transactions": true
+  },
+  "database_files_before": [
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3",
+      "sha256": "47730da8462395e95028a525520330738fffa8e81e573fa6b784fa3f5b349b8e",
+      "bytes": 2281472
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-wal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-shm",
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    }
+  ],
+  "database_files_after": [
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3",
+      "sha256": "47730da8462395e95028a525520330738fffa8e81e573fa6b784fa3f5b349b8e",
+      "bytes": 2281472
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-wal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-shm",
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    }
+  ],
+  "main_and_sidecar_hashes_unchanged_during_audit": true,
+  "accounting": {
+    "attempts": 33,
+    "states": {
+      "settled": 33
+    },
+    "purposes": {
+      "router": 3,
+      "worker": 20,
+      "router_notice": 6,
+      "independent_reviewer": 3,
+      "memory_semantic_retrieval": 1
+    },
+    "known_tokens": 376561,
+    "charged_or_reserved_tokens": 376561
+  },
+  "worker_reservation_states": {
+    "settled": 20
+  },
+  "stage_closed_conditions": [
+    {
+      "round": 1,
+      "result": {
+        "path": "docs/audit/superagent/capability-completion-round1-result.json",
+        "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe"
+      },
+      "status": "failed",
+      "accounting": {
+        "attempts": 21,
+        "states": {
+          "settled": 21
+        },
+        "purposes": {
+          "router": 1,
+          "worker": 17,
+          "independent_reviewer": 2,
+          "router_notice": 1
+        },
+        "known_tokens": 246009,
+        "charged_or_reserved_tokens": 246009
+      },
+      "report_hash_matches": true,
+      "accounting_matches_closed_result": true,
+      "database_files_before": [
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3",
+          "sha256": "1de3ef5e32f2e3ba479166ee35fc61a7fb7c8a2630da1ef8591300479c3a23fc",
+          "bytes": 2048000
+        },
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        }
+      ],
+      "database_files_after": [
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3",
+          "sha256": "1de3ef5e32f2e3ba479166ee35fc61a7fb7c8a2630da1ef8591300479c3a23fc",
+          "bytes": 2048000
+        },
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": ".local/superagent/20261116T044118Z-capability-specialists-b2e9cc/data/forge.sqlite3-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        }
+      ],
+      "database_main_unchanged": true
+    },
+    {
+      "round": 2,
+      "result": {
+        "path": "docs/audit/superagent/capability-completion-round2-result.json",
+        "sha256": "ad46cd8819c9b0783bda9901139fa6a747221d4d15dcc2f52a77d8467171327c"
+      },
+      "status": "failed",
+      "accounting": {
+        "attempts": 20,
+        "states": {
+          "settled": 20
+        },
+        "purposes": {
+          "router": 1,
+          "router_reflect": 1,
+          "worker": 15,
+          "independent_reviewer": 3
+        },
+        "known_tokens": 248876,
+        "charged_or_reserved_tokens": 248876
+      },
+      "report_hash_matches": true,
+      "accounting_matches_closed_result": true,
+      "database_files_before": [
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3",
+          "sha256": "3ac219815317a9fa744270e4e70c746bbf9a816a4d9d9fc99e726a18fc8ee306",
+          "bytes": 1974272
+        },
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        }
+      ],
+      "database_files_after": [
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3",
+          "sha256": "3ac219815317a9fa744270e4e70c746bbf9a816a4d9d9fc99e726a18fc8ee306",
+          "bytes": 1974272
+        },
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3-wal",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": ".local/superagent/20261116T051018Z-capability-continuity-e9c94c/data/forge.sqlite3-shm",
+          "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+          "bytes": 32768
+        }
+      ],
+      "database_main_unchanged": true
+    },
+    {
+      "round": 3,
+      "result": {
+        "path": "docs/audit/superagent/capability-completion-round3-result.json",
+        "sha256": "165722a2b5e43cce38d335e7921398c3d2220803facac543e15ae2d56a23dd13"
+      },
+      "status": "failed",
+      "accounting": {
+        "attempts": 25,
+        "states": {
+          "settled": 25
+        },
+        "purposes": {
+          "router": 3,
+          "worker": 18,
+          "router_notice": 2,
+          "independent_reviewer": 2
+        },
+        "known_tokens": 218339,
+        "charged_or_reserved_tokens": 218339
+      },
+      "report_hash_matches": true,
+      "accounting_matches_closed_result": true,
+      "database_files_before": [
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3",
+          "sha256": "02c8284b743b64ef01b16a6b7d8355f832a7670e47fc2ad6b5feb2294a61bd37",
+          "bytes": 1961984
+        },
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3-wal",
+          "sha256": "0d9fa6037196412c5a47fa61663637f7aaad52d7554745419655d1d93dcdf97c",
+          "bytes": 28872
+        },
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3-shm",
+          "sha256": "56e6f43ee85aceaa748bcb753a992d85218dd18e9169b7622dbe2e670da0140c",
+          "bytes": 32768
+        }
+      ],
+      "database_files_after": [
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3",
+          "sha256": "02c8284b743b64ef01b16a6b7d8355f832a7670e47fc2ad6b5feb2294a61bd37",
+          "bytes": 1961984
+        },
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3-wal",
+          "sha256": "0d9fa6037196412c5a47fa61663637f7aaad52d7554745419655d1d93dcdf97c",
+          "bytes": 28872
+        },
+        {
+          "path": ".local/superagent/20261116T053208Z-capability-continuity-549e73/data/forge.sqlite3-shm",
+          "sha256": "56e6f43ee85aceaa748bcb753a992d85218dd18e9169b7622dbe2e670da0140c",
+          "bytes": 32768
+        }
+      ],
+      "database_main_unchanged": true
+    }
+  ],
+  "stage_accounting": {
+    "attempts": 99,
+    "states": {
+      "settled": 99
+    },
+    "purposes": {
+      "router": 8,
+      "worker": 70,
+      "router_notice": 9,
+      "independent_reviewer": 10,
+      "memory_semantic_retrieval": 1,
+      "router_reflect": 1
+    },
+    "known_tokens": 1089785,
+    "charged_or_reserved_tokens": 1089785
+  },
+  "previous_closed_phase": {
+    "attempts": 155,
+    "known_tokens": 1510691,
+    "charged_or_reserved_tokens": 1562321,
+    "historical_unknown_tool_outcomes": 1,
+    "remains_separate_no_refund_reset_or_replay": true
+  },
+  "task_acceptance_observations": {
+    "L2_two_useful_specialists_research_and_integrator_delivered": true,
+    "L3_actual_failure_correction_final_success_and_original_seven_holdouts": true,
+    "project_parallel_restart_archive_and_source_grounded_Router_recap": true,
+    "complete_Thread_consumption": false,
+    "post_restart_complete_Thread_consumption": false,
+    "typed_multihop_Recall": false,
+    "complete_combined_acceptance": false
+  },
+  "workers": [
+    {
+      "id": "run_2b11557ec4c9",
+      "worker_id": "worker_cbd899c91801",
+      "quest_id": "quest_34771f670396",
+      "role_id": "research_1",
+      "node_key": "task_1",
+      "state": "succeeded",
+      "token_limit": 250000,
+      "token_spent": 84913
+    },
+    {
+      "id": "run_ddd8875674c1",
+      "worker_id": "worker_0195bf50e8c7",
+      "quest_id": "quest_cf046c4d0ecb",
+      "role_id": "coding",
+      "node_key": "task",
+      "state": "succeeded",
+      "token_limit": 500000,
+      "token_spent": 103956
+    },
+    {
+      "id": "run_e41881834d74",
+      "worker_id": "worker_705fb12f028e",
+      "quest_id": "quest_34771f670396",
+      "role_id": "reviewer_2",
+      "node_key": "task_2",
+      "state": "succeeded",
+      "token_limit": 250000,
+      "token_spent": 88816
+    }
+  ],
+  "tools": [
+    {
+      "call_id": "call_1fd61864e1a4e0dee0c80e638515d5a03dfa0ca7bd926eeaf7e4baea555b783c",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "receipt_id": "receipt_54c15e9882ba",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          3
+        ],
+        "response_ordinals": [
+          4
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_7a22b6218766cb6ff9c60fc81288e28f849af255417dbf425b3e864acea03900",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "receipt_id": "receipt_eb6d72298907",
+      "arguments": {
+        "path": "inputs/projects/project_beta"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          3
+        ],
+        "response_ordinals": [
+          5
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_6d07a6d9426f12ca2026c1f054d6148159800a962cec8d85fda0f34fd6a5f123",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_cade95c072e3",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_intake.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          6
+        ],
+        "response_ordinals": [
+          8
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_676654f51cd093ddbff3267a100cf40f462a8506de8c31e88ed0a0f649a80064",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_86f498c89f72",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          6
+        ],
+        "response_ordinals": [
+          9
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_bf7c78508ce22810033cb8275c89467a3792d3ac078feb2b3f31f8783b3847de",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_629582b5085e",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_readme.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          10
+        ],
+        "response_ordinals": [
+          11
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_0d89481e448ecb40cfb478cc6dc3ef93324472c6f0ffec8fd02bd586681124ab",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_82d73ebac69a",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/scenario.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          10
+        ],
+        "response_ordinals": [
+          12
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_a474ebb2bc4a4c0056e7f07f377e7507f80b77eb188be917834168681ecf56da",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "read_trigger",
+      "state": "succeeded",
+      "receipt_id": null,
+      "arguments": {
+        "max_chars": 4096,
+        "trigger_id": "trigger_2371162ea53b"
+      },
+      "current_context_core_tool_source_bound": true,
+      "core_tool_source_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          3
+        ],
+        "response_ordinals": [
+          5
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_85f2d2dca6d18a1412ba226556cf88d5419af004beb2260779c62d856463eb3a",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "receipt_id": "receipt_9e9a1db49c61",
+      "arguments": {
+        "path": "inputs/projects/project_alpha/l3"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          3
+        ],
+        "response_ordinals": [
+          6
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_0c189277e91307d5c32271b7941c4be0408f0a31ef2782b24a4e3de48773f7fa",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "read_trigger",
+      "state": "succeeded",
+      "receipt_id": null,
+      "arguments": {
+        "max_chars": 4096,
+        "trigger_id": "trigger_49a750c482b4"
+      },
+      "current_context_core_tool_source_bound": true,
+      "core_tool_source_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          7
+        ],
+        "response_ordinals": [
+          8
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_602b3a9df946e97db3090ae16e8e86578f498db6218ff01a47756614f15e8225",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_3a2db97e3998",
+      "arguments": {
+        "path": "inputs/projects/project_alpha/l3/starter.py"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          7
+        ],
+        "response_ordinals": [
+          9
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_899a4f57e888bbbde446a99423335be25e9a8ed4a782c1b89de90ce85a1b81be",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_76662cf6f2f8",
+      "arguments": {
+        "path": "inputs/projects/project_alpha/l3/test_candidate.py"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          10
+        ],
+        "response_ordinals": [
+          11
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_e0a22892cb109e035928768201b8dbe6fe88866fed306367cb1423fce622d9a8",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_d90df3fa9eb7",
+      "arguments": {
+        "path": "inputs/projects/project_alpha/l3/scenario.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          10
+        ],
+        "response_ordinals": [
+          12
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_f3e51288b615ecbe5db313f862c2df16d1b6640dca9115fb88931078d17053a2",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_caff5e96cbce",
+      "arguments": {
+        "content": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Record:\n    key: str\n    value: int\n\ndef normalize_records(records):\n    \"\"\"Known incomplete implementation; reproduce its observed failures before fixing.\"\"\"\n    result = []\n    seen = set()\n    for record in records:\n        key = record[\"key\"].strip()\n        if key not in seen:\n            seen.add(key)\n            result.append(Record(key, record[\"value\"]))\n    return result\n",
+        "path": "work/quest_cf046c4d0ecb/candidate.py"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          13
+        ],
+        "response_ordinals": [
+          14
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_71fb9908bf0d287705df8dfcffb727190d65eac470bf2c80be616e1d5b588979",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_a918043f3f50",
+      "arguments": {
+        "content": "import unittest\nfrom dataclasses import asdict\nfrom candidate import normalize_records\n\nclass NormalizeRecordsTests(unittest.TestCase):\n    def test_merge_last_and_sort(self):\n        rows = [{\"key\": \" B \", \"value\": 1}, {\"key\": \"a\", \"value\": 2}, {\"key\": \"b\", \"value\": 9}]\n        self.assertEqual([asdict(item) for item in normalize_records(rows)], [{\"key\": \"a\", \"value\": 2}, {\"key\": \"b\", \"value\": 9}])\n\n    def test_invalid_blank_key(self):\n        with self.assertRaises(ValueError):\n            normalize_records([{\"key\": \"  \", \"value\": 1}])\n",
+        "path": "work/quest_cf046c4d0ecb/test_candidate.py"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          13
+        ],
+        "response_ordinals": [
+          15
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_175297a6a030fe6cc8846c4bb7fc07cb7236e0049a5bdd20c564d470b44ba5cb",
+      "run_id": "run_2b11557ec4c9",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_62cf0e7b158d",
+      "arguments": {
+        "content": "# Node task_1 — Source/Trigger/Thread flow extraction (read-only research)\n\nRevision for all three sources: `8c32a9dc5d72c033816c6a8110b37f40cf94fba4`, repo `DeepSeek-ai/dsh-superagent-prototype`.\nRead via file_read on the four JSON packets in `inputs/projects/project_beta/l2/` (all four read in full; no write to inputs).\n\n## S1 deepseek_readme.json (README.md, 1–39)\n- source_sha256 `737997cf5b7d4129f12ed5485ebbdd5e9d2ce3859a82ded6ac535d222327b713`; packet sha256 `3ef5dced147170146cc2b91aca3870cf8bfb84f952a8c16262a7175ab018cfbf`\n- L3: research prototype, \"not an official DeepSeek product\", not production-ready.\n- L5: publication-adapted; NOT identical to internal version or to the implementation described in *Exploring Super-agent Design: Towards a More Autonomous Agent System*; \"Some designs discussed in the article are directions for future development and are not implemented in this prototype.\"\n- L7: proactive coding agent for ONE GitHub repository; listens to GitHub and optionally Feishu; opens a work item, works in its own session+directory, answers in the original conversation (e.g. PR).\n- L9: attention-minimizing principle.\n\n## S2 deepseek_philosophy.json (docs/000-philosophy.md, 1–33)\n- source_sha256 `0a12126843556fde2bcc2ca52dae2c297b9b5ca9170c3e33d624b2a4d85ca76b`; packet sha256 `2257025548c4799bbda7753936730a80b9f029406c2da08289acb658a40a3c1b`\n- L5: take as little human attention as possible.\n- L11: acts only when asked or when a written rule allows; request counts only if addressed directly and from an allowed person (allowlist, or an opened conversation); unrequested work requires a team-written rule and starts in record-only mode.\n- L12: speaks only when a person must act or can use a result; confirms once; quiet while working; short messages in the originating conversation.\n- L19–L20: few concepts / few settings — new business need becomes an attribute of an existing concept or prompt text, not a new concept or setting.\n\n## S3 deepseek_intake.json (src/core/intake.ts, 1–63) — the flow\n- source_sha256 `323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179`; packet sha256 `d794df820efd11166ef801d30e287a923c16c35dc9e666484be4fad6fdc9bf97`\n- L1, L11–14: module = trigger ingestion, thread correlation, subscription fan-out, eval queuing.\n- L21: timestamp normalization to canonical ISO before anything else.\n- L22: invariant — a trigger must belong to >=1 thread (throws).\n- L23: idempotency by trigger id -> `'duplicate'`.\n- L25–29: gate is `this.options.scope.scope(trigger)`; not listened -> persist trigger AND a `filtered` disposition with reason code + empty fanout -> `'filtered'`. Note: filtered triggers are still stored (auditability) but never fanned out or evaluated.\n- L31, L37: thread correlation is symmetric union of co-occurring thread keys (`thread.correlated`) — derived, not configured.\n- L38: fan-out iterates `thread.subscriptions` — subscriptions are per-thread and drive delivery (\"subscription pass-through\").\n- L42–44: `followed` (thread-level context subscription) + `resumes = trigger.human && ticket.ended?.by !== 'human' && !followed`; ended tickets are skipped unless a human message resumes them; a human-stopped ticket receives nothing (mandate withdrawn).\n- L45, L51: context-subscription tickets get inputs flagged `context: true` — the worker is told this is ambient context, not a direct ask. Precedence rule: any non-context (own) thread reach flips context false.\n- L49–52: input ids are deterministic (`key('input', ticketId, 'trigger', trigger.id)`) — replay-safe fan-out.\n- L53–55: disposition record {fanout, context?, at} persisted per trigger.\n- L58: only if `this.owners(trigger).length === 0` is the trigger queued for Eval — unclaimed human messages and every bot message get a fallback owner; claimed ones do not.\n- L59: wake each fanned-out ticket after persistence.\n- L60: emits `trigger.received` for observers.\n- Ordering: normalize -> validate -> dedupe -> filter -> save -> correlate -> fan out -> disposition -> eval fallback -> wake -> emit. Pure function of persisted state up to `this.now()` and `scope.scope`.\n\n## Prototype vs architecture article vs unimplemented\n- Public prototype (implemented, inspected text): S3 pipeline above; README S1 L7 one-repo GitHub(+optional Feishu) scope; record-only mode for unrequested work per S2 L11.\n- Architecture article (*Exploring Super-agent Design*): referenced only by title in S1 L5; its content is NOT in the supplied materials. Anything attributed to it here is a direction, not verified behavior.\n- Explicitly unimplemented / not evidenced: per S1 L5 \"some designs ... are not implemented in this prototype\"; the materials never enumerate which. No multi-repo, no autonomous-initiation path beyond written rules, no evidence of cross-repository or multi-agent topologies. Also no code paths for `followupOwners`, `queueForEval`, `scope`, `Tickets.addInput`, `EnginePart` — only call sites; their internals are unevidenced.\n- Non-claim: no execution, build, or test was run; all statements are source-text inspection only.\n",
+        "path": "work/quest_34771f670396/source_extraction.md"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          13
+        ],
+        "response_ordinals": [
+          14
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_20207cae4e3f88e21e735979c69b9a94797aab45e6d9768da9130d9f7687342f",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "python_unittest",
+      "state": "failed",
+      "receipt_id": "receipt_72e077bbc9f1",
+      "arguments": {
+        "manifest": {
+          "candidate.py": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+          "test_candidate.py": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226"
+        },
+        "path": "work/quest_cf046c4d0ecb",
+        "test_module": "test_candidate"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          16
+        ],
+        "response_ordinals": [
+          18
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_bd51463e8b87a24a8a56b875ffbb8b65d37dd9dc5d89d2d9d58af5c1431aa939",
+      "run_id": "run_e41881834d74",
+      "tool_name": "worker_read_completed_delivery",
+      "state": "succeeded",
+      "receipt_id": null,
+      "arguments": {
+        "node_key": "task_1"
+      },
+      "current_context_core_tool_source_bound": false,
+      "core_tool_source_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          4
+        ],
+        "response_ordinals": [
+          5
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_64abd96c6454fac5b99c4295bcf0ef5be4a923ac22f1615cf5630c8b0188f2b5",
+      "run_id": "run_e41881834d74",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "receipt_id": "receipt_be2fab315c00",
+      "arguments": {
+        "path": "work/quest_34771f670396"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          4
+        ],
+        "response_ordinals": [
+          6
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_9723d5314119462ccf9e09b7b94af17dab4fbeac306d85641c6e07996f4ff9ae",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_67fccfec97e4",
+      "arguments": {
+        "path": "work/quest_34771f670396/source_extraction.md"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          7
+        ],
+        "response_ordinals": [
+          8
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_75c44f8e94299f31ac438af8c18ed138bb7b21e4bfe6bf91cf548119cee57f7d",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_943e06550b0a",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_readme.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          9
+        ],
+        "response_ordinals": [
+          10
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_f624ec8ee66b67b3eab1e880906f9cf5886922dfd64903e64e43c22737594930",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_91eb1ccf94c0",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_intake.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          9
+        ],
+        "response_ordinals": [
+          11
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_9f67b7d6b960cfd00c73713e0e6cb85493d51f134a3bb9fe91094aec821ba2ca",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_03fb16ad5a40",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/deepseek_philosophy.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          9
+        ],
+        "response_ordinals": [
+          12
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_4aadd9f7b0d7b39961b88c5adb9d9f00b8f069f937dd67e2bb147fff2c60139c",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_d92317daea07",
+      "arguments": {
+        "path": "inputs/projects/project_beta/l2/scenario.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "transcript": {
+        "selected_ordinals": [
+          9
+        ],
+        "response_ordinals": [
+          13
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_9cc561bfaa601cd1aadaff57a575495c6d309b7be829575a7ab6c32d422b9bb9",
+      "run_id": "run_e41881834d74",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_88a09368c65d",
+      "arguments": {
+        "content": "{\n  \"summary\": \"The fixed-revision DeepSeek 'dsh-superagent' materials describe a positively-scoped intake pipeline: a Trigger is timestamp-normalized, required to belong to at least one Thread, deduplicated by id, then passed through a SourceScope gate. A trigger the scope does not listen to is still persisted and given a 'filtered' disposition with an empty fanout, so rejection is recorded rather than silent. Listened triggers are recorded, their Threads get monotonic lastAt and a derived symmetric correlation set, and only thread.subscriptions are iterated for fan-out, with context subscriptions delivering 'context: true' inputs unless a ticket is also reached through its own thread. Ended tickets resume only on a human message on a non-context thread, input ids are deterministic, a per-trigger disposition of fanout/context is persisted, Eval is queued only when no ticket owns the trigger, then tickets are woken and trigger.received is emitted. The documented philosophy reinforces this with an attention-cost test, direct-address allowlisting and record-only mode for unrequested work. This is a public research prototype, explicitly not an official product and not production-ready, and explicitly not identical to the implementation described in the architecture article, 'Exploring Super-agent Design: Towards a More Autonomous Agent System'; some article designs are stated future directions not implemented in this prototype, and the article text itself is not among the supplied materials, so article-level statements are directions only. Statements here are source-text inspection, not observed execution. FORGE implications are drawn with two concrete design choices (default-deny scope gate with audited rejection dispositions; subscription passthrough over derived thread correlation rather than new settings) and matching risks.\",\n  \"citations\": [\n    {\n      \"source_id\": \"deepseek_readme\",\n      \"source_sha256\": \"737997cf5b7d4129f12ed5485ebbdd5e9d2ce3859a82ded6ac535d222327b713\",\n      \"line_start\": 3,\n      \"line_end\": 5,\n      \"quote\": \"> **Research prototype for reference only, not an official DeepSeek product.** This code grew out of our team's day-to-day development work, with much of the engineering done by coding agents. Treat it as research code, not production-ready software. It may still contain bugs, and its coding style and engineering practices may be inconsistent. Review and adapt it before using it in your own environment.\"\n    },\n    {\n      \"source_id\": \"deepseek_readme\",\n      \"source_sha256\": \"737997cf5b7d4129f12ed5485ebbdd5e9d2ce3859a82ded6ac535d222327b713\",\n      \"line_start\": 5,\n      \"line_end\": 5,\n      \"quote\": \"> We have adapted it for publication, so it is not identical to our internal version or the implementation described in *Exploring Super-agent Design: Towards a More Autonomous Agent System*. Some designs discussed in the article are directions for future development and are not implemented in this prototype.\"\n    },\n    {\n      \"source_id\": \"deepseek_readme\",\n      \"source_sha256\": \"737997cf5b7d4129f12ed5485ebbdd5e9d2ce3859a82ded6ac535d222327b713\",\n      \"line_start\": 7,\n      \"line_end\": 7,\n      \"quote\": \"dsh-superagent is a proactive coding agent for one GitHub repository, packaged as a bundle for [DeepSeek Harness](https://www.deepseek.com/en/harness/). It listens to GitHub and, optionally, Feishu. When someone allowed asks the agent for work, it opens a work item, works on it in its own agent session and directory, and answers in the original conversation, for example with a pull request. A web panel shows what needs a person.\"\n    },\n    {\n      \"source_id\": \"deepseek_philosophy\",\n      \"source_sha256\": \"0a12126843556fde2bcc2ca52dae2c297b9b5ca9170c3e33d624b2a4d85ca76b\",\n      \"line_start\": 11,\n      \"line_end\": 11,\n      \"quote\": \"- **It acts only when asked, or when a written rule allows it.** A request counts only when it addresses the agent directly and comes from a person the team allowed: one on an allowed list, or anyone in a conversation the team opened to requests. Work nobody asked for needs a rule the team wrote, and starts in a mode that only records what the agent would have done.\"\n    },\n    {\n      \"source_id\": \"deepseek_philosophy\",\n      \"source_sha256\": \"0a12126843556fde2bcc2ca52dae2c297b9b5ca9170c3e33d624b2a4d85ca76b\",\n      \"line_start\": 19,\n      \"line_end\": 20,\n      \"quote\": \"- **Few concepts.** The design has only its domain concepts, such as a Source, and their concrete implementations, such as GitHub and Feishu. A business need becomes an attribute of one of them, or a prompt the agent follows. The design does not add a concept for it.\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 22,\n      \"line_end\": 23,\n      \"quote\": \"    if (!trigger.threads.length) throw new Error('A trigger must belong to at least one thread')\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 25,\n      \"line_end\": 28,\n      \"quote\": \"    const filter = this.options.scope.scope(trigger)\\n    if (!filter.listened) {\\n      this.repo.triggers.save(trigger); this.repo.triggers.saveDisposition(trigger.id, { filtered: { code: filter.reason }, fanout: [], at })\\n      return 'filtered'\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 37,\n      \"line_end\": 38,\n      \"quote\": \"      thread.correlated = [...new Set([...thread.correlated, ...keys.filter(other => other !== thread.key)])]\\n      for (const ticketId of thread.subscriptions) {\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 42,\n      \"line_end\": 45,\n      \"quote\": \"        const followed = !!thread.context?.includes(ticketId)\\n        const resumes = trigger.human && ticket?.ended?.by !== 'human' && !followed\\n        if (!ticket || (!liveTicket(ticket) && !resumes)) continue\\n        reached.set(ticketId, { ticket, context: followed && (reached.get(ticketId)?.context ?? true) })\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 50,\n      \"line_end\": 50,\n      \"quote\": \"      this.tickets.addInput(ticket, { id: key('input', ticketId, 'trigger', trigger.id), kind: 'trigger', triggerId: trigger.id, at,\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 53,\n      \"line_end\": 55,\n      \"quote\": \"    const fanout = [...reached.keys()], context = fanout.filter(id => reached.get(id)!.context)\\n    const disposition = { fanout, ...context.length ? { context } : {}, at }\\n    this.repo.triggers.saveDisposition(trigger.id, disposition)\"\n    },\n    {\n      \"source_id\": \"deepseek_intake\",\n      \"source_sha256\": \"323aadefea69436ba23ed2de3bdbaad673d61915be9e239f3233ecf551a74179\",\n      \"line_start\": 58,\n      \"line_end\": 60,\n      \"quote\": \"    if (!this.owners(trigger).length) this.queueForEval(trigger)\\n    for (const ticketId of fanout) this.tickets.wake(ticketId)\\n    this.emit('trigger.received', { triggerId: trigger.id, threads: trigger.threads.map(threadKey) })\"\n    }\n  ],\n  \"comparison\": [\n    {\n      \"topic\": \"Ingress gate: default-deny SourceScope with audited rejection\",\n      \"prototype\": \"receive() normalizes timestamps, throws if a trigger has no thread, returns 'duplicate' on id replay, then asks this.options.scope.scope(trigger); a not-listened trigger is still saved together with a disposition {filtered:{code: reason}, fanout: [], at} and returns 'filtered' (intake L21-L29). Filtering is therefore positive-scope, deterministic and replay-safe at entry.\",\n      \"forge_implication\": \"FORGE should adopt the same shape for external triggers: one deterministic scope decision taken before any model or planner work, with the negative decision persisted as a first-class record (reason code, empty fanout, timestamp) so that silently dropped work is auditable. This is a design choice to keep scope evaluation a pure predicate over typed trigger data, not a prompt-level judgement.\",\n      \"source_ids\": [\"deepseek_intake\", \"deepseek_philosophy\"]\n    },\n    {\n      \"topic\": \"Subscription pass-through and context precedence\",\n      \"prototype\": \"Fan-out iterates only thread.subscriptions; a ticket may subscribe to a thread as context (thread.context), producing inputs flagged context: true; any reach through the ticket's own thread sets context false, because reached.set uses 'followed && (previous ?? true)' (intake L32-L33, L42-L45, L50-L51). Resumption of an ended ticket requires a human trigger, not a human-ended ticket, and not a context-only subscription (L40-L44).\",\n      \"forge_implication\": \"FORGE delivery should distinguish 'ambiently informed' from 'directly tasked'. Carrying an explicit context flag on each delivered work item lets downstream policy (budget, autonomy, response obligation) differ without inventing a new concept, consistent with the few-concepts guidance. Risk-adjusted choice: derive delivery from existing subscription relations on the thread, rather than maintaining a separate fan-out list.\",\n      \"source_ids\": [\"deepseek_intake\", \"deepseek_philosophy\"]\n    },\n    {\n      \"topic\": \"Derived correlation instead of configured routing\",\n      \"prototype\": \"Thread correlation is computed during ingestion as a symmetric union of co-occurring thread keys (thread.correlated, intake L31, L37), and thread.lastAt is advanced monotonically (L36). Nothing in the inspected code configures which threads are related.\",\n      \"forge_implication\": \"FORGE can compute correlation/adjacency as a byproduct of observed co-occurrence rather than a new routing setting, keeping operator configuration to zero and preserving the 'few settings' rule; the same record then supports later retrieval and dedupe without extra schemas.\",\n      \"source_ids\": [\"deepseek_intake\", \"deepseek_philosophy\"]\n    },\n    {\n      \"topic\": \"Durability and side-effect ordering\",\n      \"prototype\": \"Order is persist trigger -> correlate/save threads -> addInputs with deterministic ids -> saveDisposition -> conditional queueForEval -> wake tickets -> emit 'trigger.received' (intake L30-L60). Eval is queued only when no ticket owns the trigger (L56-L58), so a claimed human message is not double-processed, while every bot message and unclaimed human message gets a fallback owner.\",\n      \"forge_implication\": \"FORGE should treat wake-up and event emission as effects that follow durable state, and should have a single explicit unclaimed-input fallback path. A missing fallback would strand or duplicate work; the 'owners(trigger).length === 0' test is the concrete design choice to mirror.\",\n      \"source_ids\": [\"deepseek_intake\"]\n    },\n    {\n      \"topic\": \"Prototype scope versus architecture article and unimplemented capability\",\n      \"prototype\": \"The prototype is a coding agent for one GitHub repository, optionally Feishu, with work done in its own session and directory and answered in the original conversation (README L7). README L5 states the publication version is not identical to the architecture article's implementation and that some article designs are future directions not implemented in this prototype; the article text itself is not included in the supplied materials.\",\n      \"forge_implication\": \"FORGE comparisons must not attribute article claims to running code. Multi-repository breadth, autonomous initiation beyond written rules, and any article-described topology should be treated as unevidenced directions; FORGE should prototype them behind the same scope gate and record-only mode rather than assuming a proven mechanism.\",\n      \"source_ids\": [\"deepseek_readme\", \"deepseek_philosophy\"]\n    }\n  ],\n  \"risks\": [\n    {\n      \"issue\": \"Silent or unaccountable suppression: a default-deny scope gate can drop legitimate work with no trace, and in the inspected code the filtered path returns before any wake or notice, so an operator relying on the system may never learn that work was ignored.\",\n      \"mitigation\": \"Require a persisted disposition for every non-delivery (reason code, empty fanout, timestamp), exactly as the filtered branch does, and add a FORGE-side review surface or periodic audit of filtered dispositions before widening the scope predicate. Treat widening the allowed source set as a config change reviewed like code.\"\n    },\n    {\n      \"issue\": \"Over-delivery through ambient context: since fan-out iterates thread.subscriptions and context subscriptions receive a copy, a widely subscribed thread amplifies one trigger to many workers, and context inputs could be mistaken for direct assignments, wasting attention and budget (the philosophy's own attention-cost test).\",\n      \"mitigation\": \"Keep the context flag on every delivered input and make autonomy/budget policy depend on it; cap fan-out per trigger and record the fanout list per trigger so amplification is visible; do not let context-only reach resume ended work, mirroring the resumes rule.\"\n    },\n    {\n      \"issue\": \"Attributing architecture-article designs to the prototype: README L5 states the article describes designs not implemented in this prototype, so any FORGE plan that copies an 'article' mechanism risks building on an unverified direction.\",\n      \"mitigation\": \"Label every claim as prototype-inspected, article-direction, or unevidenced internal; keep a citation-backed evidence table in research.json and require line-range provenance for each prototype claim before it influences a design decision.\"\n    },\n    {\n      \"issue\": \"Duplicate or divergent downstream work: idempotency in the prototype rests on trigger id dedupe and deterministic input ids (key('input', ticketId, 'trigger', trigger.id)), not on transactional guarantees; replay after partial failure could double-wake.\",\n      \"mitigation\": \"In FORGE, derive delivery ids deterministically from (recipient, source event id) and make wake/emit idempotent per input id; verify with a replay test that submits the same trigger twice and asserts one stored record, one disposition, and no second wake.\"\n    }\n  ],\n  \"recommendations\": [\n    {\n      \"action\": \"Implement a deterministic ingress gate in FORGE that evaluates a typed scope predicate over normalized trigger data before any model call, and persist both accepted and rejected dispositions.\",\n      \"verification\": \"Unit test: submit a not-listened trigger and assert storage plus a filtered disposition with reason code and empty fanout and no wake; submit a listened trigger and assert fanout equals the subscribed live tickets; submit the same id twice and assert 'duplicate' with no second disposition.\"\n    },\n    {\n      \"action\": \"Mirror subscription pass-through with an explicit context flag and own-thread precedence, so ambient delivery is distinguishable from a direct ask in every downstream decision.\",\n      \"verification\": \"Unit test: a ticket subscribed only as context on the trigger's thread receives an input with context true; the same ticket also subscribed on its own thread receives context false; an ended-not-human ticket is not resumed by a bot trigger and is resumed by a human trigger on a non-context thread.\"\n    },\n    {\n      \"action\": \"Keep article-level capabilities (multi-repository scope, broader autonomy, article topology) out of the implemented set and prototype them behind record-only mode with visible 'would-have-done' records.\",\n      \"verification\": \"Review check: every FORGE design claim is tagged prototype-source (with source_id and line range), article-direction, or unevidenced; a reviewer confirms no article claim is presented as implemented behavior and that record-only mode produces records without side effects.\"\n    },\n    {\n      \"action\": \"Order effects after durable state: persist trigger, correlation and inputs before wake and event emission, and add a single unclaimed-input fallback owner.\",\n      \"verification\": \"Integration test with an injected failure between persistence and wake: on restart, no duplicate input ids exist and no ticket is woken twice; a trigger with no owning ticket is routed to the fallback path exactly once.\"\n    }\n  ]\n}\n",
+        "path": "work/quest_34771f670396/research.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          14
+        ],
+        "response_ordinals": [
+          15
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_7249f8e15c37a3a490a9243c4512a10b9c25e29ac27b95012bec3eb36905b10f",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_revise",
+      "state": "succeeded",
+      "receipt_id": "receipt_44bd03b5e224",
+      "arguments": {
+        "content": "from dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass Record:\n    key: str\n    value: int\n\n\ndef _is_int(value):\n    return isinstance(value, int) and not isinstance(value, bool)\n\n\ndef normalize_records(records):\n    \"\"\"Normalize record dicts into a sorted list of frozen Records.\n\n    Rules:\n      - ``records`` must be a list (not tuple/str/dict/set/generator) of dicts.\n        A ``dict`` input is iterable over its keys only, so it is malformed.\n      - Every row must be a ``dict``.\n      - Keys must be ``str``; normalized by ``strip()`` then ``casefold()``.\n        An empty normalized key is rejected with ``ValueError``.\n      - Values must be ``int`` (``bool`` is invalid).\n      - Duplicate normalized keys keep the LAST value.\n      - Result is a new list of ``Record`` sorted lexicographically by key.\n      - The input (container, rows and nested values) is never mutated.\n    \"\"\"\n    if not isinstance(records, list):\n        raise ValueError(\"records must be a list of dictionaries\")\n    merged = {}\n    for index, record in enumerate(records):\n        if not isinstance(record, dict):\n            raise ValueError(f\"row {index} must be a dictionary\")\n        if \"key\" not in record or \"value\" not in record:\n            raise ValueError(f\"row {index} must contain 'key' and 'value'\")\n        raw_key = record[\"key\"]\n        if not isinstance(raw_key, str):\n            raise ValueError(f\"row {index} key must be a string\")\n        key = raw_key.strip().casefold()\n        if not key:\n            raise ValueError(f\"row {index} has an empty normalized key\")\n        value = record[\"value\"]\n        if not _is_int(value):\n            raise ValueError(f\"row {index} value must be an integer\")\n        merged[key] = value\n    return [Record(key, merged[key]) for key in sorted(merged)]\n",
+        "expected_sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+        "path": "work/quest_cf046c4d0ecb/candidate.py",
+        "prior_receipt_id": "receipt_caff5e96cbce"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          19
+        ],
+        "response_ordinals": [
+          20
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_a7c253036844d0b84c70e56605fb8ab84e709c48ac23ae4354d39e6aac17c729",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "python_unittest",
+      "state": "succeeded",
+      "receipt_id": "receipt_19621f8f9f41",
+      "arguments": {
+        "manifest": {
+          "candidate.py": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+          "test_candidate.py": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226"
+        },
+        "path": "work/quest_cf046c4d0ecb",
+        "test_module": "test_candidate"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          21
+        ],
+        "response_ordinals": [
+          22
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    },
+    {
+      "call_id": "call_51788237a5dff3c1098bd28727948f1abb0279dfd252a3c4e8313225e717e26f",
+      "run_id": "run_ddd8875674c1",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_f45938937a6d",
+      "arguments": {
+        "content": "{\n  \"summary\": \"Implemented candidate.py exposing frozen dataclass Record(key: str, value: int) and normalize_records(records). Reproduced the supplied starter's actual failures against the unchanged visible tests (receipt_72e077bbc9f1: 2 failures / 2 run), then corrected the implementation and observed a passing run (receipt_19621f8f9f41: 2 tests, 0 failures). Behaviour: requires a list of dict rows; normalizes keys with strip() then casefold(); rejects non-list input, non-dict rows, missing 'key'/'value', non-str keys, empty normalized keys, and non-int or bool values with ValueError; keeps the LAST value per duplicate normalized key; returns a new list of Record sorted lexicographically by normalized key; never mutates the input (rows read only, no writes); empty list returns [].\",\n  \"changes\": [\n    \"work/quest_cf046c4d0ecb/candidate.py: created as a byte-identical copy of inputs/projects/project_alpha/l3/starter.py (sha256 8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278) to reproduce the starter failure.\",\n    \"work/quest_cf046c4d0ecb/test_candidate.py: copied unchanged from inputs/projects/project_alpha/l3/test_candidate.py (sha256 8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226).\",\n    \"work/quest_cf046c4d0ecb/candidate.py: revised via file_revise (prior receipt_caff5e96cbce, prior sha256 8cc2ed15...6278) to sha256 672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96: added list/dict/row/value validation with ValueError, casefold() with strip(), last-value-wins deduplication via a dict, and lexicographic sorting of normalized keys.\"\n  ],\n  \"test_receipt_ids\": [\n    \"receipt_72e077bbc9f1\",\n    \"receipt_19621f8f9f41\"\n  ],\n  \"limitations\": [\n    \"receipt_72e077bbc9f1 is the reproduced starter failure run (state failed, exit_code 2, failures 2, tests_run 2, manifest candidate.py 8cc2ed15...6278); receipt_19621f8f9f41 is the successful run of final candidate.py (sha256 672012ad...ce96, exit_code 0, failures 0, tests_run 2, state succeeded).\",\n    \"python_unittest runs use a privately staged manifest only; hidden/holdout tests were not available. Extra behaviors in request (non-list container, non-dict rows, bool rejection, sorted order, no mutation, empty input) are covered by the implementation but exercised only by the two visible tests plus the implementation review, not by executed hidden checks.\",\n    \"Inputs under inputs/projects/project_alpha/l3/ were read only and left unchanged.\"\n  ]\n}\n",
+        "path": "work/quest_cf046c4d0ecb/development.json"
+      },
+      "native_receipt_source_bound": true,
+      "storage_relative_and_scope_bound": true,
+      "inside_original_write_scope": true,
+      "transcript": {
+        "selected_ordinals": [
+          23
+        ],
+        "response_ordinals": [
+          24
+        ],
+        "later_assistant_after_response": true,
+        "bound": true
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "event_id": "evt_bbc14b372c2d",
+      "run_id": "run_2b11557ec4c9",
+      "role_id": "research_1",
+      "verdict": "PASS",
+      "call_id": "review_call_ecb88d518d02",
+      "result_event_id": "evt_433e315e2ecf",
+      "packet_sha256": "94a057da4012364d0f28a5f832380a63eac3330d84c5a8553e60acf086731de2",
+      "packet_bytes": 51574,
+      "current_context_packet_sha256": "451c452bdb5f206f697c1f773938c8fb9c064b8e0a87c113f230a17f9d9d83e8",
+      "historical_constraint_frontier_packet_sha256": "94a057da4012364d0f28a5f832380a63eac3330d84c5a8553e60acf086731de2",
+      "complete_packet_and_live_settled_call_bound": true
+    },
+    {
+      "event_id": "evt_e4a7399fa878",
+      "run_id": "run_e41881834d74",
+      "role_id": "reviewer_2",
+      "verdict": "PASS",
+      "call_id": "review_call_74186aebd220",
+      "result_event_id": "evt_228f115cebbe",
+      "packet_sha256": "da9f84a693fcec3fdfe2cfbce3600842896a095dcf4158d02d5726bb2160cde7",
+      "packet_bytes": 81297,
+      "current_context_packet_sha256": "d8410fdf6f993682d1fb4f4795b1a6602e0ff538c2889b874ccc3013ba2ea55f",
+      "historical_constraint_frontier_packet_sha256": "da9f84a693fcec3fdfe2cfbce3600842896a095dcf4158d02d5726bb2160cde7",
+      "complete_packet_and_live_settled_call_bound": true
+    },
+    {
+      "event_id": "evt_c6b464c22752",
+      "run_id": "run_ddd8875674c1",
+      "role_id": "coding",
+      "verdict": "PASS",
+      "call_id": "review_call_970e9ead027f",
+      "result_event_id": "evt_dc5906541df4",
+      "packet_sha256": "41d48ce1833e8644b606361d70c786ce43b556aa833099806e56b5df35331aee",
+      "packet_bytes": 35347,
+      "current_context_packet_sha256": "3817bf3a047160459aee517b2f40aca99f4e3378745e3f128e161d5f976845f3",
+      "historical_constraint_frontier_packet_sha256": "41d48ce1833e8644b606361d70c786ce43b556aa833099806e56b5df35331aee",
+      "complete_packet_and_live_settled_call_bound": true
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_cf046c4d0ecb/candidate.py",
+      "receipt_id": "receipt_caff5e96cbce",
+      "run_id": "run_ddd8875674c1",
+      "written_sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+      "matches_current_file": false
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_cf046c4d0ecb/test_candidate.py",
+      "receipt_id": "receipt_a918043f3f50",
+      "run_id": "run_ddd8875674c1",
+      "written_sha256": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226",
+      "matches_current_file": true
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_34771f670396/source_extraction.md",
+      "receipt_id": "receipt_62cf0e7b158d",
+      "run_id": "run_2b11557ec4c9",
+      "written_sha256": "10bf4e8261609459414d5049423adf0c57780acefcf634b2a99f95b433506e92",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "10bf4e8261609459414d5049423adf0c57780acefcf634b2a99f95b433506e92",
+      "matches_current_file": true
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_34771f670396/research.json",
+      "receipt_id": "receipt_88a09368c65d",
+      "run_id": "run_e41881834d74",
+      "written_sha256": "1d93e34ec7ea1759e5bb9656b637cfc9156752a6bb35973c17d6aabeb58f6de5",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "1d93e34ec7ea1759e5bb9656b637cfc9156752a6bb35973c17d6aabeb58f6de5",
+      "matches_current_file": true
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_cf046c4d0ecb/candidate.py",
+      "receipt_id": "receipt_44bd03b5e224",
+      "run_id": "run_ddd8875674c1",
+      "written_sha256": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+      "matches_current_file": true
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/work/quest_cf046c4d0ecb/development.json",
+      "receipt_id": "receipt_f45938937a6d",
+      "run_id": "run_ddd8875674c1",
+      "written_sha256": "b8d564267c71cbfa03ddbc7c616049fdf70bbb605a7ff8ae8ee9da33805a9836",
+      "receipt_matches_written_content": true,
+      "current_file_sha256": "b8d564267c71cbfa03ddbc7c616049fdf70bbb605a7ff8ae8ee9da33805a9836",
+      "matches_current_file": true
+    }
+  ],
+  "python_tests": [
+    {
+      "call_id": "call_20207cae4e3f88e21e735979c69b9a94797aab45e6d9768da9130d9f7687342f",
+      "receipt_id": "receipt_72e077bbc9f1",
+      "approval_id": "approval_1cd6bc8ad80c",
+      "state": "failed",
+      "parameter_digest": "902be3570b2ee80407efeb714da44e984bb3568ba10880c52669f858904c61a4",
+      "manifest": {
+        "candidate.py": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+        "test_candidate.py": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226"
+      },
+      "manifest_sha256": "10000a732e19947597912a2bced56f6ee5aeebec4208c6f45a55dfac1adf7947",
+      "exact_consumed_R2_approval": true,
+      "manifest_result_bound": true,
+      "exit_code": 2,
+      "tests_run": 2,
+      "failures": 2,
+      "errors": 0,
+      "candidate_matches_final": false,
+      "cited_by_development_report": true
+    },
+    {
+      "call_id": "call_a7c253036844d0b84c70e56605fb8ab84e709c48ac23ae4354d39e6aac17c729",
+      "receipt_id": "receipt_19621f8f9f41",
+      "approval_id": "approval_3d21282247c4",
+      "state": "succeeded",
+      "parameter_digest": "3c71756a596c3fcf78e59bb7a6f9f843f22ab67956cdd835cba85b7fbd898872",
+      "manifest": {
+        "candidate.py": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+        "test_candidate.py": "8272bb520490dfadb422e665b83bdf53d2e232618b5b86eeb2d65998f1305226"
+      },
+      "manifest_sha256": "d33bf80f81e449bee02589dbd997a62115e5cf7d67f4279c52e807c63c2a08ff",
+      "exact_consumed_R2_approval": true,
+      "manifest_result_bound": true,
+      "exit_code": 0,
+      "tests_run": 2,
+      "failures": 0,
+      "errors": 0,
+      "candidate_matches_final": true,
+      "cited_by_development_report": true
+    }
+  ],
+  "revision_chain": [
+    {
+      "receipt_id": "receipt_44bd03b5e224",
+      "parameters": {
+        "content": "from dataclasses import dataclass\n\n\n@dataclass(frozen=True)\nclass Record:\n    key: str\n    value: int\n\n\ndef _is_int(value):\n    return isinstance(value, int) and not isinstance(value, bool)\n\n\ndef normalize_records(records):\n    \"\"\"Normalize record dicts into a sorted list of frozen Records.\n\n    Rules:\n      - ``records`` must be a list (not tuple/str/dict/set/generator) of dicts.\n        A ``dict`` input is iterable over its keys only, so it is malformed.\n      - Every row must be a ``dict``.\n      - Keys must be ``str``; normalized by ``strip()`` then ``casefold()``.\n        An empty normalized key is rejected with ``ValueError``.\n      - Values must be ``int`` (``bool`` is invalid).\n      - Duplicate normalized keys keep the LAST value.\n      - Result is a new list of ``Record`` sorted lexicographically by key.\n      - The input (container, rows and nested values) is never mutated.\n    \"\"\"\n    if not isinstance(records, list):\n        raise ValueError(\"records must be a list of dictionaries\")\n    merged = {}\n    for index, record in enumerate(records):\n        if not isinstance(record, dict):\n            raise ValueError(f\"row {index} must be a dictionary\")\n        if \"key\" not in record or \"value\" not in record:\n            raise ValueError(f\"row {index} must contain 'key' and 'value'\")\n        raw_key = record[\"key\"]\n        if not isinstance(raw_key, str):\n            raise ValueError(f\"row {index} key must be a string\")\n        key = raw_key.strip().casefold()\n        if not key:\n            raise ValueError(f\"row {index} has an empty normalized key\")\n        value = record[\"value\"]\n        if not _is_int(value):\n            raise ValueError(f\"row {index} value must be an integer\")\n        merged[key] = value\n    return [Record(key, merged[key]) for key in sorted(merged)]\n",
+        "expected_sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+        "path": "work/quest_cf046c4d0ecb/candidate.py",
+        "prior_receipt_id": "receipt_caff5e96cbce"
+      },
+      "output": {
+        "bytes": 1810,
+        "path": "D:\\Competition_this\\Agent\\.local\\superagent\\20261116T055126Z-capability-continuity-f87e7e\\work\\quest_cf046c4d0ecb\\candidate.py",
+        "prior_receipt_id": "receipt_caff5e96cbce",
+        "prior_sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+        "sha256": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96"
+      }
+    }
+  ],
+  "historical_review_reconstruction": {
+    "projection": "Read-only SELECT projection of constraint_records created_at at or before earliest review.started; no source rows modified or memory database writes.",
+    "constraint_cutoff": "2026-11-16T05:52:31.423162+00:00",
+    "excluded_later_constraints": [
+      {
+        "id": "246f1457152e83a1d23c2e52e10a43ca0b9809b6428dad4d964b105ed29a0dd1",
+        "conversation_id": "main",
+        "quest_id": null,
+        "statement": "do not create work or infer completion from intent.",
+        "dimension": "unspecified",
+        "origin": "explicit_user",
+        "source_message_id": "msg_26729cd9e64a",
+        "source_sha256": "6dfa4c7fd676239d4a1ac14edd52b599e811443bb22420b9b11f1a9c8b44fecc",
+        "created_at": "2026-11-16T05:55:17.647718+00:00",
+        "valid_until": null,
+        "status": "active",
+        "confirmation_message_id": null,
+        "confirmation_sha256": null
+      }
+    ],
+    "source": {
+      "path": "backend/src/forge_core/constraints.py",
+      "line": 447
+    },
+    "cause": "A later read-only Router recap indexed a new workspace-global constraint; current _packet includes it, changing user_constraints and invalidating historical packet/predecessor rechecks. Excluding that later row reconstructs the original review packets without changing their verdicts."
+  },
+  "L2_citations": [
+    {
+      "source_id": "deepseek_readme",
+      "line_start": 3,
+      "line_end": 5,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_readme",
+      "line_start": 5,
+      "line_end": 5,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_readme",
+      "line_start": 7,
+      "line_end": 7,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_philosophy",
+      "line_start": 11,
+      "line_end": 11,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_philosophy",
+      "line_start": 19,
+      "line_end": 20,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 22,
+      "line_end": 23,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 25,
+      "line_end": 28,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 37,
+      "line_end": 38,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 42,
+      "line_end": 45,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 50,
+      "line_end": 50,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 53,
+      "line_end": 55,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    },
+    {
+      "source_id": "deepseek_intake",
+      "line_start": 58,
+      "line_end": 60,
+      "source_file_hash_matches": true,
+      "source_content_hash_matches": true,
+      "line_range_valid": true,
+      "verbatim_quote_in_range": true
+    }
+  ],
+  "L2_content_counts": {
+    "citations": 12,
+    "comparison": 5,
+    "risks": 4,
+    "recommendations": 4
+  },
+  "original_driver_independent_holdout_not_reexecuted": {
+    "execution_mode": "programmatic_independent",
+    "level": "L3",
+    "checks": {
+      "source_inputs_unchanged": true,
+      "report_summary": true,
+      "development_report_structure": true,
+      "independent_holdout": true
+    },
+    "semantic_quality_assessed": false,
+    "holdout": {
+      "runtime": "cpython_unittest_v1",
+      "exit_code": 0,
+      "tests_run": 7,
+      "failures": 0,
+      "errors": 0,
+      "manifest_sha256": "5137190941c9253a4e0990260b5a8c955387316569508c87e4c8abbe2177b7e0",
+      "stdout_sha256": "885dd7cbdf309e4d004a9afe3e41ab79fecdbe57abcdae52b75e03ac892cdb82",
+      "stderr_sha256": "696ad49af78d3230ebe10bf15321c60301254db5b8ebc0e05668b92b282c29c7"
+    },
+    "candidate_sha256": "672012ad62a560bc720cf6c2c5094dcbbbfebce4fd258a08bad241406559ce96",
+    "artifact_sha256": "b8d564267c71cbfa03ddbc7c616049fdf70bbb605a7ff8ae8ee9da33805a9836",
+    "passed": true
+  },
+  "lifecycle_pairs": [
+    {
+      "started": "evt_4e4d110ddd29",
+      "stopped": [
+        "evt_09aa9a62506b"
+      ],
+      "generation": "856c0da4931455e773d394f4d26e9f76",
+      "router_session_id": "router_f8a8d37d8405",
+      "matching_pair": true
+    },
+    {
+      "started": "evt_a8b26f90bac9",
+      "stopped": [
+        "evt_0219ba9c7e38"
+      ],
+      "generation": "91a080c53f06f946fe518b5b779cfa3b",
+      "router_session_id": "router_f8a8d37d8405",
+      "matching_pair": true
+    }
+  ],
+  "archive_checks": [
+    {
+      "archive_id": 1,
+      "source_count": 9,
+      "source_hash": "914a49f336212bfd3780d365feb01ef4309b9da3db84a523aabf2062bb6830b9",
+      "capsule_hash": "3a6846c46ca6ca939926e310c19e781ac7de48aab923681a6face5e634620c4a",
+      "raw_stored_hashes_match": true
+    }
+  ],
+  "final_Router_notices": [
+    {
+      "message_id": "msg_b6c6e5acbc29",
+      "content_sha256": "15c5853e3855a971f05f0883ec121c53d0acc258ffd36fd9c703ede4cfd0f3af",
+      "metadata": {
+        "source": "router_notice",
+        "event_id": "evt_3b4365d7942c",
+        "source_event_ids": [
+          "evt_3b4365d7942c"
+        ],
+        "execution_mode": "live"
+      }
+    },
+    {
+      "message_id": "msg_0e27f1e8a70e",
+      "content_sha256": "ebeb9d85ae16dc0d53c6e49a8daf375a446da2ef1d1f9106af9c1405264a4d27",
+      "metadata": {
+        "source": "router_notice",
+        "event_id": "evt_48b3a28497b3",
+        "source_event_ids": [
+          "evt_48b3a28497b3"
+        ],
+        "execution_mode": "live"
+      }
+    }
+  ],
+  "Thread_continuity_reconstruction": {
+    "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
+    "after_evidence_rowid": 0,
+    "thread_consumption": [
+      {
+        "level": "L2",
+        "phase": "before_restart",
+        "trigger_id": "trigger_39b4fdcbe91e",
+        "run_ids": [
+          "run_2b11557ec4c9"
+        ],
+        "complete_reads": [],
+        "passed": false
+      },
+      {
+        "level": "L3",
+        "phase": "before_restart",
+        "trigger_id": "trigger_49a750c482b4",
+        "run_ids": [
+          "run_ddd8875674c1"
+        ],
+        "complete_reads": [
+          {
+            "run_id": "run_ddd8875674c1",
+            "source_sha256": "00fab89ee546af61fbf76ee12aee93602225f7d5055ea4b5d784c76c64767a2e",
+            "source_size": 2467,
+            "page_count": 1,
+            "first_invocation": 7,
+            "last_result": 8,
+            "relations": [],
+            "call_ids": [
+              "call_0c189277e91307d5c32271b7941c4be0408f0a31ef2782b24a4e3de48773f7fa"
+            ]
+          }
+        ],
+        "passed": true
+      },
+      {
+        "level": "L3",
+        "phase": "after_restart",
+        "trigger_id": "trigger_aaf62758da42",
+        "run_ids": [
+          "run_ddd8875674c1"
+        ],
+        "complete_reads": [],
+        "passed": false
+      }
+    ],
+    "complete_thread_consumption": false,
+    "complete_relationship_chains": [],
+    "typed_multihop_recall": false,
+    "invalid_or_unconsumed_calls": 0,
+    "worker_archive_source_recovery_assessed": false,
+    "limitations": "Source delivery to later model turns is verified; semantic understanding is not. Host Router compaction and host relation enumeration do not establish Worker archive recovery."
+  },
+  "post_restart_reconstruction": {
+    "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
+    "after_evidence_rowid": 22,
+    "thread_consumption": [
+      {
+        "level": "L3",
+        "phase": "after_restart",
+        "trigger_id": "trigger_aaf62758da42",
+        "run_ids": [
+          "run_ddd8875674c1"
+        ],
+        "complete_reads": [],
+        "passed": false
+      }
+    ],
+    "complete_thread_consumption": false,
+    "complete_relationship_chains": [],
+    "typed_multihop_recall": false,
+    "invalid_or_unconsumed_calls": 0,
+    "worker_archive_source_recovery_assessed": false,
+    "limitations": "Source delivery to later model turns is verified; semantic understanding is not. Host Router compaction and host relation enumeration do not establish Worker archive recovery."
+  },
+  "inbox_and_visible_model_turn_diagnosis": [
+    {
+      "run_id": "run_2b11557ec4c9",
+      "event_id": "evt_828185ec5f60",
+      "trigger_id": "trigger_37ed1850a210",
+      "consumed": 1,
+      "source_sha256": "635e77facb1e3de633755243b441a5c1d87f4fae5b1f628356253128a6740a50",
+      "preview_chars": 600,
+      "total_chars": 2030,
+      "exact_user_message_ordinals": [
+        2
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 3,
+          "tool_names": [
+            "directory_list",
+            "directory_list"
+          ],
+          "content_sha256": "9db070fad82f16e33698cc32d2c17aad092069da779b62b87d4deb5dcdab2155"
+        },
+        {
+          "ordinal": 6,
+          "tool_names": [
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 10,
+          "tool_names": [
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "54fa9977e8391bb97092470c1bcb6cc7501fb82b9a609324c6af93aceee46495"
+        },
+        {
+          "ordinal": 13,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "5cd8d107fd8054d01402a051c62492ffcca9dbb073cd807a7ff45b73b47d33c4"
+        },
+        {
+          "ordinal": 15,
+          "tool_names": [],
+          "content_sha256": "a1c9796e9f9e92e8a60e5c2aafa757d015905a7512b7a558f2b5333917c4d1b5"
+        },
+        {
+          "ordinal": 17,
+          "tool_names": [],
+          "content_sha256": "6e1f5a8257211e23d9b2a2dd2a2aebe51e1fb741751c16c4b9f00268aa635990"
+        }
+      ],
+      "full_read_selected_in_same_run": false
+    },
+    {
+      "run_id": "run_2b11557ec4c9",
+      "event_id": "evt_d0f1ab41c95c",
+      "trigger_id": "trigger_39b4fdcbe91e",
+      "consumed": 1,
+      "source_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+      "preview_chars": 600,
+      "total_chars": 2467,
+      "exact_user_message_ordinals": [
+        7
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 10,
+          "tool_names": [
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "54fa9977e8391bb97092470c1bcb6cc7501fb82b9a609324c6af93aceee46495"
+        },
+        {
+          "ordinal": 13,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "5cd8d107fd8054d01402a051c62492ffcca9dbb073cd807a7ff45b73b47d33c4"
+        },
+        {
+          "ordinal": 15,
+          "tool_names": [],
+          "content_sha256": "a1c9796e9f9e92e8a60e5c2aafa757d015905a7512b7a558f2b5333917c4d1b5"
+        },
+        {
+          "ordinal": 17,
+          "tool_names": [],
+          "content_sha256": "6e1f5a8257211e23d9b2a2dd2a2aebe51e1fb741751c16c4b9f00268aa635990"
+        }
+      ],
+      "full_read_selected_in_same_run": false
+    },
+    {
+      "run_id": "run_ddd8875674c1",
+      "event_id": "evt_c4627542e13a",
+      "trigger_id": "trigger_2371162ea53b",
+      "consumed": 1,
+      "source_sha256": "a72374cd43ea63042edbd5dfe19390b35350718871200447ca79850d68745a5a",
+      "preview_chars": 600,
+      "total_chars": 2335,
+      "exact_user_message_ordinals": [
+        2
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 3,
+          "tool_names": [
+            "read_trigger",
+            "directory_list"
+          ],
+          "content_sha256": "6a15ba52e767eea8b5357db865a9178f52f5bd0e413ca290f08e2ed7ef69d55e"
+        },
+        {
+          "ordinal": 7,
+          "tool_names": [
+            "read_trigger",
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 10,
+          "tool_names": [
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 13,
+          "tool_names": [
+            "file_write",
+            "file_write"
+          ],
+          "content_sha256": "45bbcac1cb016d285f328d34dfced0e06a3077c307126a903251269877cbf1d6"
+        },
+        {
+          "ordinal": 16,
+          "tool_names": [
+            "python_unittest"
+          ],
+          "content_sha256": "eeec604681726fedb8a62df1279dba993a6b203a201d790c9d9e30081f5d0fb3"
+        },
+        {
+          "ordinal": 19,
+          "tool_names": [
+            "file_revise"
+          ],
+          "content_sha256": "0688fbd52198bd228afca432f1783e77e1290caa52a54169af6505ebd0c80a82"
+        },
+        {
+          "ordinal": 21,
+          "tool_names": [
+            "python_unittest"
+          ],
+          "content_sha256": "722d636f2686036cc648937f4ed3087a8298c8b2833601d69691daeed2e6bf32"
+        },
+        {
+          "ordinal": 23,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "d3a5cea8955e0b56f512342c08be62fd02619e8453e20b371d34ef661ec0e84b"
+        },
+        {
+          "ordinal": 25,
+          "tool_names": [],
+          "content_sha256": "650681798c1c2b6aa0563ae3ad229928d32a5c8adbba6b0d252423924762daf7"
+        }
+      ],
+      "full_read_selected_in_same_run": true
+    },
+    {
+      "run_id": "run_ddd8875674c1",
+      "event_id": "evt_b242acc28187",
+      "trigger_id": "trigger_49a750c482b4",
+      "consumed": 1,
+      "source_sha256": "00fab89ee546af61fbf76ee12aee93602225f7d5055ea4b5d784c76c64767a2e",
+      "preview_chars": 600,
+      "total_chars": 2467,
+      "exact_user_message_ordinals": [
+        4
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 7,
+          "tool_names": [
+            "read_trigger",
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 10,
+          "tool_names": [
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 13,
+          "tool_names": [
+            "file_write",
+            "file_write"
+          ],
+          "content_sha256": "45bbcac1cb016d285f328d34dfced0e06a3077c307126a903251269877cbf1d6"
+        },
+        {
+          "ordinal": 16,
+          "tool_names": [
+            "python_unittest"
+          ],
+          "content_sha256": "eeec604681726fedb8a62df1279dba993a6b203a201d790c9d9e30081f5d0fb3"
+        },
+        {
+          "ordinal": 19,
+          "tool_names": [
+            "file_revise"
+          ],
+          "content_sha256": "0688fbd52198bd228afca432f1783e77e1290caa52a54169af6505ebd0c80a82"
+        },
+        {
+          "ordinal": 21,
+          "tool_names": [
+            "python_unittest"
+          ],
+          "content_sha256": "722d636f2686036cc648937f4ed3087a8298c8b2833601d69691daeed2e6bf32"
+        },
+        {
+          "ordinal": 23,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "d3a5cea8955e0b56f512342c08be62fd02619e8453e20b371d34ef661ec0e84b"
+        },
+        {
+          "ordinal": 25,
+          "tool_names": [],
+          "content_sha256": "650681798c1c2b6aa0563ae3ad229928d32a5c8adbba6b0d252423924762daf7"
+        }
+      ],
+      "full_read_selected_in_same_run": true
+    },
+    {
+      "run_id": "run_e41881834d74",
+      "event_id": "evt_828185ec5f60",
+      "trigger_id": "trigger_37ed1850a210",
+      "consumed": 1,
+      "source_sha256": "635e77facb1e3de633755243b441a5c1d87f4fae5b1f628356253128a6740a50",
+      "preview_chars": 600,
+      "total_chars": 2030,
+      "exact_user_message_ordinals": [
+        2
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 4,
+          "tool_names": [
+            "worker_read_completed_delivery",
+            "directory_list"
+          ],
+          "content_sha256": "8f735e50e19994e7ae0cb1920a2054da7e28813f04c14e2379581c049b9cfcdb"
+        },
+        {
+          "ordinal": 7,
+          "tool_names": [
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 9,
+          "tool_names": [
+            "file_read",
+            "file_read",
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "9f73083d57ff3627f497e032c06b7a8506e5f25d31494e5c85b75ad64c150aea"
+        },
+        {
+          "ordinal": 14,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "3445081214d6724f87ebe664c5d6f914e9d1486e266102c51b071cdb6fb491d9"
+        },
+        {
+          "ordinal": 16,
+          "tool_names": [],
+          "content_sha256": "1321a2f9fdb4b8ed5d45b377ceb53629ed51fd5b939aa1615625f25c57196f2d"
+        }
+      ],
+      "full_read_selected_in_same_run": false
+    },
+    {
+      "run_id": "run_e41881834d74",
+      "event_id": "evt_d0f1ab41c95c",
+      "trigger_id": "trigger_39b4fdcbe91e",
+      "consumed": 1,
+      "source_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+      "preview_chars": 600,
+      "total_chars": 2467,
+      "exact_user_message_ordinals": [
+        3
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 4,
+          "tool_names": [
+            "worker_read_completed_delivery",
+            "directory_list"
+          ],
+          "content_sha256": "8f735e50e19994e7ae0cb1920a2054da7e28813f04c14e2379581c049b9cfcdb"
+        },
+        {
+          "ordinal": 7,
+          "tool_names": [
+            "file_read"
+          ],
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "ordinal": 9,
+          "tool_names": [
+            "file_read",
+            "file_read",
+            "file_read",
+            "file_read"
+          ],
+          "content_sha256": "9f73083d57ff3627f497e032c06b7a8506e5f25d31494e5c85b75ad64c150aea"
+        },
+        {
+          "ordinal": 14,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "3445081214d6724f87ebe664c5d6f914e9d1486e266102c51b071cdb6fb491d9"
+        },
+        {
+          "ordinal": 16,
+          "tool_names": [],
+          "content_sha256": "1321a2f9fdb4b8ed5d45b377ceb53629ed51fd5b939aa1615625f25c57196f2d"
+        }
+      ],
+      "full_read_selected_in_same_run": false
+    },
+    {
+      "run_id": "run_ddd8875674c1",
+      "event_id": "evt_f42842417364",
+      "trigger_id": "trigger_aaf62758da42",
+      "consumed": 1,
+      "source_sha256": "6cc7284fa75eee915e280a82ee4756a86dfa75248249f00625c7cde08ac24103",
+      "preview_chars": 600,
+      "total_chars": 765,
+      "exact_user_message_ordinals": [
+        17
+      ],
+      "matching_delivery": true,
+      "later_assistant_sequence": [
+        {
+          "ordinal": 19,
+          "tool_names": [
+            "file_revise"
+          ],
+          "content_sha256": "0688fbd52198bd228afca432f1783e77e1290caa52a54169af6505ebd0c80a82"
+        },
+        {
+          "ordinal": 21,
+          "tool_names": [
+            "python_unittest"
+          ],
+          "content_sha256": "722d636f2686036cc648937f4ed3087a8298c8b2833601d69691daeed2e6bf32"
+        },
+        {
+          "ordinal": 23,
+          "tool_names": [
+            "file_write"
+          ],
+          "content_sha256": "d3a5cea8955e0b56f512342c08be62fd02619e8453e20b371d34ef661ec0e84b"
+        },
+        {
+          "ordinal": 25,
+          "tool_names": [],
+          "content_sha256": "650681798c1c2b6aa0563ae3ad229928d32a5c8adbba6b0d252423924762daf7"
+        }
+      ],
+      "full_read_selected_in_same_run": false
+    }
+  ],
+  "diagnostic_conclusions": [
+    "All seven trigger deliveries have matching consumed inbox rows and exact user transcript messages followed by later assistant turns. The post-restart continuation is user ordinal17 in the original coding run, before assistant19,21,23,25. It was not left in an unpulled inbox.",
+    "The only two read_trigger selections are original L3 trigger at assistant3 and pre-restart L3 followup at assistant7. There is no post-restart read of either the new trigger or an old one, and no recall_object selection. No model internal reasoning or causal intent is inferred.",
+    "Research L2 receives its followup at user7 and the later integrator receives the same followup at user3. Both proceed to later model turns and deliver without selecting read_trigger for that followup.",
+    "Core marks inbox consumed immediately upon transcript insertion. That tracks delivery, not complete source reading. The finalization check for consumed0 cannot detect the delivered-but-unread case; full page/hash/same-run/later-model source proofs remain a separate obligation.",
+    "The trusted Core wrapper calls payload Untrusted Core inbox data (not instructions or authority), while a short preview contains a read pointer and continuation requests. This source framing is a concrete affordance/contract boundary, but stored transcript alone does not prove which wording caused a model choice.",
+    "A minimal future correction can require complete assigned Trigger context proof, or explicit off-scope handback, before final delivery using bounded feedback and existing budgets. Untrusted payloads must not gain execution authority. This audit adds no runtime gate, alters no PASS, and performs no host substitute reads or live retry."
+  ],
+  "original_driver_checks": {
+    "pass_through_L2": true,
+    "pass_through_L3": true,
+    "restart_graceful_stop_confirmed": true,
+    "restart_exact_pending_approvals_preserved": true,
+    "restart_original_router_and_workers": true,
+    "compaction_of_real_history": true,
+    "post_restart_thread_pass_through": true,
+    "observed_team_condition_L2": true,
+    "artifact_L2": true,
+    "artifact_L3": true,
+    "source_bound_tests_L3": true,
+    "complete_thread_consumption": false,
+    "post_restart_complete_thread_consumption": false,
+    "typed_multihop_recall": false,
+    "two_detected_project_roots": true,
+    "correct_task_project_associations": true,
+    "parallel_workers": true,
+    "parallel_independent_tasks": true,
+    "mid_scenario_restart_while_development_waited": true,
+    "router_recap_after_compaction": true,
+    "subscription_pass_through_observed": true,
+    "final_results_original_router": true,
+    "hidden_live_workers": true,
+    "source_unchanged": true,
+    "final_graceful_stop_confirmed": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "limitations": [
+    "Source and receipt integrity and sample content subchecks do not establish semantic truth or general task capability.",
+    "Seven independent holdouts are attributed to the original source-bound driver report, not rerun by this auditor.",
+    "Later assistant turns and the audited message-loading source establish inclusion in subsequent model context; no captured raw HTTP input or model internal state is claimed.",
+    "Host typed relation enumeration and Router archive compaction do not establish actual Worker Recall or Worker archive source recovery; the existing false observations are retained.",
+    "SQLite mode=ro/query_only prohibits SQL updates but may involve WAL/SHM bookkeeping. Raw hashes are separately recorded; a physical no-write guarantee is not inferred from query_only.",
+    "Historical actual review packet wire savings remain zero. No compression effectiveness is claimed.",
+    "Current packet reconstruction is time-sensitive to subsequently indexed global constraints. Exact historical packet agreement uses the explicit read-only constraint frontier projection; current production predecessor revalidation returns false after the later recap constraint.",
+    "This supplemental condition is failed and closed. Prior failed conditions and accounting remain preserved; this audit is not a live-call or budget-reset authorization."
+  ]
+}

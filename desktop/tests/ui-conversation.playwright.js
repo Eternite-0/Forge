@@ -18,6 +18,7 @@ async (page, { outputDir }) => {
     historical, notice,
     { id: 'user-goal', role: 'user', content: '帮我阅读项目资料，整理一份可以执行的改造方案。', created_at: '2026-01-01T00:00:02Z', metadata: {} },
     { id: 'router-current', role: 'assistant', content: '我会先核对现有结构，再整理实施顺序。\n\n资料研究和方案核对会在后台继续执行，进展会回到这条对话。', created_at: '2026-01-01T00:00:04Z', metadata: { model_id: 'current-router-model', provider_id: 'fixture-provider', execution_mode: 'mock' } },
+    ...Array.from({ length: 10 }, (_, index) => ({ id: `initial-tail-${index}`, role: 'assistant', content: `Inline activity viewport tail ${index + 1}.`, created_at: `2026-01-01T00:01:${String(index).padStart(2, '0')}Z`, metadata: { execution_mode: 'mock' } })),
   ];
   let events = [
     { kind: 'tool_receipt', event_id: 'worker-read', seq: null, created_at: '2026-01-01T00:00:03Z', quest_id: quest.id, worker_id: 'worker-research', run_id: 'run-research-current', title: 'Tool execution recorded', status: 'succeeded', detail: { tool: 'file_read', path: 'README.md', result_sha256: digest }, execution_mode: 'mock' },
@@ -55,6 +56,10 @@ async (page, { outputDir }) => {
       else body = { items: activityMode === 'empty' ? [] : activityItems, next_before: activityHasMore ? 'older-run-fixture' : null, has_more: activityHasMore };
     } else if (url.pathname === '/api/settings') body = settings;
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
+    else if (url.pathname.endsWith('/plan/history') || url.pathname.endsWith('/teams')) body = [];
+    else if (url.pathname === `/api/quests/${quest.id}`) body = { quest, workers: [] };
     else if (url.pathname === '/api/budget') body = { token_limit: 24000, concurrency_limit: 2 };
     else if (url.pathname === '/api/models') body = [];
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
@@ -63,34 +68,38 @@ async (page, { outputDir }) => {
   });
   await page.goto('http://127.0.0.1:5173/');
   const rail = page.getByLabel('主导航'), header = page.locator('.conversation-shell .topbar');
-  const workers = page.getByLabel('Worker 执行记录');
-  const workerDrawer = page.locator('.worker-drawer');
-  const workerToggle = header.locator('.worker-toggle');
+  const workers = page.getByLabel('Agent 面板', { exact: true });
+  const workerDrawer = page.locator('.agent-panel-slot');
+  const workerToggle = header.locator('.agent-panel-toggle');
   const modelTrigger = page.getByRole('button', { name: '查看 Router 配置', exact: true });
   const timeline = page.getByLabel('对话历史');
-  const openWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') !== 'true') await workerToggle.click(); await page.waitForFunction(() => document.querySelector('.worker-drawer')?.style.height === 'auto'); };
-  const closeWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') === 'true') await workerToggle.click(); await page.waitForFunction(() => { const drawer = document.querySelector('.worker-drawer'); return drawer?.style.height === '0px' && drawer.clientHeight === 0; }); };
+  const openWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') !== 'true') await workerToggle.click(); await workers.waitFor(); if (await workers.locator('.agent-panel-summary').getAttribute('aria-expanded') !== 'true') await workers.locator('.agent-panel-summary').click(); };
+  const closeWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') === 'true') await workerToggle.click(); await workerDrawer.waitFor({ state: 'hidden' }); };
+  const revealProcessFor = async (record) => {
+    await record.waitFor({ state: 'attached' });
+    const process = record.locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+    if (await process.count() && !(await process.evaluate(element => element.open))) await process.locator(':scope > summary').click();
+    await record.waitFor();
+  };
   check(!(await header.isVisible()) && await header.evaluate((element) => element.getBoundingClientRect().height === 0), 'empty conversation has no toolbar or toolbar placeholder');
   check(await page.locator('.composer-context').count() === 1, 'normal composer retains its accessible workspace context');
   check(await page.locator('.composer-context').evaluate((element) => { const style = getComputedStyle(element), rect = element.getBoundingClientRect(); return style.position === 'absolute' && rect.width <= 1 && rect.height <= 1; }), 'workspace context occupies no visible composer row');
-  check(await workerToggle.getAttribute('aria-expanded') === 'false' && await workerDrawer.getAttribute('aria-hidden') === 'true', 'Worker details start collapsed with their state exposed');
+  check(await workerToggle.getAttribute('aria-expanded') === 'false' && await workerDrawer.getAttribute('hidden') !== null, 'the Agent companion stays hidden on an empty conversation');
   near(await workerDrawer.evaluate((element) => element.clientHeight), 0, 'collapsed Worker details occupy no conversation row');
-  check(await workerDrawer.evaluate((element) => element.inert), 'collapsed Worker controls are excluded from keyboard interaction');
-  const drawerTransition = await workerDrawer.evaluate((element) => { const style = getComputedStyle(element); return { properties: style.transitionProperty, duration: style.transitionDuration, easing: style.transitionTimingFunction }; });
-  check(drawerTransition.properties.includes('height') && drawerTransition.properties.includes('opacity') && drawerTransition.duration.split(',').every((value) => parseFloat(value) === .15) && drawerTransition.easing.includes('cubic-bezier(0, 0, 0.2, 1)'), 'Worker details animate measured height and opacity for 150ms with reference easing');
+  check(await workerDrawer.evaluate((element) => getComputedStyle(element).display === 'none'), 'hidden Agent controls are excluded from keyboard interaction');
   await screenshot('forge-conversation-collapsed-home');
-  check((await workers.textContent()).includes('连接 Core 后查看执行记录'), 'Worker source distinguishes disconnected from an empty execution history');
+  check((await workers.textContent()).includes('未连接'), 'Worker source distinguishes disconnected from an empty execution history');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await firstActivity;
-  await page.locator('.message.from-agent').filter({ hasText: '我会先核对现有结构' }).waitFor();
+  await revealProcessFor(page.locator('.message.from-agent').filter({ hasText: '我会先核对现有结构' }));
   check(await header.isVisible() && (await header.innerText()).includes('长期对话'), 'a populated conversation has its compact single-line title');
   const timelineHeight = await timeline.evaluate((element) => element.clientHeight);
   await openWorkers();
-  check(await workerToggle.getAttribute('aria-expanded') === 'true' && !(await workerDrawer.evaluate((element) => element.inert)), 'opening Worker details exposes their controls');
-  near(await timeline.evaluate((element) => element.clientHeight), timelineHeight, 'Worker popover leaves the conversation viewport height unchanged');
+  check(await workerToggle.getAttribute('aria-expanded') === 'true' && await workers.isVisible(), 'opening the Agent companion exposes its controls');
+  near(await timeline.evaluate((element) => element.clientHeight), timelineHeight, 'the Agent companion leaves the conversation viewport height unchanged');
   check(await workerDrawer.evaluate((element) => getComputedStyle(element).position) === 'absolute', 'Worker details float above the conversation');
-  check((await workers.innerText()).includes('正在读取执行记录'), 'Worker loading is visible while its independent request is pending');
+  check((await workers.innerText()).includes('正在读取'), 'Worker loading is visible while its independent request is pending');
   check((await modelTrigger.innerText()).includes('current-router-model'), 'Router composer model comes from the existing settings response');
   check(await header.locator('[title*="router-session-conversation-generation-1"]').count() > 0, 'Router exposes its actual nonsecret session identity');
   const oldReply = page.locator('.message.from-agent').filter({ hasText: historical.content });
@@ -107,40 +116,41 @@ async (page, { outputDir }) => {
   const firstResponse = page.waitForResponse((response) => response.url().includes('/api/activity?') && response.status() === 200);
   activityMode = 'populated'; releaseActivity(); await firstResponse;
   await openWorkers();
-  await workers.locator('.worker-run').first().waitFor();
-  check(await workers.locator('.worker-run').count() === 3, 'the normal conversation previews at most three recent execution records');
-  check((await workers.innerText()).includes('已加载 4 条') && (await workers.innerText()).includes('还有更早记录'), 'execution counts disclose the loaded subset and server pagination');
-  check(await workers.locator('.worker-run[title*="Run：run-research-current"]').count() === 1 && await workers.locator('.worker-run[title*="Run：run-research-blocked"]').count() === 1, 'two runs from one Worker remain separate records');
-  const currentRun = workers.locator('.worker-run[title*="Run：run-research-current"]');
-  check((await currentRun.innerText()).includes('资料研究') && (await currentRun.innerText()).includes('research-model') && (await currentRun.innerText()).includes('运行中'), 'expanded Worker details expose actual role, model and server state');
-  check((await workers.locator('.worker-run[title*="Run：run-plan-review"]').innerText()).includes('待验证'), 'review pending remains distinct from final task completion');
+  await workers.locator('.agent-panel-run-button').first().waitFor();
+  check(await workers.locator('.agent-panel-run-button').count() === 4, 'the expanded Agent companion exposes every loaded execution record');
+  check((await workers.innerText()).includes('查看更早的运行'), 'execution history discloses server pagination');
+  check(await workers.locator('.agent-panel-run[data-run-id="run-research-current"]').count() === 1 && await workers.locator('.agent-panel-run[data-run-id="run-research-blocked"]').count() === 1, 'two runs from one Worker remain separate records');
+  const currentRun = workers.locator('.agent-panel-run[data-run-id="run-research-current"] .agent-panel-run-button');
+  check((await currentRun.innerText()).includes('资料研究') && (await currentRun.getAttribute('title')).includes('research-model') && (await currentRun.innerText()).includes('运行中'), 'expanded Worker details expose actual role, model and server state');
+  check((await workers.locator('.agent-panel-run[data-run-id="run-plan-review"]').innerText()).includes('待验证'), 'review pending remains distinct from final task completion');
   check(!(await workers.innerText()).includes('真实执行'), 'activity records without execution mode never claim live execution');
-  const popoverRunDetails = currentRun.locator('..').locator('.worker-run-details');
-  await popoverRunDetails.locator(':scope > summary').click();
-  await page.waitForFunction(() => document.querySelector('.worker-activity .worker-run-details > .detail-collapsible')?.style.height === 'auto');
-  check((await popoverRunDetails.innerText()).includes('fixture-provider') && (await popoverRunDetails.innerText()).includes('run-research-current'), 'independent Worker details expose the exact provider and run identity');
-  check((await popoverRunDetails.locator('.worker-current-facts dd').allTextContents()).join('|') === '资料研究|fixture-provider|research-model|运行中|4|2', 'Worker details show recorded state, steps and tool count without inference');
-  await popoverRunDetails.locator(':scope > summary').focus();
-  await page.keyboard.press('ArrowDown');
-  check(await workers.locator('.worker-run[title*="Run：run-research-blocked"]').evaluate((element) => document.activeElement === element), 'popover keyboard navigation includes the new Worker summary controls');
+  const panelRunDetails = currentRun.locator('..').locator('.worker-run-details');
+  await panelRunDetails.locator(':scope > summary').click();
+  await page.waitForFunction(() => document.querySelector('.agent-panel .worker-run-details > .detail-collapsible')?.style.height === 'auto');
+  check((await panelRunDetails.innerText()).includes('fixture-provider') && (await panelRunDetails.innerText()).includes('run-research-current'), 'independent Worker details expose the exact provider and run identity');
+  check((await panelRunDetails.locator('.worker-current-facts dd').allTextContents()).join('|') === '资料研究|fixture-provider|research-model|运行中|4|2', 'Worker details show recorded state, steps and tool count without inference');
+  await panelRunDetails.locator(':scope > summary').focus();
+  await page.keyboard.press('Tab');
+  check(await workers.locator('.agent-panel-run[data-run-id="run-research-blocked"] .agent-panel-run-button').evaluate((element) => document.activeElement === element), 'normal keyboard navigation reaches the next Agent run control');
   await page.setViewportSize({ width: 1440, height: 600 });
   check(await workerDrawer.evaluate((element) => element.getBoundingClientRect().bottom <= innerHeight - 8), 'expanded Worker details stay inside a short window');
-  check(await workerDrawer.locator('.popover-surface').evaluate((element) => element.scrollHeight > element.clientHeight), 'long Worker details scroll within their popover');
+  check(await workers.evaluate((element) => element.scrollHeight > element.clientHeight), 'long Worker details scroll within the right card');
   await page.setViewportSize({ width: 1440, height: 1000 });
   const originalWorkerRun = await currentRun.elementHandle();
   await closeWorkers();
   near(await workerDrawer.evaluate((element) => element.clientHeight), 0, 'closing Worker details restores the full conversation viewport');
-  check(await originalWorkerRun.evaluate((element) => element.isConnected) && await workerDrawer.evaluate((element) => element.inert), 'closing Worker details preserves the read-only snapshot and disables hidden controls');
+  check(await originalWorkerRun.evaluate((element) => element.isConnected) && await workerDrawer.evaluate((element) => getComputedStyle(element).display === 'none'), 'closing Worker details preserves the read-only snapshot and disables hidden controls');
   await screenshot('forge-conversation-collapsed-chat');
   await openWorkers();
   check(await originalWorkerRun.evaluate((element) => element.isConnected), 'reopening Worker details keeps existing run DOM mounted');
+  await currentRun.focus();
   await page.keyboard.press('Escape');
   await closeWorkers();
   check(await workerToggle.evaluate((element) => document.activeElement === element), 'Escape closes Worker details and restores trigger focus');
   await openWorkers();
   await header.locator('h1').click();
+  check(await workerToggle.getAttribute('aria-expanded') === 'true', 'the persistent Agent companion stays available after clicking the conversation');
   await closeWorkers();
-  check(await workerToggle.getAttribute('aria-expanded') === 'false', 'outside click dismisses Worker details');
 
   await page.getByLabel('消息内容').fill('模型配置导航仍保留这一条草稿');
   const modelMenu = page.getByRole('dialog', { name: 'Router 模型配置', exact: true });
@@ -169,10 +179,15 @@ async (page, { outputDir }) => {
   check((await group.locator(':scope > summary').getAttribute('title')).includes('Worker') && (await group.locator(':scope > summary').getAttribute('title')).includes('资料研究'), 'activity summary retains real Worker identity in its source tooltip');
   check(!(await group.locator(':scope > summary').innerText()).includes('Worker'), 'activity summary stays a compact action line');
   await currentRun.click();
+  const selectedEntry = page.locator('.agent-activity[data-run-id="run-research-current"]');
+  check(await selectedEntry.evaluate(element => element.open && element.closest('.process-transcript').open) && (await selectedEntry.innerText()).includes('run-research-current') && (await selectedEntry.innerText()).includes('research-model'), 'the Agent row locates and expands the exact run metadata in its visible process');
+  check(await selectedEntry.locator('.tool-item').count() === 0 && await page.locator('[data-scroll-key="event:tool_receipt:worker-read"]').count() === 1 && await page.locator('[data-scroll-key="event:tool_receipt:worker-command"]').count() === 1, 'run metadata does not adopt or duplicate the independently ordered tool records');
+  await selectedEntry.getByRole('button', { name: '任务详情', exact: true }).click();
   await page.locator('.quest-overview').getByRole('heading', { name: quest.title, exact: true }).waitFor();
   check((await page.locator('.quest-overview').innerText()).includes(quest.goal), 'Worker row opens the actual associated task');
   await rail.getByRole('button', { name: '对话', exact: true }).click();
   await openWorkers();
+  await workers.getByRole('button', { name: 'Agent 面板菜单', exact: true }).click();
   await workers.getByRole('button', { name: '查看运行活动', exact: true }).click();
   await page.locator('.workspace-tabs').getByRole('button', { name: '运行活动', exact: true }).waitFor();
   check(await page.locator('.workspace-tabs').getByRole('button', { name: '运行活动', exact: true }).getAttribute('aria-current') === 'page' || (await page.locator('.workspace-tabs').getByRole('button', { name: '运行活动', exact: true }).getAttribute('class')).includes('active'), 'all execution records use the existing activity destination');
@@ -191,13 +206,14 @@ async (page, { outputDir }) => {
   check((await inlineRunDetails.locator('.worker-history-facts').innerText()).includes('已读取文件') && (await inlineRunDetails.locator('.worker-current-facts').innerText()).includes('运行中'), 'inline Worker details separate the historical event from current execution state');
   const originalInlineDetails = await inlineRunDetails.elementHandle();
   const originalGroup = await group.elementHandle(), originalLine = await readLine.elementHandle();
-  await timeline.evaluate((element) => { element.scrollTop = Math.max(0, element.scrollHeight - element.clientHeight - 70); });
+  await readLine.evaluate((element) => { const timeline = document.querySelector('.timeline'); timeline.scrollTop += element.getBoundingClientRect().top - timeline.getBoundingClientRect().top; });
   const scrollPosition = await timeline.evaluate((element) => element.scrollTop);
   activityItems = [{ ...activityItems[0], state: 'succeeded' }, { ...activityItems[1], state: 'unknown', model_id: null, role: null }];
   activityHasMore = false;
   await page.waitForResponse((response) => response.url().includes('/api/activity?') && response.status() === 200, { timeout: 10000 });
-  await page.waitForFunction(() => document.querySelector('.worker-activity')?.textContent.includes('执行成功'));
+  await page.waitForFunction(() => document.querySelector('.agent-panel')?.textContent.includes('执行成功'));
   check((await workers.innerText()).includes('执行成功') && !(await workers.innerText()).includes('已完成'), 'Worker success does not imply Quest completion');
+  await workers.locator('.agent-panel-run[data-run-id="run-research-blocked"] .worker-run-details > summary').click();
   check((await workers.innerText()).includes('模型未记录') && (await workers.innerText()).includes('未知'), 'missing Worker model and unknown state remain explicit');
   near(await timeline.evaluate((element) => element.scrollTop), scrollPosition, 'Worker polling keeps the expanded conversation viewport');
   check(await originalGroup.evaluate((element) => element.isConnected && element.open) && await originalLine.evaluate((element) => element.isConnected && element.open), 'Worker polling keeps expanded activity DOM mounted');
@@ -206,15 +222,15 @@ async (page, { outputDir }) => {
   activityMode = 'error';
   messages = [...messages, { id: 'after-worker-failure', role: 'assistant', content: 'Worker 状态暂不可用时，对话仍继续同步。', created_at: '2026-01-01T00:00:05Z', metadata: { model_id: 'current-router-model', execution_mode: 'mock' } }];
   await page.waitForResponse((response) => response.url().includes('/api/activity?') && response.status() === 503, { timeout: 10000 });
-  await workers.getByText('执行状态暂不可用', { exact: true }).waitFor({ state: 'attached' });
-  check(await workers.locator('.worker-run').count() === 0, 'a failed Worker read removes stale running states');
+  await workers.getByText('暂不可用', { exact: true }).waitFor({ state: 'attached' });
+  check(await workers.locator('.agent-panel-run-button').count() === 0, 'a failed Worker read removes stale running states');
   check((await inlineRunDetails.innerText()).includes('执行详情暂未加载') && await inlineRunDetails.locator('.worker-current-facts').count() === 0, 'a failed activity read removes stale current details while retaining historical identity');
   await page.locator('.message.from-agent').filter({ hasText: '对话仍继续同步' }).waitFor();
   check((await modelTrigger.innerText()).includes('current-router-model'), 'Worker failure leaves Router configuration and conversation updates available');
   activityMode = 'empty';
   await page.waitForResponse((response) => response.url().includes('/api/activity?') && response.status() === 200, { timeout: 10000 });
-  await workers.getByText('暂无执行记录', { exact: true }).waitFor({ state: 'attached' });
-  check(await workers.locator('.worker-run').count() === 0, 'a successful empty Worker response is distinct from unavailable status');
+  await workers.getByText('暂无运行', { exact: true }).waitFor({ state: 'attached' });
+  check(await workers.locator('.agent-panel-run-button').count() === 0, 'a successful empty Worker response is distinct from unavailable status');
   activityMode = 'populated';
   activityItems = [
     { run_id: 'run-recovered', worker_id: 'worker-recovered', quest_id: quest.id, role: '实施方案', state: 'running', provider_id: 'fixture-provider', model_id: 'implementation-model', steps: 5 },
@@ -222,8 +238,8 @@ async (page, { outputDir }) => {
     { run_id: 'run-recovered-check', worker_id: 'worker-check', quest_id: quest.id, role: '代码核对', state: 'queued', provider_id: 'fixture-provider', model_id: 'code-model', steps: 0 },
   ];
   await page.waitForResponse((response) => response.url().includes('/api/activity?') && response.status() === 200, { timeout: 10000 });
-  await workers.locator('.worker-run[title^="角色：实施方案"]').waitFor({ state: 'attached' });
-  check((await workers.innerText()).includes('implementation-model') && !(await workers.innerText()).includes('执行状态暂不可用'), 'a later successful Worker poll recovers its visible state');
+  await workers.locator('.agent-panel-run[data-run-id="run-recovered"]').waitFor({ state: 'attached' });
+  check((await workers.locator('.agent-panel-run[data-run-id="run-recovered"] .agent-panel-run-button').getAttribute('title')).includes('implementation-model') && !(await workers.innerText()).includes('暂不可用'), 'a later successful Worker poll recovers its visible state');
   check((await inlineRunDetails.innerText()).includes('执行详情暂未加载') && !(await inlineRunDetails.innerText()).includes('implementation-model'), 'a newer Worker run never substitutes for the historical run in inline details');
 
   messages = [...messages, ...Array.from({ length: 18 }, (_, index) => ({ id: `regroup-tail-${index}`, role: 'assistant', content: `用于验证阅读锚点的后续消息 ${index + 1}。`, created_at: `2026-01-01T00:00:${String(index + 6).padStart(2, '0')}Z`, metadata: { model_id: 'current-router-model', provider_id: 'fixture-provider', execution_mode: 'mock' } }))];
@@ -292,9 +308,9 @@ async (page, { outputDir }) => {
   await page.locator('.message.from-agent').filter({ hasText: '我会先核对现有结构' }).scrollIntoViewIfNeeded();
   await openWorkers();
   await screenshot('forge-conversation-router-worker');
-  await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
+  await page.emulateMedia({ colorScheme: 'dark' });
   await screenshot('forge-conversation-router-worker-dark');
-  await page.evaluate(() => { delete document.documentElement.dataset.theme; });
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(220);
   check(await header.isVisible() && await workerToggle.isVisible() && await modelTrigger.isVisible() && await page.getByLabel('消息内容').isVisible(), 'conversation title, Worker trigger and Router composer remain available in a narrow window');
@@ -309,13 +325,14 @@ async (page, { outputDir }) => {
   failConversation = true;
   await page.waitForResponse((response) => response.url().includes('/api/conversation?') && response.status() === 401, { timeout: 10000 });
   await page.getByLabel('Core 启动密钥').waitFor();
-  check(await workers.locator('.worker-run').count() === 0 && !(await modelTrigger.innerText()).includes('current-router-model'), 'disconnect immediately clears current Router and Worker presentation');
+  check(await workers.locator('.agent-panel-run-button').count() === 0 && !(await modelTrigger.innerText()).includes('current-router-model'), 'disconnect immediately clears current Router and Worker presentation');
   failConversation = false; generation = 'conversation-generation-2';
   settings = { ...settings, provider_configured: true, provider_id: 'next-provider', router_model_id: 'next-router-model' };
   activityItems = [{ run_id: 'run-next-generation', worker_id: 'worker-next', quest_id: quest.id, role: '新代次执行', state: 'queued', model_id: 'next-worker-model', provider_id: 'next-provider' }];
   await page.getByLabel('Core 启动密钥').fill('cd'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
-  await workers.locator('.worker-run').filter({ hasText: '新代次执行' }).waitFor({ state: 'attached' });
+  await openWorkers();
+  await workers.locator('.agent-panel-run-button').filter({ hasText: '新代次执行' }).waitFor({ state: 'attached' });
   check((await modelTrigger.innerText()).includes('next-router-model') && !(await workers.innerText()).includes('implementation-model'), 'a new Core generation shows only its own Router configuration and Worker snapshot');
   check(mutations.length === 0 && missing.length === 0, 'conversation visibility uses existing read-only endpoints without mutations');
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));

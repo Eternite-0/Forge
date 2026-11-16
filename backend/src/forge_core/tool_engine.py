@@ -189,6 +189,13 @@ class ToolEngine:
             raise DomainError("Invalid JSON parameters") from exc
         if len(encoded.encode("utf-8")) > _MAX_BYTES:
             raise DomainError("Tool parameters exceed size limit")
+        if name == "python_unittest":
+            from .python_unittest_runner import validate_manifest
+
+            try:
+                validate_manifest(parameters["manifest"], parameters["test_module"])
+            except ValueError as exc:
+                raise DomainError(str(exc)) from None
         return spec, encoded
 
     def _scope(self, name, parameters):
@@ -355,6 +362,8 @@ class ToolEngine:
                 ):
                     raise DomainError("Tool call ID is already bound")
                 return dict(existing)
+            if tool_name == "python_unittest":
+                self._python_test_snapshot(quest_id, scope, parameters)
             if tool_name == "file_revise":
                 self._revision_source(work.connection, run_id, scope, parameters)
             if spec.risk == "R1":
@@ -887,6 +896,44 @@ class ToolEngine:
                     raise DomainError("Unsafe Git metadata")
         return metadata
 
+    def _python_test_snapshot(self, quest_id, scope, parameters):
+        from .python_unittest_runner import read_snapshot
+
+        root = Path(self.store.workspace.root).resolve() / "work" / quest_id
+        if not Path(scope).is_relative_to(root):
+            raise DomainError("Python execution is confined to this task's artifact directory")
+        try:
+            return read_snapshot(scope, parameters["manifest"], parameters["test_module"])
+        except (OSError, ValueError, UnicodeError) as exc:
+            raise DomainError("Python test snapshot is unavailable or differs from approval") from exc
+
+    def _directory_create_path(self, parameters, scope, *, allow_missing):
+        """Accept only the original, unlinked directory path and ordinary parents."""
+        workspace = Path(self.store.workspace.root).resolve()
+        supplied = Path(parameters["path"])
+        if not supplied.is_absolute():
+            supplied = workspace / supplied
+        path = Path(scope)
+        if Path(os.path.abspath(supplied)) != path:
+            raise DomainError("Directory path must not be linked")
+        current = workspace
+        for part in path.relative_to(workspace).parts:
+            current = current / part
+            try:
+                info = current.lstat()
+            except FileNotFoundError:
+                if allow_missing and current == path:
+                    continue
+                raise DomainError("Directory path is unavailable") from None
+            if (
+                not stat.S_ISDIR(info.st_mode)
+                or stat.S_ISLNK(info.st_mode)
+                or getattr(info, "st_file_attributes", 0)
+                & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+                or current.resolve() != current
+            ):
+                raise DomainError("Directory path must be ordinary and unlinked")
+
     def _perform(self, intent, lease_token, cancelled):
         checked, _ = self._begin(intent["id"], lease_token)
         if checked["state"] != "executing" or cancelled.is_set():
@@ -896,6 +943,21 @@ class ToolEngine:
         if "path" in parameters and self._scope(name, parameters) != intent["resource_scope"]:
             raise DomainError("Resource changed before execution")
         path = Path(intent["resource_scope"]) if "path" in parameters else None
+        if name == "python_unittest":
+            from .python_unittest_runner import run_snapshot
+            from .worker_environment import process_environment, worker_environment
+
+            snapshot = self._python_test_snapshot(intent["quest_id"], str(path), parameters)
+            environment = worker_environment(self.store, intent["run_id"])
+            private = Path(environment["cwd"]) / ("unittest-" + intent["id"])
+            result = run_snapshot(
+                snapshot,
+                parameters["test_module"],
+                cwd=private,
+                env=process_environment(self._environment(), environment),
+                cancelled=cancelled,
+            )
+            return {**result, "path": str(path)}
         if name == "file_read":
             with path.open("rb") as stream:
                 data = stream.read(_MAX_BYTES + 1)
@@ -937,7 +999,15 @@ class ToolEngine:
             entries.sort()
             return {"entries": entries}
         if name == "directory_create":
-            path.mkdir(parents=False, exist_ok=False)
+            self._directory_create_path(parameters, str(path), allow_missing=True)
+            try:
+                path.mkdir(parents=False, exist_ok=False)
+            except FileExistsError:
+                # A precreated task root is already a valid result. This does not
+                # settle or replay any prior unknown intent: execute's existing
+                # durable state fence runs before reaching this operation.
+                pass
+            self._directory_create_path(parameters, str(path), allow_missing=False)
             return {"path": str(path)}
         if name == "gpu_status":
             from .gpu_tools import probe_gpu

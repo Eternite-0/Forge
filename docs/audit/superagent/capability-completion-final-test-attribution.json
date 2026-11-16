@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:54:18+00:00",
+  "audit_type": "independent_read_only_source_and_test_attribution",
+  "result": "unchanged_round3_production_with_separately_tested_harness_corrections",
+  "real_provider_calls_performed_by_this_audit": 0,
+  "tests_rerun_by_this_audit": 0,
+  "source_or_historical_database_modified": false,
+  "source_binding": {
+    "round3": {
+      "path": "docs/audit/superagent/capability-completion-round3-source-freeze.json",
+      "sha256": "3d3a73a2607601347a95e31f62f9c0473d1e015bec162e2e4dfa2565a29ffd93",
+      "files": 356
+    },
+    "supplemental": {
+      "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+      "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029",
+      "files": 359,
+      "all_current_frozen_files_match": true,
+      "mismatches": []
+    },
+    "backend_src_files": 118,
+    "backend_src_map_sha256": "b7660cf0f1841e9bdd0b66284d5beb7e0a0a61e8601742019422b7695b71b697",
+    "map_hash_method": "SHA256 of UTF-8 JSON {path: sha256}, sorted keys, compact separators, literal Unicode",
+    "backend_src_hashes_identical_to_round3": true,
+    "backend_src_added_or_removed": [],
+    "changed_previously_frozen_files": [
+      "backend/scripts/phase2/live_core.py",
+      "backend/scripts/verify_superagent_capability.py"
+    ],
+    "added_frozen_files": [
+      ".local/superagent/completion_supplemental_audit.py",
+      "backend/tests/test_capability_restart_boundary.py",
+      "backend/tests/test_live_core_private_control.py"
+    ],
+    "removed_frozen_files": []
+  },
+  "production_full_suite": {
+    "path": "docs/audit/superagent/capability-completion-round3-backend.xml",
+    "sha256": "5c168a6417892ebdeae78225d725e18d99ca27ed315840775ffb7d7b86e2bb70",
+    "scope": "The exact 356-file round3 freeze; every current backend/src file remains byte-identical.",
+    "tests": 2902,
+    "passed": 2886,
+    "failures": 13,
+    "errors": 0,
+    "skipped": 3,
+    "warnings_from_pytest_summary": 1,
+    "pytest_seconds": 723.24,
+    "exact_failed_case_ids_and_failure_messages_equal_historical_13": true,
+    "exact_failed_case_ids_and_failure_messages_equal_round1": true,
+    "new_failures_relative_to_historical_13": [],
+    "comparison_report": {
+      "path": "docs/audit/superagent/capability-completion-round3-regression-comparison.json",
+      "sha256": "46e3d8a5d1cc1323a3bd2c45419622925427052a6c4aa1f11997abde8c57d7e2"
+    }
+  },
+  "supplemental_targeted_regressions": [
+    {
+      "path": "docs/audit/superagent/capability-private-control-regression.xml",
+      "sha256": "9812129390de4233fa6167aee698a81fc53b77cbf3b3db9d337b3bd61895e485",
+      "tests": 41,
+      "passed": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_seconds": 40.723,
+      "coverage": "Private bootstrap/shutdown and existing lifecycle/probe compatibility. Includes two real Core child starts and normal stops with no configured Provider, stable Router identity, distinct lifecycle generations, matching stopped events, SQLite integrity and zero model attempts; mocked timeout, nonzero, closed-pipe and forced cleanup remain unconfirmed."
+    },
+    {
+      "path": "docs/audit/superagent/capability-restart-boundary-regression.xml",
+      "sha256": "ab417bba0db2faa934b4fd71c54d3c73e3d28e7ddb73ee3fd2b069dd51fff187",
+      "tests": 78,
+      "passed": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_seconds": 10.519,
+      "coverage": "Current completed L2 Quest/DAG and original Router reviewed notice, identical post-stop boundary, exact pending R2 approval identity, strict boolean graceful confirmation, first-failure preservation and bounded drain/read/accounting behavior."
+    }
+  ],
+  "historical_results_preserved": {
+    "round2_full_suite": {
+      "path": "docs/audit/superagent/capability-completion-final-backend.xml",
+      "sha256": "5c2ff28a963a71f8f832c195a9291fc9185593f281fc6f4896657bba3b6533a1",
+      "tests": 2900,
+      "passed": 2882,
+      "failures": 15,
+      "errors": 0,
+      "skipped": 3,
+      "note": "Original 15-failure result remains unchanged: historical 13 plus the restart/WAL I/O and tiny-context failures."
+    },
+    "round2_two_case_followup": {
+      "path": "docs/audit/superagent/capability-completion-round2-failure-followup.xml",
+      "sha256": "8c6d71b4e46d4003cae067cc798250ec210f6b1b4ed4c7e4f44a069524f49900",
+      "tests": 2,
+      "passed": 1,
+      "failures": 1,
+      "note": "Unchanged restart case passed; unchanged tiny-context case reproduced. This does not replace the original full-suite result."
+    },
+    "guidance_scope_correction": {
+      "path": "docs/audit/superagent/capability-completion-guidance-scope-followup.xml",
+      "sha256": "64702d5a34911c34511df531a4ec6548f9162850e6009487a8d5849417212b5c",
+      "tests": 80,
+      "passed": 80,
+      "failures": 0,
+      "note": "Artifact guidance applies to review nodes owning file_write/file_revise. The read-only tiny-context test retains its original 7000 Registry window, tool set and assertions; it also passed in round3 full-suite."
+    }
+  },
+  "source_and_protocol_guards_reviewed": {
+    "private_child_bootstrap": "Only capability opts into private_control=True at both Core constructions; existing other probes retain the default path. Bootstrap secret goes through the existing framed private stdin pipe and is omitted from the private child environment.",
+    "stop_confirmation": "Only a successfully sent private shutdown followed by normal process exit code 0 sets graceful_confirmed=True. Already stopped, never started, timeout, failed control write, nonzero exit and forced cleanup remain unconfirmed.",
+    "restart_gate": "stop_for_restart requires graceful_confirmed is True before any stopped database check, compaction or restart. It rechecks completed current L2 Quest/DAG plus original Router reviewed notice and exact held approval id/parameter_digest/plan_revision. Unknown/inflight calls and effects retain their fences.",
+    "cleanup": "Final stop metadata is recorded. Unconfirmed final stop fails the observation without replacing its first failure. No failure authorizes restart or replay.",
+    "limits_protocol": {
+      "path": "docs/audit/superagent/capability-completion-supplemental-protocol.json",
+      "sha256": "79c3b482be98ac8af660d9d9c1dd9005185a9c799529a175c39d3a229139aa2a"
+    },
+    "per_task_calls": 32,
+    "per_task_tokens": 500000,
+    "observation_seconds": 900,
+    "shutdown_drain_seconds": 130,
+    "gateway_retries": 0,
+    "worker_output_tokens": 8192,
+    "router_output_tokens": 4096,
+    "model_context_window": 100000000,
+    "supplemental_condition": {"strategy": "continuity", "call_limit": 64, "tokens": 1000000, "fresh_conditions_allowed": 1},
+    "retained_prior_attempts": 66,
+    "retained_prior_charged_or_reserved_tokens": 713224,
+    "unchanged_stage_attempt_ceiling": 160,
+    "unchanged_stage_charged_or_reserved_token_ceiling": 2500000,
+    "no_reset_refund_or_replay": true,
+    "stage_allowance_check": "66 + 64 <= 160; 713224 + 1000000 <= 2500000. These are protocol maxima, not a claim about the running condition's final usage."
+  },
+  "interpretation": "The current 118 production Python files are exactly the production source exercised in round3's 2886/13/3 full suite. Later harness/driver corrections have separate 41-pass and 78-pass targeted suites. There is no full-suite result for the complete 359-file supplemental freeze, and these overlapping targeted suites must not be added to the full-suite count. Existing failure debt remains explicit. This audit does not establish live task acceptance, nor the complete cause or repair of the historical SQLITE_IOERR_TRUNCATE."
+}

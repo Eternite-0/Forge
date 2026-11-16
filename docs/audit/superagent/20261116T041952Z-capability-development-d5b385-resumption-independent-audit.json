@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:24:02.316191+00:00",
+  "run_id": "20261116T041952Z-capability-development-d5b385",
+  "provenance": "independent_programmatic_post_run_read_only_audit_no_new_execution",
+  "auditor": {
+    "path": ".local/superagent/resumption_independent.py",
+    "sha256": "29b4e6ef425587b35c74bffac1cb728cd236c5dec4a2076e05bf01081e56e203",
+    "created_after_source_freeze": true,
+    "part_of_acceptance_runtime_freeze": false
+  },
+  "audit_actions": {
+    "provider_calls": 0,
+    "tool_replays": 0,
+    "code_executions": 0,
+    "database_or_original_report_edits": 0,
+    "sqlite_uri_mode": "ro"
+  },
+  "original_report": {
+    "path": "docs/audit/superagent/20261116T041952Z-capability-development-d5b385.json",
+    "sha256": "763eca6cb05e4c545eef9aa223355db73fe42a9bd937d8ddd7cdf9f6c5a44671",
+    "status": "passed",
+    "failure_code": null
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-resumption-source-freeze.json",
+    "sha256": "c531045546f89f67048b88cca2ade0efcfcc6222bd8bc7514c8555405dfc3343",
+    "file_count": 351,
+    "changed_files": []
+  },
+  "checks": {
+    "source_freeze_matches": true,
+    "previous_index_and_reports_unchanged": true,
+    "historical_attempts_match_131": true,
+    "historical_unknown_tool_preserved": true,
+    "new_attempts_within_29": true,
+    "combined_attempts_within_160": true,
+    "new_charged_or_reserved_within_500000": true,
+    "combined_charged_or_reserved_within_2600000": true,
+    "all_new_attempts_settled": true,
+    "failed_calls_have_receipt_or_preexecution_proof": true,
+    "actual_paths_storage_relative_and_scoped": true,
+    "final_candidate_success_receipt_cited": true,
+    "real_source_bound_reviewer_PASS": true,
+    "reviewed_completion_notice_for_all_tasks": true,
+    "database_quick_check": true
+  },
+  "audit_checks_all_passed": true,
+  "historical_accounting": {
+    "attempts": 131,
+    "states": {
+      "settled": 129,
+      "rejected": 2
+    },
+    "known_tokens": 1278416,
+    "charged_or_reserved_tokens": 1330046,
+    "unknown_tool_outcomes": 1
+  },
+  "new_accounting": {
+    "attempts": 24,
+    "states": {
+      "settled": 24
+    },
+    "known_tokens": 232275,
+    "charged_or_reserved_tokens": 232275
+  },
+  "tools": [
+    {
+      "call_id": "call_8130af5e433d3189e9a8ad324a84520ad1658f21c15d9ede44fd27d5e2f0629a",
+      "tool_name": "directory_list",
+      "state": "succeeded",
+      "receipt_id": "receipt_548cead5eaf2",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "inputs/projects/project_alpha/l3",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true
+    },
+    {
+      "call_id": "call_adb4af6f6fae3b10a8a6cc7defc168ae1b65970fd53346e348fc6c5f27d8a7bc",
+      "tool_name": "read_trigger",
+      "state": "succeeded",
+      "receipt_id": null,
+      "source_bound_receipt": false,
+      "proven_preexecution_rejection": false
+    },
+    {
+      "call_id": "call_4ba4749de9fcd6e3e15a43cc7ad32f6cdab9371f7ff739a20cb7318a10b5d3dd",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_99de8d2d1737",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "inputs/projects/project_alpha/l3/test_candidate.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true
+    },
+    {
+      "call_id": "call_05b67e8612196e80bbc3ee129da4c5a262718f8d66a7ebca49ca4e0b2dcf6f95",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_ee7dc39a1f19",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "inputs/projects/project_alpha/l3/starter.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true
+    },
+    {
+      "call_id": "call_6866f531907882f83c310532ba3514430454eea61ed335aeda7df2f264aa1673",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_3cc28d5f1c6f",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "inputs/projects/project_alpha/l3/scenario.json",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true
+    },
+    {
+      "call_id": "call_7062c27c9fd9437a21ea547a41eef0255d5fcb1f4cc2c60c151b8c9f7cf3e7ce",
+      "tool_name": "directory_create",
+      "state": "succeeded",
+      "receipt_id": "receipt_b5be6725065f",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_5a15cb5878cbeb6c9d92d1fe845a4a290aa1dff95ea1767e5da7ae2e260d71ee",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_c9b2c01678fa",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/candidate.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_02ce3c9cc8e97b00aa82815d7a59e9f468c879b6b3e33f50b1c5e2e6e9fd0ce1",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_6cc1ca478d01",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/test_candidate.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_ac0662a35eacff782429294977a3d32892ca8ab6c9b74c9549e06e0e724ae1df",
+      "tool_name": "python_unittest",
+      "state": "failed",
+      "receipt_id": "receipt_eecc2cfedbd1",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_075b31c6900a70a4b669269b4464cdba1af65c5f22baebcc10265f3eb28be750",
+      "tool_name": "file_revise",
+      "state": "succeeded",
+      "receipt_id": "receipt_eeaff8bb0a42",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/candidate.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_ca04acdac16ebef6e3ce58b38649ac67eee8ae54e5e769e62702161c95575501",
+      "tool_name": "python_unittest",
+      "state": "succeeded",
+      "receipt_id": "receipt_3dd4398a666e",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_4dc04f7e21c4ce0da8b5d00ade07879e746f4640a78d969dc46c98f7695ed8d4",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_5c1a71f89c24",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/development.json",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_3834e37b7866f4448f41fa4931369fc12ced47557c1681105214a5cc4638039d",
+      "tool_name": "file_read",
+      "state": "succeeded",
+      "receipt_id": "receipt_40276c68a6ea",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/candidate.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true
+    },
+    {
+      "call_id": "call_36300fe0e17a589e474107a30ca77fa8b1937173f32c24a148847edf17f84e22",
+      "tool_name": "file_write",
+      "state": "succeeded",
+      "receipt_id": "receipt_79611a6cde53",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/test_candidate_supplemental.py",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_09bf903c1c623e68853e5c369d11160dc012e88a1914cb8c9e86c8572c9bdc33",
+      "tool_name": "python_unittest",
+      "state": "succeeded",
+      "receipt_id": "receipt_8475cdaa8de5",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    },
+    {
+      "call_id": "call_ad6968d5a5db29a4533888088f255e00fdd5a8a859e4c8bb807e20709e14db0c",
+      "tool_name": "file_revise",
+      "state": "succeeded",
+      "receipt_id": "receipt_1cb0c55b25ae",
+      "source_bound_receipt": true,
+      "proven_preexecution_rejection": false,
+      "path": "work/quest_1fcd5b019f1c/development.json",
+      "storage_relative": true,
+      "inside_storage": true,
+      "matches_action_scope": true,
+      "inside_original_write_scope": true
+    }
+  ],
+  "python_test_receipts": [
+    {
+      "receipt_id": "receipt_eecc2cfedbd1",
+      "state": "failed",
+      "source_bound": true,
+      "exact_consumed_R2_approval": true,
+      "manifest_result_bound": true,
+      "exit_code": 2,
+      "tests_run": 2,
+      "failures": 2,
+      "errors": 0,
+      "candidate_sha256": "8cc2ed15b565521e2b4cd57b31ea5628f1954f1944bf016e75126f420b846278",
+      "matches_final_candidate": false,
+      "cited_by_development_report": true
+    },
+    {
+      "receipt_id": "receipt_3dd4398a666e",
+      "state": "succeeded",
+      "source_bound": true,
+      "exact_consumed_R2_approval": true,
+      "manifest_result_bound": true,
+      "exit_code": 0,
+      "tests_run": 2,
+      "failures": 0,
+      "errors": 0,
+      "candidate_sha256": "ae62975457fa8bb37ee5a317857935d22a8ee72b654f4928b5a5fbe2350b7dde",
+      "matches_final_candidate": true,
+      "cited_by_development_report": true
+    },
+    {
+      "receipt_id": "receipt_8475cdaa8de5",
+      "state": "succeeded",
+      "source_bound": true,
+      "exact_consumed_R2_approval": true,
+      "manifest_result_bound": true,
+      "exit_code": 0,
+      "tests_run": 12,
+      "failures": 0,
+      "errors": 0,
+      "candidate_sha256": "ae62975457fa8bb37ee5a317857935d22a8ee72b654f4928b5a5fbe2350b7dde",
+      "matches_final_candidate": true,
+      "cited_by_development_report": true
+    }
+  ],
+  "final_candidate_and_report": [
+    {
+      "quest_id": "quest_1fcd5b019f1c",
+      "candidate_sha256": "ae62975457fa8bb37ee5a317857935d22a8ee72b654f4928b5a5fbe2350b7dde",
+      "artifact_sha256": "d0c35c9b0ccd393c4b88da5c930405c3f36ed6791a5ea0f36383b3f75252bb61",
+      "declared_receipt_ids": [
+        "receipt_eecc2cfedbd1",
+        "receipt_3dd4398a666e",
+        "receipt_8475cdaa8de5"
+      ],
+      "matching_success_receipt_ids": [
+        "receipt_3dd4398a666e",
+        "receipt_8475cdaa8de5"
+      ],
+      "final_candidate_success_cited": true
+    }
+  ],
+  "reviews": [
+    {
+      "event_id": "evt_9e67a867241b",
+      "run_id": "run_a0ef98ea8d2a",
+      "verdict": "NEEDS_REVISION",
+      "packet_sha256": "cdfd2ee71985ce9323a2e0b638441ce157e545b6b878156f3ce0f5565b63e7f9",
+      "source_and_settled_call_bound": true
+    },
+    {
+      "event_id": "evt_a355a34507c2",
+      "run_id": "run_a0ef98ea8d2a",
+      "verdict": "PASS",
+      "packet_sha256": "5141946d25340fff6b06bd65ee7b2e7e644e59c5b6eb11cc87a813635e0f329e",
+      "source_and_settled_call_bound": true
+    }
+  ],
+  "final_router_notices": [
+    {
+      "message_id": "msg_a6a74f0a7804",
+      "quest_id": "quest_1fcd5b019f1c",
+      "source_event_id": "evt_84c525c38efc"
+    }
+  ],
+  "original_driver_independent_holdout": {
+    "execution_mode": "programmatic_independent",
+    "level": "L3",
+    "checks": {
+      "source_inputs_unchanged": true,
+      "report_summary": true,
+      "development_report_structure": true,
+      "independent_holdout": true
+    },
+    "semantic_quality_assessed": false,
+    "holdout": {
+      "runtime": "cpython_unittest_v1",
+      "exit_code": 0,
+      "tests_run": 7,
+      "failures": 0,
+      "errors": 0,
+      "manifest_sha256": "71f98a4564cacc56d5dc726787f9af572da3e53b4401d249ed26afa01528a07e",
+      "stdout_sha256": "885dd7cbdf309e4d004a9afe3e41ab79fecdbe57abcdae52b75e03ac892cdb82",
+      "stderr_sha256": "696ad49af78d3230ebe10bf15321c60301254db5b8ebc0e05668b92b282c29c7"
+    },
+    "candidate_sha256": "ae62975457fa8bb37ee5a317857935d22a8ee72b654f4928b5a5fbe2350b7dde",
+    "artifact_sha256": "d0c35c9b0ccd393c4b88da5c930405c3f36ed6791a5ea0f36383b3f75252bb61",
+    "passed": true
+  },
+  "limitations": [
+    "Independent code holdouts are observed from the original driver report and were not reexecuted.",
+    "A passing L3 sample does not establish multi-specialist L2 or complete joint continuity.",
+    "Receipt source integrity and approvals do not establish an OS sandbox or general task correctness."
+  ]
+}

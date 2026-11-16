@@ -1,0 +1,17 @@
+{
+  "provenance": "programmatic_independent_artifact_only_not_model_review_or_task_success",
+  "quest_id": "quest_795b7c931360",
+  "result": {
+    "execution_mode": "programmatic_independent",
+    "level": "L1",
+    "checks": {
+      "source_inputs_unchanged": true,
+      "report_summary": true,
+      "grounded_findings_structure": true,
+      "exact_source_citations": true
+    },
+    "semantic_quality_assessed": false,
+    "artifact_sha256": "4426063a208a71cb514a753dc41e2d7839a66996631abed6e78f77dd71a31883",
+    "passed": true
+  }
+}

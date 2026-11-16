@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T06:36:05.647132+00:00",
+  "status": "incomplete_acceptance_handoff_requested",
+  "goal_achieved": false,
+  "user_steering": "尽快交付吧，我打算换一个环境再继续开发了",
+  "real_calls_after_user_handoff_request": 0,
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-handoff-source-freeze.json",
+    "sha256": "407fa38caafb6299f659185b6ccc6377a62b073d1c0672644e4d0614fbacd94a"
+  },
+  "source_changed_since_latest_real_condition": [
+    "backend/src/forge_core/worker_runtime.py",
+    "backend/src/forge_core/worker_superagent.py",
+    "backend/tests/test_worker_core_provenance_superagent.py"
+  ],
+  "latest_real_result": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-result.json",
+    "sha256": "e171d42160bfc106f006754d4d46786d0ec11f0ca447d42765e10af1809dfbeb"
+  },
+  "latest_real_report": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e.json",
+    "sha256": "8d2fec6685b2258b3ab33faac957d439e630cec8b84d1bd89d9fd28ac6ec0c29"
+  },
+  "latest_real_independent_audit": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e-independent-audit.json",
+    "sha256": "2492e43d8163c9edc00a290fc38a2161dde6cc2f93284be9cd1bf8d26dd67bbd"
+  },
+  "real_L2_task_status": "passed_on_latest_closed_real_source",
+  "real_L3_task_status": "passed_on_latest_closed_real_source",
+  "combined_continuity": "failed_on_latest_closed_real_source",
+  "failed_checks": [
+    "complete_thread_consumption",
+    "post_restart_complete_thread_consumption",
+    "typed_multihop_recall"
+  ],
+  "current_production_correction": "Actual complete delivered Thread read or proved handback required before final result, with unchanged original execution budgets.",
+  "current_source_real_acceptance": "not_run",
+  "current_source_full_backend_suite": "not_run",
+  "targeted_regression": {
+    "path": "docs/audit/superagent/capability-thread-read-targeted.xml",
+    "sha256": "8c183eb7289edb7538b134d3943ef4f7035e31ae202d1452fc3d5331ad9caf5c",
+    "tests": 102,
+    "passed": 101,
+    "failed": 0,
+    "skipped": 1
+  },
+  "current_source_independent_audit": {
+    "path": "docs/audit/superagent/capability-thread-read-source-independent-audit.json",
+    "sha256": "cc5f45aae1aeab9d739f75c39451b9227ec031f940924c2a728637ca0eca5ad8"
+  },
+  "historical_full_suite_attribution": {
+    "path": "docs/audit/superagent/capability-completion-final-test-attribution.json",
+    "sha256": "22ddc2c59c763e567b278511d82877dc5b920345b26a68b835f30546535ea8ac"
+  },
+  "historical_production_full_suite": {
+    "path": "docs/audit/superagent/capability-completion-round3-backend.xml",
+    "sha256": "5c168a6417892ebdeae78225d725e18d99ca27ed315840775ffb7d7b86e2bb70",
+    "tests": 2902,
+    "passed": 2886,
+    "failed": 13,
+    "skipped": 3
+  },
+  "historical_suite_is_not_current_source_result": true,
+  "completion_stage_accounting": {
+    "attempts": 99,
+    "settled": 99,
+    "charged_or_reserved_tokens": 1089785,
+    "attempt_ceiling": 160,
+    "token_ceiling": 2500000,
+    "remaining_attempts": 61,
+    "remaining_tokens": 1410215,
+    "proposed_final_condition_attempts": 60,
+    "proposed_final_condition_tokens": 1000000,
+    "proposed_condition_has_not_run": true
+  },
+  "prior_results_retained": [
+    {
+      "path": "docs/audit/superagent/capability-completion-round1-result.json",
+      "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe"
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round2-result.json",
+      "sha256": "ad46cd8819c9b0783bda9901139fa6a747221d4d15dcc2f52a77d8467171327c"
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round3-result.json",
+      "sha256": "165722a2b5e43cce38d335e7921398c3d2220803facac543e15ae2d56a23dd13"
+    }
+  ],
+  "prior_closed_stage_index": {
+    "path": "docs/audit/superagent/capability-pre-completion-final-verification.json",
+    "sha256": "b7cc0dc399bff689e1742a765a583dafddfa86475988a90bb70da7b1353a8a36"
+  },
+  "draft_next_condition_helper": {
+    "path": ".local/superagent/completion_thread_read_audit.py",
+    "sha256": "6083aac6e439d91622cf28eb1f67826b4bd93ee0e7f79c935ce0f8fe49d089f1"
+  },
+  "new_condition_protocol_created": false,
+  "no_unknown_operation_replay_or_refund": true,
+  "frontend_or_original_provider_configuration_changed_by_this_work": false,
+  "commit_or_push_performed": false,
+  "documents": [
+    {
+      "path": "README.md",
+      "sha256": "deb1952a2a09560f3b8d4cb1c9e882ba72fc3a34710d4c6fd5ed21bc56efe736"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "sha256": "48fab5d618c290a5b96c0a19c6d2621044c724261f44aa091d73073d9d76f9ff"
+    },
+    {
+      "path": "docs/SUPERAGENT_IMPLEMENTATION_REPORT.md",
+      "sha256": "bde3f33df3aad30e06386db01ef4d7cb8675ed54150e75f76a9774be70a6e33e"
+    },
+    {
+      "path": "docs/SUPERAGENT_CAPABILITY_SPRINT_REPORT.md",
+      "sha256": "283ed2647ad444e91c62e9d42e028fc274d65ddd97b90d9eadd5d27732b330db"
+    },
+    {
+      "path": "docs/SUPERAGENT_EXPERIMENTS.md",
+      "sha256": "7b646e5efb573860462c4f59a0a4c597cd64ff0a22e2143cd2fb51481b92c8ce"
+    },
+    {
+      "path": "docs/SUPERAGENT_NEXT_ENV_HANDOFF.md",
+      "sha256": "f4b64bb4a00c6ee4b24b73c275b5a9d5395b3f464632d5450069fc0fe78a3ae7"
+    }
+  ]
+}

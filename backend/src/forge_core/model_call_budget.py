@@ -37,6 +37,7 @@ class ModelCallBudgetLedger:
         reconciled_historical_cost=None,
         remote_max_seconds=None,
         enforce_token_budgets=None,
+        call_limit=None,
     ):
         if enforce_token_budgets is None:
             enforce_token_budgets = token_budgets_enforced()
@@ -63,6 +64,9 @@ class ModelCallBudgetLedger:
         ):
             raise ValueError("Invalid isolation period")
         self.path = str(path)
+        if call_limit is not None and (type(call_limit) is not int or call_limit < 1):
+            raise ValueError("Invalid model call limit")
+        self.call_limit = call_limit
         self.enforce_token_budgets = enforce_token_budgets
         self.configured_token_limit = token_limit
         self.token_limit = token_limit if enforce_token_budgets else None
@@ -175,6 +179,14 @@ class ModelCallBudgetLedger:
         attempt_id = uuid.uuid4().hex
         with closing(self._connect()) as conn:
             conn.execute("BEGIN IMMEDIATE")
+            # The existing attempt ledger counts every admitted HTTP attempt,
+            # including spent, reserved, rejected and unknown outcomes. The
+            # transaction serializes competing admissions; settlement never
+            # refunds an attempt against this optional operator ceiling.
+            if self.call_limit is not None:
+                count = conn.execute("SELECT COUNT(*) FROM model_budget_attempts").fetchone()[0]
+                if count >= self.call_limit:
+                    raise BudgetExceeded("Model call limit exhausted")
             if context.purpose == "independent_reviewer":
                 # Fence a delayed reviewer before any HTTP admission. Claim release
                 # and this check share SQLite's write lock, so a refunded claim

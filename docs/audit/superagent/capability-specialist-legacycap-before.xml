@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.906" timestamp="2026-11-16T08:38:44.303596+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_specialist_artifact_projection" name="test_extra_specialist_artifact_respects_unchanged_raw_packet_cap" time="0.346"><failure message="Failed: DID NOT RAISE DomainError">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1259/test_extra_specialist_artifact0')
+
+    def test_extra_specialist_artifact_respects_unchanged_raw_packet_cap(tmp_path):
+        store, _manager, worker = specialist(tmp_path, content=json.dumps({"large": "x" * 65000}))
+&gt;       with pytest.raises(DomainError, match="bounded input limit"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE DomainError
+
+backend\tests\test_specialist_artifact_projection.py:111: Failed</failure></testcase></testsuite></testsuites>

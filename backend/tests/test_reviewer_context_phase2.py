@@ -25,6 +25,7 @@ from forge_core.independent_review import (
 from forge_core.model_call_budget import ModelCallBudgetLedger
 from forge_core.provider_pool import ProviderPool
 from forge_core.providers import ProviderConfig, ProviderGateway
+from forge_core.review_envelope import restore_review_text
 from forge_core.runtime import ModelRequest
 
 PASS = {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}
@@ -32,6 +33,11 @@ PASS = {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0
 
 def reconstruct(messages):
     projected = json.loads(messages[-1]["content"])
+    if "reference_key" in projected and "packet" in projected:
+        texts = [item["content"].split("\n", 1)[1] for item in messages[1:-1]]
+        return restore_review_text(projected, texts)
+    if "review_representation" not in projected:
+        return projected
     for receipt in projected["receipts"]:
         reference = receipt.get("output", {}).get("content")
         if not isinstance(reference, dict) or "review_source_ref" not in reference:
@@ -218,7 +224,7 @@ def test_review_round_default_remains_two():
     assert review_max_rounds_from_env({}) == 2
 
 
-def test_exhausted_review_round_reports_specific_limit_without_model_call(tmp_path):
+def test_exhausted_review_round_blocks_current_result_without_extra_revision(tmp_path):
     revision = {
         "verdict": "NEEDS_REVISION",
         "findings": ["Clarify evidence"],
@@ -231,22 +237,21 @@ def test_exhausted_review_round_reports_specific_limit_without_model_call(tmp_pa
             tool("file_read", {"path": "work/input.txt"}),
             response(delivery()),
             response(revision),
-            response(delivery("revised")),
         ],
     )
     service = IndependentReviewService(manager, max_rounds=1)
     assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
-    assert asyncio.run(service.review(worker["id"]))["revision_applied"]
-    assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
-    assert asyncio.run(service.tick())
+    result = asyncio.run(service.review(worker["id"]))
+    assert result["verdict"] == "NEEDS_REVISION" and not result["revision_applied"]
     assert not asyncio.run(service.tick())
     blocked = [
         json.loads(row["payload"])
         for row in store.list_events(limit=1000)
-        if row["event_type"] == "review.blocked"
+        if row["event_type"] == "worker.blocked"
     ]
-    assert blocked[-1]["reason_code"] == "review_round_limit"
-    assert len(model.requests) == 4 and manager.get(worker["id"])["state"] == "review_pending"
+    assert len(blocked) == 1 and blocked[0]["reason_code"] == "review_revision_exhausted"
+    assert blocked[0]["exhausted_bounds"] == ["review_round_limit"]
+    assert len(model.requests) == 3 and manager.get(worker["id"])["state"] == "blocked"
 
 
 def test_read_only_node_review_retains_original_goal_without_assigning_downstream_writes(tmp_path):

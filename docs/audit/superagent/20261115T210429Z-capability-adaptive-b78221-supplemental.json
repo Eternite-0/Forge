@@ -1,0 +1,257 @@
+{
+  "run_id": "20261115T210429Z-capability-adaptive-b78221",
+  "provenance": "programmatic_read_only_post_stop_supplement_of_retained_live_failure",
+  "recorded_at": "2026-11-15T21:08:16.876034+00:00",
+  "original_report": "docs/audit/superagent/20261115T210429Z-capability-adaptive-b78221.json",
+  "original_report_sha256": "5207952242cd650bbb962fa4d673dc6bb0ffc0f3e544cfbd9bf77e0ec272c6b0",
+  "original_status": "failed",
+  "original_failure_code": "ProbeFailure",
+  "status": "original_failure_unchanged",
+  "does_not_reclassify_acceptance": true,
+  "original_execution_source_sha256": "0f24f76b6fe1ee6af9cbc4a05ff2356817295427b48c8f1a55ec45a6db284dc6",
+  "diagnostic_driver_sha256": "b6cb404d22c1da2d2b29ca33ddd6d102193c8ac227da7ed8820ed445a2091a92",
+  "diagnostic_metrics_source_sha256": "d3569ca762f0f88615beeaf2b82d0e76453d82308282aa665a37d4f7c9162076",
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 2
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 11,
+      "unattributed_non_worker": 13
+    },
+    "model_calls": 24,
+    "model_calls_by_purpose": {
+      "context_compaction": 3,
+      "memory_semantic_retrieval": 3,
+      "router": 3,
+      "router_notice": 7,
+      "worker": 8
+    },
+    "admission_states": {
+      "settled": 24
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 145125,
+    "known_charged_tokens": 145125,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 53.09269189834595,
+    "workers_by_state": {
+      "blocked": 2
+    },
+    "quests_by_state": {
+      "running": 2
+    },
+    "core_completed_quest_rate": {
+      "passed": 0,
+      "samples": 2,
+      "value": 0.0
+    },
+    "tool_calls": 13,
+    "tool_states": {
+      "succeeded": 13
+    },
+    "tool_success_rate": {
+      "passed": 13,
+      "samples": 13,
+      "value": 1.0
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 0,
+    "review_verdicts": {},
+    "judged_review_pass_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 11,
+      "samples": 11,
+      "value": 1.0
+    },
+    "context_archive_count": 3,
+    "core_source_read_count": 0,
+    "subscription_count": 2,
+    "trigger_delivery_count": 4,
+    "source_refs": [
+      "model_attempt:fd018ebd962d4d87ba5bf5b43a843b18",
+      "model_attempt:b8efaa05cb194b03a36d5095cfac87fc",
+      "model_attempt:8c5c9252cf014fb29c2da86586c2203e",
+      "model_attempt:bb1d5d8f32ba4102bc6de29a4785ee00",
+      "model_attempt:aec9765750454436bfd198281f4c52e9",
+      "model_attempt:a4533bf1f76244f3894566faf4d03552",
+      "model_attempt:bcbf6dc6e4714c67a1bd92e9615e59af",
+      "model_attempt:66fa88d6c0ef4dc5a9804f2155adf707",
+      "model_attempt:516d240e98ae4ef3ab01a7d64d684382",
+      "model_attempt:57071b2afd9b4432a388f66e8ea5b1c9",
+      "model_attempt:811604da6d1947d88972edaccc87a781",
+      "model_attempt:0fb20031f8a345578bdc8d8a875ac6c4",
+      "model_attempt:50d1083891ee44c98a1aecccc10b9940",
+      "model_attempt:575ec8d8c6104ceeb85afffa213a9fda",
+      "model_attempt:a3467148054a4a2ba63a926e2887e88e",
+      "model_attempt:0cae6d6e5fa14900a151e8e6098d8bee",
+      "model_attempt:713cc3cc6fdb476e9187a22d28ce1f18",
+      "model_attempt:65074f650c284c34b938fbd183942446",
+      "model_attempt:5b5956f53b08440793d073dcb72c0bba",
+      "model_attempt:bd0910c077fd47d7a954176c70bb075c",
+      "model_attempt:5fb600607ff742939d6ce579e9aaed2b",
+      "model_attempt:7a5539aa60ca4bd0949298d0548b0b96",
+      "model_attempt:9c27632fa8074884a3c8f774394589b9",
+      "model_attempt:75bce72cbf3a49c1a4eae2b6b9bc503f",
+      "run:run_06f6fef5fd93",
+      "run:run_503dfd1968e6",
+      "receipt:receipt_0d1d94ca84af",
+      "receipt:receipt_1ba4a755a396",
+      "receipt:receipt_4601fb041dc3",
+      "receipt:receipt_48eb8edbc89e",
+      "receipt:receipt_53b9f15a0aa5",
+      "receipt:receipt_6a8f24168466",
+      "receipt:receipt_91d4e82d35be",
+      "receipt:receipt_9e22869d60f0",
+      "receipt:receipt_be734dcc03aa",
+      "receipt:receipt_cbf29cdcb9d9",
+      "receipt:receipt_dd2fcdc275bb"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "c4cbffe3ddf270ad48060720ddd8c50a1cdc322d7ea7c9bce15b599c3db8dbbc",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "final_accounting": {
+    "model_calls": 24,
+    "all_calls_settled": true,
+    "unsettled_calls": 0,
+    "worker_states": [
+      {
+        "id": "run_06f6fef5fd93",
+        "quest_id": "quest_8a00c08fdbe2",
+        "worker_id": "worker_196756638014",
+        "state": "blocked",
+        "execution_mode": "live"
+      },
+      {
+        "id": "run_503dfd1968e6",
+        "quest_id": "quest_0d1c85a014ef",
+        "worker_id": "worker_892f3d88f621",
+        "state": "blocked",
+        "execution_mode": "live"
+      }
+    ],
+    "quest_states": [
+      {
+        "id": "quest_8a00c08fdbe2",
+        "status": "running"
+      },
+      {
+        "id": "quest_0d1c85a014ef",
+        "status": "running"
+      }
+    ],
+    "blocked_observations": [
+      {
+        "run_id": "run_06f6fef5fd93",
+        "state": "blocked",
+        "awaiting_authorization": 0,
+        "reason": "context_budget"
+      },
+      {
+        "run_id": "run_503dfd1968e6",
+        "state": "blocked",
+        "awaiting_authorization": 0,
+        "reason": "context_budget"
+      }
+    ]
+  },
+  "tasks": {
+    "L1": {
+      "quest_id": "quest_8a00c08fdbe2",
+      "team_observation": {
+        "execution_team": null,
+        "independent_dispatches": [
+          {
+            "role": "reviewer",
+            "depends_on": []
+          }
+        ],
+        "selected_strategy": "single",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "reviewer"
+        ],
+        "actual_dependencies": []
+      }
+    },
+    "L2": {
+      "quest_id": "quest_0d1c85a014ef",
+      "team_observation": {
+        "execution_team": null,
+        "independent_dispatches": [
+          {
+            "role": "research",
+            "depends_on": []
+          }
+        ],
+        "selected_strategy": "single",
+        "actual_worker_count": 1,
+        "actual_roles": [
+          "research"
+        ],
+        "actual_dependencies": []
+      }
+    }
+  },
+  "source_refs": [
+    "model_attempt:fd018ebd962d4d87ba5bf5b43a843b18",
+    "model_attempt:b8efaa05cb194b03a36d5095cfac87fc",
+    "model_attempt:8c5c9252cf014fb29c2da86586c2203e",
+    "model_attempt:bb1d5d8f32ba4102bc6de29a4785ee00",
+    "model_attempt:aec9765750454436bfd198281f4c52e9",
+    "model_attempt:a4533bf1f76244f3894566faf4d03552",
+    "model_attempt:bcbf6dc6e4714c67a1bd92e9615e59af",
+    "model_attempt:66fa88d6c0ef4dc5a9804f2155adf707",
+    "model_attempt:516d240e98ae4ef3ab01a7d64d684382",
+    "model_attempt:57071b2afd9b4432a388f66e8ea5b1c9",
+    "model_attempt:811604da6d1947d88972edaccc87a781",
+    "model_attempt:0fb20031f8a345578bdc8d8a875ac6c4",
+    "model_attempt:50d1083891ee44c98a1aecccc10b9940",
+    "model_attempt:575ec8d8c6104ceeb85afffa213a9fda",
+    "model_attempt:a3467148054a4a2ba63a926e2887e88e",
+    "model_attempt:0cae6d6e5fa14900a151e8e6098d8bee",
+    "model_attempt:713cc3cc6fdb476e9187a22d28ce1f18",
+    "model_attempt:65074f650c284c34b938fbd183942446",
+    "model_attempt:5b5956f53b08440793d073dcb72c0bba",
+    "model_attempt:bd0910c077fd47d7a954176c70bb075c",
+    "model_attempt:5fb600607ff742939d6ce579e9aaed2b",
+    "model_attempt:7a5539aa60ca4bd0949298d0548b0b96",
+    "model_attempt:9c27632fa8074884a3c8f774394589b9",
+    "model_attempt:75bce72cbf3a49c1a4eae2b6b9bc503f",
+    "run:run_06f6fef5fd93",
+    "run:run_503dfd1968e6",
+    "receipt:receipt_0d1d94ca84af",
+    "receipt:receipt_1ba4a755a396",
+    "receipt:receipt_4601fb041dc3",
+    "receipt:receipt_48eb8edbc89e",
+    "receipt:receipt_53b9f15a0aa5",
+    "receipt:receipt_6a8f24168466",
+    "receipt:receipt_91d4e82d35be",
+    "receipt:receipt_9e22869d60f0",
+    "receipt:receipt_be734dcc03aa",
+    "receipt:receipt_cbf29cdcb9d9",
+    "receipt:receipt_dd2fcdc275bb"
+  ],
+  "limitations": "This is a post-stop read-only diagnostic. It does not rerun Provider calls, tools, artifacts or task acceptance, and does not replace or promote the failed original report. Earlier SQLite error codes were not recorded; their cause cannot be inferred from subsequent successful reads."
+}

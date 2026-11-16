@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T06:33:56.972053+00:00",
+  "provenance": "independent_source_and_closed_database_read_only_audit_not_live_acceptance",
+  "audit_program": {
+    "path": ".local/superagent/thread_read_source_independent_audit.py",
+    "sha256": "85c5a1206c270a2c28a43a4861167cb879a541c85cec268e4edb5e0915824e2d"
+  },
+  "sources": [
+    {
+      "path": "backend/src/forge_core/worker_continuations.py",
+      "sha256": "b414a83fdfa493b0786b626ddff637335c44bdb3d23534ce21df0d9c8230b352"
+    },
+    {
+      "path": "backend/src/forge_core/worker_runtime.py",
+      "sha256": "68d74eb21d0a69aaef98c54059cca47069855aeb4286381d93e045427d55de3d"
+    },
+    {
+      "path": "backend/src/forge_core/worker_superagent.py",
+      "sha256": "e25205c461fa3acb3d69f6a151bfc2e0764a6bf6fa44aacaf84ddd43f02144e1"
+    },
+    {
+      "path": "backend/tests/test_worker_continuation_completion.py",
+      "sha256": "d3c521ae084360575d1a61400a95160c509db993a5b3e6f7ad7e00d4e596bb60"
+    },
+    {
+      "path": "backend/tests/test_worker_core_provenance_superagent.py",
+      "sha256": "49787981c3693aef6bb943092f444b91f896449cb7022ab98d19f279eb5ca103"
+    }
+  ],
+  "baseline": {
+    "source_freeze": {
+      "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+      "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029"
+    },
+    "verified_original_source_snapshot": {
+      "path": ".local/superagent/f87e7e-independent-frozen-source/snapshot-manifest.json",
+      "sha256": "8f61a4f2175e9b9e9e37e34af98e85b4c34b07af06c8c0a2dd6069bed50843ed"
+    },
+    "changed_previously_frozen_files": [
+      "backend/src/forge_core/worker_runtime.py",
+      "backend/src/forge_core/worker_superagent.py",
+      "backend/tests/test_worker_core_provenance_superagent.py"
+    ]
+  },
+  "checks": {
+    "only_two_prior_frozen_production_files_changed": true,
+    "runtime_outside_Thread_framing_and_completion_boundary_is_identical_to_f87_freeze": true,
+    "new_Thread_framing_preserves_legacy_wrapper_and_permission_boundary": true,
+    "new_helper_only_selects_and_uses_existing_source_verification": true,
+    "scope_inbox_event_hash_page_and_same_run_checks_are_present": true,
+    "final_boundary_is_fenced_and_preserves_charged_draft_without_budget_reset": true,
+    "source_failure_records_block_and_draft_in_same_transaction": true,
+    "source_feedback_does_not_require_Recall_or_promote_payload_permissions": true,
+    "old_closed_run_is_only_observed_not_resumed": true,
+    "new_gate_detects_actual_previously_unread_L2_and_post_restart_L3_sources": true,
+    "targeted_results_observed_without_failures": true,
+    "original_combined_failed_report_is_retained": true
+  },
+  "checks_all_passed": true,
+  "targeted_validation_observed": [
+    {
+      "path": "docs/audit/superagent/capability-thread-read-targeted.xml",
+      "sha256": "8c183eb7289edb7538b134d3943ef4f7035e31ae202d1452fc3d5331ad9caf5c",
+      "tests": 102,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "passes": 101,
+      "attribution": "Implementation agent's targeted scripted/offline regression; observed XML, not independently rerun; no live Provider call or full-suite claim."
+    }
+  ],
+  "audit_actions": {
+    "Provider_calls": 0,
+    "credential_reads": 0,
+    "tool_replays": 0,
+    "code_or_test_executions": 0,
+    "Store_constructed": false,
+    "SQL_writes": 0,
+    "sqlite_uri_mode": "ro",
+    "query_only": true,
+    "explicit_read_transaction": true
+  },
+  "old_closed_database_files_before": [
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3",
+      "sha256": "47730da8462395e95028a525520330738fffa8e81e573fa6b784fa3f5b349b8e",
+      "bytes": 2281472
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-wal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-shm",
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    }
+  ],
+  "old_closed_database_files_after": [
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3",
+      "sha256": "47730da8462395e95028a525520330738fffa8e81e573fa6b784fa3f5b349b8e",
+      "bytes": 2281472
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-wal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": ".local/superagent/20261116T055126Z-capability-continuity-f87e7e/data/forge.sqlite3-shm",
+      "sha256": "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb",
+      "bytes": 32768
+    }
+  ],
+  "old_main_and_sidecars_unchanged": true,
+  "read_only_application_to_historical_run": [
+    {
+      "run_id": "run_2b11557ec4c9",
+      "role_id": "research_1",
+      "historical_state": "succeeded",
+      "before_ordinal": 17,
+      "pending_continuations": [
+        {
+          "trigger_id": "trigger_37ed1850a210",
+          "payload_sha256": "635e77facb1e3de633755243b441a5c1d87f4fae5b1f628356253128a6740a50",
+          "total_chars": 2030,
+          "next_offset_chars": 0
+        },
+        {
+          "trigger_id": "trigger_39b4fdcbe91e",
+          "payload_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+          "total_chars": 2467,
+          "next_offset_chars": 0
+        }
+      ]
+    },
+    {
+      "run_id": "run_ddd8875674c1",
+      "role_id": "coding",
+      "historical_state": "succeeded",
+      "before_ordinal": 25,
+      "pending_continuations": [
+        {
+          "trigger_id": "trigger_aaf62758da42",
+          "payload_sha256": "6cc7284fa75eee915e280a82ee4756a86dfa75248249f00625c7cde08ac24103",
+          "total_chars": 765,
+          "next_offset_chars": 0
+        }
+      ]
+    },
+    {
+      "run_id": "run_e41881834d74",
+      "role_id": "reviewer_2",
+      "historical_state": "succeeded",
+      "before_ordinal": 16,
+      "pending_continuations": [
+        {
+          "trigger_id": "trigger_37ed1850a210",
+          "payload_sha256": "635e77facb1e3de633755243b441a5c1d87f4fae5b1f628356253128a6740a50",
+          "total_chars": 2030,
+          "next_offset_chars": 0
+        },
+        {
+          "trigger_id": "trigger_39b4fdcbe91e",
+          "payload_sha256": "9cf35d923e2d4440f99dbadcec71ee99efb0cfb27ff27c55f357a10852dac5eb",
+          "total_chars": 2467,
+          "next_offset_chars": 0
+        }
+      ]
+    }
+  ],
+  "retained_original_acceptance": {
+    "path": "docs/audit/superagent/20261116T055126Z-capability-continuity-f87e7e-independent-audit.json",
+    "sha256": "2492e43d8163c9edc00a290fc38a2161dde6cc2f93284be9cd1bf8d26dd67bbd"
+  },
+  "retained_test_attribution": {
+    "path": "docs/audit/superagent/capability-completion-final-test-attribution.json",
+    "sha256": "22ddc2c59c763e567b278511d82877dc5b920345b26a68b835f30546535ea8ac"
+  },
+  "review_findings": [
+    "Finalization performs source debt inspection inside the existing BEGIN IMMEDIATE owner-fenced transaction. New deliveries and source failure cannot publish worker.result before that boundary is discharged.",
+    "The source-failure draft, blocked Worker/run/node state, lease clearing, and worker.blocked event are written in one transaction. The earlier manual commit and second _fail transaction were removed.",
+    "Debt is based on actual same-run delivery records. Even an unread delivery must pass existing scope, event/inbox, source hash and revocation validation. A consumed preview alone cannot discharge debt.",
+    "Checkpoint framing distinguishes Core delivery of untrusted Thread context from its payload's authority, while retaining the legacy wrapper for other input. The existing provenance-test fixture adds one actual full read; its original partial read and tamper assertions remain intact.",
+    "Valid reads require existing Core proofs, model selection, a matching tool-result transcript before the candidate's ordinal, and complete current payload coverage; explicit Core-proved handback remains available. Unknown or failed reads do not become proofs.",
+    "A refused final draft stays charged and persisted. Existing step/token/tool/output limits and unknown-call handling remain unchanged. Feedback only names remaining references and offsets, and grants no new authority."
+  ],
+  "limitations": [
+    "This source repair has targeted/offline validation only. No new live condition or full backend suite was run after the user's stop/hand-off instruction.",
+    "Complete context reading is an execution boundary, not a claim of understanding or typed multihop Recall. The unchanged acceptance oracle may still fail and old failed reports remain failed.",
+    "The production gate allows source-matching overlapping page coverage; the existing acceptance evidence additionally requires sequential model-selected pagination. No oracle was loosened to make them agree.",
+    "The returned final candidate establishes a later model-call boundary after stored tool results under the existing Worker execution loop; neither captured raw HTTP input nor model internal understanding is claimed.",
+    "The f87 current packet recheck changes after a later global recap constraint. Its independent audit reconstructs original hashes with an explicit read-only historical constraint frontier; this source repair does not change that separate behavior.",
+    "Old round3 full-suite results apply to their recorded source. They are not attributed to the new helper or final two changed production files."
+  ]
+}

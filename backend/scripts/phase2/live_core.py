@@ -31,10 +31,20 @@ def free_port():
 
 class LiveCore:
     def __init__(
-        self, workspace, *, provider_env, token_limit, concurrency, log=None, extra_env=None
+        self,
+        workspace,
+        *,
+        provider_env,
+        token_limit,
+        concurrency,
+        log=None,
+        extra_env=None,
+        private_control=False,
     ):
         if token_limit is not None and (type(token_limit) is not int or token_limit < 1):
             raise ValueError("token_limit must be a positive integer or None")
+        if type(private_control) is not bool:
+            raise ValueError("private_control must be a boolean")
         self.workspace = Path(workspace)
         self.workspace.mkdir(parents=True, exist_ok=True)
         self.port = free_port()
@@ -49,6 +59,7 @@ class LiveCore:
         self.log_path = log or self.workspace / "core.log"
         self.extra_env = extra_env or {}
         self.stdout = None
+        self.private_control = private_control
 
     def env(self):
         raw = bytes.fromhex(self.secret)
@@ -94,17 +105,30 @@ class LiveCore:
         # Kept open for the child lifetime and closed by stop(), including failures.
         self.stdout = open(self.log_path, "ab")  # noqa: SIM115
         env = self.env()
+        command = [str(PYTHON), "-m", "forge_api", "--workspace-root", str(self.workspace)]
+        control_options = {}
+        if self.private_control:
+            command.append("--core-child")
+            control_options["stdin"] = subprocess.PIPE
+            env.pop("FORGE_CORE_SECRET", None)
         creation = 0
         if os.name == "nt":
             creation = subprocess.CREATE_NO_WINDOW
         self.process = subprocess.Popen(
-            [str(PYTHON), "-m", "forge_api", "--workspace-root", str(self.workspace)],
+            command,
             cwd=str(BACKEND),
             env=env,
             stdout=self.stdout,
             stderr=subprocess.STDOUT,
             creationflags=creation,
+            **control_options,
         )
+        if self.private_control:
+            from forge_api.desktop_host import write_frame
+
+            write_frame(
+                self.process.stdin, {"version": 1, "type": "bootstrap", "secret": self.secret}
+            )
         deadline = time.time() + timeout
         while time.time() < deadline:
             if self.process.poll() is not None:
@@ -140,21 +164,70 @@ class LiveCore:
         return {"status": response.status_code, "body": body}
 
     def stop(self, *, graceful=True):
-        if self.process is None:
-            return
-        if self.process.poll() is None:
-            if graceful:
-                self.process.terminate()
+        """Confirm private graceful exit; forced cleanup never authorizes restart."""
+        result = {
+            "protocol": "private_core_control_v1"
+            if self.private_control
+            else "legacy_terminate_v1",
+            "graceful_requested": graceful,
+            "graceful_confirmed": False,
+            "returncode": None,
+            "forced_cleanup": False,
+            "outcome": "not_started",
+        }
+        process = self.process
+        try:
+            if process is None:
+                return result
+            result["returncode"] = process.poll()
+            if result["returncode"] is not None:
+                result["outcome"] = "already_stopped_unconfirmed"
+                return result
+            private_shutdown = self.private_control and graceful
+            if private_shutdown:
+                from forge_api.desktop_host import write_frame
+
+                try:
+                    if process.stdin is None:
+                        raise ValueError("Private control pipe missing")
+                    write_frame(process.stdin, {"version": 1, "type": "shutdown"})
+                except (OSError, ValueError):
+                    result["outcome"] = "shutdown_control_failed_cleanup"
+                    result["forced_cleanup"] = True
+                    process.kill()
+                    result["returncode"] = process.wait(timeout=15)
+                    return result
+            elif graceful:
+                process.terminate()
             else:
-                self.process.kill()
+                result["forced_cleanup"] = True
+                process.kill()
             try:
-                self.process.wait(timeout=30)
+                result["returncode"] = process.wait(timeout=30)
             except subprocess.TimeoutExpired:
-                self.process.kill()
-                self.process.wait(timeout=15)
-        if self.stdout:
-            self.stdout.close()
-            self.stdout = None
+                result["outcome"] = "shutdown_timeout_forced_cleanup"
+                result["forced_cleanup"] = True
+                process.kill()
+                result["returncode"] = process.wait(timeout=15)
+                return result
+            if private_shutdown:
+                result["graceful_confirmed"] = result["returncode"] == 0
+                result["outcome"] = (
+                    "private_shutdown_confirmed"
+                    if result["graceful_confirmed"]
+                    else "private_shutdown_exit_unconfirmed"
+                )
+            else:
+                result["outcome"] = (
+                    "legacy_terminated_unconfirmed" if graceful else "forced_cleanup"
+                )
+            return result
+        finally:
+            if self.private_control and process is not None and process.stdin is not None:
+                process.stdin.close()
+            if self.stdout:
+                self.stdout.close()
+                self.stdout = None
 
     def tail_log(self, limit=4000):
         if not self.log_path.exists():

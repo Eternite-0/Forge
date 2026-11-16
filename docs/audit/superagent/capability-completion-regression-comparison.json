@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:54:50.526797+00:00",
+  "audit_type": "independent_programmatic_read_only_regression_comparison",
+  "scope": "Round 1 completion freeze only; this is not a full-suite result for later source corrections or freezes.",
+  "result": "historical_failure_set_unchanged_no_new_failed_cases",
+  "real_provider_calls_performed": 0,
+  "backend_or_wrapper_files_modified_by_this_audit": false,
+  "old_xml_modified": false,
+  "historical_baseline": {
+    "path": "docs/audit/superagent/capability-backend-final.xml",
+    "sha256": "cc59f011c13652d7bdebbd1a2c94dbdef26d0b4f6e2fac9d7e923445e9eba63e",
+    "summary": {
+      "tests": 2603,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2587,
+      "xml_seconds": 556.739
+    },
+    "failure_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ]
+  },
+  "historical_corroborrating_suite": {
+    "path": "docs/audit/superagent/capability-repair-backend.xml",
+    "sha256": "58ad9c47057ff8cb1b9d7bab2f0c2f1e15ee6c099ffd2ff1693ff2cb8d5532f7",
+    "summary": {
+      "tests": 2767,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2751,
+      "xml_seconds": 848.462
+    },
+    "failure_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ]
+  },
+  "previous_full_suite_original_result": {
+    "path": "docs/audit/superagent/capability-final-backend.xml",
+    "sha256": "0982aa9a5e6fd6d1a15f6ad958cc5a91d4ee92853c24cf04307cb33cd16fb7fc",
+    "summary": {
+      "tests": 2812,
+      "failures": 14,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2795,
+      "xml_seconds": 642.604
+    },
+    "failure_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+    ]
+  },
+  "current_full_suite": {
+    "path": "docs/audit/superagent/capability-completion-backend.xml",
+    "sha256": "bd2188560607057102b7adaac0edd833bbd5f61607245cf41933eca998603740",
+    "summary": {
+      "tests": 2869,
+      "failures": 13,
+      "errors": 0,
+      "skipped": 3,
+      "passed": 2853,
+      "xml_seconds": 722.099
+    },
+    "failure_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "log": {
+      "path": ".local/superagent/capability-completion-backend.log",
+      "sha256": "d29bb9f7ed96f21da4407442cf41411f479633c0cc7bdd8e5866c4219e3f0a3d"
+    },
+    "pytest_summary_line": "13 failed, 2853 passed, 3 skipped, 1 warning in 722.44s (0:12:02)",
+    "warning_count_from_summary": 1
+  },
+  "current_source_binding": {
+    "path": "docs/audit/superagent/capability-completion-round1-source-freeze.json",
+    "sha256": "caf027a97292657e03147f9463900d62dc0ff22276e4fc5d07d8ea150f15d817",
+    "file_count": 354,
+    "all_frozen_files_match_at_audit": true,
+    "mismatched_paths": [],
+    "binding_note": "The full-suite result belongs to this exact 354-file freeze. Any later source change requires separately bound validation and must not inherit this result."
+  },
+  "comparison_against_historical_13": {
+    "same_failed_case_ids": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ],
+    "new_failed_case_ids": [],
+    "historical_no_longer_failed": [],
+    "failure_messages_unchanged": 13,
+    "changed_failure_messages": [],
+    "exact_failure_diagnostic_text_hash_changes": [
+      {
+        "case_id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "baseline_sha256": "b21fb5e855dcd9e390a22b52d7d18c280180806fb3f2080936cf29449af746ad",
+        "current_sha256": "1cb3f38781d06de5e7301171be637a2b2b96c617fa69fc960ed484671b8dcacf",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "baseline_sha256": "2ee4677b8b0ddc4622ff1f4243e4044f6a3c7c931d7430f2c9c0c9a8f1c75d1b",
+        "current_sha256": "4a9483333dd7fe5ad9043d36fdfa6be943bfdc5dd18e7620c0794368499bbd4b",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "baseline_sha256": "fe9973f1a2e85bc8536a8ff394cf80ef43cc791664d055ff9aedfe08b4f6c24c",
+        "current_sha256": "6785530eb557ae8d3bb299839d34e010950650919b97f6825a6c93bfe319cb6c",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "baseline_sha256": "095344d33bf0e746c1f639e15cbc482aed7b3ac939a326aec56ae51a282b2fd9",
+        "current_sha256": "358c6c4a67219ad16b6447d35d73d422f16805f906eb3256a1094a118bbff6c4",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "baseline_sha256": "a1c4c7efa885573b4d48ba1c2aefe7e4521265910bd165b52b618d729e8b5a8f",
+        "current_sha256": "2ead809258cbe8330149179451feb294452a61689563b6f48f1333ff3dcd2cab",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "baseline_sha256": "bdcc800fbd88bc2cd4d9d4fcd162fc9e0d541590d311d74ab5525132184c5c97",
+        "current_sha256": "db6d72a67005a6188b68ad0376388f64c7052a4a3b516050ad2285733a06a2c2",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "baseline_sha256": "3cf96f468116ceac7f034d4676083f94b7522545d96e9ea275a235ec32bd1b5d",
+        "current_sha256": "8e2106f1873ff8f85aa2f467ef283ef5e72d03505681a2d07396eed7719a1897",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "baseline_sha256": "0ad820091bf63f959a4ce4cd0e1e5270b555bc2bf7ea1f400c00b02f1e27fa44",
+        "current_sha256": "31608733ef321420767669db81ba1c4300c97a4faadd1883b0e0679bf9903533",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "baseline_sha256": "cbe1e85c4f9ab74c891282d0db359be5ee951e3d95195c9581db544dbd8b8a76",
+        "current_sha256": "3026da746c15f53875d061c7b252288b8de0b396ef5f2e704951b7d5c38a5593",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "baseline_sha256": "8ad2ccc2ed3e043895c5414c1bddbcc63b90aa003abb107c0a6dfe64bec57610",
+        "current_sha256": "d3ca46892ebb40fdd38cc63aeaae0387b12444e7ad925c86edb2a999295ae5e6",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "baseline_sha256": "f23b7eaee6c666c7e712bfa7e03072711405feedd491351b535831a719e98271",
+        "current_sha256": "c1e1b6b53764e25dd5a54db4a2d3f83f64ca22c6b09c49804af9f31f79768279",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "baseline_sha256": "3ce44198fd4d7bf18de8a8358fca2c81b941afe33cc6a1bf0125128536293706",
+        "current_sha256": "bb420cb406aeb83efb38343afe84ba83678758cb225ebae9a8a5d266c4f1d932",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      },
+      {
+        "case_id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+        "baseline_sha256": "fa6d74865295a5448673b1eb0e0f208e530e0f3123e5883efb50a022558a7178",
+        "current_sha256": "a450f978abd947e68a779f331a1de6b51720e624fcf12f2d8cbeac711e85c278",
+        "note": "Full pytest diagnostics include temporary paths and run-specific context; message comparisons are reported separately."
+      }
+    ]
+  },
+  "comparison_against_original_14": {
+    "new_failed_case_ids": [],
+    "previous_no_longer_failed": [
+      {
+        "case_id": "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap",
+        "current_status": "not_collected"
+      }
+    ],
+    "old_specialist_contract_followup": {
+      "previous_case_id": "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap",
+      "previous_status": "failed",
+      "current_old_case_status": "not_collected",
+      "replacement_cases": [
+        {
+          "case_id": "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_keeps_complete_evidence_and_native_admission_limits",
+          "current_status": "passed"
+        }
+      ],
+      "followup_evidence": {
+        "path": "docs/audit/superagent/capability-specialist-legacycap-followup-audit.json",
+        "sha256": "5843c1efb3fd55a5f7c87852fe5e46ee66effd2f50cfb77d1d9597b743d71aa1"
+      },
+      "interpretation": "The old 65K implicit-cap assertion was migrated in a separately recorded test-only followup. The original 2795 passed / 14 failed / 3 skipped XML remains unchanged, not rewritten as a 13-failure result."
+    }
+  },
+  "current_failure_records": [
+    {
+      "xml_case_id": "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "pytest_node_id": "backend/tests/test_composer_resources_v21.py::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "message": "assert 4096 == 2048",
+      "diagnostic_sha256": "1cb3f38781d06de5e7301171be637a2b2b96c617fa69fc960ed484671b8dcacf"
+    },
+    {
+      "xml_case_id": "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "pytest_node_id": "backend/tests/test_core_measured_planner_v19.py::test_core_preserves_large_output_bounds_and_context_rejection",
+      "message": "IndexError: list index out of range",
+      "diagnostic_sha256": "4a9483333dd7fe5ad9043d36fdfa6be943bfdc5dd18e7620c0794368499bbd4b"
+    },
+    {
+      "xml_case_id": "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "pytest_node_id": "backend/tests/test_core_measured_planner_v19.py::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+      "diagnostic_sha256": "6785530eb557ae8d3bb299839d34e010950650919b97f6825a6c93bfe319cb6c"
+    },
+    {
+      "xml_case_id": "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "pytest_node_id": "backend/tests/test_core_measured_planner_v19.py::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "message": "forge_core.quest_graph.InvalidGraphProposal: Invalid graph proposal",
+      "diagnostic_sha256": "358c6c4a67219ad16b6447d35d73d422f16805f906eb3256a1094a118bbff6c4"
+    },
+    {
+      "xml_case_id": "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "pytest_node_id": "backend/tests/test_core_measured_planner_v19.py::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "message": "assert 10313 > 12045",
+      "diagnostic_sha256": "2ead809258cbe8330149179451feb294452a61689563b6f48f1333ff3dcd2cab"
+    },
+    {
+      "xml_case_id": "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "pytest_node_id": "backend/tests/test_core_measured_serial_v17.py::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "message": "assert 10577 > 12045",
+      "diagnostic_sha256": "db6d72a67005a6188b68ad0376388f64c7052a4a3b516050ad2285733a06a2c2"
+    },
+    {
+      "xml_case_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "pytest_node_id": "backend/tests/test_planner_dataflow_v21.py::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured independent resources exceed original task ceiling",
+      "diagnostic_sha256": "8e2106f1873ff8f85aa2f467ef283ef5e72d03505681a2d07396eed7719a1897"
+    },
+    {
+      "xml_case_id": "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "pytest_node_id": "backend/tests/test_planner_dataflow_v21.py::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "message": "forge_core.capacity_preflight.CapacityPreflightError: Measured serial resources exceed original task ceiling",
+      "diagnostic_sha256": "31608733ef321420767669db81ba1c4300c97a4faadd1883b0e0679bf9903533"
+    },
+    {
+      "xml_case_id": "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "pytest_node_id": "backend/tests/test_planner_guidance_v24.py::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "message": "assert 5 == 4",
+      "diagnostic_sha256": "3026da746c15f53875d061c7b252288b8de0b396ef5f2e704951b7d5c38a5593"
+    },
+    {
+      "xml_case_id": "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "pytest_node_id": "backend/tests/test_planner_protocol_v23.py::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "message": "IndexError: list index out of range",
+      "diagnostic_sha256": "d3ca46892ebb40fdd38cc63aeaae0387b12444e7ad925c86edb2a999295ae5e6"
+    },
+    {
+      "xml_case_id": "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "pytest_node_id": "backend/tests/test_planner_protocol_v23.py::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "message": "IndexError: list index out of range",
+      "diagnostic_sha256": "c1e1b6b53764e25dd5a54db4a2d3f83f64ca22c6b09c49804af9f31f79768279"
+    },
+    {
+      "xml_case_id": "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "pytest_node_id": "backend/tests/test_planner_protocol_v23.py::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "message": "AssertionError: {'version': 'planner-capacity-preview-v23', 'status': 'available', 'scope': 'diagnostic_only_valid_nodes_original_form...ndidates': 0, ...}, {'node': 'unknown', 'status': 'unavailable', 'reason': 'invalid_criteria_node_not_measured'}], ...}\nassert 'unavailable' == 'available'\n  \n  - available\n  + unavailable\n  ? ++",
+      "diagnostic_sha256": "bb420cb406aeb83efb38343afe84ba83678758cb225ebae9a8a5d266c4f1d932"
+    },
+    {
+      "xml_case_id": "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "pytest_node_id": "backend/tests/test_planner_protocol_v25.py::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+      "message": "KeyError: 'rows'",
+      "diagnostic_sha256": "a450f978abd947e68a779f331a1de6b51720e624fcf12f2d8cbeac711e85c278"
+    }
+  ],
+  "current_skipped_cases": [
+    "tests.test_python_unittest_superagent::test_linked_source_is_rejected",
+    "tests.test_superagent_events::test_file_source_rejects_link_replaced_after_registration",
+    "tests.test_worker_environment_superagent::test_directory_resolution_does_not_create_unknown_or_linked_environments"
+  ],
+  "acceptance_boundary": "2853 passing tests with 13 historical failures is not a full test pass and establishes no real-task or Provider acceptance. Mock, programmatic and real Provider results remain separate."
+}

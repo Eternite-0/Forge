@@ -1,0 +1,28 @@
+{
+  "schema_version": 3,
+  "created_at": "2026-11-16T04:24:27.263791+00:00",
+  "status": "incomplete_acceptance_failed",
+  "goal_achieved": false,
+  "scope": "Current FORGE capability acceptance index after the resumed backend phase.",
+  "current_stage": {
+    "path": "docs/audit/superagent/capability-resumed-verification.json",
+    "sha256": "a9dbf361cc962854915b0c423fc2e082d6ac6a00d2d7f0111bbe6130e2fb33ac"
+  },
+  "previous_stage": {
+    "path": "docs/audit/superagent/capability-pre-resumption-final-verification.json",
+    "sha256": "9a6ea4738ca490fa6ef0dc8ac13e87801e90daf930120ab4654a8dbc2fc52917"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-resumption-source-freeze.json",
+    "sha256": "c531045546f89f67048b88cca2ade0efcfcc6222bd8bc7514c8555405dfc3343"
+  },
+  "frozen_source_still_matches": true,
+  "real_L3_status": "passed",
+  "remaining_acceptance": [
+    "Multi-specialist L2",
+    "Complete combined two-project restart/compaction/Recall and reviewed delivery"
+  ],
+  "historical_full_suite_results_are_not_current_source_results": true,
+  "commit_or_push_performed": false,
+  "frontend_changes_by_this_phase": false
+}

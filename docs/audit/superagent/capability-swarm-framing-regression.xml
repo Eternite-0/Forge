@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="57" time="16.843" timestamp="2026-11-16T04:59:21.246361+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[openai_compatible]" time="0.124"><failure message="AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']&#10;  &#10;  Left contains one more item: 'worker_request_experts'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1117/test_initial_native_measuremen0')
+kind = 'openai_compatible'
+
+    @pytest.mark.parametrize("kind", ["openai_compatible", "deepseek", "anthropic"])
+    def test_initial_native_measurement_includes_both_core_tools_and_escaped_source(tmp_path, kind):
+        store, manager, _model, worker = prepared(tmp_path, [])
+        source = '必须保留中文、路径 C:\\work\\"quoted" 和换行\n不要删除原始证据'
+        original = ConversationMessage(role="user", content=source)
+        store.add_message(original)
+        ConstraintService(store).record_extraction(
+            source,
+            source_message_id=original.id,
+            quest_id=worker["quest_id"],
+            origin="explicit_user",
+        )
+        posts = []
+        gateway = ObservedGateway(
+            transport=httpx.MockTransport(lambda request: posts.append(request)), kind=kind
+        )
+        graph = QuestGraphService(store).get(worker["quest_id"])
+        extra = {"role": "user", "content": "Verified source slice (untrusted): " + source}
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            team = manager.team_authority.get_approved(
+                worker["quest_id"],
+                worker["plan_revision"],
+                worker["team_digest"],
+                connection=connection,
+            )
+            before = connection.total_changes
+            measured = measure_initial_worker_request(
+                store,
+                connection,
+                store.get_quest(worker["quest_id"]),
+                graph,
+                graph["nodes"][0],
+                team["members"][0],
+                extra_messages=[extra],
+                provider=gateway,
+            )
+            assert connection.total_changes == before
+        request, payload = gateway.serialized[-1]
+        assert request.messages[-1] == extra
+        assert any("Sourced constraint records" in item["content"] for item in request.messages)
+&gt;       assert [item["name"] for item in request.tools] == [
+            "file_read",
+            "worker_read_context_source",
+            "worker_request_help",
+        ]
+E       AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']
+E         
+E         Left contains one more item: 'worker_request_experts'
+E         Use -v to get more diff
+
+backend\tests\test_worker_request_framing_v17.py:90: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[deepseek]" time="0.107"><failure message="AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']&#10;  &#10;  Left contains one more item: 'worker_request_experts'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1117/test_initial_native_measuremen1')
+kind = 'deepseek'
+
+    @pytest.mark.parametrize("kind", ["openai_compatible", "deepseek", "anthropic"])
+    def test_initial_native_measurement_includes_both_core_tools_and_escaped_source(tmp_path, kind):
+        store, manager, _model, worker = prepared(tmp_path, [])
+        source = '必须保留中文、路径 C:\\work\\"quoted" 和换行\n不要删除原始证据'
+        original = ConversationMessage(role="user", content=source)
+        store.add_message(original)
+        ConstraintService(store).record_extraction(
+            source,
+            source_message_id=original.id,
+            quest_id=worker["quest_id"],
+            origin="explicit_user",
+        )
+        posts = []
+        gateway = ObservedGateway(
+            transport=httpx.MockTransport(lambda request: posts.append(request)), kind=kind
+        )
+        graph = QuestGraphService(store).get(worker["quest_id"])
+        extra = {"role": "user", "content": "Verified source slice (untrusted): " + source}
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            team = manager.team_authority.get_approved(
+                worker["quest_id"],
+                worker["plan_revision"],
+                worker["team_digest"],
+                connection=connection,
+            )
+            before = connection.total_changes
+            measured = measure_initial_worker_request(
+                store,
+                connection,
+                store.get_quest(worker["quest_id"]),
+                graph,
+                graph["nodes"][0],
+                team["members"][0],
+                extra_messages=[extra],
+                provider=gateway,
+            )
+            assert connection.total_changes == before
+        request, payload = gateway.serialized[-1]
+        assert request.messages[-1] == extra
+        assert any("Sourced constraint records" in item["content"] for item in request.messages)
+&gt;       assert [item["name"] for item in request.tools] == [
+            "file_read",
+            "worker_read_context_source",
+            "worker_request_help",
+        ]
+E       AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']
+E         
+E         Left contains one more item: 'worker_request_experts'
+E         Use -v to get more diff
+
+backend\tests\test_worker_request_framing_v17.py:90: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_initial_native_measurement_includes_both_core_tools_and_escaped_source[anthropic]" time="0.109"><failure message="AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']&#10;  &#10;  Left contains one more item: 'worker_request_experts'&#10;  Use -v to get more diff">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1117/test_initial_native_measuremen2')
+kind = 'anthropic'
+
+    @pytest.mark.parametrize("kind", ["openai_compatible", "deepseek", "anthropic"])
+    def test_initial_native_measurement_includes_both_core_tools_and_escaped_source(tmp_path, kind):
+        store, manager, _model, worker = prepared(tmp_path, [])
+        source = '必须保留中文、路径 C:\\work\\"quoted" 和换行\n不要删除原始证据'
+        original = ConversationMessage(role="user", content=source)
+        store.add_message(original)
+        ConstraintService(store).record_extraction(
+            source,
+            source_message_id=original.id,
+            quest_id=worker["quest_id"],
+            origin="explicit_user",
+        )
+        posts = []
+        gateway = ObservedGateway(
+            transport=httpx.MockTransport(lambda request: posts.append(request)), kind=kind
+        )
+        graph = QuestGraphService(store).get(worker["quest_id"])
+        extra = {"role": "user", "content": "Verified source slice (untrusted): " + source}
+        with store.connection() as connection:
+            connection.execute("BEGIN")
+            team = manager.team_authority.get_approved(
+                worker["quest_id"],
+                worker["plan_revision"],
+                worker["team_digest"],
+                connection=connection,
+            )
+            before = connection.total_changes
+            measured = measure_initial_worker_request(
+                store,
+                connection,
+                store.get_quest(worker["quest_id"]),
+                graph,
+                graph["nodes"][0],
+                team["members"][0],
+                extra_messages=[extra],
+                provider=gateway,
+            )
+            assert connection.total_changes == before
+        request, payload = gateway.serialized[-1]
+        assert request.messages[-1] == extra
+        assert any("Sourced constraint records" in item["content"] for item in request.messages)
+&gt;       assert [item["name"] for item in request.tools] == [
+            "file_read",
+            "worker_read_context_source",
+            "worker_request_help",
+        ]
+E       AssertionError: assert ['file_read',...uest_experts'] == ['file_read',...request_help']
+E         
+E         Left contains one more item: 'worker_request_experts'
+E         Use -v to get more diff
+
+backend\tests\test_worker_request_framing_v17.py:90: AssertionError</failure></testcase><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[0]" time="0.517" /><testcase classname="tests.test_worker_request_framing_v17" name="test_native_runtime_initial_and_archived_requests_use_reserved_core_definitions[1]" time="0.716" /><testcase classname="tests.test_composition_capacity_v28" name="test_exact_native_binding_has_a_stable_observation_floor_and_no_model_call" time="0.093" /><testcase classname="tests.test_composition_capacity_v28" name="test_binding_rejects_changed_full_request_or_native_configuration[objective]" time="0.084" /><testcase classname="tests.test_composition_capacity_v28" name="test_binding_rejects_changed_full_request_or_native_configuration[inventory]" time="0.077" /><testcase classname="tests.test_composition_capacity_v28" name="test_binding_rejects_changed_full_request_or_native_configuration[context]" time="0.073" /><testcase classname="tests.test_composition_capacity_v28" name="test_binding_rejects_changed_full_request_or_native_configuration[concurrency]" time="0.079" /><testcase classname="tests.test_composition_capacity_v28" name="test_binding_rejects_changed_full_request_or_native_configuration[source]" time="0.072" /><testcase classname="tests.test_composition_capacity_v28" name="test_explicit_contract_fails_closed_when_a_binding_requirement_is_missing[callback]" time="0.062" /><testcase classname="tests.test_composition_capacity_v28" name="test_explicit_contract_fails_closed_when_a_binding_requirement_is_missing[provider]" time="0.055" /><testcase classname="tests.test_composition_capacity_v28" name="test_explicit_contract_fails_closed_when_a_binding_requirement_is_missing[measurement]" time="0.062" /><testcase classname="tests.test_composition_capacity_v28" name="test_explicit_contract_fails_closed_when_a_binding_requirement_is_missing[policy]" time="0.066" /><testcase classname="tests.test_composition_capacity_v28" name="test_legacy_absence_remains_compatible_but_a_record_cannot_select_an_unavailable_provider" time="0.062" /><testcase classname="tests.test_composition_capacity_v28" name="test_disabled_cumulative_budget_does_not_relax_a_native_model_context_limit" time="0.050" /><testcase classname="tests.test_composition_capacity_v28" name="test_future_reserve_uses_the_maximum_of_original_and_measured_remaining_not_their_sum" time="0.071" /><testcase classname="tests.test_composition_capacity_v28" name="test_only_exact_cycle_settled_calls_release_their_future_stage" time="0.118" /><testcase classname="tests.test_composition_capacity_v28" name="test_unknown_usage_retains_full_stage_and_charged_or_reserved_scope[invalid_usage0]" time="0.068" /><testcase classname="tests.test_composition_capacity_v28" name="test_unknown_usage_retains_full_stage_and_charged_or_reserved_scope[invalid_usage1]" time="0.077" /><testcase classname="tests.test_composition_capacity_v28" name="test_transport_retries_or_an_extra_cycle_call_are_never_silently_accepted[retry]" time="0.093" /><testcase classname="tests.test_composition_capacity_v28" name="test_transport_retries_or_an_extra_cycle_call_are_never_silently_accepted[third_call]" time="0.104" /><testcase classname="tests.test_composition_capacity_v28" name="test_only_an_accepted_team_for_the_exact_full_plan_releases_optional_repair[False]" time="0.082" /><testcase classname="tests.test_composition_capacity_v28" name="test_only_an_accepted_team_for_the_exact_full_plan_releases_optional_repair[True]" time="0.079" /><testcase classname="tests.test_superagent_swarm" name="test_expert_topology_reuses_original_contracts_and_budget[single-assignments0-edges0]" time="0.249" /><testcase classname="tests.test_superagent_swarm" name="test_expert_topology_reuses_original_contracts_and_budget[parallel-assignments1-edges1]" time="0.227" /><testcase classname="tests.test_superagent_swarm" name="test_expert_topology_reuses_original_contracts_and_budget[sequential-assignments2-edges2]" time="0.223" /><testcase classname="tests.test_superagent_swarm" name="test_expert_topology_reuses_original_contracts_and_budget[hierarchical-assignments3-edges3]" time="0.215" /><testcase classname="tests.test_superagent_swarm" name="test_dependent_worker_cannot_start_until_actual_predecessor_completion" time="0.181" /><testcase classname="tests.test_superagent_swarm" name="test_topology_tampering_cannot_obtain_host_approval" time="0.177" /><testcase classname="tests.test_superagent_swarm" name="test_legacy_mandate_retains_exact_tools_and_cannot_gain_new_expert_handoffs" time="0.081" /><testcase classname="tests.test_superagent_swarm" name="test_invalid_swarm_topologies_fail_before_contract_creation[team0]" time="0.001" /><testcase classname="tests.test_superagent_swarm" name="test_invalid_swarm_topologies_fail_before_contract_creation[team1]" time="0.001" /><testcase classname="tests.test_superagent_swarm" name="test_invalid_swarm_topologies_fail_before_contract_creation[team2]" time="0.001" /><testcase classname="tests.test_superagent_swarm" name="test_invalid_swarm_topologies_fail_before_contract_creation[team3]" time="0.001" /><testcase classname="tests.test_superagent_swarm" name="test_invalid_swarm_topologies_fail_before_contract_creation[team4]" time="0.000" /><testcase classname="tests.test_superagent_swarm" name="test_model_requested_expansion_retains_original_allocation_and_verified_fan_in" time="0.627" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_resumes_committed_boundaries_without_duplicate_workers[plan_proposed]" time="0.495" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_resumes_committed_boundaries_without_duplicate_workers[plan_approved]" time="0.512" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_resumes_committed_boundaries_without_duplicate_workers[team_proposed]" time="0.416" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_resumes_committed_boundaries_without_duplicate_workers[team_approved]" time="0.753" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[transcript]" time="0.338" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[unknown_model]" time="0.273" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[uncertain_tool]" time="0.263" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[unsettled_action]" time="0.295" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[cancelled]" time="0.270" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[revoked_mandate]" time="0.298" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[revoked_grant]" time="0.323" /><testcase classname="tests.test_superagent_swarm" name="test_expansion_rejects_unknown_effects_revocations_and_changed_decisions[objective]" time="0.284" /><testcase classname="tests.test_superagent_swarm" name="test_expanded_specialists_write_real_files_and_integrator_reads_both_verified_deliveries" time="3.808" /><testcase classname="tests.test_superagent_swarm" name="test_actual_model_help_replaces_expert_without_refunding_original_budgets" time="0.313" /><testcase classname="tests.test_superagent_swarm" name="test_expert_recovery_rejects_unknown_effects_and_changed_source[transcript]" time="0.232" /><testcase classname="tests.test_superagent_swarm" name="test_expert_recovery_rejects_unknown_effects_and_changed_source[unknown_model]" time="0.225" /><testcase classname="tests.test_superagent_swarm" name="test_expert_recovery_rejects_unknown_effects_and_changed_source[uncertain_tool]" time="0.216" /><testcase classname="tests.test_superagent_swarm" name="test_expert_recovery_rejects_unknown_effects_and_changed_source[revoked_mandate]" time="0.225" /><testcase classname="tests.test_superagent_swarm" name="test_mandated_expert_reads_complete_source_verified_predecessor" time="1.577" /></testsuite></testsuites>

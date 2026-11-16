@@ -178,11 +178,23 @@ def test_ambiguous_reference_never_picks_latest(tmp_path):
 
 def test_invalid_model_output_is_atomic(tmp_path):
     store, _, router = make_router(tmp_path, {"intent": "create_quest", "passed": True})
+    before = store.ensure_router()
     with pytest.raises(DomainError):
         asyncio.run(router.handle_user_message("do it", request_id="invalid"))
     assert store.list_messages() == []
     assert store.list_quests() == []
-    assert store.list_events() == []
+    assert store.ensure_router() == before
+    # Rejected attempts may leave audit diagnostics, never a committed turn,
+    # task or scheduling event. Diagnostics expose fixed codes and hashes.
+    events = store.list_events()
+    assert len(events) == 2
+    assert {item["event_type"] for item in events} == {"router.decision_rejected"}
+    diagnostics = [json.loads(item["payload"]) for item in events]
+    assert [item["stage"] for item in diagnostics] == ["initial", "repair"]
+    assert all(set(item) == {"stage", "response_sha256", "errors", "response_shape", "execution_mode"}
+               for item in diagnostics)
+    assert all(len(item["response_sha256"]) == 64 for item in diagnostics)
+    assert "do it" not in json.dumps(events) and "passed" not in json.dumps(events)
 
 
 def test_chat_with_help_does_not_create_quest(tmp_path):

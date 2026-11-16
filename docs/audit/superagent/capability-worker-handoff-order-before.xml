@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.634" timestamp="2026-11-16T06:56:51.059942+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_worker_context_affordability" name="test_existing_handoff_is_counted_before_whole_settled_tail_selection" time="0.162"><failure message="forge_core.domain.DomainError: Worker context budget exceeded after compaction">tests\test_worker_context_affordability.py:68: in test_existing_handoff_is_counted_before_whole_settled_tail_selection
+    result = service._worker_context(
+&lt;legacy-handoff-order-only&gt;:357: in _worker_context
+    ???
+E   forge_core.domain.DomainError: Worker context budget exceeded after compaction</failure></testcase></testsuite></testsuites>

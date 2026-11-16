@@ -58,7 +58,10 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/settings') body = settings;
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/models') body = [profile];
+    else if (url.pathname === '/api/projects/discovered') body = [];
+    else if (url.pathname === '/api/runtime/health') body = { components: [] };
     else if (url.pathname === `/api/models/${profile.id}`) body = { profile, updated_at: modelVersion };
+    else if (url.pathname === `/api/model-intelligence/${profile.id}`) body = { performance: { measurements: {}, source_refs: [] }, health: { recommendation: 'unknown' }, capabilities: { measurements: {}, source_refs: [] } };
     else if (url.pathname === '/api/budget') body = { token_limit: 34000, concurrency_limit: 3 };
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null, omitted: 0, bytes: 0 };
     else { missing.push(url.pathname); status = 404; body = { detail: 'settings fixture endpoint missing' }; }
@@ -126,7 +129,7 @@ async (page, { outputDir }) => {
   // The success notice confirms the POST; the revision arrives in the following panel refresh.
   await page.locator('.operator-revision').filter({ hasText: '配置版本 4' }).waitFor();
   check((await page.locator('.operator-revision').innerText()).includes('配置版本 4') && (await page.locator('.operator-revision').innerText()).includes('待重启'), 'saved configuration shows the new revision and pending restart state');
-  check(missing.length === 0 && mutations.length === 2, 'settings use only the two intended version-bound HTTP writes');
+  check(missing.length === 0 && mutations.length === 2, `settings use only the two intended version-bound HTTP writes; missing=${missing.join(',')}, writes=${mutations.length}`);
   await page.mouse.move(0, 0);
   await page.screenshot({ path: `${outputDir}/simple-settings-save.png`, fullPage: true });
   const storage = await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }));

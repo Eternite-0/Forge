@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:35:42.630777+00:00",
+  "authorization": "User: 持续推进，把这几个任务验收通过。 Prior stage remains closed with all evidence preserved.",
+  "previous_index": {
+    "path": "docs/audit/superagent/capability-pre-completion-final-verification.json",
+    "sha256": "b7cc0dc399bff689e1742a765a583dafddfa86475988a90bb70da7b1353a8a36"
+  },
+  "previous_continuation_accounting": {
+    "attempts": 155,
+    "settled": 153,
+    "injected_rejected": 2,
+    "known_tokens": 1510691,
+    "charged_or_reserved_tokens": 1562321,
+    "historical_unknown_tool_outcomes": 1,
+    "no_refund_reset_or_replay": true
+  },
+  "new_stage_maximum_attempts": 160,
+  "new_stage_maximum_charged_or_reserved_tokens": 2500000,
+  "conditions": [
+    {
+      "round": 1,
+      "strategy": "specialists",
+      "call_limit": 32,
+      "tokens": 500000
+    },
+    {
+      "round": 2,
+      "strategy": "continuity",
+      "call_limit": 64,
+      "tokens": 1000000
+    },
+    {
+      "round": 3,
+      "strategy": "continuity",
+      "call_limit": 64,
+      "tokens": 1000000,
+      "only_after_concrete_diagnosed_source_correction": true
+    }
+  ],
+  "unchanged_task_limits": {
+    "calls": 32,
+    "tokens": 500000,
+    "observation_seconds": 900,
+    "shutdown_drain_seconds": 130,
+    "gateway_retries": 0,
+    "worker_output_tokens": 8192,
+    "router_output_tokens": 4096,
+    "deadline_note": "Driver observation bound plus settlement drain, not a hard admission deadline."
+  },
+  "context_window": 100000000,
+  "context_source": "explicit_user_declaration_with_discovery_conflict_retained",
+  "unchanged_acceptance": [
+    "Actual multi-specialist research from original immutable framework sources, unchanged citation/content oracle, real reviews and final report.",
+    "Real code/tests with exact R2 approvals, observed correction or honest absence, final-candidate receipt binding and seven independent holdouts.",
+    "Correct two-project association, distinct-task parallel Workers, completely consumed Thread follow-ups and original Router reviewed completion.",
+    "Safe settled-boundary Core restart, compaction of real Router history, complete source-bound actual Worker relationship Recall after restart and source-grounded recap."
+  ],
+  "stop_policy": "No blind repeated condition, no increase in per-task budget/output/retry. Preserve each outcome. A failed condition needs a diagnosed source correction before a further condition. Stop real calls after one passing continuity condition or the stage ceilings. Unknown operations are never replayed.",
+  "evidence_boundary": "Host restart/compaction fault injection and source/accounting checks remain programmatic; actual model reads, tools and reviews are separately source-bound. Small samples do not establish general correctness or strategy superiority."
+}

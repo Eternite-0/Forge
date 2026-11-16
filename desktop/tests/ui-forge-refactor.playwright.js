@@ -1,0 +1,97 @@
+// Synthetic HTTP acceptance for the six-stage frontend. No live model calls.
+async (page, { outputDir }) => {
+  const checks = [], missing = [], calls = [];
+  const check = (ok, label) => { if (!ok) throw new Error(label); checks.push(label); };
+  const quest = { id: 'quest-ui', title: '核对前端改造', goal: '检查界面与交互', status: 'running', version: 3, plan_revision: 2 };
+  const messages = [
+    { id: 'm-user', role: 'user', content: '阅读项目资料，整理改造方案。', created_at: '2026-11-16T08:00:00Z' },
+    { id: 'm-agent', role: 'assistant', content: '我会核对项目结构，并把资料研究与界面检查交给后台成员。\n\n- 保留当前接口契约\n- 核对文件与测试结果\n\n```ts\nconst workspace = "FORGE";\n```', created_at: '2026-11-16T08:00:04Z', metadata: { model_id: 'router-fixture', execution_mode: 'mock' } },
+  ];
+  let runs = [{ run_id: 'run-ui', worker_id: 'worker-ui', quest_id: quest.id, role: '界面检查', state: 'running', provider_id: 'fixture', model_id: 'review-fixture', steps: 2, tool_spent: 1, created_at: '2026-11-16T08:00:02Z' }];
+  await page.route('http://127.0.0.1:8765/**', async (route) => {
+    const req = route.request(), url = new URL(req.url()), method = req.method();
+    const headers = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'GET,POST,PATCH,OPTIONS' };
+    if (method === 'OPTIONS') return route.fulfill({ status: 204, headers });
+    calls.push(`${method} ${url.pathname}`);
+    let body, status = 200;
+    if (url.pathname === '/health') body = { session: 'refactor-ui' };
+    else if (url.pathname === '/api/conversation') body = { messages, router: { router_session_id: 'router-ui' }, has_more: false };
+    else if (url.pathname === '/api/quests') body = { items: [quest], has_more: false };
+    else if (url.pathname === '/api/quests/quest-ui') body = { quest, workers: runs };
+    else if (url.pathname.endsWith('/plan')) body = { plan_revision: 2, status: 'approved', digest: 'a'.repeat(64), nodes: [] };
+    else if (url.pathname.endsWith('/plan/history')) body = [];
+    else if (url.pathname.endsWith('/grants') || url.pathname.endsWith('/teams')) body = [];
+    else if (url.pathname === '/api/activity') body = { items: runs, has_more: false };
+    else if (url.pathname === '/api/approvals/pending' || url.pathname === '/api/approvals') body = { items: [], has_more: false };
+    else if (url.pathname === '/api/timeline') body = { items: [{ kind: 'tool_receipt', event_id: 'tool-ui', seq: 1, created_at: '2026-11-16T08:00:03Z', quest_id: quest.id, run_id: 'run-ui', worker_id: 'worker-ui', title: '工具调用', status: 'succeeded', execution_mode: 'mock', detail: { tool: 'file_read', path: 'README.md' } }], has_more: false };
+    else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'workspace-ui', workspace_root: 'D:/Fixture/FORGE', router_model_id: 'router-fixture', provider_id: 'fixture', provider_configured: true, restore_fenced: false };
+    else if (url.pathname === '/api/restore-status') body = { fenced: false };
+    else if (url.pathname === '/api/projects/discovered') body = [{ id: 'discovered-ui', root: 'D:/Fixture/Reference', name: 'Reference', grants_tool_access: false }];
+    else if (url.pathname === '/api/runtime/health') body = { components: [{ component: 'worker', state: 'ok', last_seen: Date.now() / 1000, timeout_seconds: 600, restart_count: 0 }] };
+    else if (url.pathname === '/api/models') body = [{ id: 'model-ui', model_id: 'router-fixture', provider: 'fixture', display_name: 'Router fixture', enabled: true }];
+    else if (url.pathname === '/api/budget') body = { token_limit: 10000, concurrency_limit: 2 };
+    else if (url.pathname === '/api/memory') body = { items: [], cursor: null };
+    else if (url.pathname === '/api/triggers' || url.pathname === '/api/events') body = [];
+    else { missing.push(`${method} ${url.pathname}`); status = 404; body = { detail: 'No synthetic fixture' }; }
+    await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
+  });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('http://127.0.0.1:5173/');
+  await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
+  await page.getByRole('button', { name: '连接', exact: true }).click();
+  await page.locator('.from-agent').first().waitFor();
+  await page.waitForTimeout(220);
+  const width = await page.locator('.rail').evaluate((el) => el.getBoundingClientRect().width);
+  check(Math.abs(width - 260) < 1, 'single sidebar is 260px');
+  check(await page.locator('.primary-rail').count() === 0, 'no independent icon rail');
+  check(await page.locator('.titlebar').evaluate((el) => el.getBoundingClientRect().height) === 36, 'titlebar is 36px');
+  check(await page.getByRole('menubar', { name: '应用程序菜单' }).count() === 1, 'application menu is accessible');
+  check(await page.getByText('Reference', { exact: true }).isVisible(), 'discovered projects are visible without switching workspace');
+  const light = await page.locator('.conversation-shell').evaluate((el) => getComputedStyle(el).backgroundColor);
+  await page.screenshot({ path: `${outputDir}/forge-refactor-light.png`, fullPage: true });
+  const draft = page.getByLabel('消息内容');
+  await draft.fill('保留这个草稿');
+  await page.getByRole('button', { name: '收起工作空间侧栏' }).click();
+  await page.waitForTimeout(220);
+  check(!(await page.getByLabel('主导航').isVisible()), 'sidebar collapses completely');
+  check(await draft.inputValue() === '保留这个草稿', 'collapse preserves composer draft');
+  await page.getByRole('button', { name: '展开工作空间侧栏' }).click();
+  await page.waitForTimeout(220);
+  await page.getByRole('menuitem', { name: '视图', exact: true }).click();
+  await page.getByRole('menuitem', { name: '运行活动', exact: true }).click();
+  await page.locator('.workspace-panel').waitFor();
+  check(await draft.isVisible(), 'activity details keep the live conversation and composer visible');
+  await page.getByRole('button', { name: '返回', exact: true }).click();
+  await draft.waitFor();
+  check(await draft.inputValue() === '保留这个草稿', 'route history preserves the conversation DOM and draft');
+  await page.getByRole('button', { name: '前进', exact: true }).click();
+  await page.locator('.workspace-panel').waitFor();
+  await page.getByRole('button', { name: '对话', exact: true }).click();
+  const subagent = page.locator('.subagent-entry').filter({ hasText: '界面检查' });
+  await subagent.waitFor();
+  check(await subagent.count() === 1, 'one inline subagent is rendered per exact run');
+  check(await subagent.evaluate((element) => !element.open), 'inline subagents start as compact summaries');
+  check(await subagent.locator('.agent-avatar').count() === 1, 'the compact summary has a colored agent identity');
+  check(await page.locator('.event-line').filter({ hasText: 'README.md' }).count() === 1, 'subagent tools are not duplicated in the timeline');
+  runs = runs.map((run) => ({ ...run, state: 'succeeded', steps: 4, tool_spent: 2 }));
+  await page.waitForFunction(() => document.querySelector('.subagent-entry')?.textContent.includes('执行成功'), null, { timeout: 10000 });
+  check(await subagent.evaluate((element) => element.open === false), 'a finished untouched subagent remains a compact summary');
+  const process = subagent.locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+  check(await process.evaluate(element => !element.open), 'a completed untouched process collapses while the trailing reply stays visible');
+  await process.locator(':scope > summary').click();
+  await subagent.locator('summary').first().click();
+  check(await subagent.locator('.worker-run-details').count() === 1 && await page.locator('.event-line').filter({ hasText: 'README.md' }).count() === 1, 'completed run metadata and chronological tool history remain available without duplication');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.waitForTimeout(220);
+  const dark = await page.locator('.conversation-shell').evaluate((el) => getComputedStyle(el).backgroundColor);
+  check(light !== dark && dark === 'rgb(17, 17, 17)', 'theme follows system CSS color scheme');
+  await page.screenshot({ path: `${outputDir}/forge-refactor-dark.png`, fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: '收起工作空间侧栏' }).click();
+  await page.waitForTimeout(220);
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'narrow shell has no horizontal page overflow');
+  check(await draft.isVisible(), 'composer stays accessible at 390px');
+  await page.screenshot({ path: `${outputDir}/forge-refactor-narrow.png`, fullPage: true });
+  check(missing.length === 0, `all requested endpoints have fixtures: ${missing.join(', ')}`);
+  return { status: 'passed', checks, calls: [...new Set(calls)], screenshots: ['forge-refactor-light.png', 'forge-refactor-dark.png', 'forge-refactor-narrow.png'] };
+}

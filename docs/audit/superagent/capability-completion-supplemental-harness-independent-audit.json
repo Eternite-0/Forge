@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:53:31.309440+00:00",
+  "provenance": "independent_source_protocol_review_and_existing_offline_subprocess_regressions_no_model_calls",
+  "audit_program": {
+    "path": ".local/superagent/supplemental_harness_independent_audit.py",
+    "sha256": "ba91891f5d665b5f8e29b7ac2333eeb072dcfda1e6b898b741af942495400592"
+  },
+  "protocol": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-protocol.json",
+    "sha256": "79c3b482be98ac8af660d9d9c1dd9005185a9c799529a175c39d3a229139aa2a"
+  },
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-completion-supplemental-source-freeze.json",
+    "sha256": "c0614f14e9709ad4d6573c2d40831b63f73c33c1d192f39e06c2492d4c4be029",
+    "files": 359,
+    "changed_files": []
+  },
+  "checks": {
+    "359_file_freeze_matches": true,
+    "original_stage_and_three_closed_failures_unchanged": true,
+    "exact_prior_66_calls_and_713224_tokens_retained": true,
+    "same_original_stage_ceilings_no_budget_reset": true,
+    "single_64_call_1M_condition_fits_remaining_stage_allowance": true,
+    "original_per_task_context_output_retry_limits_unchanged": true,
+    "previously_frozen_delta_limited_to_two_harness_files": true,
+    "backend_production_source_matches_round3_full_suite": true,
+    "both_core_instances_use_private_control": true,
+    "private_control_is_optional_and_core_secret_uses_private_pipe": true,
+    "private_shutdown_confirmation_requires_normal_exit": true,
+    "unconfirmed_restart_stop_raises_before_stopped_reads_or_mutation": true,
+    "completed_L2_current_DAG_and_original_Router_notice_pre_post_stop": true,
+    "post_stop_revalidates_same_pending_R2_identity": true,
+    "confirmed_stop_and_later_state_failure_cannot_silently_pass": true,
+    "copied_real_round3_false_positive_rejected": true,
+    "livecore_implementation_bound_in_runtime_source_digest": true,
+    "one_fresh_condition_no_historical_execution_or_replay": true
+  },
+  "checks_all_passed": true,
+  "blocking_findings": [],
+  "source_delta_from_round3": [
+    {
+      "path": ".local/superagent/completion_supplemental_audit.py",
+      "old_sha256": null,
+      "new_sha256": "e9b3f684948b7029ad56318982052d963d8575e9f67375cb5e1117ccc1acf598"
+    },
+    {
+      "path": "backend/scripts/phase2/live_core.py",
+      "old_sha256": "b4739436f8e2e423f24e0ac0c0136bee95200c9130a189bc164973c780dde5c2",
+      "new_sha256": "afd78146010e552d86273f0eddc63d6dd43e6d0df968ceb1375c061fbd267f52"
+    },
+    {
+      "path": "backend/scripts/verify_superagent_capability.py",
+      "old_sha256": "e294f877acb531348d40935706fe7ef7d83773f40a36b9a43b3daeae508c16a3",
+      "new_sha256": "1760c6689caed8d9692547bdbeadca3d47410f143f629b155d6fae9f0b3135be"
+    },
+    {
+      "path": "backend/tests/test_capability_restart_boundary.py",
+      "old_sha256": null,
+      "new_sha256": "05f18addf505fa17c43f4f8340d4d724014d33a04867726c13b3234d3af14c19"
+    },
+    {
+      "path": "backend/tests/test_live_core_private_control.py",
+      "old_sha256": null,
+      "new_sha256": "5c3d40726330e53bb3260704a25da7a645d741d99de30a19c810253e3068f752"
+    }
+  ],
+  "prior_result_links": [
+    {
+      "path": "docs/audit/superagent/capability-completion-round1-result.json",
+      "sha256": "bba83eb2fb4158686112bc98a83c972310e575a21fbb4ac70701a3ab09c5dafe",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round2-result.json",
+      "sha256": "ad46cd8819c9b0783bda9901139fa6a747221d4d15dcc2f52a77d8467171327c",
+      "hash_matches": true
+    },
+    {
+      "path": "docs/audit/superagent/capability-completion-round3-result.json",
+      "sha256": "165722a2b5e43cce38d335e7921398c3d2220803facac543e15ae2d56a23dd13",
+      "hash_matches": true
+    }
+  ],
+  "budget": {
+    "prior_attempts_retained": 66,
+    "prior_charged_or_reserved_tokens_retained": 713224,
+    "remaining_stage_attempts_before_condition": 94,
+    "remaining_stage_tokens_before_condition": 1786776,
+    "one_condition_max_attempts": 64,
+    "one_condition_max_tokens": 1000000,
+    "maximum_cumulative_attempts_after_condition": 130,
+    "maximum_cumulative_tokens_after_condition": 1713224,
+    "original_stage_attempt_ceiling": 160,
+    "original_stage_token_ceiling": 2500000,
+    "previous_closed_155_attempt_phase_remains_separate": true
+  },
+  "reviewed_behavior": {
+    "restart_boundary": "Before stop and after confirmed exit, required L2 must be completed in the main conversation, have its current approved plan with all nodes in Core terminal states, and have a Router notice citing the real Quest completion. The old global unsettled model/tool/lease/verifier checks remain; the exact copied round3 gap now fails.",
+    "approval_boundary": "Only the intended exact python_unittest waiting request is held. After stop, the existing validator rechecks source scope, current manifest, blocked/awaiting authorization state, no intent/receipt/result and pending R2 status; approval id/digest/revision must match the pre-stop held set. Changed or missing requests abort before compaction/restart.",
+    "private_shutdown": "The harness uses the existing --core-child private stdin control protocol, sends bootstrap secret by a framed pipe, then sends shutdown and waits for normal process exit. Forced cleanup, timeout, broken pipe, nonzero exit, already stopped or absent process do not count as confirmed graceful shutdown. The default legacy harness path remains optional and unchanged.",
+    "failure_policy": "Stop confirmation failure aborts before post-stop database reads in stop_for_restart, compaction or restart. Post-stop boundary/approval failure aborts without replay. Final unconfirmed cleanup cannot convert a condition to success and preserves an earlier primary cause. Sidecars are not deleted or repaired to make acceptance pass."
+  },
+  "offline_regression_evidence": [
+    {
+      "path": "docs/audit/superagent/capability-private-control-regression.xml",
+      "sha256": "9812129390de4233fa6167aee698a81fc53b77cbf3b3db9d337b3bd61895e485",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "41",
+          "time": "40.723",
+          "timestamp": "2026-11-16T13:46:37.202607+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    },
+    {
+      "path": "docs/audit/superagent/capability-restart-boundary-regression.xml",
+      "sha256": "ab417bba0db2faa934b4fd71c54d3c73e3d28e7ddb73ee3fd2b069dd51fff187",
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "78",
+          "time": "10.519",
+          "timestamp": "2026-11-16T13:50:18.703406+08:00",
+          "hostname": "DESKTOP-PBHPH69"
+        }
+      ]
+    }
+  ],
+  "independent_reruns": [
+    {
+      "file": "backend/tests/test_live_core_private_control.py",
+      "passed": 9,
+      "failed": 0,
+      "seconds": 3.64,
+      "includes_two_real_local_Core_processes_without_Provider": true
+    },
+    {
+      "file": "backend/tests/test_capability_restart_boundary.py",
+      "passed": 25,
+      "failed": 0,
+      "seconds": 1.58,
+      "source_snapshot": "before final cleanup case was expanded"
+    },
+    {
+      "file": "backend/tests/test_capability_restart_boundary.py",
+      "selection": "final_unconfirmed_stop",
+      "passed": 2,
+      "failed": 0,
+      "seconds": 0.36,
+      "source_snapshot": "final frozen implementation"
+    }
+  ],
+  "historical_round3_independent_audit": {
+    "path": "docs/audit/superagent/20261116T053208Z-capability-continuity-549e73-independent-audit.json",
+    "sha256": "6234e4447df5320d28cff608555737b9f4ff98649431eb7d4cce028c68a069c4"
+  },
+  "actions": {
+    "real_model_calls": 0,
+    "credential_reads": 0,
+    "historical_database_SQL_writes": 0,
+    "historical_task_resumptions": 0,
+    "tool_replays": 0,
+    "production_source_edits": 0,
+    "SQLite_original_549e73_opens_during_this_script": 0,
+    "disposable_exact_copy_open_mode": "ro_query_only_read_transaction"
+  },
+  "limitations": [
+    "A read snapshot is not a scheduler fence. Confirmed process exit plus the unchanged post-stop settled-call/effect checks detect races; a failed check aborts rather than authorizing restart.",
+    "Private control confirmation is a valid frame followed by normal process exit; this is not a claim of a separate two-way desktop-host stopped acknowledgment. The real subprocess tests also observe matching Core start/stop generations.",
+    "The earlier SQLITE_IOERR_TRUNCATE1546 remains an observed failure with unproven exact cause; these concrete boundary/shutdown fixes do not rewrite it as success or prove complete I/O causality.",
+    "The full backend suite belongs to the round3 production-source hash. Final harness code has the separately attributed 41/78 related regressions and independent narrow reruns, not a new full-suite claim.",
+    "This audit authorizes no new budget. The parent follows the user's continuing task instruction within the same original stage ceilings, with one recorded fresh condition and preserved failed histories.",
+    "Offline structure/source/exit tests do not establish live supplemental acceptance, semantic correctness or arbitrary-task capability; historical review-packet wire savings remain zero."
+  ]
+}

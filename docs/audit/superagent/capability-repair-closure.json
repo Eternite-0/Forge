@@ -1,0 +1,355 @@
+{
+  "frozen_file_count": 342,
+  "changed": [],
+  "reports": [
+    {
+      "run_id": "20261115T235303Z-capability-continuity-251a4f",
+      "path": "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f.json",
+      "sha256": "cf2a26856b11592810a1987ba33f2d3bd8a3d3ecc7e48b698e02ff43488a680e",
+      "status": "failed",
+      "strategy": "continuity",
+      "checks": {
+        "observed_team_condition_L2": true,
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 31,
+      "known_tokens": 332091,
+      "states": {
+        "settled": 31
+      },
+      "failure_code": "router_did_not_create_independent_task",
+      "metrics": {
+        "provenance": "programmatic_read_only_core_evidence",
+        "worker_execution_modes": {
+          "live": 2
+        },
+        "gateway_attempt_modes_from_worker_scope": {
+          "live": 20,
+          "unattributed_non_worker": 11
+        },
+        "model_calls": 31,
+        "model_calls_by_purpose": {
+          "context_compaction": 4,
+          "independent_reviewer": 2,
+          "memory_semantic_retrieval": 3,
+          "router": 4,
+          "router_notice": 4,
+          "worker": 14
+        },
+        "admission_states": {
+          "settled": 31
+        },
+        "provider_model_pairs": [
+          [
+            "wb-local",
+            "deepseek-v4.1-flash"
+          ]
+        ],
+        "charged_tokens": 332091,
+        "known_charged_tokens": 332091,
+        "unknown_usage_attempts": 0,
+        "cost_microunits": null,
+        "cost_currency": null,
+        "observed_event_span_seconds": 115.7892198562622,
+        "workers_by_state": {
+          "blocked": 2
+        },
+        "quests_by_state": {
+          "running": 1
+        },
+        "core_completed_quest_rate": {
+          "passed": 0,
+          "samples": 1,
+          "value": 0.0
+        },
+        "tool_calls": 18,
+        "tool_states": {
+          "succeeded": 18
+        },
+        "tool_success_rate": {
+          "passed": 18,
+          "samples": 18,
+          "value": 1.0
+        },
+        "repair_events": 0,
+        "worker_repair_counters": 2,
+        "review_attempts": 2,
+        "review_verdicts": {
+          "NEEDS_REVISION": 2
+        },
+        "judged_review_pass_rate": {
+          "passed": 0,
+          "samples": 2,
+          "value": 0.0
+        },
+        "review_infrastructure_errors": 0,
+        "recovery_events": 0,
+        "recovered_run_current_success_rate": {
+          "passed": 0,
+          "samples": 0,
+          "value": null
+        },
+        "receipt_integrity_rate": {
+          "passed": 18,
+          "samples": 18,
+          "value": 1.0
+        },
+        "context_archive_count": 2,
+        "core_source_read_count": 0,
+        "subscription_count": 2,
+        "trigger_delivery_count": 2,
+        "source_refs": [
+          "model_attempt:f034b0611da94ce1ab3afa0cfbd84c1b",
+          "model_attempt:8adce683e49444b7bba24ae32fc8622c",
+          "model_attempt:9e2772d31a1e4ab9bdb72c6463e892ab",
+          "model_attempt:c15e297c7814484f8095a519bea20ecf",
+          "model_attempt:8e82fddf1cbd41daa31281ae31ef8481",
+          "model_attempt:6e4c6d0fa2634e90a9bb155d0c492e04",
+          "model_attempt:2dee636b5e334d0baeca25592ba2a5e0",
+          "model_attempt:0bae1bbb83514f44aa66f14e80fc2c5b",
+          "model_attempt:fd02c294b74a46f4b78ac12699be670b",
+          "model_attempt:8c98902608844bc4abac1e56e4c4ca1f",
+          "model_attempt:21ca57bfa2ac4cbda288ae4a26aa6686",
+          "model_attempt:de1d88af6b5e4ca49eb48b08874e676e",
+          "model_attempt:88a1a06dfdf84ae9a74ee4a5b8ec6666",
+          "model_attempt:6d2c87ed04014b64863dd60a8868639d",
+          "model_attempt:bae1a59b0d954351bae4c82c9454da74",
+          "model_attempt:3c349546d59745ae8ce5a2bc9394f30c",
+          "model_attempt:e67b683118a4468e8b122f07104859dd",
+          "model_attempt:f97e8bd26a634fb29e7e16cb56f605d9",
+          "model_attempt:df14db7cb772437f9b73fb752a924148",
+          "model_attempt:d35e9fb90809494f8b2869cf90d1ec59",
+          "model_attempt:a071dd59c7bc4502840bed871c95bdc7",
+          "model_attempt:5396000ed6544bfea14484c0efbd41da",
+          "model_attempt:376c5fa53c8c486e93166b7c80c87d66",
+          "model_attempt:177fed01033f49eeb01fe42d58d51115",
+          "model_attempt:fb98dd8a2b4742259a88ec7d00af3c61",
+          "model_attempt:52e7295aa50948669f0a58649924a646",
+          "model_attempt:3ce3e582549a4016a12fbaf5dc5b34b6",
+          "model_attempt:8ce66f371e484dbcb807686109113cac",
+          "model_attempt:56adac805598467e95068bfc60d5f9f5",
+          "model_attempt:b3e4e687c467489fb1e7e9c80dc40deb",
+          "model_attempt:b61f281b65a840b29fc4f0bdb2502616",
+          "run:run_c0bb31f63973",
+          "run:run_eab8762bc484",
+          "receipt:receipt_0e7c94eb01df",
+          "receipt:receipt_0ede0722b61f",
+          "receipt:receipt_2d1628fcc3d4",
+          "receipt:receipt_564001f419dc",
+          "receipt:receipt_6108774bff31",
+          "receipt:receipt_7304944f39d0",
+          "receipt:receipt_79e6f2a49ab1",
+          "receipt:receipt_7c38725c99a1",
+          "receipt:receipt_99562aa03f03",
+          "receipt:receipt_b83c8f020824",
+          "receipt:receipt_c13ca024a9d6",
+          "receipt:receipt_c76bfb23d69f",
+          "receipt:receipt_ca3e7a2154b6",
+          "receipt:receipt_cd805e84bbbf",
+          "receipt:receipt_eeca7805dd4f",
+          "receipt:receipt_ef72cecf0af9",
+          "receipt:receipt_f37e9c0f808b",
+          "receipt:receipt_f3c776900e8a",
+          "event:evt_ccc32d6cb368",
+          "event:evt_1b3ed6441731"
+        ],
+        "source_refs_omitted": 0,
+        "snapshot_sha256": "8bbaad3bf074d396761d2b78441897f1b3eff1559371c2bfa3d815b423200c13",
+        "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+      }
+    },
+    {
+      "run_id": "20261115T235734Z-capability-project-b550f2",
+      "path": "docs/audit/superagent/20261115T235734Z-capability-project-b550f2.json",
+      "sha256": "1be98085d3d733876496548fe2ee6e622bd596828f2be1c325ae46b04e21bd77",
+      "status": "failed",
+      "strategy": "project",
+      "checks": {
+        "pass_through_L1": true,
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 11,
+      "known_tokens": 94082,
+      "states": {
+        "settled": 11
+      },
+      "failure_code": "bounded_scenario_deadline",
+      "metrics": {
+        "provenance": "programmatic_read_only_core_evidence",
+        "worker_execution_modes": {
+          "live": 1
+        },
+        "gateway_attempt_modes_from_worker_scope": {
+          "live": 7,
+          "unattributed_non_worker": 4
+        },
+        "model_calls": 11,
+        "model_calls_by_purpose": {
+          "memory_semantic_retrieval": 1,
+          "router": 1,
+          "router_notice": 2,
+          "worker": 7
+        },
+        "admission_states": {
+          "settled": 11
+        },
+        "provider_model_pairs": [
+          [
+            "wb-local",
+            "deepseek-v4.1-flash"
+          ]
+        ],
+        "charged_tokens": 94082,
+        "known_charged_tokens": 94082,
+        "unknown_usage_attempts": 0,
+        "cost_microunits": null,
+        "cost_currency": null,
+        "observed_event_span_seconds": 234.9482879638672,
+        "workers_by_state": {
+          "review_pending": 1
+        },
+        "quests_by_state": {
+          "running": 1
+        },
+        "core_completed_quest_rate": {
+          "passed": 0,
+          "samples": 1,
+          "value": 0.0
+        },
+        "tool_calls": 9,
+        "tool_states": {
+          "succeeded": 9
+        },
+        "tool_success_rate": {
+          "passed": 9,
+          "samples": 9,
+          "value": 1.0
+        },
+        "repair_events": 0,
+        "worker_repair_counters": 0,
+        "review_attempts": 1,
+        "review_verdicts": {
+          "BLOCKED": 1
+        },
+        "judged_review_pass_rate": {
+          "passed": 0,
+          "samples": 0,
+          "value": null
+        },
+        "review_infrastructure_errors": 1,
+        "recovery_events": 0,
+        "recovered_run_current_success_rate": {
+          "passed": 0,
+          "samples": 0,
+          "value": null
+        },
+        "receipt_integrity_rate": {
+          "passed": 6,
+          "samples": 6,
+          "value": 1.0
+        },
+        "context_archive_count": 0,
+        "core_source_read_count": 0,
+        "subscription_count": 1,
+        "trigger_delivery_count": 2,
+        "source_refs": [
+          "model_attempt:775ba656fc274885a02af6baf570aa4c",
+          "model_attempt:814566739092478d893baba9bd349687",
+          "model_attempt:0b2164a0aea541a2ba1b2dc683fe144d",
+          "model_attempt:ba58ab8eeb534f498c1da0d2a4149114",
+          "model_attempt:2f48c0fe6888446d9f2cba3a6c5b884a",
+          "model_attempt:d7c49690cf364e0481888e4d20964823",
+          "model_attempt:ddb6588ad5554ab9b4eed776b64df40d",
+          "model_attempt:970636cac5bf4d228dbc99ab06e2be83",
+          "model_attempt:183c7d860ffa4ef09cd47a112bceffa8",
+          "model_attempt:ff197dda62b244a6a353d7b7e04d4c08",
+          "model_attempt:c71f84d08c3648c08c217e087f49804f",
+          "run:run_c3dfd3706845",
+          "receipt:receipt_27ae6a64bc35",
+          "receipt:receipt_2e2a3c897b74",
+          "receipt:receipt_6ca2515efed1",
+          "receipt:receipt_6d28116c3d11",
+          "receipt:receipt_b26f6981721c",
+          "receipt:receipt_c4c823a59a0f",
+          "event:evt_1f3f2a786a3b"
+        ],
+        "source_refs_omitted": 0,
+        "snapshot_sha256": "7a4112e7bd5ede5c7ab7361e6f4aa4698c3c3bafc433be50f49101b7011bd5b7",
+        "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+      }
+    },
+    {
+      "run_id": "20261115T235408Z-failover-6b6702",
+      "path": "docs/audit/superagent/20261115T235408Z-failover-6b6702.json",
+      "sha256": "e276621197e80ff6d5770a28914a3c4d42f8335d8f084f2166a07b4a19b35cb9",
+      "status": "failed",
+      "strategy": "model_recovery_probe",
+      "checks": {
+        "native_model_reassignment": true,
+        "alternative_model_completed_real_worker": false,
+        "real_artifact_matches_exact_acceptance": true,
+        "replacement_source_bound_write_and_read_receipts": true,
+        "independent_reviewer_pass": false,
+        "quest_completed": false,
+        "same_original_router_delivered_result": false,
+        "all_noninjected_attempts_settled": true,
+        "known_rejection_reservation_retained_without_refund": true,
+        "no_unknown_tool_outcomes": true
+      },
+      "attempts": 11,
+      "known_tokens": 45594,
+      "states": {
+        "settled": 10,
+        "rejected": 1
+      },
+      "failure_code": "TimeoutError",
+      "metrics": {}
+    }
+  ],
+  "attempts": 53,
+  "known_tokens": 471767,
+  "full_regression": {
+    "path": "docs/audit/superagent/capability-repair-backend.xml",
+    "sha256": "58ad9c47057ff8cb1b9d7bab2f0c2f1e15ee6c099ffd2ff1693ff2cb8d5532f7",
+    "tests": 2767,
+    "failures": 13,
+    "errors": 0,
+    "skipped": 3,
+    "passed": 2751,
+    "seconds": 848.462,
+    "failed_cases": [
+      "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+      "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+      "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+      "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+      "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+      "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+      "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+      "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+      "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+      "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+      "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+      "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+    ]
+  },
+  "schema_version": 1,
+  "status": "closed_acceptance_failed",
+  "goal_achieved": false,
+  "source_freeze": "docs/audit/superagent/capability-repair-source-freeze.json",
+  "independent_corrections": [
+    "docs/audit/superagent/20261115T235408Z-failover-6b6702-independent-supplemental.json",
+    "docs/audit/superagent/20261115T235303Z-capability-continuity-251a4f-independent-supplemental.json",
+    "docs/audit/superagent/20261115T235734Z-capability-project-b550f2-independent-artifact-only.json"
+  ],
+  "phase_limits_not_increased": true,
+  "unknown_operations_replayed": false
+}

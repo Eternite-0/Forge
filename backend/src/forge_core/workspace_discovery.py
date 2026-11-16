@@ -73,6 +73,37 @@ class WorkspaceDiscovery:
     def __init__(self, store):
         self.store = store
 
+    def register_user_request(self, content, *, connection):
+        """Present explicitly named user projects; never bind tasks or grant tools.
+
+        Only Router.handle_user_message supplies the current authenticated user's
+        unmodified text. Call after request-ID replay/conflict checks and inside
+        the existing pre-inference snapshot transaction, never on model output,
+        historical/tool text, or a background Trigger payload.
+        """
+        projects = {}
+        for path in _named_paths(content):
+            try:
+                project = detect_project(path)
+            except (OSError, ValueError):
+                continue
+            projects[project["id"]] = project
+        timestamp = now_iso()
+        for project in projects.values():
+            connection.execute(
+                "INSERT INTO workspace_projects VALUES (?,?,?,?,?) "
+                "ON CONFLICT(id) DO UPDATE SET markers_json=excluded.markers_json,"
+                "detected_at=excluded.detected_at",
+                (
+                    project["id"],
+                    project["root"],
+                    project["name"],
+                    json.dumps(project["markers"]),
+                    timestamp,
+                ),
+            )
+        return list(projects.values())
+
     def associate_request(self, quest_id):
         """Recognize a uniquely named local project from the immutable request.
 
@@ -80,6 +111,7 @@ class WorkspaceDiscovery:
         project content, follows a model-selected path, or adds tool grants.
         Multiple distinct projects retain the neutral storage-workspace link.
         """
+        existing = self.for_quest(quest_id)
         with self.store.connection() as connection:
             quest = connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
             if quest is None:
@@ -108,6 +140,13 @@ class WorkspaceDiscovery:
             except (OSError, ValueError):
                 continue
             projects[project["id"]] = project
+        # Only a verified immutable user/Trigger request may correct an existing
+        # model-selected identity. Missing, ambiguous or mutable paths preserve
+        # that identity, and association never changes tool grants.
+        if existing and (not mandate or len(projects) != 1):
+            return existing
+        if existing and existing["id"] in projects:
+            return existing
         path = next(iter(projects.values()))["root"] if len(projects) == 1 else None
         return self.associate(quest_id, path)
 

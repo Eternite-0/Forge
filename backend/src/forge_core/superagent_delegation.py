@@ -18,8 +18,9 @@ from .router_domain import IndependentDispatch
 from .team_composition import PRESET_ROLES, CompositionLimits, RoleSpec
 from .worker_schema import STRICT_DELIVERY_OUTPUT_SCHEMA
 
-POLICY = "local-superagent-v1"
-SAFE_TOOLS = (
+LEGACY_POLICY = "local-superagent-v1"
+POLICY = "local-superagent-v2"
+LEGACY_SAFE_TOOLS = (
     "file_read",
     "directory_list",
     "file_write",
@@ -31,6 +32,8 @@ SAFE_TOOLS = (
     "git_status",
     "gpu_status",
 )
+SAFE_TOOLS = (*LEGACY_SAFE_TOOLS, "worker_read_completed_delivery", "python_unittest")
+POLICY_TOOLS = {LEGACY_POLICY: LEGACY_SAFE_TOOLS, POLICY: SAFE_TOOLS}
 
 
 def _json(value):
@@ -90,6 +93,8 @@ def issue_mandate(work, quest_id, source_message_id=None, *, trigger_id=None):
         "max_steps": 32,
         "max_tools": 64,
         "max_seconds": 1800,
+        "initial_tool_budget": 32,
+        "max_help_depth": 1,
         "write_scope": f"work/{quest_id}",
     }
     c.execute(
@@ -128,23 +133,30 @@ class DelegationAuthority:
             raise DomainError("Unknown delegation contract")
         if kind == "plan":
             nodes = body.get("nodes", [])
+            quest = connection.execute("SELECT * FROM quests WHERE id=?", (quest_id,)).fetchone()
+            assignments = _assignments(quest)
+            from .superagent_swarm import graph_matches_assignments, validate_expansion_plan
+
+            expanded = bool(body.get("revision_lineage"))
+            if expanded:
+                validate_expansion_plan(connection, quest_id, revision, digest, body)
+
             if (
                 not 1 <= len(nodes) <= policy["max_workers"]
-                or body.get("edges")
-                or body.get("revision_lineage")
-                or body.get("hierarchical_expansions")
+                or (not expanded and not graph_matches_assignments(body, assignments))
+                or (not expanded and body.get("hierarchical_expansions"))
                 or body["max_total_tokens"] > policy["max_tokens"]
                 or sum(n["budget_tokens"] for n in nodes) > policy["max_tokens"]
                 or (body.get("max_duration_seconds") or 0) > policy["max_seconds"]
                 or any(set(n["allowed_tools"]) - set(policy["tools"]) for n in nodes)
             ):
-                raise DomainError("Plan exceeds independent-task mandate")
+                raise DomainError("Plan exceeds bounded task mandate")
         else:
             limits = body["limits"]
             if (
                 limits["max_members"] > policy["max_workers"]
                 or limits["max_concurrency"] > policy["max_workers"]
-                or limits["max_depth"] != 0
+                or limits["max_depth"] > policy.get("max_help_depth", 0)
                 or limits["max_total_tool_calls"] > policy["max_tools"]
                 or limits["max_total_tokens"] > policy["max_tokens"]
                 or len(body["members"]) > policy["max_workers"]
@@ -161,6 +173,14 @@ class DelegationAuthority:
                 )
             ):
                 raise DomainError("Team exceeds delegation mandate")
+            if body.get("reassignment"):
+                from .superagent_swarm import check_reassignment_budget
+
+                check_reassignment_budget(connection, quest_id, body, policy)
+            else:
+                from .superagent_swarm import check_residual_allocation
+
+                check_residual_allocation(connection, quest_id, body["members"], policy)
         connection.execute(
             "INSERT OR IGNORE INTO delegation_contracts VALUES (?,?,?,?)",
             (mandate["id"], kind, revision, digest),
@@ -199,7 +219,8 @@ def _active(connection, mandate_id, quest_id):
     if not valid_source:
         raise DomainError("Delegation mandate is unavailable or changed")
     policy = json.loads(row["policy_json"])
-    if policy.get("version") != POLICY or policy.get("tools") != list(SAFE_TOOLS):
+    expected_tools = POLICY_TOOLS.get(policy.get("version"))
+    if expected_tools is None or policy.get("tools") != list(expected_tools):
         raise DomainError("Unknown delegation policy")
     return row, policy
 
@@ -228,6 +249,11 @@ def _split_budget(total, count):
 
 
 def _assignments(quest):
+    from .superagent_swarm import team_assignments
+
+    team = team_assignments(quest)
+    if team is not None:
+        return team["assignments"]
     metadata = json.loads(quest["metadata"])
     raw = metadata.get("independent_dispatches", [])
     if not isinstance(raw, list) or len(raw) > 4:
@@ -275,11 +301,19 @@ class SuperagentDelegation:
         if quest["status"] in {"cancelled", "rejected", "failed", "completed"}:
             return False
         assignments = _assignments(quest)
+        from .superagent_swarm import (
+            assignment_tools,
+            edges_for,
+            graph_matches_assignments,
+            team_assignments,
+        )
+
+        execution_team = team_assignments(quest)
         count = len(assignments)
         if count > policy["max_workers"]:
             raise DomainError("Independent dispatches exceed the Worker mandate")
         token_budgets = _split_budget(policy["max_tokens"], count)
-        tool_budgets = _split_budget(policy["max_tools"], count)
+        tool_budgets = _split_budget(policy.get("initial_tool_budget", policy["max_tools"]), count)
         time_budgets = _split_budget(policy["max_seconds"], count)
         nodes = [
             {
@@ -288,7 +322,25 @@ class SuperagentDelegation:
                 "success_criteria": ["delivery_review"],
                 "budget_tokens": token_budgets[index],
                 "required_capabilities": {},
-                "allowed_tools": list(policy["tools"]),
+                "allowed_tools": assignment_tools(policy, item),
+                **(
+                    {
+                        "required_predecessor_deliveries": item["depends_on"],
+                    }
+                    if item.get("depends_on")
+                    else {}
+                ),
+                **(
+                    {
+                        "capacity_bounds": {
+                            "max_source_receipt_bytes": 32768,
+                            "max_artifact_bytes": 16384,
+                            "max_delivery_bytes": 16384,
+                        }
+                    }
+                    if execution_team is not None
+                    else {}
+                ),
             }
             for index, item in enumerate(assignments)
         ]
@@ -302,7 +354,7 @@ class SuperagentDelegation:
                 quest_id,
                 {
                     "nodes": nodes,
-                    "edges": [],
+                    "edges": edges_for(assignments),
                     "max_total_tokens": policy["max_tokens"],
                     "max_duration_seconds": policy["max_seconds"],
                 },
@@ -316,9 +368,7 @@ class SuperagentDelegation:
                 work.connection.execute(
                     "UPDATE quests SET metadata=? WHERE id=?", (_json(metadata), quest_id)
                 )
-        if plan.get("edges") or {item["key"]: item["objective"] for item in plan["nodes"]} != {
-            item["key"]: item["objective"] for item in assignments
-        }:
+        if not graph_matches_assignments(plan, assignments):
             raise DomainError("Task contracts changed after independent dispatch")
         quest = self.store.get_quest(quest_id)
         if plan["status"] == "proposed":
@@ -372,21 +422,44 @@ class SuperagentDelegation:
                         task_node_key=assignment["key"],
                         dynamic=count > 1,
                         required_capabilities=requirements,
-                        tools=list(policy["tools"]),
-                        input_tokens=min(window, 65536, token_budgets[index] - member_output),
+                        tools=assignment_tools(policy, assignment),
+                        input_tokens=(
+                            min(
+                                window - member_output,
+                                token_budgets[index] // 2 - member_output,
+                                8192
+                                + len(quest["goal"].encode("utf-8"))
+                                + len(assignment["objective"].encode("utf-8")),
+                            )
+                            if policy["version"] == POLICY
+                            else min(window, 65536, token_budgets[index] - member_output)
+                        ),
                         output_tokens=member_output,
+                        execution_token_budget=(
+                            token_budgets[index] // 2 if policy["version"] == POLICY else None
+                        ),
                         max_steps=policy["max_steps"],
                         max_tool_calls=tool_budgets[index],
                         max_duration_seconds=time_budgets[index],
-                        responsibility="Execute only your assigned independent node objective. "
-                        "Plan your own steps and report findings to the Router. Write only inside "
+                        responsibility="Execute only your assigned expert objective. "
+                        "Plan your own steps, read declared predecessor deliveries before using "
+                        "their findings, and report through the Router. Write only inside "
                         + policy["write_scope"]
                         + ".",
                         input_contract=[
                             (
                                 "Use the complete original request for constraints; execute your "
                                 "current node objective. Other assignments belong to their Workers."
-                            )
+                            ),
+                            *(
+                                [
+                                    "Read the full completed predecessor deliveries with "
+                                    "worker_read_completed_delivery before relying on them: "
+                                    + ", ".join(assignment["depends_on"])
+                                ]
+                                if assignment.get("depends_on")
+                                else []
+                            ),
                         ],
                         output_schema=STRICT_DELIVERY_OUTPUT_SCHEMA,
                         acceptance_criteria=["delivery_review"],
@@ -397,11 +470,15 @@ class SuperagentDelegation:
                 roles,
                 CompositionLimits(
                     max_members=count,
-                    max_depth=0,
-                    max_concurrency=min(count, self.max_concurrency),
+                    max_depth=policy.get("max_help_depth", 0),
+                    max_concurrency=(
+                        1
+                        if execution_team and execution_team["strategy"] == "sequential"
+                        else min(count, self.max_concurrency)
+                    ),
                     max_total_tokens=policy["max_tokens"],
                     max_total_tool_calls=policy["max_tools"],
-                    allowed_tools=list(policy["tools"]),
+                    allowed_tools=sorted({tool for role in roles for tool in role.tools}),
                 ),
                 strategy="complementarity",
                 expected_version=quest["version"],
@@ -505,4 +582,6 @@ class SuperagentDelegation:
                 # Retain the last committed phase; supervision retries without
                 # fabricating approval, models or evidence.
                 continue
-        return prepared
+        from .superagent_swarm import recover_expert_requests
+
+        return prepared + recover_expert_requests(self)

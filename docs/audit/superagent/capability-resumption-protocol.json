@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "frozen_before_provider_calls",
+  "authorization": "The user asked this chat to read the failed FORGE chat and continue its authorized backend work on 2026-11-16.",
+  "scope": "Source corrections for explicit Worker tool-path semantics and retaining verified settled failures after repair exhaustion.",
+  "previous_phase": {
+    "path": "docs/audit/superagent/capability-pre-resumption-final-verification.json",
+    "sha256": "9a6ea4738ca490fa6ef0dc8ac13e87801e90daf930120ab4654a8dbc2fc52917"
+  },
+  "previous_phase_is_closed": true,
+  "source_freeze": {
+    "path": "docs/audit/superagent/capability-resumption-source-freeze.json",
+    "sha256": "c531045546f89f67048b88cca2ade0efcfcc6222bd8bc7514c8555405dfc3343"
+  },
+  "accounting_before_this_condition": {
+    "continuation_attempt_limit": 160,
+    "attempts": 131,
+    "settled": 129,
+    "injected_rejected_not_forwarded": 2,
+    "known_tokens": 1278416,
+    "charged_or_reserved_tokens": 1330046,
+    "original_token_limit": 2600000,
+    "historical_unknown_tool_outcomes": 1,
+    "unknown_usage_not_imputed_or_refunded": true,
+    "original_160_attempt_phase_and_12_microprobes_remain_separate": true
+  },
+  "condition": {
+    "strategy": "development",
+    "samples": 1,
+    "maximum_new_attempts": 29,
+    "per_task_original_attempt_limit": 32,
+    "token_limit": 500000,
+    "task_observation_seconds": 900,
+    "shutdown_drain_seconds": 130,
+    "deadline_note": "Driver observation limit followed by bounded settlement drain; not a trusted hard 900-second admission deadline.",
+    "worker_output_limit": 8192,
+    "router_output_limit": 4096,
+    "gateway_retries": 0,
+    "model_context_window": 100000000,
+    "context_source": "explicit_user_declaration",
+    "discovered_context_conflict_retained": true,
+    "original_provider_configuration_modified": false
+  },
+  "unchanged_acceptance": [
+    "Real code and visible CPython tests with fresh exact-manifest R2 authorization.",
+    "Final candidate hash bound to a real successful test receipt in development.json.",
+    "Seven independent held-out cases, real independent Reviewer and reviewed final Router notification.",
+    "All attempts and unknown outcomes retained after drain, with no replay of historical operations."
+  ],
+  "stop_policy": "One fresh isolated development condition only; no retry or additional real probe after its outcome, no source edits until drain completes, no budget/output/retry increase.",
+  "interpretation": "A development success establishes this L3 sample only. Multi-specialist L2 and the complete two-project/restart/compaction/Recall scenario remain unaccepted."
+}

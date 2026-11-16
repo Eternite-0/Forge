@@ -1,0 +1,158 @@
+{
+  "audit_type": "programmatic_test_contract_followup_not_provider_reacceptance",
+  "created_at": "2026-11-16T00:40:56.931464+00:00",
+  "classification": "Omitted historical test assertion for the deliberately removed legacy 65KiB packet cap; production native model/cumulative admission remains enforced.",
+  "historical_13_failure_set_unchanged": true,
+  "new_failure": [
+    "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+  ],
+  "source_freeze": {
+    "files": 345,
+    "manifest_sha256": "5df3c2c51dd5d576fea573a2a942c1af1885f3218edf6d6c76f384be4e353a72",
+    "src_or_scripts_changed": false,
+    "only_file_changed": [
+      {
+        "path": "backend/tests/test_specialist_artifact_projection.py",
+        "frozen_sha256": "01ec1f0811576852460bfcba52912bf0fe5fa91af0eff9b4b9cf91547f45ac76",
+        "current_sha256": "53166953d71b5cf473c1b3bbfc333c14ce53828f34ff5870acdd7af30b912047"
+      }
+    ]
+  },
+  "test_only_change": {
+    "artifact_chars": 65000,
+    "same_original_artifact_bytes": 65013,
+    "complete_body_hash_receipt_bound": true,
+    "complete_raw_packet_over_65536_kept": true,
+    "legacy_has_no_explicit_envelope": true,
+    "native_window": 64000,
+    "original_cumulative_token_limit": 33000,
+    "actual_review_outcome": "BLOCKED/deterministic_review_capacity",
+    "extra_mock_model_requests": 0,
+    "original_budget_and_source_unchanged": true,
+    "explicit_envelope_coverage": "Existing reviewed capacity/envelope regression remains in the 61-test followup; no allowance or contract expanded."
+  },
+  "validation": {
+    "capability-backend-final.xml": {
+      "sha256": "cc59f011c13652d7bdebbd1a2c94dbdef26d0b4f6e2fac9d7e923445e9eba63e",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "13",
+        "skipped": "3",
+        "tests": "2603",
+        "time": "556.739",
+        "timestamp": "2026-11-16T06:28:40.378598+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      },
+      "failures": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+      ]
+    },
+    "capability-repair-backend.xml": {
+      "sha256": "58ad9c47057ff8cb1b9d7bab2f0c2f1e15ee6c099ffd2ff1693ff2cb8d5532f7",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "13",
+        "skipped": "3",
+        "tests": "2767",
+        "time": "848.462",
+        "timestamp": "2026-11-16T07:53:03.559381+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      },
+      "failures": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values"
+      ]
+    },
+    "capability-final-backend.xml": {
+      "sha256": "0982aa9a5e6fd6d1a15f6ad958cc5a91d4ee92853c24cf04307cb33cd16fb7fc",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "14",
+        "skipped": "3",
+        "tests": "2812",
+        "time": "642.604",
+        "timestamp": "2026-11-16T08:26:29.569255+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      },
+      "failures": [
+        "tests.test_composer_resources_v21::test_production_pump_uses_semantic_wire_then_full_native_service_admission",
+        "tests.test_core_measured_planner_v19::test_core_protocol_quantifies_single_chain_and_independent_branches[branch]",
+        "tests.test_core_measured_planner_v19::test_core_uses_original_operator_intersection_without_accepting_model_caps",
+        "tests.test_core_measured_planner_v19::test_selected_team_is_remeasured_and_approved_with_explicit_stage_margin",
+        "tests.test_core_measured_planner_v19::test_core_preserves_large_output_bounds_and_context_rejection",
+        "tests.test_core_measured_serial_v17::test_actual_team_contract_is_remeasured_with_approved_role_cycle_headroom",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[1]",
+        "tests.test_planner_dataflow_v21::test_constructed_original_router_source_capacity_is_feasible[2]",
+        "tests.test_planner_guidance_v24::test_complete_preview_explains_all_cycles_and_extra_edge_loss_of_serial_pool",
+        "tests.test_planner_protocol_v23::test_valid_nodes_get_all_raw_native_correction_metrics_while_bad_criteria_stay_unknown",
+        "tests.test_planner_protocol_v23::test_first_rejection_combines_schema_and_all_independent_capacity_measurements",
+        "tests.test_planner_protocol_v23::test_normal_preflight_still_rejects_a_packet_which_diagnostic_only_can_measure",
+        "tests.test_planner_protocol_v25::test_rejected_custom_bounds_get_one_compact_repair_without_changing_their_values",
+        "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+      ]
+    },
+    "capability-specialist-legacycap-before.xml": {
+      "sha256": "60aba5eb29954ecee465a55827f7db747ba83cc88a08cede242c00c80673f168",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "1",
+        "time": "0.906",
+        "timestamp": "2026-11-16T08:38:44.303596+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      },
+      "failures": [
+        "tests.test_specialist_artifact_projection::test_extra_specialist_artifact_respects_unchanged_raw_packet_cap"
+      ]
+    },
+    "capability-specialist-legacycap-followup.xml": {
+      "sha256": "8155a80af6b388e6adfc0e96217cc3ba156b10a3e8f6cab58374a6cc92d4be24",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "61",
+        "time": "23.138",
+        "timestamp": "2026-11-16T08:39:42.548036+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      },
+      "failures": []
+    }
+  },
+  "provider_calls": 0,
+  "historical_full_xml_rewritten": false,
+  "limitations": [
+    "The frozen full regression remains 2795 passed,14 failed,3 skipped.",
+    "The followup corrects exactly one stale test and passes 61 targeted tests; no repeated full-suite/all-green claim.",
+    "The historical 13 unrelated failures remain unresolved."
+  ]
+}

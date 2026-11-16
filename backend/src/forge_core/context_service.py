@@ -822,6 +822,16 @@ class ContextService:
                     "read_source": "worker_read_context_source",
                 },
             }
+            if previous.get("model_handoff"):
+                # The previous handoff remains part of the next context until
+                # a new source-bound handoff replaces it. Include it before
+                # deciding whether a settled tail must also be archived.
+                capsule["model_handoff"] = {
+                    **previous["model_handoff"],
+                    "previous_archive": {
+                        key: head[key] for key in ("archive_id", "source_hash", "capsule_hash")
+                    },
+                }
 
             def compacted_result():
                 value = [
@@ -892,13 +902,6 @@ class ContextService:
                     }
                     if head
                     else None,
-                }
-            elif previous.get("model_handoff"):
-                capsule["model_handoff"] = {
-                    **previous["model_handoff"],
-                    "previous_archive": {
-                        key: head[key] for key in ("archive_id", "source_hash", "capsule_hash")
-                    },
                 }
             claims = list(previous.get("hypotheses", []))
             completed = list(previous.get("completed_steps", []))

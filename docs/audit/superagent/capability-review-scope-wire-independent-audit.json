@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T04:42:39.516828+00:00",
+  "provenance": "independent_read_only_offline_historical_packet_wire_audit",
+  "audit_program": {
+    "path": ".local/superagent/review_scope_wire_audit.py",
+    "sha256": "de36d3e2397c9b87b74f3ec7baf82c4369a39654b26c90ea2b6df55f7efafcb2"
+  },
+  "diagnosis_program": {
+    "path": ".local/superagent/l2_failure_diagnosis.py",
+    "sha256": "4cd385bced5cc8c427efdde465e0781c4897831277792dd8ff5dacb534caf382"
+  },
+  "source_files": [
+    {
+      "path": "backend/src/forge_core/independent_review.py",
+      "sha256": "15b5f3b9ee7f38840c6c8b9f238e9fb0b860011704d97bb334f9a30f2a9e76b8"
+    },
+    {
+      "path": "backend/src/forge_core/review_envelope.py",
+      "sha256": "224e2407705432840979d0e10ebe5efb373ea75d3d72a6bd7f0e307008e82852"
+    },
+    {
+      "path": "backend/src/forge_core/providers/__init__.py",
+      "sha256": "daa872fd000f14a15179af8256bf08a7765bb9c7186fe919c2af959f58651b0a"
+    }
+  ],
+  "historical_evidence": {
+    "path": "docs/audit/superagent/capability-l2-closed-failure-diagnosis.json",
+    "sha256": "439b1f34bcaa68a59198af143ed542afa4896e602756a2c10bac626582f08f3f"
+  },
+  "regression_evidence": {
+    "path": "docs/audit/superagent/capability-review-scope-wire-regression.xml",
+    "sha256": "0dd68296e5e72641f551755f33df00db6fb14a38365375392b0462257801ba95"
+  },
+  "actions": {
+    "provider_calls": 0,
+    "credential_reads": 0,
+    "historical_database_writes": 0,
+    "historical_verdict_changes": 0,
+    "production_code_changes": 0,
+    "sqlite_uri_mode": "ro",
+    "sqlite_query_only": true
+  },
+  "measurement_limits": [
+    "Both representations use identical current system instructions to isolate transport savings.",
+    "Native payloads use offline ProviderGateway framing; these are byte-based reservations, not measured model token usage.",
+    "No review rerun, budget admission, approval or model acceptance is claimed.",
+    "The historical original verdicts remain NEEDS_REVISION with their original source attribution."
+  ],
+  "review_conclusions": {
+    "no_automatic_pass_override": true,
+    "all_current_node_mandatory_requirements_retained": true,
+    "unsupported_claims_and_missing_evidence_remain_defects": true,
+    "citation_guidance_matches_existing_verbatim_substring_contract": true,
+    "projection_preserves_complete_canonical_packet_and_pass_hash": true,
+    "approved_envelope_components_checked_on_canonical_packet": true,
+    "native_request_context_and_budget_admission_retained": true,
+    "scope_instruction_is_model_guidance_not_a_programmatic_verdict_filter": true
+  },
+  "database_quick_check": "ok",
+  "historical_database_hash_unchanged": true,
+  "packets": [
+    {
+      "round": 1,
+      "packet_sha256": "15bca56d6f9f77db9a16ea526b4124d7f8a593389f6c5e0e6cc8cd192901c4f1",
+      "canonical_packet_bytes": 68486,
+      "original_verdict_unchanged": "NEEDS_REVISION",
+      "original_review_result_event_id": "evt_eb9cf2b7f864",
+      "exact_canonical_roundtrip": true,
+      "exact_historical_hash_match": true,
+      "projection_complete_text_count": 11,
+      "provider_framing": {
+        "openai_compatible": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 68129,
+            "native_payload_bytes": 69557,
+            "native_input_reservation_byte_based_units": 69621,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 68129,
+            "native_payload_bytes": 69557,
+            "native_input_reservation_byte_based_units": 69621,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        },
+        "deepseek": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 68657,
+            "native_payload_bytes": 68740,
+            "native_input_reservation_byte_based_units": 68804,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 68657,
+            "native_payload_bytes": 68740,
+            "native_input_reservation_byte_based_units": 68804,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        },
+        "anthropic": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 68657,
+            "native_payload_bytes": 68735,
+            "native_input_reservation_byte_based_units": 68799,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 68657,
+            "native_payload_bytes": 68735,
+            "native_input_reservation_byte_based_units": 68799,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        }
+      }
+    },
+    {
+      "round": 2,
+      "packet_sha256": "850c419b16d73a5fce80433d1eb05ca1e83e46293b390b88ad4882c9b04c4ffa",
+      "canonical_packet_bytes": 75947,
+      "original_verdict_unchanged": "NEEDS_REVISION",
+      "original_review_result_event_id": "evt_01dbc473d21b",
+      "exact_canonical_roundtrip": true,
+      "exact_historical_hash_match": true,
+      "projection_complete_text_count": 13,
+      "provider_framing": {
+        "openai_compatible": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 75831,
+            "native_payload_bytes": 77259,
+            "native_input_reservation_byte_based_units": 77323,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 75831,
+            "native_payload_bytes": 77259,
+            "native_input_reservation_byte_based_units": 77323,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        },
+        "deepseek": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 76359,
+            "native_payload_bytes": 76442,
+            "native_input_reservation_byte_based_units": 76506,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 76359,
+            "native_payload_bytes": 76442,
+            "native_input_reservation_byte_based_units": 76506,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        },
+        "anthropic": {
+          "legacy": {
+            "message_count": 6,
+            "serialized_message_bytes": 76359,
+            "native_payload_bytes": 76437,
+            "native_input_reservation_byte_based_units": 76501,
+            "output_reserve": 8192
+          },
+          "current": {
+            "message_count": 6,
+            "serialized_message_bytes": 76359,
+            "native_payload_bytes": 76437,
+            "native_input_reservation_byte_based_units": 76501,
+            "output_reserve": 8192
+          },
+          "native_input_saved": 0,
+          "native_input_savings_fraction": 0.0
+        }
+      }
+    }
+  ]
+}

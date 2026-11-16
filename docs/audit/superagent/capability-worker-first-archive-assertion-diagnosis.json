@@ -1,0 +1,43 @@
+{
+  "provenance": "programmatic_offline_full_original_test_with_one_assertion_corrected_in_memory",
+  "changed_assertion": {
+    "before": "assert request.context_limit <= initial[\"token_limit\"] - settled_spent",
+    "after": "assert reservation <= initial[\"token_limit\"] - settled_spent"
+  },
+  "original_assertion_trace": {
+    "test_line": 74,
+    "call_index": 0,
+    "reservation": 7286,
+    "model_context_limit": 64000,
+    "cumulative_token_limit": 33000,
+    "result": "AssertionError_caught_as_model_error"
+  },
+  "corrected_full_test_passed": true,
+  "request_observations": [
+    {
+      "call_index": 0,
+      "reservation": 7286,
+      "model_context_limit": 64000,
+      "remaining_cumulative_allowance": 33000,
+      "current_token_spent_with_reservation": 7286
+    },
+    {
+      "call_index": 1,
+      "reservation": 10616,
+      "model_context_limit": 64000,
+      "remaining_cumulative_allowance": 32960,
+      "current_token_spent_with_reservation": 10656
+    },
+    {
+      "call_index": 2,
+      "reservation": 13233,
+      "model_context_limit": 64000,
+      "remaining_cumulative_allowance": 32920,
+      "current_token_spent_with_reservation": 13313
+    }
+  ],
+  "assertion_errors": [],
+  "provider_calls": 0,
+  "tracked_test_sha256_before": "ba58fbedb79e095cca0708d6a72471990e28e47ba531f0f333cdb9cbaecdb401",
+  "tracked_test_sha256_after": "ba58fbedb79e095cca0708d6a72471990e28e47ba531f0f333cdb9cbaecdb401"
+}

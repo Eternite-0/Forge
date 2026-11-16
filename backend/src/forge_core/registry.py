@@ -1,5 +1,6 @@
 import hashlib
 import json
+from datetime import UTC, datetime
 
 from .domain import RoleTemplate
 
@@ -49,7 +50,7 @@ class ModelRegistry:
         return self.store.list_models()
 
     async def discover(self, gateway):
-        from .domain import ModelProfile
+        from .domain import ModelProfile, ProtocolSupport
 
         mode = getattr(gateway, "execution_mode", None)
         if mode not in {"mock", "live"}:
@@ -70,12 +71,31 @@ class ModelRegistry:
             identity = json.dumps([provider, model_id], ensure_ascii=False, separators=(",", ":"))
             key = "discovered_" + hashlib.sha256(identity.encode("utf-8")).hexdigest()
             if key not in existing:
+                declared = {}
+                for name in ("context_window", "max_output_tokens"):
+                    if type(item.get(name)) is int and item[name] > 0:
+                        declared[name] = item[name]
+                for field, name in (("supports_tool_calls", "tool_calling_support"),
+                    ("supports_structured_output", "structured_output_support")):
+                    if type(item.get(field)) is bool:
+                        declared[name] = ProtocolSupport(
+                            supported=item[field], source="provider_declared"
+                        )
+                provenance = {"discovery": {"source": "provider", "mode": mode}}
+                if declared:
+                    provenance["provider_declared"] = {
+                        "source": "provider_declared",
+                        "observed_at": datetime.now(UTC).isoformat(),
+                        "scope": "Provider-advertised limits/protocols; not benchmark measurements",
+                        "fields": item.get("declaration_provenance", {}).get("fields", {}),
+                    }
                 profile = ModelProfile(
                     id=key,
                     provider=provider,
                     model_id=model_id,
                     display_name=model_id,
-                    provenance={"discovery": {"source": "provider", "mode": mode}},
+                    provenance=provenance,
+                    **declared,
                 )
                 self.upsert(profile)
                 existing[key] = profile

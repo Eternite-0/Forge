@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { currentWorkspaceProject } from "./projectContext";
+import { request, type Connection } from "./api";
+import { errorMessage } from "./logic";
+import SidebarGroup from "./components/Sidebar/SidebarGroup";
 
 export interface WorkspaceSidebarProps {
   connected: boolean;
@@ -8,6 +11,9 @@ export interface WorkspaceSidebarProps {
   active: boolean;
   navigation: ReactNode;
   children: ReactNode;
+  topNavigation?: ReactNode;
+  footer?: ReactNode;
+  connection?: Connection | null;
 }
 
 function FolderIcon() {
@@ -15,11 +21,21 @@ function FolderIcon() {
 }
 
 export default function WorkspaceSidebar({
-  connected, workspaceId, workspaceRoot, active, navigation, children,
+  connected, workspaceId, workspaceRoot, active, navigation, children, topNavigation, footer, connection,
 }: WorkspaceSidebarProps) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [projectExpanded, setProjectExpanded] = useState(true);
   const [compactViewport, setCompactViewport] = useState(() => window.matchMedia("(max-width: 760px)").matches);
+  const [discovery, setDiscovery] = useState<{ key: string; items: { id: string; root: string; name: string }[]; error: string }>({ key: "", items: [], error: "" });
+  const identity = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "";
+  useEffect(() => {
+    if (!connection) return;
+    const controller = new AbortController();
+    request<{ id: string; root: string; name: string }[]>(connection, "/api/projects/discovered", { signal: controller.signal })
+      .then((items) => { if (!controller.signal.aborted) setDiscovery({ key: identity, items: Array.isArray(items) ? items : [], error: "" }); })
+      .catch((error) => { if (!controller.signal.aborted) setDiscovery({ key: identity, items: [], error: errorMessage(error) }); });
+    return () => controller.abort();
+  }, [identity, connection?.bearer]);
   const workspaceDialogId = useId();
   const projectContentId = useId();
   const workspaceRef = useRef<HTMLDivElement>(null);
@@ -151,7 +167,9 @@ export default function WorkspaceSidebar({
         </button> : <p className="workspace-menu-empty">连接后显示工作空间</p>}
       </div>
     </div>
+    {topNavigation}
     <div className="sidebar-scroll">
+      <SidebarGroup label="置顶"><p className="sidebar-empty">暂无置顶项</p></SidebarGroup>
       <section className="sidebar-project-group" data-project-key={workspaceProject.key} data-project-source="workspace">
         <h2 className="sidebar-section-label">项目</h2>
         <button type="button" className="sidebar-project-toggle" aria-label={`${projectExpanded ? "收起" : "展开"}项目 ${workspaceName}`} aria-expanded={projectExpanded} aria-controls={projectContentId} title={workspacePath || undefined} onClick={() => setProjectExpanded((expanded) => !expanded)} onKeyDown={(event) => {
@@ -164,8 +182,12 @@ export default function WorkspaceSidebar({
           <FolderIcon /><span>{workspaceName}</span>
         </button>
         <div ref={projectContent} id={projectContentId} className="sidebar-project-content" aria-hidden={projectCanCollapse && !projectExpanded}>{navigation}</div>
+        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <div className="discovered-project" key={item.id} title={`${item.root}\n已发现的项目；不授予目录访问权限。`}><FolderIcon /><span>{item.name}</span><small>已发现</small></div>)}
+        {discovery.key === identity && discovery.error && <p className="sidebar-empty" title={discovery.error}>项目发现暂不可用</p>}
       </section>
+      <SidebarGroup label="最近"><p className="sidebar-empty">当前工作空间使用一条长期对话</p></SidebarGroup>
     </div>
     <div className="sidebar-connection">{children}</div>
+    <div className="sidebar-footer">{footer}</div>
   </div>;
 }

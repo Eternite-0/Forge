@@ -1,0 +1,115 @@
+{
+  "schema_version": "router-json-protocol-verification-v1",
+  "created_at": "2026-11-15T23:52:12.265898+00:00",
+  "branch": "codex/phase1-continuous",
+  "baseline_commit": "57a162d31f9b559353fecbde61f95dd72f878abd",
+  "provenance": "programmatic_pytest_sqlite_and_scripted_mock_with_httpx_MockTransport",
+  "real_provider_calls": 0,
+  "provider_configuration_modified": false,
+  "historical_database_or_evidence_modified": false,
+  "original_router_source_sha256": "b48b29c5178421a3e5f3948b6b7c0a20fd1803cbb3df339da31330a94f9bdc3a",
+  "source_hashes": {
+    "backend/src/forge_core/router.py": "c6e2565f45e42461168c0a6234e60094f0aef92d4cbac1f4a6fa5387525e483a",
+    "backend/src/forge_core/router_json_protocol.py": "f49b383ddf2376f1a445334fdc5dfb51f73ed51c687ebfce5bc021ffc056a6e1",
+    "backend/tests/test_router_json_protocol.py": "ef5a6dbc56cc7343f4579afd52a5efeafbf34adb6fe266fae719e1518f2c98ca",
+    "backend/tests/test_persistent_router.py": "889ea771ab94db4c68d49aaab431b3b498f85c08aa04b5cac718589036edf77f"
+  },
+  "behavior": {
+    "wire_schema": "After compact/autonomous selection only, require every advertised object property and remove schema default annotations. Preserve references, original constraints and nullable unions. List-valued defaults remain arrays. Local Pydantic schema/defaults and legacy validation stay unchanged.",
+    "transport": "Only remove one complete lowercase JSON fence with exact LF opening and closing delimiters. No outer whitespace, CRLF delimiters, explanations, multiple fences, other languages, substring extraction or JSON repair.",
+    "validation": "Original RouterDecision and selected_requirements validators still run at initial and repair sites. Raw response and pre-normalization byte limits retained; maximum one reflection unchanged.",
+    "audit": "Separate router.response_transport_normalized event records fixed provenance, stage, raw and normalized SHA256 and byte counts, and explicitly pending validation. Rejected decisions add fixed syntax/shape metadata only; no text, field names, parser messages or values.",
+    "budget": "Projection runs before all existing initial/tool-round/reflection schema framing. No budget, output reserve, context window or retry increase."
+  },
+  "coverage": [
+    "Four compact/autonomous schema variants and unchanged local defaults",
+    "Nested references, required depends_on, array types, constraints, and a literal property named default",
+    "Exact transport success; prose/multiple/partial/CRLF/non-JSON fences rejected",
+    "Malformed body, invalid priority, illegal topology and ineligible Recall still rejected",
+    "Raw rejected fence retained for one reflection, privacy, output bytes, idempotency, atomic turn and no audit CAS self-conflict",
+    "Actual Gateway with MockTransport, tool-round assistant text unchanged, schema instruction matches strict response_format, reflection and framing in 32768/131072-byte windows",
+    "Fixed syntax codes, root kinds, Unicode byte/character distinction, non-text and parser resource limits"
+  ],
+  "tests": [
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-before.xml",
+      "sha256": "26e443b4af18873838780e5d0a8a6a9a72764a477e6f237ef6f14c03f27695d4",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "4",
+        "skipped": "0",
+        "tests": "6",
+        "time": "0.816",
+        "timestamp": "2026-11-16T07:41:45.764686+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-after.xml",
+      "sha256": "9e49a44f2dfab9ca91230c00ed00c34a59eaedb89848948a27b9d64c50db7bb7",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "6",
+        "time": "1.550",
+        "timestamp": "2026-11-16T07:45:37.685923+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-regression.xml",
+      "sha256": "f6e670081a7f3d5d05df410bcd580562b29e4a80b86127c886b820818ca52703",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "69",
+        "time": "7.873",
+        "timestamp": "2026-11-16T07:48:29.083221+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-final.xml",
+      "sha256": "2957175c2a1b08206ceee09cba0b949999406c67ea386dd552fd867ec7794ccf",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "58",
+        "time": "2.719",
+        "timestamp": "2026-11-16T07:49:55.380300+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    },
+    {
+      "path": "docs/audit/superagent/capability-router-json-protocol-joint.xml",
+      "sha256": "2558834e1bc1bf960cfed867f8d325ca3306f56ddc21a00f466d8407abc55124",
+      "suite": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "264",
+        "time": "48.397",
+        "timestamp": "2026-11-16T07:50:17.471275+08:00",
+        "hostname": "DESKTOP-PBHPH69"
+      }
+    }
+  ],
+  "static_checks": {
+    "ruff": "passed for four source/test paths above",
+    "git_diff_check": "passed for four source/test paths above"
+  },
+  "limitations": [
+    "No real Provider or task acceptance was performed by this subtask; parent verification is still required.",
+    "The new exact-fence compatibility behavior and independently observed strict-schema issue do not establish the cause of previous continuity failure. The historical raw responses were not retained and hashes reveal no response shape.",
+    "A transport-normalization audit event is not decision acceptance, task success or proof of strict Provider compliance.",
+    "This helper is scoped to Router decisions; Provider-wide schemas and NoticeDecision are unchanged."
+  ]
+}

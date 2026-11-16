@@ -1,0 +1,209 @@
+{
+  "historical_source": "D:\\Competition_this\\Agent\\.local\\superagent\\20261115T232817Z-failover-35753c\\data\\forge.sqlite3",
+  "historical_database_access": "sqlite-mode-ro",
+  "historical_db_sha256_before": "2dd09fb5ccf69d8a9b672b5e911d6abd7256414b1d1f58e3516c78c2bd52bda9",
+  "historical_db_sha256_after": "2dd09fb5ccf69d8a9b672b5e911d6abd7256414b1d1f58e3516c78c2bd52bda9",
+  "historical_intent": {
+    "id": "action_2bd62f470dc4",
+    "call_id": "call_146afcc647ef47bb6f1089984cba74f6caa18c17b9ce2c9824bc0393238d1de6",
+    "quest_id": "quest_1c56ba92eaad",
+    "worker_id": "worker_726802dda625",
+    "run_id": "run_b373e3afa3bb",
+    "plan_id": "plan_0cc1b14b06e8",
+    "plan_revision": 1,
+    "tool_name": "directory_create",
+    "parameters_json": "{\"path\":\"work/quest_1c56ba92eaad\"}",
+    "parameter_digest": "4007149c7f6382bf12735a295fc36acee09d7a7dff9d22365dffc4ec44df37c9",
+    "resource_scope": "D:\\Competition_this\\Agent\\.local\\superagent\\20261115T232817Z-failover-35753c\\work\\quest_1c56ba92eaad",
+    "risk": "R1",
+    "approval_id": null,
+    "execution_mode": "live",
+    "state": "uncertain",
+    "created_at": "2026-11-15T23:28:58.613997+00:00",
+    "updated_at": "2026-11-15T23:28:58.687244+00:00"
+  },
+  "historical_grants": [
+    {
+      "quest_id": "quest_1c56ba92eaad",
+      "workspace_id": "88e5bb186a2725687ced7a89",
+      "plan_revision": 1,
+      "resource_scope": "D:\\Competition_this\\Agent\\.local\\superagent\\20261115T232817Z-failover-35753c\\work\\quest_1c56ba92eaad",
+      "granted_by": "router_mandate:mandate_91484cad76f9",
+      "created_at": "2026-11-15T23:28:34.735945+00:00",
+      "revoked_at": null
+    }
+  ],
+  "historical_tool_calls": [
+    {
+      "run_id": "run_b373e3afa3bb",
+      "call_id": "call_6c857f09b9911bc3c73efd024a2ccf8afe12c64cfcf520fd89011227c7ae4ebc",
+      "model_call_id": "call_9af25311d21b46d4869ee5cd",
+      "tool_name": "directory_list",
+      "arguments_json": "{\"path\":\"inputs\"}",
+      "state": "succeeded",
+      "receipt_id": "receipt_c3bf79cb0e60",
+      "result_json": "{\"call_id\":\"call_6c857f09b9911bc3c73efd024a2ccf8afe12c64cfcf520fd89011227c7ae4ebc\",\"intent_id\":\"action_93bb7e39e948\",\"output\":{\"entries\":[\"value.txt\"]},\"receipt_id\":\"receipt_c3bf79cb0e60\",\"state\":\"succeeded\"}"
+    },
+    {
+      "run_id": "run_b373e3afa3bb",
+      "call_id": "call_7b0b46d372cb32517bd0b0560adb2758a23c3d747d24b161f31a5daa4aed8d98",
+      "model_call_id": "call_bfe699b131fc4dd7a7eec59e",
+      "tool_name": "directory_create",
+      "arguments_json": "{\"path\":\"quest_1c56ba92eaad\"}",
+      "state": "failed",
+      "receipt_id": null,
+      "result_json": "{\"call_id\":\"call_7b0b46d372cb32517bd0b0560adb2758a23c3d747d24b161f31a5daa4aed8d98\",\"output\":{\"allowed_write_roots\":[\"work/quest_1c56ba92eaad\"],\"authorization_source\":\"existing_task_grants\",\"error_code\":\"local_write_outside_existing_grant\",\"no_effect\":true},\"receipt_id\":null,\"state\":\"rejected_before_execution\"}"
+    },
+    {
+      "run_id": "run_b373e3afa3bb",
+      "call_id": "call_146afcc647ef47bb6f1089984cba74f6caa18c17b9ce2c9824bc0393238d1de6",
+      "model_call_id": "call_25291b4a80464be3847f8520",
+      "tool_name": "directory_create",
+      "arguments_json": "{\"path\":\"work/quest_1c56ba92eaad\"}",
+      "state": "uncertain",
+      "receipt_id": null,
+      "result_json": null
+    },
+    {
+      "run_id": "run_b373e3afa3bb",
+      "call_id": "call_b5455a4c780c3b2ee00673a85c1daa3b8eed3d218fd3e109f3d26c10444991e8",
+      "model_call_id": "call_4f6fe4f34ad44f7ba9efbb5e",
+      "tool_name": "file_read",
+      "arguments_json": "{\"path\":\"inputs/value.txt\"}",
+      "state": "pending",
+      "receipt_id": null,
+      "result_json": null
+    }
+  ],
+  "historical_events": [
+    {
+      "seq": 9,
+      "id": "evt_e97d41892c70",
+      "event_type": "governance.workspace_granted",
+      "conversation_id": "main",
+      "quest_id": "quest_1c56ba92eaad",
+      "worker_id": null,
+      "payload": "{\"scope\": \"D:\\\\Competition_this\\\\Agent\\\\.local\\\\superagent\\\\20261115T232817Z-failover-35753c\\\\work\\\\quest_1c56ba92eaad\", \"actor\": \"router_mandate:mandate_91484cad76f9\", \"policy\": \"local-superagent-v2\"}",
+      "created_at": "2026-11-15T23:28:34.736049+00:00"
+    },
+    {
+      "seq": 23,
+      "id": "evt_56b6169eec22",
+      "event_type": "tool.intent_prepared",
+      "conversation_id": "main",
+      "quest_id": "quest_1c56ba92eaad",
+      "worker_id": "worker_726802dda625",
+      "payload": "{\"intent_id\": \"action_93bb7e39e948\", \"tool\": \"directory_list\"}",
+      "created_at": "2026-11-15T23:28:50.605251+00:00"
+    },
+    {
+      "seq": 29,
+      "id": "evt_6ae513720906",
+      "event_type": "tool.intent_prepared",
+      "conversation_id": "main",
+      "quest_id": "quest_1c56ba92eaad",
+      "worker_id": "worker_726802dda625",
+      "payload": "{\"intent_id\": \"action_2bd62f470dc4\", \"tool\": \"directory_create\"}",
+      "created_at": "2026-11-15T23:28:58.614163+00:00"
+    },
+    {
+      "seq": 30,
+      "id": "evt_c0814b2a1b9a",
+      "event_type": "tool.execution_uncertain",
+      "conversation_id": "main",
+      "quest_id": "quest_1c56ba92eaad",
+      "worker_id": "worker_726802dda625",
+      "payload": "{\"intent_id\": \"action_2bd62f470dc4\"}",
+      "created_at": "2026-11-15T23:28:58.687359+00:00"
+    }
+  ],
+  "historical_directory": {
+    "is_directory": true,
+    "is_symlink": false,
+    "ctime_ns": 1794785314731485800,
+    "mtime_ns": 1794785314731485800,
+    "entries": []
+  },
+  "fresh_fixture": {
+    "execution_mode": "mock",
+    "real_provider_calls": 0,
+    "directory_preexisted": true,
+    "worker_outcome": {
+      "id": "run_a55225d3cad3",
+      "worker_id": "worker_f5872956b94b",
+      "quest_id": "quest_7db288016a96",
+      "plan_id": "plan_e7be55875875",
+      "node_key": "n",
+      "plan_revision": 1,
+      "plan_digest": "649738f9f7d27711aee7bb23b397b884110c38258ebb307ca0e24b6595c828cd",
+      "team_digest": "72ade1d704ac89ec5bd1f9417e012d207dafbc80e39c1bff021ebb1af8fbbc22",
+      "member_index": 0,
+      "role_id": "coding",
+      "provider_id": "protocol",
+      "model_id": "fixture",
+      "execution_mode": "mock",
+      "state": "blocked",
+      "generation": 1,
+      "lease_token": null,
+      "lease_until": null,
+      "quest_paused": 0,
+      "awaiting_authorization": 0,
+      "allowed_tools_json": "[\"directory_create\"]",
+      "capability_sources_json": "{\"tools\":\"test_fixture\"}",
+      "token_limit": 33000,
+      "token_spent": 40,
+      "tool_limit": 5,
+      "tool_spent": 1,
+      "step_limit": 12,
+      "steps": 1,
+      "cost_limit_microunits": null,
+      "cost_spent_microunits": null,
+      "currency": null,
+      "price_bounds_json": null,
+      "deadline": 1794786015.1524346,
+      "depth": 0,
+      "created_at": "2026-11-15T23:38:15.153723+00:00",
+      "output_limit": 3000,
+      "model_max_output_tokens": 4000,
+      "model_context_window": 64000,
+      "next_attempt_at": 0.0,
+      "repairs": 0
+    },
+    "exceptions": [
+      {
+        "type": "FileExistsError",
+        "errno": 17,
+        "winerror": 183,
+        "trace": [
+          {
+            "name": "observed",
+            "filename": "diagnose_failover_directory_readonly.py",
+            "line": 47,
+            "code": "return original(*args)"
+          },
+          {
+            "name": "_perform",
+            "filename": "tool_engine.py",
+            "line": 975,
+            "code": "path.mkdir(parents=False, exist_ok=False)"
+          },
+          {
+            "name": "mkdir",
+            "filename": "_local.py",
+            "line": 722,
+            "code": "os.mkdir(self, mode)"
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "tool_name": "directory_create",
+        "state": "uncertain"
+      }
+    ],
+    "receipt_count": 0,
+    "model_requests": 1
+  },
+  "limitation": "Historical execute swallowed its exception. Exact FileExistsError is reproduced in a fresh fixture with the same preexisting ordinary granted directory; the historical exception itself was not recorded."
+}

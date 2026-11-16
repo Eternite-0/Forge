@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T00:25:59.641528+00:00",
+  "scope": "Minimal correction after frozen continuity-251a4f and project-b550f2 failures",
+  "provenance": "programmatic_and_mock_regression_not_live_provider",
+  "provider_calls_for_this_change": 0,
+  "source_edits_complete": true,
+  "source_hashes_at_handoff": [
+    {
+      "path": "backend/src/forge_core/workspace_discovery.py",
+      "sha256": "643758a9590fe5b7511b67f0bc1565f1fb1f4df5ac07512ff0f809d533a5883c"
+    },
+    {
+      "path": "backend/src/forge_core/independent_review.py",
+      "sha256": "ea1ac2f49c45c17e8a5cb8e26b5f866b0a38c3754175ddf337746322758ff635"
+    },
+    {
+      "path": "backend/src/forge_core/router.py",
+      "sha256": "8adaa3e80b3d5441afe9b15c6b8f46d60dc2677dc679de1edfbdf63e68a13a87"
+    },
+    {
+      "path": "backend/tests/test_router_intake_legacy_capacity_sprint.py",
+      "sha256": "d337225a54c107e1d1fc7d911f03cf11bc5312a4b0813600c10678ee45647078"
+    },
+    {
+      "path": "backend/tests/test_router_project_intake_independent_sprint.py",
+      "sha256": "60d721c6798d396d48fb665dc87f90b607878346ee03eeea6688a29a9e366fbc"
+    },
+    {
+      "path": "backend/tests/test_reviewer_capacity_phase2.py",
+      "sha256": "248094c5429198fbbb9b31de8a6bfe5a7081d3dd5f25585c9bceee721c1fe133"
+    },
+    {
+      "path": "backend/tests/test_review_capacity_preview_phase2.py",
+      "sha256": "d0f21bb3f4ad2d972d280e7b76239ccdb7562f67374f25874f0958235e7c5648"
+    },
+    {
+      "path": "backend/tests/test_reviewer_repair_phase2.py",
+      "sha256": "aa360b09ca97193b0b2567a877661ac09b9fdce9bbfeb048b7cc73c96130b0e0"
+    }
+  ],
+  "changes": {
+    "current_user_project_preregistration": {
+      "source": "Current authenticated handle_user_message text only",
+      "timing": "After request ID replay/conflict checks, in existing pre-inference snapshot transaction",
+      "writes": "Existing workspace_projects metadata only; detected_at refresh only for explicitly named current-user roots",
+      "bounds": "Unchanged _named_paths: first262144 chars, eight absolute paths,4096-char token; bounded ancestor marker discovery",
+      "authority": "No task links, approvals, mandates, grants, Workers, tool executions or budget allowance from registration",
+      "preserved": "Original post-Quest association, snapshot stability and Router CAS; manual/background paths unchanged",
+      "verified_edges": [
+        "First and second root presented before inference and assigned distinct actual Quest links",
+        "Same request replay/conflict does not discover",
+        "Only current user text scanned; historical/assistant/model/tool/background text not discovery input",
+        "Only explicit old root refreshed into current32-project presentation",
+        "Transaction failure rollback",
+        "Eight-path bound",
+        "Manual and background trigger helper not called"
+      ]
+    },
+    "legacy_review_packet_admission": {
+      "no_explicit_envelope": "Complete native request plus existing model window, original cumulative/cost ledger and original output allowance control admission; no legacy65536-byte aggregate raw gate",
+      "explicit_envelope": "Existing approved component/native/verdict/correction and raw policy constraints retained",
+      "evidence": "Complete packet, all receipts and artifacts preserved and source-hashed; no silent truncation or fabricated review",
+      "preview": "Inapplicable legacy raw_packet_cap/raw_headroom are null; actual native/context/budget measurements retained",
+      "unchanged_limits": {
+        "governed_file_content_bytes": 262144,
+        "evidence_reader_bytes": 1048576,
+        "source_receipt_count": 64,
+        "model_context_budget_output_retry_limits": "unchanged"
+      }
+    }
+  },
+  "regression_evidence": [
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-candidate-before.xml",
+      "sha256": "3e8c6f9a6115d21a37671c2cc44800192ce5180341843f51d236cb92f4dcdeee",
+      "label": "Initial candidate tests on frozen production; expected missing feature/legacy raw-cap failures",
+      "tests": 13,
+      "passed": 2,
+      "failed": 11,
+      "skipped": 0,
+      "seconds": 4.544
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-candidate-after.xml",
+      "sha256": "f3feb8c07ed6de24670c44aee0efe7a20b0d0b5c8b6d3d3040b44b954363bda6",
+      "label": "First isolated candidate attempt: 11 pass, 2 test-harness defects (missing BEGIN and absent enforced-budget fixture) subsequently corrected",
+      "tests": 13,
+      "passed": 11,
+      "failed": 2,
+      "skipped": 0,
+      "seconds": 5.383
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-candidate-before-v2.xml",
+      "sha256": "b1a9d967c8dffc79a607b94ce8dcd0050c659b5c54750af5b9e1bdbe41a2215c",
+      "label": "Same corrected candidate tests on frozen production; 11 fail/2 pass",
+      "tests": 13,
+      "passed": 2,
+      "failed": 11,
+      "skipped": 0,
+      "seconds": 3.666
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-candidate-after-v2.xml",
+      "sha256": "adedc44896fd3b31234878ef6410c6b7998f78b7f153a73764301876badc064e",
+      "label": "Same corrected tests on isolated candidate with enforced original token budgets; 13 pass",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 4.482
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-independent-candidate.xml",
+      "sha256": "d09a1ae6e2de14b6065c791a175495764cef85f3a00048c8867de650dc22b70d",
+      "label": "Independent second-agent intake boundary checks on isolated candidate; 5 pass",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 0.923
+    },
+    {
+      "path": "docs/audit/superagent/capability-legacycap-contract-before.xml",
+      "sha256": "c69730d34a408cf2728d0be060d39ec2247af163e9351934f4590d48b246c532",
+      "label": "Frozen production 52-case capacity/preview/repair baseline; initial PYTHONPATH attempt still loaded production via backend pytest config",
+      "tests": 52,
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 23.137
+    },
+    {
+      "path": "docs/audit/superagent/capability-legacycap-contract-candidate-before.xml",
+      "sha256": "b4bf5862f7da3e02f6dd60bbd5be9d6d2fcd537e3947a5b887ef5e6aa9a9f98b",
+      "label": "Unmigrated legacy contract tests on verified candidate import path; 20 fail/32 pass because old total raw-cap expectations changed",
+      "tests": 52,
+      "passed": 32,
+      "failed": 20,
+      "skipped": 0,
+      "seconds": 29.092
+    },
+    {
+      "path": "docs/audit/superagent/capability-legacycap-contract-candidate-after.xml",
+      "sha256": "6defd0d40a56c17362d85910e0cff0e0df310c910660fe263e3bafa1d78610f6",
+      "label": "All same 52 contract cases retained with actual native/context shortage and unchanged packet/hash assertions; isolated candidate 52 pass",
+      "tests": 52,
+      "passed": 52,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 20.719
+    },
+    {
+      "path": "docs/audit/superagent/capability-intake-legacycap-integrated.xml",
+      "sha256": "a98596f6ac057eaa260165a616e05d70af12e880b280e4990cec293a532649f8",
+      "label": "Production integrated 12-file regression; 225 pass",
+      "tests": 225,
+      "passed": 225,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 56.276
+    },
+    {
+      "path": "docs/audit/superagent/capability-legacycap-explicit-envelope.xml",
+      "sha256": "154f5a029111ae0d8b2af2814fbafea4f577796409f91d6732b7ee2756fe0993",
+      "label": "Production explicit review-envelope contracts; 24 pass",
+      "tests": 24,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 5.718
+    }
+  ],
+  "regression_accounting": "Targeted and joint suites overlap; do not sum them as distinct cases. Mock scripted model judgement and local programmatic checks are not real Provider acceptance.",
+  "legacy_contract_migration": {
+    "tests_deleted": 0,
+    "test_cases_retained": 52,
+    "reason": "Old tests required every legacy raw packet>65536 to throw before measuring native context. New expected contract uses full packet, actual context and original budget bounds.",
+    "changed_assertions": [
+      "Fixture returns complete oversized packet and asserts measured raw size instead of forced legacy rejection",
+      "Capacity raw cap is null for legacy; correction diagnostic records actual raw bytes",
+      "Immutable receipts are compared against actual fixed native/context floor",
+      "Preview full packet hash remains identical without synthetic raw headroom",
+      "Context-shortage diagnostic reason is review_context_limit instead of obsolete total raw-packet cap"
+    ]
+  },
+  "remaining_gap": {
+    "blocked_capacity_convergence_implemented": false,
+    "description": "An unrepairable actual capacity diagnostic can still leave review_pending because _ready excludes the result while NodeVerifier requires source-bound PASS. Candidate removes the observed obsolete raw-cap trigger but adds no generic BLOCKED transition.",
+    "follow_up_design": ".local/review-capacity-draft-b550f2.md",
+    "requirements": "Any convergence must revalidate exact latest source/result/review, current assignment/authority, actual capacity blocker, all unknown-effect fences and one transaction/CAS/Outbox transition; old raw-cap diagnostic is not task-content failure."
+  },
+  "historical_failures_preserved": [
+    "20261115T235303Z-capability-continuity-251a4f",
+    "20261115T235734Z-capability-project-b550f2"
+  ],
+  "real_provider_status": "Pending parent-owned single final bounded continuity experiment; these regressions do not establish final capability acceptance.",
+  "static_checks": {
+    "ruff_changed_files": true,
+    "git_diff_check": true
+  }
+}

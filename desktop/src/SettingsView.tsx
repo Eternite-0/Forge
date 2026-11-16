@@ -1,7 +1,7 @@
 import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 export type SettingId = "general" | "shortcuts" | "models" | "environment" |
-  "storage" | "connections" | "maintenance";
+  "storage" | "connections" | "maintenance" | "memory" | "triggers";
 
 export interface SettingItem {
   id: SettingId;
@@ -23,6 +23,8 @@ export const settingGroups: SettingGroup[] = [
     { id: "storage", label: "用量与预算", accessibleLabel: "存储", description: "查看 Token 预算、已确认用量、未结算预留与并发占用。", keywords: "费用 货币 消耗 账本" },
   ] },
   { label: "安全与数据", items: [
+    { id: "memory", label: "记忆", description: "检索和管理任务记忆、来源与有效期。", keywords: "recall 来源 决策 历史 撤销" },
+    { id: "triggers", label: "触发器", description: "登记事件源，创建定时任务、文件监听或提交事件。", keywords: "定时 调度 文件 事件 source schedule watch" },
     { id: "connections", label: "供应商凭据", accessibleLabel: "连接", description: "在桌面应用的系统凭据库中保存、检查和删除供应商凭据。", keywords: "密钥 API key credential" },
     { id: "maintenance", label: "备份与恢复", description: "备份和恢复工作空间，检查维护状态与恢复后的写入锁定。", keywords: "维护 数据 回滚 Core 重启" },
   ] },
@@ -38,6 +40,8 @@ function SettingsIcon({ id }: { id: SettingId }) {
     environment: <><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 14h18m-12 7h6m-3-3v3" /></>,
     storage: <><path d="M3 7.5h7l2 2h9v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5v-11Z" /><path d="M3 7.5V5a1 1 0 0 1 1-1h5l3 3.5M3 10h18" /></>,
     connections: <><circle cx="8" cy="8" r="4.5" /><path d="m11.5 11.5 9 9m-3-3 2.5-2.5m-5.5-.5 2.5-2.5" /></>,
+    memory: <><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" /></>,
+    triggers: <><circle cx="12" cy="12" r="8.5" /><path d="M12 6v6l4 2" /></>,
     maintenance: <><path d="M4 9a8 8 0 1 1 0 6M4 3v6h6" /><path d="M12 7v5l3 2" /></>,
   };
   return <svg className="settings-nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{symbols[id]}</svg>;

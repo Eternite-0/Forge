@@ -14,6 +14,19 @@ def digest(value):
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 
+def _approved_authority(connection, quest_id, row, kind="plan"):
+    from .superagent_delegation import validate_contract_authority
+
+    validate_contract_authority(
+        connection,
+        quest_id,
+        row["approved_by"],
+        kind,
+        row["revision"] if kind == "plan" else row["plan_revision"],
+        row["digest"] if kind == "plan" else row["proposal_digest"],
+    )
+
+
 def request_binding(quest):
     metadata = (
         json.loads(quest["metadata"]) if isinstance(quest["metadata"], str) else quest["metadata"]
@@ -59,8 +72,10 @@ def _source(connection, quest, newplan, node_key, *, require_approved):
         newplan["status"] != "approved" or quest["plan_revision"] != newplan["revision"]
     ):
         raise DomainError("Current approved revision lineage required")
-    if require_approved and (newplan["approved_by"] != "local_user" or not newplan["approved_at"]):
+    if require_approved and (not newplan["approved_by"] or not newplan["approved_at"]):
         raise DomainError("Current lineage plan lacks user approval")
+    if require_approved:
+        _approved_authority(connection, quest["id"], newplan)
     if lineage.get("quest_goal_sha256") != hashlib.sha256(
         quest["goal"].encode()
     ).hexdigest() or lineage.get("request_binding") != request_binding(quest):
@@ -95,9 +110,10 @@ def _source(connection, quest, newplan, node_key, *, require_approved):
         or source_plan["revision"] != entry["source_revision"]
         or source_plan["digest"] != entry["source_plan_digest"]
         or not source_plan["approved_at"]
-        or source_plan["approved_by"] != "local_user"
+        or not source_plan["approved_by"]
     ):
         raise DomainError("Completed lineage source approval is invalid")
+    _approved_authority(connection, quest["id"], source_plan)
     source_graph = _graph(source_plan)
     if graph.get("execution_constraints") != source_graph.get("execution_constraints"):
         raise DomainError("Completed lineage execution constraints changed")
@@ -159,12 +175,13 @@ def _source(connection, quest, newplan, node_key, *, require_approved):
     ).fetchone()
     if (
         team is None
-        or team["approved_by"] != "local_user"
+        or not team["approved_by"]
         or not team["approved_at"]
         or team["status"] not in {"approved", "superseded"}
         or source_run["created_at"] < team["approved_at"]
     ):
         raise DomainError("Completed lineage original team approval is invalid")
+    _approved_authority(connection, quest["id"], team, "team")
     body = json.loads(team["body_json"])
     if (
         digest(body) != source_run["team_digest"]
@@ -205,9 +222,10 @@ def _source(connection, quest, newplan, node_key, *, require_approved):
             or parent["revision"] != current["parent_revision"]
             or parent["revision"] >= cursor["revision"]
             or not parent["approved_at"]
-            or parent["approved_by"] != "local_user"
+            or not parent["approved_by"]
         ):
             raise DomainError("Completed lineage parent approval changed")
+        _approved_authority(connection, quest["id"], parent)
         cursor = parent
     return {
         "source_plan": dict(source_plan),
@@ -235,9 +253,10 @@ def validate_pending_lineage(connection, quest, newplan):
         or parent["revision"] != quest["plan_revision"]
         or parent["digest"] != lineage["parent_digest"]
         or not parent["approved_at"]
-        or parent["approved_by"] != "local_user"
+        or not parent["approved_by"]
     ):
         raise DomainError("Pending remaining DAG parent approval changed")
+    _approved_authority(connection, quest["id"], parent)
     _graph(parent)
     if lineage.get("quest_goal_sha256") != hashlib.sha256(
         quest["goal"].encode()

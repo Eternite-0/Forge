@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "closed_at": "2026-11-15T23:40:01.540504+00:00",
+  "phase": "capability-continuation-after-context-and-notice-corrections",
+  "status": "closed_acceptance_failed",
+  "goal_achieved": false,
+  "protocol_sha256": "0d770f35ea753d17998e0012d90e6ab6b1d62c197184257696ff336e09811001",
+  "frozen_source": {
+    "path": "docs/audit/superagent/capability-continuation-source-freeze.json",
+    "sha256": "33644c9563bc74c92945d840c3edbfca80c8b97a80ece933f92b006893215d63",
+    "file_count": 338,
+    "verified_matching_after_all_processes_stopped": true
+  },
+  "source_verification_note": "338 paths independently hash-matched before subsequent edits; frozen manifest and original reports are immutable.",
+  "reports": [
+    {
+      "run_id": "20261115T231351Z-capability-continuity-4ccdec",
+      "path": "docs/audit/superagent/20261115T231351Z-capability-continuity-4ccdec.json",
+      "sha256": "52042c78ecae5ba3b2d3d09955de7361e78f2ae61aa7e997c9ce1a929b0e2a72",
+      "status": "failed",
+      "checks": {
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 3,
+      "known_tokens": 11439,
+      "admission_states": {
+        "settled": 3
+      },
+      "failure_code": "core_api_status_409"
+    },
+    {
+      "run_id": "20261115T231549Z-capability-project-4348f1",
+      "path": "docs/audit/superagent/20261115T231549Z-capability-project-4348f1.json",
+      "sha256": "72f383bd5370fffd80f6081835dacef191a24714ea789c6b318c9ee661d08269",
+      "status": "passed",
+      "checks": {
+        "pass_through_L1": true,
+        "artifact_L1": true,
+        "final_results_original_router": true,
+        "hidden_live_workers": true,
+        "source_unchanged": true,
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 13,
+      "known_tokens": 161807,
+      "admission_states": {
+        "settled": 13
+      },
+      "failure_code": null
+    },
+    {
+      "run_id": "20261115T231841Z-capability-single-db92c8",
+      "path": "docs/audit/superagent/20261115T231841Z-capability-single-db92c8.json",
+      "sha256": "30a55e207e4ee434fd2b862a666545b03351f04b323ca087995e2c6fe8a19b0b",
+      "status": "passed",
+      "checks": {
+        "pass_through_L2": true,
+        "observed_team_condition_L2": true,
+        "artifact_L2": true,
+        "final_results_original_router": true,
+        "hidden_live_workers": true,
+        "source_unchanged": true,
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 13,
+      "known_tokens": 154299,
+      "admission_states": {
+        "settled": 13
+      },
+      "failure_code": null
+    },
+    {
+      "run_id": "20261115T232055Z-capability-fixed-fe94ad",
+      "path": "docs/audit/superagent/20261115T232055Z-capability-fixed-fe94ad.json",
+      "sha256": "5d9c97e09ed59e07413d6b0618b5ef579fdcca944a6db6f95eaeb8e1a021434b",
+      "status": "failed",
+      "checks": {
+        "pass_through_L2": true,
+        "observed_team_condition_L2": false,
+        "final_calls_settled": true,
+        "fixed_aggregate_calls": true,
+        "fixed_admission_call_ceiling": true,
+        "final_per_task_budget": true,
+        "source_unchanged_after_drain": true
+      },
+      "attempts": 15,
+      "known_tokens": 170378,
+      "admission_states": {
+        "settled": 15
+      },
+      "failure_code": "bounded_scenario_deadline"
+    },
+    {
+      "run_id": "20261115T232817Z-failover-35753c",
+      "path": "docs/audit/superagent/20261115T232817Z-failover-35753c.json",
+      "sha256": "4335dd82c26fd37a951ae0a46b62150be22aac8b640b73653aedf7e2f3056f81",
+      "status": "failed",
+      "checks": {
+        "native_model_reassignment": true,
+        "alternative_model_completed_real_worker": false,
+        "real_artifact_matches_exact_acceptance": false,
+        "replacement_source_bound_write_and_read_receipts": false,
+        "independent_reviewer_pass": false,
+        "quest_completed": false,
+        "same_original_router_delivered_result": false,
+        "all_noninjected_attempts_settled": true,
+        "known_rejection_reservation_retained_without_refund": true,
+        "no_unknown_tool_outcomes": false
+      },
+      "attempts": 6,
+      "known_tokens": 17918,
+      "admission_states": {
+        "rejected": 1,
+        "settled": 5
+      },
+      "failure_code": "TimeoutError"
+    }
+  ],
+  "accounting": {
+    "attempts": 50,
+    "admission_states": {
+      "settled": 49,
+      "rejected": 1
+    },
+    "known_charged_tokens": 515841,
+    "cost_microunits": null,
+    "injected_rejections": 1,
+    "actual_upstream_calls": 49,
+    "completed_rejection_usage_unknown": 1,
+    "model_operation_unknown": 0,
+    "tool_operation_unknown": 1,
+    "unknown_usage_imputed": false,
+    "reservation_refunded": false
+  },
+  "observations": [
+    "L1 real Worker/Reviewer and independent citation acceptance passed.",
+    "Single-Worker L2 real research and independent citation acceptance passed.",
+    "Continuity failed before Quest admission on two json_invalid responses; raw was not retained and exact syntax cause is unknown.",
+    "Fixed-team Research remained review_pending after repairs=4/4; no Architect executed.",
+    "Watchdog help failed Dispatcher schema validation; neither inbox received it.",
+    "Injected HTTP503 caused native replacement; fallback directory_create became uncertain. Its unknown operation is retained and never replayed.",
+    "DeepSeek 100M context uses explicit user declaration; API 1M conflict is retained. No budget grant or Provider configuration change.",
+    "One sample per condition; no claim of optimal team or model-routing policy."
+  ]
+}

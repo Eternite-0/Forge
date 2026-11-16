@@ -60,6 +60,9 @@ def completed(delegated):
                     {"path": f"work/{quest_id}/result.json", "content": '{"ok":true}'},
                     2,
                 ),
+                # Completion now requires full delivered Thread consumption;
+                # keep the original partial call and its tamper checks intact.
+                tool("read_trigger", {"trigger_id": trigger["id"], "max_chars": 4096}, 3),
                 response(delivery()),
                 response(
                     {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.8}

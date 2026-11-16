@@ -384,6 +384,7 @@ class MemoryService:
         created_before=None,
         source_types=(),
         exact_source_refs=False,
+        project_id=None,
     ):
         """Read bounded indexed candidates, optionally only the exact source refs.
 
@@ -398,6 +399,10 @@ class MemoryService:
         if type(exact_source_refs) is not bool:
             raise ValueError("Invalid exact source selector")
         quests, refs = list(quest_ids), list(source_refs)
+        if project_id is not None and (
+            not isinstance(project_id, str) or not 1 <= len(project_id) <= 200
+        ):
+            raise ValueError("Invalid memory project selector")
         kinds, layers = set(kinds), set(layers)
         source_types = set(source_types)
         if len(kinds) > 16 or len(layers) > 4:
@@ -580,6 +585,8 @@ class MemoryService:
                     else:
                         item = None
                     if item is not None:
+                        if project_id is not None:
+                            continue
                         if not _kind_selected(item, kinds) or (
                             layers and item["layer"] not in layers
                         ):
@@ -679,6 +686,15 @@ class MemoryService:
                         "plan_binding": "unbound" if revision is None else "bound",
                         "trust_scope": "source record only; no domain truth or current artifact validation",
                     }
+                if project_id is not None:
+                    related = item.get("related_quest_ids", [])
+                    if not related or any(
+                        db.execute(
+                            "SELECT 1 FROM task_project_links WHERE quest_id=? AND project_id=?",
+                            (identity, project_id),
+                        ).fetchone() is None for identity in related
+                    ):
+                        continue
                 if not _kind_selected(item, kinds) or (layers and item["layer"] not in layers):
                     continue
                 if source_types and item.get("source_type") not in source_types:

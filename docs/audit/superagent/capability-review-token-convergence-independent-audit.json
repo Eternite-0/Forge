@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-11-16T05:11:15.161369+00:00",
+  "provenance": "independent_code_and_regression_evidence_review_no_model_calls",
+  "audit_program": {
+    "path": ".local/superagent/review_token_convergence_audit.py",
+    "sha256": "af4b093b74795186f4c2f97e75f20d3e2cb084f716df70496a30cd429b7712cf"
+  },
+  "sources": [
+    {
+      "path": "backend/src/forge_core/independent_review.py",
+      "sha256": "80ef9c498bb45ae60b87132e0b11df9f117560ac2675e310b59cfe60d9c24cfa"
+    },
+    {
+      "path": "backend/src/forge_core/worker_prompts.py",
+      "sha256": "a855bf9df41573c0f98e12df09ea780937f83a4047d731efaba8657e880bdd5e"
+    },
+    {
+      "path": "backend/tests/test_review_unaffordable_convergence.py",
+      "sha256": "092aea080f9e3316cd62266c76cf1d00e4f6cc6454c57e15208d445de0d3e0aa"
+    },
+    {
+      "path": "backend/src/forge_core/store.py",
+      "sha256": "f6468ad2671710e2f7c0d4328354d34a3a88221ed85b5b975964d57b6462fbb7"
+    }
+  ],
+  "regression": {
+    "path": "docs/audit/superagent/capability-review-token-convergence-regression.xml",
+    "sha256": "0034fcceaa5485fa1d028e13c14966bbb022b1d8b50d1180d5659c781f0441e8",
+    "testcases": 141,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "classes": [
+      "tests.test_review_envelope_phase2",
+      "tests.test_review_scope_wire",
+      "tests.test_review_unaffordable_convergence",
+      "tests.test_reviewer_capacity_phase2",
+      "tests.test_reviewer_context_phase2",
+      "tests.test_reviewer_gateway_guard_phase2",
+      "tests.test_stall_recovery_capability_sprint"
+    ]
+  },
+  "code_locations": {
+    "typed_reservation_error": {
+      "path": "backend/src/forge_core/independent_review.py",
+      "line": 214
+    },
+    "preadmission_convergence": {
+      "path": "backend/src/forge_core/independent_review.py",
+      "line": 1849
+    },
+    "review_admission_order": {
+      "path": "backend/src/forge_core/independent_review.py",
+      "line": 2158
+    },
+    "analytical_delivery_guidance": {
+      "path": "backend/src/forge_core/worker_prompts.py",
+      "line": 165
+    }
+  },
+  "checks": {
+    "typed_token_failure_precedes_review_claim_and_gateway_admission": true,
+    "transaction_rechecks_exact_run_snapshot_generation_source_packet_hash": true,
+    "current_approved_team_and_packet_provenance_revalidated": true,
+    "provider_object_mode_and_live_ledger_revalidated": true,
+    "paused_awaiting_authorization_and_lease_flags_prevent_convergence": true,
+    "pending_running_uncertain_tools_and_unknown_effects_prevent_convergence": true,
+    "unsettled_worker_and_gateway_reservations_prevent_convergence": true,
+    "unclosed_or_malformed_review_claims_prevent_convergence": true,
+    "minimum_native_payload_and_original_remaining_budget_remeasured": true,
+    "model_context_and_approved_envelope_limits_remain_separate": true,
+    "run_worker_node_updates_are_atomic_and_checked_with_CAS": true,
+    "no_ready_release_refund_reservation_or_charge_mutation": true,
+    "core_blocked_events_never_include_or_replace_model_verdict": true,
+    "prompt_keeps_schema_inline_evidence_and_downstream_requirements": true,
+    "prompt_references_only_assigned_artifacts_visible_to_review_and_readers": true,
+    "prompt_retains_complete_code_sources_reports_and_read_only_delivery": true,
+    "prompt_adds_no_budget_size_permission_retry_limit": true,
+    "reported_141_regressions_passed": true
+  },
+  "all_checks_passed": true,
+  "actionable_findings": [],
+  "resolved_review_findings": [
+    "Added explicit awaiting_authorization and quest_paused fences; tests resnapshot after setting the flags so whole-row staleness does not mask missing dedicated checks.",
+    "Added explicit pending/running/uncertain Core tool fences without relying on an action intent.",
+    "Settled Gateway attempts with null charged usage remain fenced as incomplete accounting."
+  ],
+  "actions": {
+    "provider_calls": 0,
+    "credential_reads": 0,
+    "acceptance_runtime_changes": 0,
+    "historical_database_reads": 0,
+    "database_writes": 0,
+    "historical_verdict_changes": 0
+  },
+  "limitations": [
+    "This reviews source and existing offline regression evidence; no live task acceptance is claimed.",
+    "Budget convergence reports failure promptly; it does not make an unaffordable final review pass.",
+    "Analytical delivery guidance depends on model compliance and does not guarantee smaller artifacts or successful review.",
+    "The historical L2 wire audit saved zero bytes for the actual packets; no compression improvement is claimed.",
+    "Round 1 remains closed and failed on its original 354-file freeze; the patch was not applied to that run's database."
+  ]
+}

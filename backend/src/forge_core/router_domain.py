@@ -14,6 +14,41 @@ class IndependentDispatch(BaseModel):
     ]
 
 
+class ExecutionAssignment(IndependentDispatch):
+    depends_on: list[Annotated[int, Field(ge=0, le=3)]] = Field(default_factory=list, max_length=3)
+
+
+class ExecutionTeam(BaseModel):
+    """Coarse expert responsibilities; execution steps remain Worker-owned."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+    strategy: Literal["single", "parallel", "sequential", "hierarchical"]
+    assignments: list[ExecutionAssignment] = Field(min_length=1, max_length=4)
+
+    @model_validator(mode="after")
+    def bounded_topology(self):
+        for index, item in enumerate(self.assignments):
+            if len(set(item.depends_on)) != len(item.depends_on) or any(
+                source >= index for source in item.depends_on
+            ):
+                raise ValueError("Expert dependencies must reference earlier distinct assignments")
+        if self.strategy == "single" and len(self.assignments) != 1:
+            raise ValueError("Single strategy needs exactly one Worker")
+        if self.strategy in {"single", "parallel"} and any(item.depends_on for item in self.assignments):
+            raise ValueError("Independent expert strategy cannot contain dependencies")
+        if self.strategy == "sequential" and any(
+            item.depends_on != [index - 1] for index, item in enumerate(self.assignments) if index
+        ):
+            raise ValueError("Sequential experts must form a success chain")
+        if self.strategy == "hierarchical" and (
+            len(self.assignments) < 2
+            or self.assignments[-1].depends_on != list(range(len(self.assignments) - 1))
+            or any(item.depends_on for item in self.assignments[:-1])
+        ):
+            raise ValueError("Hierarchical experts require independent specialists and one integrator")
+        return self
+
+
 class RouterDecision(BaseModel):
     """Structured Router decision protocol.
 
@@ -73,11 +108,20 @@ class RouterDecision(BaseModel):
         max_length=4,
         description="Optional independent Worker objectives and roles for create_quest only.",
     )
+    execution_team: ExecutionTeam | None = None
+    project_id: str | None = Field(default=None, min_length=1, max_length=200)
+    task_control: Literal["pause", "resume", "cancel"] | None = None
 
     @model_validator(mode="after")
     def dispatch_new_tasks_only(self):
         if self.independent_dispatches and self.intent != "create_quest":
             raise ValueError("Independent dispatches require a new task")
+        if self.execution_team is not None and (
+            self.intent != "create_quest" or self.independent_dispatches
+        ):
+            raise ValueError("Choose independent tasks or one expert execution team for new work")
+        if self.task_control is not None and self.intent != "continue_quest":
+            raise ValueError("Task control requires an existing task continuation")
         return self
 
 

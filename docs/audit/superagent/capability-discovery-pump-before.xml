@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.998" timestamp="2026-11-16T06:26:17.733297+08:00" hostname="DESKTOP-PBHPH69"><testcase classname="tests.test_workspace_discovery_pump_capability_sprint" name="test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling" time="5.556"><failure message="AssertionError: assert {'quest_pump_...pump_05', ...} &lt;= {'quest_pump_21'}&#10;  &#10;  Extra items in the left set:&#10;  'quest_pump_09'&#10;  'quest_pump_15'&#10;  'quest_pump_02'&#10;  'quest_pump_05'&#10;  'quest_pump_00'...&#10;  &#10;  ...Full output truncated, use '-vv' to show">tmp_path = WindowsPath('C:/Users/msi/AppData/Local/Temp/pytest-of-msi/pytest-1178/test_worker_pump_rechecks_prep0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001F06B8AC180&gt;
+
+    def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_path, monkeypatch):
+        monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
+        monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
+        for key in (
+            "FORGE_PROVIDER_ID", "FORGE_PROVIDER_KIND", "FORGE_PROVIDER_BASE_URL",
+            "FORGE_PROVIDER_CREDENTIAL_REF", "FORGE_PROVIDERS_JSON", "FORGE_PRICE_BOUNDS_JSON",
+            "FORGE_ROUTER_MODEL_ID", "FORGE_ROUTER_CONTEXT_LIMIT",
+        ):
+            monkeypatch.delenv(key, raising=False)
+        from forge_api import main
+    
+        importlib.reload(main)
+        monkeypatch.setattr(
+            main.ProviderPool, "from_environment", lambda **_kwargs: (ProviderPool({}), {})
+        )
+        store = main.store
+        discovery = WorkspaceDiscovery(store)
+        roots = [tmp_path / "project_alpha", tmp_path / "project_beta"]
+        for root in roots:
+            root.mkdir()
+            (root / "pyproject.toml").write_text("[project]\nname='fixture'\n", encoding="utf-8")
+    
+        def task(index, *, automatic=True, state="active", shape="unique", linked=True):
+            content = (
+                f"Inspect `{roots[0]}` and report issues."
+                if shape == "unique" else
+                f"Compare `{roots[0]}` with `{roots[1]}`." if shape == "multiple" else
+                "Inspect the selected project."
+            )
+            quest = Quest(id=f"quest_pump_{index:02d}", title="Inspect project", goal="Mutable summary")
+            source = ConversationMessage(role="user", content=content)
+            with store.unit_of_work() as work:
+                work.add_message(source)
+                work.save_quest(quest)
+                work.connection.execute("UPDATE quests SET status='running' WHERE id=?", (quest.id,))
+                if automatic:
+                    mandate = issue_mandate(work, quest.id, source.id)
+                    work.connection.execute(
+                        "UPDATE delegation_mandates SET setup_complete=1,state=? WHERE id=?",
+                        (state, mandate),
+                    )
+            if linked:
+                discovery.associate(quest.id, roots[1])
+            return quest.id
+    
+        # More than one batch verifies that long-running automatic tasks cannot
+        # permanently occupy the first sixteen discovery slots.
+        automatic = [task(index) for index in range(17)]
+        manual = task(17, automatic=False)
+        revoked = task(18, state="revoked")
+        ambiguous = task(19, shape="multiple")
+        unnamed = task(20, shape="none")
+        unlinked_manual = task(21, automatic=False, linked=False)
+        expected_calls = {*automatic, ambiguous, unnamed, unlinked_manual}
+        authorization_tables = (
+            "delegation_mandates", "delegation_contracts", "task_grants", "approvals", "messages"
+        )
+    
+        def authorization_snapshot():
+            with store.connection() as connection:
+                return {
+                    table: [tuple(row) for row in connection.execute(f"SELECT * FROM {table} ORDER BY 1")]
+                    for table in authorization_tables
+                }
+    
+        before = authorization_snapshot()
+        calls, scheduled = [], []
+        original_associate = main.WorkspaceDiscovery.associate_request
+    
+        def observed_associate(self, quest_id):
+            calls.append(quest_id)
+            return original_associate(self, quest_id)
+    
+        async def scheduler_tick(_scheduler):
+            # The same pump must apply identity correction before invoking execution.
+            scheduled.append({quest_id: discovery.for_quest(quest_id) for quest_id in calls})
+    
+        monkeypatch.setattr(main.WorkspaceDiscovery, "associate_request", observed_associate)
+        monkeypatch.setattr(main.WorkerScheduler, "tick", scheduler_tick)
+    
+        async def run_core():
+            async with main._core_lifespan(main.app):
+                for _ in range(160):
+                    if expected_calls &lt;= set(calls) and scheduled:
+                        break
+                    await asyncio.sleep(0.025)
+    
+        asyncio.run(run_core())
+&gt;       assert expected_calls &lt;= set(calls)
+E       AssertionError: assert {'quest_pump_...pump_05', ...} &lt;= {'quest_pump_21'}
+E         
+E         Extra items in the left set:
+E         'quest_pump_09'
+E         'quest_pump_15'
+E         'quest_pump_02'
+E         'quest_pump_05'
+E         'quest_pump_00'...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+backend\tests\test_workspace_discovery_pump_capability_sprint.py:102: AssertionError</failure></testcase></testsuite></testsuites>

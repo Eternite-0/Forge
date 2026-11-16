@@ -36,10 +36,12 @@ const connectionIdentity = (connection: Connection | null) => connection
   ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "";
 
 /** This read-only feed runs independently so a slow activity request cannot delay chat. */
-export function useWorkerActivity(connection: Connection | null): ActivityState {
+export function useWorkerActivity(connection: Connection | null, beforeUpdate?: () => void): ActivityState {
   const identity = connectionIdentity(connection);
   const currentIdentity = useRef(identity);
   currentIdentity.current = identity;
+  const beforeUpdateRef = useRef(beforeUpdate);
+  beforeUpdateRef.current = beforeUpdate;
   const [snapshot, setSnapshot] = useState<ActivitySnapshot>(() => ({ identity, state: emptyActivity(!!connection) }));
 
   useEffect(() => {
@@ -63,10 +65,16 @@ export function useWorkerActivity(connection: Connection | null): ActivityState 
         if (!Array.isArray(page.items)) throw new Error("Core 返回了无效执行记录。");
         const items = [...new Map(page.items.filter((item) => item && typeof item === "object" && typeof item.run_id === "string" && item.run_id)
           .map((item) => [item.run_id, item])).values()];
-        if (accepts()) setSnapshot({ identity, state: { items, loading: false, error: "", hasMore: page.has_more === true, connected: true } });
+        if (accepts()) {
+          beforeUpdateRef.current?.();
+          setSnapshot({ identity, state: { items, loading: false, error: "", hasMore: page.has_more === true, connected: true } });
+        }
       } catch (error) {
         // Old running states must never be presented as the current state after a failed read.
-        if (accepts()) setSnapshot({ identity, state: { items: [], loading: false, error: errorMessage(error), hasMore: false, connected: true } });
+        if (accepts()) {
+          beforeUpdateRef.current?.();
+          setSnapshot({ identity, state: { items: [], loading: false, error: errorMessage(error), hasMore: false, connected: true } });
+        }
       } finally {
         window.clearTimeout(timeout);
         if (controller === pending) controller = null;

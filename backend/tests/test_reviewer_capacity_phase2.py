@@ -14,7 +14,6 @@ from forge_core.independent_review import (
     _hash,
     _json,
     _packet,
-    _ReviewBoundaryError,
     review_pass_matches,
 )
 from forge_core.store import Store
@@ -34,6 +33,7 @@ def pending(
     revise=True,
     source_bytes=23400,
     source_reads=1,
+    distinct_source_reads=False,
     explanation_repeats=2000,
     context_window=64000,
     raw_oversize=True,
@@ -88,21 +88,22 @@ def pending(
         successor=successor,
         source=source,
     )
-    model.responses[1:1] = [
-        tool("file_read", {"path": "work/input.txt"}, ordinal=20 + index)
-        for index in range(source_reads - 1)
-    ]
+    reads = []
+    for index in range(source_reads - 1):
+        path = "work/input.txt"
+        if distinct_source_reads:
+            path = f"work/input-{index}.txt"
+            prefix = f"Distinct immutable source {index}: "
+            (tmp_path / path).write_text(prefix + source[len(prefix):], encoding="utf-8")
+        reads.append(tool("file_read", {"path": path}, ordinal=20 + index))
+    model.responses[1:1] = reads
     assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
     with store.connection() as connection:
         connection.execute("BEGIN")
         row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
+        packet = _packet(store, connection, row)
         if raw_oversize:
-            with pytest.raises(_ReviewBoundaryError) as caught:
-                _packet(store, connection, row)
-            assert caught.value.code == "review_packet_too_large"
-            packet = caught.value.packet
-        else:
-            packet = _packet(store, connection, row)
+            assert len(_json(packet).encode("utf-8")) > 65536
     return store, manager, model, worker, packet, content
 
 
@@ -128,14 +129,14 @@ def test_capacity_feedback_preserves_rejected_packet_and_never_claims_model_revi
     assert result["validation_source"] == "core_review_capacity"
     assert result["packet_sha256"] == _hash(packet) and _json(packet) == original
     assert result["capacity_diagnostics"]["raw_packet_bytes"] == len(original.encode()) > 65536
-    assert result["capacity_diagnostics"]["raw_packet_cap"] == 65536
+    assert result["capacity_diagnostics"]["raw_packet_cap"] is None
     assert "call_id" not in result and "provider_id" not in result
     assert len(model.requests) == 3 and not events(store, "review.started")
     assert after["state"] == "queued" and after["repairs"] == 1
     for key in ("steps", "tool_spent", "token_spent", "token_limit", "tool_limit", "step_limit"):
         assert after[key] == before[key]
     assert "Preserve ALL assigned requirements" in result["revision_goals"][0]
-    assert f"{len(original.encode())}/65536" in result["revision_goals"][0]
+    assert f"raw packet {len(original.encode())} bytes" in result["revision_goals"][0]
     with store.connection() as connection:
         assert service._rounds(connection, worker["id"]) == 1
         assert connection.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 2
@@ -188,13 +189,31 @@ def test_compact_complete_owned_revision_still_requires_fresh_model_review(tmp_p
         assert service._rounds(connection, worker["id"]) == 2
 
 
-def test_immutable_receipts_exceeding_cap_cannot_get_capacity_revision(tmp_path, monkeypatch):
-    store, manager, model, worker, packet, _ = pending(tmp_path, monkeypatch, source_reads=3)
+def test_immutable_receipts_exceeding_actual_context_cannot_get_capacity_revision(tmp_path, monkeypatch):
+    store, manager, model, worker, packet, _ = pending(
+        tmp_path, monkeypatch, source_reads=3, distinct_source_reads=True
+    )
+    immutable_sources = [
+        item["output"]["content"] for item in packet["receipts"] if item["tool_name"] == "file_read"
+    ]
+    assert len(set(immutable_sources)) == 3
     result = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
     assert result["verdict"] == "BLOCKED" and not result["revision_applied"]
-    assert result["capacity_diagnostics"]["fixed_packet_floor"] > 65536
+    assert result["capacity_diagnostics"]["fixed_input_floor"] > 64000
     assert result["packet_sha256"] == _hash(packet)
     assert len(model.requests) == 5 and not events(store, "worker.revision_requested")
+
+
+def test_repeated_immutable_sources_keep_all_receipts_but_share_wire_text(tmp_path, monkeypatch):
+    store, manager, model, worker, packet, _ = pending(tmp_path, monkeypatch, source_reads=3)
+    immutable_receipts = [item for item in packet["receipts"] if item["tool_name"] == "file_read"]
+    assert len(immutable_receipts) == 3 and len({item["id"] for item in immutable_receipts}) == 3
+    assert len({item["output"]["content"] for item in immutable_receipts}) == 1
+    result = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
+    assert result["verdict"] == "NEEDS_REVISION" and result["revision_applied"]
+    assert result["capacity_diagnostics"]["fixed_input_floor"] < 64000
+    assert result["packet_sha256"] == _hash(packet)
+    assert len(model.requests) == 5 and not events(store, "review.started")
 
 
 def test_context_only_overflow_uses_same_bounded_core_diagnostic(tmp_path, monkeypatch):

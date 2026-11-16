@@ -145,6 +145,9 @@ try:
             else None
         ),
         concurrency_limit=int(os.environ.get("FORGE_MODEL_CONCURRENCY_LIMIT", "1")),
+        call_limit=int(os.environ["FORGE_MODEL_CALL_LIMIT"])
+        if os.environ.get("FORGE_MODEL_CALL_LIMIT") is not None
+        else None,
         remote_max_seconds=float(os.environ["FORGE_MODEL_REMOTE_MAX_SECONDS"])
         if os.environ.get("FORGE_MODEL_REMOTE_MAX_SECONDS")
         else None,
@@ -176,8 +179,6 @@ provider = (
 )
 router_model = os.environ.get("FORGE_ROUTER_MODEL_ID")
 context_limit = os.environ.get("FORGE_ROUTER_CONTEXT_LIMIT")
-if router_model and not context_limit:
-    raise ValueError("FORGE_ROUTER_CONTEXT_LIMIT is required when configuring a Router model")
 try:
     context_limit_value = int(context_limit) if context_limit else 32768
 except ValueError as exc:
@@ -191,6 +192,7 @@ router = RouterService(
     model_id=router_model,
     provider_id=provider.config.id if provider.config else None,
     context_limit=context_limit_value,
+    use_registry_context=not bool(context_limit),
     output_reserve=int(os.environ.get("FORGE_ROUTER_OUTPUT_RESERVE", "2048")),
     semantic_recall=True,
     autonomous=True,
@@ -233,7 +235,7 @@ def _measure_composer_capacity(
         graph,
         current_provider,
         model_id=router.model_id,
-        context_limit=min(router.context_limit, profile.context_window or router.context_limit),
+        context_limit=router.effective_context_limit(profile),
         capabilities={"json_schema": profile.structured_output_support.source},
         operator_max_concurrency=native_worker_concurrency,
         model_max_output=profile.max_output_tokens or 8192,
@@ -332,15 +334,24 @@ async def _core_lifespan(application):
         await asyncio.to_thread(watchdog.tick)
         watchdog.supervise(loops, restart_loop)
 
+    project_cursor = ""
+
     async def prepare_worker_tick():
+        nonlocal project_cursor
         with store.connection() as c:
             quests = c.execute(
                 "SELECT id FROM quests WHERE status IN ('approved','queued','running') "
-                "AND NOT EXISTS (SELECT 1 FROM task_project_links l WHERE l.quest_id=quests.id) "
-                "LIMIT 16"
+                "AND (NOT EXISTS (SELECT 1 FROM task_project_links l WHERE l.quest_id=quests.id) "
+                "OR EXISTS (SELECT 1 FROM delegation_mandates m "
+                "WHERE m.quest_id=quests.id AND m.state='active')) "
+                "ORDER BY CASE WHEN id>? THEN 0 ELSE 1 END,id LIMIT 16",
+                (project_cursor,),
             ).fetchall()
         for quest in quests:
+            # Prepared automatic tasks still need immutable-source identity
+            # correction. This does not change their mandate or tool grants.
             await asyncio.to_thread(projects.associate_request, quest["id"])
+            project_cursor = quest["id"]
         await scheduler.tick()
 
     async def verify_tick():
@@ -601,9 +612,7 @@ async def process_pending_plan():
                 remaining_dag=replanning,
                 source_event_id=notice["event_id"],
                 source_event_token=notice_token,
-                context_limit=min(router.context_limit, profile.context_window)
-                if profile and profile.context_window
-                else router.context_limit,
+                context_limit=router.effective_context_limit(profile),
                 output_limit=min(8192, profile.max_output_tokens)
                 if profile and profile.max_output_tokens
                 else 8192,
@@ -874,11 +883,7 @@ async def process_pending_team():
                 raise DomainError("Actual Composer messages differ from their approved binding")
             composer_policy = POLICY
             data = bounded_messages[1]["content"]
-        limit = (
-            min(router.context_limit, profile.context_window)
-            if profile and profile.context_window
-            else router.context_limit
-        )
+        limit = router.effective_context_limit(profile)
         output_limit = (
             min(8192, profile.max_output_tokens) if profile and profile.max_output_tokens else 8192
         )
@@ -1473,6 +1478,9 @@ def worker_activity(
 @app.get("/api/settings")
 def settings_summary():
     saved = read_operator_settings(settings.workspace.root)
+    profile = router._model_profile({"models": [
+        {"id": item.id, "profile": item.model_dump_json()} for item in registry.list()
+    ]})
     return {
         "workspace_id": settings.workspace.id,
         "workspace_root": str(settings.workspace.root),
@@ -1481,7 +1489,9 @@ def settings_summary():
         "provider_configured": provider.config is not None,
         "provider_id": provider.config.id if provider.config else None,
         "router_model_id": router_model,
-        "context_limit": context_limit_value,
+        "context_limit": router.effective_context_limit(profile),
+        "context_limit_source": "model_registry" if router.use_registry_context and profile
+        and profile.context_window else "operator_cap" if context_limit else "conservative_fallback",
         "restore_fenced": (settings.workspace.root / FENCE_NAME).exists(),
         "revision": saved["revision"],
         "config": saved["config"],
@@ -1769,9 +1779,7 @@ async def generate_plan(quest_id: str, payload: PlanGenerateIn):
             require_capacity_contract=True,
             remaining_dag=payload.remaining_dag,
             expansion_parent=payload.expansion_parent,
-            context_limit=min(router.context_limit, profile.context_window)
-            if profile and profile.context_window
-            else router.context_limit,
+            context_limit=router.effective_context_limit(profile),
             output_limit=min(8192, profile.max_output_tokens)
             if profile and profile.max_output_tokens
             else 8192,
@@ -1889,6 +1897,62 @@ def list_models():
     return [
         profile.model_dump(mode="json", exclude={"quarantined_raw"}) for profile in registry.list()
     ]
+
+
+class ModelProbeIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    profile_id: str = Field(min_length=1, max_length=512)
+    dimensions: list[str] | None = Field(default=None, max_length=7)
+
+
+@app.post("/api/model-intelligence/discover")
+async def discover_configured_models():
+    if not isinstance(provider, ProviderGateway) or provider.config is None:
+        raise HTTPException(status_code=409, detail="Configured Provider required")
+    try:
+        return await registry.discover(provider)
+    except ProviderError as exc:
+        raise HTTPException(status_code=503, detail=f"Provider unavailable: {exc.code}") from exc
+
+
+@app.get("/api/model-intelligence/{profile_id}")
+def model_intelligence_snapshot(profile_id: str):
+    from forge_core.capability_benchmark import CapabilityBenchmarkRunner
+    from forge_core.model_performance import model_health_snapshot, performance_snapshot
+
+    profile = next((item for item in registry.list() if item.id == profile_id), None)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Model not found")
+    model_id = profile.model_id or profile.id
+    with store.connection() as connection:
+        performance = performance_snapshot(connection, profile.provider, model_id)
+        health = model_health_snapshot(connection, profile.provider, model_id)
+    return {
+        "performance": performance,
+        "health": health,
+        "capabilities": CapabilityBenchmarkRunner(store).summarize(model_id, profile.provider),
+    }
+
+
+@app.post("/api/model-intelligence/benchmark")
+async def benchmark_model_capabilities(payload: ModelProbeIn):
+    from forge_core.capability_benchmark import CapabilityBenchmarkRunner
+
+    profile = next((item for item in registry.list() if item.id == payload.profile_id), None)
+    if profile is None or not profile.enabled or profile.quarantine_reason:
+        raise HTTPException(status_code=409, detail="Enabled model required")
+    if (
+        not isinstance(provider, ProviderGateway)
+        or provider.config is None
+        or profile.provider != provider.config.id
+    ):
+        raise HTTPException(status_code=409, detail="Configured Provider required")
+    try:
+        return await CapabilityBenchmarkRunner(store).run(
+            provider, profile.model_id or profile.id, mode="live", dimensions=payload.dimensions
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
 
 
 @app.get("/api/models/{profile_id}")

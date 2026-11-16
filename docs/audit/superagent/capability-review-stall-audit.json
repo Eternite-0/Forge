@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "scope": "Current settled independent-review exhaustion and valid Watchdog stall notifications",
+  "verification_kind": "programmatic_sqlite_mock_and_scripted_local_http",
+  "real_provider_validation_after_fix": false,
+  "historical_run": {
+    "run_id": "20261115T232055Z-capability-fixed-fe94ad",
+    "database_access": "sqlite_uri_mode_ro",
+    "database_mutated_by_this_audit": false,
+    "worker_run_id": "run_30f06ec88bd4",
+    "worker_id": "worker_c76774339bf8",
+    "quest_id": "quest_e4a8958c96c5",
+    "plan_id": "plan_165e328109e9",
+    "plan_revision": 1,
+    "current_result_event_id": "evt_f706892d98ac",
+    "current_review_event_id": "evt_88b507f4ab19",
+    "review_packet_sha256": "633aa6ead3c5e0a4dae49b415f4af186b88efd3f1b700fbb6ea100101085d59b",
+    "revision_blocked_event_id": "evt_13e86231da3c",
+    "watchdog_help_event_id": "evt_c8c5ca128d0b",
+    "observed_state": "review_pending",
+    "repairs": 4,
+    "configured_repair_limit": 4,
+    "steps": 12,
+    "step_limit": 32,
+    "charged_tokens": 158736,
+    "allocated_tokens": 250000,
+    "tools": 11,
+    "tool_limit": 16,
+    "deadline": 1794785775.4077952,
+    "gateway_attempts": {"total": 15, "settled": 15},
+    "worker_model_reservations": {"total": 10, "settled": 10},
+    "repair_history": [
+      {"attempt": 1, "reason": "tool_preexecution_rejected", "tool": "directory_list"},
+      {"attempt": 2, "reason": "tool_preexecution_rejected", "tool": "directory_list"},
+      {"attempt": 3, "reason": "tool_failed", "tool": "file_read"},
+      {"attempt": 4, "reason": "first_independent_review_revision"}
+    ],
+    "stall_notice_delivery": {
+      "router": {"state": "dead", "attempts": 5, "last_error": "invalid_event"},
+      "composer": {"state": "dead", "attempts": 5, "last_error": "invalid_event"},
+      "planner": "skipped",
+      "worker": "skipped",
+      "event_inbox_rows": 0,
+      "outbox_delivered_at": null,
+      "missing_v2_help_fields": ["requested_role", "reason", "requires_approved_reassignment"]
+    },
+    "acceptance_is_not_retroactively_changed": true
+  },
+  "changes": [
+    "Converge a current settled independent_same_model NEEDS_REVISION result only after complete packet, current plan/team authority and no-unknown-effect checks plus a proven original resource limit.",
+    "CAS the same generation to blocked and update its Worker, task node and verifier claim in one existing transaction; emit a source-bound budget event through Outbox.",
+    "Recover an existing review.revision_blocked marker on subsequent ticks and restart without retrying the Provider.",
+    "Ignore an older NEEDS_REVISION when a later result verdict supersedes it.",
+    "Preserve deterministic parser, semantic and capacity revision contexts; they do not enter the new independent_same_model terminalization path.",
+    "Give new Watchdog help events the existing strict v2 role/reason/approval-boundary fields with requested_role router; no protocol relaxation or model help transcript is created."
+  ],
+  "safety": {
+    "new_state_store_or_manager": false,
+    "counter_or_budget_reset": false,
+    "unknown_usage_refunded": false,
+    "unknown_operation_replayed": false,
+    "tool_or_expansion_authority_added": false,
+    "existing_invalid_dead_letters_rewritten_or_replayed": false,
+    "frontend_changed": false,
+    "provider_config_changed": false,
+    "limits_increased": false
+  },
+  "tests": {
+    "candidate_new_and_control_drafts": {
+      "passed": 31,
+      "real_provider": false,
+      "overlaps_final_suite": true
+    },
+    "preserved_contract_transition": {
+      "path": "docs/audit/superagent/capability-review-stall-candidate-before.xml",
+      "passed": 183,
+      "failed": 1,
+      "reason": "The old test required a Worker correction after max_rounds=1 had already been consumed. The new contract blocks the exact still-NEEDS_REVISION result instead of spending a call on a delivery with no remaining independent-review round. The original red XML is retained. No max_rounds or max_repairs value is increased."
+    },
+    "final_targeted_regression": {
+      "path": "docs/audit/superagent/capability-review-stall-regression.xml",
+      "test_files": 10,
+      "passed": 213,
+      "failed": 0,
+      "duration_seconds": 75.44,
+      "new_safety_cases": 29,
+      "coverage": [
+        "current repair, step, deadline, enforced Token and independent-review-round exhaustion",
+        "disabled Token limits and remaining repairs do not terminalize",
+        "stale result/verdict/packet/claim, changed plan/team, wrong Worker/mode remain fenced",
+        "unknown local model, Gateway, tool and external intent remain fenced",
+        "old revision-blocked marker recovers once after reopening Store",
+        "scripted local HTTP validates exact settled native reviewer proof and rejects unknown, duplicate, purpose or model mismatches",
+        "strict v2 Watchdog help reaches Dispatcher Router inbox with unknown-effect/lease/counter boundaries retained",
+        "Watchdog help cannot authorize expert reassignment or expansion"
+      ]
+    },
+    "ruff": {"files": 4, "status": "passed"},
+    "diff_check": "passed"
+  },
+  "final_source_hashes": [
+    {"path": "backend/src/forge_core/independent_review.py", "sha256": "e021057b0d438c9a35d6a4cd6ddc7269c31b1023c2cdb42b09b45de5e8bb5ff7"},
+    {"path": "backend/src/forge_core/runtime_progress.py", "sha256": "b949a689f631d1109b0b977b2cfce76c5bbb6590d08de4e3e363b3b5178b188d"},
+    {"path": "backend/tests/test_stall_recovery_capability_sprint.py", "sha256": "78736074da504076c571325bda6418b5b16ceff09c6d6df3c3c7b7c5d96f018d"},
+    {"path": "backend/tests/test_reviewer_context_phase2.py", "sha256": "7bb0901406830a474a36c2fd4a2fafc9156ca620f1b7921f06368230968cf731"}
+  ],
+  "limitations": [
+    "Historical fixed-run failure and dead-letter deliveries remain unchanged.",
+    "This targeted regression does not establish real-model task success or replace full regression.",
+    "The new terminalization is deliberately restricted to current settled independent_same_model NEEDS_REVISION; other existing review diagnostics keep their prior behavior.",
+    "Programmatic, Mock and scripted local HTTP counts overlap and must not be added to full-suite counts."
+  ]
+}

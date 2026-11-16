@@ -1,0 +1,272 @@
+{
+  "run_id": "20261116T051018Z-capability-continuity-e9c94c",
+  "strategy": "continuity",
+  "scenario_levels": [
+    "L2",
+    "L3"
+  ],
+  "execution_mode": "live",
+  "upstream_identity": "unverified_proxy_reported_identity",
+  "context_metadata": {
+    "source": "operator_declared",
+    "independently_measured": false,
+    "context_window": 100000000,
+    "fields": {
+      "context_length": 1000000,
+      "max_input_tokens": 1000000,
+      "max_output_tokens": 128000
+    },
+    "operator_context_window": 100000000,
+    "declaration_conflict_retained": true,
+    "execution_budget_grant": false
+  },
+  "source_sha256": "eee86f27ef2e55ae1903285bf17c396e158292475e6544aca80849ffcea917d2",
+  "limits": {
+    "task_calls": 32,
+    "task_tokens": 500000,
+    "task_seconds": 900,
+    "gateway_retries": 0,
+    "aggregate_calls": 64
+  },
+  "status": "failed",
+  "checks": {
+    "observed_team_condition_L2": true,
+    "artifact_L2": true,
+    "final_calls_settled": true,
+    "fixed_aggregate_calls": true,
+    "fixed_admission_call_ceiling": true,
+    "final_per_task_budget": true,
+    "source_unchanged_after_drain": true
+  },
+  "tasks": {
+    "L2": {
+      "quest_id": "quest_9b27b92ebd8c",
+      "source_sha256": "11b4340adda7e86e380c8611ccce9d06c0dd213272ffa6f99a97e214ddcbeda7",
+      "team_observation": {
+        "execution_team": {
+          "strategy": "hierarchical",
+          "assignments": [
+            {
+              "role": "research",
+              "depends_on": []
+            },
+            {
+              "role": "architect",
+              "depends_on": []
+            },
+            {
+              "role": "reviewer",
+              "depends_on": [
+                0,
+                1
+              ]
+            }
+          ]
+        },
+        "independent_dispatches": [],
+        "selected_strategy": "hierarchical",
+        "actual_worker_count": 3,
+        "actual_roles": [
+          "research_1",
+          "architect_2",
+          "reviewer_3"
+        ],
+        "actual_dependencies": [
+          {
+            "source": "task_1",
+            "target": "task_3",
+            "condition": "success"
+          },
+          {
+            "source": "task_2",
+            "target": "task_3",
+            "condition": "success"
+          }
+        ]
+      },
+      "independent_check_attempted": true,
+      "independent_check": {
+        "execution_mode": "programmatic_independent",
+        "level": "L2",
+        "checks": {
+          "source_inputs_unchanged": true,
+          "report_summary": true,
+          "exact_source_citations": true,
+          "comparison_structure": true,
+          "risks_structure": true,
+          "recommendations_structure": true,
+          "comparison_source_references": true
+        },
+        "semantic_quality_assessed": false,
+        "artifact_sha256": "87ab70cbb4df0aa21306f58ec17b8eef626071831cc5b4f163623ecc79eb79ef",
+        "passed": true
+      }
+    }
+  },
+  "approval_provenance": "trusted_host_test_authorization_for_exact_user_authorized_manifest_not_model_approval",
+  "restart_boundary_policy": "Host restart only after every original Worker is quiescent and all calls/effects settle; L3 exact approval is held while L2 reaches a terminal Worker state. This tests durable resumption, not interruption of active computation.",
+  "failure_code": "core_api_status_500",
+  "primary_exception": {
+    "exception_type": "CoreAPIError",
+    "http_status": 500,
+    "detail_sha256": "b2789feceb19deb130f01b29b1b97279c4131101df4bf8ac885558f5091e3b3a",
+    "detail_code": "unclassified_core_detail"
+  },
+  "shutdown_drain": {
+    "provenance": "programmatic_host_shutdown_observation_no_new_work_or_replay",
+    "limit_seconds": 130,
+    "elapsed_seconds": 103.146,
+    "outcome": "drained",
+    "pending_futures": 0,
+    "last_accounting": {
+      "model_calls": 20,
+      "provider_reserved": 0,
+      "provider_unknown": 0,
+      "worker_model_reserved": 0,
+      "tool_inflight": 0,
+      "tool_unknown": 0,
+      "worker_tool_running": 0,
+      "worker_tool_unknown": 0,
+      "active_workers": 0
+    },
+    "future_errors": [
+      {
+        "level": "L3",
+        "exception_type": "CoreAPIError",
+        "http_status": 500,
+        "detail_sha256": "b2789feceb19deb130f01b29b1b97279c4131101df4bf8ac885558f5091e3b3a",
+        "detail_code": "unclassified_core_detail"
+      }
+    ]
+  },
+  "metrics": {
+    "provenance": "programmatic_read_only_core_evidence",
+    "worker_execution_modes": {
+      "live": 3
+    },
+    "gateway_attempt_modes_from_worker_scope": {
+      "live": 18,
+      "unattributed_non_worker": 2
+    },
+    "model_calls": 20,
+    "model_calls_by_purpose": {
+      "independent_reviewer": 3,
+      "router": 1,
+      "router_reflect": 1,
+      "worker": 15
+    },
+    "admission_states": {
+      "settled": 20
+    },
+    "provider_model_pairs": [
+      [
+        "wb-local",
+        "deepseek-v4.1-flash"
+      ]
+    ],
+    "charged_tokens": 248876,
+    "known_charged_tokens": 248876,
+    "unknown_usage_attempts": 0,
+    "cost_microunits": null,
+    "cost_currency": null,
+    "observed_event_span_seconds": 120.7513370513916,
+    "workers_by_state": {
+      "succeeded": 3
+    },
+    "quests_by_state": {
+      "completed": 1
+    },
+    "core_completed_quest_rate": {
+      "passed": 1,
+      "samples": 1,
+      "value": 1.0
+    },
+    "tool_calls": 21,
+    "tool_states": {
+      "succeeded": 21
+    },
+    "tool_success_rate": {
+      "passed": 21,
+      "samples": 21,
+      "value": 1.0
+    },
+    "repair_events": 0,
+    "worker_repair_counters": 0,
+    "review_attempts": 3,
+    "review_verdicts": {
+      "PASS": 3
+    },
+    "judged_review_pass_rate": {
+      "passed": 3,
+      "samples": 3,
+      "value": 1.0
+    },
+    "review_infrastructure_errors": 0,
+    "recovery_events": 0,
+    "recovered_run_current_success_rate": {
+      "passed": 0,
+      "samples": 0,
+      "value": null
+    },
+    "receipt_integrity_rate": {
+      "passed": 19,
+      "samples": 19,
+      "value": 1.0
+    },
+    "context_archive_count": 0,
+    "core_source_read_count": 0,
+    "subscription_count": 3,
+    "trigger_delivery_count": 3,
+    "source_refs": [
+      "model_attempt:b9b7111dd22448248a73ed82e7e15da4",
+      "model_attempt:bf890072862a442ba3d0b0c41d032a1a",
+      "model_attempt:616069d3cb95411db48652704cb1b9f5",
+      "model_attempt:77a72146f56344c1a4259b2a379b3147",
+      "model_attempt:ff46f5fa6e64474e9f132862936e6942",
+      "model_attempt:00e96c7eda50473185637c84ba299f9c",
+      "model_attempt:08d427d4b81248b2b13697eeea2407dd",
+      "model_attempt:43b46974afc74226bc93e6299a7733fc",
+      "model_attempt:d6a81930c1da46899d770c572546a3ca",
+      "model_attempt:a3a64a241a1342b59fd0441c8a51ee93",
+      "model_attempt:60f5241be41640498997b4ba9620a731",
+      "model_attempt:bdf00ff2ea7142b880b5690848b84f13",
+      "model_attempt:5a5e5704ba944659b2ab0f151a20faaf",
+      "model_attempt:58d51fe67288487dbab3e4ce712822de",
+      "model_attempt:84a5b3870aba4c9fa21823c8caa8db6d",
+      "model_attempt:c12f6ab3f76440b688fe2fac1afd43c6",
+      "model_attempt:5b3fd1627bda4ac6aa99daac8d01c28f",
+      "model_attempt:89d59b1ccd894a92a77c081f584af0ca",
+      "model_attempt:e86ad0b3b74e434cbf0edc3959d24c8d",
+      "model_attempt:905890218a2245538df67bad7246d603",
+      "run:run_01997cac9d27",
+      "run:run_70f928cb6909",
+      "run:run_a07677193235",
+      "receipt:receipt_01d9320f87d3",
+      "receipt:receipt_11e1e196075e",
+      "receipt:receipt_24e84018e8db",
+      "receipt:receipt_3cd821fc17b9",
+      "receipt:receipt_535fe8a85b35",
+      "receipt:receipt_560d91bf634c",
+      "receipt:receipt_5c1c39db9eed",
+      "receipt:receipt_78decf6cdb51",
+      "receipt:receipt_8d41983fc742",
+      "receipt:receipt_a1b5c8fa3b84",
+      "receipt:receipt_a3ed81d82b44",
+      "receipt:receipt_af6a263f96ef",
+      "receipt:receipt_c0f1eba0db25",
+      "receipt:receipt_c5d8da54beb1",
+      "receipt:receipt_d44b5a8f0a0c",
+      "receipt:receipt_e6fc6e66fb24",
+      "receipt:receipt_eee810ffa2b4",
+      "receipt:receipt_f04af562ebab",
+      "receipt:receipt_f5b1ab264584",
+      "event:evt_793d3b7d935c",
+      "event:evt_6eca0c2cefa2",
+      "event:evt_c81a953dc4d2"
+    ],
+    "source_refs_omitted": 0,
+    "snapshot_sha256": "21eeb5948f10b7bf7b7bf2480cb25663f0fb27c39108e6750ed5e67c572bd31b",
+    "limitations": "Core completion is not content correctness. Receipt integrity checks stored hashes and binding, not external truth. Recovery rate observes current terminal state after requeue, not causal efficacy. Event span is not CPU time. Unknown prices/call usage remain null."
+  },
+  "elapsed_seconds": 124.129
+}

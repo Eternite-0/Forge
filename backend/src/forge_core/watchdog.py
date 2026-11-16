@@ -33,7 +33,15 @@ class Watchdog:
     """
 
     def __init__(
-        self, store, *, clock=time.time, heartbeat_interval=10, stable_seconds=300, batch_size=64
+        self,
+        store,
+        *,
+        clock=time.time,
+        heartbeat_interval=10,
+        stable_seconds=300,
+        batch_size=64,
+        worker_progress_timeout=180,
+        provider_failure_threshold=3,
     ):
         if type(batch_size) is not int or not 1 <= batch_size <= 1000:
             raise ValueError("Invalid watchdog batch size")
@@ -43,6 +51,12 @@ class Watchdog:
         if self.stable_seconds > 3600:
             raise ValueError("Invalid component stability window")
         self.batch_size = batch_size
+        self.worker_progress_timeout = _positive(worker_progress_timeout, "Worker progress timeout")
+        if self.worker_progress_timeout > 3600:
+            raise ValueError("Invalid Worker progress timeout")
+        if type(provider_failure_threshold) is not int or not 1 <= provider_failure_threshold <= 10:
+            raise ValueError("Invalid Provider failure threshold")
+        self.provider_failure_threshold = provider_failure_threshold
         self._heartbeats = {}
         self._healthy_since = {}
 
@@ -166,9 +180,55 @@ class Watchdog:
             "failed": [],
             "deliveries_released": 0,
             "stalled_components": [],
+            "stalled_workers": [],
+            "provider_issues": [],
         }
         with self.store.unit_of_work() as work:
             connection = work.connection
+            from .model_performance import model_health_snapshot
+            from .runtime_progress import observe_worker_progress
+
+            active = connection.execute(
+                "SELECT r.*,q.conversation_id FROM worker_runs r JOIN quests q ON q.id=r.quest_id "
+                "WHERE r.state IN ('running','review_pending') ORDER BY r.created_at LIMIT ?",
+                (self.batch_size,),
+            ).fetchall()
+            provider_states = {}
+            for row in active:
+                stalled = observe_worker_progress(
+                    work, row, now=now, timeout_seconds=self.worker_progress_timeout
+                )
+                if stalled:
+                    report["stalled_workers"].append(stalled)
+                key = row["provider_id"], row["model_id"], row["execution_mode"]
+                if key not in provider_states:
+                    provider_states[key] = model_health_snapshot(
+                        connection,
+                        *key[:2],
+                        mode=key[2],
+                        failure_threshold=self.provider_failure_threshold,
+                        now=now,
+                    )
+            recent_models = connection.execute(
+                "SELECT provider_id,model_id,mode FROM model_observations "
+                "ORDER BY created_at DESC,id DESC LIMIT ?",
+                (self.batch_size,),
+            ).fetchall()
+            for observed in recent_models:
+                key = tuple(observed)
+                if key not in provider_states:
+                    provider_states[key] = model_health_snapshot(
+                        connection,
+                        *key[:2],
+                        mode=key[2],
+                        failure_threshold=self.provider_failure_threshold,
+                        now=now,
+                    )
+            report["provider_issues"] = [
+                item
+                for item in provider_states.values()
+                if item["recommendation"] in {"degraded", "blocked_unknown"}
+            ]
             stale = connection.execute(
                 "SELECT * FROM runtime_heartbeats WHERE state IN ('ok','retrying','restarting') "
                 "AND last_seen+timeout_seconds<=? ORDER BY last_seen LIMIT ?",
