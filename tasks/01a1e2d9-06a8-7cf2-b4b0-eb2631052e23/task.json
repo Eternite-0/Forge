@@ -1,0 +1,20 @@
+{
+  "tool_use_id": "01a1e2d9-06a8-7cf2-b4b0-eb2631052e23",
+  "agent_id": "01a1e2d9-06a8-7cf2-b4b0-eb2631052e23",
+  "subagent_type": "default",
+  "files": [
+    "desktop/src/components/conversation/AgentActivityRow.tsx",
+    "desktop/tests/ui-activity-files.playwright.js",
+    "desktop/tests/ui-inline-diff.playwright.js",
+    "desktop/tests/ui-risk-status.playwright.js"
+  ],
+  "token_usage": {
+    "input_tokens": 500884,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 5944526,
+    "output_tokens": 11307,
+    "api_call_count": 42
+  },
+  "started_at": "2026-11-16T13:33:58.5276353+08:00",
+  "completed_at": "2026-11-16T14:09:25.5937546+08:00"
+}
