@@ -51,7 +51,7 @@ async (page, { outputDir }) => {
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
   await page.goto('http://127.0.0.1:5173/');
-  await page.waitForFunction(() => document.querySelector('.sidebar-project-toggle')?.textContent.includes('TreeFixture'));
+  await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('TreeFixture'));
   await page.getByLabel('消息内容').fill('tree fixture draft');
   await page.getByRole('button', { name: '查看工作空间文件', exact: true }).click();
   const preview = page.getByLabel('工作空间文件预览', { exact: true }), tree = preview.locator('.preview-file-tree');

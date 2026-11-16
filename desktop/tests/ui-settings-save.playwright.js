@@ -68,7 +68,7 @@ async (page, { outputDir }) => {
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
   await page.goto('http://127.0.0.1:5173/');
-  await page.waitForFunction(() => document.querySelector('.sidebar-project-toggle')?.textContent.includes('FORGE-settings-save'));
+  await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('FORGE-settings-save'));
   await page.keyboard.press('Control+,');
   const nav = page.locator('.settings-nav');
   await nav.getByRole('button', { name: '模型库', exact: true }).click();

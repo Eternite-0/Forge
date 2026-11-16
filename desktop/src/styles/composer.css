@@ -163,3 +163,41 @@ button.worker-run:hover { background: var(--color-background-secondary-ghost-hov
 @media (min-width: 1181px) { .agent-panel-visible > .conversation-shell { margin-right: 324px; } }
 @media (max-width: 1180px) { .agent-panel-slot { top: 56px; } .agent-panel { box-shadow: var(--shadow-lg); } }
 @media (max-width: 480px) { .agent-panel-slot { width: min(300px,calc(100% - 16px)); bottom: 156px; } .agent-panel-toggle > span { display: none; } }
+
+/* Conversation-first shell: operational details stay available without framing the chat. */
+.conversation-topbar { height: 60px; padding: 12px 20px; border-bottom: 0; }
+.conversation-topbar .topbar-title h1 { font-size: 20px; line-height: 28px; font-weight: 600; }
+.conversation-topbar .conversation-status { gap: 6px; }
+.conversation-topbar .router-status { font-size: 12px; gap: 6px; }
+.conversation-files-toggle, .agent-panel-toggle { height: 36px; border-radius: 9px; }
+.conversation-files-toggle { width: 36px; }
+.agent-panel-toggle { padding-inline: 10px; }
+.composer-wrap { padding: 0 24px 24px; }
+.composer-stack { max-width: 768px; }
+.composer { min-height: 104px; padding: 16px 16px 10px; border: 1px solid var(--color-border); border-radius: 26px; background: light-dark(#f4f4f4,#303030); box-shadow: none; }
+.composer:focus-within { border-color: var(--color-border-strong); }
+.composer textarea { min-height: 32px; height: 32px; max-height: 200px; font-size: 16px; line-height: 24px; font-weight: 400; }
+.composer-bottom { min-height: 36px; margin-top: 10px; gap: 8px; }
+.composer-options-button { justify-content: center; width: 36px; height: 36px; padding: 0; border-radius: 50%; }
+.composer-model { height: 32px; max-width: min(280px,45vw); font-size: 12px; padding-inline: 8px; }
+.send-button { width: 36px; height: 36px; }
+.composer-wrap > .send-error { max-width: 768px; margin: 8px auto 0; font-size: 12px; line-height: 18px; overflow-wrap: anywhere; }
+.home-state { justify-content: center; padding-block: 60px 100px; }
+.home-state > .conversation-topbar { position: absolute; inset: 0 0 auto; }
+.home-state .timeline { display: flex; flex: 0 1 auto; flex-direction: column; align-items: center; padding: 24px 24px 28px; overflow: auto; }
+.home-state .empty-conversation { transform: none; gap: 0; }
+.home-state .empty-conversation h2 { font-size: 30px; line-height: 40px; font-weight: 500; }
+.home-state > .composer-wrap { position: relative; padding-bottom: 0; }
+.home-state > .composer-wrap::before { display: none; }
+@media (max-width: 760px) {
+  .conversation-topbar { padding-inline: 16px; }
+  .composer-wrap { padding-inline: 16px; padding-bottom: 16px; }
+  .home-state { padding-block: 60px 80px; }
+  .home-state .timeline { padding-inline: 20px; padding-bottom: 24px; }
+  .home-state .empty-conversation h2 { font-size: 26px; line-height: 36px; }
+  .router-state-label { display: inline; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+@media (max-height: 520px) {
+  .home-state { justify-content: flex-start; padding-block: 60px 20px; overflow-y: auto; }
+  .home-state .timeline { flex: none; padding-top: 12px; padding-bottom: 16px; }
+}

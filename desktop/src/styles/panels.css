@@ -57,6 +57,10 @@
 .quest-list .list-row > span:first-child { min-width: 0; flex: 1; }
 .quest-list .list-row small { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .quest-list .list-row > .state-label { flex: none; padding-top: 2px; font-size: 12px; line-height: 18px; }
+.quest-list .list-row > .quest-state { align-self: flex-start; padding: 2px 7px; border-radius: 999px; background: var(--color-background-ghost); white-space: nowrap; }
+.quest-state[data-state="running"] { color: var(--color-text); }
+.quest-state:is([data-state="awaiting_approval"], [data-state="blocked"], [data-state="needs_input"]) { color: var(--color-status-warning); }
+.quest-state[data-state="failed"] { color: var(--color-status-error); }
 .quest-empty { padding: 8px 0 16px; color: var(--color-text-secondary); font-size: 13px; line-height: 20px; }
 .quest-empty p { margin: 0 0 8px; }
 .quest-empty-selection { padding: 28px 0; }

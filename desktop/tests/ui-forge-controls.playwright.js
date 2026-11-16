@@ -71,13 +71,13 @@ async (page, { outputDir }) => {
   await page.getByLabel('Core 启动密钥').fill('cd'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.locator('.from-agent').first().waitFor();
-  await page.getByRole('button', { name: '查看 Router 配置', exact: true }).click();
+  await page.getByRole('button', { name: '查看模型配置', exact: true }).click();
   await page.getByRole('button', { name: 'Alternate model', exact: true }).click();
   await page.getByLabel('Router 模型 ID', { exact: true }).waitFor();
   check(await page.getByLabel('Router 模型 ID', { exact: true }).inputValue() === 'alternate-model' && settings.config.router_model_id === 'fixture-model', 'composer model selection prefills runtime settings without claiming an immediate switch');
   check(await page.getByText('重启 Core', { exact: false }).count() > 0, 'model configuration communicates its restart requirement');
   await page.locator('.settings-nav').getByRole('button', { name: '返回对话', exact: true }).click();
-  check((await page.getByRole('button', { name: '查看 Router 配置', exact: true }).innerText()).includes('fixture-model'), 'returning to chat retains the actual active Router model');
+  check((await page.getByRole('button', { name: '查看模型配置', exact: true }).innerText()).includes('fixture-model'), 'returning to chat retains the actual active Router model');
   await page.getByRole('button', { name: '查看运行健康' }).click();
   await page.locator('[data-health="stale"]').waitFor();
   check(await page.locator('[data-health="healthy"]').count() === 1 && await page.locator('[data-health="unknown"]').count() === 1, 'health distinguishes fresh, expired and unknown Unix-second heartbeats');

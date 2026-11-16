@@ -2,7 +2,6 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { currentWorkspaceProject } from "./projectContext";
 import { request, type Connection } from "./api";
 import { errorMessage } from "./logic";
-import SidebarGroup from "./components/Sidebar/SidebarGroup";
 
 export interface WorkspaceSidebarProps {
   connected: boolean;
@@ -24,8 +23,6 @@ export default function WorkspaceSidebar({
   connected, workspaceId, workspaceRoot, active, navigation, children, topNavigation, footer, connection,
 }: WorkspaceSidebarProps) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
-  const [projectExpanded, setProjectExpanded] = useState(true);
-  const [compactViewport, setCompactViewport] = useState(() => window.matchMedia("(max-width: 760px)").matches);
   const [discovery, setDiscovery] = useState<{ key: string; items: { id: string; root: string; name: string }[]; error: string }>({ key: "", items: [], error: "" });
   const identity = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "";
   useEffect(() => {
@@ -37,42 +34,15 @@ export default function WorkspaceSidebar({
     return () => controller.abort();
   }, [identity, connection?.bearer]);
   const workspaceDialogId = useId();
-  const projectContentId = useId();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const currentRef = useRef<HTMLButtonElement>(null);
-  const projectContent = useRef<HTMLDivElement>(null);
   const workspaceProject = currentWorkspaceProject(connected ? workspaceId : "", connected ? workspaceRoot : "");
   const workspacePath = connected ? workspaceProject.path || workspaceId : "";
   const workspaceName = workspaceProject.name;
-  const projectCanCollapse = active && !compactViewport;
 
   useEffect(() => { if (!active) setWorkspaceOpen(false); }, [active]);
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 760px)");
-    const update = () => setCompactViewport(media.matches);
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-  useLayoutEffect(() => {
-    const element = projectContent.current;
-    if (!element) return;
-    element.toggleAttribute("inert", projectCanCollapse && !projectExpanded);
-    const finish = () => { element.style.height = !projectCanCollapse || projectExpanded ? "auto" : "0px"; element.style.opacity = !projectCanCollapse || projectExpanded ? "1" : "0"; };
-    if (!projectCanCollapse || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { finish(); return; }
-    element.style.height = `${element.getBoundingClientRect().height}px`;
-    void element.offsetHeight;
-    let timeout = 0;
-    const frame = requestAnimationFrame(() => {
-      element.style.height = projectExpanded ? `${element.scrollHeight}px` : "0px";
-      element.style.opacity = projectExpanded ? "1" : "0";
-      timeout = window.setTimeout(finish, 200);
-    });
-    const transitioned = (event: TransitionEvent) => { if (event.target === element && event.propertyName === "height") finish(); };
-    element.addEventListener("transitionend", transitioned);
-    return () => { cancelAnimationFrame(frame); window.clearTimeout(timeout); element.removeEventListener("transitionend", transitioned); };
-  }, [projectCanCollapse, projectExpanded]);
 
   const closeWorkspace = useCallback(() => {
     setWorkspaceOpen(false);
@@ -118,7 +88,7 @@ export default function WorkspaceSidebar({
         ref={triggerRef}
         type="button"
         className={`workspace-selector${workspaceOpen ? " is-open" : ""}`}
-        aria-label="选择工作空间"
+        aria-label="查看当前工作空间"
         aria-haspopup="dialog"
         aria-expanded={workspaceOpen}
         aria-controls={workspaceDialogId}
@@ -141,7 +111,7 @@ export default function WorkspaceSidebar({
         ref={dialogRef}
         className="workspace-menu"
         role="dialog"
-        aria-label="工作空间选择"
+        aria-label="当前工作空间"
         aria-hidden={!workspaceOpen}
         tabIndex={-1}
         onKeyDown={(event) => {
@@ -167,25 +137,15 @@ export default function WorkspaceSidebar({
         </button> : <p className="workspace-menu-empty">连接后显示工作空间</p>}
       </div>
     </div>
-    {topNavigation}
+    <div className="sidebar-primary">{navigation}</div>
     <div className="sidebar-scroll">
-      <SidebarGroup label="置顶"><p className="sidebar-empty">暂无置顶项</p></SidebarGroup>
-      <section className="sidebar-project-group" data-project-key={workspaceProject.key} data-project-source="workspace">
-        <h2 className="sidebar-section-label">项目</h2>
-        <button type="button" className="sidebar-project-toggle" aria-label={`${projectExpanded ? "收起" : "展开"}项目 ${workspaceName}`} aria-expanded={projectExpanded} aria-controls={projectContentId} title={workspacePath || undefined} onClick={() => setProjectExpanded((expanded) => !expanded)} onKeyDown={(event) => {
-          if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229 || event.altKey || event.ctrlKey || event.metaKey) return;
-          if (event.key === "ArrowLeft") { event.preventDefault(); setProjectExpanded(false); }
-          if (event.key === "ArrowRight") { event.preventDefault(); setProjectExpanded(true); }
-          if (event.key === "ArrowDown" && projectExpanded) { event.preventDefault(); projectContent.current?.querySelector<HTMLButtonElement>("button")?.focus(); }
-        }}>
-          <svg className="project-chevron" data-chevron viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg>
-          <FolderIcon /><span>{workspaceName}</span>
-        </button>
-        <div ref={projectContent} id={projectContentId} className="sidebar-project-content" aria-hidden={projectCanCollapse && !projectExpanded}>{navigation}</div>
-        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <div className="discovered-project" key={item.id} title={`${item.root}\n已发现的项目；不授予目录访问权限。`}><FolderIcon /><span>{item.name}</span><small>已发现</small></div>)}
+      <div className="sidebar-tools"><h2 className="sidebar-section-label">工具</h2>{topNavigation}</div>
+      {connected && <section className="sidebar-project-summary" aria-label="项目上下文" data-project-key={workspaceProject.key} data-project-source="workspace">
+        <h2 className="sidebar-section-label">项目上下文</h2>
+        <div className="discovered-project current-project" title={workspacePath}><FolderIcon /><span>{workspaceName}</span><small>当前</small></div>
+        {discovery.key === identity && discovery.items.filter((item) => item.root.replace(/\\/g, "/").toLowerCase() !== workspaceRoot.replace(/\\/g, "/").toLowerCase()).map((item) => <div className="discovered-project" key={item.id} title={`${item.root}\n已识别的项目上下文，不授予目录访问权限。`}><FolderIcon /><span>{item.name}</span></div>)}
         {discovery.key === identity && discovery.error && <p className="sidebar-empty" title={discovery.error}>项目发现暂不可用</p>}
-      </section>
-      <SidebarGroup label="最近"><p className="sidebar-empty">当前工作空间使用一条长期对话</p></SidebarGroup>
+      </section>}
     </div>
     <div className="sidebar-connection">{children}</div>
     <div className="sidebar-footer">{footer}</div>

@@ -49,6 +49,8 @@ async (page, { outputDir }) => {
   await page.goto('http://127.0.0.1:5173/');
   await connect();
   const panel = page.locator('.agent-panel'), summary = panel.locator('.agent-panel-summary');
+  check(!(await panel.isVisible()), 'the Agent companion starts closed even on wide screens');
+  await page.getByRole('button', { name: '切换 Agent 面板', exact: true }).click();
   await panel.waitFor();
   const geometry = await panel.evaluate(element => {
     const rect = element.getBoundingClientRect(), chat = document.querySelector('.conversation-shell').getBoundingClientRect();

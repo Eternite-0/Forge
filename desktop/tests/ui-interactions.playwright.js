@@ -102,12 +102,12 @@ async (page, { outputDir }) => {
   await approvalSummary.click();
   await page.waitForFunction(() => !document.querySelector('.approval-details')?.open);
   check(await originalApprovalPanel.evaluate((element) => element.isConnected) && await approvalSummary.getAttribute('aria-expanded') === 'false', 'collapsing approval details preserves the mounted detail DOM');
-  const workspaceSelector = rail.getByRole('button', { name: '选择工作空间', exact: true });
+  const workspaceSelector = rail.getByRole('button', { name: '查看当前工作空间', exact: true });
   const conversationEntry = rail.getByRole('button', { name: '对话', exact: true });
   const originalConversationEntry = await conversationEntry.elementHandle();
   const originalWorkspaceSelector = await workspaceSelector.elementHandle();
   await workspaceSelector.click();
-  const workspaceDialog = page.getByRole('dialog', { name: '工作空间选择', exact: true });
+  const workspaceDialog = page.getByRole('dialog', { name: '当前工作空间', exact: true });
   await workspaceDialog.waitFor();
   check(await workspaceDialog.getByRole('button', { name: '使用当前工作空间', exact: true }).count() === 1, 'workspace picker exposes the current workspace');
   await page.keyboard.press('Escape');

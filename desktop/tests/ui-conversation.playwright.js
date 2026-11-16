@@ -71,7 +71,7 @@ async (page, { outputDir }) => {
   const workers = page.getByLabel('Agent 面板', { exact: true });
   const workerDrawer = page.locator('.agent-panel-slot');
   const workerToggle = header.locator('.agent-panel-toggle');
-  const modelTrigger = page.getByRole('button', { name: '查看 Router 配置', exact: true });
+  const modelTrigger = page.getByRole('button', { name: '查看模型配置', exact: true });
   const timeline = page.getByLabel('对话历史');
   const openWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') !== 'true') await workerToggle.click(); await workers.waitFor(); if (await workers.locator('.agent-panel-summary').getAttribute('aria-expanded') !== 'true') await workers.locator('.agent-panel-summary').click(); };
   const closeWorkers = async () => { if (await workerToggle.getAttribute('aria-expanded') === 'true') await workerToggle.click(); await workerDrawer.waitFor({ state: 'hidden' }); };
@@ -81,7 +81,7 @@ async (page, { outputDir }) => {
     if (await process.count() && !(await process.evaluate(element => element.open))) await process.locator(':scope > summary').click();
     await record.waitFor();
   };
-  check(!(await header.isVisible()) && await header.evaluate((element) => element.getBoundingClientRect().height === 0), 'empty conversation has no toolbar or toolbar placeholder');
+  check(await header.isVisible() && (await header.innerText()).includes('FORGE'), 'empty conversation keeps a minimal app header with genuine status');
   check(await page.locator('.composer-context').count() === 1, 'normal composer retains its accessible workspace context');
   check(await page.locator('.composer-context').evaluate((element) => { const style = getComputedStyle(element), rect = element.getBoundingClientRect(); return style.position === 'absolute' && rect.width <= 1 && rect.height <= 1; }), 'workspace context occupies no visible composer row');
   check(await workerToggle.getAttribute('aria-expanded') === 'false' && await workerDrawer.getAttribute('hidden') !== null, 'the Agent companion stays hidden on an empty conversation');
@@ -93,7 +93,7 @@ async (page, { outputDir }) => {
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await firstActivity;
   await revealProcessFor(page.locator('.message.from-agent').filter({ hasText: '我会先核对现有结构' }));
-  check(await header.isVisible() && (await header.innerText()).includes('长期对话'), 'a populated conversation has its compact single-line title');
+  check(await header.isVisible() && (await header.innerText()).includes('FORGE'), 'a populated conversation has its compact single-line title');
   const timelineHeight = await timeline.evaluate((element) => element.clientHeight);
   await openWorkers();
   check(await workerToggle.getAttribute('aria-expanded') === 'true' && await workers.isVisible(), 'opening the Agent companion exposes its controls');
@@ -153,7 +153,7 @@ async (page, { outputDir }) => {
   await closeWorkers();
 
   await page.getByLabel('消息内容').fill('模型配置导航仍保留这一条草稿');
-  const modelMenu = page.getByRole('dialog', { name: 'Router 模型配置', exact: true });
+  const modelMenu = page.getByRole('dialog', { name: '模型配置', exact: true });
   await modelTrigger.click();
   await modelMenu.waitFor();
   check((await modelMenu.locator('.router-model').innerText()).includes('current-router-model') && (await modelMenu.locator('.router-provider').innerText()).includes('fixture-provider'), 'model popover exposes the actual configured provider and model');

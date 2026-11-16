@@ -1,9 +1,12 @@
 # FORGE v4 — General-purpose Super-agent
 
-The desktop frontend now has a six-stage Codex-style refactor, with a single
-260px sidebar, inline Worker runs and UI paths for the current 50 authenticated
-API routes. See the [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md),
-[API-to-UI map](desktop/API-UI-COVERAGE.md) and [desktop instructions](desktop/README.md).
+The desktop opens to a chat-first workspace: a centered composer on an empty
+conversation and the same composer at the bottom once the conversation starts.
+Routine background work is available from Tasks; the conversation still surfaces
+pending approvals, blockers and requests for input. Execution details and file
+views are available on demand. The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)
+describes the historical Codex-style layout; see the [API-to-UI map](desktop/API-UI-COVERAGE.md)
+and [desktop instructions](desktop/README.md) for existing capabilities.
 
 FORGE is a self-built, general-purpose DeepSeek-style Super-agent desktop
 application: one persistent Router conversation coordinates hidden, isolated

@@ -1,7 +1,7 @@
 import { useRef, type RefObject } from "react";
 import AnimatedDetails from "./AnimatedDetails";
 import type { WorkerRun } from "./ConversationRuntime";
-import { isClosedQuest, needsQuestAttention, riskLabel, statusLabel, toolLabel } from "./presentation";
+import { needsQuestAttention, riskLabel, statusLabel, toolLabel } from "./presentation";
 import { mergeTimeline, type ChatMessage, type Outgoing } from "./timeline";
 import type { TimelineEvent } from "./timeline";
 import MessageList from "./components/conversation/MessageList";
@@ -27,20 +27,19 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
   if (memoryRef.current.identity !== identity) memoryRef.current = { identity, value: { expansion: new Map(), commandScroll: new Map() } };
   const memory = memoryRef.current.value;
   const items = groupEvents(mergeTimeline(messages, events, outgoing));
-  const active = quests.filter((quest) => !isClosedQuest(quest.status)).sort((left, right) => Number(needsQuestAttention(right.status)) - Number(needsQuestAttention(left.status)));
-  const attention = active.filter((quest) => needsQuestAttention(quest.status));
-  const background = active.filter((quest) => !needsQuestAttention(quest.status));
+  // Routine runs belong in Tasks, not in a global status list at the end of chat.
+  const attention = quests.filter((quest) => needsQuestAttention(quest.status));
   const taskRow = (quest: Quest) => <button className="timeline-update" key={quest.id} aria-label={`${quest.title} 状态：${quest.status} · 版本 ${quest.version}`} onClick={() => onQuest(quest.id)}><span><strong>{quest.title}</strong><small>{statusLabel(quest.status)}</small></span><span aria-hidden="true">›</span></button>;
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
     {timelineError && <p className="notice error" role="alert">过程记录暂不可用：{timelineError}</p>}
-    {!items.length && !workerRuns.length && <div className="empty-conversation"><h2>有什么可以帮你？</h2><p>直接说目标，也可以继续之前的任务。</p></div>}
+    {!items.length && !workerRuns.length && <div className="empty-conversation"><h2>有什么可以帮你？</h2></div>}
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
-    {connected && (active.length > 0 || approvals.length > 0) && <section className="timeline-updates" aria-label="任务与审批更新">
-      {(approvals.length > 0 || attention.length > 0) && <div className="timeline-updates-label">需要你处理</div>}
+    {connected && (attention.length > 0 || approvals.length > 0) && <section className="timeline-updates" aria-label="任务与审批更新">
+      <div className="timeline-updates-label">需要你处理</div>
       {approvals.slice(0, 3).map((item) => {
         const quest = quests.find((candidate) => candidate.id === item.quest_id);
         const expiresAt = typeof item.expires_at === "string" ? Date.parse(item.expires_at) : NaN;
@@ -58,9 +57,6 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
       {approvals.length > 3 && <p className="notice">已加载的审批中另有 {approvals.length - 3} 项待处理，审批页按任务筛选 · <button className="text-button" onClick={() => onApproval(text(approvals[0]?.quest_id, ""))}>按任务查看审批</button></p>}
       {attention.slice(0, 3).map(taskRow)}
       {attention.length > 3 && <p className="notice">另有 {attention.length - 3} 项已加载任务需要处理 · <button className="text-button" onClick={() => onQuest("")}>查看全部任务</button></p>}
-      {background.length > 0 && <AnimatedDetails className="background-task-summary" onInspect={onInspect} summaryTitle="仅统计已加载的未结束任务，展开查看当前状态。" summary={<><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><circle cx="8" cy="8" r="5.5" /><path d="M8 4.5V8l2.5 1.5" /></svg><span>{background.length} 个后台任务</span><Chevron /></>}>
-        <div className="background-task-list">{background.slice(0, 3).map(taskRow)}{background.length > 3 && <p className="notice">另有 {background.length - 3} 项已加载任务 · <button className="text-button" onClick={() => onQuest("")}>查看全部任务</button></p>}</div>
-      </AnimatedDetails>}
     </section>}
     {connected && approvalError && <p className="notice error" role="alert">审批状态暂不可用：{approvalError}</p>}
     {connected && (items.length > 0 || workerRuns.length > 0) && <RecallCard connection={connection || null} />}

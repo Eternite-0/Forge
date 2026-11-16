@@ -51,7 +51,7 @@ async (page, { outputDir }) => {
   await page.goto('http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
-  await page.waitForFunction(() => document.querySelector('.sidebar-project-toggle')?.textContent.includes('Settings'));
+  await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('Settings'));
   await page.keyboard.press('Control+,');
   const nav = page.locator('.settings-nav');
   await nav.getByRole('button', { name: '触发器', exact: true }).click();
@@ -115,7 +115,7 @@ async (page, { outputDir }) => {
   await page.screenshot({ path: `${outputDir}/forge-triggers-light.png`, fullPage: true });
   await page.emulateMedia({ colorScheme: 'dark' });
   const dark = await page.locator('.settings-content').evaluate((element) => getComputedStyle(element).backgroundColor);
-  check(light !== dark && dark === 'rgb(17, 17, 17)', 'trigger settings follow the system theme without a JS theme toggle');
+  check(light !== dark && dark === 'rgb(33, 33, 33)', 'trigger settings follow the system theme without a JS theme toggle');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: '收起工作空间侧栏', exact: true }).click();
   check(await page.locator('.settings-content').evaluate((element) => element.clientWidth >= 340), '390px trigger settings retain at least 340px of usable content width');

@@ -13,8 +13,8 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
   const { native, connection, setSuggestedRouterModel, runtimeStatus, workspaceOperation, restoreFenced, view, setSettingsOpen, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, coreInfo, routerInfo, workerActivity, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
   const chatVisible = view === "chat" || (taskView && !settingsOpen);
   const [compactAgent, setCompactAgent] = useState(() => window.matchMedia("(max-width: 1180px)").matches);
-  const [agentPreference, setAgentPreference] = useState<boolean | null>(null);
-  const agentOpen = !home && !taskView && !previewOpen && (agentPreference ?? !compactAgent);
+  const [agentPreference, setAgentPreference] = useState(false);
+  const agentOpen = !home && !taskView && !previewOpen && agentPreference;
   const previousAgent = useRef(agentOpen);
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1180px)");
@@ -59,7 +59,7 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
   }))];
   return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
-      <ConversationToolbar home={home && !previewOpen} status={routerStatus} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent} sessionTitle={routerInfo.router_session_id ? `Router 会话：${text(routerInfo.router_session_id)}` : undefined} />
+      <ConversationToolbar home={home} status={routerStatus} onOpenFiles={() => openPreview("files")} agentOpen={agentOpen} onToggleAgent={toggleAgent} sessionTitle={routerInfo.router_session_id ? `Router 会话：${text(routerInfo.router_session_id)}` : undefined} />
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
       <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
@@ -86,7 +86,7 @@ export default function ConversationWorkspace({ workspace }: { workspace: Worksp
     <div id="conversation-agent-panel" className="agent-panel-slot" hidden={!agentOpen} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('[aria-label="切换 Agent 面板"]')?.focus(); } }}>
       <AgentPanel key={connectionKey} state={workerActivity} sources={sources} events={timelineEvents} conversationFiles={conversationFiles.length} onConversationFiles={() => openPreview("conversation", undefined, conversationFiles)} filesChanged={workspaceChanges} onChanges={() => openPreview("changes")} onSource={path => openPreview("files", path || undefined)} onRun={revealRun} onActivity={() => openTaskView("activity", "")} onClose={() => { captureReadingPosition(); setAgentPreference(false); }} />
     </div>
-    {!previewOpen && home && <button type="button" className="home-files-button" aria-label="查看工作空间文件" onClick={() => openPreview("files")}><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M2 5h5l1.5 1.5H14v6H2V5Zm0 0V3h5l1.5 2" /></svg>文件</button>}
+
     </div>;
 }
 

@@ -1,4 +1,4 @@
-/* Application shell, titlebar and a single workspace sidebar. */
+/* A quiet application shell; conversation is the primary surface. */
 .app-shell { display: grid; grid-template-columns: var(--sidebar-width) minmax(0,1fr); grid-template-rows: var(--app-shell-titlebar-height) minmax(0,1fr); height: 100dvh; overflow: hidden; background: var(--app-color-background-surface-under); transition: grid-template-columns 150ms var(--ease-out); }
 .app-shell.compact-navigation { grid-template-columns: 0 minmax(0,1fr); }
 .desktop-chrome { display: flex; grid-column: 1 / -1; grid-row: 1; align-items: center; min-width: 0; height: var(--app-shell-titlebar-height); padding: 0 12px 0 8px; gap: 12px; background: var(--app-color-background-surface-under); -webkit-app-region: drag; user-select: none; }
@@ -115,3 +115,34 @@
   .tasks-open > .chat-workspace { margin-inline-end: min(560px,40vw); }
 }
 @media (prefers-reduced-motion: reduce) { .app-shell > .workspace-panel.task-inspector { animation: none; } }
+
+/* Chat-first navigation. Project identities are context, not fake chat history. */
+.desktop-chrome { gap: 8px; background: var(--app-color-background-surface); }
+.rail { border-right: 0; }
+.workspace-selector-wrap { padding: 12px 12px 14px; }
+.workspace-selector-name { font-size: 19px; font-weight: 600; letter-spacing: -.5px; }
+.workspace-selector { height: 40px; }
+.sidebar-primary { padding: 0 12px 16px; }
+.conversation-entry { height: 42px; padding-inline: 12px; border-radius: 12px; }
+.sidebar-primary .conversation-entry.active { background: var(--color-background-selected); font-weight: 500; }
+.sidebar-tools { margin-top: 4px; }
+.sidebar-tools .utility-nav { padding: 0 0 16px; }
+.sidebar-tools .nav-item { height: 38px; padding-inline: 12px; }
+.sidebar-section-label { padding: 0 12px; margin: 16px 0 8px; font-size: 12px; }
+.sidebar-project-summary { padding-top: 8px; border-top: 1px solid var(--color-border-subtle); }
+.sidebar-project-summary .discovered-project { padding-inline: 12px; height: 34px; }
+.sidebar-project-summary .current-project { color: var(--color-text-secondary); }
+.sidebar-project-summary .discovered-project small { color: var(--muted); }
+.sidebar-footer { padding-top: 12px; }
+.profile-button { height: 42px; padding-inline: 10px; }
+.profile-avatar { width: 28px; height: 28px; }
+.titlebar-actions { gap: 8px; }
+.titlebar-health { flex: none; }
+.application-menu > .application-overflow { display: grid; place-items: center; width: 32px; padding: 0; }
+.titlebar-actions .application-menu-panel { left: auto; right: 0; max-height: calc(100dvh - 64px); overflow-y: auto; }
+.application-command-group { padding-block: 4px; border-top: 1px solid var(--color-border-subtle); }
+.application-menu-panel button:disabled { opacity: .4; cursor: default; }
+@media (max-width: 760px) {
+  .titlebar-health { display: none; }
+  .sidebar-primary { padding-top: 4px; }
+}

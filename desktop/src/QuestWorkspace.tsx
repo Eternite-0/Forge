@@ -112,7 +112,7 @@ function QuestProjectGroup({ project, selectedId, search, filter, onSelect }: { 
   const closed = project.quests.filter((quest) => isClosedQuest(quest.status));
   const row = (quest: WorkspaceQuest) => <button type="button" key={quest.id} className={selectedId === quest.id ? "list-row selected" : "list-row"}
     aria-label={`${quest.title} ${quest.id} ${quest.status}`} aria-current={selectedId === quest.id ? "page" : undefined} onClick={() => onSelect(quest.id)}>
-    <span><strong>{quest.title}</strong><small>{quest.goal}</small></span><span className="state-label">{statusLabel(quest.status)}</span>
+    <span><strong>{quest.title}</strong><small>{quest.goal}</small></span><span className="state-label quest-state" data-state={quest.status}>{statusLabel(quest.status)}</span>
   </button>;
   return <section className="quest-project-group" data-project-key={project.key} data-project-source={project.source}>
     <button type="button" className="quest-project-toggle" aria-expanded={expanded} aria-controls={contentId} title={project.path || undefined} onClick={() => setExpanded((value) => !value)} onKeyDown={(event) => {
@@ -190,7 +190,7 @@ export default function QuestWorkspace({
   const nodes = records(plan?.nodes);
   return <div className="quest-workspace">
     <div className="quest-list">
-      <div className="section-heading"><span>后台任务</span><span>{quests.length} 项已加载{hasMore ? " · 还有更多" : ""}</span></div>
+      <div className="section-heading"><span>任务列表</span><span>{quests.length} 项已加载{hasMore ? " · 还有更多" : ""}</span></div>
       <div className="quest-search">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
         <input ref={searchInput} type="search" aria-label="搜索任务" placeholder="搜索已加载的任务" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => {
@@ -202,8 +202,8 @@ export default function QuestWorkspace({
       {quests.length > 0 && <p className="notice quest-filter-count">显示 {filtered.length} / {quests.length} 项已加载任务</p>}
       {error && <p className="notice error" role="alert">任务列表加载失败：{error}</p>}
       {!quests.length ? <div className="quest-empty">
-        <p>{connected ? "暂无后台任务" : "连接 Core 后显示任务"}</p>
-        <p className="notice">在长期对话中提出目标，计划、团队与执行记录会归到对应任务。</p>
+        <p>{connected ? "还没有任务" : "未连接，暂时无法查看任务"}</p>
+        <p className="notice">在对话中交代要做的事，创建后的任务会出现在这里。</p>
       </div> : !filtered.length ? <div className="quest-empty quest-filter-empty">
         <p>没有匹配的已加载任务</p><p className="notice">试试其他关键词，或清除搜索与状态筛选。</p>
         <button type="button" className="text-button" onClick={resetFilters}>清除筛选</button>

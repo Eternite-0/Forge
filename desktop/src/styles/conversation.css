@@ -4,10 +4,8 @@
 .activity-history-open { display: inline-flex; align-items: center; gap: 8px; margin: 2px 0 6px 24px; font-size: 12px; line-height: 21px; }
 .timeline { flex: 1; min-height: 0; overflow: auto; overflow-anchor: none; padding: 32px 24px calc(var(--conversation-footer-height,118px) + 32px); scroll-padding-bottom: var(--conversation-footer-height,118px); }
 .timeline > * { width: 100%; max-width: 736px; min-width: 0; margin-inline: auto; }
-.home-state .timeline { display: grid; place-items: center; padding-block: 0 var(--conversation-footer-height,118px); }
-.empty-conversation { display: flex; flex-direction: column; align-items: center; gap: 12px; transform: translateY(-24px); text-align: center; }
+.empty-conversation { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .empty-conversation h2 { margin: 0; color: var(--color-text); font-size: 28px; line-height: 36px; font-weight: 500; }
-.empty-conversation p { max-width: 480px; margin: 0; color: var(--muted); font-size: 14px; line-height: 21px; }
 .message { position: relative; display: flex; flex-direction: column; margin: 0; width: 100%; min-width: 0; }
 .message-body { min-width: 0; overflow-wrap: anywhere; white-space: normal; font-size: var(--text-chat); line-height: var(--text-chat-line); font-weight: var(--font-weight-body); order: 1; }
 .message.from-user { align-items: flex-end; }
@@ -69,11 +67,6 @@
 .inline-diff-copy-status { position: absolute; top: 28px; right: 8px; padding: 4px 8px; border-radius: 5px; background: var(--app-color-background-surface); box-shadow: var(--shadow-sm); font-size: 12px; }
 .timeline-updates { margin: 24px auto 0; }
 .timeline-updates-label { margin-bottom: 8px; color: var(--muted); font-size: 12px; line-height: 16px; }
-.background-task-summary > summary { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; list-style: none; color: var(--muted); font-size: 12px; line-height: 20px; }
-.background-task-summary > summary::-webkit-details-marker { display: none; }
-.background-task-summary > summary:hover { color: var(--color-text); }
-.background-task-summary > summary > svg { flex: none; width: 16px; height: 16px; }
-.background-task-list { padding-top: 4px; }
 .timeline-update { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin: 8px 0; padding: 10px 12px; border: .8px solid var(--color-border); border-radius: 12.5px; background: var(--app-color-background-surface); text-align: left; }
 .timeline-update:hover { background: var(--color-background-secondary-ghost-hover); }
 .timeline-update strong, .timeline-update small { display: block; overflow-wrap: anywhere; }

@@ -73,17 +73,21 @@ export default function Titlebar(props: TitlebarProps) {
   return <>
     <header className="desktop-chrome titlebar" ref={bar} data-tauri-drag-region>
       <div className="titlebar-navigation">
-        <button type="button" className="sidebar-toggle" aria-label="返回" title="返回" disabled={history.index === 0} onClick={() => move(-1)}><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m11 5-5 5 5 5M6 10h10" /></svg></button>
-        <button type="button" className="sidebar-toggle" aria-label="前进" title="前进" disabled={history.index === history.routes.length - 1} onClick={() => move(1)}><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m9 5 5 5-5 5M4 10h10" /></svg></button>
         <button type="button" className="sidebar-toggle" aria-label={props.sidebarCollapsed ? "展开工作空间侧栏" : "收起工作空间侧栏"} aria-expanded={!props.sidebarCollapsed} title={props.sidebarCollapsed ? "显示侧边栏" : "隐藏侧边栏"} onClick={props.onToggleSidebar}><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" /><path d="M9 4v16" /></svg></button>
       </div>
-      <div role="menubar" aria-label="应用程序菜单" className="application-menubar">
-        {Object.entries(commands).map(([name, entries]) => <div className="application-menu" key={name}>
-          <button type="button" role="menuitem" aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu(name); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>{name}</button>
-          {menu === name && <div className="application-menu-panel" role="menu" aria-label={`${name}菜单`}>{entries.map((entry) => <button type="button" role="menuitem" key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>}
-        </div>)}
+      <div className="titlebar-actions">
+        <div className="application-menu">
+          <button type="button" className="application-overflow" aria-label="应用菜单" title="应用菜单" aria-haspopup="menu" aria-expanded={menu === "app"} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === "app" ? null : "app"); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu("app"); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
+          </button>
+          {menu === "app" && <div className="application-menu-panel" role="menu" aria-label="应用菜单">
+            <button type="button" role="menuitem" disabled={history.index === 0} onClick={() => { setMenu(null); move(-1); }}>返回</button>
+            <button type="button" role="menuitem" disabled={history.index === history.routes.length - 1} onClick={() => { setMenu(null); move(1); }}>前进</button>
+            {Object.entries(commands).map(([name, entries]) => <div key={name} role="group" aria-label={name} className="application-command-group">{entries.map((entry) => <button type="button" role="menuitem" key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>)}
+          </div>}
+        </div>
       </div>
-      <div className="titlebar-actions"><span className="titlebar-brand">FORGE</span>{props.health ?? <span className="connection-indicator"><span className={props.connected ? "status-dot on" : "status-dot"} />{props.connected ? "Core 已连接" : "Core 未连接"}</span>}</div>
+      <div className="titlebar-health">{props.health ?? <span className="connection-indicator"><span className={props.connected ? "status-dot on" : "status-dot"} />{props.connected ? "Core 已连接" : "Core 未连接"}</span>}</div>
     </header>
     {notice && <div className="titlebar-notice" role="status">{notice}</div>}
     {about && <div className="modal-backdrop" onClick={() => { setAbout(false); menuTrigger.current?.focus(); }}><section className="app-modal" role="dialog" aria-modal="true" aria-label="关于 FORGE" onClick={(event) => event.stopPropagation()} onKeyDown={(event) => { if (event.key === "Escape") { setAbout(false); menuTrigger.current?.focus(); } if (event.key === "Tab") { event.preventDefault(); aboutClose.current?.focus(); } }}><h2>FORGE</h2><p>一个持续对话的工作空间。Router 协调后台子智能体，进展与交付回到同一条对话。</p><p className="notice">桌面前端 0.2.0</p><button ref={aboutClose} type="button" className="button" onClick={() => { setAbout(false); menuTrigger.current?.focus(); }}>关闭</button></section></div>}

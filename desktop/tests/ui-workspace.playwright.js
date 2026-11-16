@@ -98,13 +98,13 @@ async (page, { outputDir }) => {
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   const rail = page.getByLabel('主导航');
-  const workspaceSelector = rail.getByRole('button', { name: '选择工作空间', exact: true });
-  await page.waitForFunction(() => document.querySelector('.sidebar-project-toggle')?.textContent.includes('FORGE-workspace'));
+  const workspaceSelector = rail.getByRole('button', { name: '查看当前工作空间', exact: true });
+  await page.waitForFunction(() => document.querySelector('.current-project')?.textContent.includes('FORGE-workspace'));
   check(await workspaceSelector.getAttribute('title') === settings.workspace_root, 'workspace selector uses the actual workspace path');
   check(await rail.getByRole('button', { name: '对话', exact: true }).count() === 1 && await rail.getByRole('button', { name: '长期对话', exact: true }).count() === 0, 'sidebar has one conversation entry');
   check(await rail.locator('.sidebar-quest, .sidebar-attention').count() === 0, 'sidebar stays focused on workspace and primary destinations');
   await workspaceSelector.click();
-  const workspaceDialog = page.getByRole('dialog', { name: '工作空间选择', exact: true });
+  const workspaceDialog = page.getByRole('dialog', { name: '当前工作空间', exact: true });
   await workspaceDialog.waitFor();
   const currentWorkspace = workspaceDialog.getByRole('button', { name: '使用当前工作空间', exact: true });
   check(await workspaceDialog.getByRole('button').count() === 1 && (await currentWorkspace.innerText()).includes(settings.workspace_root), 'workspace picker exposes only the actual current workspace');
@@ -138,13 +138,8 @@ async (page, { outputDir }) => {
   check(!activityLabels.join('').includes('创建聊天'), 'private Worker execution is not presented as creating a user chat');
   const updates = timeline.locator('.timeline-updates');
   check((await updates.innerText()).includes('已加载的审批中另有 3 项待处理，审批页按任务筛选') && await updates.getByRole('button', { name: '按任务查看审批', exact: true }).isVisible(), 'additional pending approvals disclose the loaded remainder and Quest scope');
-  const background = updates.locator('.background-task-summary');
   check(await updates.locator(':scope > button.timeline-update').count() === 3 && (await updates.locator(':scope > button.timeline-update').allTextContents()).join(' ').includes('Epsilon 补充目标'), 'all three loaded tasks needing attention remain visible beside approvals');
-  check((await background.locator(':scope > summary').innerText()).includes('2 个后台任务') && await background.getAttribute('open') === null && !(await background.locator('.timeline-update').first().isVisible()), 'the two ordinary active tasks start behind a counted background summary');
-  await background.locator(':scope > summary').click();
-  check(await background.locator('.timeline-update').count() === 2 && (await background.innerText()).includes('Beta 数据核对') && (await background.innerText()).includes('Delta 暂停记录'), 'expanding the background summary reveals actual running and paused tasks');
-  check((await background.locator(':scope > summary').getAttribute('title') || '').includes('已加载'), 'background count clearly describes its loaded subset scope');
-  await background.locator(':scope > summary').click();
+  check(!(await updates.innerText()).includes('Beta 数据核对') && !(await updates.innerText()).includes('Delta 暂停记录'), 'ordinary running and paused tasks do not repeat at the end of a chat');
   await page.getByLabel('消息内容').fill('workspace draft survives every task and settings view');
   await timeline.evaluate((element) => { element.scrollTop = 0; });
   await screenshot('forge-workspace-conversation');
@@ -155,6 +150,11 @@ async (page, { outputDir }) => {
   await page.locator('.workspace-panel .data-row').filter({ hasText: 'https://fixture.invalid/source-4' }).waitFor();
   check(await page.locator('.workspace-panel .data-row').count() === 2, 'approval scope can switch to a second actual Quest');
   await page.locator('.workspace-tabs').getByRole('button', { name: '后台任务', exact: true }).click();
+  const taskList = page.locator('.quest-list');
+  await taskList.getByRole('button', { name: /Beta 数据核对/ }).waitFor();
+  check(await taskList.getByRole('button', { name: /Beta 数据核对/ }).getByText('运行中', { exact: true }).count() === 1 &&
+    await taskList.getByRole('button', { name: /Delta 暂停记录/ }).getByText('已暂停', { exact: true }).count() === 1,
+    'running and paused tasks remain separately visible with their real state in the task manager');
   await page.locator('.quest-list .list-row').filter({ hasText: quests[0].title }).click();
   await page.locator('.quest-overview').getByRole('heading', { name: quests[0].title, exact: true }).waitFor();
   await page.waitForFunction(() => Math.abs(document.querySelector('.rail')?.getBoundingClientRect().width - 260) <= 1);
@@ -261,7 +261,7 @@ async (page, { outputDir }) => {
   await screenshot('forge-workspace-budget');
   budget = { token_limit: 0, concurrency_limit: 2, charged_tokens: 0, known_tokens: null, reserved_tokens: 0, active_reservations: 0,
     cost_limit_microunits: 0, currency: 'USD', recent_unsettled: null };
-  await page.getByRole('menuitem', { name: '视图', exact: true }).click();
+  await page.getByRole('button', { name: '应用菜单', exact: true }).click();
   await page.getByRole('menuitem', { name: '刷新当前视图', exact: true }).click();
   await page.waitForFunction(() => [...document.querySelectorAll('.settings-row')].some((row) => row.querySelector('.settings-row-label')?.textContent === '已确认用量' && row.querySelector('.settings-row-value')?.textContent === '未知'));
   check(await valueFor('已确认用量').innerText() === '未知' && await valueFor('迁移期上界').innerText() === '未知', 'missing and null budget measurements stay unknown');
