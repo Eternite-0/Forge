@@ -144,3 +144,16 @@ test("conversation snapshots only enrich exact loaded run history; queued is not
   const plain = buildProcessTimeline([message("u", "user", 0), message("reply", "assistant", 4)], historyWorkerRuns(runs, []));
   assert.deepEqual(plain.map(item => item.type), ["message", "message"]);
 });
+
+test("last-confirmed and expired running snapshots do not drive a live process clock", () => {
+  const source = [message("user", "user", 1), life("started", 4, "run", "worker.started"), event("tool", 7, { run_id: "run" })];
+  for (const metadata of [{ last_confirmed: true }, { lease_status: "expired" }, { last_confirmed: true, lease_status: "expired" }]) {
+    const group = buildProcessTimeline(source, [{ run_id: "run", state: "running", ...metadata }])[1];
+    assert.equal(group.active, false);
+    assert.equal(group.durationMs, 6000);
+    assert.deepEqual(group.records.flatMap(record => record.events || []).map(event => event.event_id), ["started", "tool"]);
+  }
+  const fresh = buildProcessTimeline(source, [{ run_id: "run", state: "running", lease_status: "active", last_confirmed: false }])[1];
+  assert.equal(fresh.active, true);
+  assert.equal(fresh.durationMs, undefined);
+});

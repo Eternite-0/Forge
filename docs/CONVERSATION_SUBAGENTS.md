@@ -56,6 +56,11 @@ An expired or mismatched cursor restarts that list rather than being applied to
 another scope. Exact run detail does not depend on phase and remains readable
 when the run moves between active and terminal.
 
+A partial active first page does not invalidate rows explicitly read from an
+older active page. Older rows show their last confirmed status; they do not
+start a live clock or count as currently running. A run that genuinely drops
+off the polled first page still gets a bounded exact-run status check.
+
 ## Historical files
 
 Agents can leave file writes or revisions even when the run later fails or

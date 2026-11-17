@@ -61,3 +61,50 @@ test("new active work sorts above a hundred historical terminal rows without los
   assert.equal(rows.length, 102);
   assert.equal(rows.filter(row => row.run_id === "new-active").length, 1);
 });
+
+test("partial heads preserve paged snapshots without repeated reconciliation", () => {
+  const state = new AgentBuckets();
+  state.acceptActive([run("head")], false);
+  state.acceptDetail(run("older", "review_pending"));
+  for (let i = 0; i < 3; i++) state.acceptActive([run("head")], false);
+  assert.equal(state.items.find(row => row.run_id === "older").state, "review_pending");
+  assert.equal(state.items.find(row => row.run_id === "older").last_confirmed, true);
+  assert.deepEqual(state.reconcileIds, []);
+  state.acceptActive([run("replacement")], false);
+  assert.deepEqual(state.reconcileIds, ["head"]);
+  state.acceptDetail(run("head"));
+  state.acceptActive([run("replacement")], false);
+  assert.deepEqual(state.reconcileIds, []);
+  assert.equal(state.items.find(row => row.run_id === "head").last_confirmed, true);
+  state.acceptActive([run("replacement")], true);
+  assert.deepEqual(state.reconcileIds.sort(), ["head", "older"]);
+});
+test("head re-entry confirms paged state; loss fails closed without reviving terminal", () => {
+  const state = new AgentBuckets();
+  state.acceptDetail(run("older"));
+  state.acceptActive([run("older")], false);
+  assert.equal(state.items[0].last_confirmed, false);
+  state.unavailable();
+  assert.equal(state.items[0].state, "unknown");
+  state.acceptTerminal([run("older", "succeeded")]);
+  state.acceptDetail(run("older"));
+  assert.equal(state.items[0].state, "succeeded");
+  assert.equal(state.items[0].last_confirmed, false);
+});
+test("paged state copy explicitly labels its observation, not a current running claim", async () => {
+  const { agentState } = await import("../src/conversationAgents.ts");
+  assert.equal(agentState({ ...run("older"), last_confirmed: true }), "上次确认：运行中");
+  assert.equal(agentState({ ...run("older", "unknown"), last_confirmed: true }), null);
+});
+
+test("last-confirmed expired lease never labels an agent as running", async () => {
+  const { agentState } = await import("../src/conversationAgents.ts");
+  assert.equal(agentState({ ...run("older"), lease_status: "expired", last_confirmed: true }), "上次确认：租约已过期 · 等待恢复");
+  assert.equal(agentState({ ...run("head"), lease_status: "expired" }), "租约已过期 · 等待恢复");
+});
+
+test("live overview count excludes paged and expired observations", async () => {
+  const { agentRunning } = await import("../src/conversationAgents.ts");
+  const rows = [run("fresh"), { ...run("paged"), last_confirmed: true }, { ...run("expired"), lease_status: "expired" }, run("queued", "queued")];
+  assert.deepEqual(rows.filter(agentRunning).map(row => row.run_id), ["fresh"]);
+});

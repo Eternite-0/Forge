@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { ActivityState, WorkerRun } from "../ConversationRuntime";
-import { agentRole } from "../conversationAgents";
+import { agentRole, agentRunning, agentState } from "../conversationAgents";
 import { statusLabel } from "../presentation";
 import AgentAvatar from "./AgentAvatar";
 import type { TimelineEvent } from "../timeline";
@@ -35,7 +35,7 @@ export default function AgentPanel({ state, sources, events, conversationFiles, 
   }, [menu]);
   const runs = state.connected && !state.error ? state.items : [];
   const done = runs.filter(run => run.state === "succeeded").length;
-  const active = runs.filter(run => run.state === "running").length;
+  const active = runs.filter(agentRunning).length;
   const failed = runs.filter(run => run.state === "failed").length;
   const other = runs.length - active - done - failed;
   const commands = events.filter(event => event.kind === "tool_receipt" && event.status === "running" && event.execution_mode === "live" && event.detail && typeof event.detail === "object" && typeof (event.detail as Record<string, unknown>).command === "string");
@@ -59,7 +59,7 @@ export default function AgentPanel({ state, sources, events, conversationFiles, 
       {state.error && <p className="agent-panel-notice" role="status">无法读取当前状态。<button type="button" onClick={onActivity}>查看运行活动</button></p>}
       <div id="agent-panel-runs" className="agent-panel-runs" hidden={!expanded}>
         {runs.map(run => <div className="agent-panel-run" key={run.run_id} data-run-id={run.run_id}>
-          <button type="button" className="agent-panel-run-button" onClick={() => onRun(run)} title={run.model_id || undefined}><AgentAvatar identity={run.worker_id || run.run_id} size={16} /><span>{agentRole(run.role)}</span><small data-state={run.state}>{statusLabel(run.state)}</small></button>
+          <button type="button" className="agent-panel-run-button" onClick={() => onRun(run)} title={run.model_id || undefined}><AgentAvatar identity={run.worker_id || run.run_id} size={16} /><span>{agentRole(run.role)}</span><small data-state={run.state}>{agentState(run) || statusLabel(run.state)}</small></button>
         </div>)}
         {activeMore && onActiveOlder && <button type="button" className="agent-panel-all" disabled={state.loading} onClick={onActiveOlder}>加载更多进行中与待处理</button>}
         {state.hasMore && <button type="button" className="agent-panel-all" disabled={state.loading} onClick={onOlder || onActivity}>查看更早的运行</button>}

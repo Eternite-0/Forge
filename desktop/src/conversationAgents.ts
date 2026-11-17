@@ -23,7 +23,12 @@ export function agentRole(role?: string): string {
   const numbered = /^([a-z]+)_(\d+)$/.exec(role);
   return numbered && roles[numbered[1]] ? `${roles[numbered[1]]} ${numbered[2]}` : role;
 }
-export function agentState(run: ConversationAgent): string | null {
+export function agentState(run: WorkerRun): string | null {
+  if (run.last_confirmed && run.state === "running" && run.lease_status === "expired") return "上次确认：租约已过期 · 等待恢复";
+  if (run.last_confirmed && run.state !== "unknown") {
+    const labels: Record<string, string> = { queued: "等待执行", running: "运行中", paused: "已暂停", blocked: "受阻", review_pending: "等待验证" };
+    return `上次确认：${labels[run.state || ""] || "状态待确认"}`;
+  }
   if (run.state === "running" && run.lease_status === "expired") return "租约已过期 · 等待恢复";
   return null;
 }
@@ -49,3 +54,6 @@ export function validateAgentPhase(page: AgentPage, phase: "active" | "terminal"
 export const orderedAgents = (items: ConversationAgent[]) => [
   ...items.filter(agentActive), ...items.filter(item => !agentActive(item)),
 ];
+
+/** Only fresh, unexpired execution observations can drive live UI claims. */
+export const agentRunning = (run: WorkerRun) => run.state === "running" && !run.last_confirmed && run.lease_status !== "expired";

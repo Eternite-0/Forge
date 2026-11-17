@@ -69,10 +69,10 @@ export default function useConversationAgents(connection: Connection | null, sel
         const head = await list(legacy ? "all" : "active");
         if (!accepts()) return;
         if (legacy) {
-          buckets.acceptActive(head.rows);
+          buckets.acceptActive(head.rows, !head.more);
           if (!terminalPaged) { terminalMore = head.more; terminalCursor = head.cursor; } activeMore = false;
         } else {
-          buckets.acceptActive(head.rows);
+          buckets.acceptActive(head.rows, !head.more);
           if (!activePaged) { activeMore = head.more; activeCursor = head.cursor; }
         }
         // Publish disappearance as unknown immediately; at most 8 tracked details per tick.

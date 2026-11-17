@@ -10,6 +10,9 @@ export interface WorkerRun {
   quest_id?: string;
   role?: string;
   state?: string;
+  /** Client display observation; older paged states are not live assertions. */
+  last_confirmed?: boolean;
+  lease_status?: "active" | "expired" | "none";
   provider_id?: string;
   model_id?: string;
   steps?: number;

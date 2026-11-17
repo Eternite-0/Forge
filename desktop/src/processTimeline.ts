@@ -1,3 +1,4 @@
+import { agentRunning } from "./conversationAgents.ts";
 import type { WorkerRun } from "./ConversationRuntime";
 import type { DisplayItem } from "./components/conversation/eventModel";
 import { messageMetadata, type ChatMessage, type TimelineEvent, type TimelineItem } from "./timeline.ts";
@@ -32,7 +33,7 @@ const timestamp = (value: string | undefined) => {
 };
 const itemTime = (item: OrderedItem) => timestamp(item.type === "snapshot" ? item.run.created_at
   : item.type === "outgoing" ? item.value.createdAt : item.value.created_at);
-const running = (run: WorkerRun) => run.state === "running";
+
 const lifecycle = (event: TimelineEvent) => event.kind === "event" && /^worker\./.test(event.status || "");
 const itemKey = (item: OrderedItem) => item.type === "snapshot" ? `run:${item.run.run_id}`
   : item.type === "event" ? `event:${item.value.kind}:${item.value.event_id}`
@@ -143,7 +144,7 @@ function makeGroup(items: OrderedItem[], key: string, runs: Map<string, WorkerRu
   }
   const group: ProcessGroup = { type: "process", key: `process:${key}`, records, active: [...runIds].some(id => {
     const run = runs.get(id);
-    return !!run && running(run);
+    return !!run && agentRunning(run);
   }), runIds: [...runIds] };
   setGroupTiming(group, items, null);
   return group;
