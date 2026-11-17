@@ -1,6 +1,6 @@
-// Synthetic read-only Core projection; file opening must not invent file content or Git history.
+// Synthetic read-only Core projection; main receipt rows open recorded changes, not current disk.
 async (page, { outputDir }) => {
-  const checks = [], unexpected = [];
+  const checks = [], unexpected = [], historyReads = [];
   const check = (value, label) => { if (!value) throw new Error(label); checks.push(label); };
   const receipt = (id, path, overrides = {}) => ({ kind: 'tool_receipt', event_id: id, seq: null, created_at: `2026-01-01T00:00:${String(Number(id.slice(1)) + 1).padStart(2, '0')}Z`, quest_id: null, title: 'Tool execution recorded', status: 'succeeded', execution_mode: 'live', detail: { tool: 'file_revise', path }, ...overrides });
   const events = [
@@ -22,6 +22,12 @@ async (page, { outputDir }) => {
     let body = {}, status = 200;
     if (request.method() !== 'GET') { unexpected.push(url.pathname); status = 404; }
     else if (url.pathname === '/health') body = { session: 'activity-files-fixture' };
+    else if (url.pathname.startsWith('/api/artifacts/receipts/')) {
+      const id = url.pathname.split('/').at(-2); historyReads.push(id);
+      const event = events.find(event => event.event_id === id);
+      if (id === 'e5') { status = 404; body = {detail:'Historical receipt unavailable'}; }
+      else body = {receipt_id:id,base_receipt_id:'base',quest_id:'quest',run_id:'run',path:event.detail.path,execution_mode:'live',change:'revised',created_at:event.created_at,sha256:'a'.repeat(64),base_sha256:'b'.repeat(64),added:1,removed:1,text:`--- a/${event.detail.path}\n+++ b/${event.detail.path}\n@@ -1 +1 @@\n-OLD\n+SAVED ${id}\n`,truncated:false,origin:null};
+    }
     else if (url.pathname === '/api/conversation') body = { messages, next_before: null, has_more: false };
     else if (url.pathname === '/api/timeline') body = { items: events, next_before: null, has_more: false };
     else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'activity-files-fixture', items: [], next_before: null, has_more: false };
@@ -35,7 +41,7 @@ async (page, { outputDir }) => {
     else { unexpected.push(url.pathname); status = 404; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(globalThis.process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ef'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   const process = page.locator('.process-transcript');
@@ -45,7 +51,6 @@ async (page, { outputDir }) => {
   check(await list.locator('.activity-file-row:visible').count() === 3, 'file list initially shows three recorded paths');
   check(await list.locator('.activity-file-row').count() === 7, 'successful live writes are deduplicated by validated relative path');
   check(!(await list.textContent()).match(/failed\.ts|mock\.ts|unknown\.ts|exit\.ts|outside\.ts|read-only\.ts/), 'failed, mock, unknown, nonzero-exit, invalid and read-only receipts do not enter the edited-file list');
-  await process.locator(':scope > summary').click();
   const more = list.locator('.activity-more-files');
   check((await more.locator(':scope > summary').innerText()).includes('再显示 4 个文件'), 'more-files count reflects only the remaining distinct paths');
   await more.locator(':scope > summary').focus(); await page.keyboard.press('Space');
@@ -53,9 +58,17 @@ async (page, { outputDir }) => {
   check(await list.locator('.activity-file-row:visible').count() === 7, 'keyboard expansion exposes every recorded file');
   await list.locator('.activity-file-row[title="src/g.ts"]').click();
   const preview = page.getByLabel('工作空间文件预览', { exact: true });
-  await preview.getByRole('tab', { name: 'g.ts', exact: true }).waitFor();
-  check(await preview.locator('.preview-breadcrumb').getAttribute('title') === 'src/g.ts', 'a grouped file opens its actual relative path in preview');
-  check((await preview.getByRole('alert').innerText()).includes('选择此文件所在的目录'), 'a projection does not invent content when no browser file source was selected');
+  await preview.getByRole('region',{name:'文件历史更改'}).getByText('SAVED e6',{exact:false}).waitFor();
+  check(historyReads.at(-1) === 'e6', 'expanded row opens its own immutable receipt, not first file or current disk');
+  check(!(await preview.innerText()).includes('请先选择此文件所在的目录'), 'receipt history requires no directory selection');
+  await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
+  await list.locator('.activity-file-row[title="src/a.ts"]').click();
+  await preview.getByRole('region',{name:'文件历史更改'}).getByText('SAVED e7',{exact:false}).waitFor();
+  check(historyReads.at(-1) === 'e7', 'deduplicated path opens its latest recorded receipt');
+  await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
+  await list.locator('.activity-file-row[title="src/f.ts"]').click();
+  await preview.getByText('Historical receipt unavailable',{exact:false}).waitFor();
+  check(!(await preview.innerText()).includes('SAVED') && !(await preview.innerText()).includes('请先选择此文件所在的目录'), 'missing receipt fails closed without stale content or disk fallback');
   await preview.getByRole('button', { name: '关闭文件预览', exact: true }).click();
   await preview.waitFor({ state: 'hidden' });
   const original = await more.elementHandle(), timeline = page.getByLabel('对话历史');
@@ -76,5 +89,5 @@ async (page, { outputDir }) => {
   check(!(await page.locator('.activity-group-files').allInnerTexts()).some((content) => content.includes('本轮')), 'activity file groups do not claim unsupported chat-turn or historical-diff semantics');
   await page.mouse.move(0, 0); await page.screenshot({ path: `${outputDir}/activity-files-expanded.png`, fullPage: true });
   check(unexpected.length === 0, `grouped files introduce no new HTTP endpoints or writes${unexpected.length ? `: ${unexpected.join(', ')}` : ''}`);
-  return { status: 'passed', fixture: 'synthetic HTTP projection only; no file bytes', checks: checks.length, screenshots: 1, results: checks };
+  return { status: 'passed', fixture: 'synthetic HTTP receipt projection and saved diff text; no current disk reads', checks: checks.length, screenshots: 1, results: checks };
 }

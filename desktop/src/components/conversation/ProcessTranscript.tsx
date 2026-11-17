@@ -84,6 +84,6 @@ export function ProcessFileChanges({ process, memory, historyStats, onInspect, o
   if (!files.length) return null;
   const events = process.records.flatMap(record => record.type === "tools" ? record.events : []);
   const state = eventView(memory, events[0]);
-  return <TurnDiff files={files} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
+  return <TurnDiff preferHistory files={files} groupKey={process.key} initialExpanded={state.groupFilesExpanded || false}
     onExpandedChange={value => { state.groupFilesExpanded = value; update(count => count + 1); }} onInspect={onInspect} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} />;
 }
