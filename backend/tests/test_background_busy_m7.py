@@ -31,7 +31,7 @@ def test_router_notice_busy_does_not_consume_failure_budget(tmp_path, monkeypatc
             break
     router = RouterService(store, TeamComposer(ModelRegistry(store)), model_id="mock")
 
-    async def busy(*args):
+    async def busy(*args, **kwargs):
         raise ProviderError("concurrency_unavailable")
 
     monkeypatch.setattr(router, "_handle_notice", busy)

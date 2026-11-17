@@ -1,5 +1,6 @@
 """Persistent Router. Provider calls are outside the SQLite write transaction."""
 
+import asyncio
 import hashlib
 import json
 import re
@@ -1383,13 +1384,27 @@ class RouterService:
                     "UPDATE event_inbox SET notice_attempts=notice_attempts+1,notice_next_attempt=?,notice_token=? WHERE consumer_id='router' AND event_id=?",
                     (time.time() + 60, notice_token, event_id),
                 )
+        deadline_state = {}
         try:
             import asyncio
 
-            return await asyncio.wait_for(self._handle_notice(event_ids, notice_token), timeout=45)
+            return await asyncio.wait_for(
+                self._handle_notice(event_ids, notice_token, deadline_state=deadline_state),
+                timeout=45,
+            )
         except Exception as exc:  # noqa: BLE001 - store a non-sensitive bounded failure code
             from .providers import ProviderError
 
+            # Only wait_for's deadline after cancelling the notice model may
+            # use this provider-free path. Caller cancellation still propagates.
+            if isinstance(exc, TimeoutError) and deadline_state.get("provider_cancelled"):
+                try:
+                    if await self._handle_notice(
+                        event_ids, notice_token, deadline_handoff=deadline_state
+                    ):
+                        return True
+                except Exception as handoff_error:  # noqa: BLE001 - retain bounded failure bookkeeping
+                    exc = handoff_error
             busy = isinstance(exc, ProviderError) and exc.code == "concurrency_unavailable"
             with self.store.unit_of_work() as work:
                 for event_id in event_ids:
@@ -1416,7 +1431,9 @@ class RouterService:
                         )
             return False
 
-    async def _handle_notice(self, event_ids, notice_token):
+    async def _handle_notice(
+        self, event_ids, notice_token, *, deadline_state=None, deadline_handoff=None
+    ):
         event_id = event_ids[0]
         with self.store.connection() as connection:
             connection.execute("BEGIN")
@@ -1482,6 +1499,20 @@ class RouterService:
                 connection, notice["quest_id"], grouped, completed_sources
             )
             connection.commit()
+        if deadline_handoff is not None and (
+            completion_handoff_sources is None
+            or completion_handoff_sources != deadline_handoff.get("sources")
+            or not any(
+                item["event_type"] == "quest.status_changed"
+                and json.loads(item["payload"]).get("to") == "completed"
+                and item["notice_attempts"] >= 5
+                for item in grouped
+            )
+            or not self._stable_context(
+                deadline_handoff["snapshot"], snapshot, notice_quest=notice["quest_id"]
+            )
+        ):
+            return False
         compactions = 0
         while (
             len(_json(snapshot["messages"]).encode("utf-8"))
@@ -1612,14 +1643,20 @@ class RouterService:
         if model_context_exceeded and completion_handoff_sources is None:
             raise DomainError("Router notice context budget exceeded")
         completion_handoff = (
-            context["budget"]["input_estimate"] > 16000 or model_context_exceeded
+            deadline_handoff is not None
+            or context["budget"]["input_estimate"] > 16000
+            or model_context_exceeded
         ) and completion_handoff_sources is not None
         if completion_handoff:
             # A Core state notification, not a shortened/reinterpreted result.
             # Full claims remain untouched; never submit an over-budget request.
             decision = NoticeDecision(
                 action="update_user",
-                reply="任务已完成。结果较长，这里只通知完成，不概括内容。",
+                reply=(
+                    "任务已完成。结果摘要暂不可用。"
+                    if deadline_handoff is not None
+                    else "任务已完成。结果较长，这里只通知完成，不概括内容。"
+                ),
             )
         else:
             source = "mock" if mode == "mock" else profile.structured_output_support.source
@@ -1656,8 +1693,14 @@ class RouterService:
                     ),
                 )
             else:
+                if deadline_state is not None:
+                    deadline_state.update(snapshot=snapshot, sources=completion_handoff_sources)
                 try:
                     response = await self.provider.generate(request)
+                except asyncio.CancelledError:
+                    if deadline_state is not None:
+                        deadline_state["provider_cancelled"] = True
+                    raise
                 except Exception as exc:
                     # Only generation failure on the completion event's last
                     # durable attempt may degrade to a Core-only notification.

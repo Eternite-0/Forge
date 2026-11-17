@@ -419,11 +419,11 @@ def test_notice_failures_back_off_persist_and_stop_after_limit(tmp_path, monkeyp
     main.router.model_id = "mock"
     original_handle = main.router._handle_notice
 
-    async def delayed_handle(event_ids, notice_token):
+    async def delayed_handle(event_ids, notice_token, **kwargs):
         # Expose the claim/read window deterministically. Advancing retry time
         # during this delay would intentionally fence this execution attempt.
         await asyncio.sleep(0.08)
-        return await original_handle(event_ids, notice_token)
+        return await original_handle(event_ids, notice_token, **kwargs)
 
     monkeypatch.setattr(main.router, "_handle_notice", delayed_handle)
     event = ForgeEvent(event_type="approval.requested", payload={"message": "test"})
