@@ -93,9 +93,12 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
           if (!element) return;
           const nearLatest = isNearBottom(element.scrollTop, element.clientHeight, element.scrollHeight);
           setAwayFromLatest(!nearLatest);
-          if (manualPause.current) return;
-          followBottom.current = nearLatest;
-          if (nearLatest) setHasNew(false);
+          if (workspace.isRestoringResponsiveReading()) return;
+          if (!manualPause.current) {
+            followBottom.current = nearLatest;
+            if (nearLatest) setHasNew(false);
+          }
+          workspace.rememberTimelineReading();
         }}
         onInspect={() => { manualPause.current = true; followBottom.current = false; setReadingPaused(true); }}
         onLoadOlder={() => void loadOlder()} onRetry={(item) => void sendPending(item, false)}
@@ -107,7 +110,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
       {actionError && <p className="notice error action-error" role="alert">{actionError}</p>}
       {(awayFromLatest || hasNew || readingPaused) && <button type="button" className="new-messages" data-has-new={hasNew}
         title={hasNew ? "有新消息 · 回到最新" : "回到最新"}
-        onClick={() => { manualPause.current = false; followBottom.current = true; setReadingPaused(false); setHasNew(false); setAwayFromLatest(false); if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }}>
+        onClick={() => { workspace.cancelResponsiveReading(); manualPause.current = false; followBottom.current = true; setReadingPaused(false); setHasNew(false); setAwayFromLatest(false); if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }}>
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false"><path d="M10 4v12m-5-5 5 5 5-5" /></svg>
         <span className="sr-only">{hasNew ? "有新消息 · 回到最新 ↓" : "回到最新 ↓"}</span>
       </button>}

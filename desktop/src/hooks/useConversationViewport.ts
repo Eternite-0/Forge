@@ -1,19 +1,69 @@
-import { useCallback, useEffect, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { captureTimelineReading, type TimelineReadingAnchor } from "../captureTimelineReading";
 import type { WorkspaceState } from "./useWorkspaceState";
 
 export default function useConversationViewport(workspace: WorkspaceState) {
   const { view, sidebarCollapsed, draft, scrollRef, composerInput, composerResizeFrame, followBottom, readingAnchor } = workspace;
-  function captureReadingPosition() {
-    const element = scrollRef.current;
-    if (!element?.getClientRects().length || followBottom.current) return;
-    const viewport = element.getBoundingClientRect();
-    const candidates = Array.from(element.querySelectorAll<HTMLElement>("[data-scroll-key]"))
-      .map((node) => ({ node, bounds: node.getBoundingClientRect() }))
-      .filter(({ bounds }) => bounds.height > 0 && bounds.bottom > viewport.top && bounds.top < viewport.bottom);
-    const preferred = candidates.filter(({ node }) => !/^group(?:-files)?:/.test(node.dataset.scrollKey || ""));
-    const anchor = (preferred.length ? preferred : candidates).sort((a, b) => Math.abs(a.bounds.top - viewport.top) - Math.abs(b.bounds.top - viewport.top))[0];
-    if (anchor) readingAnchor.current = { key: anchor.node.dataset.scrollKey!, offset: anchor.bounds.top - viewport.top, top: element.scrollTop };
+  // Keep a pre-reflow snapshot separate from the anchor consumed by polling.
+  const windowReading = useRef({ width: window.innerWidth, height: window.innerHeight, anchor: null as TimelineReadingAnchor | null });
+  const responsiveReading = useRef<{ anchor: TimelineReadingAnchor; frame: number; timer: number } | null>(null);
+  const pendingWindowResize = () => windowReading.current.width !== window.innerWidth || windowReading.current.height !== window.innerHeight;
+  function rememberTimelineReading() {
+    if (pendingWindowResize() || responsiveReading.current) return;
+    windowReading.current.anchor = captureTimelineReading(scrollRef.current, followBottom.current);
   }
+  function captureReadingPosition() {
+    const anchor = responsiveReading.current?.anchor ?? (pendingWindowResize() ? windowReading.current.anchor : captureTimelineReading(scrollRef.current, followBottom.current));
+    if (anchor) readingAnchor.current = anchor;
+  }
+  function cancelResponsiveReading() {
+    const pending = responsiveReading.current;
+    if (!pending) return;
+    cancelAnimationFrame(pending.frame);
+    window.clearTimeout(pending.timer);
+    responsiveReading.current = null;
+    if (readingAnchor.current === pending.anchor) readingAnchor.current = null;
+  }
+  useEffect(() => {
+    const timeline = scrollRef.current;
+    if (!timeline) return;
+    const apply = (anchor: TimelineReadingAnchor) => {
+      if (!timeline.clientHeight) return;
+      const node = Array.from(timeline.querySelectorAll<HTMLElement>("[data-scroll-key]")).find(element => element.dataset.scrollKey === anchor.key);
+      if (node) timeline.scrollTop += node.getBoundingClientRect().top - timeline.getBoundingClientRect().top - anchor.offset;
+    };
+    const resize = () => {
+      if (!pendingWindowResize()) return;
+      const anchor = responsiveReading.current?.anchor ?? windowReading.current.anchor;
+      cancelResponsiveReading();
+      windowReading.current = { width: window.innerWidth, height: window.innerHeight, anchor };
+      if (!anchor || followBottom.current) return;
+      readingAnchor.current = anchor;
+      // Restore before paint, and again after the responsive file panel settles.
+      const frame = requestAnimationFrame(() => apply(anchor));
+      const timer = window.setTimeout(() => {
+        apply(anchor);
+        cancelResponsiveReading();
+        rememberTimelineReading();
+      }, 220);
+      responsiveReading.current = { anchor, frame, timer };
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) &&
+          ["ArrowDown", "ArrowUp", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) cancelResponsiveReading();
+    };
+    window.addEventListener("resize", resize);
+    timeline.addEventListener("wheel", cancelResponsiveReading, { passive: true });
+    timeline.addEventListener("pointerdown", cancelResponsiveReading);
+    timeline.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("resize", resize);
+      timeline.removeEventListener("wheel", cancelResponsiveReading);
+      timeline.removeEventListener("pointerdown", cancelResponsiveReading);
+      timeline.removeEventListener("keydown", onKey);
+      cancelResponsiveReading();
+    };
+  }, []);
   const resizeComposer = useCallback(() => {
     const input = composerInput.current;
     if (!input || !input.getClientRects().length) return;
@@ -78,6 +128,6 @@ export default function useConversationViewport(workspace: WorkspaceState) {
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
-  return { captureReadingPosition, resizeComposer };
+  return { captureReadingPosition, resizeComposer, rememberTimelineReading, cancelResponsiveReading, isRestoringResponsiveReading: () => pendingWindowResize() || !!responsiveReading.current };
 }
 

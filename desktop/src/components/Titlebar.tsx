@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 
 export interface TitlebarProps {
   route: string; onNavigate: (route: string) => void;
@@ -15,6 +15,7 @@ export default function Titlebar(props: TitlebarProps) {
   const [history, setHistory] = useState({ routes: [props.route], index: 0 });
   const bar = useRef<HTMLElement>(null);
   const menuTrigger = useRef<HTMLButtonElement | null>(null);
+  const menuFocusRequest = useRef<HTMLButtonElement | null>(null);
   const target = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
   const going = useRef(false);
   const lastRoute = useRef(props.route);
@@ -25,6 +26,16 @@ export default function Titlebar(props: TitlebarProps) {
     if (going.current) { going.current = false; return; }
     setHistory((current) => ({ routes: [...current.routes.slice(0, current.index + 1), props.route], index: current.index + 1 }));
   }, [props.route]);
+  function focusMenuItems(trigger: HTMLButtonElement) {
+    if (document.activeElement === trigger && menuTrigger.current === trigger) {
+      trigger.parentElement?.querySelector<HTMLButtonElement>(".application-menu-panel button:not(:disabled)")?.focus();
+    }
+  }
+  useLayoutEffect(() => {
+    const trigger = menuFocusRequest.current;
+    menuFocusRequest.current = null;
+    if (trigger && trigger.dataset.appMenu === menu) focusMenuItems(trigger);
+  }, [menu]);
   useEffect(() => {
     if (!menu) return;
     const close = (event: PointerEvent) => { if (event.target instanceof Node && !bar.current?.contains(event.target)) setMenu(null); };
@@ -99,8 +110,8 @@ export default function Titlebar(props: TitlebarProps) {
     next.focus();
     if (!menu || !next.dataset.appMenu) return;
     menuTrigger.current = next;
+    menuFocusRequest.current = next;
     setMenu(next.dataset.appMenu);
-    requestAnimationFrame(() => next.parentElement?.querySelector<HTMLButtonElement>(".application-menu-panel button:not(:disabled)")?.focus());
   };
   return <>
     <header className="desktop-chrome titlebar" ref={bar} data-tauri-drag-region>
@@ -111,7 +122,7 @@ export default function Titlebar(props: TitlebarProps) {
       </div>
       <div role="menubar" aria-label="应用程序菜单" className="application-menubar" onKeyDown={moveMenu}>
         {Object.entries(commands).map(([name, entries]) => <div className="application-menu" key={name}>
-          <button type="button" role="menuitem" data-app-menu={name} aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu(name); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>{name}</button>
+          <button type="button" role="menuitem" data-app-menu={name} aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown" && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229 && !event.altKey && !event.ctrlKey && !event.metaKey) { event.preventDefault(); const trigger = event.currentTarget; menuTrigger.current = trigger; if (menu === name) focusMenuItems(trigger); else { menuFocusRequest.current = trigger; setMenu(name); } } }}>{name}</button>
           {menu === name && <div className="application-menu-panel" role="menu" aria-label={`${name}菜单`}>{entries.map((entry) => <button type="button" role="menuitem" tabIndex={-1} key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>}
         </div>)}
       </div>
