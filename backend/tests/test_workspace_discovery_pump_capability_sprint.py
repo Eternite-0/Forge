@@ -15,9 +15,14 @@ def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_
     monkeypatch.setenv("FORGE_CORE_SECRET", secrets.token_hex(32))
     monkeypatch.setenv("FORGE_WORKSPACE_ROOT", str(tmp_path))
     for key in (
-        "FORGE_PROVIDER_ID", "FORGE_PROVIDER_KIND", "FORGE_PROVIDER_BASE_URL",
-        "FORGE_PROVIDER_CREDENTIAL_REF", "FORGE_PROVIDERS_JSON", "FORGE_PRICE_BOUNDS_JSON",
-        "FORGE_ROUTER_MODEL_ID", "FORGE_ROUTER_CONTEXT_LIMIT",
+        "FORGE_PROVIDER_ID",
+        "FORGE_PROVIDER_KIND",
+        "FORGE_PROVIDER_BASE_URL",
+        "FORGE_PROVIDER_CREDENTIAL_REF",
+        "FORGE_PROVIDERS_JSON",
+        "FORGE_PRICE_BOUNDS_JSON",
+        "FORGE_ROUTER_MODEL_ID",
+        "FORGE_ROUTER_CONTEXT_LIMIT",
     ):
         monkeypatch.delenv(key, raising=False)
     from forge_api import main
@@ -36,9 +41,10 @@ def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_
     def task(index, *, automatic=True, state="active", shape="unique", linked=True):
         content = (
             f"Inspect `{roots[0]}` and report issues."
-            if shape == "unique" else
-            f"Compare `{roots[0]}` with `{roots[1]}`." if shape == "multiple" else
-            "Inspect the selected project."
+            if shape == "unique"
+            else f"Compare `{roots[0]}` with `{roots[1]}`."
+            if shape == "multiple"
+            else "Inspect the selected project."
         )
         quest = Quest(id=f"quest_pump_{index:02d}", title="Inspect project", goal="Mutable summary")
         source = ConversationMessage(role="user", content=content)
@@ -66,13 +72,19 @@ def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_
     unlinked_manual = task(21, automatic=False, linked=False)
     expected_calls = {*automatic, ambiguous, unnamed, unlinked_manual}
     authorization_tables = (
-        "delegation_mandates", "delegation_contracts", "task_grants", "approvals", "messages"
+        "delegation_mandates",
+        "delegation_contracts",
+        "task_grants",
+        "approvals",
+        "messages",
     )
 
     def authorization_snapshot():
         with store.connection() as connection:
             return {
-                table: [tuple(row) for row in connection.execute(f"SELECT * FROM {table} ORDER BY 1")]
+                table: [
+                    tuple(row) for row in connection.execute(f"SELECT * FROM {table} ORDER BY 1")
+                ]
                 for table in authorization_tables
             }
 
@@ -106,7 +118,8 @@ def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_
         assert discovery.for_quest(quest_id)["root"] == str(roots[0])
         assert all(
             snapshot[quest_id]["root"] == str(roots[0])
-            for snapshot in scheduled if quest_id in snapshot
+            for snapshot in scheduled
+            if quest_id in snapshot
         )
     for quest_id in (manual, revoked, ambiguous, unnamed):
         assert discovery.for_quest(quest_id)["root"] == str(roots[1])
@@ -114,7 +127,9 @@ def test_worker_pump_rechecks_prepared_automatic_identity_before_scheduling(tmp_
     assert authorization_snapshot() == before
     assert store.list_workers() == []
     assert all(task.done() for task in main.app.state.background_tasks)
-    events = [row for row in store.list_events() if row["event_type"] == "workspace.task_associated"]
+    events = [
+        row for row in store.list_events() if row["event_type"] == "workspace.task_associated"
+    ]
     for quest_id in automatic:
         changes = [row for row in events if row["quest_id"] == quest_id]
         assert len(changes) == 2

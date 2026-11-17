@@ -42,13 +42,18 @@ def test_settled_local_failure_keeps_receipt_when_correction_is_exhausted(tmp_pa
         receipt = connection.execute("SELECT * FROM action_receipts").fetchone()
         assert call["state"] == "failed" and call["receipt_id"] == receipt["id"]
         result = json.loads(call["result_json"])
-        assert result["state"] == "failed" and result["output"] == json.loads(receipt["result_json"])
+        assert result["state"] == "failed" and result["output"] == json.loads(
+            receipt["result_json"]
+        )
         assert settled_read_failure(connection, worker["id"], call, require_repair=False)
         assert not settled_read_failure(connection, worker["id"], call)
         assert connection.execute("SELECT state FROM action_intents").fetchone()[0] == "failed"
-        assert connection.execute(
-            "SELECT COUNT(*) FROM events WHERE json_extract(payload,'$.phase')='self_repair'"
-        ).fetchone()[0] == 0
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM events WHERE json_extract(payload,'$.phase')='self_repair'"
+            ).fetchone()[0]
+            == 0
+        )
         assert connection.execute("SELECT status FROM workers").fetchone()[0] == "blocked"
         assert connection.execute("SELECT status FROM task_nodes").fetchone()[0] == "blocked"
         persisted_call = dict(call)
@@ -66,7 +71,9 @@ def test_settled_local_failure_keeps_receipt_when_correction_is_exhausted(tmp_pa
     with pytest.raises(DomainError, match="Unresolved tool result"):
         resumed.retry(worker["id"])
     with reopened.connection() as connection:
-        assert dict(connection.execute("SELECT * FROM worker_tool_calls").fetchone()) == persisted_call
+        assert (
+            dict(connection.execute("SELECT * FROM worker_tool_calls").fetchone()) == persisted_call
+        )
         assert connection.execute("SELECT COUNT(*) FROM action_receipts").fetchone()[0] == 1
         assert connection.execute("SELECT COUNT(*) FROM events").fetchone()[0] == events_before
     assert len(model.requests) == 1
@@ -144,8 +151,10 @@ def test_unbound_or_uncertain_failure_never_becomes_a_settled_call(tmp_path, mon
     async def changed(**arguments):
         result = await execute(**arguments)
         assert result["state"] == "failed"
-        result[tamper] = {"error_code": "invented"} if tamper == "output" else (
-            "uncertain" if tamper == "state" else "invented"
+        result[tamper] = (
+            {"error_code": "invented"}
+            if tamper == "output"
+            else ("uncertain" if tamper == "state" else "invented")
         )
         return result
 
@@ -176,7 +185,9 @@ def test_unbound_or_uncertain_failure_never_becomes_a_settled_call(tmp_path, mon
         "unknown_intent",
     ],
 )
-def test_corrupt_storage_cannot_bind_failure_or_leave_running_worker(tmp_path, monkeypatch, corruption):
+def test_corrupt_storage_cannot_bind_failure_or_leave_running_worker(
+    tmp_path, monkeypatch, corruption
+):
     store, manager, model, worker = prepared(
         tmp_path, [tool("file_read", {"path": "work/missing"})], max_repairs=0
     )
@@ -213,7 +224,8 @@ def test_corrupt_storage_cannot_bind_failure_or_leave_running_worker(tmp_path, m
                 names = ",".join(source)
                 placeholders = ",".join("?" for _ in source)
                 connection.execute(
-                    f"INSERT INTO worker_runs ({names}) VALUES ({placeholders})", tuple(source.values())
+                    f"INSERT INTO worker_runs ({names}) VALUES ({placeholders})",
+                    tuple(source.values()),
                 )
                 connection.execute("UPDATE action_intents SET run_id='run_foreign'")
             elif corruption == "plan_revision":
@@ -235,4 +247,6 @@ def test_corrupt_storage_cannot_bind_failure_or_leave_running_worker(tmp_path, m
         assert call["state"] == "uncertain" and call["receipt_id"] is None
         assert call["result_json"] is None
         if corruption == "unknown_intent":
-            assert connection.execute("SELECT state FROM action_intents").fetchone()[0] == "uncertain"
+            assert (
+                connection.execute("SELECT state FROM action_intents").fetchone()[0] == "uncertain"
+            )

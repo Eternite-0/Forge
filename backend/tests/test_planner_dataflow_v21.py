@@ -493,7 +493,11 @@ def test_constructed_original_router_source_capacity_respects_current_ceiling(tm
         with pytest.raises(CapacityPreflightError, match="original task ceiling") as rejected:
             service._size_core_resources(quest, data, inventory, provider)
         diagnostic = rejected.value.capacity_diagnostics
-        assert diagnostic["required_total"] > diagnostic["original_ceiling"] == limits["max_total_tokens"]
+        assert (
+            diagnostic["required_total"]
+            > diagnostic["original_ceiling"]
+            == limits["max_total_tokens"]
+        )
         assert data["edges"] == graph["edges"]
         assert [node["capacity_bounds"] for node in data["nodes"]] == before
         assert service.history(quest["id"]) == []

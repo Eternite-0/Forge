@@ -142,8 +142,13 @@ def record_diagnostic_error(report, stage, exc, **scope):
 def source_digest():
     digest = hashlib.sha256()
     files = sorted((REPO / "backend" / "src").rglob("*.py"))
-    files += [Path(__file__), Path(scenarios.__file__), Path(metrics.__file__),
-              Path(continuity_evidence.__file__), Path(live_core.__file__)]
+    files += [
+        Path(__file__),
+        Path(scenarios.__file__),
+        Path(metrics.__file__),
+        Path(continuity_evidence.__file__),
+        Path(live_core.__file__),
+    ]
     for path in files:
         digest.update(path.relative_to(REPO).as_posix().encode())
         digest.update(path.read_bytes())
@@ -219,12 +224,17 @@ def resolve_context_declaration(declared, operator_window=None):
 
 
 def verify_project_links(database, mapping, descriptors):
-    links = rows(database, "SELECT p.root,l.quest_id FROM task_project_links l "
-                 "JOIN workspace_projects p ON p.id=l.project_id")
+    links = rows(
+        database,
+        "SELECT p.root,l.quest_id FROM task_project_links l "
+        "JOIN workspace_projects p ON p.id=l.project_id",
+    )
     actual = {item["quest_id"]: Path(item["root"]).resolve() for item in links}
     return {
-        "two_detected_project_roots": len({actual.get(quest) for quest in mapping.values()}
-                                          - {None}) == 2,
+        "two_detected_project_roots": len(
+            {actual.get(quest) for quest in mapping.values()} - {None}
+        )
+        == 2,
         "correct_task_project_associations": all(
             actual.get(quest) == Path(descriptors[level]["project_root"]).resolve()
             for level, quest in mapping.items()
@@ -237,7 +247,8 @@ def parallel_task_ownership(intervals, workers):
     quests = {worker["id"]: worker["quest_id"] for worker in workers}
     boundaries = sorted(
         (stamp, change, quests[item["run_id"]])
-        for item in intervals if item["run_id"] in quests
+        for item in intervals
+        if item["run_id"] in quests
         for stamp, change in ((item["started_at"], 1), (item["ended_at"], -1))
     )
     active, maximum = {}, 0
@@ -387,16 +398,25 @@ def restart_boundary(database, *, required_completed_quest_ids=()):
                     return False
             if required:
                 state = {
-                    "quests": [dict(row) for row in c.execute(
-                        "SELECT id,status FROM quests WHERE conversation_id='main'"
-                    )],
-                    "messages": [dict(row) for row in c.execute(
-                        "SELECT role,metadata FROM messages WHERE conversation_id='main'"
-                    )],
-                    "events": [dict(row) for row in c.execute(
-                        "SELECT id,event_type,quest_id,payload FROM events "
-                        "WHERE conversation_id='main'"
-                    )],
+                    "quests": [
+                        dict(row)
+                        for row in c.execute(
+                            "SELECT id,status FROM quests WHERE conversation_id='main'"
+                        )
+                    ],
+                    "messages": [
+                        dict(row)
+                        for row in c.execute(
+                            "SELECT role,metadata FROM messages WHERE conversation_id='main'"
+                        )
+                    ],
+                    "events": [
+                        dict(row)
+                        for row in c.execute(
+                            "SELECT id,event_type,quest_id,payload FROM events "
+                            "WHERE conversation_id='main'"
+                        )
+                    ],
                 }
                 if not required <= reviewed_notices_for_tasks(state):
                     return False
@@ -406,7 +426,12 @@ def restart_boundary(database, *, required_completed_quest_ids=()):
 
 
 def stop_for_restart(
-    core, database, report, *, required_completed_quest_ids, workspace=None,
+    core,
+    database,
+    report,
+    *,
+    required_completed_quest_ids,
+    workspace=None,
     held_python_approvals=(),
 ):
     """Require confirmed orderly shutdown before stopped-state reads or mutation."""
@@ -416,18 +441,16 @@ def stop_for_restart(
     report["checks"]["restart_graceful_stop_confirmed"] = confirmed
     if not confirmed:
         raise Failure("restart_graceful_stop_unconfirmed_no_replay")
-    if not restart_boundary(
-        database, required_completed_quest_ids=required_completed_quest_ids
-    ):
+    if not restart_boundary(database, required_completed_quest_ids=required_completed_quest_ids):
         raise Failure("restart_boundary_changed_no_replay")
     if held_python_approvals:
         actual = approved_python_requests(
             database, workspace, {item["quest_id"] for item in held_python_approvals}
         )
+
         def identity(items):
-            return {
-                (item["id"], item["parameter_digest"], item["plan_revision"]) for item in items
-            }
+            return {(item["id"], item["parameter_digest"], item["plan_revision"]) for item in items}
+
         preserved = identity(actual) == identity(held_python_approvals)
         report["checks"]["restart_exact_pending_approvals_preserved"] = preserved
         if not preserved:
@@ -571,7 +594,9 @@ def verify_development_receipts(database, workspace, quest_id):
             JOIN worker_runs w ON w.id=i.run_id
             JOIN worker_tool_calls c ON c.run_id=i.run_id AND c.call_id=i.call_id AND c.receipt_id=r.id
             LEFT JOIN approvals a ON a.id=i.approval_id
-            WHERE r.id IN (""" + ",".join("?" for _ in receipt_ids) + ")",
+            WHERE r.id IN ("""
+            + ",".join("?" for _ in receipt_ids)
+            + ")",
             tuple(receipt_ids),
         )
         if len(evidence) != len(receipt_ids):
@@ -944,7 +969,10 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
     context_window = context_metadata["context_window"]
     env["FORGE_ROUTER_CONTEXT_LIMIT"] = str(context_window)
     core = live_core.LiveCore(
-        workspace, provider_env=env, token_limit=500000 * len(levels), concurrency=2,
+        workspace,
+        provider_env=env,
+        token_limit=500000 * len(levels),
+        concurrency=2,
         private_control=True,
     )
     database = workspace / "data" / "forge.sqlite3"
@@ -1015,21 +1043,31 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
         collect_task_results(database, workspace, mapping, descriptors, report, strategy)
         if thread_deliveries:
             observed = read_only(
-                lambda: continuity_evidence.observe(database, workspace, mapping, thread_deliveries),
+                lambda: continuity_evidence.observe(
+                    database, workspace, mapping, thread_deliveries
+                ),
                 stage="worker_continuity_evidence",
             )
             report["worker_continuity_evidence"] = observed
-            report["checks"]["complete_thread_consumption"] = observed["complete_thread_consumption"]
+            report["checks"]["complete_thread_consumption"] = observed[
+                "complete_thread_consumption"
+            ]
         if integrated and restarted:
             post = [item for item in thread_deliveries if item["phase"] == "after_restart"]
             observed = read_only(
                 lambda: continuity_evidence.observe(
-                    database, workspace, mapping, post,
+                    database,
+                    workspace,
+                    mapping,
+                    post,
                     after_evidence_rowid=report["continuity"]["restart_evidence_rowid"],
-                ), stage="post_restart_worker_evidence",
+                ),
+                stage="post_restart_worker_evidence",
             )
             report["post_restart_worker_evidence"] = observed
-            report["checks"]["post_restart_complete_thread_consumption"] = observed["complete_thread_consumption"]
+            report["checks"]["post_restart_complete_thread_consumption"] = observed[
+                "complete_thread_consumption"
+            ]
             report["checks"]["typed_multihop_recall"] = observed["typed_multihop_recall"]
 
     try:
@@ -1096,11 +1134,14 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
                         and sum(item["purpose"] == "router_trigger" for item in after["calls"])
                         == before
                     )
-                    thread_deliveries.append({
-                        "level": level, "phase": "before_restart" if integrated else "task_followup",
-                        "trigger_id": trigger["id"],
-                        "run_ids": [item["run_id"] for item in trigger.get("deliveries", [])],
-                    })
+                    thread_deliveries.append(
+                        {
+                            "level": level,
+                            "phase": "before_restart" if integrated else "task_followup",
+                            "trigger_id": trigger["id"],
+                            "run_ids": [item["run_id"] for item in trigger.get("deliveries", [])],
+                        }
+                    )
                     delivered.add(level)
             terminal = {item["id"] for item in state["quests"] if item["status"] == "completed"}
             approvals = approved_python_requests(
@@ -1112,15 +1153,17 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
                 and not restarted
                 and all(f.done() for f in futures.values())
                 and "L2" in mapping
-                and restart_boundary(
-                    database, required_completed_quest_ids=(mapping["L2"],)
-                )
+                and restart_boundary(database, required_completed_quest_ids=(mapping["L2"],))
             ):
                 # R2 approval wait is an explicit no-tool-running boundary. No
                 # unknown call/effect is killed or replayed to fabricate recovery.
                 stop_for_restart(
-                    core, database, report, required_completed_quest_ids=(mapping["L2"],),
-                    workspace=workspace, held_python_approvals=approvals,
+                    core,
+                    database,
+                    report,
+                    required_completed_quest_ids=(mapping["L2"],),
+                    workspace=workspace,
+                    held_python_approvals=approvals,
                 )
                 report["continuity"] = compact_and_recall(workspace, list(mapping.values()))
                 report["continuity"]["restart_evidence_rowid"] = rows(
@@ -1128,7 +1171,10 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
                 )[0]["frontier"]
                 before_ids = {item["id"] for item in state["workers"]}
                 core = live_core.LiveCore(
-                    workspace, provider_env=env, token_limit=500000 * len(levels), concurrency=2,
+                    workspace,
+                    provider_env=env,
+                    token_limit=500000 * len(levels),
+                    concurrency=2,
                     private_control=True,
                 )
                 core.start(timeout=60)
@@ -1148,32 +1194,44 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
                 # to recover actual complete sources. Host refs above are not a
                 # substitute for model-directed reads or Worker archive recovery.
                 before = sum(item["purpose"] == "router_trigger" for item in after["calls"])
-                trigger = api("POST", "/api/triggers", {
-                    "source_id": "conversation", "external_id": prefix + "after-restart-L3",
-                    "thread_key": mapping["L3"], "actor": "local_user", "addressed": True,
-                    "payload": {
-                        "instruction": "Continue the original task with unchanged deliverables and permissions. "
-                        "Read this entire continuation through all pages. Before delivery, use recall_object "
-                        "from your existing superagent.original_request.reference; fully read that object "
-                        "and follow two useful typed relations within your task/project, one at a time, "
-                        "reading each complete object through all returned offsets. Prefer the short "
-                        "request-to-project-to-current-task path when available. Each next reference "
-                        "must come from the preceding actual tool result; do not guess object IDs or "
-                        "repeat unrelated source files. Preserve original tool/model-step and spending "
-                        "limits. Cite only actual observations in your normal evidence references.",
-                        "verification_marker": "CAPABILITY_AFTER_RESTART_L3",
+                trigger = api(
+                    "POST",
+                    "/api/triggers",
+                    {
+                        "source_id": "conversation",
+                        "external_id": prefix + "after-restart-L3",
+                        "thread_key": mapping["L3"],
+                        "actor": "local_user",
+                        "addressed": True,
+                        "payload": {
+                            "instruction": "Continue the original task with unchanged deliverables and permissions. "
+                            "Read this entire continuation through all pages. Before delivery, use recall_object "
+                            "from your existing superagent.original_request.reference; fully read that object "
+                            "and follow two useful typed relations within your task/project, one at a time, "
+                            "reading each complete object through all returned offsets. Prefer the short "
+                            "request-to-project-to-current-task path when available. Each next reference "
+                            "must come from the preceding actual tool result; do not guess object IDs or "
+                            "repeat unrelated source files. Preserve original tool/model-step and spending "
+                            "limits. Cite only actual observations in your normal evidence references.",
+                            "verification_marker": "CAPABILITY_AFTER_RESTART_L3",
+                        },
                     },
-                })
+                )
                 resumed = snapshot(database)
                 report["checks"]["post_restart_thread_pass_through"] = (
                     trigger.get("status") == "passed_through"
                     and bool(trigger.get("deliveries"))
-                    and sum(item["purpose"] == "router_trigger" for item in resumed["calls"]) == before
+                    and sum(item["purpose"] == "router_trigger" for item in resumed["calls"])
+                    == before
                 )
-                thread_deliveries.append({
-                    "level": "L3", "phase": "after_restart", "trigger_id": trigger["id"],
-                    "run_ids": [item["run_id"] for item in trigger.get("deliveries", [])],
-                })
+                thread_deliveries.append(
+                    {
+                        "level": "L3",
+                        "phase": "after_restart",
+                        "trigger_id": trigger["id"],
+                        "run_ids": [item["run_id"] for item in trigger.get("deliveries", [])],
+                    }
+                )
                 approvals = approved_python_requests(database, workspace, {mapping["L3"]})
             # Keep the R2 pause until the declared restart boundary has been
             # observed. Authorizing early could consume the sole safe pause.
@@ -1225,7 +1283,9 @@ def run(strategy="adaptive", *, key, call_limit=None, operator_context_window=No
         if integrated:
             report["checks"].update(verify_project_links(database, mapping, descriptors))
             report["checks"]["parallel_workers"] = maximum >= 2
-            report["checks"]["parallel_independent_tasks"] = report["max_parallel_task_ownership"] >= 2
+            report["checks"]["parallel_independent_tasks"] = (
+                report["max_parallel_task_ownership"] >= 2
+            )
             report["checks"]["mid_scenario_restart_while_development_waited"] = restarted
             # After compaction, ask the actual Router to recover all tasks. IDs
             # are user-supplied recall keys, never fabricated model outputs.
@@ -1299,7 +1359,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--strategy",
-        choices=["adaptive", "continuity", "single", "fixed", "specialists", "development", "project"],
+        choices=[
+            "adaptive",
+            "continuity",
+            "single",
+            "fixed",
+            "specialists",
+            "development",
+            "project",
+        ],
         default="adaptive",
     )
     args = parser.parse_args()

@@ -40,8 +40,17 @@ def strict_router_wire_schema(schema):
             for value in node.get(key, {}).values():
                 visit(value)
         for key in (
-            "items", "additionalProperties", "contains", "propertyNames", "not", "if", "then",
-            "else", "unevaluatedItems", "unevaluatedProperties", "contentSchema",
+            "items",
+            "additionalProperties",
+            "contains",
+            "propertyNames",
+            "not",
+            "if",
+            "then",
+            "else",
+            "unevaluatedItems",
+            "unevaluatedProperties",
+            "contentSchema",
         ):
             visit(node.get(key))
         for key in ("anyOf", "oneOf", "allOf", "prefixItems"):
@@ -127,8 +136,13 @@ def _strict_json_shape(text):
     except RecursionError:
         return {"syntax": "invalid", "error_code": "nesting_limit"}
     kind = {
-        dict: "object", list: "array", str: "string", int: "number", float: "number",
-        bool: "boolean", type(None): "null",
+        dict: "object",
+        list: "array",
+        str: "string",
+        int: "number",
+        float: "number",
+        bool: "boolean",
+        type(None): "null",
     }[type(parsed)]
     return {"syntax": "valid", "root_kind": kind}
 
@@ -144,7 +158,7 @@ def _first_token_class(text):
         return "non_json_whitespace"
     if stripped.startswith("```"):
         return "code_fence"
-    if first in "{[\"":
+    if first in '{["':
         return {"{": "object", "[": "array", '"': "string"}[first]
     if first in "-0123456789":
         return "number"

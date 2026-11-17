@@ -483,7 +483,7 @@ def _relations(connection, kind, record, offset=0):
         # the actual originals after a restart. Worker ordinals remain private
         # and use the existing worker_read_context_source permission path.
         if record["scope"] == "router":
-            for source in record["source_json"][:offset + 33]:
+            for source in record["source_json"][: offset + 33]:
                 add("archived_message", f"message:{source['id']}")
         previous = record["capsule_json"].get("model_handoff", {}).get("previous_archive")
         if isinstance(previous, dict) and type(previous.get("archive_id")) is int:

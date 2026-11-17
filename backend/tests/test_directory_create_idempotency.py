@@ -51,9 +51,7 @@ def test_existing_file_is_not_reported_as_created_directory(tmp_path):
 
 
 @pytest.mark.parametrize("linked_parent", [False, True])
-def test_directory_create_does_not_accept_symlink_alias_even_within_grant(
-    tmp_path, linked_parent
-):
+def test_directory_create_does_not_accept_symlink_alias_even_within_grant(tmp_path, linked_parent):
     store, manager, model, worker, root = setup(tmp_path)
     real = tmp_path / root / "real"
     real.mkdir()
@@ -139,4 +137,3 @@ def test_unknown_directory_creation_is_never_automatically_replayed(tmp_path, mo
         manager.retry(worker["id"])
     assert asyncio.run(manager.run(worker["id"]))["state"] == "blocked"
     assert len(effects) == 1
-

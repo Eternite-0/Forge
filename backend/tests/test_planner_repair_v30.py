@@ -165,7 +165,9 @@ def test_capacity_feedback_preserves_action_and_output_bounds_and_reports_native
     assert candidate["native_context_excess_bytes"]["correction"] > 0
 
 
-def test_complete_analysis_profile_gets_measured_response_space_and_exact_composer_binding(tmp_path):
+def test_complete_analysis_profile_gets_measured_response_space_and_exact_composer_binding(
+    tmp_path,
+):
     from test_composer_resources_v21 import graph_fixture, semantic_team
 
     from forge_core.composer_resources import SemanticTeamWire

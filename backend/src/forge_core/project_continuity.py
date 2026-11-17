@@ -26,14 +26,16 @@ def project_context(connection, text, *, limit=32):
         except (OSError, RuntimeError, ValueError):
             continue
         matches = [
-            project for project in projects
+            project
+            for project in projects
             if named == project["root"].casefold().replace("\\", "/").rstrip("/")
             or named.startswith(project["root"].casefold().replace("\\", "/").rstrip("/") + "/")
         ]
         if matches:
             depth = max(len(project["root"].rstrip("/\\")) for project in matches)
-            selected.update(project["id"] for project in matches
-                            if len(project["root"].rstrip("/\\")) == depth)
+            selected.update(
+                project["id"] for project in matches if len(project["root"].rstrip("/\\")) == depth
+            )
         prose = prose.replace(str(path).casefold().replace("\\", "/"), " ")
     for project in projects:
         name = project["name"].casefold()
@@ -46,12 +48,8 @@ def project_context(connection, text, *, limit=32):
             boundary_left = rf"(?:(?<![\w-])|(?<=[{cjk}]))"
             boundary_right = rf"(?:(?![\w-])|(?=[{cjk}]))"
         # A shared short name is ambiguous. Exact IDs/roots remain available.
-        if (
-            re.search(r"(?<![\w-])" + re.escape(project["id"]) + r"(?![\w-])", text)
-            or (
-                len(name) >= 3
-                and re.search(boundary_left + re.escape(name) + boundary_right, prose)
-            )
+        if re.search(r"(?<![\w-])" + re.escape(project["id"]) + r"(?![\w-])", text) or (
+            len(name) >= 3 and re.search(boundary_left + re.escape(name) + boundary_right, prose)
         ):
             selected.add(project["id"])
     explicit_quests = re.findall(r"\bquest_[A-Za-z0-9]+\b", text)

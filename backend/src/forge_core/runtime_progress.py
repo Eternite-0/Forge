@@ -24,7 +24,13 @@ _TOOL_FIELDS = {
     "python_compile": ("source_sha256", "exit_code"),
     "python_test": ("source_sha256", "suite_sha256", "passed", "failed", "exit_code"),
     "python_unittest": (
-        "manifest_sha256", "test_module", "tests_run", "failures", "errors", "skipped", "exit_code"
+        "manifest_sha256",
+        "test_module",
+        "tests_run",
+        "failures",
+        "errors",
+        "skipped",
+        "exit_code",
     ),
     "numeric_ast": ("source_sha256", "input_sha256", "result_json", "exit_code"),
     "worker_read_completed_delivery": ("node_key", "delivery_sha256"),
@@ -71,7 +77,16 @@ def productive_fingerprint(connection, row):
             # parameters. Events expose neither paths nor source text.
             resource = {
                 name: arguments[name]
-                for name in ("path", "url", "server", "tool", "node_key", "ordinal", "offset", "limit")
+                for name in (
+                    "path",
+                    "url",
+                    "server",
+                    "tool",
+                    "node_key",
+                    "ordinal",
+                    "offset",
+                    "limit",
+                )
                 if name in arguments
             }
             signatures.add(_digest([call["tool_name"], resource, stable]))

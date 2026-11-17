@@ -905,7 +905,9 @@ class ToolEngine:
         try:
             return read_snapshot(scope, parameters["manifest"], parameters["test_module"])
         except (OSError, ValueError, UnicodeError) as exc:
-            raise DomainError("Python test snapshot is unavailable or differs from approval") from exc
+            raise DomainError(
+                "Python test snapshot is unavailable or differs from approval"
+            ) from exc
 
     def _directory_create_path(self, parameters, scope, *, allow_missing):
         """Accept only the original, unlinked directory path and ordinary parents."""
@@ -1014,8 +1016,11 @@ class ToolEngine:
             from .worker_environment import process_environment, worker_environment
 
             environment = worker_environment(self.store, intent["run_id"])
-            return probe_gpu(cwd=environment["cwd"],
-                env=process_environment(self._environment(), environment), runner=self._run_process)
+            return probe_gpu(
+                cwd=environment["cwd"],
+                env=process_environment(self._environment(), environment),
+                runner=self._run_process,
+            )
         if name in {"shell_inspect", "git_status", "python_compile", "numeric_ast", "python_test"}:
             from .worker_environment import process_environment, worker_environment
 

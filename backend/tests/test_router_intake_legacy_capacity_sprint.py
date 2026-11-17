@@ -56,8 +56,10 @@ def test_first_and_second_explicit_roots_present_before_model_and_bind_separate_
         return response(conversational_decision())
 
     router.provider = MockProvider(decide)
-    created = [asyncio.run(router.handle_user_message(f'Analyze "{root}".', request_id=str(i)))
-               for i, root in enumerate(roots)]
+    created = [
+        asyncio.run(router.handle_user_message(f'Analyze "{root}".', request_id=str(i)))
+        for i, root in enumerate(roots)
+    ]
     assert len({item["quest_id"] for item in created}) == 2
     for item, root in zip(created, roots, strict=True):
         assert WorkspaceDiscovery(store).for_quest(item["quest_id"])["root"] == str(root)
@@ -66,12 +68,24 @@ def test_first_and_second_explicit_roots_present_before_model_and_bind_separate_
 
 def test_registration_changes_only_existing_project_metadata_and_no_authority(tmp_path):
     store, _, roots = setup_projects(tmp_path)
-    tables = ["quests", "task_project_links", "workers", "worker_runs", "task_grants", "approvals",
-              "delegation_mandates", "delegation_contracts", "action_intents", "model_budget_attempts"]
+    tables = [
+        "quests",
+        "task_project_links",
+        "workers",
+        "worker_runs",
+        "task_grants",
+        "approvals",
+        "delegation_mandates",
+        "delegation_contracts",
+        "action_intents",
+        "model_budget_attempts",
+    ]
     before = {name: table_rows(store, name) for name in tables}
     with store.connection() as c:
         c.execute("BEGIN")
-        records = WorkspaceDiscovery(store).register_user_request(f'Inspect "{roots[0]}"', connection=c)
+        records = WorkspaceDiscovery(store).register_user_request(
+            f'Inspect "{roots[0]}"', connection=c
+        )
         assert len(records) == 1 and records[0]["grants_tool_access"] is False
         c.commit()
     assert {name: table_rows(store, name) for name in tables} == before
@@ -97,9 +111,12 @@ def test_replay_and_conflicting_request_id_do_not_scan_new_paths(tmp_path, monke
 @pytest.mark.parametrize("case", ["missing", "relative", "multiple", "duplicate"])
 def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path, case):
     store, _, roots = setup_projects(tmp_path)
-    text = {"missing": f'Inspect "{tmp_path / "absent"}"', "relative": 'Inspect "project_alpha"',
-            "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
-            "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"'}[case]
+    text = {
+        "missing": f'Inspect "{tmp_path / "absent"}"',
+        "relative": 'Inspect "project_alpha"',
+        "multiple": f'Compare "{roots[0]}" and "{roots[1]}"',
+        "duplicate": f'Inspect "{roots[0]}" and "{roots[0]}"',
+    }[case]
     with store.connection() as c:
         c.execute("BEGIN")
         records = WorkspaceDiscovery(store).register_user_request(text, connection=c)
@@ -110,8 +127,9 @@ def test_named_project_registration_keeps_parser_identity_and_ambiguity(tmp_path
 
 def test_current_user_text_only_and_model_selected_path_does_not_register(tmp_path):
     store, router, roots = setup_projects(tmp_path)
-    router.provider = MockProvider(lambda *_: response({**conversational_decision("chat"),
-                                                       "reply": f'I found "{roots[1]}"'}))
+    router.provider = MockProvider(
+        lambda *_: response({**conversational_decision("chat"), "reply": f'I found "{roots[1]}"'})
+    )
     asyncio.run(router.handle_user_message(f'Inspect "{roots[0]}"', request_id="scope"))
     assert {p["root"] for p in WorkspaceDiscovery(store).list_projects()} == {str(roots[0])}
 
@@ -146,8 +164,9 @@ def generous_approved_pending(tmp_path, monkeypatch):
 
     monkeypatch.setattr(reports.QuestGraphService, "propose", plan)
     monkeypatch.setattr(reports.TeamCompositionService, "propose", team)
-    return pending(tmp_path, monkeypatch, successor=False, raw_oversize=False,
-                   context_window=100000000)
+    return pending(
+        tmp_path, monkeypatch, successor=False, raw_oversize=False, context_window=100000000
+    )
 
 
 def test_legacy_complete_packet_over_65k_uses_native_model_and_original_cumulative_admission(
@@ -190,8 +209,12 @@ def test_legacy_preview_reports_native_headroom_without_invented_raw_cap(tmp_pat
 
 def test_legacy_actual_context_shortage_still_never_admits_model_review(tmp_path, monkeypatch):
     _store, manager, model, worker, _, _ = pending(
-        tmp_path, monkeypatch, explanation_repeats=1200,
-        context_window=50000, raw_oversize=False, successor=False,
+        tmp_path,
+        monkeypatch,
+        explanation_repeats=1200,
+        context_window=50000,
+        raw_oversize=False,
+        successor=False,
     )
     before = len(model.requests)
     result = asyncio.run(IndependentReviewService(manager).review(worker["id"]))
@@ -205,13 +228,23 @@ def test_explicit_envelope_retains_raw_and_component_contract_limits():
     from forge_core.independent_review import _review_raw_packet_cap
     from forge_core.review_envelope import ReviewEnvelopeError, validate_review_packet
 
-    envelope = {"version": "review-envelope-v1", "max_source_bytes": 1024,
-                "max_artifact_bytes": 1024, "max_delivery_bytes": 1024,
-                "max_review_input_tokens": 4096, "verdict_tokens": 1024,
-                "correction_input_tokens": 4096, "correction_output_tokens": 1024,
-                "correction_calls": 1}
-    packet = {"contract": {"review_envelope": envelope}, "receipts": [], "artifacts": [],
-              "delivery": "x" * 2000}
+    envelope = {
+        "version": "review-envelope-v1",
+        "max_source_bytes": 1024,
+        "max_artifact_bytes": 1024,
+        "max_delivery_bytes": 1024,
+        "max_review_input_tokens": 4096,
+        "verdict_tokens": 1024,
+        "correction_input_tokens": 4096,
+        "correction_output_tokens": 1024,
+        "correction_calls": 1,
+    }
+    packet = {
+        "contract": {"review_envelope": envelope},
+        "receipts": [],
+        "artifacts": [],
+        "delivery": "x" * 2000,
+    }
     assert _review_raw_packet_cap(packet) == 65536
     with pytest.raises(ReviewEnvelopeError, match="review_delivery_bytes_envelope_exceeded"):
         validate_review_packet(packet, envelope)

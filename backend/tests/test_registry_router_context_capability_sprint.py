@@ -59,7 +59,9 @@ def test_explicit_operator_cap_preserves_smaller_window(rig):  # noqa: F811
     context, _ = router._context(snapshot(router), "Hello")
     assert context["budget"]["effective_limit"] == 32768
     router.use_registry_context = True
-    assert router.effective_context_limit(profile.model_copy(update={"context_window": None})) == 32768
+    assert (
+        router.effective_context_limit(profile.model_copy(update={"context_window": None})) == 32768
+    )
     assert router.effective_context_limit(None) == 32768
 
 
@@ -71,12 +73,19 @@ def test_semantic_recall_uses_registry_window_and_accepts_large_capacity(rig):  
     source = ConversationMessage(role="user", content="Retain project notes")
     with store.unit_of_work() as work:
         work.add_message(source)
-    router.memory_service.remember("Retain project notes", kind="fact", layer="L1",
-        source_refs=["message:" + source.id])
+    router.memory_service.remember(
+        "Retain project notes", kind="fact", layer="L1", source_refs=["message:" + source.id]
+    )
     provider = MockProvider(lambda *_: response({"candidate_ids": []}))
-    result = asyncio.run(router.memory_service.retrieve_semantic_context("keep notes",
-        provider=provider, model_id=router.model_id, provider_id=router.provider_id,
-        context_limit=router.effective_context_limit(registry_window(store))))
+    result = asyncio.run(
+        router.memory_service.retrieve_semantic_context(
+            "keep notes",
+            provider=provider,
+            model_id=router.model_id,
+            provider_id=router.provider_id,
+            context_limit=router.effective_context_limit(registry_window(store)),
+        )
+    )
     assert result["semantic"]["status"] == "selected"
     assert provider.requests[0].context_limit == 100000000
     assert provider.requests[0].max_output_tokens == 512
@@ -104,17 +113,37 @@ def test_semantic_handle_and_model_compactor_share_registry_window(rig, monkeypa
 
     monkeypatch.setattr(router.memory_service, "retrieve_semantic_context", semantic)
     monkeypatch.setattr("forge_core.model_compaction.RouterModelCompactor", Compactor)
-    router.provider = ProviderGateway(ProviderConfig(id="mock-provider", kind="openai_compatible",
-        base_url="https://example.invalid/v1", credential_ref="FORGE_PROVIDER_KEY_TEST",
-        supports_tools=True, supports_json_schema=True),
+    router.provider = ProviderGateway(
+        ProviderConfig(
+            id="mock-provider",
+            kind="openai_compatible",
+            base_url="https://example.invalid/v1",
+            credential_ref="FORGE_PROVIDER_KEY_TEST",
+            supports_tools=True,
+            supports_json_schema=True,
+        ),
         credential_resolver=lambda _: "placeholder",
         budget_ledger=ModelCallBudgetLedger(store.path, token_limit=100000, concurrency_limit=1),
-        transport=httpx.MockTransport(lambda _: httpx.Response(200, json={
-            "choices": [{"message": {"content": json.dumps(conversational_decision("chat"))},
-                "finish_reason": "stop"}], "usage": {"prompt_tokens": 20, "completion_tokens": 10}})))
+        transport=httpx.MockTransport(
+            lambda _: httpx.Response(
+                200,
+                json={
+                    "choices": [
+                        {
+                            "message": {"content": json.dumps(conversational_decision("chat"))},
+                            "finish_reason": "stop",
+                        }
+                    ],
+                    "usage": {"prompt_tokens": 20, "completion_tokens": 10},
+                },
+            )
+        ),
+    )
     for index in range(51):
         with store.unit_of_work() as work:
-            work.add_message(ConversationMessage(role="user", content="Historical turn " + str(index)))
+            work.add_message(
+                ConversationMessage(role="user", content="Historical turn " + str(index))
+            )
     asyncio.run(router.handle_user_message("Hello", request_id="same-window"))
     assert ("compaction", 100000000) in captured
     assert ("semantic", 100000000) in captured
@@ -141,7 +170,10 @@ def test_unknown_profile_keeps_fallback_and_live_eligibility_guard(rig):  # noqa
 
 @pytest.mark.parametrize("operator_cap,expected", [(None, 100000000), ("32768", 32768)])
 def test_main_starts_without_context_env_and_settings_report_effective_registry_limit(
-    tmp_path, monkeypatch, operator_cap, expected,
+    tmp_path,
+    monkeypatch,
+    operator_cap,
+    expected,
 ):
     monkeypatch.setenv("FORGE_DB_PATH", str(tmp_path / "api.sqlite3"))
     monkeypatch.setenv("FORGE_ROUTER_MODEL_ID", "mock-model")
@@ -153,9 +185,18 @@ def test_main_starts_without_context_env_and_settings_report_effective_registry_
     from forge_core.domain import ModelProfile
 
     main.router.provider_id = "fixture"
-    main.store.save_model(ModelProfile(id="fixture", model_id="mock-model", provider="fixture",
-        display_name="Declared large context fixture", context_window=100000000))
+    main.store.save_model(
+        ModelProfile(
+            id="fixture",
+            model_id="mock-model",
+            provider="fixture",
+            display_name="Declared large context fixture",
+            context_window=100000000,
+        )
+    )
     settings = main.settings_summary()
     assert main.router.use_registry_context is (operator_cap is None)
     assert settings["context_limit"] == expected
-    assert settings["context_limit_source"] == ("model_registry" if operator_cap is None else "operator_cap")
+    assert settings["context_limit_source"] == (
+        "model_registry" if operator_cap is None else "operator_cap"
+    )

@@ -402,13 +402,23 @@ def test_user_conversation_autonomously_admits_worker_reads_sources_and_relays_o
             )
         assert request.messages[-1]["role"] == "tool"
         if count == 2:
-            assert "Please explain the private source." in json.loads(request.messages[-1]["content"])["text"]
+            assert (
+                "Please explain the private source."
+                in json.loads(request.messages[-1]["content"])["text"]
+            )
             # Reading the original task does not consume a later Thread request.
             assert followup["id"] in json.dumps(request.messages)
-            return ModelResponse(text="", tool_calls=[{
-                "id": "read-addition", "name": "read_trigger",
-                "arguments": {"trigger_id": followup["id"]},
-            }], usage={"input_tokens": 20, "output_tokens": 10})
+            return ModelResponse(
+                text="",
+                tool_calls=[
+                    {
+                        "id": "read-addition",
+                        "name": "read_trigger",
+                        "arguments": {"trigger_id": followup["id"]},
+                    }
+                ],
+                usage={"input_tokens": 20, "output_tokens": 10},
+            )
         assert count == 3
         assert "Keep the analysis concise" in json.loads(request.messages[-1]["content"])["text"]
         return response(

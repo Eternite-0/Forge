@@ -110,7 +110,14 @@ def test_team_rejection_persists_only_whitelisted_reason(tmp_path, team, reason)
 def test_unrecognized_or_misplaced_context_stays_generic(reason, location, expected):
     error = ValidationError.from_exception_data(
         "RouterDecision",
-        [{"type": "value_error", "loc": location, "input": "PRIVATE_INPUT", "ctx": {"error": reason}}],
+        [
+            {
+                "type": "value_error",
+                "loc": location,
+                "input": "PRIVATE_INPUT",
+                "ctx": {"error": reason},
+            }
+        ],
     )
     assert _decision_error_digest(error) == [expected]
     assert "PRIVATE" not in json.dumps(_decision_error_digest(error))
@@ -173,12 +180,15 @@ def test_extra_field_repair_sees_legal_topology_within_single_reflection(tmp_pat
 
     provider = ScriptedMock(decision("create_quest", execution_team=invalid_team), corrected)
     instance = autonomous_router(store, provider)
-    result = asyncio.run(instance.handle_user_message("Analyze a local project", request_id="repair"))
+    result = asyncio.run(
+        instance.handle_user_message("Analyze a local project", request_id="repair")
+    )
     assert result["intent"] == "create_quest"
     assert len(provider.requests) == 2 and instance.max_repairs == 1
     assert_topology_contract(provider.requests[0].messages[0]["content"])
     assert [request.budget_context.purpose for request in provider.requests] == [
-        "router", "router_reflect"
+        "router",
+        "router_reflect",
     ]
     assert {request.max_output_tokens for request in provider.requests} == {4096}
     assert {request.context_limit for request in provider.requests} == {131072}

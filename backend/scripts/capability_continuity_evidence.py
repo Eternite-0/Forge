@@ -30,8 +30,11 @@ def complete_pages(pages, *, byte_offsets):
     for page in pages:
         start, end, text = page["offset"], page["end"], page["text"]
         if (
-            type(start) is not int or type(end) is not int or not isinstance(text, str)
-            or page["total"] != total or page["sha256"] != digest
+            type(start) is not int
+            or type(end) is not int
+            or not isinstance(text, str)
+            or page["total"] != total
+            or page["sha256"] != digest
             or not 0 <= start < end <= total
             or (len(text.encode("utf-8")) if byte_offsets else len(text)) != end - start
             or page["complete"] is not (end == total)
@@ -64,6 +67,7 @@ def complete_pages(pages, *, byte_offsets):
 
 def relation_chain(objects, start, *, hops=2):
     """Every next object must follow an observed relation on a later model turn."""
+
     def visit(path):
         if len(path) == hops + 1:
             return path
@@ -71,7 +75,8 @@ def relation_chain(objects, start, *, hops=2):
         for reference in current["relations"]:
             target = objects.get(reference)
             if (
-                target is not None and reference not in path
+                target is not None
+                and reference not in path
                 and target["first_invocation"] > current["last_result"]
             ):
                 found = visit([*path, reference])
@@ -92,12 +97,16 @@ def _transcript(connection, run_id, call):
         message = json.loads(row["message_json"])
         if row["role"] == "assistant":
             subsequent.append(row["ordinal"])
-            if any(item.get("id") == call["model_call_id"] for item in message.get("tool_calls", [])):
+            if any(
+                item.get("id") == call["model_call_id"] for item in message.get("tool_calls", [])
+            ):
                 invoked.append(row["ordinal"])
         elif row["role"] == "tool" and message.get("tool_call_id") == call["model_call_id"]:
             result.append(row["ordinal"])
     if (
-        len(invoked) != 1 or len(result) != 1 or invoked[0] >= result[0]
+        len(invoked) != 1
+        or len(result) != 1
+        or invoked[0] >= result[0]
         or not any(ordinal > result[0] for ordinal in subsequent)
     ):
         return None
@@ -124,7 +133,11 @@ def observe(database, workspace, mapping, deliveries, *, after_evidence_rowid=0)
             "AND state='succeeded' ORDER BY rowid"
         ).fetchall():
             run = runs.get(call["run_id"])
-            if not run or run["execution_mode"] != "live" or run["quest_id"] not in mapping.values():
+            if (
+                not run
+                or run["execution_mode"] != "live"
+                or run["quest_id"] not in mapping.values()
+            ):
                 continue
             proofs = c.execute(
                 "SELECT rowid FROM evidence WHERE kind='worker_core_source' AND trusted=1 "
@@ -141,20 +154,31 @@ def observe(database, workspace, mapping, deliveries, *, after_evidence_rowid=0)
             shared = {**transcript, "call_id": call["call_id"]}
             if call["tool_name"] == "read_trigger":
                 key = call["run_id"], arguments["trigger_id"]
-                trigger_pages.setdefault(key, []).append({
-                    **shared, "offset": output["offset_chars"],
-                    "end": output["next_offset_chars"] or output["total_chars"],
-                    "total": output["total_chars"], "sha256": output["payload_sha256"],
-                    "text": output["text"], "complete": output["next_offset_chars"] is None,
-                })
+                trigger_pages.setdefault(key, []).append(
+                    {
+                        **shared,
+                        "offset": output["offset_chars"],
+                        "end": output["next_offset_chars"] or output["total_chars"],
+                        "total": output["total_chars"],
+                        "sha256": output["payload_sha256"],
+                        "text": output["text"],
+                        "complete": output["next_offset_chars"] is None,
+                    }
+                )
             else:
                 key = call["run_id"], output["ref"], output["source_hash"]
-                sources.setdefault(key, []).append({
-                    **shared, "offset": output["offset"], "end": output["next_offset"],
-                    "total": output["content_bytes"], "sha256": output["source_hash"],
-                    "text": output["content"], "complete": output["complete"],
-                    "relations": [item["ref"] for item in output["relations"]],
-                })
+                sources.setdefault(key, []).append(
+                    {
+                        **shared,
+                        "offset": output["offset"],
+                        "end": output["next_offset"],
+                        "total": output["content_bytes"],
+                        "sha256": output["source_hash"],
+                        "text": output["content"],
+                        "complete": output["complete"],
+                        "relations": [item["ref"] for item in output["relations"]],
+                    }
+                )
         restored = {}
         for (run_id, reference, _digest), pages in sources.items():
             complete = complete_pages(pages, byte_offsets=True)
@@ -177,7 +201,9 @@ def observe(database, workspace, mapping, deliveries, *, after_evidence_rowid=0)
         for run_id, objects in restored.items():
             if deliveries and run_id not in delivered_runs:
                 continue
-            quest = c.execute("SELECT metadata FROM quests WHERE id=?", (runs[run_id]["quest_id"],)).fetchone()
+            quest = c.execute(
+                "SELECT metadata FROM quests WHERE id=?", (runs[run_id]["quest_id"],)
+            ).fetchone()
             message_id = json.loads(quest[0]).get("original_request_message_id")
             if not message_id:
                 message = c.execute(
@@ -187,8 +213,14 @@ def observe(database, workspace, mapping, deliveries, *, after_evidence_rowid=0)
                 message_id = message[0] if message else None
             chain = relation_chain(objects, "message:" + message_id) if message_id else []
             if chain:
-                chains.append({"run_id": run_id, "quest_id": runs[run_id]["quest_id"],
-                               "references": chain, "sources": [objects[ref] for ref in chain]})
+                chains.append(
+                    {
+                        "run_id": run_id,
+                        "quest_id": runs[run_id]["quest_id"],
+                        "references": chain,
+                        "sources": [objects[ref] for ref in chain],
+                    }
+                )
         return {
             "provenance": "programmatic_verification_of_real_worker_tool_proofs_and_transcripts",
             "after_evidence_rowid": after_evidence_rowid,

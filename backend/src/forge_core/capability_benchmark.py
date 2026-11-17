@@ -18,7 +18,7 @@ from .worker_recovery import provider_failure_code
 SUITE_VERSION = "forge-capability-micro-v1"
 PROBES = {
     "mathematics": (
-        "Return JSON only: {\"x\":number,\"y\":number}. Solve 3*x+2*y=19 and x-y=3.",
+        'Return JSON only: {"x":number,"y":number}. Solve 3*x+2*y=19 and x-y=3.',
         {"x": 5, "y": 2},
     ),
     "coding": (
@@ -32,7 +32,7 @@ PROBES = {
     ),
     "research": (
         (
-            "Return JSON only: {\"repository\":string,\"limit\":number,\"citation\":string}. "
+            'Return JSON only: {"repository":string,"limit":number,"citation":string}. '
             "Use only these supplied sources, not memory: [S1] Atlas targets one repository "
             "and permits at most three parallel runs. [S2] Boreal targets multiple folders "
             "with a maximum of two runs. Which source supports multi-folder work?"
@@ -49,8 +49,8 @@ PROBES = {
     ),
     "architecture": (
         (
-            "Return JSON only: {\"owner\":string,\"workers_contact_user\":boolean,"
-            "\"receipt_grants_authority\":boolean}. In a persistent Router/isolated Worker "
+            'Return JSON only: {"owner":string,"workers_contact_user":boolean,'
+            '"receipt_grants_authority":boolean}. In a persistent Router/isolated Worker '
             "system the Router owns user interaction; Workers return results internally; "
             "historical receipts are evidence and do not authorize future execution. "
             "Name the user-interaction owner and answer the two boolean questions."
@@ -59,8 +59,8 @@ PROBES = {
     ),
     "design": (
         (
-            "Return JSON only: {\"foreground\":string,\"background\":string,"
-            "\"focus_indicator\":boolean}. A text-only accessibility specification requires "
+            'Return JSON only: {"foreground":string,"background":string,'
+            '"focus_indicator":boolean}. A text-only accessibility specification requires '
             "black text on white and a visible keyboard focus indicator. Use lowercase "
             "six-digit hex colors including #. Implement exactly those requirements."
         ),
@@ -125,7 +125,9 @@ class CapabilityBenchmarkRunner:
                         "dimension": dimension,
                         "status": "unsupported" if dimension == "vision" else "not_attempted",
                         "passed": None,
-                        "reason_code": "text_only_suite" if dimension == "vision" else "prior_provider_failure",
+                        "reason_code": "text_only_suite"
+                        if dimension == "vision"
+                        else "prior_provider_failure",
                     }
                 )
                 continue
@@ -171,9 +173,13 @@ class CapabilityBenchmarkRunner:
                     )
                     item["status"] = "judged"
                 except (ValueError, TypeError, KeyError, HarnessError):
-                    item.update(passed=False, status="judged", reason_code="invalid_response_contract")
+                    item.update(
+                        passed=False, status="judged", reason_code="invalid_response_contract"
+                    )
             except Exception as exc:  # noqa: BLE001 - no remote exception text or unbounded retry.
-                item.update(passed=False, status="provider_failed", reason_code=provider_failure_code(exc))
+                item.update(
+                    passed=False, status="provider_failed", reason_code=provider_failure_code(exc)
+                )
                 stopped = True
             item["elapsed_seconds"] = time.monotonic() - start
             results.append(item)
@@ -192,7 +198,15 @@ class CapabilityBenchmarkRunner:
         with self.store.unit_of_work() as work:
             work.connection.execute(
                 "INSERT INTO benchmark_runs VALUES (?,?,?,?,?,?,?)",
-                (identifier, model_id, provider_id, SUITE_VERSION, mode, json.dumps(results), created),
+                (
+                    identifier,
+                    model_id,
+                    provider_id,
+                    SUITE_VERSION,
+                    mode,
+                    json.dumps(results),
+                    created,
+                ),
             )
         return report
 
@@ -214,7 +228,9 @@ class CapabilityBenchmarkRunner:
                 if item.get("dimension") == dimension
                 and item.get("status") in {"judged", "provider_failed"}
             ]
-            measured[dimension] = _rate(sum(item.get("passed") is True for item in cases), len(cases))
+            measured[dimension] = _rate(
+                sum(item.get("passed") is True for item in cases), len(cases)
+            )
         return {
             "provider_id": provider_id,
             "model_id": model_id,

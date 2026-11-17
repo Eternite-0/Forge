@@ -94,7 +94,9 @@ def test_core_protocol_quantifies_single_chain_and_independent_branches(tmp_path
         # this historical 360k fixture. Preserve rejection, never raise its cap.
         with pytest.raises(InvalidGraphProposal):
             generate(store, quest, provider)
-        diagnostic = json.loads(provider.requests[-1].messages[-1]["content"])["capacity_diagnostics"]
+        diagnostic = json.loads(provider.requests[-1].messages[-1]["content"])[
+            "capacity_diagnostics"
+        ]
         assert diagnostic["required_total"] > diagnostic["original_ceiling"] == 360000
         assert QuestGraphService(store).history(quest.id) == []
         assert wire == original
@@ -179,8 +181,7 @@ def test_smaller_independent_branch_fits_unchanged_source_ceiling_without_serial
     other = copy.deepcopy(graph["nodes"][0])
     other.update(key="independent", expected_artifact="work/independent.json")
     other["success_criteria"] = [
-        item.replace("work/out.json", "work/independent.json")
-        for item in other["success_criteria"]
+        item.replace("work/out.json", "work/independent.json") for item in other["success_criteria"]
     ]
     graph["nodes"].append(other)
     wire = semantic_wire(graph)
@@ -191,13 +192,18 @@ def test_smaller_independent_branch_fits_unchanged_source_ceiling_without_serial
     assert "serial_capacity_policy" not in plan
     observation = plan["capacity_contract"]["resource_allocation"]
     assert observation["shape"] == "independent_cycles"
-    assert sum(node["budget_tokens"] for node in plan["nodes"]) + plan["coordination_reserve_tokens"] <= 360000
+    assert (
+        sum(node["budget_tokens"] for node in plan["nodes"]) + plan["coordination_reserve_tokens"]
+        <= 360000
+    )
 
 
 def test_affordable_operator_intersection_still_admits_without_increasing_source_cap(tmp_path):
     store, quest = prepared(tmp_path)
     plan = generate(
-        store, quest, NativeFramingMock(semantic_wire(capacity_graph())),
+        store,
+        quest,
+        NativeFramingMock(semantic_wire(capacity_graph())),
         operator_max_total_tokens=170000,
     )
     assert plan["max_total_tokens"] == 170000

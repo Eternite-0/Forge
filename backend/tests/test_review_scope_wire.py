@@ -113,11 +113,15 @@ def test_ordinary_compact_wire_has_smaller_actual_native_reservation_without_new
 
 
 @pytest.mark.parametrize("verdict", ["PASS", "NEEDS_REVISION"])
-def test_review_instructions_distinguish_mandatory_defects_without_rewriting_verdict(tmp_path, verdict):
+def test_review_instructions_distinguish_mandatory_defects_without_rewriting_verdict(
+    tmp_path, verdict
+):
     answer = {
         "verdict": verdict,
         "findings": ["Optional presentation improvement"],
-        "revision_goals": ["Optional presentation improvement"] if verdict == "NEEDS_REVISION" else [],
+        "revision_goals": ["Optional presentation improvement"]
+        if verdict == "NEEDS_REVISION"
+        else [],
         "confidence": 0.8,
     }
     store, manager, model, worker = prepared(

@@ -232,7 +232,9 @@ def _text_values(value, depth=0):
     if isinstance(value, str):
         return [value]
     if isinstance(value, dict):
-        return [text for item in list(value.values())[:64] for text in _text_values(item, depth + 1)]
+        return [
+            text for item in list(value.values())[:64] for text in _text_values(item, depth + 1)
+        ]
     if isinstance(value, list):
         return [text for item in value[:64] for text in _text_values(item, depth + 1)]
     return []

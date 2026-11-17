@@ -531,12 +531,15 @@ def _review_receipts(store, connection, run):
                 # Complete verified pages and explicit handbacks are contract
                 # context, NOT evidence that an artifact implements the addition.
                 # Include them in the same packet/capacity accounting as sources.
-                receipts.append({
-                    "id": call["call_id"], "tool_name": call["tool_name"],
-                    "context_only": True,
-                    "arguments": json.loads(call["arguments_json"]),
-                    "output": json.loads(call["result_json"]),
-                })
+                receipts.append(
+                    {
+                        "id": call["call_id"],
+                        "tool_name": call["tool_name"],
+                        "context_only": True,
+                        "arguments": json.loads(call["arguments_json"]),
+                        "output": json.loads(call["result_json"]),
+                    }
+                )
             # An archived or upstream reference alone never proves this task ran.
             continue
         receipt = connection.execute(

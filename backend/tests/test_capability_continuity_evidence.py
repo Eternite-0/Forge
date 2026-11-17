@@ -28,7 +28,8 @@ def test_standalone_specialists_keeps_same_l2_and_requires_actual_distinct_roles
     assert driver.scenario_levels("specialists") == driver.scenario_levels("single") == ["L2"]
     assert driver.scenario_levels("continuity") == ["L2", "L3"]
     observation = {
-        "execution_team": None, "actual_worker_count": 2,
+        "execution_team": None,
+        "actual_worker_count": 2,
         "actual_roles": ["research_1", "research_2"],
     }
     assert not driver.strategy_observed(observation, "specialists")
@@ -43,9 +44,14 @@ def page(text, start, end, *, ordinal=1, byte_offsets=False):
     selected = body[start:end]
     selected = selected.decode() if byte_offsets else selected
     return {
-        "offset": start, "end": end, "text": selected, "total": len(body),
-        "sha256": hashlib.sha256(text.encode()).hexdigest(), "complete": end == len(body),
-        "invocation_ordinal": ordinal, "result_ordinal": ordinal + 1,
+        "offset": start,
+        "end": end,
+        "text": selected,
+        "total": len(body),
+        "sha256": hashlib.sha256(text.encode()).hexdigest(),
+        "complete": end == len(body),
+        "invocation_ordinal": ordinal,
+        "result_ordinal": ordinal + 1,
         "call_id": "call-" + str(ordinal),
     }
 
@@ -54,8 +60,10 @@ def page(text, start, end, *, ordinal=1, byte_offsets=False):
 def test_full_pages_require_every_character_and_original_hash(byte_offsets):
     text = "original 中文 continuation"
     length = len(text.encode()) if byte_offsets else len(text)
-    pages = [page(text, 0, 9, byte_offsets=byte_offsets),
-             page(text, 9, length, ordinal=3, byte_offsets=byte_offsets)]
+    pages = [
+        page(text, 0, 9, byte_offsets=byte_offsets),
+        page(text, 9, length, ordinal=3, byte_offsets=byte_offsets),
+    ]
     result = evidence.complete_pages(pages, byte_offsets=byte_offsets)
     assert result["source_sha256"] == hashlib.sha256(text.encode()).hexdigest()
     assert result["page_count"] == 2
@@ -63,7 +71,9 @@ def test_full_pages_require_every_character_and_original_hash(byte_offsets):
     assert evidence.complete_pages([pages[0], pages[0]], byte_offsets=byte_offsets) is None
 
 
-@pytest.mark.parametrize("tamper", ["gap", "overlap", "hash", "text", "length", "batch", "complete"])
+@pytest.mark.parametrize(
+    "tamper", ["gap", "overlap", "hash", "text", "length", "batch", "complete"]
+)
 def test_partial_forged_overlapping_or_same_turn_pages_do_not_pass(tamper):
     text = "original complete body"
     pages = [page(text, 0, 8), page(text, 8, len(text), ordinal=3)]
@@ -113,19 +123,35 @@ def read_trigger_pages(delegated):
     plan = graph.get(quest_id)
     with store.connection() as c:
         team = c.execute("SELECT * FROM team_proposals").fetchone()
-    run = manager.start(quest_id, plan["id"], "task", team_digest=team["proposal_digest"], member_index=0)
+    run = manager.start(
+        quest_id, plan["id"], "task", team_digest=team["proposal_digest"], member_index=0
+    )
     triggers = TriggerService(store)
     triggers.register_source("continuity-fixture", kind="message")
     trigger = triggers.receive("continuity-fixture", "1", "task", {"text": "中文 " * 250})
     triggers.subscribe(trigger["thread_id"], run["id"])
-    model.responses.extend([
-        tool("read_trigger", {"trigger_id": trigger["id"], "offset_chars": 0, "max_chars": 500}),
-        tool("read_trigger", {"trigger_id": trigger["id"], "offset_chars": 500, "max_chars": 2048}, 2),
-        response(delivery()),
-    ])
+    model.responses.extend(
+        [
+            tool(
+                "read_trigger", {"trigger_id": trigger["id"], "offset_chars": 0, "max_chars": 500}
+            ),
+            tool(
+                "read_trigger",
+                {"trigger_id": trigger["id"], "offset_chars": 500, "max_chars": 2048},
+                2,
+            ),
+            response(delivery()),
+        ]
+    )
     assert asyncio.run(manager.run(run["id"]))["state"] == "review_pending"
-    deliveries = [{"level": "L3", "phase": "after_restart", "trigger_id": trigger["id"],
-                   "run_ids": [run["id"]]}]
+    deliveries = [
+        {
+            "level": "L3",
+            "phase": "after_restart",
+            "trigger_id": trigger["id"],
+            "run_ids": [run["id"]],
+        }
+    ]
     return store, run, trigger, deliveries
 
 
@@ -138,18 +164,23 @@ def test_actual_core_proofs_and_transcripts_allow_only_complete_same_run_pages(r
     with store.connection() as c:
         frontier = c.execute("SELECT MAX(rowid) FROM evidence").fetchone()[0]
     assert not evidence.observe(
-        store.path, store.workspace.root, {"L3": run["quest_id"]}, deliveries,
+        store.path,
+        store.workspace.root,
+        {"L3": run["quest_id"]},
+        deliveries,
         after_evidence_rowid=frontier,
     )["complete_thread_consumption"]
     rebound = copy.deepcopy(deliveries)
     rebound[0]["run_ids"] = ["another-run"]
-    assert not evidence.observe(
-        store.path, store.workspace.root, {"L3": run["quest_id"]}, rebound
-    )["complete_thread_consumption"]
+    assert not evidence.observe(store.path, store.workspace.root, {"L3": run["quest_id"]}, rebound)[
+        "complete_thread_consumption"
+    ]
 
 
 @pytest.mark.parametrize("tamper", ["proof", "partial", "transcript", "unconsumed", "payload"])
-def test_stored_success_label_cannot_replace_source_proof_or_full_consumption(read_trigger_pages, tamper):
+def test_stored_success_label_cannot_replace_source_proof_or_full_consumption(
+    read_trigger_pages, tamper
+):
     store, run, trigger, deliveries = read_trigger_pages
     with store.unit_of_work() as work:
         c = work.connection
@@ -160,9 +191,13 @@ def test_stored_success_label_cannot_replace_source_proof_or_full_consumption(re
         elif tamper == "transcript":
             c.execute("DELETE FROM worker_messages WHERE role='tool'")
         elif tamper == "unconsumed":
-            c.execute("DELETE FROM worker_messages WHERE role='assistant' AND COALESCE(json_array_length(json_extract(message_json,'$.tool_calls')),0)=0")
+            c.execute(
+                "DELETE FROM worker_messages WHERE role='assistant' AND COALESCE(json_array_length(json_extract(message_json,'$.tool_calls')),0)=0"
+            )
         else:
-            c.execute("UPDATE superagent_triggers SET payload_json='{}' WHERE id=?", (trigger["id"],))
+            c.execute(
+                "UPDATE superagent_triggers SET payload_json='{}' WHERE id=?", (trigger["id"],)
+            )
     assert not evidence.observe(
         store.path, store.workspace.root, {"L3": run["quest_id"]}, deliveries
     )["complete_thread_consumption"]
@@ -174,7 +209,9 @@ def test_real_scripted_worker_traverses_only_returned_relations_and_recovers_ful
     project_root.mkdir()
     project = WorkspaceDiscovery(store).associate(quest_id, project_root)
     with store.unit_of_work() as work:
-        source = work.connection.execute("SELECT source_message_id FROM delegation_mandates").fetchone()[0]
+        source = work.connection.execute(
+            "SELECT source_message_id FROM delegation_mandates"
+        ).fetchone()[0]
         work.connection.execute(
             "UPDATE messages SET metadata=json_set(metadata,'$.project_id',?) WHERE id=?",
             (project["id"], source),
@@ -191,7 +228,9 @@ def test_real_scripted_worker_traverses_only_returned_relations_and_recovers_ful
     plan = graph.get(quest_id)
     with store.connection() as c:
         team = c.execute("SELECT * FROM team_proposals").fetchone()
-    run = manager.start(quest_id, plan["id"], "task", team_digest=team["proposal_digest"], member_index=0)
+    run = manager.start(
+        quest_id, plan["id"], "task", team_digest=team["proposal_digest"], member_index=0
+    )
     hops = []
 
     async def generate(request):
@@ -206,14 +245,19 @@ def test_real_scripted_worker_traverses_only_returned_relations_and_recovers_ful
         else:
             result = json.loads(previous[0])
             if not result["complete"]:
-                arguments = {"reference": result["ref"], "offset": result["next_offset"],
-                             "expected_hash": result["source_hash"]}
+                arguments = {
+                    "reference": result["ref"],
+                    "offset": result["next_offset"],
+                    "expected_hash": result["source_hash"],
+                }
             else:
                 hops.append(result["ref"])
                 if len(hops) == 3:
                     return response(delivery())
                 prefix = "project:" if len(hops) == 1 else "quest:"
-                reference = next(item["ref"] for item in result["relations"] if item["ref"].startswith(prefix))
+                reference = next(
+                    item["ref"] for item in result["relations"] if item["ref"].startswith(prefix)
+                )
                 arguments = {"reference": reference}
         return tool("recall_object", arguments, len(model.requests))
 

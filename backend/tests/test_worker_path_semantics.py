@@ -121,7 +121,12 @@ def test_initial_measurement_includes_real_superagent_paths_and_bounds_runtime(d
         member = json.loads(team["body_json"])["members"][0]
         before = connection.total_changes
         measured = measure_initial_worker_request(
-            store, connection, store.get_quest(quest_id), plan, plan["nodes"][0], member,
+            store,
+            connection,
+            store.get_quest(quest_id),
+            plan,
+            plan["nodes"][0],
+            member,
             provider=gateway,
         )
         assert connection.total_changes == before
@@ -134,26 +139,35 @@ def test_initial_measurement_includes_real_superagent_paths_and_bounds_runtime(d
         store, ProviderPool({"mock-provider": model}), ToolEngine(store), team_authority=teams
     )
     run = manager.start(
-        quest_id, plan["id"], plan["nodes"][0]["key"],
-        team_digest=team["proposal_digest"], member_index=0,
+        quest_id,
+        plan["id"],
+        plan["nodes"][0]["key"],
+        team_digest=team["proposal_digest"],
+        member_index=0,
     )
     assert asyncio.run(manager.run(run["id"]))["state"] == "review_pending"
     request = model.requests[0]
     task = json.loads(request.messages[-1]["content"])
     assert task["superagent"] == preview_task["superagent"]
     assert task["execution_environment"]["storage_root"] == str(store.workspace.root.resolve())
-    assert task["execution_environment"]["project"] == preview_task["execution_environment"]["project"]
+    assert (
+        task["execution_environment"]["project"] == preview_task["execution_environment"]["project"]
+    )
     # This helper measures persisted initial context, not the separately admitted
     # per-step execution/review preview appended by runtime just before sending.
     initial_request = replace(
-        request, messages=[
-            item for item in request.messages
+        request,
+        messages=[
+            item
+            for item in request.messages
             if not item["content"].startswith("Core remaining execution allowance")
         ],
     )
     assert {item["name"] for item in request.tools}.issubset(
         {item["name"] for item in preview_request.tools}
     )
-    actual = len(json.dumps(gateway._payload(initial_request, False), ensure_ascii=False).encode()) + 64
+    actual = (
+        len(json.dumps(gateway._payload(initial_request, False), ensure_ascii=False).encode()) + 64
+    )
     assert measured["native_input_reservation"] >= actual
     assert not Path(preview_task["execution_environment"]["root"]).exists()

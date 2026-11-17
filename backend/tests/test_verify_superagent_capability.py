@@ -106,9 +106,7 @@ def test_python_approval_accepts_exact_additional_test_module_only(
         assert [item["id"] for item in result] == [approval["id"]]
     else:
         with pytest.raises(driver.Failure, match="manifest_out_of_scope"):
-            driver.approved_python_requests(
-                store.path, store.workspace.root, {worker["quest_id"]}
-            )
+            driver.approved_python_requests(store.path, store.workspace.root, {worker["quest_id"]})
     assert not driver.rows(store.path, "SELECT id FROM action_intents")
 
 
@@ -397,7 +395,9 @@ def test_final_snapshot_retry_diagnostics_keep_original_failure_and_remaining_ta
     assert artifact_attempts == ["q1", "q2"]
 
 
-def test_final_budget_and_source_checks_include_calls_settled_during_shutdown(tmp_path, monkeypatch):
+def test_final_budget_and_source_checks_include_calls_settled_during_shutdown(
+    tmp_path, monkeypatch
+):
     database = tmp_path / "database.sqlite3"
     database.touch()
     observed = []
@@ -429,9 +429,7 @@ def test_final_budget_and_source_checks_include_calls_settled_during_shutdown(tm
     assert not report["checks"]["final_per_task_budget"]
     assert not report["checks"]["source_unchanged_after_drain"]
     assert report["checks"]["final_calls_settled"]
-    assert report["diagnostic_errors"] == [
-        {"stage": "final_budget", "exception_type": "Failure"}
-    ]
+    assert report["diagnostic_errors"] == [{"stage": "final_budget", "exception_type": "Failure"}]
 
 
 def test_router_requests_submit_in_order_without_waiting_for_background_workers():

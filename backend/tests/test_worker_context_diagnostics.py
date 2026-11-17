@@ -19,9 +19,15 @@ from forge_core.domain import DomainError
         ("Worker compaction token allocation exhausted", "cumulative_allocation_exhausted"),
         ("Invalid Worker compaction handoff", "invalid_compaction_handoff"),
         ("Invalid source-bound Worker model handoff", "invalid_compaction_handoff"),
-        ("Complete earliest Worker exchange does not fit model context", "complete_exchange_context_limit"),
+        (
+            "Complete earliest Worker exchange does not fit model context",
+            "complete_exchange_context_limit",
+        ),
         ("Cannot archive an incomplete Worker tool exchange", "incomplete_compaction_exchange"),
-        ("Worker compaction Provider failed; original context retained", "compaction_provider_failure"),
+        (
+            "Worker compaction Provider failed; original context retained",
+            "compaction_provider_failure",
+        ),
         ("PRIVATE REMOTE MODEL TEXT", "unclassified_context_rejection"),
     ],
 )
@@ -61,5 +67,7 @@ def test_context_rejection_distinguishes_capacity_protocol_and_unknown_without_t
             "cumulative_token_limits_enforced": enforced,
         }
         assert "PRIVATE" not in events[0][0]
-        blocked = c.execute("SELECT payload FROM events WHERE event_type='worker.blocked'").fetchone()
+        blocked = c.execute(
+            "SELECT payload FROM events WHERE event_type='worker.blocked'"
+        ).fetchone()
         assert json.loads(blocked[0])["reason_code"] == "context_budget"

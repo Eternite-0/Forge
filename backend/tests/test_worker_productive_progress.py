@@ -24,12 +24,18 @@ def checkpoint(store, run_id, index, *, content="unchanged", path="source.py"):
                 "file_read",
                 json.dumps({"path": path}),
                 f"receipt-{index}",
-                json.dumps({"receipt_id": f"receipt-{index}", "state": "succeeded", "output": output}),
+                json.dumps(
+                    {"receipt_id": f"receipt-{index}", "state": "succeeded", "output": output}
+                ),
             ),
         )
         work.connection.execute(
             "INSERT INTO worker_messages VALUES (?,?, 'assistant',?)",
-            (run_id, index + 100, json.dumps({"role": "assistant", "content": f"Thinking {index}"})),
+            (
+                run_id,
+                index + 100,
+                json.dumps({"role": "assistant", "content": f"Thinking {index}"}),
+            ),
         )
         work.connection.execute(
             "UPDATE worker_capsules SET revision=revision+1 WHERE run_id=?", (run_id,)
@@ -56,7 +62,9 @@ def test_repeated_read_and_inference_activity_does_not_hide_unchanged_outcome(wo
     assert sum(event["event_type"] == "runtime.worker_progress_observed" for event in events) == 4
     assert model.calls == 0 and tool.calls == []
     with store.connection() as connection:
-        row = connection.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
+        row = connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (session["id"],)
+        ).fetchone()
         assert row["state"] == "running" and row["lease_until"] == 900
 
 
@@ -84,15 +92,25 @@ def test_active_but_unknown_effect_is_only_diagnosed_and_not_replayed(worker):  
     checkpoint(store, session["id"], 0)
     Watchdog(store, clock=lambda: 100, worker_progress_timeout=20).tick()
     with store.unit_of_work() as work:
-        row = work.connection.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
+        row = work.connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (session["id"],)
+        ).fetchone()
         reserve_worker_model_call(work.connection, row, "unknown", 100, 10, None, [])
     checkpoint(store, session["id"], 1)
     report = Watchdog(store, clock=lambda: 125, worker_progress_timeout=20).tick()
     assert report["stalled_workers"][0]["recovery"] == "observe_only_unknown_effect"
     assert report["stalled_workers"][0]["reason_code"] == "worker_no_productive_progress"
     with store.connection() as connection:
-        assert connection.execute("SELECT state FROM worker_model_reservations").fetchone()[0] == "reserved"
-        assert connection.execute("SELECT state FROM worker_runs WHERE id=?", (session["id"],)).fetchone()[0] == "running"
+        assert (
+            connection.execute("SELECT state FROM worker_model_reservations").fetchone()[0]
+            == "reserved"
+        )
+        assert (
+            connection.execute(
+                "SELECT state FROM worker_runs WHERE id=?", (session["id"],)
+            ).fetchone()[0]
+            == "running"
+        )
     assert model.calls == 0 and tool.calls == []
 
 
@@ -102,7 +120,9 @@ def test_settled_model_calls_and_thoughts_alone_do_not_advance_outcomes(worker):
     Watchdog(store, clock=lambda: 100, worker_progress_timeout=20).tick()
     for index, moment in enumerate((110, 120, 125)):
         with store.unit_of_work() as work:
-            row = work.connection.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
+            row = work.connection.execute(
+                "SELECT * FROM worker_runs WHERE id=?", (session["id"],)
+            ).fetchone()
             reserve_worker_model_call(work.connection, row, f"settled-{index}", 100, 10, None, [])
             work.connection.execute(
                 "UPDATE worker_model_reservations SET state='settled',input_tokens=10,output_tokens=5,"
@@ -111,9 +131,15 @@ def test_settled_model_calls_and_thoughts_alone_do_not_advance_outcomes(worker):
             )
             work.connection.execute(
                 "INSERT INTO worker_messages VALUES (?,?, 'assistant',?)",
-                (session["id"], index + 100, json.dumps({"role": "assistant", "content": f"Thought {index}"})),
+                (
+                    session["id"],
+                    index + 100,
+                    json.dumps({"role": "assistant", "content": f"Thought {index}"}),
+                ),
             )
-        report = Watchdog(store, clock=lambda moment=moment: moment, worker_progress_timeout=20).tick()
+        report = Watchdog(
+            store, clock=lambda moment=moment: moment, worker_progress_timeout=20
+        ).tick()
     assert report["stalled_workers"][0]["reason_code"] == "worker_no_productive_progress"
     assert not report["stalled_workers"][0]["unsettled_effect_or_call"]
 
@@ -125,13 +151,22 @@ def test_two_watchdogs_deduplicate_active_nonproductive_frontier(worker):  # noq
     Watchdog(store, clock=lambda: 100, worker_progress_timeout=20).tick()
     checkpoint(store, session["id"], 1)
     with ThreadPoolExecutor(max_workers=2) as pool:
-        list(pool.map(lambda _: Watchdog(store, clock=lambda: 125, worker_progress_timeout=20).tick(), range(2)))
-    help_events = [event for event in store.list_events() if event["event_type"] == "worker.help_requested"]
+        list(
+            pool.map(
+                lambda _: Watchdog(store, clock=lambda: 125, worker_progress_timeout=20).tick(),
+                range(2),
+            )
+        )
+    help_events = [
+        event for event in store.list_events() if event["event_type"] == "worker.help_requested"
+    ]
     assert len(help_events) == 1
     assert json.loads(help_events[0]["payload"])["reason_code"] == "worker_no_productive_progress"
 
 
-def test_consumed_followup_resets_outcome_window_without_treating_capsule_revision_as_output(worker):  # noqa: F811
+def test_consumed_followup_resets_outcome_window_without_treating_capsule_revision_as_output(
+    worker,  # noqa: F811
+):
     store, _, session, _, _, _ = worker
     keep_live_lease(store, session["id"])
     Watchdog(store, clock=lambda: 100, worker_progress_timeout=20).tick()
@@ -140,9 +175,17 @@ def test_consumed_followup_resets_outcome_window_without_treating_capsule_revisi
             "UPDATE worker_capsules SET inbox_cursor=inbox_cursor+1,revision=revision+1 WHERE run_id=?",
             (session["id"],),
         )
-    assert Watchdog(store, clock=lambda: 115, worker_progress_timeout=20).tick()["stalled_workers"] == []
+    assert (
+        Watchdog(store, clock=lambda: 115, worker_progress_timeout=20).tick()["stalled_workers"]
+        == []
+    )
     with store.unit_of_work() as work:
-        work.connection.execute("UPDATE worker_capsules SET revision=revision+1 WHERE run_id=?", (session["id"],))
-    assert Watchdog(store, clock=lambda: 130, worker_progress_timeout=20).tick()["stalled_workers"] == []
+        work.connection.execute(
+            "UPDATE worker_capsules SET revision=revision+1 WHERE run_id=?", (session["id"],)
+        )
+    assert (
+        Watchdog(store, clock=lambda: 130, worker_progress_timeout=20).tick()["stalled_workers"]
+        == []
+    )
     report = Watchdog(store, clock=lambda: 136, worker_progress_timeout=20).tick()
     assert report["stalled_workers"][0]["reason_code"] == "worker_no_productive_progress"

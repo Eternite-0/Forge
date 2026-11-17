@@ -188,35 +188,51 @@ def test_event_arriving_during_final_inference_is_consumed_before_delivery(graph
                         (session_id, "late-event", json.dumps({"followup": "include appendix"})),
                     )
                 return ModelResponse(
-                    text='{"summary":"draft"}', tool_calls=[],
+                    text='{"summary":"draft"}',
+                    tool_calls=[],
                     usage={"input_tokens": 10, "output_tokens": 5},
                 )
             assert "include appendix" in json.dumps(request.messages)
             assert not any(e["event_type"] == "worker.result" for e in store.list_events())
             return ModelResponse(
-                text='{"summary":"done with appendix"}', tool_calls=[],
+                text='{"summary":"done with appendix"}',
+                tool_calls=[],
                 usage={"input_tokens": 10, "output_tokens": 5},
             )
 
     model = LateEventModel()
     manager = WorkerManager(
-        store, ProviderPool({"mock-provider": model}), MockToolEngine(),
+        store,
+        ProviderPool({"mock-provider": model}),
+        MockToolEngine(),
         team_authority=MockApprovedTeam(plan),
     )
     session_id = manager.start(
-        quest.id, plan["id"], "n", team_digest="team", member_index=0,
+        quest.id,
+        plan["id"],
+        "n",
+        team_digest="team",
+        member_index=0,
     )["id"]
     result = run(manager.run(session_id))
     assert result["state"] == "review_pending"
     assert model.calls == 2 and result["steps"] == 2 and result["token_spent"] == 30
     with store.connection() as connection:
-        assert connection.execute(
-            "SELECT consumed FROM worker_inbox WHERE run_id=?", (session_id,),
-        ).fetchone()[0] == 1
-        assert connection.execute(
-            "SELECT COUNT(*) FROM worker_messages WHERE run_id=? "
-            "AND message_json LIKE '%draft%'", (session_id,),
-        ).fetchone()[0] >= 1
+        assert (
+            connection.execute(
+                "SELECT consumed FROM worker_inbox WHERE run_id=?",
+                (session_id,),
+            ).fetchone()[0]
+            == 1
+        )
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM worker_messages WHERE run_id=? "
+                "AND message_json LIKE '%draft%'",
+                (session_id,),
+            ).fetchone()[0]
+            >= 1
+        )
     events = [e for e in store.list_events() if e["event_type"] == "worker.result"]
     assert len(events) == 1
 

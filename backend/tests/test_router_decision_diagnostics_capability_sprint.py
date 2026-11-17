@@ -13,8 +13,11 @@ from forge_core.store import Store
 
 
 def rejected_events(store):
-    return [json.loads(row["payload"]) for row in store.list_events()
-        if row["event_type"] == "router.decision_rejected"]
+    return [
+        json.loads(row["payload"])
+        for row in store.list_events()
+        if row["event_type"] == "router.decision_rejected"
+    ]
 
 
 def test_rejected_initial_and_repair_have_field_paths_hashes_and_no_raw_content(tmp_path):
@@ -25,7 +28,9 @@ def test_rejected_initial_and_repair_have_field_paths_hashes_and_no_raw_content(
     instance = router(store, provider)
     before = store.ensure_router()
     with pytest.raises(DomainError, match="Invalid Router model decision"):
-        asyncio.run(instance.handle_user_message("USER_PRIVATE_REQUEST_NEVER_PERSIST", request_id="invalid"))
+        asyncio.run(
+            instance.handle_user_message("USER_PRIVATE_REQUEST_NEVER_PERSIST", request_id="invalid")
+        )
     events = rejected_events(store)
     assert [item["stage"] for item in events] == ["initial", "repair"]
     expected = hashlib.sha256(json.dumps(invalid).encode()).hexdigest()
@@ -60,15 +65,19 @@ def test_successful_reflection_retains_initial_diagnostic_without_invalid_turn(t
 
 def test_diagnostic_after_router_lookup_does_not_cause_a_model_retry(tmp_path):
     store = Store(tmp_path / "lookup-repair.sqlite3")
-    lookup = ModelResponse(text="", tool_calls=[{
-        "id": "lookup", "name": "list_quests", "arguments": {}
-    }], usage={"input_tokens": 10, "output_tokens": 5})
+    lookup = ModelResponse(
+        text="",
+        tool_calls=[{"id": "lookup", "name": "list_quests", "arguments": {}}],
+        usage={"input_tokens": 10, "output_tokens": 5},
+    )
     provider = ScriptedMock(lookup, decision(priority="invalid"), decision())
     result = asyncio.run(router(store, provider).handle_user_message("Hello", request_id="lookup"))
     assert result["intent"] == "chat"
     assert len(provider.requests) == 3
     assert [request.budget_context.purpose for request in provider.requests] == [
-        "router", "router", "router_reflect"
+        "router",
+        "router",
+        "router_reflect",
     ]
     assert len(rejected_events(store)) == 1
 
@@ -87,8 +96,9 @@ def test_disabled_reflection_records_one_diagnostic_and_does_not_retry(tmp_path)
 
 def test_recall_rejection_records_fixed_reason_without_source_statement(tmp_path):
     store = Store(tmp_path / "recall.sqlite3")
-    provider = ScriptedMock(decision("create_quest",
-        recalled_requirement_ids=["PRIVATE_NOT_PRESENTED_MEMORY"]))
+    provider = ScriptedMock(
+        decision("create_quest", recalled_requirement_ids=["PRIVATE_NOT_PRESENTED_MEMORY"])
+    )
     instance = router(store, provider)
     instance.max_repairs = 0
     with pytest.raises(DomainError):

@@ -475,14 +475,21 @@ def measure_initial_worker_request(
     )
     # Include possible later Core definitions in the framing bound. This
     # grants no authority: runtime exposes each only under its existing policy.
-    expert_expansion_allowed = connection.execute(
-        "SELECT 1 FROM delegation_mandates WHERE quest_id=? AND state='active' "
-        "AND json_extract(policy_json,'$.version')='local-superagent-v2'", (quest["id"],),
-    ).fetchone() is not None
-    tools.extend(supplemental_worker_tools(
-        source_readback=True, help_allowed=True,
-        expert_expansion_allowed=expert_expansion_allowed,
-    ))
+    expert_expansion_allowed = (
+        connection.execute(
+            "SELECT 1 FROM delegation_mandates WHERE quest_id=? AND state='active' "
+            "AND json_extract(policy_json,'$.version')='local-superagent-v2'",
+            (quest["id"],),
+        ).fetchone()
+        is not None
+    )
+    tools.extend(
+        supplemental_worker_tools(
+            source_readback=True,
+            help_allowed=True,
+            expert_expansion_allowed=expert_expansion_allowed,
+        )
+    )
     if superagent:
         from .worker_superagent import TOOLS
 

@@ -44,11 +44,20 @@ def boundary_database(tmp_path):
 def complete(database):
     with sqlite3.connect(database) as c:
         c.execute("UPDATE quests SET status='completed' WHERE id='L2'")
-        c.execute("UPDATE task_nodes SET status='succeeded',worker_id='integrator' WHERE node_key='task_3'")
+        c.execute(
+            "UPDATE task_nodes SET status='succeeded',worker_id='integrator' WHERE node_key='task_3'"
+        )
 
 
-def notice(database, event_id="done", *, role="assistant", source="router_notice",
-           conversation="main", batch=None):
+def notice(
+    database,
+    event_id="done",
+    *,
+    role="assistant",
+    source="router_notice",
+    conversation="main",
+    batch=None,
+):
     metadata = {"source": source, "event_id": event_id}
     if batch is not None:
         metadata["source_event_ids"] = batch
@@ -80,15 +89,20 @@ def test_completed_label_and_notice_cannot_hide_unfinished_current_dag(boundary_
     assert not safe(boundary_database)
 
 
-@pytest.mark.parametrize("notice_arguments", [
-    None,
-    {"event_id": "claim"},
-    {"event_id": "other"},
-    {"role": "user"},
-    {"source": "worker"},
-    {"conversation": "other"},
-])
-def test_restart_requires_real_completed_notice_in_original_router(boundary_database, notice_arguments):
+@pytest.mark.parametrize(
+    "notice_arguments",
+    [
+        None,
+        {"event_id": "claim"},
+        {"event_id": "other"},
+        {"role": "user"},
+        {"source": "worker"},
+        {"conversation": "other"},
+    ],
+)
+def test_restart_requires_real_completed_notice_in_original_router(
+    boundary_database, notice_arguments
+):
     complete(boundary_database)
     if notice_arguments is not None:
         notice(boundary_database, **notice_arguments)
@@ -111,12 +125,16 @@ def test_completed_current_dag_reviewed_notice_and_l3_r2_wait_is_safe(boundary_d
 
 
 @pytest.mark.parametrize("confirmation", [None, False, 1, "true"])
-def test_unconfirmed_stop_never_reads_stopped_database_compacts_or_restarts(monkeypatch, confirmation):
+def test_unconfirmed_stop_never_reads_stopped_database_compacts_or_restarts(
+    monkeypatch, confirmation
+):
     actions = []
     report = {"checks": {}}
     stopped = {"graceful_confirmed": confirmation, "outcome": "unconfirmed"}
     core = SimpleNamespace(stop=lambda: stopped)
-    monkeypatch.setattr(driver, "restart_boundary", lambda *_args, **_kwargs: actions.append("read"))
+    monkeypatch.setattr(
+        driver, "restart_boundary", lambda *_args, **_kwargs: actions.append("read")
+    )
     with pytest.raises(driver.Failure, match="graceful_stop_unconfirmed_no_replay"):
         driver.stop_for_restart(core, "unused", report, required_completed_quest_ids=("L2",))
         actions.extend(["compact", "restart"])
@@ -137,12 +155,12 @@ def test_confirmed_stop_rechecks_identical_required_completed_quest(monkeypatch,
     monkeypatch.setattr(driver, "restart_boundary", boundary)
     core = SimpleNamespace(stop=lambda: {"graceful_confirmed": True})
     if still_safe:
-        driver.stop_for_restart(core, "same-database", report,
-                                required_completed_quest_ids=("L2",))
+        driver.stop_for_restart(core, "same-database", report, required_completed_quest_ids=("L2",))
     else:
         with pytest.raises(driver.Failure, match="restart_boundary_changed_no_replay"):
-            driver.stop_for_restart(core, "same-database", report,
-                                    required_completed_quest_ids=("L2",))
+            driver.stop_for_restart(
+                core, "same-database", report, required_completed_quest_ids=("L2",)
+            )
     assert actions == [("same-database", ("L2",))]
     assert report["checks"]["restart_graceful_stop_confirmed"] is True
 
@@ -154,8 +172,11 @@ def test_final_unconfirmed_stop_fails_closed_and_keeps_original_failure(tmp_path
     if original_failure:
         report.update(status="failed", failure_code=original_failure)
     driver.finalize_observations(
-        SimpleNamespace(stop=lambda: stopped), SimpleNamespace(shutdown=lambda **_kwargs: None),
-        tmp_path / "absent.sqlite3", report, task_count=2,
+        SimpleNamespace(stop=lambda: stopped),
+        SimpleNamespace(shutdown=lambda **_kwargs: None),
+        tmp_path / "absent.sqlite3",
+        report,
+        task_count=2,
     )
     assert report["status"] == "failed"
     assert report["failure_code"] == (
@@ -185,14 +206,22 @@ def test_stopped_r2_approval_must_keep_exact_pending_identity(monkeypatch, tampe
     report = {"checks": {}}
     if tamper is None:
         driver.stop_for_restart(
-            core, "database", report, required_completed_quest_ids=("L2",),
-            workspace="workspace", held_python_approvals=held,
+            core,
+            "database",
+            report,
+            required_completed_quest_ids=("L2",),
+            workspace="workspace",
+            held_python_approvals=held,
         )
     else:
         with pytest.raises(driver.Failure, match="restart_approval_boundary_changed_no_replay"):
             driver.stop_for_restart(
-                core, "database", report, required_completed_quest_ids=("L2",),
-                workspace="workspace", held_python_approvals=held,
+                core,
+                "database",
+                report,
+                required_completed_quest_ids=("L2",),
+                workspace="workspace",
+                held_python_approvals=held,
             )
     assert observed == [("database", "workspace", {"L3"})]
     assert report["checks"]["restart_exact_pending_approvals_preserved"] is (tamper is None)

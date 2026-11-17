@@ -75,8 +75,10 @@ class ModelRegistry:
                 for name in ("context_window", "max_output_tokens"):
                     if type(item.get(name)) is int and item[name] > 0:
                         declared[name] = item[name]
-                for field, name in (("supports_tool_calls", "tool_calling_support"),
-                    ("supports_structured_output", "structured_output_support")):
+                for field, name in (
+                    ("supports_tool_calls", "tool_calling_support"),
+                    ("supports_structured_output", "structured_output_support"),
+                ):
                     if type(item.get(field)) is bool:
                         declared[name] = ProtocolSupport(
                             supported=item[field], source="provider_declared"

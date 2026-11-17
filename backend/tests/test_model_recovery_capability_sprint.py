@@ -53,7 +53,9 @@ def test_health_separates_provenance_and_never_calls_transport_success_task_succ
 def test_health_unknown_reservation_is_not_reclassified_by_later_transport_success(worker):  # noqa: F811
     store, _, session, _, _, _ = worker
     with store.unit_of_work() as work:
-        row = work.connection.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
+        row = work.connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (session["id"],)
+        ).fetchone()
         reserve_worker_model_call(work.connection, row, "unresolved-call", 100, 10, None, [])
     observe(store, session["model_id"], ["success"], provider=session["provider_id"])
     with store.connection() as c:
@@ -135,7 +137,9 @@ def test_healthy_heartbeat_does_not_hide_stalled_worker_and_help_survives_restar
     assert len(report["stalled_workers"]) == 1 and report["stalled_components"] == []
     assert report["stalled_workers"][0]["recovery"] == "request_router_assessment"
     Watchdog(store, clock=lambda: 130.0, worker_progress_timeout=20).tick()
-    help_events = [event for event in store.list_events() if event["event_type"] == "worker.help_requested"]
+    help_events = [
+        event for event in store.list_events() if event["event_type"] == "worker.help_requested"
+    ]
     assert len(help_events) == 1
     with store.connection() as c:
         current = c.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
@@ -151,11 +155,15 @@ def test_capsule_checkpoint_advances_activity_but_not_outcomes_or_reclaim(worker
     watch.tick()
     now[0] = 115
     with store.unit_of_work() as work:
-        work.connection.execute("UPDATE worker_capsules SET revision=revision+1 WHERE run_id=?", (session["id"],))
+        work.connection.execute(
+            "UPDATE worker_capsules SET revision=revision+1 WHERE run_id=?", (session["id"],)
+        )
     assert watch.tick()["stalled_workers"] == []
     now[0] = 130
     with store.unit_of_work() as work:
-        work.connection.execute("UPDATE worker_runs SET generation=generation+1 WHERE id=?", (session["id"],))
+        work.connection.execute(
+            "UPDATE worker_runs SET generation=generation+1 WHERE id=?", (session["id"],)
+        )
     stalled = watch.tick()["stalled_workers"]
     assert stalled[0]["reason_code"] == "worker_no_productive_progress"
     now[0] = 136
@@ -166,9 +174,13 @@ def test_provider_wait_is_observed_once_without_stealing_lease_or_replaying(work
     store, _, session, _, model, tool = worker
     keep_live_lease(store, session["id"])
     with store.unit_of_work() as work:
-        row = work.connection.execute("SELECT * FROM worker_runs WHERE id=?", (session["id"],)).fetchone()
+        row = work.connection.execute(
+            "SELECT * FROM worker_runs WHERE id=?", (session["id"],)
+        ).fetchone()
         reserve_worker_model_call(work.connection, row, "wait-call", 100, 10, None, [])
-        work.connection.execute("INSERT INTO model_provider_cooldowns VALUES (?,?)", (row["provider_id"], 300))
+        work.connection.execute(
+            "INSERT INTO model_provider_cooldowns VALUES (?,?)", (row["provider_id"], 300)
+        )
     now = [100.0]
     watch = Watchdog(store, clock=lambda: now[0], worker_progress_timeout=20)
     watch.tick()
@@ -181,9 +193,21 @@ def test_provider_wait_is_observed_once_without_stealing_lease_or_replaying(work
     assert report["provider_issues"][0]["in_flight_calls"] == 1
     assert report["provider_issues"][0]["unknown_attempts"] == 0
     watch.tick()
-    assert len([event for event in store.list_events() if event["event_type"] == "worker.help_requested"]) == 1
+    assert (
+        len(
+            [
+                event
+                for event in store.list_events()
+                if event["event_type"] == "worker.help_requested"
+            ]
+        )
+        == 1
+    )
     with store.connection() as c:
-        assert c.execute("SELECT state FROM worker_runs WHERE id=?", (session["id"],)).fetchone()[0] == "running"
+        assert (
+            c.execute("SELECT state FROM worker_runs WHERE id=?", (session["id"],)).fetchone()[0]
+            == "running"
+        )
     assert model.calls == 0 and tool.calls == []
 
 
@@ -204,8 +228,22 @@ def test_two_watchdogs_emit_one_help_for_the_same_durable_frontier(worker):  # n
     keep_live_lease(store, session["id"])
     Watchdog(store, clock=lambda: 100, worker_progress_timeout=20).tick()
     with ThreadPoolExecutor(max_workers=2) as pool:
-        list(pool.map(lambda _: Watchdog(store, clock=lambda: 125, worker_progress_timeout=20).tick(), range(2)))
-    assert len([event for event in store.list_events() if event["event_type"] == "worker.help_requested"]) == 1
+        list(
+            pool.map(
+                lambda _: Watchdog(store, clock=lambda: 125, worker_progress_timeout=20).tick(),
+                range(2),
+            )
+        )
+    assert (
+        len(
+            [
+                event
+                for event in store.list_events()
+                if event["event_type"] == "worker.help_requested"
+            ]
+        )
+        == 1
+    )
 
 
 class ProbeMock:
@@ -222,8 +260,17 @@ class ProbeMock:
         dimension = request.messages[0]["content"].split(" ")[2].rstrip(".")
         expected = PROBES[dimension][1]
         if dimension == "coding":
-            expected = {"code": "def clamp(value, low, high):\n    if value < low:\n        return low\n    if value > high:\n        return high\n    return value\n"}
-        return ModelResponse(json.dumps(expected), [], {"input_tokens": 10, "output_tokens": 10}, "mock", request.model_id, "stop")
+            expected = {
+                "code": "def clamp(value, low, high):\n    if value < low:\n        return low\n    if value > high:\n        return high\n    return value\n"
+            }
+        return ModelResponse(
+            json.dumps(expected),
+            [],
+            {"input_tokens": 10, "output_tokens": 10},
+            "mock",
+            request.model_id,
+            "stop",
+        )
 
 
 def test_capability_probes_persist_bounded_measured_results_without_overriding_registry(tmp_path):
@@ -233,8 +280,13 @@ def test_capability_probes_persist_bounded_measured_results_without_overriding_r
     assert len(gateway.requests) == 6
     assert all(item["passed"] is True for item in report["results"] if item["status"] == "judged")
     assert report["results"][-1]["status"] == "unsupported"
-    assert all(request.max_retries == 0 and request.max_output_tokens == 512 for request in gateway.requests)
-    assert all(request.budget_context.purpose == "capability_benchmark" for request in gateway.requests)
+    assert all(
+        request.max_retries == 0 and request.max_output_tokens == 512
+        for request in gateway.requests
+    )
+    assert all(
+        request.budget_context.purpose == "capability_benchmark" for request in gateway.requests
+    )
     summary = runner.summarize("m", "mock", mode="mock")
     assert summary["measurements"]["coding"]["n_samples"] == 1
     assert summary["measurements"]["coding"]["confidence"]["lower"] < 0.21
@@ -244,7 +296,10 @@ def test_capability_probes_persist_bounded_measured_results_without_overriding_r
 
 
 def test_capability_failure_stops_further_calls_without_losing_diagnostic(tmp_path):
-    runner, gateway = CapabilityBenchmarkRunner(Store(tmp_path / "failed.sqlite3")), ProbeMock(fail=True)
+    runner, gateway = (
+        CapabilityBenchmarkRunner(Store(tmp_path / "failed.sqlite3")),
+        ProbeMock(fail=True),
+    )
     result = asyncio.run(runner.run(gateway, "m", mode="mock"))
     assert len(gateway.requests) == 1 and result["results"][0]["reason_code"] == "timeout"
     assert result["results"][1]["status"] == "not_attempted"
@@ -269,18 +324,29 @@ def test_capability_probes_use_real_gateway_accounting_with_scripted_http_only(t
             200,
             json={
                 "model": "m",
-                "choices": [{"message": {"content": json.dumps(expected)}, "finish_reason": "stop"}],
+                "choices": [
+                    {"message": {"content": json.dumps(expected)}, "finish_reason": "stop"}
+                ],
                 "usage": {"prompt_tokens": 10, "completion_tokens": 10},
             },
         )
 
     gateway = ProviderGateway(
-        ProviderConfig(id="p", kind="openai_compatible", base_url="https://example.invalid/v1", credential_ref="FORGE_PROVIDER_KEY_TEST"),
+        ProviderConfig(
+            id="p",
+            kind="openai_compatible",
+            base_url="https://example.invalid/v1",
+            credential_ref="FORGE_PROVIDER_KEY_TEST",
+        ),
         credential_resolver=lambda _: "placeholder",
         transport=httpx.MockTransport(answer),
         budget_ledger=ledger,
     )
-    report = asyncio.run(CapabilityBenchmarkRunner(store).run(gateway, "m", mode="mock", dimensions=["mathematics", "research"]))
+    report = asyncio.run(
+        CapabilityBenchmarkRunner(store).run(
+            gateway, "m", mode="mock", dimensions=["mathematics", "research"]
+        )
+    )
     assert all(item["passed"] for item in report["results"])
     with store.connection() as c:
         calls = c.execute("SELECT * FROM model_budget_attempts").fetchall()

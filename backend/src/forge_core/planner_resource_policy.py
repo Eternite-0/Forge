@@ -18,6 +18,7 @@ def planned_worker_output_tokens(node):
         return PLANNED_WORKER_OUTPUT_TOKENS
     return 4096 if complete_output_bytes <= 6144 else 8192
 
+
 # The objective itself remains complete in responsibility and the Worker task.
 # A reference avoids copying a 2000-character objective into a 1000-character
 # input-contract item during internal resource measurement.

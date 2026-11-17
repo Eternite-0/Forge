@@ -146,9 +146,7 @@ def performance_snapshot(connection, provider_id, model_id, *, mode="live", limi
             }
         )
         verdicts = [
-            row
-            for row in verdicts[:limit]
-            if json.loads(row["payload"]).get("run_id") in run_ids
+            row for row in verdicts[:limit] if json.loads(row["payload"]).get("run_id") in run_ids
         ]
         tools, attempts, events, reviews = (
             tools[:limit],
@@ -237,7 +235,12 @@ def performance_snapshot(connection, provider_id, model_id, *, mode="live", limi
     latest = max(
         [
             row["created_at"]
-            for row in [*observations, *runs, *(events if runs else []), *(verdicts if runs else [])]
+            for row in [
+                *observations,
+                *runs,
+                *(events if runs else []),
+                *(verdicts if runs else []),
+            ]
         ],
         default=None,
     )
@@ -325,6 +328,7 @@ def model_health_snapshot(
         if observation["outcome"] == "success":
             break
         failures += 1
+
     def in_flight(row):
         return (
             row["state"] == "reserved"
@@ -350,11 +354,13 @@ def model_health_snapshot(
         if (proof := completed_gateway_rejection_proof(connection, row["call_id"])) is not None
     }
     unknown_calls = {
-        row["call_id"] for row in [*unknown, *attempts]
+        row["call_id"]
+        for row in [*unknown, *attempts]
         if row["call_id"] not in rejected and not in_flight(row)
     }
     in_flight_calls = {
-        row["call_id"] for row in [*unknown, *attempts]
+        row["call_id"]
+        for row in [*unknown, *attempts]
         if row["call_id"] not in rejected and in_flight(row)
     }
     recommendation = (

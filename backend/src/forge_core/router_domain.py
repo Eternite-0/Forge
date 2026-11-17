@@ -34,7 +34,9 @@ class ExecutionTeam(BaseModel):
                 raise ValueError("Expert dependencies must reference earlier distinct assignments")
         if self.strategy == "single" and len(self.assignments) != 1:
             raise ValueError("Single strategy needs exactly one Worker")
-        if self.strategy in {"single", "parallel"} and any(item.depends_on for item in self.assignments):
+        if self.strategy in {"single", "parallel"} and any(
+            item.depends_on for item in self.assignments
+        ):
             raise ValueError("Independent expert strategy cannot contain dependencies")
         if self.strategy == "sequential" and any(
             item.depends_on != [index - 1] for index, item in enumerate(self.assignments) if index
@@ -45,7 +47,9 @@ class ExecutionTeam(BaseModel):
             or self.assignments[-1].depends_on != list(range(len(self.assignments) - 1))
             or any(item.depends_on for item in self.assignments[:-1])
         ):
-            raise ValueError("Hierarchical experts require independent specialists and one integrator")
+            raise ValueError(
+                "Hierarchical experts require independent specialists and one integrator"
+            )
         return self
 
 

@@ -42,17 +42,23 @@ class ScriptedThread:
         if request.budget_context.purpose == "independent_reviewer":
             packet = probe._request_packet(request.messages)
             assert packet["artifacts"] and any(r.get("context_only") for r in packet["receipts"])
-            return response({"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.9})
+            return response(
+                {"verdict": "PASS", "findings": [], "revision_goals": [], "confidence": 0.9}
+            )
         run_id = request.budget_context.worker_run_id
         with self.store.connection() as c:
             run = c.execute("SELECT * FROM worker_runs WHERE id=?", (run_id,)).fetchone()
             goal = c.execute("SELECT goal FROM quests WHERE id=?", (run["quest_id"],)).fetchone()[0]
             triggers = c.execute(
                 "SELECT t.* FROM superagent_triggers t JOIN superagent_subscriptions s "
-                "ON s.thread_id=t.thread_id WHERE s.run_id=? ORDER BY t.rowid", (run_id,),
+                "ON s.thread_id=t.thread_id WHERE s.run_id=? ORDER BY t.rowid",
+                (run_id,),
             ).fetchall()
-        pages = [json.loads(m["content"]) for m in request.messages if m["role"] == "tool"
-                 and '"payload_sha256"' in m.get("content", "")]
+        pages = [
+            json.loads(m["content"])
+            for m in request.messages
+            if m["role"] == "tool" and '"payload_sha256"' in m.get("content", "")
+        ]
         for trigger in triggers:
             prior = [p for p in pages if p.get("trigger_id") == trigger["id"]]
             cursor = max((p["offset_chars"] + len(p["text"]) for p in prior), default=0)
@@ -64,13 +70,20 @@ class ScriptedThread:
                 return tool("read_trigger", args, ordinal=self.calls)
         path = self.store.workspace.root / f"work/{run['quest_id']}/thread-result.json"
         if not path.exists():
-            texts = sorted((p for p in pages if p["trigger_id"] == triggers[-1]["id"]),
-                           key=lambda p: p["offset_chars"])
+            texts = sorted(
+                (p for p in pages if p["trigger_id"] == triggers[-1]["id"]),
+                key=lambda p: p["offset_chars"],
+            )
             addition = json.loads("".join(p["text"] for p in texts))
-            content = {"base": re.search(r"base='([^']+)'", goal)[1],
-                       "notes": [addition["z_required_note"]]}
-            return tool("file_write", {"path": str(path), "content": json.dumps(content)},
-                        ordinal=self.calls)
+            content = {
+                "base": re.search(r"base='([^']+)'", goal)[1],
+                "notes": [addition["z_required_note"]],
+            }
+            return tool(
+                "file_write",
+                {"path": str(path), "content": json.dumps(content)},
+                ordinal=self.calls,
+            )
         result = delivery("Actual JSON includes the complete Thread addition")
         result["artifacts"] = [str(path)]
         return response(result)
@@ -104,16 +117,31 @@ def test_thread_harness_refuses_retry_policy_before_generation(delegated):
     assert model.calls == 0
 
 
-@pytest.mark.parametrize("ledger_present", [False, True], ids=["missing-ledger", "missing-call-cap"])
+@pytest.mark.parametrize(
+    "ledger_present", [False, True], ids=["missing-ledger", "missing-call-cap"]
+)
 def test_thread_harness_live_requires_existing_capped_ledger(delegated, ledger_present):
     store = delegated[0]
-    ledger = ModelCallBudgetLedger(store.path, token_limit=220000, concurrency_limit=1) if ledger_present else None
-    gateway = ProviderGateway(ProviderConfig(
-        id="mock-provider", kind="openai_compatible", base_url="http://127.0.0.1:1/v1",
-        credential_ref="FORGE_PROVIDER_KEY_OFFLINE", max_retries=0,
-        allow_insecure_loopback=True,
-    ), budget_ledger=ledger)
+    ledger = (
+        ModelCallBudgetLedger(store.path, token_limit=220000, concurrency_limit=1)
+        if ledger_present
+        else None
+    )
+    gateway = ProviderGateway(
+        ProviderConfig(
+            id="mock-provider",
+            kind="openai_compatible",
+            base_url="http://127.0.0.1:1/v1",
+            credential_ref="FORGE_PROVIDER_KEY_OFFLINE",
+            max_retries=0,
+            allow_insecure_loopback=True,
+        ),
+        budget_ledger=ledger,
+    )
     report = asyncio.run(probe.run_thread(store, gateway))
-    assert report["failure_code"] == ("existing_live_ledger_call_limit_required" if ledger_present
-                                      else "existing_live_budget_ledger_required")
+    assert report["failure_code"] == (
+        "existing_live_ledger_call_limit_required"
+        if ledger_present
+        else "existing_live_budget_ledger_required"
+    )
     assert not report["passed"] and not report["worker_rounds"]

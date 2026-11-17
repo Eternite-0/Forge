@@ -231,7 +231,11 @@ def seed(workspace, level):
         local = source_root / (item["id"] + ".json")
         _write_new(local, _json(item))
         manifest.append(
-            {key: value for key, value in item.items() if key not in {"content", "numbered_content"}}
+            {
+                key: value
+                for key, value in item.items()
+                if key not in {"content", "numbered_content"}
+            }
             | {
                 "local_path": local.relative_to(workspace).as_posix(),
                 "file_sha256": _sha(local.read_bytes()),

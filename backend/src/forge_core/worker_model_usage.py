@@ -171,7 +171,10 @@ def completed_gateway_rejection_proof(connection, call_id):
             or attempt["worker_run_id"] != row["id"]
             or attempt["provider_id"] != record["provider_id"]
             or attempt["model_id"] != record["model_id"]
-            or any(attempt[name] is not None for name in ("input_charged", "output_charged", "cost_charged"))
+            or any(
+                attempt[name] is not None
+                for name in ("input_charged", "output_charged", "cost_charged")
+            )
             or type(attempt["input_reserved"]) is not int
             or attempt["input_reserved"] <= 0
             or attempt["output_reserved"] != record["output_limit"]

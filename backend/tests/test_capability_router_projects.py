@@ -22,8 +22,9 @@ def test_path_prefix_is_not_a_project_boundary(tmp_path, suffix):
     connection = sqlite3.connect(":memory:")
     connection.row_factory = sqlite3.Row
     connection.execute("CREATE TABLE workspace_projects(id,root,name,detected_at)")
-    connection.execute("INSERT INTO workspace_projects VALUES ('p1',?,'alpha','now')",
-                       (str(tmp_path / 'alpha'),))
+    connection.execute(
+        "INSERT INTO workspace_projects VALUES ('p1',?,'alpha','now')", (str(tmp_path / "alpha"),)
+    )
     context = project_context(connection, f"Continue `{tmp_path / ('alpha' + suffix)}`")
     assert context["selected_project_ids"] == []
     assert context["grants_tool_access"] is False
@@ -39,8 +40,10 @@ def test_parsed_paths_disambiguate_nested_and_same_name_projects(tmp_path):
     connection.execute("CREATE TABLE workspace_projects(id,root,name,detected_at)")
     roots = [tmp_path / "alpha", tmp_path / "other" / "alpha", tmp_path / "alpha" / "child"]
     for index, root in enumerate(roots):
-        connection.execute("INSERT INTO workspace_projects VALUES (?,?,?,'now')",
-                           (f"project_{index}", str(root), root.name))
+        connection.execute(
+            "INSERT INTO workspace_projects VALUES (?,?,?,'now')",
+            (f"project_{index}", str(root), root.name),
+        )
     for index, root in enumerate(roots):
         for path in (root, root / "file with spaces.py"):
             result = project_context(connection, f'Continue "{path}".')

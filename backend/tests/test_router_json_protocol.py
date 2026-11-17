@@ -27,15 +27,24 @@ from forge_core.store import Store
 
 
 def response(text):
-    return ModelResponse(text=text, tool_calls=[], usage={"input_tokens": 10, "output_tokens": 5}, finish_reason="mock")
+    return ModelResponse(
+        text=text,
+        tool_calls=[],
+        usage={"input_tokens": 10, "output_tokens": 5},
+        finish_reason="mock",
+    )
 
 
 def events(store, kind):
     return [json.loads(row["payload"]) for row in store.list_events() if row["event_type"] == kind]
 
 
-@pytest.mark.parametrize("compact,autonomous", [(False, False), (True, False), (False, True), (True, True)])
-def test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults(compact, autonomous):
+@pytest.mark.parametrize(
+    "compact,autonomous", [(False, False), (True, False), (False, True), (True, True)]
+)
+def test_strict_wire_schema_requires_only_all_advertised_properties_and_preserves_local_defaults(
+    compact, autonomous
+):
     original = RouterDecision.model_json_schema()
     snapshot = copy.deepcopy(original)
     schema = _decision_schema(compact=compact, autonomous=autonomous)
@@ -59,7 +68,10 @@ def test_strict_wire_schema_requires_only_all_advertised_properties_and_preserve
     assert legacy.constraints == [] and legacy.project_id is None
     if not compact and autonomous:
         jsonschema.validate(legacy.model_dump(mode="json"), schema)
-        assert {part.get("type") for part in schema["properties"]["project_id"]["anyOf"]} == {"string", "null"}
+        assert {part.get("type") for part in schema["properties"]["project_id"]["anyOf"]} == {
+            "string",
+            "null",
+        }
         assert schema["properties"]["constraints"]["type"] == "array"
 
 
@@ -101,7 +113,9 @@ def test_json_rejection_keeps_only_safe_shape_and_original_hash(tmp_path):
 
 def test_projection_preserves_properties_named_default_and_schema_constraints():
     original = {
-        "type": "object", "additionalProperties": False, "required": [],
+        "type": "object",
+        "additionalProperties": False,
+        "required": [],
         "properties": {
             "default": {"type": "string", "default": "legacy", "minLength": 1},
             "values": {"type": "array", "items": {"type": "integer"}, "maxItems": 3},
@@ -122,12 +136,18 @@ def test_nested_team_refs_resolve_and_list_defaults_are_required_arrays():
     assignment = schema["$defs"]["ExecutionAssignment"]
     assert assignment["required"] == ["objective", "role", "depends_on"]
     assert assignment["properties"]["depends_on"]["type"] == "array"
-    full = RouterDecision.model_validate(decision("create_quest", execution_team={
-        "strategy": "sequential", "assignments": [
-            {"objective": "Research sources", "role": "research", "depends_on": []},
-            {"objective": "Review source analysis", "role": "reviewer", "depends_on": [0]},
-        ],
-    })).model_dump(mode="json")
+    full = RouterDecision.model_validate(
+        decision(
+            "create_quest",
+            execution_team={
+                "strategy": "sequential",
+                "assignments": [
+                    {"objective": "Research sources", "role": "research", "depends_on": []},
+                    {"objective": "Review source analysis", "role": "reviewer", "depends_on": [0]},
+                ],
+            },
+        )
+    ).model_dump(mode="json")
     jsonschema.validate(full, schema)
     del full["execution_team"]["assignments"][0]["depends_on"]
     with pytest.raises(jsonschema.ValidationError):
@@ -137,13 +157,24 @@ def test_nested_team_refs_resolve_and_list_defaults_are_required_arrays():
         jsonschema.validate(full, schema)
 
 
-@pytest.mark.parametrize("text", [
-    'before\n```json\n{}\n```', '```json\n{}\n```\nafter',
-    '```json\n{}\n```\n```json\n{}\n```', '```json\n{}',
-    '```python\n{}\n```', '```JSON\n{}\n```', '````json\n{}\n````',
-    '```json extra\n{}\n```', '```json {} ```', ' ```json\n{}\n```',
-    '```json\n{}\n```\n', '```json\r\n{}\r\n```', '```json\n{}\r\n```',
-])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "before\n```json\n{}\n```",
+        "```json\n{}\n```\nafter",
+        "```json\n{}\n```\n```json\n{}\n```",
+        "```json\n{}",
+        "```python\n{}\n```",
+        "```JSON\n{}\n```",
+        "````json\n{}\n````",
+        "```json extra\n{}\n```",
+        "```json {} ```",
+        " ```json\n{}\n```",
+        "```json\n{}\n```\n",
+        "```json\r\n{}\r\n```",
+        "```json\n{}\r\n```",
+    ],
+)
 def test_nonexact_transport_is_rejected_unchanged(tmp_path, text):
     assert normalize_router_json_transport(text) == (text, None)
     shape = json_response_diagnostics(text)
@@ -158,18 +189,40 @@ def test_nonexact_transport_is_rejected_unchanged(tmp_path, text):
     assert len(provider.requests) == 1 and store.list_messages() == []
 
 
-@pytest.mark.parametrize("body,expected", [
-    ('{"intent":', "[root]: json_invalid"),
-    (json.dumps(decision(priority=99)), "priority: less_than_equal"),
-    (json.dumps(decision("create_quest", recalled_requirement_ids=["PRIVATE_UNKNOWN_MEMORY"])),
-        "recall_source_not_presented_or_ineligible"),
-    (json.dumps(decision("create_quest", execution_team={
-        "strategy": "parallel", "assignments": [
-            {"objective": "PRIVATE_INVALID_TEAM", "role": "research", "depends_on": [0]},
-        ],
-    })), "execution_team: team_dependencies_not_earlier_distinct"),
-])
-def test_transport_conversion_still_requires_original_schema_topology_and_recall(tmp_path, body, expected):
+@pytest.mark.parametrize(
+    "body,expected",
+    [
+        ('{"intent":', "[root]: json_invalid"),
+        (json.dumps(decision(priority=99)), "priority: less_than_equal"),
+        (
+            json.dumps(
+                decision("create_quest", recalled_requirement_ids=["PRIVATE_UNKNOWN_MEMORY"])
+            ),
+            "recall_source_not_presented_or_ineligible",
+        ),
+        (
+            json.dumps(
+                decision(
+                    "create_quest",
+                    execution_team={
+                        "strategy": "parallel",
+                        "assignments": [
+                            {
+                                "objective": "PRIVATE_INVALID_TEAM",
+                                "role": "research",
+                                "depends_on": [0],
+                            },
+                        ],
+                    },
+                )
+            ),
+            "execution_team: team_dependencies_not_earlier_distinct",
+        ),
+    ],
+)
+def test_transport_conversion_still_requires_original_schema_topology_and_recall(
+    tmp_path, body, expected
+):
     store = Store(tmp_path / "original-validators.sqlite3")
     text = "```json\n" + body + "\n```"
     provider = ScriptedMock(response(text))
@@ -198,7 +251,10 @@ def test_fenced_invalid_initial_is_reflected_raw_once_and_fenced_repair_is_valid
     assert result["intent"] == "chat" and len(provider.requests) == 2
     assert provider.requests[1].messages[-2] == {"role": "assistant", "content": invalid}
     assert provider.responses[0].text == invalid and provider.responses[1].text == corrected
-    assert [item["stage"] for item in events(store, "router.response_transport_normalized")] == ["initial", "repair"]
+    assert [item["stage"] for item in events(store, "router.response_transport_normalized")] == [
+        "initial",
+        "repair",
+    ]
     assert events(store, "router.decision_rejected")[0]["errors"] == ["priority: int_type"]
     assert "PRIVATE_INVALID_VALUE" not in json.dumps(store.list_events())
     assert "PRIVATE_INVALID_VALUE" not in json.dumps(store.list_messages())
@@ -209,7 +265,9 @@ def test_failed_fenced_reflection_does_not_add_a_second_repair(tmp_path):
     invalid = "```json\n" + json.dumps(decision(priority=99)) + "\n```"
     provider = ScriptedMock(response(invalid))
     with pytest.raises(DomainError, match="Invalid Router model decision"):
-        asyncio.run(router(store, provider).handle_user_message("Hello", request_id="bounded-fence"))
+        asyncio.run(
+            router(store, provider).handle_user_message("Hello", request_id="bounded-fence")
+        )
     assert len(provider.requests) == 2
     assert len(events(store, "router.response_transport_normalized")) == 2
     assert len(events(store, "router.decision_rejected")) == 2
@@ -240,22 +298,29 @@ def test_fenced_task_creation_keeps_atomic_turn_and_does_not_self_conflict(tmp_p
     repeated = asyncio.run(instance.handle_user_message("Analyze this project", request_id="task"))
     assert repeated == result and result["intent"] == "create_quest"
     assert len(provider.requests) == 1 and len(store.list_quests()) == 1
-    assert len(store.list_messages()) == 2 and len(events(store, "router.response_transport_normalized")) == 1
+    assert (
+        len(store.list_messages()) == 2
+        and len(events(store, "router.response_transport_normalized")) == 1
+    )
     with store.connection() as connection:
         assert connection.execute("SELECT count(*) FROM router_turns").fetchone()[0] == 1
 
 
-@pytest.mark.parametrize("text,first,error", [
-    ("", "empty", "expected_value"), ("  \n", "empty", "expected_value"),
-    ('{"a":1,}', "object", "expected_property_name"),
-    ('{"a":1} explanation', "object", "extra_data"),
-    ('Here is the decision: {"a":1}', "letter", "expected_value"),
-    ('{"a":', "object", "expected_value"),
-    ('{"a":"line\nvalue"}', "object", "invalid_control_character"),
-    ('{"a":"\\q"}', "object", "invalid_escape"),
-    ('\ufeff{"a":1}', "bom", "unexpected_bom"),
-    ('\u00a0{"a":1}', "non_json_whitespace", "expected_value"),
-])
+@pytest.mark.parametrize(
+    "text,first,error",
+    [
+        ("", "empty", "expected_value"),
+        ("  \n", "empty", "expected_value"),
+        ('{"a":1,}', "object", "expected_property_name"),
+        ('{"a":1} explanation', "object", "extra_data"),
+        ('Here is the decision: {"a":1}', "letter", "expected_value"),
+        ('{"a":', "object", "expected_value"),
+        ('{"a":"line\nvalue"}', "object", "invalid_control_character"),
+        ('{"a":"\\q"}', "object", "invalid_escape"),
+        ('\ufeff{"a":1}', "bom", "unexpected_bom"),
+        ('\u00a0{"a":1}', "non_json_whitespace", "expected_value"),
+    ],
+)
 def test_error_shapes_have_only_fixed_metadata(text, first, error):
     result = json_response_diagnostics(text)
     assert result["utf8_bytes"] == len(text.encode())
@@ -265,9 +330,16 @@ def test_error_shapes_have_only_fixed_metadata(text, first, error):
     assert result["json"]["line"] >= 1 and result["json"]["column"] >= 1
 
 
-@pytest.mark.parametrize("text,kind", [
-    ('"private"', "string"), ('[]', "array"), ('42', "number"), ('false', "boolean"), ('null', "null"),
-])
+@pytest.mark.parametrize(
+    "text,kind",
+    [
+        ('"private"', "string"),
+        ("[]", "array"),
+        ("42", "number"),
+        ("false", "boolean"),
+        ("null", "null"),
+    ],
+)
 def test_valid_json_wrong_root_remains_schema_rejection(text, kind):
     assert json_response_diagnostics(text)["json"] == {"syntax": "valid", "root_kind": kind}
     candidate, metadata = normalize_router_json_transport("```json\n" + text + "\n```")
@@ -278,7 +350,10 @@ def test_valid_json_wrong_root_remains_schema_rejection(text, kind):
 
 @pytest.mark.parametrize("text", ["NaN", "Infinity", "-Infinity", '{"x":NaN}'])
 def test_nonstandard_constants_have_fixed_codes(text):
-    assert json_response_diagnostics(text)["json"] == {"syntax": "invalid", "error_code": "nonfinite_number"}
+    assert json_response_diagnostics(text)["json"] == {
+        "syntax": "invalid",
+        "error_code": "nonfinite_number",
+    }
 
 
 def test_unicode_positions_count_characters_while_size_counts_utf8_bytes():
@@ -292,31 +367,40 @@ def test_unicode_positions_count_characters_while_size_counts_utf8_bytes():
 
 def test_no_private_fields_values_or_parser_messages_are_returned():
     marker = "PRIVATE_SECRET_NEVER_LOGGED_7b75"
-    for text in (json.dumps({marker: marker}) + " " + marker,
-        '```json\n{"' + marker + '":"' + marker + '"}\n```'):
+    for text in (
+        json.dumps({marker: marker}) + " " + marker,
+        '```json\n{"' + marker + '":"' + marker + '"}\n```',
+    ):
         encoded = json.dumps(json_response_diagnostics(text))
         assert marker not in encoded
         assert "Expecting" not in encoded and "Extra data" not in encoded
 
 
-@pytest.mark.parametrize("text,code", [
-    ("1" * 5000, "json_value_limit"), ("[" * 3000, "nesting_limit"),
-])
+@pytest.mark.parametrize(
+    "text,code",
+    [
+        ("1" * 5000, "json_value_limit"),
+        ("[" * 3000, "nesting_limit"),
+    ],
+)
 def test_parser_resource_limits_have_bounded_fixed_diagnostics(text, code):
     assert json_response_diagnostics(text)["json"] == {"syntax": "invalid", "error_code": code}
 
 
-@pytest.mark.parametrize("value", ["[" * 3000, '{"escaped": "\\\\\\\"["}' * 1200])
+@pytest.mark.parametrize("value", ["[" * 3000, '{"escaped": "\\\\\\"["}' * 1200])
 def test_nesting_limit_ignores_brackets_and_escaped_quotes_in_strings(value):
     assert json_response_diagnostics(json.dumps({"source": value}))["json"] == {
-        "syntax": "valid", "root_kind": "object",
+        "syntax": "valid",
+        "root_kind": "object",
     }
 
 
 @pytest.mark.parametrize("value", [None, 3, {}, []])
 def test_nontext_diagnostics_are_fixed_metadata(value):
     assert json_response_diagnostics(value) == {
-        "utf8_bytes": None, "first_token_class": "not_text", "single_json_fence": False,
+        "utf8_bytes": None,
+        "first_token_class": "not_text",
+        "single_json_fence": False,
         "json": {"syntax": "not_text", "error_code": "not_text"},
     }
 
@@ -332,11 +416,19 @@ def test_native_gateway_schema_tool_rounds_reflection_and_original_framing(tmp_p
         wire_requests.append(wire)
         index = len(wire_requests)
         if index == 1:
-            message = {"content": "```json\nPRIVATE_TOOL_TEXT\n```", "tool_calls": [{
-                "id": "lookup", "type": "function", "function": {
-                    "name": "list_quests", "arguments": "{}",
-                },
-            }]}
+            message = {
+                "content": "```json\nPRIVATE_TOOL_TEXT\n```",
+                "tool_calls": [
+                    {
+                        "id": "lookup",
+                        "type": "function",
+                        "function": {
+                            "name": "list_quests",
+                            "arguments": "{}",
+                        },
+                    }
+                ],
+            }
         else:
             full = RouterDecision.model_validate(decision()).model_dump(mode="json")
             properties = wire["response_format"]["json_schema"]["schema"]["properties"]
@@ -346,10 +438,15 @@ def test_native_gateway_schema_tool_rounds_reflection_and_original_framing(tmp_p
                 value["reply"] = 7
                 content = json.dumps(value)
             message = {"content": "```json\n" + content + "\n```"}
-        return httpx.Response(200, json={
-            "choices": [{"message": message, "finish_reason": "tool_calls" if index == 1 else "stop"}],
-            "usage": {"prompt_tokens": 20, "completion_tokens": 10},
-        })
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {"message": message, "finish_reason": "tool_calls" if index == 1 else "stop"}
+                ],
+                "usage": {"prompt_tokens": 20, "completion_tokens": 10},
+            },
+        )
 
     class ObservedGateway(ProviderGateway):
         async def generate(self, request):
@@ -357,33 +454,65 @@ def test_native_gateway_schema_tool_rounds_reflection_and_original_framing(tmp_p
             return await super().generate(request)
 
     gateway = ObservedGateway(
-        ProviderConfig(id="protocol", kind="openai_compatible", base_url="https://example.invalid/v1",
-            credential_ref="FORGE_PROVIDER_KEY_TEST", supports_tools=True, supports_json_schema=True,
-            max_retries=0),
+        ProviderConfig(
+            id="protocol",
+            kind="openai_compatible",
+            base_url="https://example.invalid/v1",
+            credential_ref="FORGE_PROVIDER_KEY_TEST",
+            supports_tools=True,
+            supports_json_schema=True,
+            max_retries=0,
+        ),
         credential_resolver=lambda _: "offline-placeholder",
         budget_ledger=ModelCallBudgetLedger(store.path, token_limit=500000, concurrency_limit=1),
         transport=httpx.MockTransport(transport),
     )
     gateway.requests = []
-    instance = RouterService(store, TeamComposer(ModelRegistry(store)), provider=gateway,
-        model_id="fixture", provider_id="protocol", context_limit=window, output_reserve=4096,
-        autonomous=True)
-    result = asyncio.run(instance.handle_user_message('Explain "中文" C:\\project\nbriefly', request_id="native"))
+    instance = RouterService(
+        store,
+        TeamComposer(ModelRegistry(store)),
+        provider=gateway,
+        model_id="fixture",
+        provider_id="protocol",
+        context_limit=window,
+        output_reserve=4096,
+        autonomous=True,
+    )
+    result = asyncio.run(
+        instance.handle_user_message('Explain "中文" C:\\project\nbriefly', request_id="native")
+    )
     assert result["intent"] == "chat" and len(wire_requests) == 3
     expected = _decision_schema(compact=window < 65536, autonomous=True)
     for wire, request in zip(wire_requests, gateway.requests, strict=True):
         assert wire["response_format"]["json_schema"] == {
-            "name": "router_decision", "strict": True, "schema": expected,
+            "name": "router_decision",
+            "strict": True,
+            "schema": expected,
         }
-        assert wire["messages"][1] == {"role": "system", "content": schema_format_instruction(expected)}
+        assert wire["messages"][1] == {
+            "role": "system",
+            "content": schema_format_instruction(expected),
+        }
         assert request.max_output_tokens == 4096 and request.context_limit == window
         assert len(json.dumps(wire, ensure_ascii=False).encode()) + 64 + 4096 <= window
     initial = gateway.requests[0]
-    measured = _router_initial_input_size(json.loads(initial.messages[1]["content"]), expected,
-        initial.tools, initial.model_id, initial.max_output_tokens)
+    measured = _router_initial_input_size(
+        json.loads(initial.messages[1]["content"]),
+        expected,
+        initial.tools,
+        initial.model_id,
+        initial.max_output_tokens,
+    )
     assert measured >= len(json.dumps(wire_requests[0], ensure_ascii=False).encode()) + 64
-    assert [request.budget_context.purpose for request in gateway.requests] == ["router", "router", "router_reflect"]
-    assert any(item.get("content") == "```json\nPRIVATE_TOOL_TEXT\n```" for item in wire_requests[1]["messages"])
+    assert [request.budget_context.purpose for request in gateway.requests] == [
+        "router",
+        "router",
+        "router_reflect",
+    ]
+    assert any(
+        item.get("content") == "```json\nPRIVATE_TOOL_TEXT\n```"
+        for item in wire_requests[1]["messages"]
+    )
     assert "tools" not in wire_requests[2]
     assert len(events(store, "router.response_transport_normalized")) == 2
     assert len(events(store, "router.decision_rejected")) == 1

@@ -94,7 +94,7 @@ def pending(
         if distinct_source_reads:
             path = f"work/input-{index}.txt"
             prefix = f"Distinct immutable source {index}: "
-            (tmp_path / path).write_text(prefix + source[len(prefix):], encoding="utf-8")
+            (tmp_path / path).write_text(prefix + source[len(prefix) :], encoding="utf-8")
         reads.append(tool("file_read", {"path": path}, ordinal=20 + index))
     model.responses[1:1] = reads
     assert asyncio.run(manager.run(worker["id"]))["state"] == "review_pending"
@@ -189,7 +189,9 @@ def test_compact_complete_owned_revision_still_requires_fresh_model_review(tmp_p
         assert service._rounds(connection, worker["id"]) == 2
 
 
-def test_immutable_receipts_exceeding_actual_context_cannot_get_capacity_revision(tmp_path, monkeypatch):
+def test_immutable_receipts_exceeding_actual_context_cannot_get_capacity_revision(
+    tmp_path, monkeypatch
+):
     store, manager, model, worker, packet, _ = pending(
         tmp_path, monkeypatch, source_reads=3, distinct_source_reads=True
     )

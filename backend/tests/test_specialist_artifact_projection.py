@@ -129,9 +129,7 @@ def test_extra_specialist_artifact_keeps_complete_evidence_and_native_admission_
     assert observed["artifacts"][0]["receipt_id"] == observed["receipts"][0]["id"]
     with store.connection() as connection:
         connection.execute("BEGIN")
-        run = connection.execute(
-            "SELECT * FROM worker_runs WHERE id=?", (worker["id"],)
-        ).fetchone()
+        run = connection.execute("SELECT * FROM worker_runs WHERE id=?", (worker["id"],)).fetchone()
         preview = review_capacity_preview(store, connection, run, model)
     assert preview["complete"] and preview["raw_packet_cap"] is None
     assert preview["raw_packet_bytes"] == len(_json(observed).encode("utf-8"))

@@ -73,43 +73,79 @@ def completed_specialists(store):
     """Explicit scripted storage fixture; no external execution is claimed."""
     quest, first = completed_task(store, "initial scripted completion")
     with store.connection() as connection:
-        template = dict(connection.execute("SELECT * FROM worker_runs WHERE quest_id=?", (quest.id,)).fetchone())
-        node = dict(connection.execute("SELECT * FROM task_nodes WHERE plan_id=?", (template["plan_id"],)).fetchone())
+        template = dict(
+            connection.execute("SELECT * FROM worker_runs WHERE quest_id=?", (quest.id,)).fetchone()
+        )
+        node = dict(
+            connection.execute(
+                "SELECT * FROM task_nodes WHERE plan_id=?", (template["plan_id"],)
+            ).fetchone()
+        )
     expected = []
     for index in range(3):
         if index:
             worker = WorkerSession(quest_id=quest.id, role="research")
             store.save_worker(worker)
-            run = {**template, "id": new_id("run"), "worker_id": worker.id,
-                   "node_key": f"task_{index}"}
+            run = {
+                **template,
+                "id": new_id("run"),
+                "worker_id": worker.id,
+                "node_key": f"task_{index}",
+            }
             task = {**node, "node_key": run["node_key"], "worker_id": worker.id}
             with store.unit_of_work() as work:
                 for table, row in (("task_nodes", task), ("worker_runs", run)):
                     work.connection.execute(
-                        f"INSERT INTO {table}("+",".join(row)+") VALUES ("+",".join("?" for _ in row)+")",
+                        f"INSERT INTO {table}("
+                        + ",".join(row)
+                        + ") VALUES ("
+                        + ",".join("?" for _ in row)
+                        + ")",
                         tuple(row.values()),
                     )
         else:
             run = template
-        delivery = {"summary": f"Specialist {index}: "+"observed grounded finding "*32,
-                    "findings": [f"Evidence {part}: "+"source-backed analysis "*13 for part in range(3)],
-                    "artifacts": [f"work/{quest.id}/report_{index}.json receipt:exact_{index}"]}
-        event = ForgeEvent(event_type="worker.result", quest_id=quest.id, worker_id=run["worker_id"],
-                           payload={**first.payload, "run_id": run["id"],
-                                    "task_node_key": run["node_key"], "claim": json.dumps(delivery)})
+        delivery = {
+            "summary": f"Specialist {index}: " + "observed grounded finding " * 32,
+            "findings": [
+                f"Evidence {part}: " + "source-backed analysis " * 13 for part in range(3)
+            ],
+            "artifacts": [f"work/{quest.id}/report_{index}.json receipt:exact_{index}"],
+        }
+        event = ForgeEvent(
+            event_type="worker.result",
+            quest_id=quest.id,
+            worker_id=run["worker_id"],
+            payload={
+                **first.payload,
+                "run_id": run["id"],
+                "task_node_key": run["node_key"],
+                "claim": json.dumps(delivery),
+            },
+        )
         store.append_event(event)
         with store.connection() as connection:
-            raw = connection.execute("SELECT payload FROM events WHERE id=?", (event.id,)).fetchone()[0]
-        expected.append({"source_event_id": event.id, "source_sha256": hashlib.sha256(raw.encode()).hexdigest(),
-                         **delivery})
+            raw = connection.execute(
+                "SELECT payload FROM events WHERE id=?", (event.id,)
+            ).fetchone()[0]
+        expected.append(
+            {
+                "source_event_id": event.id,
+                "source_sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                **delivery,
+            }
+        )
     constraints = ConstraintService(store)
     for index in range(4):
-        statement = f"Required source constraint {index}: "+"preserve evidence "*20
+        statement = f"Required source constraint {index}: " + "preserve evidence " * 20
         message = ConversationMessage(role="user", content=statement)
         store.add_message(message)
         constraints.record_extraction(statement, source_message_id=message.id, quest_id=quest.id)
-    completed = ForgeEvent(event_type="quest.status_changed", quest_id=quest.id,
-                           payload={"from": "running", "to": "completed"})
+    completed = ForgeEvent(
+        event_type="quest.status_changed",
+        quest_id=quest.id,
+        payload={"from": "running", "to": "completed"},
+    )
     store.append_event(completed)
     return quest, completed, expected
 
@@ -125,9 +161,13 @@ def test_complete_notice_facts_fit_without_repeating_the_ordinary_router_policy(
         # Necessary source facts already fit the unchanged 16000-byte bound.
         assert len(_json(context).encode("utf-8")) <= 16000
         summaries = context["notice"]["completed_delivery_summaries"]
-        assert {item["source_event_id"] for item in summaries} == {item["source_event_id"] for item in expected}
+        assert {item["source_event_id"] for item in summaries} == {
+            item["source_event_id"] for item in expected
+        }
         for actual in summaries:
-            original = next(item for item in expected if item["source_event_id"] == actual["source_event_id"])
+            original = next(
+                item for item in expected if item["source_event_id"] == actual["source_event_id"]
+            )
             for key in ("source_sha256", "summary", "findings", "artifacts"):
                 assert actual[key] == original[key]
             assert "reviewed Worker claim" in actual["trust"]
@@ -143,7 +183,7 @@ def test_complete_notice_facts_fit_without_repeating_the_ordinary_router_policy(
         work.connection.execute(
             "UPDATE event_inbox SET notice_token=?,notice_next_attempt=? "
             "WHERE consumer_id='router' AND event_id=?",
-            (token, time.time()+60, completed.id),
+            (token, time.time() + 60, completed.id),
         )
     assert asyncio.run(router._handle_notice([completed.id], token))
     assert len(model.requests) == 1

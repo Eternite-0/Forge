@@ -33,7 +33,9 @@ def _handoff_response_diagnostics(response, summary_bytes, provider_id, model_id
     if response.tool_calls:
         reasons.append("unexpected_tool_calls")
     if not isinstance(response.finish_reason, str) or response.finish_reason not in {
-        "stop", "end_turn", "stop_sequence"
+        "stop",
+        "end_turn",
+        "stop_sequence",
     }:
         reasons.append("incomplete_finish")
     if not isinstance(text, str):
@@ -52,9 +54,12 @@ def _handoff_response_diagnostics(response, summary_bytes, provider_id, model_id
         "response_utf8_bytes": len(encoded) if encoded is not None else None,
         "summary_limit_utf8_bytes": summary_bytes,
         "finish_class": finish
-        if isinstance(finish, str) and finish in {"stop", "end_turn", "stop_sequence", "tool_calls", "tool_use"}
+        if isinstance(finish, str)
+        and finish in {"stop", "end_turn", "stop_sequence", "tool_calls", "tool_use"}
         else ("missing" if finish is None else "other"),
-        "tool_call_count": len(response.tool_calls) if isinstance(response.tool_calls, list) else None,
+        "tool_call_count": len(response.tool_calls)
+        if isinstance(response.tool_calls, list)
+        else None,
         "provider_binding_matches": response.provider_id == provider_id,
         "model_binding_matches": response.model_id == model_id,
     }, reasons
@@ -86,7 +91,9 @@ class WorkerModelCompactor:
     def _fence(self, connection):
         return self.manager._fenced(connection, self.run_id, self.token)
 
-    def _record_handoff_rejection(self, prepared, selected, request, response, digest, summary_bytes, *, stage):
+    def _record_handoff_rejection(
+        self, prepared, selected, request, response, digest, summary_bytes, *, stage
+    ):
         metadata, reasons = _handoff_response_diagnostics(
             response, summary_bytes, self.provider_id, self.model_id
         )
@@ -104,7 +111,9 @@ class WorkerModelCompactor:
                     "input_digest": digest,
                     "frontier_sha256": _hash(prepared["snapshot"]),
                     "source_count": len(selected),
-                    "reason_codes": ["source_bound_handoff_validation"] if stage == "checkpoint" else reasons,
+                    "reason_codes": ["source_bound_handoff_validation"]
+                    if stage == "checkpoint"
+                    else reasons,
                     "usage_state": "gateway_and_local_settled",
                     "execution_mode": prepared["snapshot"]["run"]["execution_mode"],
                     **metadata,
@@ -357,7 +366,9 @@ class WorkerModelCompactor:
                 self.run_id,
                 input_budget=input_budget,
                 source_readback_available=source_readback_available,
-                _fence=lambda connection: self._checkpoint_fence(connection, request, response.usage),
+                _fence=lambda connection: self._checkpoint_fence(
+                    connection, request, response.usage
+                ),
                 _expected=prepared["snapshot"],
                 _handoff={"text": response.text, "input_digest": digest},
                 _max_sources=len(selected),

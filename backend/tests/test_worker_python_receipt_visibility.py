@@ -10,7 +10,9 @@ from forge_core.domain import DomainError
 from forge_core.worker_runtime import _worker_tool_output
 
 
-def test_scripted_model_uses_visible_failed_and_successful_python_receipt_ids(tmp_path, monkeypatch):
+def test_scripted_model_uses_visible_failed_and_successful_python_receipt_ids(
+    tmp_path, monkeypatch
+):
     captured = {}
     generate = ProtocolModel.generate
 
@@ -43,7 +45,9 @@ def test_scripted_model_uses_visible_failed_and_successful_python_receipt_ids(tm
                 (receipt_id,),
             ).fetchone()
             original = json.loads(receipt["result_json"])
-            assert {key: value for key, value in output.items() if key != "core_receipt"} == original
+            assert {
+                key: value for key, value in output.items() if key != "core_receipt"
+            } == original
             assert output["manifest_sha256"] == original["manifest_sha256"]
             assert output["core_receipt"] == {
                 "receipt_id": receipt_id,

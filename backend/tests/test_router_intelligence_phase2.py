@@ -136,7 +136,8 @@ def test_router_invalid_repair_is_bounded_and_has_no_turn_side_effects(tmp_path)
     assert len(provider.requests) == 2
     assert store.list_messages() == [] and store.list_quests() == []
     assert [event["event_type"] for event in store.list_events()] == [
-        "router.decision_rejected", "router.decision_rejected"
+        "router.decision_rejected",
+        "router.decision_rejected",
     ]
     assert store.ensure_router() == before
     with store.connection() as connection:

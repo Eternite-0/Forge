@@ -26,7 +26,9 @@ def _path_context(store, connection, quest_id):
             "reference": "project:" + row["id"],
             "source": "persisted_task_project_link",
             "grants_tool_access": False,
-        } if row is not None else None,
+        }
+        if row is not None
+        else None,
     }
 
 

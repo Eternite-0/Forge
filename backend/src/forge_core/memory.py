@@ -692,7 +692,9 @@ class MemoryService:
                         db.execute(
                             "SELECT 1 FROM task_project_links WHERE quest_id=? AND project_id=?",
                             (identity, project_id),
-                        ).fetchone() is None for identity in related
+                        ).fetchone()
+                        is None
+                        for identity in related
                     ):
                         continue
                 if not _kind_selected(item, kinds) or (layers and item["layer"] not in layers):

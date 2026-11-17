@@ -46,16 +46,22 @@ def injection_target(database, model):
     if model != PRIMARY or not Path(database).is_file():
         return None
     try:
-        active = read_rows(database, "SELECT attempt_id,purpose,worker_run_id,model_id,provider_id "
-                           "FROM model_budget_attempts WHERE state='reserved'")
+        active = read_rows(
+            database,
+            "SELECT attempt_id,purpose,worker_run_id,model_id,provider_id "
+            "FROM model_budget_attempts WHERE state='reserved'",
+        )
     except sqlite3.Error:
         return None
     if len(active) != 1:
         return None
     candidate = active[0]
-    if (candidate["purpose"] != "worker" or not candidate["worker_run_id"]
-            or candidate["model_id"] != PRIMARY
-            or candidate["provider_id"] != live_core.PROVIDER_ID):
+    if (
+        candidate["purpose"] != "worker"
+        or not candidate["worker_run_id"]
+        or candidate["model_id"] != PRIMARY
+        or candidate["provider_id"] != live_core.PROVIDER_ID
+    ):
         return None
     return candidate
 
@@ -65,9 +71,15 @@ class OneShotFaultProxy:
 
     def __init__(self, database, *, upstream=UPSTREAM, credential=None):
         parsed = urlsplit(upstream)
-        if (parsed.scheme != "http" or parsed.hostname != "127.0.0.1"
-                or parsed.username or parsed.password or parsed.query or parsed.fragment
-                or parsed.path != "/v1"):
+        if (
+            parsed.scheme != "http"
+            or parsed.hostname != "127.0.0.1"
+            or parsed.username
+            or parsed.password
+            or parsed.query
+            or parsed.fragment
+            or parsed.path != "/v1"
+        ):
             raise ValueError("Only the explicit loopback v1 upstream is supported")
         self.database, self.upstream = Path(database), upstream
         self._expected_authorization = None if credential is None else "Bearer " + credential
@@ -90,7 +102,8 @@ class OneShotFaultProxy:
             if target is None:
                 return None
             record = {
-                **target, "http_status": 503,
+                **target,
+                "http_status": 503,
                 "provenance": "intentional_host_fault_injection_not_natural_provider_failure",
                 "forwarded_upstream": False,
                 "request_sha256": hashlib.sha256(body).hexdigest(),
@@ -134,17 +147,26 @@ class OneShotFaultProxy:
                 try:
                     # Only the authenticated request's existing credential is
                     # forwarded to the named local upstream; no key is stored.
-                    headers = {name: self.headers[name] for name in ("Authorization", "Content-Type")
-                               if name in self.headers}
-                    with httpx.Client(trust_env=False, timeout=60, follow_redirects=False) as client:
+                    headers = {
+                        name: self.headers[name]
+                        for name in ("Authorization", "Content-Type")
+                        if name in self.headers
+                    }
+                    with httpx.Client(
+                        trust_env=False, timeout=60, follow_redirects=False
+                    ) as client:
                         response = client.request(
-                            self.command, owner.upstream + self.path.removeprefix("/v1"),
-                            headers=headers, content=body,
+                            self.command,
+                            owner.upstream + self.path.removeprefix("/v1"),
+                            headers=headers,
+                            content=body,
                         )
                     with owner._lock:
                         owner.forwarded += 1
                     self.send_response(response.status_code)
-                    self.send_header("Content-Type", response.headers.get("content-type", "application/json"))
+                    self.send_header(
+                        "Content-Type", response.headers.get("content-type", "application/json")
+                    )
                     self.send_header("Content-Length", str(len(response.content)))
                     self.end_headers()
                     self.wfile.write(response.content)
@@ -182,12 +204,19 @@ def registry_profiles(declared):
             raise ValueError("Both actual upstream model identities are required")
         context = resolve_context_declaration(model, 100000000 if model_id == PRIMARY else None)
         profile = deepcopy(live_core.MODEL_PROFILE)
-        profile.update(id=model_id, model_id=model_id, display_name=model_id,
-                       context_window=context["context_window"], max_output_tokens=min(
-                           8192, model.get("max_output_tokens", 8192)))
+        profile.update(
+            id=model_id,
+            model_id=model_id,
+            display_name=model_id,
+            context_window=context["context_window"],
+            max_output_tokens=min(8192, model.get("max_output_tokens", 8192)),
+        )
         for measurement in profile["capability_measurements"].values():
-            measurement.update(value=max(0, measurement["value"] - index * 10),
-                               source="operator_probe_eligibility_prior_unmeasured", n_samples=None)
+            measurement.update(
+                value=max(0, measurement["value"] - index * 10),
+                source="operator_probe_eligibility_prior_unmeasured",
+                n_samples=None,
+            )
         profile["provenance"] = {
             "context_declaration": context,
             "capability_source": "operator_probe_eligibility_prior_unmeasured",
@@ -198,39 +227,67 @@ def registry_profiles(declared):
     return profiles
 
 
-def failover_observations(database, workspace, quest_id, injected, initial_router, *, source_bytes=None):
+def failover_observations(
+    database, workspace, quest_id, injected, initial_router, *, source_bytes=None
+):
     state = snapshot(database)
     runs = read_rows(database, "SELECT id,quest_id,model_id,execution_mode,state FROM worker_runs")
-    attempts = read_rows(database, "SELECT attempt_id,purpose,model_id,state,input_charged,output_charged "
-                         "FROM model_budget_attempts ORDER BY rowid")
-    local_reserved = read_rows(database, "SELECT call_id,reserved_tokens,reserved_cost_microunits "
-                              "FROM worker_model_reservations WHERE state='reserved'")
+    attempts = read_rows(
+        database,
+        "SELECT attempt_id,purpose,model_id,state,input_charged,output_charged "
+        "FROM model_budget_attempts ORDER BY rowid",
+    )
+    local_reserved = read_rows(
+        database,
+        "SELECT call_id,reserved_tokens,reserved_cost_microunits "
+        "FROM worker_model_reservations WHERE state='reserved'",
+    )
     known_rejections, unresolved_local = [], []
     with closing(sqlite3.connect(Path(database).resolve().as_uri() + "?mode=ro", uri=True)) as c:
         c.row_factory = sqlite3.Row
         for reservation in local_reserved:
             proof = completed_gateway_rejection_proof(c, reservation["call_id"])
-            if (proof is not None and proof["attempt_id"] == injected.get("attempt_id")
-                    and proof["run_id"] == injected.get("worker_run_id")):
+            if (
+                proof is not None
+                and proof["attempt_id"] == injected.get("attempt_id")
+                and proof["run_id"] == injected.get("worker_run_id")
+            ):
                 known_rejections.append({**proof, **reservation})
             else:
                 unresolved_local.append(reservation)
-    replacements = [run for run in runs if run["quest_id"] == quest_id
-                    and run["id"] != injected.get("worker_run_id") and run["model_id"] == ALTERNATIVE]
+    replacements = [
+        run
+        for run in runs
+        if run["quest_id"] == quest_id
+        and run["id"] != injected.get("worker_run_id")
+        and run["model_id"] == ALTERNATIVE
+    ]
     events = [(event, json.loads(event["payload"])) for event in state["events"]]
-    reassigned = any(event["event_type"] == "superagent.expert_reassigned"
-                     and payload.get("source_run_id") == injected.get("worker_run_id")
-                     and payload.get("kind") == "model" for event, payload in events)
-    completed = any(quest["id"] == quest_id and quest["status"] == "completed" for quest in state["quests"])
-    passed = any(event["event_type"] == "review.result" and payload.get("verdict") == "PASS"
-                 and payload.get("run_id") in {run["id"] for run in replacements}
-                 for event, payload in events)
+    reassigned = any(
+        event["event_type"] == "superagent.expert_reassigned"
+        and payload.get("source_run_id") == injected.get("worker_run_id")
+        and payload.get("kind") == "model"
+        for event, payload in events
+    )
+    completed = any(
+        quest["id"] == quest_id and quest["status"] == "completed" for quest in state["quests"]
+    )
+    passed = any(
+        event["event_type"] == "review.result"
+        and payload.get("verdict") == "PASS"
+        and payload.get("run_id") in {run["id"] for run in replacements}
+        for event, payload in events
+    )
     path = workspace / "work" / quest_id / "recovered.txt"
     # Capture source_bytes before Core starts. Never accept a platform-specific
     # hardcoded newline or rebaseline a source modified during execution.
     source = workspace / "inputs/value.txt"
-    source_digest = hashlib.sha256(source_bytes).hexdigest() if isinstance(source_bytes, bytes) else None
-    input_unchanged = source_digest is not None and source.is_file() and source.read_bytes() == source_bytes
+    source_digest = (
+        hashlib.sha256(source_bytes).hexdigest() if isinstance(source_bytes, bytes) else None
+    )
+    input_unchanged = (
+        source_digest is not None and source.is_file() and source.read_bytes() == source_bytes
+    )
     correct_bytes = input_unchanged and path.is_file() and path.read_bytes() == source_bytes
     digest = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
     receipt_ok = correct_bytes and any(
@@ -240,52 +297,82 @@ def failover_observations(database, workspace, quest_id, injected, initial_route
         and write["execution_mode"] == "live"
         and json.loads(write["result_json"]).get("sha256") == source_digest == digest
         and json.loads(write["result_json"]).get("bytes") == len(source_bytes)
-        and any(source_read["run_id"] == write["run_id"] and source_read["tool_name"] == "file_read"
-                and source_read["execution_mode"] == "live"
-                and Path(source_read["resource_scope"]).resolve() == source.resolve()
-                and json.loads(source_read["result_json"]).get("sha256") == source_digest
-                and json.loads(source_read["result_json"]).get("content", "").encode("utf-8") == source_bytes
-                for source_read in state["receipts"])
-        and any(read["run_id"] == write["run_id"] and read["tool_name"] == "file_read"
-                and read["resource_scope"] == write["resource_scope"]
-                and read["execution_mode"] == "live"
-                and json.loads(read["result_json"]).get("content", "").encode("utf-8") == source_bytes
-                and json.loads(read["result_json"]).get("sha256") == digest
-                for read in state["receipts"])
+        and any(
+            source_read["run_id"] == write["run_id"]
+            and source_read["tool_name"] == "file_read"
+            and source_read["execution_mode"] == "live"
+            and Path(source_read["resource_scope"]).resolve() == source.resolve()
+            and json.loads(source_read["result_json"]).get("sha256") == source_digest
+            and json.loads(source_read["result_json"]).get("content", "").encode("utf-8")
+            == source_bytes
+            for source_read in state["receipts"]
+        )
+        and any(
+            read["run_id"] == write["run_id"]
+            and read["tool_name"] == "file_read"
+            and read["resource_scope"] == write["resource_scope"]
+            and read["execution_mode"] == "live"
+            and json.loads(read["result_json"]).get("content", "").encode("utf-8") == source_bytes
+            and json.loads(read["result_json"]).get("sha256") == digest
+            for read in state["receipts"]
+        )
         for write in state["receipts"]
     )
-    accounted = all(attempt["state"] == "settled" or (
-        attempt["attempt_id"] == injected.get("attempt_id") and attempt["state"] == "rejected"
-        and bool(known_rejections) and attempt["input_charged"] is None
-        and attempt["output_charged"] is None
-    ) for attempt in attempts) and not unresolved_local
-    unknown_tools = read_rows(database, "SELECT 1 FROM action_intents WHERE state='uncertain' "
-                             "UNION ALL SELECT 1 FROM worker_tool_calls WHERE state='uncertain' LIMIT 1")
+    accounted = (
+        all(
+            attempt["state"] == "settled"
+            or (
+                attempt["attempt_id"] == injected.get("attempt_id")
+                and attempt["state"] == "rejected"
+                and bool(known_rejections)
+                and attempt["input_charged"] is None
+                and attempt["output_charged"] is None
+            )
+            for attempt in attempts
+        )
+        and not unresolved_local
+    )
+    unknown_tools = read_rows(
+        database,
+        "SELECT 1 FROM action_intents WHERE state='uncertain' "
+        "UNION ALL SELECT 1 FROM worker_tool_calls WHERE state='uncertain' LIMIT 1",
+    )
     return {
         "checks": {
             "native_model_reassignment": reassigned,
-            "alternative_model_completed_real_worker": bool(replacements) and all(
-                run["state"] == "succeeded" and run["execution_mode"] == "live" for run in replacements),
+            "alternative_model_completed_real_worker": bool(replacements)
+            and all(
+                run["state"] == "succeeded" and run["execution_mode"] == "live"
+                for run in replacements
+            ),
             "real_artifact_matches_exact_acceptance": correct_bytes,
             "input_unchanged": input_unchanged,
             "replacement_source_bound_write_and_read_receipts": receipt_ok,
             "independent_reviewer_pass": passed,
             "quest_completed": completed,
             "same_original_router_delivered_result": state["router"] == initial_router
-                and quest_id in reviewed_notices_for_tasks(state),
+            and quest_id in reviewed_notices_for_tasks(state),
             "all_noninjected_attempts_settled": accounted,
             "known_rejection_reservation_retained_without_refund": len(known_rejections) == 1,
             "no_unknown_tool_outcomes": not unknown_tools,
         },
-        "injected_attempts": [attempt for attempt in attempts if attempt["attempt_id"] == injected.get("attempt_id")],
-        "real_upstream_attempts": [attempt for attempt in attempts if attempt["attempt_id"] != injected.get("attempt_id")],
+        "injected_attempts": [
+            attempt for attempt in attempts if attempt["attempt_id"] == injected.get("attempt_id")
+        ],
+        "real_upstream_attempts": [
+            attempt for attempt in attempts if attempt["attempt_id"] != injected.get("attempt_id")
+        ],
         "known_rejection_usage_unknown": known_rejections,
-        "worker_models": [{key: run[key] for key in ("id", "model_id", "state", "execution_mode")} for run in runs],
+        "worker_models": [
+            {key: run[key] for key in ("id", "model_id", "state", "execution_mode")} for run in runs
+        ],
         "artifact_sha256": digest,
-        "source_artifact_binding": {"source_path": "inputs/value.txt",
-                                    "baseline_sha256": source_digest,
-                                    "baseline_bytes": len(source_bytes) if isinstance(source_bytes, bytes) else None,
-                                    "artifact_sha256": digest},
+        "source_artifact_binding": {
+            "source_path": "inputs/value.txt",
+            "baseline_sha256": source_digest,
+            "baseline_bytes": len(source_bytes) if isinstance(source_bytes, bytes) else None,
+            "artifact_sha256": digest,
+        },
         "local_reserved_count": len(local_reserved),
         "unresolved_other_local_reservations": len(unresolved_local),
     }
@@ -297,36 +384,64 @@ def inflight_snapshot(database, injected):
         c.row_factory = sqlite3.Row
         c.execute("BEGIN")
         count = lambda query: c.execute(query).fetchone()[0]
-        local = c.execute("SELECT call_id FROM worker_model_reservations WHERE state='reserved'").fetchall()
+        local = c.execute(
+            "SELECT call_id FROM worker_model_reservations WHERE state='reserved'"
+        ).fetchall()
         unresolved, known = 0, 0
         for row in local:
             proof = completed_gateway_rejection_proof(c, row["call_id"])
-            if (proof and proof["attempt_id"] == injected.get("attempt_id")
-                    and proof["run_id"] == injected.get("worker_run_id")):
+            if (
+                proof
+                and proof["attempt_id"] == injected.get("attempt_id")
+                and proof["run_id"] == injected.get("worker_run_id")
+            ):
                 known += 1
             else:
                 unresolved += 1
         return {
             "model_calls": count("SELECT count(*) FROM model_budget_attempts"),
-            "provider_reserved": count("SELECT count(*) FROM model_budget_attempts WHERE state='reserved'"),
-            "provider_unknown": count("SELECT count(*) FROM model_budget_attempts WHERE state='unknown'"),
+            "provider_reserved": count(
+                "SELECT count(*) FROM model_budget_attempts WHERE state='reserved'"
+            ),
+            "provider_unknown": count(
+                "SELECT count(*) FROM model_budget_attempts WHERE state='unknown'"
+            ),
             "worker_model_unresolved": unresolved,
             "known_rejection_usage_unknown_reservations": known,
-            "tool_inflight": count("SELECT count(*) FROM action_intents WHERE state IN ('prepared','executing')"),
+            "tool_inflight": count(
+                "SELECT count(*) FROM action_intents WHERE state IN ('prepared','executing')"
+            ),
             "tool_unknown": count("SELECT count(*) FROM action_intents WHERE state='uncertain'"),
-            "worker_tool_inflight": count("SELECT count(*) FROM worker_tool_calls WHERE state='running'"),
-            "worker_tool_unknown": count("SELECT count(*) FROM worker_tool_calls WHERE state='uncertain'"),
-            "active_workers": count("SELECT count(*) FROM worker_runs WHERE state IN ('queued','running','review_pending')"),
-            "router_pending": count("SELECT count(*) FROM event_inbox WHERE consumer_id='router' AND processed_at IS NULL AND notice_dead_at IS NULL"),
-            "router_dead": count("SELECT count(*) FROM event_inbox WHERE consumer_id='router' AND notice_dead_at IS NOT NULL"),
+            "worker_tool_inflight": count(
+                "SELECT count(*) FROM worker_tool_calls WHERE state='running'"
+            ),
+            "worker_tool_unknown": count(
+                "SELECT count(*) FROM worker_tool_calls WHERE state='uncertain'"
+            ),
+            "active_workers": count(
+                "SELECT count(*) FROM worker_runs WHERE state IN ('queued','running','review_pending')"
+            ),
+            "router_pending": count(
+                "SELECT count(*) FROM event_inbox WHERE consumer_id='router' AND processed_at IS NULL AND notice_dead_at IS NULL"
+            ),
+            "router_dead": count(
+                "SELECT count(*) FROM event_inbox WHERE consumer_id='router' AND notice_dead_at IS NOT NULL"
+            ),
         }
 
 
 def no_pending_operations(counters):
-    return not any(counters[name] for name in (
-        "provider_reserved", "worker_model_unresolved", "tool_inflight",
-        "worker_tool_inflight", "active_workers", "router_pending",
-    ))
+    return not any(
+        counters[name]
+        for name in (
+            "provider_reserved",
+            "worker_model_unresolved",
+            "tool_inflight",
+            "worker_tool_inflight",
+            "active_workers",
+            "router_pending",
+        )
+    )
 
 
 def drain_before_stop(core, database, future, proxy, began):
@@ -353,17 +468,28 @@ def drain_before_stop(core, database, future, proxy, began):
             if signature != previous:
                 quiet, previous = time.monotonic(), signature
             if quiet is not None and time.monotonic() - quiet >= 2:
-                unknown = any(counters[name] for name in (
-                    "provider_unknown", "tool_unknown", "worker_tool_unknown", "router_dead",
-                ))
+                unknown = any(
+                    counters[name]
+                    for name in (
+                        "provider_unknown",
+                        "tool_unknown",
+                        "worker_tool_unknown",
+                        "router_dead",
+                    )
+                )
                 outcome = "drained_with_unknown_preserved" if unknown else "quiescent"
                 break
         else:
             quiet, previous = None, None
         time.sleep(min(0.25, max(0, deadline - time.monotonic())))
-    return {"provenance": "programmatic_host_read_only_drain_no_new_work_or_replay",
-            "max_seconds": DRAIN_LIMIT, "elapsed_seconds": round(time.monotonic() - started, 3),
-            "outcome": outcome, "last_counters": counters, "read_error_types": failures}
+    return {
+        "provenance": "programmatic_host_read_only_drain_no_new_work_or_replay",
+        "max_seconds": DRAIN_LIMIT,
+        "elapsed_seconds": round(time.monotonic() - started, 3),
+        "outcome": outcome,
+        "last_counters": counters,
+        "read_error_types": failures,
+    }
 
 
 def run(*, key):
@@ -376,13 +502,23 @@ def run(*, key):
     source_bytes = source.read_bytes()
     source_hash = hashlib.sha256(source_bytes).hexdigest()
     database = workspace / "data/forge.sqlite3"
-    report = {"run_id": identifier, "status": "failed", "execution_mode": "live",
-              "experiment": "intentional_single_http_503_model_replacement_not_natural_failure",
-              "upstream_identity": "unverified_proxy_reported_identity",
-              "limits": {"http_attempts": CALL_LIMIT, "tokens": TOKEN_LIMIT, "seconds": WALL_LIMIT, "retries": 0},
-              "source_sha256": source_digest(), "checks": {},
-              "driver_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-              "comparison_scope": "one_failover_condition_no_claim_of_optimal_model_or_team"}
+    report = {
+        "run_id": identifier,
+        "status": "failed",
+        "execution_mode": "live",
+        "experiment": "intentional_single_http_503_model_replacement_not_natural_failure",
+        "upstream_identity": "unverified_proxy_reported_identity",
+        "limits": {
+            "http_attempts": CALL_LIMIT,
+            "tokens": TOKEN_LIMIT,
+            "seconds": WALL_LIMIT,
+            "retries": 0,
+        },
+        "source_sha256": source_digest(),
+        "checks": {},
+        "driver_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "comparison_scope": "one_failover_condition_no_claim_of_optimal_model_or_team",
+    }
     core = None
     executor = ThreadPoolExecutor(max_workers=1)
     future = None
@@ -392,60 +528,99 @@ def run(*, key):
     with OneShotFaultProxy(database, credential=key) as proxy:
         try:
             with httpx.Client(trust_env=False, timeout=15, follow_redirects=False) as client:
-                discovery = client.get(proxy.base_url + "/models", headers={"Authorization": "Bearer " + key})
+                discovery = client.get(
+                    proxy.base_url + "/models", headers={"Authorization": "Bearer " + key}
+                )
                 discovery.raise_for_status()
                 profiles = registry_profiles(discovery.json()["data"])
             report["model_context_declarations"] = {
-                profile["model_id"]: profile["provenance"]["context_declaration"] for profile in profiles
+                profile["model_id"]: profile["provenance"]["context_declaration"]
+                for profile in profiles
             }
             env = live_core.provider_env_from_key(key)
-            env.update(FORGE_PROVIDER_BASE_URL=proxy.base_url, FORGE_MODEL_CALL_LIMIT=str(CALL_LIMIT),
-                       FORGE_PROVIDER_MAX_RETRIES="0", FORGE_PROVIDER_TIMEOUT_SECONDS="60",
-                       FORGE_ROUTER_CONTEXT_LIMIT=str(profiles[0]["context_window"]))
-            core = live_core.LiveCore(workspace, provider_env=env, token_limit=TOKEN_LIMIT, concurrency=1)
+            env.update(
+                FORGE_PROVIDER_BASE_URL=proxy.base_url,
+                FORGE_MODEL_CALL_LIMIT=str(CALL_LIMIT),
+                FORGE_PROVIDER_MAX_RETRIES="0",
+                FORGE_PROVIDER_TIMEOUT_SECONDS="60",
+                FORGE_ROUTER_CONTEXT_LIMIT=str(profiles[0]["context_window"]),
+            )
+            core = live_core.LiveCore(
+                workspace, provider_env=env, token_limit=TOKEN_LIMIT, concurrency=1
+            )
             core.start(timeout=45)
             for profile in profiles:
                 result = core.call("POST", "/api/models", profile, timeout=15)
                 if result["status"] != 200:
                     raise ValueError("Registry eligibility registration failed")
             initial_router = snapshot(database)["router"]
-            prompt = (f'Work in local project "{workspace}". Use one coding Worker (single strategy). '
-                      "Read inputs/value.txt with a governed tool; write its exact bytes to "
-                      "work/<your actual quest_id>/recovered.txt and read the written file back. "
-                      "Do not modify inputs. Report the real paths and receipts in the original Router. "
-                      "Acceptance is exact byte preservation, source-bound write/read receipts and independent review. "
-                      "No Python, shell, network or additional expertise is required.")
-            future = executor.submit(core.call, "POST", "/api/conversation/message",
-                                     {"content": prompt, "request_id": identifier}, timeout=75)
+            prompt = (
+                f'Work in local project "{workspace}". Use one coding Worker (single strategy). '
+                "Read inputs/value.txt with a governed tool; write its exact bytes to "
+                "work/<your actual quest_id>/recovered.txt and read the written file back. "
+                "Do not modify inputs. Report the real paths and receipts in the original Router. "
+                "Acceptance is exact byte preservation, source-bound write/read receipts and independent review. "
+                "No Python, shell, network or additional expertise is required."
+            )
+            future = executor.submit(
+                core.call,
+                "POST",
+                "/api/conversation/message",
+                {"content": prompt, "request_id": identifier},
+                timeout=75,
+            )
             while time.monotonic() - began < WALL_LIMIT - DRAIN_LIMIT - STOP_RESERVE:
                 if core.process.poll() is not None:
                     raise ValueError("Core exited")
                 if future.done():
                     response = future.result()
-                    if response["status"] != 200 or response["body"].get("intent") != "create_quest":
+                    if (
+                        response["status"] != 200
+                        or response["body"].get("intent") != "create_quest"
+                    ):
                         raise ValueError("Router did not create the task")
                     quest_id = response["body"].get("quest_id")
                 attempts = read_rows(database, "SELECT state FROM model_budget_attempts")
                 if any(row["state"] == "unknown" for row in attempts):
                     raise ValueError("Unknown model outcome preserved without replay")
                 if quest_id and proxy.injections:
-                    report.update(failover_observations(database, workspace, quest_id,
-                                                       proxy.injections[0], initial_router, source_bytes=source_bytes))
+                    report.update(
+                        failover_observations(
+                            database,
+                            workspace,
+                            quest_id,
+                            proxy.injections[0],
+                            initial_router,
+                            source_bytes=source_bytes,
+                        )
+                    )
                     counters = inflight_snapshot(database, proxy.injections[0])
                     ready = all(report["checks"].values()) and no_pending_operations(counters)
-                    signature = (len(attempts), snapshot(database)["message_digest"], json.dumps(counters, sort_keys=True))
+                    signature = (
+                        len(attempts),
+                        snapshot(database)["message_digest"],
+                        json.dumps(counters, sort_keys=True),
+                    )
                     if ready:
-                        quiet = quiet if quiet is not None and quiet[0] == signature else (signature, time.monotonic())
+                        quiet = (
+                            quiet
+                            if quiet is not None and quiet[0] == signature
+                            else (signature, time.monotonic())
+                        )
                         if time.monotonic() - quiet[1] >= 2:
                             break
                     else:
                         quiet = None
-                if len(attempts) >= CALL_LIMIT and not any(row["state"] == "reserved" for row in attempts):
+                if len(attempts) >= CALL_LIMIT and not any(
+                    row["state"] == "reserved" for row in attempts
+                ):
                     raise ValueError("HTTP attempt ceiling reached")
                 time.sleep(0.25)
             else:
                 raise TimeoutError("Bounded failover observation expired")
-            report["checks"]["input_unchanged"] = hashlib.sha256(source.read_bytes()).hexdigest() == source_hash
+            report["checks"]["input_unchanged"] = (
+                hashlib.sha256(source.read_bytes()).hexdigest() == source_hash
+            )
             report["checks"]["exactly_one_known_fault"] = len(proxy.injections) == 1
             report["checks"]["no_forwarding_transport_failures"] = not proxy.forward_errors
             report["status"] = "passed" if all(report["checks"].values()) else "failed"
@@ -456,15 +631,23 @@ def run(*, key):
                 future.cancel()
             if core:
                 if database.is_file():
-                    report["shutdown_drain"] = drain_before_stop(core, database, future, proxy, began)
+                    report["shutdown_drain"] = drain_before_stop(
+                        core, database, future, proxy, began
+                    )
                     if report["shutdown_drain"]["outcome"] != "quiescent":
                         report["status"] = "failed"
                 core.stop()
             executor.shutdown(wait=False, cancel_futures=True)
             if database.is_file() and quest_id and proxy.injections:
                 try:
-                    final = failover_observations(database, workspace, quest_id,
-                                                  proxy.injections[0], initial_router, source_bytes=source_bytes)
+                    final = failover_observations(
+                        database,
+                        workspace,
+                        quest_id,
+                        proxy.injections[0],
+                        initial_router,
+                        source_bytes=source_bytes,
+                    )
                     final["checks"] = {**report["checks"], **final["checks"]}
                     report.update(final)
                     if not all(report["checks"].values()):

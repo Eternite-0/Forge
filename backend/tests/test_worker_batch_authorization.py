@@ -119,7 +119,9 @@ def test_batch_does_not_resume_changed_or_unknown_operations(tmp_path, tamper):
         elif tamper == "count":
             c.execute("UPDATE worker_runs SET tool_spent=tool_spent-1")
         elif tamper == "unknown":
-            c.execute("UPDATE worker_tool_calls SET state='uncertain' WHERE model_call_id='batch-1'")
+            c.execute(
+                "UPDATE worker_tool_calls SET state='uncertain' WHERE model_call_id='batch-1'"
+            )
         else:
             c.execute(
                 """INSERT INTO action_intents

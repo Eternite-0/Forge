@@ -40,7 +40,9 @@ def conversation_routes(*, get_store, submit_turn):
             raise HTTPException(status_code=422, detail="Invalid conversation cursor") from None
 
     @routes.get("/turn")
-    def get_committed_turn(response: Response, request_id: str = Query(min_length=1, max_length=200)):
+    def get_committed_turn(
+        response: Response, request_id: str = Query(min_length=1, max_length=200)
+    ):
         response.headers["Cache-Control"] = "no-store"
         return read_committed_turn(get_store(), request_id)
 

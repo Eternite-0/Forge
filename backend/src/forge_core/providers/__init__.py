@@ -48,7 +48,7 @@ def _discovered_model(item, provider_id):
             if field not in item:
                 continue
             value = item[field]
-            if (type(value) is bool if boolean else type(value) is int and value > 0):
+            if type(value) is bool if boolean else type(value) is int and value > 0:
                 valid[field] = value
             else:
                 invalid.append(field)
