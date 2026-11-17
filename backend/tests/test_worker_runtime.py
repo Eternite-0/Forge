@@ -599,21 +599,28 @@ def test_gateway_unsent_worker_reservation_is_refunded(graph, blocked, monkeypat
         observer=lambda *args: observations.append(args),
         transport=httpx.MockTransport(lambda request: sent.append(request) or httpx.Response(500)),
     )
+    # Lease fencing uses logical time; host/SQLite scheduling is not the subject
+    # of these proven-unsent admission tests. Keep the actual short lease.
+    logical_now = time.time()
     manager = WorkerManager(
         store,
         ProviderPool({"mock-provider": gateway}),
         MockToolEngine(),
         team_authority=MockApprovedTeam(plan),
         lease_seconds=0.3,
+        clock=lambda: logical_now,
     )
     session = manager.start(quest.id, plan["id"], "n", team_digest="team", member_index=0)
 
     async def exercise():
+        before_send = asyncio.Event()
         if blocked == "semaphore":
             await gateway._semaphore.acquire()
+            assert gateway._semaphore.locked()
         if blocked == "cancel":
 
             async def wait_before_send(**_kwargs):
+                before_send.set()
                 await asyncio.Event().wait()
 
             monkeypatch.setattr(gateway, "_pace", wait_before_send)
@@ -621,7 +628,9 @@ def test_gateway_unsent_worker_reservation_is_refunded(graph, blocked, monkeypat
             gateway._next_request = time.monotonic() + 2
         task = asyncio.create_task(manager.run(session["id"]))
         if blocked == "cancel":
-            await asyncio.sleep(0.05)
+            # Cancel only after the Gateway has established unsent proof.
+            # This timeout is a deadlock watchdog, not a lease advance.
+            await asyncio.wait_for(before_send.wait(), timeout=10)
             task.cancel()
             with pytest.raises(asyncio.CancelledError):
                 await task
@@ -638,11 +647,23 @@ def test_gateway_unsent_worker_reservation_is_refunded(graph, blocked, monkeypat
             "SELECT steps,token_spent FROM worker_runs WHERE id=?", (session["id"],)
         ).fetchone()[:] == (0, 0)
         assert connection.execute("SELECT COUNT(*) FROM model_budget_attempts").fetchone()[0] == 0
+        # Zero attempts alone cannot prove we reached the refund path.
+        reservations = connection.execute(
+            "SELECT state,input_tokens,output_tokens FROM worker_model_reservations WHERE run_id=?",
+            (session["id"],),
+        ).fetchall()
+        assert [tuple(row) for row in reservations] == [("refunded", 0, 0)]
         if blocked in {"semaphore", "rate"}:
             row = connection.execute(
                 "SELECT state,lease_token,lease_until FROM worker_runs WHERE id=?", (session["id"],)
             ).fetchone()
             assert row[:] == ("queued", None, None)
+            assert (
+                connection.execute(
+                    "SELECT next_attempt_at FROM worker_runs WHERE id=?", (session["id"],)
+                ).fetchone()[0]
+                == logical_now + 1
+            )
 
 
 @pytest.mark.parametrize("blocked", ["semaphore", "rate"])
