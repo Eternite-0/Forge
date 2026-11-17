@@ -41,3 +41,17 @@ Verify no-agent chat, multiple related runs, a run failure, a second scope,
 connection changes, and refresh/restart separately. Browser fixtures establish
 UI behavior, not model execution; offline Core and native app/provider tests
 are distinct acceptance levels.
+
+## Active work and finished history
+
+The list endpoint accepts `phase=all|active|terminal` (`all` by default).
+Active includes queued work, blocked or paused agents, work waiting for review,
+and running agents whose lease expired. Only an authoritative succeeded, failed,
+or cancelled state places a run in terminal history. Filtering takes place
+before paging, so a newer block of finished runs cannot crowd out older active
+agents.
+
+A cursor belongs to one workspace, conversation, optional project, and phase.
+An expired or mismatched cursor restarts that list rather than being applied to
+another scope. Exact run detail does not depend on phase and remains readable
+when the run moves between active and terminal.

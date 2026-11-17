@@ -17,11 +17,13 @@ interface AgentPanelProps {
   onRun: (run: WorkerRun) => void;
   onActivity: () => void;
   onOlder?: () => void;
+  activeMore?: boolean;
+  onActiveOlder?: () => void;
   onClose: () => void;
 }
 
 /** A persistent conversation companion, with identities shared by the transcript. */
-export default function AgentPanel({ state, sources, events, conversationFiles, onConversationFiles, filesChanged, onChanges, onSource, onRun, onActivity, onOlder, onClose }: AgentPanelProps) {
+export default function AgentPanel({ state, sources, events, conversationFiles, onConversationFiles, filesChanged, onChanges, onSource, onRun, onActivity, onOlder, activeMore, onActiveOlder, onClose }: AgentPanelProps) {
   const [expanded, setExpanded] = useState(false), [allSources, setAllSources] = useState(false);
   const [menu, setMenu] = useState(false);
   const menuAnchor = useRef<HTMLDivElement>(null);
@@ -59,6 +61,7 @@ export default function AgentPanel({ state, sources, events, conversationFiles, 
         {runs.map(run => <div className="agent-panel-run" key={run.run_id} data-run-id={run.run_id}>
           <button type="button" className="agent-panel-run-button" onClick={() => onRun(run)} title={run.model_id || undefined}><AgentAvatar identity={run.worker_id || run.run_id} size={16} /><span>{agentRole(run.role)}</span><small data-state={run.state}>{statusLabel(run.state)}</small></button>
         </div>)}
+        {activeMore && onActiveOlder && <button type="button" className="agent-panel-all" disabled={state.loading} onClick={onActiveOlder}>加载更多进行中与待处理</button>}
         {state.hasMore && <button type="button" className="agent-panel-all" disabled={state.loading} onClick={onOlder || onActivity}>查看更早的运行</button>}
       </div>
     </section>

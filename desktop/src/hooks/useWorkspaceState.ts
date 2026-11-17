@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { EMPTY, text, asRecord } from "../workspaceTypes";
 import { useWorkerActivity } from "../ConversationRuntime";
-import { captureTimelineReading } from "../captureTimelineReading";
 import useRuntimeState from "./useRuntimeState";
 import useWorkspaceNavigation from "./useWorkspaceNavigation";
 import useConversationState from "./useConversationState";
@@ -14,10 +13,7 @@ export default function useWorkspaceState() {
   const connectionKey = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "";
   const coreInfo = coreSnapshot.key === connectionKey ? coreSnapshot.settings : {};
   const routerInfo = coreSnapshot.key === connectionKey ? coreSnapshot.router : {};
-  const workerActivity = useWorkerActivity(connection, () => {
-    const anchor = captureTimelineReading(state.scrollRef.current, state.followBottom.current);
-    if (anchor) state.readingAnchor.current = anchor;
-  });
+  const workerActivity = useWorkerActivity(connection);
   const savedCredentialProvider = asRecord(asRecord(coreInfo.config).provider);
   const savedProviderId = text(savedCredentialProvider.id, "");
   const savedCredentialRef = text(savedCredentialProvider.credential_ref, "");

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Connection } from "../api";
-import { agentRole, agentTask, agentState, agentOutcome, agentMilestone, agentActive, type ConversationAgent } from "../conversationAgents";
+import { agentRole, agentTask, agentState, agentOutcome, agentMilestone, agentActive, orderedAgents, type ConversationAgent } from "../conversationAgents";
 import useConversationAgents from "../hooks/useConversationAgents";
 import { statusLabel } from "../presentation";
 import AgentAvatar from "./AgentAvatar";
@@ -9,21 +9,33 @@ import "../styles/conversation-agents.css";
 type Feed = ReturnType<typeof useConversationAgents>;
 export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (run: ConversationAgent) => void }) {
   const [expanded, setExpanded] = useState(false);
-  if (!feed.items.length || feed.error || !feed.connected) return null;
-  return <section className="conversation-agents" aria-label="本对话子智能体" data-scroll-key="conversation-agents">
+  const section = useRef<HTMLElement>(null);
+  const restoreRowFocus = useRef<HTMLElement | null>(null);
+  const focused = document.activeElement as HTMLElement | null;
+  restoreRowFocus.current = focused?.matches(".conversation-agent-row") && section.current?.contains(focused) ? focused : null;
+  useLayoutEffect(() => {
+    if (document.activeElement === document.body && restoreRowFocus.current?.isConnected) restoreRowFocus.current.focus({ preventScroll: true });
+    restoreRowFocus.current = null;
+  }, [feed.items]);
+  const ordered = orderedAgents(feed.items);
+  if (!feed.items.length || !feed.connected) return null;
+  return <section ref={section} className="conversation-agents" aria-label="本对话子智能体" data-scroll-key="conversation-agents">
     <button className="conversation-agents-toggle" type="button" aria-expanded={expanded} aria-controls="conversation-agent-runs" onClick={() => setExpanded(!expanded)}>
       <span className="agent-avatar-stack">{feed.items.slice(0, 3).map(run => <AgentAvatar key={run.run_id} identity={run.worker_id || run.run_id} size={18} />)}</span>
-      <span>本对话子智能体 · {feed.items.length}{feed.hasMore ? "+" : ""}</span><span aria-hidden="true">{expanded ? "⌃" : "⌄"}</span>
+      <span>本对话子智能体 · {feed.items.length}{feed.hasMore || feed.activeMore ? "+" : ""}</span><span aria-hidden="true">{expanded ? "⌃" : "⌄"}</span>
     </button>
     {expanded && <div id="conversation-agent-runs" className="conversation-agent-runs">
       <p className="conversation-agent-caption">本对话已委派的工作 · 已加载 {feed.items.length} 项{feed.hasMore ? "（还有更早记录）" : ""}</p>
-      {[true, false].map(active => {
-        const items = feed.items.filter(run => agentActive(run) === active);
-        return items.length > 0 && <div key={String(active)}><p className="conversation-agent-caption">{active ? "进行中与待处理" : "已结束"}</p>{items.map(run => <button type="button" className="conversation-agent-row" key={run.run_id} onClick={() => onSelect(run)}>
+      {feed.legacy && <p className="conversation-agent-caption">Core 使用较早的分页接口，仅显示已加载记录；活跃记录可能在更早页。</p>}
+      {feed.error && <p role="status" className="conversation-agent-caption">{feed.error}<button type="button" onClick={feed.refresh}>重新读取</button></p>}
+      {ordered.flatMap((run, index) => [
+        (index === 0 || agentActive(ordered[index - 1]) !== agentActive(run)) && <p key={agentActive(run) ? "active-heading" : "terminal-heading"} className="conversation-agent-caption">{agentActive(run) ? "进行中与待处理" : "已结束"}</p>,
+        <button type="button" className="conversation-agent-row" key={`run:${run.run_id}`} onClick={() => onSelect(run)}>
         <AgentAvatar identity={run.worker_id || run.run_id} size={20} />
         <span><strong>{agentRole(run.role)}</strong><span title={agentTask(run)}>{agentTask(run)}</span></span>
         <small data-state={run.state}>{agentState(run) || statusLabel(run.state)}{run.execution_mode === "mock" ? " · 模拟" : ""}</small><span aria-hidden="true">›</span>
-      </button>)}</div>; })}
+      </button>])}
+      {feed.activeMore && <button type="button" className="conversation-agents-older" disabled={feed.loading} onClick={feed.loadActive}>加载更多进行中与待处理</button>}
       {feed.hasMore && <button type="button" className="conversation-agents-older" disabled={feed.loading} onClick={feed.loadOlder}>{feed.loading ? "正在读取…" : "加载更早的子智能体"}</button>}
     </div>}
   </section>;

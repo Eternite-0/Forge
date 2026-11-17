@@ -23,7 +23,7 @@ export default function useWorkspaceController() {
   const operations = useWorkspaceOperations({ ...state, ...session });
   const conversation = useConversationSend({ ...state, ...feed });
   const workspace = { ...state, ...viewport, ...preview, ...session, ...feed, ...inspector, ...operations, ...conversation };
-  const { connection, view, setView, setSettingsOpen, sidebarCollapsed, setSetting, messages, timelineEvents, outgoing, sending, selectedId, setSelectedId, setActionError, coreInfo, visiblePanel, visiblePlan, previewOpen, previewExpanded, perform, workerActivity, setSuggestedRouterModel } = workspace;
+  const { connection, view, setView, setSettingsOpen, sidebarCollapsed, setSetting, messages, timelineEvents, outgoing, sending, selectedId, setSelectedId, setActionError, coreInfo, visiblePanel, visiblePlan, previewOpen, previewExpanded, perform, setSuggestedRouterModel } = workspace;
   const plan = visiblePlan.value as Row | null;
   const panelItems = (view === "memory" || view === "approvals") && visiblePanel.value && typeof visiblePanel.value === "object" && !Array.isArray(visiblePanel.value) ? rows((visiblePanel.value as Row).items) :
     view === "activity" && visiblePanel.value && typeof visiblePanel.value === "object" && !Array.isArray(visiblePanel.value) ? rows((visiblePanel.value as Row).items ?? (visiblePanel.value as Row).events) : rows(visiblePanel.value);
@@ -46,7 +46,7 @@ export default function useWorkspaceController() {
   };
   const compactNavigation = sidebarCollapsed || previewOpen && previewExpanded;
   const hasTaskUpdates = !!connection && (workspace.pendingApprovals.length > 0 || taskProgress(workspace.quests, timelineEvents, messages).length > 0);
-  const home = !messages.length && !timelineEvents.length && !outgoing.length && !workerActivity.items.length && !hasTaskUpdates;
+  const home = !messages.length && !timelineEvents.length && !outgoing.length && !hasTaskUpdates;
   const lastRequest = [...messages].reverse().find(message => message.role === "user");
   const conversationTitle = lastRequest?.content?.replace(/\s+/g, " ").trim().slice(0, 180) || undefined;
   const conversationFiles = [...new Set(timelineEvents.flatMap((event) => {

@@ -135,7 +135,7 @@ export default function useConversationFeed(workspace: WorkspaceState & ReturnTy
       readingAnchor.current = null;
       element.scrollTop = element.scrollHeight;
     }
-  }, [messages, timelineEvents, outgoing, view, coreSnapshot, previewOpen, previewWidth, workspace.workerActivity.items, workspace.quests, workspace.pendingApprovals]);
+  }, [messages, timelineEvents, outgoing, view, coreSnapshot, previewOpen, previewWidth, workspace.quests, workspace.pendingApprovals]);
 
   const loadOlder = async () => {
     if (!connection || (!before && !timelineBefore) || historyBusy) return;

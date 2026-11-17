@@ -131,8 +131,9 @@ async (page, { outputDir }) => {
   await page.waitForFunction(() => document.querySelector('.process-transcript > summary')?.textContent.includes('当前运行失败'), null, { timeout: 10000 });
   check(!(await panel.isVisible()) && !(await process.evaluate(element => element.open)) && await process.locator(':scope > summary .event-failed').isVisible(), 'a failed current run stays visible on the collapsed process header even when only successful receipts are loaded and the Agent card is hidden');
   runs = runs.map(run => run.run_id === 'panel-run-c' ? { ...run, state: 'unknown' } : run);
-  await page.waitForFunction(() => document.querySelector('.process-transcript > summary')?.textContent.includes('当前状态未知'), null, { timeout: 10000 });
-  check(!(await panel.isVisible()) && !(await process.evaluate(element => element.open)) && await process.locator(':scope > summary .event-unknown').isVisible() && await process.locator(':scope > summary .event-failed').count() === 0, 'an unknown current state replaces the failed state visibly without rewriting successful historical receipts');
+  await page.waitForResponse(response => new URL(response.url()).pathname === '/api/conversations/main/subagents');
+  await page.waitForTimeout(100);
+  check(!(await panel.isVisible()) && !(await process.evaluate(element => element.open)) && await process.locator(':scope > summary .event-failed').isVisible() && await process.locator(':scope > summary .event-unknown').count() === 0, 'a delayed unknown observation cannot replace the already confirmed terminal failure of the same run');
   runs = runs.map(run => ({ ...run, state: 'succeeded' }));
   await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 执行成功') && !document.querySelector('.process-transcript > summary .event-unknown'), null, { timeout: 10000 });
   check(await process.locator(':scope > summary .event-failed, :scope > summary .event-unknown').count() === 0, 'a recovered run clears current risk labels while the recorded receipts remain unchanged');

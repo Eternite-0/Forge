@@ -8,7 +8,7 @@ export interface ConversationAgent extends WorkerRun {
   source: { kind: "message" | "trigger"; id: string };
   outcome: { kind: string; label: string }; milestones: AgentMilestone[];
 }
-export interface AgentPage { conversation_id: string; workspace_id?: string; items: ConversationAgent[]; has_more: boolean; next_before: string | null }
+export interface AgentPage { phase?: "all" | "active" | "terminal"; conversation_id: string; workspace_id?: string; items: ConversationAgent[]; has_more: boolean; next_before: string | null }
 export interface AgentDetail { conversation_id: string; workspace_id?: string; item: ConversationAgent }
 
 export function scopedAgents(page: AgentPage, conversation = "main", workspace?: string): ConversationAgent[] {
@@ -37,3 +37,15 @@ export const agentActive = (run: ConversationAgent) => !["failed", "cancelled", 
 /** Assignment identifies a specialist; the parent task title stays in detail. */
 export const agentTask = (run: Pick<ConversationAgent, "task_objective" | "task_title">) =>
   (run.task_objective?.trim() || run.task_title?.trim() || "已委派任务").replace(/\s+/g, " ");
+
+export function validateAgentPhase(page: AgentPage, phase: "active" | "terminal" | "all"): void {
+  if (phase === "all" || page.phase === undefined) return;
+  if (page.phase !== phase) throw new Error("子智能体分页范围不一致。");
+  const allowed = phase === "active" ? ["queued", "running", "paused", "blocked", "review_pending"] : ["succeeded", "failed", "cancelled"];
+  if (page.items.some(item => !allowed.includes(item.state || ""))) throw new Error("子智能体分页状态不一致。");
+}
+
+/** Preserve stable order within each bucket, while newly admitted active work stays visible. */
+export const orderedAgents = (items: ConversationAgent[]) => [
+  ...items.filter(agentActive), ...items.filter(item => !agentActive(item)),
+];
