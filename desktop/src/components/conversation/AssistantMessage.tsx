@@ -13,11 +13,13 @@ function CopyReply({ content, onInspect }: { content: string; onInspect: () => v
 }
 
 
-export default function AssistantMessage({ message, native, onInspect }: { message: ChatMessage; native: boolean; onInspect: () => void }) {
+export default function AssistantMessage({ message, native, onInspect, onViewTask }: { message: ChatMessage; native: boolean; onInspect: () => void; onViewTask?: () => void }) {
   const meta = messageMetadata(message.metadata);
   return <article data-scroll-key={`message:${message.id}`} className="message from-agent">
     {meta.execution_mode === "mock" && <span className="message-demo-label">模拟记录</span>}
-    <div className="message-body"><Markdown content={message.content} native={native} onInspect={onInspect} /></div>
+    <div className="message-body"><Markdown content={message.content} native={native} onInspect={onInspect} />
+      {onViewTask && <button type="button" className="text-button completion-task-link" onClick={() => { onInspect(); onViewTask(); }}>查看任务</button>}
+    </div>
     <CopyReply content={message.content} onInspect={onInspect} />
   </article>;
 }

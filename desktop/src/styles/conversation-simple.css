@@ -8,3 +8,4 @@
 .conversation-agent-technical > summary { cursor: pointer; color: var(--color-text-secondary); font-size: 13px; padding-block: 6px; }
 .conversation-agent-technical > dl { margin-top: 16px; }
 @media (max-width: 600px) { .conversation-execution-details { margin-block: 12px; } .conversation-execution-body { padding: 8px; } }
+.message-body .completion-task-link { display: block; min-height: 32px; margin-top: 4px; text-align: start; }
