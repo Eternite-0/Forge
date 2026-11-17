@@ -12,6 +12,7 @@ from datetime import datetime
 from pydantic import ValidationError
 
 from .domain import DomainError
+from .token_policy import token_budgets_enforced
 
 
 def valid_expert_tool_call(call, policy):
@@ -158,7 +159,13 @@ def check_residual_allocation(connection, quest_id, members, policy):
     ).fetchone()
     if (
         total[0] + len(members) > policy["max_workers"]
-        or total[1] + sum(member["estimated_tokens"] for member in members) > policy["max_tokens"]
+        # This is the Core-generated cumulative allocation estimate, not usage
+        # or a monetary ceiling. Honor the same optional policy as Worker start.
+        or (
+            token_budgets_enforced()
+            and total[1] + sum(member["estimated_tokens"] for member in members)
+            > policy["max_tokens"]
+        )
         or total[2] + sum(member["max_tool_calls"] for member in members) > policy["max_tools"]
     ):
         raise DomainError("Replacement exceeds residual mandate allocation")
