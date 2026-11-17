@@ -1611,10 +1611,10 @@ class RouterService:
         )
         if model_context_exceeded and completion_handoff_sources is None:
             raise DomainError("Router notice context budget exceeded")
-        oversized_completion = (
+        completion_handoff = (
             context["budget"]["input_estimate"] > 16000 or model_context_exceeded
         ) and completion_handoff_sources is not None
-        if oversized_completion:
+        if completion_handoff:
             # A Core state notification, not a shortened/reinterpreted result.
             # Full claims remain untouched; never submit an over-budget request.
             decision = NoticeDecision(
@@ -1656,24 +1656,58 @@ class RouterService:
                     ),
                 )
             else:
-                response = await self.provider.generate(request)
                 try:
+                    response = await self.provider.generate(request)
+                except Exception as exc:
+                    # Only generation failure on the completion event's last
+                    # durable attempt may degrade to a Core-only notification.
+                    # Cancellation, invalid output and commit/CAS failures do
+                    # not enter this handler. Busy providers retain their refund.
+                    from .providers import ProviderError
+
+                    final_completion_attempt = any(
+                        item["event_type"] == "quest.status_changed"
+                        and json.loads(item["payload"]).get("to") == "completed"
+                        and item["notice_attempts"] >= 5
+                        for item in grouped
+                    )
                     if (
-                        getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
-                        or len(response.text.encode("utf-8")) > self.output_reserve * 8
+                        completion_handoff_sources is None
+                        or not final_completion_attempt
+                        or (
+                            isinstance(exc, ProviderError) and exc.code == "concurrency_unavailable"
+                        )
                     ):
-                        raise ValueError("Invalid response")
-                    decision = NoticeDecision.model_validate_json(response.text)
-                    if decision.action in {"update_user", "replan_remaining"} and (
-                        not decision.reply or len(decision.reply) > 10000
-                    ):
-                        raise ValueError("A bounded update is required")
-                    if decision.action == "replan_remaining" and not adaptive_plan:
-                        raise ValueError("Remaining planning is not available for this event")
-                    if decision.action == "silent" and decision.reply is not None:
-                        raise ValueError("Silent decisions cannot include a reply")
-                except (TypeError, ValueError, ValidationError) as exc:
-                    raise DomainError("Invalid Router notice decision") from exc
+                        raise
+                    completion_handoff = True
+                    decision = NoticeDecision(
+                        action="update_user",
+                        reply="任务已完成。结果摘要暂不可用。",
+                    )
+                if not completion_handoff:
+                    try:
+                        if (
+                            getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
+                            or len(response.text.encode("utf-8")) > self.output_reserve * 8
+                        ):
+                            raise ValueError("Invalid response")
+                        decision = NoticeDecision.model_validate_json(response.text)
+                        if decision.action in {"update_user", "replan_remaining"} and (
+                            not decision.reply or len(decision.reply) > 10000
+                        ):
+                            raise ValueError("A bounded update is required")
+                        if decision.action == "replan_remaining" and not adaptive_plan:
+                            raise ValueError("Remaining planning is not available for this event")
+                        if decision.action == "silent" and decision.reply is not None:
+                            raise ValueError("Silent decisions cannot include a reply")
+                    except (TypeError, ValueError, ValidationError) as exc:
+                        raise DomainError("Invalid Router notice decision") from exc
+                    if decision.action == "silent" and completion_handoff_sources is not None:
+                        completion_handoff = True
+                        decision = NoticeDecision(
+                            action="update_user",
+                            reply="任务已完成。结果摘要暂不可用。",
+                        )
         with self.store.unit_of_work() as work:
             current = work.connection.execute(
                 "SELECT processed_at FROM event_inbox WHERE consumer_id='router' AND event_id=? AND notice_token=? AND notice_next_attempt>?",
@@ -1695,7 +1729,7 @@ class RouterService:
                     _completed_context(work.connection, [dict(quest)]) if quest else []
                 ):
                     return False
-            if oversized_completion and completion_handoff_sources != _completion_handoff_sources(
+            if completion_handoff and completion_handoff_sources != _completion_handoff_sources(
                 work.connection, notice["quest_id"], grouped, completed_sources
             ):
                 return False
@@ -1728,7 +1762,7 @@ class RouterService:
                             "source_event_ids": event_ids,
                             "execution_mode": (
                                 "programmatic"
-                                if pending_review or oversized_completion
+                                if pending_review or completion_handoff
                                 else "mock"
                                 if mode == "mock"
                                 else "live"
@@ -1741,7 +1775,7 @@ class RouterService:
                                     "completion_execution_mode": "live",
                                     "completion_result_sources": completion_handoff_sources,
                                 }
-                                if oversized_completion
+                                if completion_handoff
                                 else {}
                             ),
                         },
