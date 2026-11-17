@@ -94,6 +94,7 @@ async (page, { outputDir }) => {
   await page.waitForFunction(() => document.activeElement?.textContent.includes('docs/A.md'));
   await page.keyboard.press('Escape');
   await panel.waitFor({state:'hidden'});
+  await page.waitForFunction(() => document.activeElement?.matches('.conversation-agent-row'));
   check(await page.locator('.conversation-agent-row').evaluate(e=>e===document.activeElement), 'detail back restores selected run focus in execution list');
   await page.getByRole('button',{name:'返回对话',exact:false}).click();
   check(await draft.inputValue() === '保留这个演示草稿' && await door.evaluate(e=>e===document.activeElement), 'main back preserves draft and restores entry focus');

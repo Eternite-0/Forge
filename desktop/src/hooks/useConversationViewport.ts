@@ -96,6 +96,9 @@ export default function useConversationViewport(workspace: WorkspaceState) {
     const footer = composerInput.current?.closest<HTMLElement>(".composer-wrap");
     if (!footer) return;
     const observer = new ResizeObserver(() => {
+      // Hiding the mounted conversation for execution navigation is not a
+      // composer resize. Preserve its reservation so Back has stable geometry.
+      if (!footer.getClientRects().length) return;
       const shell = footer.closest<HTMLElement>(".conversation-shell");
       shell?.style.setProperty("--conversation-footer-height", `${footer.offsetHeight}px`);
       shell?.style.setProperty("--composer-bottom-offset", `${footer.offsetHeight + 12}px`);

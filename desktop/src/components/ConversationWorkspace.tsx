@@ -11,6 +11,7 @@ import { isNearBottom, shouldSubmitOnEnter } from "../logic";
 import { asRecord } from "../workspaceTypes";
 import type { WorkspaceController } from "../hooks/useWorkspaceController";
 import "../styles/execution-screen.css";
+import { captureTimelineReading, type TimelineReadingAnchor } from "../captureTimelineReading";
 
 export default function ConversationWorkspace({ workspace, connectionSetup }: { workspace: WorkspaceController; connectionSetup?: ReactNode }) {
   const { native, connection, runtimeStatus, workspaceOperation, restoreFenced, view, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspaceName, routerStatus, selectSetting, decideApproval, home: conversationHome, conversationFiles, taskView, settingsOpen } = workspace;
@@ -22,23 +23,53 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
   const executionOpen = executionIdentity === connectionKey && !!connection && !taskView;
   const executionBack = useRef<HTMLButtonElement>(null);
   const executionScroll = useRef<HTMLDivElement>(null);
-  const chatReturn = useRef<{ node: HTMLElement | null; top: number }>({ node: null, top: 0 });
+  type ChatReturn = { identity: string; epoch: number; node: HTMLElement | null; top: number; follow: boolean; manual: boolean; paused: boolean; anchor: TimelineReadingAnchor | null };
+  const navigationEpoch = useRef(0);
+  const chatReturn = useRef<ChatReturn | null>(null);
+  const pendingReturn = useRef<ChatReturn | null>(null);
+  const rememberChatReturn = () => {
+    pendingReturn.current = null;
+    chatReturn.current = { identity: connectionKey, epoch: ++navigationEpoch.current, node: document.activeElement as HTMLElement | null,
+      top: scrollRef.current?.scrollTop || 0, follow: followBottom.current, manual: manualPause.current, paused: readingPaused,
+      anchor: captureTimelineReading(scrollRef.current, followBottom.current) };
+  };
   const openExecution = () => {
     captureReadingPosition();
-    chatReturn.current = { node: document.activeElement as HTMLElement | null, top: scrollRef.current?.scrollTop || 0 };
+    rememberChatReturn();
     manualPause.current = true; followBottom.current = false;
     setExecutionIdentity(connectionKey); setSelectedAgent(null); setAgentPreference(false);
     if (previewOpen) closePreview();
   };
   const closeExecution = () => {
+    pendingReturn.current = chatReturn.current;
     setExecutionIdentity(null); setSelectedAgent(null);
     if (previewOpen) closePreview();
-    requestAnimationFrame(() => {
-      if (scrollRef.current) scrollRef.current.scrollTop = chatReturn.current.top;
-      const node = chatReturn.current.node;
-      (node?.isConnected ? node : composerInput.current)?.focus({preventScroll:true});
-    });
   };
+  // Restore only after the mounted chat is visible, before paint. A return from
+  // another workspace/instance or an older navigation must never override the
+  // connection hook's fresh follow-latest state or move focus into stale UI.
+  useLayoutEffect(() => {
+    const saved = pendingReturn.current;
+    if (!saved || executionOpen) return;
+    pendingReturn.current = null;
+    if (saved.identity !== connectionKey || saved.epoch !== navigationEpoch.current) return;
+    const timeline = scrollRef.current;
+    if (!timeline?.clientHeight) return;
+    followBottom.current = saved.follow; manualPause.current = saved.manual; setReadingPaused(saved.paused);
+    workspace.readingAnchor.current = null;
+    const restorePosition = () => {
+      if (saved.follow) timeline.scrollTop = timeline.scrollHeight;
+      else {
+        const anchor = saved.anchor;
+        const node = anchor && Array.from(timeline.querySelectorAll<HTMLElement>("[data-scroll-key]")).find(item => item.dataset.scrollKey === anchor.key);
+        timeline.scrollTop = node && anchor ? timeline.scrollTop + node.getBoundingClientRect().top - timeline.getBoundingClientRect().top - anchor.offset : saved.top;
+      }
+    };
+    restorePosition();
+    if (saved.follow) { setHasNew(false); setAwayFromLatest(false); }
+    workspace.rememberTimelineReading();
+    (saved.node?.isConnected && saved.node.getClientRects().length ? saved.node : composerInput.current)?.focus({preventScroll:true});
+  });
   useEffect(() => { if (executionOpen && !selectedAgent) executionBack.current?.focus({preventScroll:true}); }, [executionOpen]);
   const navigationRevision = useRef(workspace.conversationNavigation);
   useLayoutEffect(() => {
@@ -94,7 +125,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
   };
   const revealRun = (run: WorkerRun) => {
     captureReadingPosition();
-    if (!executionOpen) chatReturn.current = { node: document.activeElement as HTMLElement | null, top: scrollRef.current?.scrollTop || 0 };
+    if (!executionOpen) rememberChatReturn();
     agentReturnFocus.current = document.activeElement as HTMLElement | null;
     setExecutionIdentity(connectionKey);
     setSelectedAgent({ identity: connectionKey, runId: run.run_id });
@@ -119,7 +150,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         approvalError={approvalLoadError} canRetry={!!connection && !sending && !writesBlocked} scrollRef={scrollRef}
         onScroll={() => {
           const element = scrollRef.current;
-          if (!element) return;
+          if (!element || executionOpen) return;
           const nearLatest = isNearBottom(element.scrollTop, element.clientHeight, element.scrollHeight);
           setAwayFromLatest(!nearLatest);
           if (workspace.isRestoringResponsiveReading()) return;

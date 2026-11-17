@@ -59,7 +59,7 @@ export default function ChatTimeline({ children, executionView = false, onExecut
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
-    {onExecution && (events.length > 0 || workerRuns.length > 0 || progress.length > 0) && <button type="button" className="text-button conversation-execution-link" data-scroll-key="execution-details" onClick={() => { onInspect(); onExecution(); }}>执行详情<span aria-hidden="true"> →</span></button>}
+    {onExecution && (events.length > 0 || workerRuns.length > 0 || progress.length > 0) && <button type="button" className="text-button conversation-execution-link" data-scroll-key="execution-details" onClick={onExecution}>执行详情<span aria-hidden="true"> →</span></button>}
     {connected && <TaskProgressList cards={progress.filter(card => ["needs_input", "blocked", "failed"].includes(card.quest.status) || card.quest.status === "completed" && card.result && !visibleHistoryReceipts.has(card.result.receiptId))} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
     {connected && approvals.length > 0 && <section className="timeline-updates" aria-label="任务与审批更新">
       <div className="timeline-updates-label">需要你处理</div>
