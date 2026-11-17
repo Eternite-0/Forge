@@ -186,3 +186,107 @@ def test_oversized_noncompletion_keeps_original_failure_semantics(oversized):
     with pytest.raises(DomainError, match="projection exceeds budget"):
         asyncio.run(router._handle_notice([event.id], "test"))
     assert not router.provider.requests
+
+
+@pytest.mark.parametrize("completion", [True, False])
+def test_small_projection_over_effective_model_budget_uses_same_completion_gate(
+    oversized, monkeypatch, completion
+):
+    import forge_core.router as router_module
+
+    store, router, dispatcher, quest, event = oversized
+    with store.unit_of_work() as work:
+        for row in work.connection.execute(
+            "SELECT id,payload FROM events WHERE event_type='worker.result'"
+        ).fetchall():
+            payload = json.loads(row["payload"])
+            payload["claim"] = json.dumps({"summary": "bounded finding", "findings": []})
+            work.connection.execute(
+                "UPDATE events SET payload=? WHERE id=?", (json.dumps(payload), row["id"])
+            )
+        if not completion:
+            for table in ("events", "event_inbox"):
+                key = "id" if table == "events" else "event_id"
+                work.connection.execute(
+                    f"UPDATE {table} SET event_type='worker.blocked',payload='{{}}' WHERE {key}=?",
+                    (event.id,),
+                )
+    original_context = router._context
+    seen = []
+
+    def constrained_context(*args):
+        context, tools = original_context(*args)
+        # Isolate the existing final wire-admission boundary, not earlier intake
+        # policy admission. The projection fits16k but cannot fit this budget.
+        context["budget"]["effective_limit"] = router.output_reserve + 1024
+        seen.append(context)
+        return context, tools
+
+    router._context = constrained_context
+    wire_sizes = []
+    original_json = router_module._json
+
+    def observe_wire(value):
+        text = original_json(value)
+        if isinstance(value, dict) and "messages" in value and "schema" in value:
+            wire_sizes.append(len(text.encode("utf-8")))
+        return text
+
+    monkeypatch.setattr(router_module, "_json", observe_wire)
+    before = len(store.list_messages())
+    assert asyncio.run(router.handle_pending_events(dispatcher)) is completion
+    assert seen[-1]["budget"]["input_estimate"] < 16000
+    assert wire_sizes[-1] > 1024
+    assert not router.provider.requests
+    if completion:
+        assert len(store.list_messages()) == before + 1
+        metadata = json.loads(store.list_messages()[-1]["metadata"])
+        assert metadata["notice_phase"] == "completion_summary_unavailable"
+        assert metadata["quest_id"] == quest.id
+        assert metadata["completion_execution_mode"] == "live"
+        assert not asyncio.run(router.handle_pending_events(dispatcher))
+    else:
+        assert len(store.list_messages()) == before
+        with store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE event_inbox SET notice_token='test',notice_next_attempt=9999999999 WHERE event_id=?",
+                (event.id,),
+            )
+        with pytest.raises(DomainError, match="notice context budget exceeded"):
+            asyncio.run(router._handle_notice([event.id], "test"))
+
+
+def test_configured_18000_context_delivers_13973_byte_completion_without_inference(oversized):
+    store, router, dispatcher, quest, _event = oversized
+    with store.unit_of_work() as work:
+        for row in work.connection.execute(
+            "SELECT id,payload FROM events WHERE event_type='worker.result'"
+        ).fetchall():
+            payload = json.loads(row["payload"])
+            payload["claim"] = json.dumps(
+                {"summary": "核查结果" * 50, "findings": ["来源证据" * 50] * 3},
+                ensure_ascii=False,
+            )
+            work.connection.execute(
+                "UPDATE events SET payload=? WHERE id=?",
+                (json.dumps(payload, ensure_ascii=False), row["id"]),
+            )
+    router.context_limit = 18000
+    original_context = router._context
+    seen = []
+
+    def observe(*args):
+        context, tools = original_context(*args)
+        seen.append(context)
+        return context, tools
+
+    router._context = observe
+    assert asyncio.run(router.handle_pending_events(dispatcher))
+    assert seen[-1]["budget"]["effective_limit"] == 18000
+    assert seen[-1]["budget"]["input_estimate"] < 16000
+    assert not router.provider.requests
+    message = store.list_messages()[-1]
+    metadata = json.loads(message["metadata"])
+    assert metadata["quest_id"] == quest.id
+    assert metadata["notice_phase"] == "completion_summary_unavailable"
+    assert metadata["completion_execution_mode"] == "live"

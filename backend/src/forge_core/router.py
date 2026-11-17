@@ -1590,9 +1590,30 @@ class RouterService:
         context["budget"]["input_estimate"] = len(_json(context).encode("utf-8"))
         if context["budget"]["input_estimate"] > 16000 and completion_handoff_sources is None:
             raise DomainError("Router notice projection exceeds budget")
-        oversized_completion = (
-            context["budget"]["input_estimate"] > 16000 and completion_handoff_sources is not None
+        schema = NoticeDecision.model_json_schema()
+        messages = [
+            {
+                "role": "system",
+                "content": _POLICY
+                + " Choose silent or a concise user update for this event. Only when remaining_planning_available is present, you may choose replan_remaining to ask the Planner for a new proposal addressing the observed failure. A bounded reply must describe the needed adjustment. This cannot approve a plan/team or resume execution. For an observed completed Quest, use update_user to summarize its source-linked deliveries and artifacts. Distinguish observed evidence from Worker claims. Never invent execution.",
+            },
+            {"role": "user", "content": _json(context)},
+        ]
+        model_context_exceeded = (
+            len(_json({"messages": messages, "schema": schema}).encode("utf-8"))
+            + len(
+                _json({"role": "system", "content": schema_format_instruction(schema)}).encode(
+                    "utf-8"
+                )
+            )
+            + 512
+            > context["budget"]["effective_limit"] - self.output_reserve
         )
+        if model_context_exceeded and completion_handoff_sources is None:
+            raise DomainError("Router notice context budget exceeded")
+        oversized_completion = (
+            context["budget"]["input_estimate"] > 16000 or model_context_exceeded
+        ) and completion_handoff_sources is not None
         if oversized_completion:
             # A Core state notification, not a shortened/reinterpreted result.
             # Full claims remain untouched; never submit an over-budget request.
@@ -1601,26 +1622,6 @@ class RouterService:
                 reply="任务已完成。结果较长，这里只通知完成，不概括内容。",
             )
         else:
-            schema = NoticeDecision.model_json_schema()
-            messages = [
-                {
-                    "role": "system",
-                    "content": _POLICY
-                    + " Choose silent or a concise user update for this event. Only when remaining_planning_available is present, you may choose replan_remaining to ask the Planner for a new proposal addressing the observed failure. A bounded reply must describe the needed adjustment. This cannot approve a plan/team or resume execution. For an observed completed Quest, use update_user to summarize its source-linked deliveries and artifacts. Distinguish observed evidence from Worker claims. Never invent execution.",
-                },
-                {"role": "user", "content": _json(context)},
-            ]
-            if (
-                len(_json({"messages": messages, "schema": schema}).encode("utf-8"))
-                + len(
-                    _json({"role": "system", "content": schema_format_instruction(schema)}).encode(
-                        "utf-8"
-                    )
-                )
-                + 512
-                > context["budget"]["effective_limit"] - self.output_reserve
-            ):
-                raise DomainError("Router notice context budget exceeded")
             source = "mock" if mode == "mock" else profile.structured_output_support.source
             request = ModelRequest(
                 model_id=self.model_id,
