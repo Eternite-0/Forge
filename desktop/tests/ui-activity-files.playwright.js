@@ -24,6 +24,7 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/health') body = { session: 'activity-files-fixture' };
     else if (url.pathname === '/api/conversation') body = { messages, next_before: null, has_more: false };
     else if (url.pathname === '/api/timeline') body = { items: events, next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'activity-files-fixture', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/quests' || url.pathname === '/api/approvals/pending' || url.pathname === '/api/activity') body = { items: [], has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'activity-files-fixture', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };

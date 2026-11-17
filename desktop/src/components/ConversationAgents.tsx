@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Connection } from "../api";
-import { agentRole, agentState, agentOutcome, agentMilestone, agentActive, type ConversationAgent } from "../conversationAgents";
+import { agentRole, agentTask, agentState, agentOutcome, agentMilestone, agentActive, type ConversationAgent } from "../conversationAgents";
 import useConversationAgents from "../hooks/useConversationAgents";
 import { statusLabel } from "../presentation";
 import AgentAvatar from "./AgentAvatar";
@@ -21,7 +21,7 @@ export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (
         const items = feed.items.filter(run => agentActive(run) === active);
         return items.length > 0 && <div key={String(active)}><p className="conversation-agent-caption">{active ? "进行中与待处理" : "已结束"}</p>{items.map(run => <button type="button" className="conversation-agent-row" key={run.run_id} onClick={() => onSelect(run)}>
         <AgentAvatar identity={run.worker_id || run.run_id} size={20} />
-        <span><strong>{agentRole(run.role)}</strong><span>{run.task_title || "已委派任务"}</span></span>
+        <span><strong>{agentRole(run.role)}</strong><span title={agentTask(run)}>{agentTask(run)}</span></span>
         <small data-state={run.state}>{agentState(run) || statusLabel(run.state)}{run.execution_mode === "mock" ? " · 模拟" : ""}</small><span aria-hidden="true">›</span>
       </button>)}</div>; })}
       {feed.hasMore && <button type="button" className="conversation-agents-older" disabled={feed.loading} onClick={feed.loadOlder}>{feed.loading ? "正在读取…" : "加载更早的子智能体"}</button>}

@@ -39,6 +39,7 @@ async (page, { outputDir }) => {
       if (url.searchParams.has('before')) { historyLoaded = true; body = { messages: oldMessages, next_before: null, has_more: false }; }
       else body = { messages, next_before: historyLoaded ? null : 'process-history', has_more: !historyLoaded, router: { router_session_id: 'process-router' } };
     } else if (url.pathname === '/api/timeline') body = { items: events, next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'process-workspace', items: runs.map(run => ({ ...run, task_title: quest.title, task_objective: quest.goal, source: { kind: 'message', id: user.id }, execution_mode: 'mock', lease_status: 'active', delegation_state: 'active', outcome: { kind: run.state, label: '' }, milestones: [] })), next_before: null, has_more: false };
     else if (url.pathname === '/api/activity') body = { items: runs, has_more: false };
     else if (url.pathname === '/api/quests') body = { items: [{ ...quest, status: complete ? 'completed' : quest.status }], has_more: false };
     else if (url.pathname === '/api/approvals/pending') body = { items: [], has_more: false };
@@ -53,7 +54,7 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await page.clock.setFixedTime(new Date('2026-11-16T08:01:05Z'));
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(globalThis.process.env.FORGE_UI_BASE_URL || 'http://127.0.0.1:5173/');
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   const process = page.locator('.process-transcript').filter({ has: page.locator('[data-scroll-key="message:process-intro"]') });

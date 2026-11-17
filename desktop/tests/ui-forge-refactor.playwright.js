@@ -24,6 +24,7 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/activity') body = { items: runs, has_more: false };
     else if (url.pathname === '/api/approvals/pending' || url.pathname === '/api/approvals') body = { items: [], has_more: false };
     else if (url.pathname === '/api/timeline') body = { items: [{ kind: 'tool_receipt', event_id: 'tool-ui', seq: 1, created_at: '2026-11-16T08:00:03Z', quest_id: quest.id, run_id: 'run-ui', worker_id: 'worker-ui', title: '工具调用', status: 'succeeded', execution_mode: 'mock', detail: { tool: 'file_read', path: 'README.md' } }], has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'workspace-ui', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'workspace-ui', workspace_root: 'D:/Fixture/FORGE', router_model_id: 'router-fixture', provider_id: 'fixture', provider_configured: true, restore_fenced: false };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/projects/discovered') body = [{ id: 'discovered-ui', root: 'D:/Fixture/Reference', name: 'Reference', grants_tool_access: false }];

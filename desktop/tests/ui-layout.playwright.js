@@ -48,6 +48,7 @@ async (page, { outputDir }) => {
       if (id === 'approve-fixture' && failApproval) { status = 409; body = { detail: 'synthetic approval conflict' }; failApproval = false; }
       else { approvals.find((item) => item.id === id).status = payload.decision; body = { ok: true }; }
     } else if (url.pathname === '/api/timeline') { timelineReads += 1; body = { items: events, next_before: null, has_more: false }; }
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'layout-fixture', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, context_limit: 8192, restore_fenced: false, environment_overrides: [], workspace_id: 'layout-fixture' };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/budget') body = { token_limit: 0, concurrency_limit: 1 };

@@ -32,6 +32,7 @@ async (page, { outputDir }) => {
       if (failDetail) { status = 503; body = { detail: 'synthetic approval detail unavailable' }; }
       else body = approval;
     } else if (path === '/api/timeline' || path === '/api/activity') body = { items: [], has_more: false };
+    else if (path === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: settings.workspace_id, items: [], next_before: null, has_more: false };
     else if (path === '/api/settings') body = settings;
     else if (path === '/api/restore-status') body = { fenced: false };
     else if (path === '/api/runtime/health') body = { components: [] };

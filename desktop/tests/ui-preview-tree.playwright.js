@@ -40,6 +40,7 @@ async (page, { outputDir }) => {
     if (request.method() !== 'GET') { httpWrites.push(url.pathname); status = 400; body = { detail: 'tree fixture is read-only' }; }
     else if (url.pathname === '/api/conversation') body = { messages: [{ id: 'tree-intro', role: 'assistant', content: '合成文件树验收，所有路径和内容均为测试数据。', created_at: '2026-01-01T00:00:00Z', metadata: { execution_mode: 'mock' } }], next_before: null, has_more: false };
     else if (['/api/timeline', '/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'tree-fixture', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'tree-fixture', workspace_root: 'D:/Synthetic/TreeFixture', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/projects/discovered') body = [];

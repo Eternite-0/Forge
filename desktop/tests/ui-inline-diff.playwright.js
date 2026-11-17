@@ -27,6 +27,7 @@ async (page, { outputDir }) => {
       if (failConversation) { status = 401; body = { detail: 'Synthetic inline generation expired' }; }
       else body = { messages, next_before: null, has_more: false };
     } else if (url.pathname === '/api/timeline') body = { items: events, next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: generation, items: [], next_before: null, has_more: false };
     else if (['/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: generation, workspace_root: `D:/Synthetic/${generation}`, context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };

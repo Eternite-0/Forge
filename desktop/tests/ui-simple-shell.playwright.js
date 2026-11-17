@@ -23,6 +23,7 @@ async (page, { outputDir }) => {
     else if (pathname === '/api/settings') json = { revision: 1, config: {}, workspace_root: '/fixture/FORGE', provider_configured: true, router_model_id: 'fixture-model' };
     else if (pathname === '/api/restore-status') json = { fenced: false };
     else if (pathname === '/api/conversation') json = { messages, router: {}, has_more: false };
+    else if (pathname === '/api/conversations/main/subagents') json = { conversation_id: 'main', workspace_id: 'simple-shell', items: [], next_before: null, has_more: false };
     else if (pathname === '/api/quests') json = { items: showQuest ? [quest] : [], has_more: false };
     else if (pathname === '/api/timeline') json = { items: events, has_more: false };
     else if (pathname === `/api/artifacts/receipts/${receiptId}/diff`) {

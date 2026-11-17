@@ -74,6 +74,7 @@ async (page, { outputDir }) => {
     if (pathname === '/health') json = { session: 'layout-fixture' };
     else if (pathname === '/api/conversation') json = { ...lists, messages: populated ? [...messages, ...(longThread ? [longReply] : []), ...(hasIncoming ? [incoming] : [])] : [], router: {} };
     else if (pathname === '/api/timeline') json = { ...lists, items: populated ? events : [] };
+    else if (pathname === '/api/conversations/main/subagents') json = { ...lists, conversation_id: 'main', workspace_id: settings.workspace_id };
     else if (pathname === '/api/settings') json = settings;
     else if (pathname === '/api/restore-status') json = { fenced: false };
     else if (['/api/quests', '/api/approvals/pending', '/api/activity'].includes(pathname)) json = lists;

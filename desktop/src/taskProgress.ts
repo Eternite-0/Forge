@@ -47,3 +47,14 @@ export function taskProgress(quests: ProgressQuest[], events: TimelineEvent[], m
     completed = true; return true;
   });
 }
+
+/** Suppress only duplicate routine status, never a review, action or result. */
+export function redundantDelegatedProgress(card: TaskProgress, delegatedQuests: ReadonlySet<string>, events: TimelineEvent[]): boolean {
+  if (!delegatedQuests.has(card.quest.id) || card.result || !["approved", "queued", "running"].includes(card.quest.status)) return false;
+  return !events.some(event => {
+    if (event.quest_id !== card.quest.id) return false;
+    if (/review|approval|blocked|failed|uncertain|verified|result/.test(event.status || "") || /review|approval/.test(event.kind)) return true;
+    const detail = messageMetadata(event.detail);
+    return event.kind === "tool_receipt" && ["file_write", "file_revise"].includes(String(detail.tool));
+  });
+}

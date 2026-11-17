@@ -32,7 +32,7 @@ const timestamp = (value: string | undefined) => {
 };
 const itemTime = (item: OrderedItem) => timestamp(item.type === "snapshot" ? item.run.created_at
   : item.type === "outgoing" ? item.value.createdAt : item.value.created_at);
-const running = (run: WorkerRun) => run.state === "running" || run.state === "queued";
+const running = (run: WorkerRun) => run.state === "running";
 const lifecycle = (event: TimelineEvent) => event.kind === "event" && /^worker\./.test(event.status || "");
 const itemKey = (item: OrderedItem) => item.type === "snapshot" ? `run:${item.run.run_id}`
   : item.type === "event" ? `event:${item.value.kind}:${item.value.event_id}`
@@ -42,6 +42,12 @@ const canBeReply = (message: ChatMessage) => {
   const meta = messageMetadata(message.metadata);
   return message.role === "assistant" && meta.source !== "router_notice" && meta.phase !== "commentary" && meta.channel !== "commentary";
 };
+
+/** A current run may enrich its exact recorded history, never invent it. */
+export function historyWorkerRuns(runs: WorkerRun[], events: TimelineEvent[]): WorkerRun[] {
+  const ids = new Set(events.flatMap(event => event.run_id ? [event.run_id] : []));
+  return runs.filter(run => ids.has(run.run_id));
+}
 
 /** Chronological display windows do not assert task ownership or invent a completion fact. */
 export function buildProcessTimeline(items: (TimelineItem | DisplayItem)[], workerRuns: WorkerRun[]): ProcessTimelineItem[] {

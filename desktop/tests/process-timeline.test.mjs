@@ -68,7 +68,7 @@ test("ordinary chat remains visible even with undated activity, and user keys su
   const items = buildProcessTimeline(chat, [{ run_id: "undated", state: "queued" }]);
   assert.deepEqual(items.slice(0, 2), chat);
   assert.equal(items[2].records[0].type, "snapshot");
-  assert.equal(items[2].active, true);
+  assert.equal(items[2].active, false); // Queued is waiting, not running elapsed time.
   const source = [message("user", "user", 3), event("tool", 4), message("reply", "assistant", 5)];
   const oldKey = buildProcessTimeline(source, [])[1].key;
   const prepended = buildProcessTimeline([message("older", "user", 0), message("older-reply", "assistant", 1), ...source], []);
@@ -131,4 +131,16 @@ test("a lone snapshot has its own start without a fabricated end; two recorded e
   assert.equal(lone.durationMs, undefined);
   const simultaneous = buildProcessTimeline([event("one", 3), event("two", 3)], [])[0];
   assert.equal(simultaneous.durationMs, 0);
+});
+
+test("conversation snapshots only enrich exact loaded run history; queued is not a running clock", async () => {
+  const { historyWorkerRuns } = await import("../src/processTimeline.ts");
+  const runs = [{ run_id: "a", worker_id: "shared", state: "queued", created_at: at(1) }, { run_id: "b", worker_id: "shared", state: "running", created_at: at(1) }];
+  assert.deepEqual(historyWorkerRuns(runs, []), []);
+  const events = [life("queued", 2, "a", "worker.started").value];
+  assert.deepEqual(historyWorkerRuns(runs, events), [runs[0]]);
+  const queued = buildProcessTimeline([message("u", "user", 0), { type: "event", value: events[0] }], historyWorkerRuns(runs, events));
+  assert.equal(queued[1].active, false);
+  const plain = buildProcessTimeline([message("u", "user", 0), message("reply", "assistant", 4)], historyWorkerRuns(runs, []));
+  assert.deepEqual(plain.map(item => item.type), ["message", "message"]);
 });

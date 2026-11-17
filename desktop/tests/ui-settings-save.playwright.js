@@ -55,6 +55,7 @@ async (page, { outputDir }) => {
       } else { missing.push(`${request.method()} ${url.pathname}`); status = 404; body = { detail: 'unexpected fixture mutation' }; }
     } else if (url.pathname === '/api/conversation') body = { messages: [], next_before: null, has_more: false };
     else if (['/api/timeline', '/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'settings-save-fixture', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = settings;
     else if (url.pathname === '/api/restore-status') body = { fenced: false };
     else if (url.pathname === '/api/models') body = [profile];

@@ -42,3 +42,16 @@ test("persisted assistant text without a verified result contract cannot create 
   const cards = taskProgress([quest("a", "completed")], [receipt("a", 11, { kind: "event", status: "quest.status_changed", detail: { to: "completed" } })], messages);
   assert.equal(cards[0].result, undefined);
 });
+
+test("only exact delegated routine statuses are redundant; review/action/results survive", async () => {
+  const { redundantDelegatedProgress } = await import("../src/taskProgress.ts");
+  const scopes = new Set(["a"]);
+  const card = status => ({ quest: quest("a", status), updatedAt: 0 });
+  for (const status of ["approved", "queued", "running"]) assert.equal(redundantDelegatedProgress(card(status), scopes, []), true);
+  for (const status of ["proposed", "awaiting_approval", "blocked", "needs_input", "failed", "reviewing", "completed", "paused"]) assert.equal(redundantDelegatedProgress(card(status), scopes, []), false);
+  assert.equal(redundantDelegatedProgress(card("running"), new Set(["other"]), []), false);
+  assert.equal(redundantDelegatedProgress({ ...card("running"), result: { receiptId: "r", path: "out.md" } }, scopes, []), false);
+  for (const status of ["worker.result", "task.verified", "review.requested", "failed", "uncertain"]) assert.equal(redundantDelegatedProgress(card("running"), scopes, [receipt("a", 12, { kind: "event", status })]), false);
+  assert.equal(redundantDelegatedProgress(card("running"), scopes, [receipt("a", 12)]), false);
+  assert.equal(redundantDelegatedProgress(card("running"), scopes, [receipt("other", 12)]), true);
+});

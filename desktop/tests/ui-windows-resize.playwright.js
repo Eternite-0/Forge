@@ -19,6 +19,7 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/restore-status') json = { fenced: false };
     else if (url.pathname === '/api/conversation') json = { messages: [], router: {}, has_more: false };
     else if (['/api/quests', '/api/timeline', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) json = { items: [], has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') json = { conversation_id: 'main', workspace_id: 'resize-workspace', items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/runtime/health') json = { components: [] };
     else if (url.pathname === '/api/projects/discovered') json = [];
     else if (url.pathname === '/api/budget') json = { token_limit: 10000, concurrency_limit: 2 };

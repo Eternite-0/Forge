@@ -2,10 +2,10 @@ import { useRef, type RefObject, type ReactNode } from "react";
 import AnimatedDetails from "./AnimatedDetails";
 import type { WorkerRun } from "./ConversationRuntime";
 import { questDisplayTitle, riskLabel, statusLabel, toolLabel } from "./presentation";
-import { taskProgress } from "./taskProgress";
+import { taskProgress, redundantDelegatedProgress } from "./taskProgress";
 import TaskProgressList from "./components/conversation/TaskProgressList";
 import { processFileChanges } from "./components/conversation/ProcessTranscript";
-import { buildProcessTimeline } from "./processTimeline";
+import { buildProcessTimeline, historyWorkerRuns } from "./processTimeline";
 import { mergeTimeline, type ChatMessage, type Outgoing } from "./timeline";
 import type { TimelineEvent } from "./timeline";
 import MessageList from "./components/conversation/MessageList";
@@ -31,18 +31,20 @@ export default function ChatTimeline({ children, messages, events, outgoing, que
   if (memoryRef.current.identity !== identity) memoryRef.current = { identity, value: { expansion: new Map(), commandScroll: new Map() } };
   const memory = memoryRef.current.value;
   const items = groupEvents(mergeTimeline(messages, events, outgoing));
+  const historicalRuns = historyWorkerRuns(workerRuns, events);
+  const delegatedQuests = new Set(workerRuns.flatMap(run => run.quest_id ? [run.quest_id] : []));
   const progress = taskProgress(quests, events, messages).filter(card =>
-    !approvals.some(approval => approval.quest_id === card.quest.id && approval.status === "PENDING"));
+    !approvals.some(approval => approval.quest_id === card.quest.id && approval.status === "PENDING") && !redundantDelegatedProgress(card, delegatedQuests, events));
   // Only suppress an action when the exact same immutable receipt already has
   // a visible history button. Other files, tasks and unavailable routes stay intact.
-  const visibleHistoryReceipts = new Set(onOpenHistory ? buildProcessTimeline(items, workerRuns)
+  const visibleHistoryReceipts = new Set(onOpenHistory ? buildProcessTimeline(items, historicalRuns)
     .flatMap(item => item.type === "process" ? processFileChanges(item).slice(0, 1).map(file => file.receiptId) : []) : []);
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
     {timelineError && <p className="notice error" role="alert">过程记录暂不可用：{timelineError}</p>}
     {!items.length && !workerRuns.length && !(connected && (progress.length || approvals.length)) && <div className="empty-conversation"><h2>{workspaceName ? <>你想让我们在 <span className="welcome-project-name" title={workspaceName}>{workspaceName}</span> 中构建什么？</> : "你想构建什么？"}</h2></div>}
-    {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
+    {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
     {children}

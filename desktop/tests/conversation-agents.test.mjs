@@ -32,3 +32,10 @@ test("roles and milestone kinds use readable labels, not raw event names", () =>
   assert.equal(agentMilestone("worker.result"), "提交结果，等待验证");
   assert.equal(agentMilestone("some.secret.event"), "更新运行记录");
 });
+
+test("specialist row uses its own assignment, not the repeated parent title", async () => {
+  const { agentTask } = await import("../src/conversationAgents.ts");
+  assert.equal(agentTask({ task_title: "Research", task_objective: "Inspect\n source A" }), "Inspect source A");
+  assert.equal(agentTask({ task_title: "Research", task_objective: "Check calculation B" }), "Check calculation B");
+  assert.equal(agentTask({ task_title: "Research", task_objective: "  " }), "Research");
+});

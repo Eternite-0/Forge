@@ -44,6 +44,7 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/api/memory') body = { items: [], cursor: null };
     else if (url.pathname === '/api/budget') body = { token_limit: 10000, concurrency_limit: 2 };
     else if (['/api/quests', '/api/approvals/pending', '/api/approvals', '/api/activity', '/api/timeline'].includes(url.pathname)) body = { items: [], has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: 'settings-workspace', items: [], next_before: null, has_more: false };
     else { missing.push(`${method} ${url.pathname}`); status = 404; body = { detail: 'No synthetic settings fixture' }; }
     await route.fulfill({ status, headers, contentType: 'application/json', body: JSON.stringify(body) });
   });

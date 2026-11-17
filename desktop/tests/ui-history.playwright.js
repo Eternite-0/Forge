@@ -35,6 +35,7 @@ async (page, { outputDir }) => {
       status = failConversation ? 401 : 200;
       body = failConversation ? { detail: 'Synthetic Core generation expired' } : { messages, next_before: null, has_more: false };
     } else if (url.pathname === '/api/timeline') body = { items: events, next_before: null, has_more: false };
+    else if (url.pathname === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: generation === 'history-generation-1' ? 'history-space-one' : 'history-space-two', items: [], next_before: null, has_more: false };
     else if (['/api/quests', '/api/approvals/pending', '/api/activity'].includes(url.pathname)) body = { items: [], next_before: null, has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: generation === 'history-generation-1' ? 'history-space-one' : 'history-space-two', workspace_root: generation === 'history-generation-1' ? 'D:/Synthetic/HistoryOne' : 'D:/Synthetic/HistoryTwo', context_limit: 8192, restore_fenced: false, environment_overrides: [] };
     else if (url.pathname === '/api/restore-status') body = { fenced: false };

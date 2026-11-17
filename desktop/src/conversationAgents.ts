@@ -33,3 +33,7 @@ export const agentOutcome = (kind?: string) => outcomes[kind || ""] || "尚无�
 const milestones: Record<string, string> = { "task.verified": "结果已通过验证", "worker.proposed": "提出子任务", "worker.started": "开始执行", "worker.blocked": "遇到阻塞", "worker.failed": "执行失败", "worker.result": "提交结果，等待验证", "worker.retry": "重新尝试", "worker.help_requested": "请求协助", "worker.pause": "暂停执行", "worker.resume": "恢复执行", "worker.cancel": "取消执行", "worker.progress": "记录工作进展", "worker.model_response_rejected": "结果需要修正" };
 export const agentMilestone = (kind: string) => milestones[kind] || "更新运行记录";
 export const agentActive = (run: ConversationAgent) => !["failed", "cancelled", "succeeded"].includes(run.state || "");
+
+/** Assignment identifies a specialist; the parent task title stays in detail. */
+export const agentTask = (run: Pick<ConversationAgent, "task_objective" | "task_title">) =>
+  (run.task_objective?.trim() || run.task_title?.trim() || "已委派任务").replace(/\s+/g, " ");

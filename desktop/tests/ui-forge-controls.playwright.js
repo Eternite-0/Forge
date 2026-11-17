@@ -46,6 +46,7 @@ async (page, { outputDir }) => {
     else if (path === '/api/team/preview') body = [{ role_id: 'research', role_name: '研究', model_candidates: [{ provider: 'fixture', model_id: 'fixture-model', fit_score: 70 }] }];
     else if (path === '/api/activity') body = { items: [run], has_more: false };
     else if (path === '/api/timeline') body = { items: [], has_more: false };
+    else if (path === '/api/conversations/main/subagents') body = { conversation_id: 'main', workspace_id: settings.workspace_id, items: [], next_before: null, has_more: false };
     else if (path === '/api/approvals/pending') body = { items: approvals.filter(item => item.status === 'PENDING'), has_more: false };
     else if (path === '/api/approvals') body = { items: approvals, has_more: false };
     else if (path === '/api/approvals/approval-controls') body = approvals[0];
