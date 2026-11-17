@@ -1,4 +1,4 @@
-import { useRef, type RefObject } from "react";
+import { useRef, type RefObject, type ReactNode } from "react";
 import AnimatedDetails from "./AnimatedDetails";
 import type { WorkerRun } from "./ConversationRuntime";
 import { questDisplayTitle, riskLabel, statusLabel, toolLabel } from "./presentation";
@@ -14,9 +14,10 @@ import { groupEvents, text, type EventViewMemory, type HistoryProps, type Quest,
 
 export { default as SafeMarkdownPreview } from "./components/Markdown";
 
-export default function ChatTimeline({ messages, events, outgoing, quests, workerRuns, approvals, native, workspaceName,
+export default function ChatTimeline({ children, messages, events, outgoing, quests, workerRuns, approvals, native, workspaceName,
   connected, historyMore, historyBusy, timelineError, conversationError, approvalError,
   canRetry, scrollRef, onScroll, onInspect, onLoadOlder, onRetry, onQuest, onOpenFile, onOpenHistory, historyStats, connection, onHistoryLoaded, onApproval, approvalsBlocked, onApprovalDecision }: {
+  children?: ReactNode;
   messages: ChatMessage[]; events: TimelineEvent[]; outgoing: Outgoing[]; quests: Quest[]; workerRuns: WorkerRun[]; approvals: Row[]; workspaceName?: string;
   native: boolean; connected: boolean; historyMore: boolean; historyBusy: boolean; timelineError: string;
   conversationError: string; approvalError: string; canRetry: boolean; scrollRef: RefObject<HTMLDivElement>;
@@ -44,6 +45,7 @@ export default function ChatTimeline({ messages, events, outgoing, quests, worke
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={workerRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
+    {children}
     {connected && <TaskProgressList cards={progress} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
     {connected && approvals.length > 0 && <section className="timeline-updates" aria-label="任务与审批更新">
       <div className="timeline-updates-label">需要你处理</div>

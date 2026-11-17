@@ -2,6 +2,8 @@ import ConversationContext from "./ConversationContext";
 import ChatTimeline from "../ChatTimeline";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import AgentPanel from "./AgentPanel";
+import { ConversationAgents, ConversationAgentDetail } from "./ConversationAgents";
+import useConversationAgents from "../hooks/useConversationAgents";
 import type { WorkerRun } from "../ConversationRuntime";
 import ConversationToolbar from "../ConversationToolbar";
 import ConversationComposer from "../ConversationComposer";
@@ -11,9 +13,19 @@ import { asRecord } from "../workspaceTypes";
 import type { WorkspaceController } from "../hooks/useWorkspaceController";
 
 export default function ConversationWorkspace({ workspace, connectionSetup }: { workspace: WorkspaceController; connectionSetup?: ReactNode }) {
-  const { native, connection, runtimeStatus, workspaceOperation, restoreFenced, view, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, workerActivity, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspaceName, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
+  const { native, connection, runtimeStatus, workspaceOperation, restoreFenced, view, messages, timelineEvents, timelineHasMore, timelineError, outgoing, hasNew, setHasNew, readingPaused, setReadingPaused, hasMore, historyBusy, conversationError, draft, setDraft, pending, sending, sendError, scrollRef, composerInput, followBottom, manualPause, quests, pendingApprovals, approvalLoadError, actionError, actionBusy, connectionKey, writesBlocked, captureReadingPosition, previewOpen, previewExpanded, setPreviewExpanded, initialPreviewWidth, previewBounds, previewWidthPixels, previewRequest, workspaceChanges, setWorkspaceChanges, historyStats, fileSource, openPreview, closePreview, resizePreview, recordHistoryStats, revealRequest, workspaceRef, previewPresent, loadOlder, sendPending, send, openTaskView, currentWorkspaceName, routerStatus, selectSetting, decideApproval, home, conversationFiles, taskView, settingsOpen } = workspace;
   const chatVisible = view === "chat" || (taskView && !settingsOpen);
-  const [compactAgent, setCompactAgent] = useState(() => window.matchMedia("(max-width: 1180px)").matches);
+  const agents = useConversationAgents(connection, null, captureReadingPosition);
+  const [selectedAgent, setSelectedAgent] = useState<{ identity: string; runId: string } | null>(null);
+  const agentReturnFocus = useRef<HTMLElement | null>(null);
+  const detailOpen = !!connection && selectedAgent?.identity === connectionKey && !home && !taskView && !previewOpen;
+  const closeAgentDetail = () => {
+    captureReadingPosition(); setSelectedAgent(null);
+    requestAnimationFrame(() => {
+      const origin = agentReturnFocus.current;
+      (origin?.isConnected && origin.getClientRects().length ? origin : composerInput.current)?.focus({ preventScroll: true });
+    });
+  };
   const [agentPreference, setAgentPreference] = useState(false);
   const [awayFromLatest, setAwayFromLatest] = useState(false);
   useEffect(() => {
@@ -32,17 +44,9 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
     Array.from(timeline.children).forEach(child => observer.observe(child));
     return () => observer.disconnect();
   }, [connectionKey, messages, timelineEvents, outgoing, quests, pendingApprovals, home, chatVisible]);
-  const agentOpen = !home && !taskView && !previewOpen && agentPreference;
-  const previousAgent = useRef(agentOpen);
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 1180px)");
-    const change = () => { captureReadingPosition(); setCompactAgent(media.matches); };
-    media.addEventListener("change", change);
-    return () => media.removeEventListener("change", change);
-  }, []);
+  const agentOpen = !home && !taskView && !previewOpen && !detailOpen && agentPreference;
+  const agentLayout = `${agentOpen}:${detailOpen}`;
   useLayoutEffect(() => {
-    if (previousAgent.current === agentOpen) return;
-    previousAgent.current = agentOpen;
     const timeline = scrollRef.current;
     if (!timeline) return;
     if (followBottom.current) timeline.scrollTop = timeline.scrollHeight;
@@ -51,32 +55,24 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
       const node = anchor && Array.from(timeline.querySelectorAll<HTMLElement>("[data-scroll-key]")).find(item => item.dataset.scrollKey === anchor.key);
       if (node && anchor) timeline.scrollTop += node.getBoundingClientRect().top - timeline.getBoundingClientRect().top - anchor.offset;
     }
-  }, [agentOpen]);
+  }, [agentLayout, agents.items]);
   const toggleAgent = () => {
-    captureReadingPosition();
+    captureReadingPosition(); setSelectedAgent(null);
     if (taskView) workspace.openConversation();
     if (previewOpen) closePreview();
     setAgentPreference(!agentOpen);
   };
   const revealRun = (run: WorkerRun) => {
-    const entry = Array.from(scrollRef.current?.querySelectorAll<HTMLDetailsElement>(".agent-activity") || []).find(item => item.dataset.runId === run.run_id || Array.from(item.querySelectorAll<HTMLElement>("[data-run-id]")).some(node => node.dataset.runId === run.run_id));
-    if (!entry) { if (run.quest_id) openTaskView("quests", run.quest_id); return; }
-    manualPause.current = true; followBottom.current = false; setReadingPaused(true);
-    const process = entry.closest<HTMLDetailsElement>(".process-transcript");
-    if (process && !process.open) process.querySelector<HTMLElement>(":scope > summary")?.click();
-    if (!entry.open) entry.querySelector<HTMLElement>("summary")?.click();
-    if (compactAgent) setAgentPreference(false);
-    requestAnimationFrame(() => {
-      const record = Array.from(entry.querySelectorAll<HTMLElement>(".agent-activity-record")).find(item => item.dataset.runId === run.run_id);
-      (record || entry).scrollIntoView({ block: "center", behavior: "instant" }); entry.querySelector<HTMLElement>("summary")?.focus({ preventScroll: true });
-    });
+    captureReadingPosition();
+    agentReturnFocus.current = document.activeElement as HTMLElement | null;
+    setSelectedAgent({ identity: connectionKey, runId: run.run_id });
   };
   const sources = [...new Set(timelineEvents.flatMap(event => {
     const detail = asRecord(event.detail);
     return event.kind === "tool_receipt" && event.status === "succeeded" && event.execution_mode === "live" && detail.tool === "file_read" && typeof detail.path === "string" ? [detail.path] : [];
   }))];
   const threadTitle = workspace.conversationTitle || (home ? "FORGE" : "与 FORGE 对话");
-  return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
+  return <div ref={workspaceRef} className={`chat-workspace${agentOpen ? " agent-panel-visible" : ""}${detailOpen ? " subagent-detail-visible" : ""}${previewOpen ? " preview-open" : ""}${previewExpanded && previewOpen ? " preview-expanded" : ""}`} hidden={!chatVisible}>
     <main className={`conversation-shell${home ? " home-state" : ""}`}>
       <ConversationToolbar home={home} status={routerStatus} title={threadTitle} changeCount={conversationFiles.length}
         onOpenChanges={() => openPreview("conversation", undefined, conversationFiles)}
@@ -84,11 +80,11 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         onOpenSettings={workspace.openSettings} onOpenMemory={() => selectSetting("memory")} onOpenActivity={() => openTaskView("activity", "")}
         onConfigure={() => selectSetting("environment")} pendingCount={pendingApprovals.length} />
       {connection && !home && <ConversationContext workspace={workspace.currentWorkspace} model={workspace.routerModel} connected={true}
-        activity={workerActivity} approvals={pendingApprovals.length} health={workspace.feedHealth}
-        onActivity={() => home ? openTaskView("activity", "") : toggleAgent()} onApprovals={() => openTaskView("approvals", "")} onFiles={() => openPreview("files")} />}
+        approvals={pendingApprovals.length} health={workspace.feedHealth}
+        onApprovals={() => openTaskView("approvals", "")} onFiles={() => openPreview("files")} />}
       {connectionSetup}
       {writesBlocked && <div className="maintenance-banner" role="status">{restoreFenced === true ? "恢复后写操作已锁定，请先人工核对。" : workspaceOperation?.status === "unknown" && !workspaceOperation.acknowledged ? "维护结果未知，请人工核查；写操作已暂停。" : runtimeStatus?.state === "maintenance" || workspaceOperation?.status === "running" ? "正在备份或恢复，完成后可退出；写操作已暂停。" : "正在核对工作空间恢复状态；写操作暂不可用。"}</div>}
-      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={workerActivity.items} connection={connection} onHistoryLoaded={recordHistoryStats} workspaceName={connection ? currentWorkspaceName : undefined}
+      <ChatTimeline messages={messages} events={timelineEvents} outgoing={outgoing} quests={quests} workerRuns={agents.items} connection={connection} onHistoryLoaded={recordHistoryStats} workspaceName={connection ? currentWorkspaceName : undefined}
         approvals={pendingApprovals} native={native} connected={!!connection} historyMore={hasMore || timelineHasMore}
         historyBusy={historyBusy} timelineError={timelineError} conversationError={conversationError}
         approvalError={approvalLoadError} canRetry={!!connection && !sending && !writesBlocked} scrollRef={scrollRef}
@@ -110,7 +106,9 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         onOpenFile={(path) => openPreview("files", path)}
         onOpenHistory={(receiptId, path) => openPreview("history", path, undefined, receiptId)} historyStats={historyStats.identity === connectionKey ? historyStats.files : {}}
         onApproval={(id) => openTaskView("approvals", id)}
-        approvalsBlocked={actionBusy || writesBlocked} onApprovalDecision={decideApproval} />
+        approvalsBlocked={actionBusy || writesBlocked} onApprovalDecision={decideApproval} >
+        <ConversationAgents feed={agents} onSelect={revealRun} />
+      </ChatTimeline>
       {actionError && <p className="notice error action-error" role="alert">{actionError}</p>}
       {(awayFromLatest || hasNew || readingPaused) && <button type="button" className="new-messages" data-has-new={hasNew}
         title={hasNew ? "有新消息 · 回到最新" : "回到最新"}
@@ -128,8 +126,9 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
     </main>
     {previewPresent && <PreviewDivider width={previewWidthPixels} minimum={previewBounds.minimum} maximum={previewBounds.maximum} onResize={resizePreview} onReset={() => resizePreview(initialPreviewWidth)} />}
     <FilePreviewWorkspace source={fileSource} native={native} identity={connectionKey} connection={connection} onRequest={revealRequest} onHistoryLoaded={recordHistoryStats} workspaceName={currentWorkspaceName} open={previewOpen} present={previewPresent} visible={chatVisible} expanded={previewExpanded} onToggleExpanded={() => { captureReadingPosition(); setPreviewExpanded((value) => !value); }} request={previewRequest} onClose={closePreview} onChanges={setWorkspaceChanges} />
+    {detailOpen && connection && selectedAgent && <ConversationAgentDetail key={`${connectionKey}:${selectedAgent.runId}`} connection={connection} runId={selectedAgent.runId} onBack={closeAgentDetail} onTask={id => { closeAgentDetail(); openTaskView("quests", id); }} onActivity={() => { closeAgentDetail(); openTaskView("activity", ""); }} />}
     <div id="conversation-agent-panel" className="agent-panel-slot" hidden={!agentOpen} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('.conversation-more-toggle')?.focus(); } }}>
-      <AgentPanel key={connectionKey} state={workerActivity} sources={sources} events={timelineEvents} conversationFiles={conversationFiles.length} onConversationFiles={() => openPreview("conversation", undefined, conversationFiles)} filesChanged={workspaceChanges} onChanges={() => openPreview("changes")} onSource={path => openPreview("files", path || undefined)} onRun={revealRun} onActivity={() => openTaskView("activity", "")} onClose={() => { captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('.conversation-more-toggle')?.focus(); }} />
+      <AgentPanel key={connectionKey} state={agents} onOlder={agents.loadOlder} sources={sources} events={timelineEvents} conversationFiles={conversationFiles.length} onConversationFiles={() => openPreview("conversation", undefined, conversationFiles)} filesChanged={workspaceChanges} onChanges={() => openPreview("changes")} onSource={path => openPreview("files", path || undefined)} onRun={revealRun} onActivity={() => openTaskView("activity", "")} onClose={() => { captureReadingPosition(); setAgentPreference(false); document.querySelector<HTMLButtonElement>('.conversation-more-toggle')?.focus(); }} />
     </div>
 
     </div>;

@@ -14,6 +14,7 @@ async (page, { outputDir }) => {
     if (req.method() !== 'GET') { writes.push(path); return route.fulfill({ status: 405, headers, json: {} }); }
     reads.push(url.pathname + url.search); let json = {};
     if (path === '/health') json = { session: 'independent-fixture' };
+    else if (path === '/api/conversations/main/subagents') json = { conversation_id: 'main', items: [], has_more: false, next_before: null };
     else if (path === '/api/settings') { await gate; json = { revision: 1, config: {}, workspace_root: '/fixture/PermanentChat', router_model_id: 'fixture-model', restore_fenced: false }; }
     else if (path === '/api/quests' || path === '/api/timeline') { await gate; json = { items: [], has_more: false }; }
     else if (path === '/api/restore-status') json = { fenced: false };
@@ -33,7 +34,7 @@ async (page, { outputDir }) => {
     await route.fulfill({ headers, json });
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(process.env.FORGE_TEST_URL || 'http://127.0.0.1:5173/');
+  await page.goto(process.env.FORGE_TEST_URL || (globalThis.process.env.FORGE_UI_BASE_URL || 'http://127.0.0.1:5173/'));
   await page.getByLabel('Core 启动密钥').fill('ab'.repeat(32));
   await page.getByRole('button', { name: '连接', exact: true }).click();
   await page.getByText('对话无需等待其他数据源', { exact: true }).waitFor({ timeout: 3000 });

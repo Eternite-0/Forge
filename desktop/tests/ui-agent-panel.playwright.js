@@ -23,6 +23,12 @@ async (page, { outputDir }) => {
     else if (url.pathname === '/health') body = { session: 'agent-panel-fixture' };
     else if (url.pathname === '/api/conversation') body = { messages, router: { router_session_id: 'agent-panel-router' }, has_more: false };
     else if (url.pathname === '/api/quests') body = { items: [quest], has_more: false };
+    else if (url.pathname.startsWith('/api/conversations/main/subagents')) {
+      const items = runs.map(run => ({ ...run, task_title: quest.title, task_objective: quest.goal, execution_mode: 'mock', lease_status: 'active', delegation_state: 'active', parent_message_id: messages[0].id, source: { kind: 'message', id: messages[0].id }, outcome: { kind: run.state === 'succeeded' ? 'verified' : run.state, label: '' }, milestones: [] }));
+      const selectedId = url.pathname.split('/subagents/')[1];
+      if (activityFailure) { status = 503; body = { detail: 'synthetic activity unavailable' }; }
+      else body = selectedId ? { conversation_id: 'main', workspace_id: 'agent-panel-workspace', item: items.find(run => run.run_id === selectedId) } : { conversation_id: 'main', workspace_id: 'agent-panel-workspace', items, has_more: false, next_before: null };
+    }
     else if (url.pathname === '/api/activity') { if (activityFailure) { status = 503; body = { detail: 'synthetic activity unavailable' }; } else body = { items: runs, has_more: false }; }
     else if (url.pathname === '/api/timeline') body = { items: runs.map((run, index) => ({ kind: 'tool_receipt', event_id: `panel-tool-${index}`, seq: index + 1, quest_id: quest.id, run_id: run.run_id, worker_id: run.worker_id, created_at: `2026-11-16T08:00:0${index + 2}Z`, title: '工具调用', status: 'succeeded', execution_mode: 'live', detail: { tool: 'file_read', path: ['README.md', 'src/App.tsx', 'tests/ui.test.ts'][index] } })), has_more: false };
     else if (url.pathname === '/api/settings') body = { revision: 0, config: null, workspace_id: 'agent-panel-workspace', workspace_root: 'D:/Fixture/AgentPanel', router_model_id: 'fixture-router', provider_id: 'fixture', provider_configured: true, restore_fenced: false };
@@ -46,7 +52,7 @@ async (page, { outputDir }) => {
     return hit === element || element.contains(hit);
   });
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
-  await page.goto('http://127.0.0.1:5173/');
+  await page.goto(globalThis.process.env.FORGE_UI_BASE_URL || 'http://127.0.0.1:5173/');
   await connect();
   const panel = page.locator('.agent-panel'), summary = panel.locator('.agent-panel-summary');
   check(!(await panel.isVisible()), 'the Agent companion starts closed even on wide screens');
@@ -58,7 +64,7 @@ async (page, { outputDir }) => {
     return { width: rect.width, left: rect.left, chatRight: chat.right };
   });
   check(Math.abs(geometry.width - 300) < 1 && geometry.left >= geometry.chatRight, 'wide Agent card is 300px and occupies the right side without covering chat');
-  check((await summary.innerText()).includes('2 完成') && (await summary.innerText()).includes('1 运行中'), 'the right summary reports current run states');
+  check((await summary.innerText()).includes('2 执行成功') && (await summary.innerText()).includes('1 运行中'), 'the right summary reports current run states');
   check(await summary.locator('.agent-avatar').count() === 3, 'the summary shows three colored flower identities');
   check(await page.locator('.agent-activity').evaluateAll(elements => elements.every(element => !element.open)), 'agent current-state details start compact inside the chronological process');
   check(await page.locator('.agent-activity > summary').evaluateAll(elements => elements.every(element => element.textContent.includes('当前状态'))), 'activity snapshots identify the current state without fabricating lifecycle events');
@@ -79,7 +85,7 @@ async (page, { outputDir }) => {
   check(await panel.isVisible() && !(await panel.locator('.agent-panel-menu').isVisible()), 'clicking outside the Agent menu dismisses it while preserving its card');
   runs = runs.map(run => run.run_id === 'panel-run-c' ? { ...run, state: 'fixture-unknown' } : run);
   await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('1 其他状态'), null, { timeout: 10000 });
-  check((await summary.innerText()).includes('2 完成') && (await summary.innerText()).includes('1 其他状态'), 'unknown run states remain visible alongside successful runs');
+  check((await summary.innerText()).includes('2 执行成功') && (await summary.innerText()).includes('1 其他状态'), 'unknown run states remain visible alongside successful runs');
   runs = runs.map(run => run.run_id === 'panel-run-c' ? { ...run, state: 'running' } : run);
   await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('1 运行中'), null, { timeout: 10000 });
   await page.emulateMedia({ colorScheme: 'dark' });
@@ -91,13 +97,20 @@ async (page, { outputDir }) => {
   check(await panel.locator('.agent-panel-run-button').count() === 3, 'the Agent disclosure exposes all three recorded runs');
   const selected = page.locator('.agent-activity[data-run-id="panel-run-c"]');
   await panel.locator('.agent-panel-run[data-run-id="panel-run-c"] .agent-panel-run-button').click();
-  await page.waitForFunction(() => document.querySelector('.agent-activity[data-run-id="panel-run-c"]')?.open === true);
-  check(await selected.locator('.agent-activity-record[data-run-id="panel-run-c"] .worker-run-details-body').isVisible() && (await selected.innerText()).includes('fixture-test') && !(await selected.innerText()).includes('fixture-research'), 'selecting a run opens only its exact retained run metadata');
-  check(await selected.evaluate(element => element.closest('.process-transcript').open), 'selecting a run opens its containing execution process');
-  check(await selected.locator('.tool-item').count() === 0, 'agent details do not duplicate tools from the chronological process');
+  const detail = page.getByRole('complementary', { name: '子智能体详情' });
+  await detail.getByText('fixture-test', { exact: true }).waitFor();
+  check(!(await detail.innerText()).includes('fixture-research'), 'same-workspace detail selects only the exact scoped run');
+  check(await detail.locator('.tool-item').count() === 0, 'detail does not duplicate chronological receipts');
+  await detail.getByRole('button', { name: '返回对话', exact: true }).click();
+  await panel.waitFor();
+  check(await panel.locator('.agent-panel-run[data-run-id="panel-run-c"] .agent-panel-run-button').evaluate(node => node === document.activeElement), 'Back restores the original Agent panel row focus');
+  const containingProcess = selected.locator('xpath=ancestor::details[contains(@class,"process-transcript")]');
+  if (!(await containingProcess.evaluate(node => node.open))) await containingProcess.locator(':scope > summary').click();
+  if (!(await selected.evaluate(node => node.open))) await selected.locator(':scope > summary').click();
+  check(await selected.locator('.agent-activity-record[data-run-id="panel-run-c"] .worker-run-details-body').isVisible(), 'historical metadata remains independently inspectable in the transcript');
   check(await page.locator('.tool-item').count() === 3 && await page.locator('[data-scroll-key="event:tool_receipt:panel-tool-2"]').count() === 1, 'each tool receipt stays at its original process position exactly once');
   runs = runs.map(run => ({ ...run, state: 'succeeded' }));
-  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 完成'), null, { timeout: 10000 });
+  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 执行成功'), null, { timeout: 10000 });
   check(await selected.evaluate(element => element.open && element.closest('.process-transcript').open), 'manually opened run and process details stay open after completion');
   const afterMarks = await summary.locator('.agent-avatar').evaluateAll(elements => elements.map(element => ({ shape: element.getAttribute('data-agent-shape'), source: element.querySelector('img').currentSrc })));
   check(JSON.stringify(afterMarks) === JSON.stringify(summaryMarks), 'polling and completion preserve each flower identity');
@@ -121,7 +134,7 @@ async (page, { outputDir }) => {
   await page.waitForFunction(() => document.querySelector('.process-transcript > summary')?.textContent.includes('当前状态未知'), null, { timeout: 10000 });
   check(!(await panel.isVisible()) && !(await process.evaluate(element => element.open)) && await process.locator(':scope > summary .event-unknown').isVisible() && await process.locator(':scope > summary .event-failed').count() === 0, 'an unknown current state replaces the failed state visibly without rewriting successful historical receipts');
   runs = runs.map(run => ({ ...run, state: 'succeeded' }));
-  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 完成') && !document.querySelector('.process-transcript > summary .event-unknown'), null, { timeout: 10000 });
+  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 执行成功') && !document.querySelector('.process-transcript > summary .event-unknown'), null, { timeout: 10000 });
   check(await process.locator(':scope > summary .event-failed, :scope > summary .event-unknown').count() === 0, 'a recovered run clears current risk labels while the recorded receipts remain unchanged');
   await page.getByRole('button', { name: '更多对话操作', exact: true }).click();
   await riskToggle.click();
@@ -151,7 +164,7 @@ async (page, { outputDir }) => {
   await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('暂不可用'), null, { timeout: 10000 });
   check(await summary.locator('.agent-avatar').count() === 0 && await panel.locator('.agent-panel-run-button').count() === 0, 'an activity read failure clears stale current run states and avatars');
   activityFailure = false;
-  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 完成'), null, { timeout: 10000 });
+  await page.waitForFunction(() => document.querySelector('.agent-panel-summary')?.textContent.includes('3 执行成功'), null, { timeout: 10000 });
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.reload();
   await connect();

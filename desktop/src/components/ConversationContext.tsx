@@ -1,14 +1,11 @@
-import type { ActivityState } from "../ConversationRuntime";
 import "../styles/conversation-context.css";
 
 interface ContextProps {
   workspace: string;
   model: string;
   connected: boolean;
-  activity: ActivityState;
   approvals: number;
   health: Record<string, { updatedAt?: number; error?: string }>;
-  onActivity: () => void;
   onApprovals: () => void;
   onFiles: () => void;
 }
@@ -16,8 +13,7 @@ interface ContextProps {
 /** Context belongs to the permanent conversation, not the selected inspector.
  * Each source declares its own availability; a connected Core is not proof
  * that tasks, approval state or model configuration have finished loading. */
-export default function ConversationContext({ workspace, model, connected, activity, approvals, health, onActivity, onApprovals, onFiles }: ContextProps) {
-  const running = activity.items.filter(run => ["running", "queued", "starting"].includes(run.state || "")).length;
+export default function ConversationContext({ workspace, model, connected, approvals, health, onApprovals, onFiles }: ContextProps) {
   const status = (key: string) => !connected ? "未连接" : health[key]?.error ? "读取失败" : health[key]?.updatedAt ? "已更新" : "读取中";
   const approvalLabel = !connected || !health.approvals?.updatedAt || health.approvals?.error ? `审批 · ${status("approvals")}` : `待审批 ${approvals}`;
   return <section className="conversation-context" aria-label="当前对话上下文">
@@ -33,7 +29,6 @@ export default function ConversationContext({ workspace, model, connected, activ
       </div>
     </details>
     <div className="context-actions">
-      <button type="button" onClick={onActivity} disabled={!connected} title={activity.error || "查看后台活动；不会中断当前对话"}>{activity.error ? "活动读取失败" : activity.loading ? "活动读取中" : running ? `执行中 ${running}` : "后台活动"}</button>
       <button type="button" onClick={onApprovals} disabled={!connected}>{approvalLabel}</button>
     </div>
   </section>;

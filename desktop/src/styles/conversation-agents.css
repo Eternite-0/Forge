@@ -1,0 +1,36 @@
+.conversation-agents { margin: 12px 0 20px; color: var(--color-text-secondary); font-size: 13px; }
+.conversation-agents button, .conversation-agent-detail button { font: inherit; color: inherit; cursor: pointer; }
+.conversation-agents-toggle { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border: 1px solid var(--color-border-subtle); border-radius: 9px; background: transparent; }
+.conversation-agents button:hover { background: var(--color-background-ghost); }
+.conversation-agent-runs { margin-top: 6px; border-left: 1px solid var(--color-border-subtle); padding-left: 12px; }
+.conversation-agent-caption { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.conversation-agent-row { display: flex; align-items: center; gap: 10px; width: 100%; border: 0; border-radius: 8px; background: transparent; text-align: left; padding: 10px 8px; }
+.conversation-agent-row > span:nth-child(2) { flex: 1; min-width: 0; }
+.conversation-agent-row strong { display: block; color: var(--color-text); font-weight: 500; }
+.conversation-agent-row > span:nth-child(2) > span { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 3px; }
+.conversation-agent-row small { max-width: 130px; text-align: right; font-size: 12px; }
+.conversation-agent-detail { position: absolute; inset: 0 0 0 auto; z-index: 35; width: min(380px, 100%); background: light-dark(#fff, #181818); color: var(--color-text); border-left: 1px solid var(--color-border-subtle); display: flex; flex-direction: column; min-height: 0; font-size: 14px; }
+.conversation-agent-detail > header { display: flex; align-items: center; gap: 18px; padding: 14px 16px; border-bottom: 1px solid var(--color-border-subtle); }
+.conversation-agent-detail h2 { font-size: 14px; margin: 0; font-weight: 500; }
+.conversation-agent-detail button { border: 1px solid var(--color-border-subtle); border-radius: 7px; background: transparent; padding: 6px 9px; min-height: 32px; }
+.conversation-agent-detail-body { padding: 20px; overflow: auto; flex: 1; overflow-wrap: anywhere; }
+.conversation-agent-identity { display: flex; align-items: center; gap: 10px; }
+.conversation-agent-identity h3 { font-size: 18px; margin: 0; }
+.conversation-agent-detail h4 { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin: 24px 0 8px; }
+.conversation-agent-detail p { line-height: 1.65; }
+.conversation-agent-status { color: var(--color-text-secondary); }
+.agent-objective { white-space: pre-wrap; }
+.conversation-agent-detail dl { display: block; }
+.conversation-agent-detail dl > div { display: flex; gap: 14px; padding: 5px 0; font-size: 12px; }
+.conversation-agent-detail dt { flex: 0 0 65px; color: var(--color-text-secondary); }
+.conversation-agent-detail dd { margin: 0; min-width: 0; flex: 1; }
+.agent-milestones { list-style: none; padding: 0 0 0 12px; border-left: 1px solid var(--color-border-subtle); }
+.agent-milestones li { margin: 12px 0; }
+.agent-milestones time { display: block; font-size: 11px; margin-top: 4px; color: var(--color-text-secondary); }
+.conversation-agent-global { margin-top: 20px; }
+@media (min-width: 901px) { .chat-workspace.subagent-detail-visible > .conversation-shell { margin-right: 380px; } }
+@media (max-width: 900px) { .conversation-agent-detail { width: 100%; } }
+@media (max-width: 480px) { .conversation-agent-row { flex-wrap: wrap; } .conversation-agent-row small { margin-left: 30px; max-width: none; text-align: left; } .conversation-agent-detail-body { padding: 16px; } }
+.conversation-agents button:focus-visible, .conversation-agent-detail button:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
+
+@media (min-width: 1181px) { .chat-workspace.agent-panel-visible > .conversation-shell { margin-right: 324px; } }

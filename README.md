@@ -14,6 +14,8 @@ Workers and continuously receives events.
 The [Grok Bot-inspired runtime and desktop rebuild](docs/GROKBOT_REBUILD.md)
 documents the new session, replay, supervision, and delivery boundaries. It
 describes what was verified offline separately from live and native acceptance.
+The [conversation subagents design](docs/CONVERSATION_SUBAGENTS.md) explains
+how delegated work is inspected without replacing the main conversation.
 
 ## Continuity review — 2026-11-16
 

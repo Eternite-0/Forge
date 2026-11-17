@@ -13,7 +13,7 @@
 | 1 | `GET /api/conversation` | 长期对话；加载更早消息；连接校验 | [useConversationFeed.ts](src/hooks/useConversationFeed.ts)、[api.ts](src/api.ts) | 读取当前工作空间的一条长期对话，按 `before` 分页。 |
 | 2 | `POST /api/conversation/message` | Composer 发送；失败消息重试 | [useConversationSend.ts](src/hooks/useConversationSend.ts) | 使用真实 `request_id`；相同内容重试保留原 ID，网络失败不宣称请求未执行。 |
 | 3 | `GET /api/timeline` | 会话中的工具调用、子智能体事件、历史加载 | [useConversationFeed.ts](src/hooks/useConversationFeed.ts)、[ChatTimeline.tsx](src/ChatTimeline.tsx) | 保留分页与历史事件来源；不生成缺失的工具输出或思考时长。 |
-| 4 | `GET /api/activity` | 右侧 Agent 卡片、会话子智能体条目；运行活动抽屉 | [AgentPanel.tsx](src/components/AgentPanel.tsx)、[ConversationRuntime.tsx](src/ConversationRuntime.tsx)、[useWorkspaceInspector.ts](src/hooks/useWorkspaceInspector.ts) | 独立轮询约 6 秒；详情按 `run_id` 绑定，读取失败清除陈旧当前状态。已记录步数和运行成功不代表任务完成。 |
+| 4 | `GET /api/activity` | 已有历史事件的运行补充信息；工作空间级运行活动抽屉 | [ConversationRuntime.tsx](src/ConversationRuntime.tsx)、[useWorkspaceInspector.ts](src/hooks/useWorkspaceInspector.ts) | 独立轮询约 6 秒；不是本对话子智能体名单。已记录步数和运行成功不代表任务完成。 |
 | 5 | `GET /api/events` | 运行活动 → 事件流 | [EventFeed.tsx](src/components/EventFeed.tsx) | 按 `after` 序号轮询；每批 100 条，本次查看最多保留最近 500 条。不是 SSE/WebSocket 订阅。 |
 | 6 | `GET /api/settings` | 常规、运行配置；Composer 当前模型；工作空间识别 | [useConversationFeed.ts](src/hooks/useConversationFeed.ts)、[useWorkspaceInspector.ts](src/hooks/useWorkspaceInspector.ts)、[OperatorSettings.tsx](src/OperatorSettings.tsx) | 区分当前活动配置与已保存配置，不把已保存模型当作正在运行的模型。 |
 | 7 | `POST /api/settings` | 设置 → 运行配置 → 保存 | [OperatorSettings.tsx](src/OperatorSettings.tsx)、[useWorkspaceInspector.ts](src/hooks/useWorkspaceInspector.ts) | 必须携带 `expected_revision`；保存后重启 Core 才生效。不会重置既有预算账本。 |
@@ -23,6 +23,8 @@
 | 11 | `POST /api/memory/{memory_id}/revoke` | 记忆记录 → 撤销记忆 | [WorkspaceInspector.tsx](src/components/WorkspaceInspector.tsx) | 只对可撤销的有效记忆标识展示入口；需用户确认；后台仍负责有效性检查。 |
 | 12 | `GET /api/recall` | 会话 → 引用与来源；记忆页；事件详情的关联引用 | [RecallCard.tsx](src/components/RecallCard.tsx) | 使用真实 `reference`、内容偏移与关联偏移；每页内容有字节上限，历史陈述不作为授权或正确性证明。 |
 | 13 | `GET /api/runtime/health` | 顶栏 → 运行健康 | [RuntimeHealth.tsx](src/components/RuntimeHealth.tsx)、[runtimeHealth.ts](src/runtimeHealth.ts) | 根据 `last_seen`、`timeout_seconds` 与组件状态判断心跳；连接成功不代表模型和权限已就绪。 |
+
+补充只读接口：`GET /api/conversations/{conversation_id}/subagents` 读取经 Core 验证归属的委派列表；同路径加 `/{run_id}` 读取精确运行详情。见 [useConversationAgents.ts](src/hooks/useConversationAgents.ts) 和 [设计说明](../docs/CONVERSATION_SUBAGENTS.md)。工作空间或对话不匹配时不展示数据；详情不可用时不以全局活动代替。
 
 ## 任务、计划、团队与 Worker（15 条）
 
