@@ -2662,19 +2662,11 @@ class WorkerManager:
                             )
                             if approved_capacity
                             else (
-                                "Use existing evidence. Do not repeatedly reread unchanged sources "
-                                "or your own unchanged artifact. If an exact source is archived, "
-                                "use worker_read_context_source with the archived task context's "
-                                "source_refs instead of another file_read. For artifact corrections "
-                                "use the current Core receipt/hash and approved file_revise. "
-                                "Keep tool batches within remaining_tool_calls. Reserve a model "
-                                "step for complete delivery and capacity for independent review. "
-                                "Review capacity estimates cover current evidence only; future "
-                                "delivery, tool results and model usage can increase the cost. "
-                                "Keep every assigned requirement, use concise artifact references "
-                                "in the delivery, and report a blocker if complete work cannot fit. "
-                                "Propose checks when asked for verification recommendations; "
-                                "execute tests only when assigned."
+                                "Reuse unchanged evidence; recall archived source_refs with "
+                                "worker_read_context_source. Revise only via approved file_revise "
+                                "+ current receipt/hash. Keep all requirements/tool limits; reserve "
+                                "final/review capacity. Review preview excludes future usage. "
+                                "Cite artifacts; report blockers. Suggest checks; execute only if assigned."
                             ),
                         }
                     ),
