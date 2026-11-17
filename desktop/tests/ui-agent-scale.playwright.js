@@ -42,6 +42,7 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(base);
+  await page.locator('.conversation-execution-details > summary').click();
   if (!process.env.FORGE_AGENT_SCALE_HOME_ONLY) {
   const group = page.getByRole('region', { name: '本对话子智能体' });
   await group.getByRole('button', { name: /本对话子智能体 · 52/ }).click();
@@ -106,10 +107,12 @@ async (page, { outputDir }) => {
   await page.waitForTimeout(500);
   check(await page.locator('.conversation-shell.home-state').count() === 1 && await page.locator('.conversation-agent-row').count() === 0, 'empty scoped chat remains home despite unrelated global running worker');
   triggerMode = true;
+  await page.locator('.conversation-execution-details > summary').click();
   const triggerToggle = page.getByRole('button', { name: /本对话子智能体 · 1/ });
   await triggerToggle.waitFor({ timeout: 16000 }); await triggerToggle.click();
   check(await page.locator('.conversation-shell.home-state').count() === 0, 'genuine scoped trigger delegation exits empty home without fabricated chat messages');
   await page.locator('.conversation-agent-row').filter({ hasText: 'trigger-agent 的独立委派任务' }).click();
+  await page.locator('.conversation-agent-technical > summary').click();
   await page.locator('.conversation-agent-detail').getByText('已登记触发事件', { exact: true }).waitFor();
   check(await page.locator('.conversation-agent-detail').getByText('trigger-agent 的独立委派任务', { exact: true }).isVisible(), 'trigger-only delegated run has accessible exact detail');
   check(!writes.length && !unknown.length, 'scale tests make no mutations or unknown API requests');

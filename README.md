@@ -2,8 +2,11 @@
 
 The desktop opens to one persistent conversation, with a Codex-inspired
 navigation sidebar, app menus and a compact composer. The conversation shows
-current task progress and pending approvals; Tasks opens a side panel on desktop
-and a full page on narrow screens. The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)
+user messages, assistant replies, usable results and required approvals. Background
+work stays behind one collapsed execution-details entry; individual agents open
+with responsibility and status, while logs and verification metadata remain
+optional. Task management is available from the conversation's overflow menu.
+The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)
 describes the historical Codex-style layout; see the [API-to-UI map](desktop/API-UI-COVERAGE.md)
 and [desktop instructions](desktop/README.md) for existing capabilities.
 

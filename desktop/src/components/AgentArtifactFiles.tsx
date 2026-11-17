@@ -14,7 +14,7 @@ function Files({ connection, runId }: { connection: Connection; runId: string })
   const [cursor, setCursor] = useState<string | null>(null);
   const [selected, setSelected] = useState<AgentArtifact | null>(null);
   const disclosure = useRef<HTMLButtonElement>(null), origin = useRef<HTMLButtonElement | null>(null), returnButton = useRef<HTMLButtonElement>(null);
-  const closeFile = () => { setSelected(null); requestAnimationFrame(() => (origin.current?.isConnected ? origin.current : disclosure.current)?.focus({ preventScroll: true })); };
+  const closeFile = () => { (origin.current?.isConnected ? origin.current : disclosure.current)?.focus({ preventScroll: true }); setSelected(null); requestAnimationFrame(() => (origin.current?.isConnected ? origin.current : disclosure.current)?.focus({ preventScroll: true })); };
   useEffect(() => { if (selected) returnButton.current?.focus({ preventScroll: true }); }, [selected]);
   useEffect(() => {
     if (!expanded || state.loaded) return;
@@ -30,9 +30,9 @@ function Files({ connection, runId }: { connection: Connection; runId: string })
   }, [expanded, revision, cursor, connection.base_url, connection.workspace_id, connection.generation, connection.bearer, runId]);
   const page = state.page;
   return <section className="agent-artifact-files" aria-label="子智能体历史文件" onKeyDown={event => { if (event.key === "Escape" && selected) { event.stopPropagation(); event.preventDefault(); closeFile(); } }}>
-    <h4><button ref={disclosure} type="button" aria-expanded={expanded} onClick={() => { if (expanded) setSelected(null); setExpanded(!expanded); }}>历史文件 {expanded ? "⌃" : "⌄"}</button></h4>
+    <h4><button ref={disclosure} type="button" aria-expanded={expanded} onClick={() => { if (expanded) setSelected(null); setExpanded(!expanded); }}>查看返回文件 {expanded ? "⌃" : "⌄"}</button></h4>
     {expanded && <>
-      <p className="conversation-agent-caption">不可变工具回执中的历史文件，不代表磁盘当前内容或任务已验收。</p>
+      <p className="conversation-agent-caption">显示本次执行时保存的版本。</p>
       {state.loading && <p role="status">正在读取历史文件…</p>}
       {state.error && <p role="status">历史文件暂不可用，不能据此判断没有文件。<button type="button" onClick={() => refresh(n => n + 1)}>重试</button></p>}
       {!state.loading && !state.error && page && <>

@@ -1,6 +1,5 @@
 import Markdown from "../Markdown";
 import { messageMetadata, type ChatMessage } from "../../timeline";
-import { text } from "./eventModel";
 import useTransientStatus from "./useTransientStatus";
 
 function CopyReply({ content, onInspect }: { content: string; onInspect: () => void }) {
@@ -17,12 +16,7 @@ function CopyReply({ content, onInspect }: { content: string; onInspect: () => v
 export default function AssistantMessage({ message, native, onInspect }: { message: ChatMessage; native: boolean; onInspect: () => void }) {
   const meta = messageMetadata(message.metadata);
   return <article data-scroll-key={`message:${message.id}`} className="message from-agent">
-    <div className="message-meta"><span className="message-avatar">F</span><strong>Router</strong>
-      <span className="reply-model" title={[meta.provider_id, meta.model_id].filter(Boolean).join(" / ")}>{meta.source === "router_notice" ? "任务通知" : text(meta.model_id, "模型未记录")}</span>
-      {meta.execution_mode === "mock" && <span>模拟</span>}{meta.execution_mode === "live" && <span>真实执行</span>}
-      {meta.execution_mode !== "live" && meta.execution_mode !== "mock" && <span>来源未知</span>}
-      <time dateTime={message.created_at}>{message.created_at ? new Date(message.created_at).toLocaleString() : ""}</time>
-    </div>
+    {meta.execution_mode === "mock" && <span className="message-demo-label">模拟记录</span>}
     <div className="message-body"><Markdown content={message.content} native={native} onInspect={onInspect} /></div>
     <CopyReply content={message.content} onInspect={onInspect} />
   </article>;

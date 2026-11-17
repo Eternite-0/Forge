@@ -1,11 +1,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Connection } from "../api";
-import { agentRole, agentTask, agentState, agentOutcome, agentMilestone, agentActive, orderedAgents, type ConversationAgent } from "../conversationAgents";
+import { agentRole, agentTask, agentOutcome, agentMilestone, agentActive, orderedAgents, type ConversationAgent } from "../conversationAgents";
 import useConversationAgents from "../hooks/useConversationAgents";
 import { statusLabel } from "../presentation";
 import AgentArtifactFiles from "./AgentArtifactFiles";
 import AgentAvatar from "./AgentAvatar";
 import "../styles/conversation-agents.css";
+
+function conciseState(run: ConversationAgent) {
+  if (run.delegation_state === "revoked") return "委派已撤销";
+  if (run.last_confirmed) return `上次确认：${run.lease_status === "expired" ? "等待恢复" : statusLabel(run.state)}（待更新）`;
+  if (run.state === "running" && run.lease_status === "expired") return "等待恢复";
+  if (run.state === "review_pending") return "结果待确认";
+  if (run.state === "succeeded") return run.outcome?.kind === "verified" ? "已完成" : "已返回结果";
+  return statusLabel(run.state);
+}
 
 type Feed = ReturnType<typeof useConversationAgents>;
 export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (run: ConversationAgent) => void }) {
@@ -34,7 +43,7 @@ export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (
         <button type="button" className="conversation-agent-row" key={`run:${run.run_id}`} onClick={() => onSelect(run)}>
         <AgentAvatar identity={run.worker_id || run.run_id} size={20} />
         <span><strong>{agentRole(run.role)}</strong><span title={agentTask(run)}>{agentTask(run)}</span></span>
-        <small data-state={run.state}>{agentState(run) || statusLabel(run.state)}{run.execution_mode === "mock" ? " · 模拟" : ""}</small><span aria-hidden="true">›</span>
+        <small data-state={run.state}>{conciseState(run)}{run.execution_mode === "mock" ? " · 模拟" : ""}</small><span aria-hidden="true">›</span>
       </button>])}
       {feed.activeMore && <button type="button" className="conversation-agents-older" disabled={feed.loading} onClick={feed.loadActive}>加载更多进行中与待处理</button>}
       {feed.hasMore && <button type="button" className="conversation-agents-older" disabled={feed.loading} onClick={feed.loadOlder}>{feed.loading ? "正在读取…" : "加载更早的子智能体"}</button>}
@@ -72,7 +81,7 @@ export function ConversationAgentDetail({ connection, runId, onBack, onActivity,
     onKeyDown={event => {
       if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); onBack(); }
       if (event.key === "Tab" && narrow) {
-        const elements = Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not([disabled]), [href], [tabindex="0"]') || []);
+        const elements = Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not([disabled]), summary, [href], [tabindex="0"]') || []).filter(element => element.getClientRects().length > 0);
         const first = elements[0], last = elements[elements.length - 1];
         if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
         else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
@@ -84,15 +93,19 @@ export function ConversationAgentDetail({ connection, runId, onBack, onActivity,
       {feed.error && <div role="status"><p>暂时无法读取此运行，未显示过期状态。</p><button type="button" onClick={feed.refresh}>重新读取</button></div>}
       {run && <>
         <div className="conversation-agent-identity"><AgentAvatar identity={run.worker_id || run.run_id} size={28} /><h3>{agentRole(run.role)}</h3></div>
-        <p className="conversation-agent-status">{agentState(run) || statusLabel(run.state)}{run.execution_mode === "mock" ? " · 模拟运行" : ""}</p>
-        <section><h4>委派任务</h4><p>{run.task_title || "已委派任务"}</p>{run.task_objective && <p className="agent-objective">{run.task_objective}</p>}</section>
-        <dl><div><dt>模型</dt><dd>{run.model_id || "未记录"}</dd></div><div><dt>委派来源</dt><dd>{run.source.kind === "message" ? "本对话请求" : "已登记触发事件"}</dd></div>{run.delegation_state === "revoked" && <div><dt>委派授权</dt><dd>已撤销</dd></div>}</dl>
-        <section><h4>结果</h4><p>{agentOutcome(run.outcome?.kind)}</p><p className="conversation-agent-caption">执行成功不等于任务已验收。这里只显示 Core 已记录的状态，不展示内部思考或未核实草稿。</p></section>
+        <p className="conversation-agent-status">{conciseState(run)}{run.execution_mode === "mock" ? " · 模拟运行" : ""}</p>
+        <section className="conversation-agent-responsibility"><h4>负责的工作</h4><p className="agent-objective">{agentTask(run)}</p></section>
+        {run.quest_id && ["failed", "blocked", "paused"].includes(run.state || "") && <section className="conversation-agent-next-step"><h4>需要处理</h4><button type="button" onClick={() => onTask(run.quest_id!)}>查看问题与可用操作</button></section>}
         <AgentArtifactFiles connection={connection} runId={runId} />
-        <section><h4>里程碑</h4>{run.milestones?.length ? <ol className="agent-milestones">{run.milestones.map(item => <li key={item.event_id}><span>{agentMilestone(item.event_type)}</span><time dateTime={item.created_at}>{Number.isNaN(Date.parse(item.created_at)) ? "" : new Date(item.created_at).toLocaleString()}</time></li>)}</ol> : <p className="conversation-agent-caption">尚无可公开的里程碑。</p>}</section>
+        <details className="conversation-agent-technical"><summary>更多详情</summary>
+          <dl><div><dt>模型</dt><dd>{run.model_id || "未记录"}</dd></div><div><dt>委派来源</dt><dd>{run.source.kind === "message" ? "本对话请求" : "已登记触发事件"}</dd></div>{run.delegation_state === "revoked" && <div><dt>委派授权</dt><dd>已撤销</dd></div>}</dl>
+          <section><h4>结果记录</h4><p>{agentOutcome(run.outcome?.kind)}</p></section>
+          <section><h4>里程碑</h4>{run.milestones?.length ? <ol className="agent-milestones">{run.milestones.map(item => <li key={item.event_id}><span>{agentMilestone(item.event_type)}</span><time dateTime={item.created_at}>{Number.isNaN(Date.parse(item.created_at)) ? "" : new Date(item.created_at).toLocaleString()}</time></li>)}</ol> : <p className="conversation-agent-caption">尚无记录。</p>}</section>
+          {run.quest_id && <button type="button" className="conversation-agent-global" onClick={() => onTask(run.quest_id!)}>打开关联任务</button>}
+          <button type="button" className="conversation-agent-global" onClick={onActivity}>查看全部运行活动</button>
+        </details>
       </>}
-      {run?.quest_id && <button type="button" className="conversation-agent-global" onClick={() => onTask(run.quest_id!)}>打开关联任务</button>}
-      <button type="button" className="conversation-agent-global" onClick={onActivity}>查看全部运行活动</button>
+
     </div>
   </aside>;
 }

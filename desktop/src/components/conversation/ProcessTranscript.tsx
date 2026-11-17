@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { visibleConversationMessage } from "../../conversationPresentation";
 import type { WorkerRun } from "../../ConversationRuntime";
 import type { ProcessGroup } from "../../processTimeline";
 import { relativeFilePath } from "../../workspaceFiles";
@@ -33,9 +34,8 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
     return () => window.clearInterval(timer);
   }, [process.active, process.startedAtMs]);
   const saved = memory.processes.get(process.key);
-  // Keep conversational progress visible, but do not open a stream of logs
-  // just because a background run has not produced an answer yet.
-  const expanded = saved?.expanded ?? (!process.answerId && process.records.some(record => record.type === "message"));
+  // Background progress never expands itself while the user is chatting.
+  const expanded = saved?.expanded ?? false;
   const events = process.records.flatMap(record => record.type === "tools" || record.type === "agents" ? record.events : []);
   const failed = events.some(event => /failed/.test(event.status || "") || typeof (event.detail as Row | undefined)?.exit_code === "number" && (event.detail as Row).exit_code !== 0);
   const unknown = events.some(event => /unknown|uncertain/.test(event.status || ""));
@@ -53,7 +53,7 @@ export default function ProcessTranscript({ process, runs, quests, memory, nativ
     }}>{!duration && <span>{label}</span>}{duration && <small>{duration}</small>}{(failed || currentFailed) && <small className="event-failed">{currentFailed ? "当前运行失败" : "含失败记录"}</small>}{(unknown || currentUnknown) && <small className="event-unknown">{currentUnknown ? "当前状态未知" : "含未知结果"}</small>}{mock && <small>含模拟记录</small>}<Chevron /></summary>
     <div className="process-content" hidden={!expanded} onClickCapture={() => { memory.processes!.set(process.key, { expanded: true }); }} onKeyDownCapture={() => { memory.processes!.set(process.key, { expanded: true }); }}>
       {process.records.map(record => {
-        if (record.type === "message") return <AssistantMessage key={`message:${record.value.id}`} message={record.value} native={native} onInspect={onInspect} />;
+        if (record.type === "message") return visibleConversationMessage(record.value) ? null : <AssistantMessage key={`message:${record.value.id}`} message={record.value} native={native} onInspect={onInspect} />;
         if (record.type === "agents") return <AgentActivityRow key={`agent:${eventKey(record.events[0])}`} events={record.events} runs={record.runs} memory={memory} onInspect={onInspect} onQuest={onQuest} />;
         if (record.type === "snapshot") return <AgentActivityRow key={`snapshot:${record.run.run_id}`} events={[]} runs={[record.run]} memory={memory} onInspect={onInspect} onQuest={onQuest} />;
         return <EventGroup key={`tools:${eventKey(record.events[0])}`} item={{ type: "group", questId: record.events[0].quest_id || null, events: record.events }}

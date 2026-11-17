@@ -1,4 +1,5 @@
 import { useRef, type RefObject, type ReactNode } from "react";
+import "./styles/conversation-simple.css";
 import AnimatedDetails from "./AnimatedDetails";
 import type { WorkerRun } from "./ConversationRuntime";
 import { questDisplayTitle, riskLabel, statusLabel, toolLabel } from "./presentation";
@@ -42,13 +43,23 @@ export default function ChatTimeline({ children, messages, events, outgoing, que
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
-    {timelineError && <p className="notice error" role="alert">过程记录暂不可用：{timelineError}</p>}
+
     {!items.length && !workerRuns.length && !(connected && (progress.length || approvals.length)) && <div className="empty-conversation"><h2>{workspaceName ? <>你想让我们在 <span className="welcome-project-name" title={workspaceName}>{workspaceName}</span> 中构建什么？</> : "你想构建什么？"}</h2></div>}
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
-    {children}
-    {connected && <TaskProgressList cards={progress} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
+    {(events.length > 0 || workerRuns.length > 0 || progress.length > 0) && <details className="conversation-execution-details" data-scroll-key="execution-details" onToggle={event => { if (event.currentTarget.open) onInspect(); }}>
+      <summary>执行详情</summary>
+      <div className="conversation-execution-body">
+        {timelineError && <p className="notice error" role="status">过程记录暂不可用：{timelineError}</p>}
+        {children}
+        <MessageList mode="execution" items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
+          onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
+          connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />
+        {connected && <TaskProgressList cards={progress.filter(card => !["needs_input", "blocked", "failed"].includes(card.quest.status))} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
+      </div>
+    </details>}
+    {connected && <TaskProgressList cards={progress.filter(card => ["needs_input", "blocked", "failed"].includes(card.quest.status) || card.quest.status === "completed" && card.result && !visibleHistoryReceipts.has(card.result.receiptId))} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
     {connected && approvals.length > 0 && <section className="timeline-updates" aria-label="任务与审批更新">
       <div className="timeline-updates-label">需要你处理</div>
       {approvals.slice(0, 3).map((item) => {
