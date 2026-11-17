@@ -184,6 +184,15 @@ their content. Never store credentials or personal payloads in the report.
 - Worker result admission is a separate fenced transaction stage. It either
   persists pending tool calls, records more context debt, blocks, or queues
   independent review. A delivery claim is not verified completion.
+- After successful tool work, a terminal reply rejected only for JSON syntax or
+  schema enters durable reply-format correction, not artifact execution. The
+  next request retains existing Core read-only source/receipt recall but removes
+  action tools; admission independently rejects unexpected action calls before
+  staging them. The original contract, source archives and review gates remain
+  unchanged. Pause/reopen and untrusted inbox context preserve this restriction;
+  an existing authoritative independent-review revision restores ordinary scoped execution.
+  This uses existing capsule state, with no migration or provider-specific
+  structured-output capability assumption.
 - The shipped synchronization uses bounded polling, not SSE or token streaming.
   Conversation deltas replay new committed messages; ongoing activity remains
   a separate snapshot. No migration or workspace reset is required.

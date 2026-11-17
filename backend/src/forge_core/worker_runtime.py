@@ -20,6 +20,7 @@ from .tool_engine import ToolAuthorizationRequired, ToolEngine
 from .worker_delivery import (
     DeliveryOutcome,
     commit_worker_response,
+    reply_format_repair_active,
     validate_worker_delivery,
 )
 from .worker_delivery import (
@@ -1754,6 +1755,27 @@ class WorkerManager:
                 "the failure, change your approach, and return JSON that matches "
                 "output_schema. Do not repeat the same failing call."
             )
+            format_reply = (
+                failed_call is None
+                and reason_code == "invalid_output_contract"
+                and detail.get("validation_stage")
+                in {"json_syntax", "canonical_json", "output_schema"}
+                and detail.get("error") != "SchemaError"
+                and work.connection.execute(
+                    "SELECT 1 FROM worker_tool_calls WHERE run_id=? AND state='succeeded' LIMIT 1",
+                    (run_id,),
+                ).fetchone()
+                is not None
+            ) or reply_format_repair_active(work.connection, run_id)
+            if format_reply:
+                instruction = (
+                    "Correct the final reply only: return raw JSON matching the approved "
+                    "output_schema. This is a reply-format error, not an instruction to edit "
+                    "artifacts or repeat completed actions. Preserve all assigned requirements, "
+                    "findings and exact evidence references. Reuse existing receipts and source "
+                    "content; only Core read-only citation/recall tools remain available. "
+                    "Do not write the reply into a file. A valid reply still requires review."
+                )
             if envelope:
                 instruction += (
                     f" Complete delivery must fit {envelope['max_delivery_bytes']} canonical "
@@ -1878,8 +1900,8 @@ class WorkerManager:
                 "UPDATE worker_runs SET repairs=repairs+1 WHERE id=?", (run_id,)
             )
             work.connection.execute(
-                "UPDATE worker_capsules SET next_action='model',revision=revision+1 WHERE run_id=?",
-                (run_id,),
+                "UPDATE worker_capsules SET next_action=?,revision=revision+1 WHERE run_id=?",
+                ("format_reply" if format_reply else "model", run_id),
             )
             work.append_event(
                 ForgeEvent(
@@ -2148,7 +2170,8 @@ class WorkerManager:
                                 (run_id, ordinal, _json(message)),
                             )
                             work.connection.execute(
-                                "UPDATE worker_capsules SET next_action='model',revision=revision+1 WHERE run_id=?",
+                                "UPDATE worker_capsules SET next_action=CASE WHEN next_action='format_reply' "
+                                "THEN 'format_reply' ELSE 'model' END,revision=revision+1 WHERE run_id=?",
                                 (run_id,),
                             )
                     except (
@@ -2515,6 +2538,14 @@ class WorkerManager:
 
                     definitions.extend(TOOLS)
                     allowed.extend(item["name"] for item in TOOLS)
+                with self.store.connection() as connection:
+                    format_reply = reply_format_repair_active(connection, run_id)
+                if format_reply:
+                    # A malformed terminal reply does not reopen artifact execution.
+                    # Keep only already-authorized Core source/receipt recall, including
+                    # archived citations; never grant a tool solely for format repair.
+                    allowed = [name for name in allowed if name in CORE_READ_ONLY_TOOLS]
+                    definitions = [item for item in definitions if item["name"] in allowed]
                 from .context_service import ContextService
                 from .worker_prompts import WORKER_MESSAGE_FRAMING_BYTES
 

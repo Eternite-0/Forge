@@ -26,6 +26,15 @@ class DeliveryOutcome(str, Enum):
     BLOCKED = "blocked"
 
 
+def reply_format_repair_active(connection, run_id):
+    row = connection.execute(
+        "SELECT next_action FROM worker_capsules WHERE run_id=?", (run_id,)
+    ).fetchone()
+    if row is None:
+        raise DomainError("Worker capsule missing")
+    return row[0] == "format_reply"
+
+
 def _delivery_schema_error_path(error):
     return [
         part
@@ -159,6 +168,14 @@ def commit_worker_response(manager, *, run_id, token, row, calls, allowed, text,
     with manager.store.unit_of_work() as work:
         c = work.connection
         current = manager._fenced(c, run_id, token)
+        format_reply = reply_format_repair_active(c, run_id)
+        if format_reply:
+            from .worker_recovery import CORE_READ_ONLY_TOOLS
+
+            # Enforce before staging any tool, even if an adapter ignores the
+            # narrowed request definitions. Model output cannot grant execution.
+            if any(call.get("name") not in CORE_READ_ONLY_TOOLS for call in calls):
+                raise DomainError("Reply format repair cannot admit action tools")
         from .superagent_events import TriggerService
 
         trigger_debt = (
@@ -259,8 +276,8 @@ def commit_worker_response(manager, *, run_id, token, row, calls, allowed, text,
                 ),
             )
             c.execute(
-                "UPDATE worker_capsules SET next_action='model',revision=revision+1 WHERE run_id=?",
-                (run_id,),
+                "UPDATE worker_capsules SET next_action=?,revision=revision+1 WHERE run_id=?",
+                ("format_reply" if format_reply else "model", run_id),
             )
             return DeliveryOutcome.CONTEXT_PENDING
         if current["tool_spent"] + len(calls) > current["tool_limit"]:
@@ -309,7 +326,7 @@ def commit_worker_response(manager, *, run_id, token, row, calls, allowed, text,
             )
         c.execute(
             "UPDATE worker_capsules SET next_action=?,revision=revision+1 WHERE run_id=?",
-            ("tool" if calls else "review", run_id),
+            ("format_reply" if calls and format_reply else "tool" if calls else "review", run_id),
         )
         if not calls:
             c.execute(
