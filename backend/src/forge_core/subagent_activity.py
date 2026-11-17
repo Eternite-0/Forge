@@ -35,6 +35,10 @@ _OUTCOMES = {
     "succeeded": ("verified", "Worker result verified"),
 }
 _CONTROL = re.compile(r"[\x00-\x1f\x7f-\x9f\u202a-\u202e\u2066-\u2069]")
+_PHASE_STATES = {
+    "active": ("queued", "running", "paused", "blocked", "review_pending"),
+    "terminal": ("succeeded", "failed", "cancelled"),
+}
 
 
 class SubagentNotFound(KeyError):
@@ -51,13 +55,13 @@ def _identity(value):
     return value
 
 
-def _scope_key(conversation_id, project_id):
-    raw = json.dumps([conversation_id, project_id], separators=(",", ":"))
+def _scope_key(workspace_id, conversation_id, project_id, phase):
+    raw = json.dumps([workspace_id, conversation_id, project_id, phase], separators=(",", ":"))
     return hashlib.sha256(raw.encode()).hexdigest()[:24]
 
 
 def _encode_cursor(ordinal, scope):
-    raw = f"1:{scope}:{ordinal}".encode("ascii")
+    raw = f"2:{scope}:{ordinal}".encode("ascii")
     return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
 
 
@@ -70,7 +74,7 @@ def _decode_cursor(value, scope):
         raw = base64.b64decode(value + "=" * (-len(value) % 4), altchars=b"-_", validate=True)
         if base64.urlsafe_b64encode(raw).decode().rstrip("=") != value:
             raise ValueError
-        match = re.fullmatch(r"1:([0-9a-f]{24}):([1-9][0-9]{0,18})", raw.decode("ascii"))
+        match = re.fullmatch(r"2:([0-9a-f]{24}):([1-9][0-9]{0,18})", raw.decode("ascii"))
         if not match or match[1] != scope or int(match[2]) > 2**63 - 1:
             raise ValueError
         return int(match[2])
@@ -190,8 +194,14 @@ _SELECT = (
 )
 
 
-def read_subagents(store, conversation_id, *, project_id=None, before=None, limit=50, run_id=None):
+def read_subagents(
+    store, conversation_id, *, project_id=None, before=None, limit=50, run_id=None, phase="all"
+):
     """One snapshot with bounded candidates; cursors are tied to the exact scope.
+
+    The active phase includes blocked/paused/reviewing work and expired leases;
+    only a durable terminal state moves a run to terminal history. Phase is
+    applied before pagination, so newer completed runs cannot hide older work.
 
     A candidate with unavailable/corrupt source is omitted, not reassigned to a
     neighboring turn. Such a page may be shorter (even empty); next_before still
@@ -204,9 +214,13 @@ def read_subagents(store, conversation_id, *, project_id=None, before=None, limi
         _identity(run_id)
     if type(limit) is not int or not 1 <= limit <= 100:
         raise ValueError("Invalid subagent page size")
+    if not isinstance(phase, str) or phase not in {"all", *_PHASE_STATES}:
+        raise ValueError("Invalid subagent phase")
     if run_id is not None and before is not None:
         raise ValueError("Detail cannot be paginated")
-    scope = _scope_key(conversation_id, project_id)
+    if run_id is not None and phase != "all":
+        raise ValueError("Detail cannot be phase-filtered")
+    scope = _scope_key(store.workspace.id, conversation_id, project_id, phase)
     boundary = _decode_cursor(before, scope)
     now = time.time()
     with store.connection() as connection:
@@ -231,6 +245,10 @@ def read_subagents(store, conversation_id, *, project_id=None, before=None, limi
             " AND plan.digest=r.plan_digest"
         )
         params = [conversation_id]
+        if phase != "all":
+            states = _PHASE_STATES[phase]
+            predicate += " AND r.state IN (" + ",".join("?" for _ in states) + ")"
+            params.extend(states)
         if project_id is not None:
             predicate += " AND p.project_id=?"
             params.append(project_id)
@@ -261,6 +279,7 @@ def read_subagents(store, conversation_id, *, project_id=None, before=None, limi
             "conversation_id": conversation_id,
             "workspace_id": store.workspace.id,
             "project_id": project_id,
+            "phase": phase,
         }
         if run_id is not None:
             if not items:

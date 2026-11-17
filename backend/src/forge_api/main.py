@@ -1408,10 +1408,11 @@ def conversation_subagents(
     project_id: str | None = Query(default=None, max_length=200),
     before: str | None = Query(default=None, max_length=96),
     limit: int = Query(default=50, ge=1, le=100),
+    phase: str = Query(default="all", max_length=16),
 ):
     try:
         return read_subagents(
-            store, conversation_id, project_id=project_id, before=before, limit=limit
+            store, conversation_id, project_id=project_id, before=before, limit=limit, phase=phase
         )
     except SubagentNotFound:
         raise HTTPException(status_code=404, detail="Subagent scope not found") from None
