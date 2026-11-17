@@ -141,6 +141,13 @@ _READ_TOOLS.append(
 )
 
 
+_INTERRUPTED_COMPLETION_NOTICE = (
+    "(notice_attempts=5 AND notice_token IS NOT NULL "
+    "AND event_type='quest.status_changed' "
+    "AND COALESCE(CASE WHEN json_valid(payload) THEN json_extract(payload,'$.to') END,'')='completed')"
+)
+
+
 def _json(value):
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
@@ -1295,6 +1302,9 @@ class RouterService:
         if not self.model_id:
             return False
         self._sync_memory()
+        recovered = await self._recover_interrupted_completion()
+        if recovered is not None:
+            return recovered
         allowed = (*URGENT_EVENTS, "worker.progress", "quest.status_changed")
         notice_token = secrets.token_hex(24)
         placeholders = ",".join("?" for _ in allowed)
@@ -1305,7 +1315,8 @@ class RouterService:
             if self.autonomous:
                 internal_acks += self._ack_closed_approval_requests(connection)
             connection.execute(
-                "UPDATE event_inbox SET notice_dead_at=?,notice_error='attempts_exhausted' WHERE consumer_id='router' AND processed_at IS NULL AND notice_dead_at IS NULL AND notice_attempts>=5 AND notice_next_attempt<=?",
+                "UPDATE event_inbox SET notice_dead_at=?,notice_error='attempts_exhausted' WHERE consumer_id='router' AND processed_at IS NULL AND notice_dead_at IS NULL AND notice_attempts>=5 AND notice_next_attempt<=? "
+                f"AND NOT {_INTERRUPTED_COMPLETION_NOTICE}",
                 (now_iso(), time.time()),
             )
             row = connection.execute(
@@ -1431,8 +1442,59 @@ class RouterService:
                         )
             return False
 
+    async def _recover_interrupted_completion(self):
+        """Recover only an expired, still-owned last attempt without model replay.
+
+        Normal failures clear their token. An interrupted in-flight attempt does
+        not; its unknown model usage remains reserved and is never refunded here.
+        Cancellation itself never publishes. A later poll must acquire a new
+        lease and revalidate current completion evidence before publishing.
+        """
+        with self.store.connection() as connection:
+            row = connection.execute(
+                "SELECT event_id,notice_token FROM event_inbox WHERE consumer_id='router' "
+                "AND processed_at IS NULL AND notice_dead_at IS NULL "
+                f"AND {_INTERRUPTED_COMPLETION_NOTICE} AND notice_next_attempt<=? "
+                "ORDER BY seq LIMIT 1",
+                (time.time(),),
+            ).fetchone()
+            if row is None:
+                return None
+            event_id = row["event_id"]
+        token = secrets.token_hex(24)
+        with self.store.unit_of_work() as work:
+            changed = work.connection.execute(
+                "UPDATE event_inbox SET notice_token=?,notice_next_attempt=? "
+                "WHERE consumer_id='router' AND event_id=? AND notice_token=? "
+                "AND processed_at IS NULL AND notice_dead_at IS NULL "
+                "AND notice_attempts=5 AND notice_next_attempt<=?",
+                (token, time.time() + 60, event_id, row["notice_token"], time.time()),
+            )
+            if changed.rowcount != 1:
+                return False
+        try:
+            recovered = await self._handle_notice([event_id], token, orphaned_completion=True)
+        except Exception:  # noqa: BLE001 - bounded terminal failure; cancellation propagates
+            recovered = False
+        if recovered:
+            return True
+        with self.store.unit_of_work() as work:
+            work.connection.execute(
+                "UPDATE event_inbox SET notice_dead_at=?,notice_error='attempts_exhausted',notice_token=NULL "
+                "WHERE consumer_id='router' AND event_id=? AND notice_token=? "
+                "AND processed_at IS NULL AND notice_dead_at IS NULL AND notice_next_attempt>?",
+                (now_iso(), event_id, token, time.time()),
+            )
+        return False
+
     async def _handle_notice(
-        self, event_ids, notice_token, *, deadline_state=None, deadline_handoff=None
+        self,
+        event_ids,
+        notice_token,
+        *,
+        deadline_state=None,
+        deadline_handoff=None,
+        orphaned_completion=False,
     ):
         event_id = event_ids[0]
         with self.store.connection() as connection:
@@ -1499,6 +1561,12 @@ class RouterService:
                 connection, notice["quest_id"], grouped, completed_sources
             )
             connection.commit()
+        if orphaned_completion and (
+            completion_handoff_sources is None
+            or len(grouped) != 1
+            or grouped[0]["notice_attempts"] != 5
+        ):
+            return False
         if deadline_handoff is not None and (
             completion_handoff_sources is None
             or completion_handoff_sources != deadline_handoff.get("sources")
@@ -1643,7 +1711,8 @@ class RouterService:
         if model_context_exceeded and completion_handoff_sources is None:
             raise DomainError("Router notice context budget exceeded")
         completion_handoff = (
-            deadline_handoff is not None
+            orphaned_completion
+            or deadline_handoff is not None
             or context["budget"]["input_estimate"] > 16000
             or model_context_exceeded
         ) and completion_handoff_sources is not None
@@ -1654,7 +1723,7 @@ class RouterService:
                 action="update_user",
                 reply=(
                     "任务已完成。结果摘要暂不可用。"
-                    if deadline_handoff is not None
+                    if deadline_handoff is not None or orphaned_completion
                     else "任务已完成。结果较长，这里只通知完成，不概括内容。"
                 ),
             )
