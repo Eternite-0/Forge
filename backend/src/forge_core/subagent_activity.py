@@ -10,6 +10,7 @@ import hashlib
 import json
 import math
 import re
+import sqlite3
 import time
 from pathlib import Path
 
@@ -142,7 +143,57 @@ def _milestones(connection, row, limit):
     ]
 
 
-def _project(connection, row, source, *, now, milestone_limit):
+def _page_milestones(connection, rows, limit):
+    """Scan this conversation once, retaining only each exact run's latest events.
+
+    SQLite 3.35+ supports MATERIALIZED (window functions require 3.25+).
+    The materialization fence prevents a separate event scan per wanted run.
+    Candidates are already source-verified and bounded by the list page size.
+    No payload or unbounded event history crosses the SQLite result boundary.
+    """
+    if not rows:
+        return {}
+    # Custom Python builds may link an older SQLite. Preserve their existing
+    # bounded behavior; genuine query errors on newer engines must propagate.
+    if sqlite3.sqlite_version_info < (3, 35, 0):
+        return {row["id"]: _milestones(connection, row, limit) for row in rows}
+    wanted = ",".join("(?,?,?,?)" for _ in rows)
+    workers = ",".join("?" for _ in rows)
+    types = ",".join("?" for _ in _TITLES)
+    sql = (
+        f"WITH wanted(conv,quest,worker,run) AS (VALUES {wanted}), "
+        "eligible AS MATERIALIZED ("
+        "SELECT id,event_type,created_at,seq,conversation_id,quest_id,worker_id,"
+        "json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END,'$.run_id') "
+        "AS run FROM events WHERE conversation_id=? "
+        f"AND worker_id IN ({workers}) AND event_type IN ({types})), "
+        "ranked AS (SELECT e.*,ROW_NUMBER() OVER(PARTITION BY e.run ORDER BY seq DESC) "
+        "AS rank FROM eligible e JOIN wanted w ON e.conversation_id=w.conv "
+        "AND e.quest_id=w.quest AND e.worker_id=w.worker AND e.run=w.run) "
+        "SELECT id,event_type,created_at,seq,run FROM ranked WHERE rank<=? ORDER BY seq"
+    )
+    params = tuple(
+        value
+        for row in rows
+        for value in (row["conversation_id"], row["quest_id"], row["worker_id"], row["id"])
+    )
+    params += (rows[0]["conversation_id"],)
+    params += tuple(row["worker_id"] for row in rows) + tuple(_TITLES) + (limit,)
+    result = {row["id"]: [] for row in rows}
+    for event in connection.execute(sql, params):
+        result[event["run"]].append(
+            {
+                "event_id": event["id"],
+                "event_type": event["event_type"],
+                "title": _TITLES[event["event_type"]],
+                "created_at": event["created_at"],
+                "seq": event["seq"],
+            }
+        )
+    return result
+
+
+def _project(connection, row, source, *, now, milestone_limit, milestones=None):
     lease_status = "none"
     if row["state"] == "running":
         valid_times = all(
@@ -175,7 +226,9 @@ def _project(connection, row, source, *, now, milestone_limit):
         "tool_spent": row["tool_spent"],
         "delegation_state": row["delegation_state"],
         "outcome": {"kind": kind, "label": label},
-        "milestones": _milestones(connection, row, milestone_limit),
+        "milestones": _milestones(connection, row, milestone_limit)
+        if milestones is None
+        else milestones,
     }
 
 
@@ -306,19 +359,25 @@ def read_subagents(
             boundary=boundary,
             count=1 if run_id is not None else limit + 1,
         )
-        items = []
+        verified = []
         for row in rows[:limit]:
             source = _source(connection, row, store.workspace.id)
             if source is not None:
-                items.append(
-                    _project(
-                        connection,
-                        row,
-                        source,
-                        now=now,
-                        milestone_limit=20 if run_id else 5,
-                    )
-                )
+                verified.append((row, source))
+        milestones = (
+            _page_milestones(connection, [row for row, _ in verified], 5) if run_id is None else {}
+        )
+        items = [
+            _project(
+                connection,
+                row,
+                source,
+                now=now,
+                milestone_limit=20 if run_id else 5,
+                milestones=milestones.get(row["id"]),
+            )
+            for row, source in verified
+        ]
         envelope = {
             "conversation_id": conversation_id,
             "workspace_id": store.workspace.id,

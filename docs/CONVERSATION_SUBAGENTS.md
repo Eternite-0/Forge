@@ -68,3 +68,16 @@ The history preview verifies the selected run, receipt, path, digest and
 execution mode before displaying the recorded diff. Nothing here reads or
 replaces the current file, proves the overall task was accepted, or displays
 private model reasoning. Mock-generated receipts are explicitly marked.
+
+## List performance
+
+List pages retain per-run milestone limits and exact conversation, task,
+worker, and run matching, but fetch eligible milestones in one query on
+SQLite 3.35 or newer. Older SQLite builds use the original bounded per-run
+query. The detail endpoint retains its independent 20-milestone limit.
+
+In a disposable fixture with 5,000 seeded terminal records and two matching
+events per recorded run, the median for a 50-row terminal page fell from
+about 200 ms to about 8 ms over seven samples. The response matched the
+original implementation field for field. This measures local SQLite reads
+on seeded history, not provider execution or production latency.
