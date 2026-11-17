@@ -622,12 +622,18 @@ class ContextService:
         return {"capsule": capsule, "recent_messages": messages}
 
     def build_worker_context(
-        self, run_id: str, *, input_budget: int, source_readback_available: bool = False
+        self,
+        run_id: str,
+        *,
+        input_budget: int,
+        source_readback_available: bool = False,
+        per_message_overhead: int = 0,
     ) -> list[dict]:
         return self._worker_context(
             run_id,
             input_budget=input_budget,
             source_readback_available=source_readback_available,
+            per_message_overhead=per_message_overhead,
         )
 
     def _worker_context(
@@ -636,6 +642,7 @@ class ContextService:
         *,
         input_budget,
         source_readback_available=False,
+        per_message_overhead=0,
         _prepare=False,
         _fence=None,
         _expected=None,
@@ -644,6 +651,14 @@ class ContextService:
     ):
         if type(input_budget) is not int or input_budget <= 0:
             raise DomainError("Invalid Worker context budget")
+        if type(per_message_overhead) is not int or per_message_overhead < 0:
+            raise DomainError("Invalid Worker message framing")
+
+        def measured(messages):
+            # Admit the same per-message framing later charged by the request ledger.
+            # Otherwise content can fit here but fail before the next revision call.
+            return len(_json(messages).encode("utf-8")) + per_message_overhead * len(messages)
+
         if type(source_readback_available) is not bool:
             raise DomainError("Invalid Worker source readback availability")
         with self.store.unit_of_work() as work:
@@ -787,7 +802,7 @@ class ContextService:
                 return with_constraints(result)
 
             result = build(remaining)
-            if len(_json(result).encode("utf-8")) <= input_budget:
+            if measured(result) <= input_budget:
                 if _prepare:
                     return {"messages": result, "selected": []}
                 return result
@@ -853,7 +868,7 @@ class ContextService:
             # Raw sources remain immutable; archive metadata grants no evidence PASS.
             if (
                 (archives or source_readback_available)
-                and len(_json(compacted_result()).encode("utf-8")) > input_budget
+                and measured(compacted_result()) > input_budget
                 and _settled_receipted_exchange(self.store, c, run_id, remaining[boundary:])
             ):
                 capsule["history_recall"]["recent_exchange"] = {
@@ -978,14 +993,14 @@ class ContextService:
             result = compacted_result()
             # Fixed task contracts and live tool pairs take priority over archived
             # highlights. Every removed highlight still has its original source.
-            while len(_json(result).encode("utf-8")) > input_budget and (
+            while measured(result) > input_budget and (
                 capsule["hypotheses"] or capsule["completed_steps"]
             ):
                 target = capsule["hypotheses"] or capsule["completed_steps"]
                 target.pop()
                 capsule["history_recall"]["omitted_highlights"] += 1
                 result = compacted_result()
-            if len(_json(result).encode("utf-8")) > input_budget and (
+            if measured(result) > input_budget and (
                 _handoff is None or _max_sources == len(prepared["selected"])
             ):
                 raise DomainError("Worker context budget exceeded after compaction")

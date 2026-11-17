@@ -189,6 +189,34 @@ def test_compact_complete_owned_revision_still_requires_fresh_model_review(tmp_p
         assert service._rounds(connection, worker["id"]) == 2
 
 
+def test_owned_revision_framing_admission_long_workspace(tmp_path, monkeypatch):
+    longer = tmp_path / ("p" * 120)
+    longer.mkdir()
+    test_compact_complete_owned_revision_still_requires_fresh_model_review(longer, monkeypatch)
+
+
+def test_revision_cannot_bypass_exhausted_context_with_framing(tmp_path, monkeypatch):
+    store, manager, model, worker, _packet_before, _content = pending(tmp_path, monkeypatch)
+    assert asyncio.run(IndependentReviewService(manager).review(worker["id"]))["revision_applied"]
+    before_calls = len(model.requests)
+    with store.unit_of_work() as work:
+        # Explicit near-exhausted allocation fixture, not extra authority or budget.
+        work.connection.execute(
+            "UPDATE worker_runs SET token_spent=token_limit-100 WHERE id=?", (worker["id"],)
+        )
+        before_receipts = work.connection.execute(
+            "SELECT count(*) FROM action_receipts"
+        ).fetchone()[0]
+    result = asyncio.run(manager.run(worker["id"]))
+    assert result["state"] == "blocked"
+    assert len(model.requests) == before_calls
+    with store.connection() as connection:
+        assert (
+            connection.execute("SELECT count(*) FROM action_receipts").fetchone()[0]
+            == before_receipts
+        )
+
+
 def test_immutable_receipts_exceeding_actual_context_cannot_get_capacity_revision(
     tmp_path, monkeypatch
 ):

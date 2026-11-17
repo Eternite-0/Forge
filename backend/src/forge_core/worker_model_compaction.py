@@ -267,10 +267,11 @@ class WorkerModelCompactor:
                 purpose="context_compaction",
             )
 
-    async def compact(self, *, input_budget, source_readback_available):
+    async def compact(self, *, input_budget, source_readback_available, per_message_overhead=0):
         prepared = self.service._worker_context(
             self.run_id,
             input_budget=input_budget,
+            per_message_overhead=per_message_overhead,
             source_readback_available=source_readback_available,
             _prepare=True,
             _fence=self._fence,
@@ -365,6 +366,7 @@ class WorkerModelCompactor:
             self.service._worker_context(
                 self.run_id,
                 input_budget=input_budget,
+                per_message_overhead=per_message_overhead,
                 source_readback_available=source_readback_available,
                 _fence=lambda connection: self._checkpoint_fence(
                     connection, request, response.usage

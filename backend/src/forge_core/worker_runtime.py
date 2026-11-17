@@ -2516,6 +2516,7 @@ class WorkerManager:
                     definitions.extend(TOOLS)
                     allowed.extend(item["name"] for item in TOOLS)
                 from .context_service import ContextService
+                from .worker_prompts import WORKER_MESSAGE_FRAMING_BYTES
 
                 remaining = (
                     row["token_limit"] - row["token_spent"] if token_budgets_enforced() else None
@@ -2667,6 +2668,7 @@ class WorkerManager:
                     ).compact(
                         input_budget=context_input_allowance,
                         source_readback_available=source_readback_available,
+                        per_message_overhead=WORKER_MESSAGE_FRAMING_BYTES,
                     )
                     if compacted["source_count"]:
                         # A summary is a real, accounted model step. Re-read
@@ -2679,6 +2681,7 @@ class WorkerManager:
                         run_id,
                         input_budget=context_input_allowance,
                         source_readback_available=source_readback_available,
+                        per_message_overhead=WORKER_MESSAGE_FRAMING_BYTES,
                     )
                 if artifact_message is not None:
                     messages.append(artifact_message)
@@ -2739,7 +2742,9 @@ class WorkerManager:
             except (TypeError, ValueError, KeyError):
                 self._fail(run_id, token, "invalid_tool_scope")
                 return self.get(run_id)
-            reserve = request_bytes + output_limit + 64 + 16 * len(messages)
+            reserve = (
+                request_bytes + output_limit + 64 + WORKER_MESSAGE_FRAMING_BYTES * len(messages)
+            )
             if approved_capacity:
                 from .providers import ProviderGateway
 

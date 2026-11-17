@@ -5,6 +5,8 @@ import json
 from .worker_schema import DELIVERY_FIELDS, LEGACY_OUTPUT_SCHEMA
 from .worker_task_sources import CORE_PREFETCH_POLICY, INPUT_POLICIES
 
+WORKER_MESSAGE_FRAMING_BYTES = 16
+
 
 def canonical(value):
     return json.dumps(
@@ -354,9 +356,12 @@ def worker_request_reservation(messages, tools, model_id, output_limit):
     """Same complete conservative input/framing policy as native Worker admission."""
     size = len(canonical({"messages": messages, "tools": tools, "model": model_id}).encode())
     return {
-        "input_reservation": size + 64 + 16 * len(messages),
+        "input_reservation": size + 64 + WORKER_MESSAGE_FRAMING_BYTES * len(messages),
         "output_reservation": output_limit,
-        "total_reservation": size + output_limit + 64 + 16 * len(messages),
+        "total_reservation": size
+        + output_limit
+        + 64
+        + WORKER_MESSAGE_FRAMING_BYTES * len(messages),
     }
 
 

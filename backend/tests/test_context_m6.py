@@ -171,7 +171,8 @@ def test_router_chinese_recall_with_two_old_candidates_asks_to_disambiguate(tmp_
     assert result["intent"] == "ambiguous"
 
 
-def test_worker_compaction_keeps_pending_tool_pair(graph):
+@pytest.mark.parametrize("framing_boundary", [False, True])
+def test_worker_compaction_keeps_pending_tool_pair(graph, framing_boundary):
     from test_worker_runtime import MockApprovedTeam, MockToolEngine, ScriptedMock
 
     from forge_core.provider_pool import ProviderPool
@@ -207,14 +208,33 @@ def test_worker_compaction_keeps_pending_tool_pair(graph):
                 "INSERT INTO worker_messages VALUES (?,?,?,?)",
                 (run["id"], ordinal, message["role"], json.dumps(message)),
             )
-    context = ContextService(store).build_worker_context(run["id"], input_budget=3500)
+    service = ContextService(store)
+    framing = 0
+    budget = 3500
+    if framing_boundary:
+        from forge_core.context_service import _json
+        from forge_core.worker_prompts import WORKER_MESSAGE_FRAMING_BYTES
+
+        unframed = service.build_worker_context(run["id"], input_budget=20000)
+        budget = len(_json(unframed).encode("utf-8"))
+        # Serialized content alone fits exactly; framing must trigger safe archival.
+        assert service.build_worker_context(run["id"], input_budget=budget) == unframed
+        framing = WORKER_MESSAGE_FRAMING_BYTES
+    context = service.build_worker_context(
+        run["id"], input_budget=budget, per_message_overhead=framing
+    )
+    if framing_boundary:
+        assert len(_json(context).encode("utf-8")) + framing * len(context) <= budget
+        assert len(context) < len(unframed)
     assert sum(m["role"] == "system" for m in context) == 1
     assert sum(m["role"] == "user" and m.get("content", "").startswith("{") for m in context) == 1
     assert any(m.get("tool_calls") for m in context)
     assert any(m.get("tool_call_id") == "pending" for m in context)
-    assert len(ContextService(store).build_worker_context(run["id"], input_budget=3500)) == len(
-        context
-    )
+    assert len(
+        ContextService(store).build_worker_context(
+            run["id"], input_budget=budget, per_message_overhead=framing
+        )
+    ) == len(context)
     source = ContextService(Store(store.path, workspace=store.workspace)).read_source(
         "worker", run["id"], 2
     )
