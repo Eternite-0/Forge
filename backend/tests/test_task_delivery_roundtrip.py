@@ -11,6 +11,7 @@ import importlib
 import json
 import secrets
 
+import pytest
 from fastapi.testclient import TestClient
 from test_router_responsiveness_superagent import deliver_all
 from test_superagent_loop import MockProvider, conversational_decision, response, rig
@@ -163,8 +164,9 @@ def test_natural_request_real_write_read_receipt_http_and_replay(tmp_path, monke
     client.close()
 
 
+@pytest.mark.parametrize("oversized", [False, True])
 def test_local_verified_file_result_is_persisted_to_user_with_openable_reference(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, oversized
 ):
     import test_node_verifier_m5 as local_verifier_fixture
 
@@ -181,7 +183,8 @@ def test_local_verified_file_result_is_persisted_to_user_with_openable_reference
             kwargs["text"] = json.dumps(
                 {
                     "summary": "JSON文件已经写入，等待独立本地校验。",
-                    "artifacts": ["work/result.json"],
+                    "artifacts": ["work/result.json"]
+                    + (["不应直接展示" * 134] * 7 if oversized else []),
                 },
                 ensure_ascii=False,
             )
@@ -205,9 +208,14 @@ def test_local_verified_file_result_is_persisted_to_user_with_openable_reference
             "WHERE i.run_id=? AND i.tool_name='file_write' AND i.state='succeeded'",
             (run["id"],),
         ).fetchone()[0]
-    reply = f"JSON任务已通过本地验证：work/result.json；receipt:{receipt_id}"
+    reply = (
+        "任务已完成。结果较长，这里只通知完成，不概括内容。"
+        if oversized
+        else f"JSON任务已通过本地验证：work/result.json；receipt:{receipt_id}"
+    )
 
     def summarize(request, _):
+        assert not oversized, "Oversized completion must not invoke a model"
         context = json.loads(request.messages[1]["content"])
         assert context["completed_context"] == []
         deliveries = context["notice"]["completed_delivery_summaries"]
@@ -227,6 +235,13 @@ def test_local_verified_file_result_is_persisted_to_user_with_openable_reference
     assert len(notices) == 1 and notices[0]["content"] == reply
     assert notices[0]["conversation_id"] == "main"
     metadata = json.loads(notices[0]["metadata"])
+    if oversized:
+        assert metadata["notice_phase"] == "completion_summary_unavailable"
+        assert metadata["quest_id"] == quest.id
+        assert metadata["execution_mode"] == "programmatic"
+        assert metadata["completion_execution_mode"] == "live"
+        assert len(metadata["completion_result_sources"]) == 1
+        assert "不应直接展示" not in notices[0]["content"]
     with store.connection() as connection:
         completed = connection.execute(
             "SELECT id FROM events WHERE quest_id=? AND event_type='quest.status_changed' "
@@ -239,5 +254,5 @@ def test_local_verified_file_result_is_persisted_to_user_with_openable_reference
     assert result.status_code == 200 and '+{"ok":true}' in result.json()["text"]
     assert result.json()["run_id"] == run["id"] and result.json()["path"] == "work/result.json"
     assert not asyncio.run(router._handle_notice([completed], "already-processed"))
-    assert len(router.provider.requests) == 1
+    assert len(router.provider.requests) == (0 if oversized else 1)
     client.close()

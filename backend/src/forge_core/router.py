@@ -284,6 +284,66 @@ def _completed_context(connection, quests):
     return result
 
 
+def _completion_handoff_sources(connection, quest_id, grouped, completed_sources):
+    """Prove a completion-only handoff without treating claim text as authority.
+
+    Existing completion projection binds succeeded runs to the completed plan.
+    Additionally bind the original inbox batch and projected deliveries to this
+    conversation's durable events. Re-run this proof at the ordinary CAS commit.
+    """
+    quest = connection.execute(
+        "SELECT conversation_id,status FROM quests WHERE id=?", (quest_id,)
+    ).fetchone()
+    if (
+        quest is None
+        or quest["conversation_id"] != "main"
+        or quest["status"] != "completed"
+        or len(completed_sources) != 1
+        or completed_sources[0]["reference"] != "quest:" + quest_id
+        or not completed_sources[0]["deliveries"]
+    ):
+        return None
+    has_completion = False
+    for item in grouped:
+        event = connection.execute(
+            "SELECT event_type,conversation_id,quest_id,payload FROM events WHERE id=?",
+            (item["event_id"],),
+        ).fetchone()
+        if (
+            event is None
+            or event["conversation_id"] != "main"
+            or event["quest_id"] != quest_id
+            or event["event_type"] != item["event_type"]
+            or event["payload"] != item["payload"]
+        ):
+            return None
+        if event["event_type"] == "quest.status_changed":
+            has_completion |= json.loads(event["payload"]).get("to") == "completed"
+    if not has_completion:
+        return None
+    sources = []
+    for source in completed_sources[0]["deliveries"]:
+        event_id = source["reference"][6:]
+        event = connection.execute(
+            "SELECT e.conversation_id,e.quest_id,e.payload,r.execution_mode FROM events e "
+            "JOIN worker_runs r ON r.id=json_extract(e.payload,'$.run_id') "
+            "AND r.quest_id=e.quest_id AND r.worker_id=e.worker_id AND r.state='succeeded' "
+            "WHERE e.id=? AND e.event_type='worker.result'",
+            (event_id,),
+        ).fetchone()
+        if (
+            event is None
+            or event["conversation_id"] != "main"
+            or event["quest_id"] != quest_id
+            or event["execution_mode"] != "live"
+            or hashlib.sha256(event["payload"].encode("utf-8")).hexdigest()
+            != source["source_sha256"]
+        ):
+            return None
+        sources.append({"event_id": event_id, "source_sha256": source["source_sha256"]})
+    return sources
+
+
 def _completed_status_reply(model_reply, items, context):
     """Only completed, presented, source-backed tasks may use a natural recap."""
     presented = {item["reference"]: item for item in context.get("completed_context", [])}
@@ -1418,6 +1478,9 @@ class RouterService:
                             "artifacts": delivery.get("artifacts", [])[:8],
                         }
                     )
+            completion_handoff_sources = _completion_handoff_sources(
+                connection, notice["quest_id"], grouped, completed_sources
+            )
             connection.commit()
         compactions = 0
         while (
@@ -1525,80 +1588,91 @@ class RouterService:
             context["notice"]["coordination"] = coordination
         context["budget"]["notice_projection"] = True
         context["budget"]["input_estimate"] = len(_json(context).encode("utf-8"))
-        if context["budget"]["input_estimate"] > 16000:
+        if context["budget"]["input_estimate"] > 16000 and completion_handoff_sources is None:
             raise DomainError("Router notice projection exceeds budget")
-        schema = NoticeDecision.model_json_schema()
-        messages = [
-            {
-                "role": "system",
-                "content": _POLICY
-                + " Choose silent or a concise user update for this event. Only when remaining_planning_available is present, you may choose replan_remaining to ask the Planner for a new proposal addressing the observed failure. A bounded reply must describe the needed adjustment. This cannot approve a plan/team or resume execution. For an observed completed Quest, use update_user to summarize its source-linked deliveries and artifacts. Distinguish observed evidence from Worker claims. Never invent execution.",
-            },
-            {"role": "user", "content": _json(context)},
-        ]
-        if (
-            len(_json({"messages": messages, "schema": schema}).encode("utf-8"))
-            + len(
-                _json({"role": "system", "content": schema_format_instruction(schema)}).encode(
-                    "utf-8"
-                )
-            )
-            + 512
-            > context["budget"]["effective_limit"] - self.output_reserve
-        ):
-            raise DomainError("Router notice context budget exceeded")
-        source = "mock" if mode == "mock" else profile.structured_output_support.source
-        request = ModelRequest(
-            model_id=self.model_id,
-            provider_id=self.provider_id,
-            messages=messages,
-            response_format={
-                "type": "json_schema",
-                "json_schema": {"name": "router_notice", "strict": True, "schema": schema},
-            },
-            max_output_tokens=self.output_reserve,
-            context_limit=context["budget"]["effective_limit"],
-            model_capabilities={"json_schema": True},
-            model_capability_sources={"json_schema": source},
-            budget_context=ModelCallContext(
-                call_id=new_id("call"),
-                purpose="router_notice",
-                workspace_id=self.store.workspace.id,
-                quest_id=notice["quest_id"],
-            ),
+        oversized_completion = (
+            context["budget"]["input_estimate"] > 16000 and completion_handoff_sources is not None
         )
-        if pending_review:
-            # This is a Core state update, not a model summary of an unreviewed claim.
-            # Keep the ordinary leased/CAS commit below and spend no Provider call.
+        if oversized_completion:
+            # A Core state notification, not a shortened/reinterpreted result.
+            # Full claims remain untouched; never submit an over-budget request.
             decision = NoticeDecision(
                 action="update_user",
-                reply=(
-                    "后台 Worker 已提交交付，正在等待独立审查；尚未确认任务完成。\n"
-                    + "来源：quest:"
-                    + notice["quest_id"]
-                    + "；"
-                    + "；".join("event:" + item for item in event_ids)
-                ),
+                reply="任务已完成。结果较长，这里只通知完成，不概括内容。",
             )
         else:
-            response = await self.provider.generate(request)
-            try:
-                if (
-                    getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
-                    or len(response.text.encode("utf-8")) > self.output_reserve * 8
-                ):
-                    raise ValueError("Invalid response")
-                decision = NoticeDecision.model_validate_json(response.text)
-                if decision.action in {"update_user", "replan_remaining"} and (
-                    not decision.reply or len(decision.reply) > 10000
-                ):
-                    raise ValueError("A bounded update is required")
-                if decision.action == "replan_remaining" and not adaptive_plan:
-                    raise ValueError("Remaining planning is not available for this event")
-                if decision.action == "silent" and decision.reply is not None:
-                    raise ValueError("Silent decisions cannot include a reply")
-            except (TypeError, ValueError, ValidationError) as exc:
-                raise DomainError("Invalid Router notice decision") from exc
+            schema = NoticeDecision.model_json_schema()
+            messages = [
+                {
+                    "role": "system",
+                    "content": _POLICY
+                    + " Choose silent or a concise user update for this event. Only when remaining_planning_available is present, you may choose replan_remaining to ask the Planner for a new proposal addressing the observed failure. A bounded reply must describe the needed adjustment. This cannot approve a plan/team or resume execution. For an observed completed Quest, use update_user to summarize its source-linked deliveries and artifacts. Distinguish observed evidence from Worker claims. Never invent execution.",
+                },
+                {"role": "user", "content": _json(context)},
+            ]
+            if (
+                len(_json({"messages": messages, "schema": schema}).encode("utf-8"))
+                + len(
+                    _json({"role": "system", "content": schema_format_instruction(schema)}).encode(
+                        "utf-8"
+                    )
+                )
+                + 512
+                > context["budget"]["effective_limit"] - self.output_reserve
+            ):
+                raise DomainError("Router notice context budget exceeded")
+            source = "mock" if mode == "mock" else profile.structured_output_support.source
+            request = ModelRequest(
+                model_id=self.model_id,
+                provider_id=self.provider_id,
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {"name": "router_notice", "strict": True, "schema": schema},
+                },
+                max_output_tokens=self.output_reserve,
+                context_limit=context["budget"]["effective_limit"],
+                model_capabilities={"json_schema": True},
+                model_capability_sources={"json_schema": source},
+                budget_context=ModelCallContext(
+                    call_id=new_id("call"),
+                    purpose="router_notice",
+                    workspace_id=self.store.workspace.id,
+                    quest_id=notice["quest_id"],
+                ),
+            )
+            if pending_review:
+                # This is a Core state update, not a model summary of an unreviewed claim.
+                # Keep the ordinary leased/CAS commit below and spend no Provider call.
+                decision = NoticeDecision(
+                    action="update_user",
+                    reply=(
+                        "后台 Worker 已提交交付，正在等待独立审查；尚未确认任务完成。\n"
+                        + "来源：quest:"
+                        + notice["quest_id"]
+                        + "；"
+                        + "；".join("event:" + item for item in event_ids)
+                    ),
+                )
+            else:
+                response = await self.provider.generate(request)
+                try:
+                    if (
+                        getattr(response, "finish_reason", None) not in {None, "stop", "mock"}
+                        or len(response.text.encode("utf-8")) > self.output_reserve * 8
+                    ):
+                        raise ValueError("Invalid response")
+                    decision = NoticeDecision.model_validate_json(response.text)
+                    if decision.action in {"update_user", "replan_remaining"} and (
+                        not decision.reply or len(decision.reply) > 10000
+                    ):
+                        raise ValueError("A bounded update is required")
+                    if decision.action == "replan_remaining" and not adaptive_plan:
+                        raise ValueError("Remaining planning is not available for this event")
+                    if decision.action == "silent" and decision.reply is not None:
+                        raise ValueError("Silent decisions cannot include a reply")
+                except (TypeError, ValueError, ValidationError) as exc:
+                    raise DomainError("Invalid Router notice decision") from exc
         with self.store.unit_of_work() as work:
             current = work.connection.execute(
                 "SELECT processed_at FROM event_inbox WHERE consumer_id='router' AND event_id=? AND notice_token=? AND notice_next_attempt>?",
@@ -1620,6 +1694,10 @@ class RouterService:
                     _completed_context(work.connection, [dict(quest)]) if quest else []
                 ):
                     return False
+            if oversized_completion and completion_handoff_sources != _completion_handoff_sources(
+                work.connection, notice["quest_id"], grouped, completed_sources
+            ):
+                return False
             if not self._stable_context(
                 snapshot,
                 self._snapshot(work.connection, notice["quest_id"] or ""),
@@ -1649,12 +1727,22 @@ class RouterService:
                             "source_event_ids": event_ids,
                             "execution_mode": (
                                 "programmatic"
-                                if pending_review
+                                if pending_review or oversized_completion
                                 else "mock"
                                 if mode == "mock"
                                 else "live"
                             ),
                             **({"notice_phase": "review_pending"} if pending_review else {}),
+                            **(
+                                {
+                                    "notice_phase": "completion_summary_unavailable",
+                                    "quest_id": notice["quest_id"],
+                                    "completion_execution_mode": "live",
+                                    "completion_result_sources": completion_handoff_sources,
+                                }
+                                if oversized_completion
+                                else {}
+                            ),
                         },
                     )
                 )
