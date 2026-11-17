@@ -3,7 +3,7 @@
 The desktop opens to one persistent conversation, with a Codex-inspired
 navigation sidebar, app menus and a compact composer. The conversation shows
 user messages, assistant replies, usable results and required approvals. Background
-work stays behind one collapsed execution-details entry; individual agents open
+work stays behind one execution-details navigation entry, opening its own screen within the app; individual agents open in that same screen
 with responsibility and status, while logs and verification metadata remain
 optional. Task management is available from the conversation's overflow menu.
 The previous [frontend acceptance report](desktop/CODEX-REFACTOR-REPORT.md)

@@ -15,10 +15,11 @@ import { groupEvents, text, type EventViewMemory, type HistoryProps, type Quest,
 
 export { default as SafeMarkdownPreview } from "./components/Markdown";
 
-export default function ChatTimeline({ children, messages, events, outgoing, quests, workerRuns, approvals, native, workspaceName,
+export default function ChatTimeline({ children, executionView = false, onExecution, messages, events, outgoing, quests, workerRuns, approvals, native, workspaceName,
   connected, historyMore, historyBusy, timelineError, conversationError, approvalError,
   canRetry, scrollRef, onScroll, onInspect, onLoadOlder, onRetry, onQuest, onOpenFile, onOpenHistory, historyStats, connection, onHistoryLoaded, onApproval, approvalsBlocked, onApprovalDecision }: {
   children?: ReactNode;
+  executionView?: boolean; onExecution?: () => void;
   messages: ChatMessage[]; events: TimelineEvent[]; outgoing: Outgoing[]; quests: Quest[]; workerRuns: WorkerRun[]; approvals: Row[]; workspaceName?: string;
   native: boolean; connected: boolean; historyMore: boolean; historyBusy: boolean; timelineError: string;
   conversationError: string; approvalError: string; canRetry: boolean; scrollRef: RefObject<HTMLDivElement>;
@@ -40,6 +41,16 @@ export default function ChatTimeline({ children, messages, events, outgoing, que
   // a visible history button. Other files, tasks and unavailable routes stay intact.
   const visibleHistoryReceipts = new Set(onOpenHistory ? buildProcessTimeline(items, historicalRuns)
     .flatMap(item => item.type === "process" ? processFileChanges(item).slice(0, 1).map(file => file.receiptId) : []) : []);
+  if (executionView) return <div className="execution-records">
+    {children}
+    {timelineError && <p className="notice error" role="status">过程记录暂不可用：{timelineError}</p>}
+    <details className="execution-technical"><summary>过程记录</summary>
+      <MessageList mode="execution" items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
+        onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
+        connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />
+      {historyMore && <button className="text-button" disabled={historyBusy} onClick={onLoadOlder}>加载更早的记录</button>}
+    </details>
+  </div>;
   return <div className="timeline" ref={scrollRef} onScroll={onScroll} onMouseUp={() => { if (window.getSelection()?.toString()) onInspect(); }} aria-label="对话历史">
     {historyMore && <button className="text-button history" disabled={historyBusy} onClick={onLoadOlder}>{historyBusy ? "正在加载…" : "加载更早的消息与记录"}</button>}
     {conversationError && <p className="notice error" role="alert">{conversationError}</p>}
@@ -48,17 +59,7 @@ export default function ChatTimeline({ children, messages, events, outgoing, que
     {(items.length > 0 || workerRuns.length > 0) && <MessageList items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
       onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
       connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />}
-    {(events.length > 0 || workerRuns.length > 0 || progress.length > 0) && <details className="conversation-execution-details" data-scroll-key="execution-details" onToggle={event => { if (event.currentTarget.open) onInspect(); }}>
-      <summary>执行详情</summary>
-      <div className="conversation-execution-body">
-        {timelineError && <p className="notice error" role="status">过程记录暂不可用：{timelineError}</p>}
-        {children}
-        <MessageList mode="execution" items={items} identity={identity} quests={quests} workerRuns={historicalRuns} memory={memory} native={native} canRetry={canRetry}
-          onRetry={onRetry} onQuest={onQuest} onOpenFile={onOpenFile} onOpenHistory={onOpenHistory} historyStats={historyStats}
-          connection={connection} onHistoryLoaded={onHistoryLoaded} onInspect={onInspect} />
-        {connected && <TaskProgressList cards={progress.filter(card => !["needs_input", "blocked", "failed"].includes(card.quest.status))} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
-      </div>
-    </details>}
+    {onExecution && (events.length > 0 || workerRuns.length > 0 || progress.length > 0) && <button type="button" className="text-button conversation-execution-link" data-scroll-key="execution-details" onClick={() => { onInspect(); onExecution(); }}>执行详情<span aria-hidden="true"> →</span></button>}
     {connected && <TaskProgressList cards={progress.filter(card => ["needs_input", "blocked", "failed"].includes(card.quest.status) || card.quest.status === "completed" && card.result && !visibleHistoryReceipts.has(card.result.receiptId))} onQuest={onQuest} onOpenHistory={onOpenHistory} visibleHistoryReceipts={visibleHistoryReceipts} />}
     {connected && approvals.length > 0 && <section className="timeline-updates" aria-label="任务与审批更新">
       <div className="timeline-updates-label">需要你处理</div>

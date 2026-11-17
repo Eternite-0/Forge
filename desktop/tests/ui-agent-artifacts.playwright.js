@@ -47,15 +47,15 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(process.env.FORGE_TEST_URL || 'http://127.0.0.1:5205/');
-  await page.locator('.conversation-execution-details > summary').click();
-  await page.getByRole('button', { name: /本对话子智能体 · 2/ }).click();
+  await page.getByLabel('消息内容', { exact: true }).fill('保留草稿，不要发送');
+  await page.getByRole('button', {name:'执行详情',exact:true}).click();
   const row = id => page.locator('.conversation-agent-row').filter({ hasText: `核对 ${id} 的历史文件` });
   const panel = page.locator('.conversation-agent-detail'), files = page.getByRole('region', { name: '子智能体历史文件' }), history = page.getByRole('region', { name: '文件历史更改' });
-  const back = page.getByRole('button', { name: '返回对话', exact: true }), draft = page.getByLabel('消息内容', { exact: true });
+  const back = page.getByRole('button', { name: '返回执行列表', exact: true }), draft = page.getByLabel('消息内容', { exact: true });
   const file = id => files.getByRole('button', { name: new RegExp(`docs/${id}\\.md`) });
   const open = async id => { await row(id).click(); await panel.getByText(`核对 ${id} 的历史文件`, { exact: true }).waitFor(); };
   const expand = () => files.getByRole('button', { name: /^查看返回文件/ }).click();
-  await draft.fill('保留草稿，不要发送'); await open('A'); await page.waitForTimeout(6500);
+  await open('A'); await page.waitForTimeout(6500);
   check(listCount() === 0 && diffCount() === 0, 'ordinary agent polling and initial detail do not read historical files');
   await expand(); await file('A').waitFor();
   check((await files.innerText()).includes('执行时保存的版本') && (await file('A').innerText()).includes('模拟记录'), 'history provenance and mock mode are explicit');
@@ -70,7 +70,7 @@ async (page, { outputDir }) => {
   await page.keyboard.press('Escape'); await history.waitFor({ state: 'hidden' });
   check(await panel.isVisible() && await file('A').evaluate(e => document.activeElement === e), 'first Escape returns to same agent historical file with origin focus');
   await page.keyboard.press('Escape'); await panel.waitFor({ state: 'hidden' });
-  check(await row('A').evaluate(e => document.activeElement === e) && await draft.inputValue() === '保留草稿，不要发送', 'second Escape returns chat and preserves draft/focus');
+  check(await row('A').evaluate(e => document.activeElement === e) && await draft.inputValue() === '保留草稿，不要发送', 'second Escape returns execution list and preserves chat draft/focus');
   await open('A'); await expand(); await file('A').click(); await history.getByText('HISTORICAL A ONLY', { exact: false }).waitFor();
   for (const field of ['receipt_id', 'run_id', 'path', 'sha256', 'execution_mode']) {
     mismatch = field; await history.getByRole('button', { name: '重新读取记录的更改', exact: true }).click(); await history.getByRole('alert').waitFor();

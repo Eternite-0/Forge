@@ -17,7 +17,7 @@ function conciseState(run: ConversationAgent) {
 }
 
 type Feed = ReturnType<typeof useConversationAgents>;
-export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (run: ConversationAgent) => void }) {
+export function ConversationAgents({ feed, onSelect, fullPage = false }: { feed: Feed; onSelect: (run: ConversationAgent) => void; fullPage?: boolean }) {
   const [expanded, setExpanded] = useState(false);
   const section = useRef<HTMLElement>(null);
   const restoreRowFocus = useRef<HTMLElement | null>(null);
@@ -30,11 +30,11 @@ export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (
   const ordered = orderedAgents(feed.items);
   if (!feed.items.length || !feed.connected) return null;
   return <section ref={section} className="conversation-agents" aria-label="本对话子智能体" data-scroll-key="conversation-agents">
-    <button className="conversation-agents-toggle" type="button" aria-expanded={expanded} aria-controls="conversation-agent-runs" onClick={() => setExpanded(!expanded)}>
+    {!fullPage && <button className="conversation-agents-toggle" type="button" aria-expanded={expanded} aria-controls="conversation-agent-runs" onClick={() => setExpanded(!expanded)}>
       <span className="agent-avatar-stack">{feed.items.slice(0, 3).map(run => <AgentAvatar key={run.run_id} identity={run.worker_id || run.run_id} size={18} />)}</span>
       <span>本对话子智能体 · {feed.items.length}{feed.hasMore || feed.activeMore ? "+" : ""}</span><span aria-hidden="true">{expanded ? "⌃" : "⌄"}</span>
-    </button>
-    {expanded && <div id="conversation-agent-runs" className="conversation-agent-runs">
+    </button>}
+    {(expanded || fullPage) && <div id="conversation-agent-runs" className="conversation-agent-runs">
       <p className="conversation-agent-caption">本对话已委派的工作 · 已加载 {feed.items.length} 项{feed.hasMore ? "（还有更早记录）" : ""}</p>
       {feed.legacy && <p className="conversation-agent-caption">Core 使用较早的分页接口，仅显示已加载记录；活跃记录可能在更早页。</p>}
       {feed.error && <p role="status" className="conversation-agent-caption">{feed.error}<button type="button" onClick={feed.refresh}>重新读取</button></p>}
@@ -51,7 +51,7 @@ export function ConversationAgents({ feed, onSelect }: { feed: Feed; onSelect: (
   </section>;
 }
 
-export function ConversationAgentDetail({ connection, runId, onBack, onActivity, onTask }: { connection: Connection; runId: string; onBack: () => void; onActivity: () => void; onTask: (id: string) => void }) {
+export function ConversationAgentDetail({ connection, runId, onBack, onActivity, onTask, fullPage = false }: { connection: Connection; runId: string; onBack: () => void; onActivity: () => void; onTask: (id: string) => void; fullPage?: boolean }) {
   const feed = useConversationAgents(connection, runId);
   const panel = useRef<HTMLElement>(null);
   const back = useRef<HTMLButtonElement>(null);
@@ -64,7 +64,7 @@ export function ConversationAgentDetail({ connection, runId, onBack, onActivity,
     return () => media.removeEventListener("change", changed);
   }, []);
   useEffect(() => {
-    if (!narrow || !panel.current?.parentElement) return;
+    if (fullPage || !narrow || !panel.current?.parentElement) return;
     const siblings: HTMLElement[] = [];
     let branch: HTMLElement = panel.current;
     while (branch.parentElement) {
@@ -75,19 +75,19 @@ export function ConversationAgentDetail({ connection, runId, onBack, onActivity,
     const previous = siblings.map(node => node.inert);
     siblings.forEach(node => { node.inert = true; });
     return () => siblings.forEach((node, index) => { node.inert = previous[index]; });
-  }, [narrow]);
+  }, [narrow, fullPage]);
   const run = feed.detail;
-  return <aside ref={panel} className="conversation-agent-detail" role={narrow ? "dialog" : "complementary"} aria-modal={narrow || undefined} aria-labelledby="conversation-agent-heading"
+  return <aside ref={panel} className={`conversation-agent-detail${fullPage ? " execution-detail-page" : ""}`} role={fullPage ? "region" : narrow ? "dialog" : "complementary"} aria-modal={!fullPage && narrow || undefined} aria-labelledby="conversation-agent-heading"
     onKeyDown={event => {
       if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); onBack(); }
-      if (event.key === "Tab" && narrow) {
+      if (event.key === "Tab" && narrow && !fullPage) {
         const elements = Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not([disabled]), summary, [href], [tabindex="0"]') || []).filter(element => element.getClientRects().length > 0);
         const first = elements[0], last = elements[elements.length - 1];
         if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
         else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
       }
     }}>
-    <header><button ref={back} type="button" onClick={onBack} aria-label="返回对话">← 返回</button><h2 id="conversation-agent-heading">子智能体详情</h2></header>
+    <header><button ref={back} type="button" onClick={onBack} aria-label={fullPage ? "返回执行列表" : "返回对话"}>← {fullPage ? "执行列表" : "返回"}</button><h2 id="conversation-agent-heading">子智能体详情</h2></header>
     <div className="conversation-agent-detail-body">
       {feed.loading && <p role="status">正在读取委派记录…</p>}
       {feed.error && <div role="status"><p>暂时无法读取此运行，未显示过期状态。</p><button type="button" onClick={feed.refresh}>重新读取</button></div>}

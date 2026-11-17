@@ -44,9 +44,8 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(base);
-  await page.locator('.conversation-execution-details > summary').click();
+  await page.getByRole('button', {name:'执行详情',exact:true}).click();
   const group = page.getByRole('region', { name: '本对话子智能体' });
-  await group.getByRole('button', { name: /本对话子智能体 · 50/ }).click();
   await page.getByRole('button', { name: '加载更多进行中与待处理', exact: true }).click();
   await page.waitForFunction(() => document.querySelectorAll('.conversation-agent-row').length === 53);
   check(await page.locator('.conversation-agent-row').count() === 53, 'all 53 genuine active rows loaded through explicit page 2');

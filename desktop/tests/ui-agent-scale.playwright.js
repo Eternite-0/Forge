@@ -42,10 +42,9 @@ async (page, { outputDir }) => {
   });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto(base);
-  await page.locator('.conversation-execution-details > summary').click();
+  await page.getByRole('button', {name:'执行详情',exact:true}).click();
   if (!process.env.FORGE_AGENT_SCALE_HOME_ONLY) {
   const group = page.getByRole('region', { name: '本对话子智能体' });
-  await group.getByRole('button', { name: /本对话子智能体 · 52/ }).click();
   const rowA = page.locator('.conversation-agent-row').filter({ hasText: 'active-A 的独立委派任务' });
   const rowB = page.locator('.conversation-agent-row').filter({ hasText: 'active-B 的独立委派任务' });
   check(await rowA.count() === 1 && await rowB.count() === 1, 'old active run remains visible despite 101 newer terminal runs');
@@ -58,7 +57,7 @@ async (page, { outputDir }) => {
   const historyReadCount = olderReads();
   const originalA = await rowA.elementHandle(), originalB = await rowB.elementHandle();
   await rowB.focus(); await page.keyboard.press('Enter');
-  const panel = page.locator('.conversation-agent-detail'), back = page.getByRole('button', { name: '返回对话', exact: true });
+  const panel = page.locator('.conversation-agent-detail'), back = page.getByRole('button', { name: '返回执行列表', exact: true });
   await panel.getByText('active-B 的独立委派任务', { exact: true }).waitFor();
   a = { ...a, state: 'succeeded', lease_status: 'none' };
   await page.waitForFunction(() => Array.from(document.querySelectorAll('.conversation-agent-row')).find(e => e.textContent.includes('active-A 的独立委派任务'))?.querySelector('small')?.dataset.state === 'succeeded', null, { timeout: 16000 });
@@ -75,7 +74,7 @@ async (page, { outputDir }) => {
   check(olderReads() === historyReadCount, 'periodic refresh does not refetch loaded historical pages');
   check(!await older.isVisible(), 'exhausted history is not resurrected by terminal head refresh');
   terminalFail = true;
-  await group.getByRole('button', { name: /本对话子智能体/ }).focus();
+  await rowB.focus();
   for (let i = 0; i < 60 && !terminalFailures; i++) await page.waitForTimeout(500);
   check(terminalFailures > 0, 'terminal-head failure was actually exercised');
   await group.getByText('已结束记录暂不可用；进行中记录仍独立更新。', { exact: false }).waitFor();
@@ -107,9 +106,8 @@ async (page, { outputDir }) => {
   await page.waitForTimeout(500);
   check(await page.locator('.conversation-shell.home-state').count() === 1 && await page.locator('.conversation-agent-row').count() === 0, 'empty scoped chat remains home despite unrelated global running worker');
   triggerMode = true;
-  await page.locator('.conversation-execution-details > summary').click();
-  const triggerToggle = page.getByRole('button', { name: /本对话子智能体 · 1/ });
-  await triggerToggle.waitFor({ timeout: 16000 }); await triggerToggle.click();
+  const triggerNavigation = page.getByRole('button', {name:'执行详情',exact:true});
+  await triggerNavigation.waitFor({timeout:16000}); await triggerNavigation.click();
   check(await page.locator('.conversation-shell.home-state').count() === 0, 'genuine scoped trigger delegation exits empty home without fabricated chat messages');
   await page.locator('.conversation-agent-row').filter({ hasText: 'trigger-agent 的独立委派任务' }).click();
   await page.locator('.conversation-agent-technical > summary').click();

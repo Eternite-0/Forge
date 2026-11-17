@@ -30,12 +30,13 @@ export default function useWorkspaceController() {
   const title = VIEW_NAMES[view];
   const taskView = TASK_VIEWS.includes(view);
   const [taskDetailIntent, setTaskDetailIntent] = useState<{ id: string; identity: string } | null>(null);
+  const [conversationNavigation, setConversationNavigation] = useState(0);
   const taskDetailRequest = taskDetailIntent?.identity === workspace.connectionKey ? taskDetailIntent : null;
   const openTaskView = (destination: View, id?: string) => {
     setTaskDetailIntent(destination === "quests" ? { id: id || "", identity: workspace.connectionKey } : null);
     setSettingsOpen(false); setSelectedId(id ?? selectedId); setView(destination); setActionError("");
   };
-  const openConversation = () => { setTaskDetailIntent(null); setSettingsOpen(false); setView("chat"); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="消息内容"]')?.focus()); };
+  const openConversation = () => { setConversationNavigation(value => value + 1); setTaskDetailIntent(null); setSettingsOpen(false); setView("chat"); requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="消息内容"]')?.focus()); };
   const currentWorkspace = connection ? text(coreInfo.workspace_root, connection.workspace_id) : "尚未连接";
   const currentWorkspaceName = currentWorkspace.replace(/[\\/]+$/, "").split(/[\\/]/).pop() || "工作空间";
   const routerModel = !connection ? "尚未连接" : coreInfo.provider_configured === false ? "未配置模型" : text(coreInfo.router_model_id, "模型信息未读取");
@@ -54,7 +55,7 @@ export default function useWorkspaceController() {
     if (event.kind !== "tool_receipt" || event.status !== "succeeded" || event.execution_mode !== "live" || typeof detail.exit_code === "number" && detail.exit_code !== 0 || !["file_write", "file_revise"].includes(text(detail.tool, "")) || typeof detail.path !== "string") return [];
     try { return [relativeFilePath(detail.path)]; } catch { return []; }
   }))];
-  return { ...workspace, plan, panelItems, title, taskView, taskDetailRequest, openTaskView, openConversation, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, compactNavigation, home, conversationTitle, conversationFiles };
+  return { ...workspace, plan, panelItems, title, taskView, taskDetailRequest, openTaskView, openConversation, conversationNavigation, currentWorkspace, currentWorkspaceName, routerModel, routerStatus, selectSetting, decideApproval, compactNavigation, home, conversationTitle, conversationFiles };
 }
 export type WorkspaceController = ReturnType<typeof useWorkspaceController>;
 

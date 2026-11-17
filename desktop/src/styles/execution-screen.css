@@ -1,0 +1,13 @@
+.conversation-shell[hidden], .execution-screen-content[hidden] { display: none !important; }
+.conversation-execution-link { align-self: flex-start; min-height: 32px; }
+.execution-screen { grid-area: 1/1; min-width: 0; min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--app-color-background-surface); }
+.execution-screen-header { display: flex; align-items: center; gap: 20px; min-height: 54px; padding: 10px 20px; border-bottom: 1px solid var(--color-border); }
+.execution-screen-header h2 { margin: 0; font-size: 16px; }
+.execution-screen-header button { border: 0; background: transparent; color: inherit; min-height: 32px; cursor: pointer; }
+.execution-screen-content { overflow: auto; padding: 24px; min-height: 0; }
+.execution-records { max-width: 840px; margin: 0 auto; }
+.execution-technical { margin-top: 24px; }
+.execution-technical > summary { cursor: pointer; color: var(--color-text-secondary); min-height: 32px; }
+.execution-screen .execution-detail-page { position: static; inset: auto; width: 100%; max-width: none; min-width: 0; height: auto; flex: 1; border: 0; border-radius: 0; box-shadow: none; z-index: auto; }
+.execution-screen .execution-detail-page .conversation-agent-detail-body { width: 100%; max-width: 840px; box-sizing: border-box; margin: 0 auto; }
+@media (max-width: 600px) { .execution-screen-content { padding: 16px; } .execution-screen-header { padding: 8px 12px; gap: 12px; } }
