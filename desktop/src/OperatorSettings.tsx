@@ -11,6 +11,11 @@ export default function OperatorSettings({ settings, budget, blocked, save, sugg
   suggestedRouterModel?: string | null;
 }) {
   const saved = settings.config && typeof settings.config === "object" ? settings.config as Row : {};
+  // Persisted policy is distinct from effective environment overrides.
+  const tokenPolicy = {
+    enforced: settings.config === null ? false : typeof saved.enforce_token_budgets === "boolean" ? saved.enforce_token_budgets : null,
+    savedLimit: typeof saved.model_token_limit === "number" ? saved.model_token_limit : null,
+  };
   const provider = saved.provider && typeof saved.provider === "object" ? saved.provider as Row : {};
   const [form, setForm] = useState<OperatorForm>({
     providerEnabled: !!saved.provider, providerId: text(provider.id, ""), kind: text(provider.kind, "openai_compatible"),
@@ -18,7 +23,7 @@ export default function OperatorSettings({ settings, budget, blocked, save, sugg
     allowInsecureLoopback: provider.allow_insecure_loopback === true,
     supportsTools: provider.supports_tools === true, supportsJsonSchema: provider.supports_json_schema === true,
     routerModel: text(saved.router_model_id, ""), contextLimit: text(saved.router_context_limit ?? settings.context_limit, ""),
-    tokenLimit: text(saved.model_token_limit ?? budget.token_limit, ""), concurrencyLimit: text(saved.model_concurrency_limit ?? budget.concurrency_limit, ""),
+    tokenLimit: text(saved.model_token_limit, ""), concurrencyLimit: text(saved.model_concurrency_limit ?? budget.concurrency_limit, ""),
     hosts: Array.isArray(saved.network_hosts) ? saved.network_hosts.join("\n") : "",
   });
   const [error, setError] = useState("");
@@ -35,7 +40,7 @@ export default function OperatorSettings({ settings, budget, blocked, save, sugg
   const submit = (event: FormEvent) => {
     event.preventDefault();
     try {
-      const config = operatorConfig(form);
+      const config = operatorConfig(form, tokenPolicy);
       if (!Number.isInteger(settings.revision)) throw new Error("配置版本未知，请先刷新。");
       if (!window.confirm(`保存配置版本 ${settings.revision} 的修改？\n重启 Core 后生效；已有预算账本不会重置。\n请核对供应商、模型、预算和网络范围。`)) return;
       setError(""); save({ expected_revision: settings.revision, config });
@@ -69,6 +74,7 @@ export default function OperatorSettings({ settings, budget, blocked, save, sugg
       <summary><span>高级设置</span><svg data-chevron viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg></summary>
       <div className="operator-disclosure-content settings-blocks">
         <SettingsSection title="预算与并发">
+          <p className="notice">{tokenPolicy.enforced === false ? "累计 Token 限制未启用；填写数值不会启用限制，用量仍会记录。单次上下文、费用和权限限制保持不变。" : tokenPolicy.enforced === true ? "已保存的累计 Token 限制已启用；下方保留原有上限。进程环境覆盖以当前运行状态为准。" : "已保存的 Token 限制策略未知，请刷新后再保存。"}</p>
           <label className="field-label">模型 Token 上限<input type="number" min="0" value={form.tokenLimit} onChange={(event) => change("tokenLimit", event.target.value)} /></label>
           <label className="field-label">并发上限<input type="number" min="1" max="64" value={form.concurrencyLimit} onChange={(event) => change("concurrencyLimit", event.target.value)} /></label>
         </SettingsSection>

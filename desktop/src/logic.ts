@@ -63,13 +63,18 @@ export interface OperatorForm {
   tokenLimit: string; concurrencyLimit: string; hosts: string;
 }
 
-export function operatorConfig(form: OperatorForm) {
+export interface TokenBudgetPolicy { enforced: boolean | null; savedLimit: number | null }
+
+export function operatorConfig(form: OperatorForm, tokenPolicy: TokenBudgetPolicy) {
   const integer = (value: string, minimum: number, maximum: number, name: string) => {
     if (!/^\d+$/.test(value)) throw new Error(`${name}必须是整数。`);
     const number = Number(value);
     if (!Number.isSafeInteger(number) || number < minimum || number > maximum) throw new Error(`${name}超出允许范围。`);
     return number;
   };
+  if (typeof tokenPolicy?.enforced !== "boolean") throw new Error("Token 限制策略未知，请刷新配置后再保存。");
+  const tokenLimit = tokenPolicy.enforced === false && tokenPolicy.savedLimit === null && form.tokenLimit === ""
+    ? null : integer(form.tokenLimit, 0, 1000000000, "Token 上限");
   let provider = null;
   if (form.providerEnabled) {
     let url: URL;
@@ -84,7 +89,8 @@ export function operatorConfig(form: OperatorForm) {
   if (form.routerModel.trim() && !provider) throw new Error("配置 Router 模型前请启用供应商。");
   return { provider, router_model_id: form.routerModel.trim() || null,
     router_context_limit: integer(form.contextLimit, 2049, 10000000, "上下文上限"),
-    model_token_limit: integer(form.tokenLimit, 0, 1000000000, "Token 上限"),
+    model_token_limit: tokenLimit,
+    enforce_token_budgets: tokenPolicy.enforced,
     model_concurrency_limit: integer(form.concurrencyLimit, 1, 64, "并发上限"),
     network_hosts: form.hosts.split(/\r?\n/).map((host) => host.trim()).filter(Boolean) };
 }

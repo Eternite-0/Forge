@@ -23,6 +23,7 @@ export function formatBudgetRecoveryTime(value: unknown): string {
 }
 
 export default function BudgetOverview({ budget }: { budget: BudgetRecord }) {
+  const enforced = budget.token_budgets_enforced;
   const unsettled = Array.isArray(budget.recent_unsettled) ? budget.recent_unsettled : null;
 
   return <div className="settings-blocks budget-overview">
@@ -30,9 +31,9 @@ export default function BudgetOverview({ budget }: { budget: BudgetRecord }) {
       <SettingsRow label="已确认用量" description="已经记录的确认 Token 用量。">{formatBudgetNumber(budget.known_tokens)}</SettingsRow>
       <SettingsRow label="未结算预留" description="尚未确认的输入和输出 Token 预留。">{formatBudgetNumber(budget.reserved_tokens)}</SettingsRow>
       <SettingsRow label="迁移期上界" description="历史预算迁移时计入的 Token 上界。">{formatBudgetNumber(budget.opening_tokens)}</SettingsRow>
-      <SettingsRow label="保守计入 Token" description="已确认用量 + 未结算预留 + 迁移期上界；用于预算准入，不是实际消耗。">{formatBudgetNumber(budget.charged_tokens)}</SettingsRow>
-      <SettingsRow label="Token 上限" description="当前工作空间模型调用的累计预算上限。">{formatBudgetNumber(budget.token_limit)}</SettingsRow>
-      {budget.token_limit === 0 && <p className="notice">Token 上限为 0，当前预算未开放，模型调用受限。</p>}
+      <SettingsRow label="保守计入 Token" description={enforced === false ? "已确认用量 + 未结算预留 + 迁移期上界；仅作账本记录，不按累计 Token 停止任务，也不是实际消耗。" : "已确认用量 + 未结算预留 + 迁移期上界；不是实际消耗。"}>{formatBudgetNumber(budget.charged_tokens)}</SettingsRow>
+      <SettingsRow label="Token 上限" description={enforced === false ? "不按累计 Token 停止任务；单次上下文、费用和权限限制保持不变。" : "当前工作空间模型调用的累计预算上限；执行策略以 Core 返回为准。"}>{enforced === false ? "未启用" : formatBudgetNumber(budget.token_limit)}</SettingsRow>
+      {enforced !== false && budget.token_limit === 0 && <p className="notice">Token 上限为 0，当前预算未开放，模型调用受限。</p>}
     </SettingsSection>
 
     <SettingsSection title="并发与费用">

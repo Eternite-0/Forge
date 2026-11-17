@@ -53,13 +53,14 @@ test("operator settings never serialize a secret and reject credentials in a URL
     baseUrl: "https://example.invalid/v1", credentialRef: "FORGE_PROVIDER_KEY_EXAMPLE",
     supportsTools: true, supportsJsonSchema: true, allowInsecureLoopback: false, routerModel: "model", contextLimit: "8192",
     tokenLimit: "10000", concurrencyLimit: "1", hosts: "example.invalid\n" };
-  const config = operatorConfig(form);
+  const policy = { enforced: true, savedLimit: 10000 };
+  const config = operatorConfig(form, policy);
   assert.equal(config.provider.credential_ref, "FORGE_PROVIDER_KEY_EXAMPLE");
   assert.equal(JSON.stringify(config).includes("secret"), false);
-  assert.throws(() => operatorConfig({ ...form, baseUrl: "https://user:password@example.invalid" }), /不能包含/);
-  assert.throws(() => operatorConfig({ ...form, baseUrl: "http://127.0.0.1:8788/v1" }), /HTTP/);
-  assert.equal(operatorConfig({ ...form, baseUrl: "http://127.0.0.1:8788/v1", allowInsecureLoopback: true }).provider.allow_insecure_loopback, true);
-  assert.throws(() => operatorConfig({ ...form, baseUrl: "http://example.invalid", allowInsecureLoopback: true }), /HTTP/);
+  assert.throws(() => operatorConfig({ ...form, baseUrl: "https://user:password@example.invalid" }, policy), /不能包含/);
+  assert.throws(() => operatorConfig({ ...form, baseUrl: "http://127.0.0.1:8788/v1" }, policy), /HTTP/);
+  assert.equal(operatorConfig({ ...form, baseUrl: "http://127.0.0.1:8788/v1", allowInsecureLoopback: true }, policy).provider.allow_insecure_loopback, true);
+  assert.throws(() => operatorConfig({ ...form, baseUrl: "http://example.invalid", allowInsecureLoopback: true }, policy), /HTTP/);
 });
 
 test("Markdown links admit only credential-free HTTP(S), and history keeps its viewport", () => {
