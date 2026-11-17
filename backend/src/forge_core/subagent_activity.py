@@ -11,6 +11,7 @@ import json
 import math
 import re
 import time
+from pathlib import Path
 
 from .timeline import EVENT_TITLES
 
@@ -194,6 +195,75 @@ _SELECT = (
 )
 
 
+def _scoped_rows(
+    connection,
+    store,
+    conversation_id,
+    *,
+    project_id=None,
+    phase="all",
+    run_id=None,
+    boundary=None,
+    count=1,
+):
+    """Shared authoritative JOIN for activity, detail and on-demand artifact reads."""
+    _identity(conversation_id)
+    if project_id is not None:
+        _identity(project_id)
+    if run_id is not None:
+        _identity(run_id)
+    binding = connection.execute("SELECT id,root FROM workspace WHERE singleton=1").fetchone()
+    if (
+        binding is None
+        or binding["id"] != store.workspace.id
+        or Path(binding["root"]).resolve() != store.workspace.root.resolve()
+    ):
+        raise SubagentNotFound("Workspace not found")
+    if (
+        connection.execute("SELECT 1 FROM conversations WHERE id=?", (conversation_id,)).fetchone()
+        is None
+    ):
+        raise SubagentNotFound("Conversation not found")
+    if (
+        project_id is not None
+        and connection.execute(
+            "SELECT 1 FROM workspace_projects WHERE id=?", (project_id,)
+        ).fetchone()
+        is None
+    ):
+        raise SubagentNotFound("Project not found")
+    predicate = (
+        " WHERE q.conversation_id=? AND plan.approved_by='router_mandate:'||m.id"
+        " AND plan.digest=r.plan_digest"
+    )
+    params = [conversation_id]
+    if phase != "all":
+        states = _PHASE_STATES[phase]
+        predicate += " AND r.state IN (" + ",".join("?" for _ in states) + ")"
+        params.extend(states)
+    if project_id is not None:
+        predicate += " AND p.project_id=?"
+        params.append(project_id)
+    if run_id is not None:
+        predicate += " AND r.id=?"
+        params.append(run_id)
+    if boundary is not None:
+        predicate += " AND r.rowid<?"
+        params.append(boundary)
+    return connection.execute(
+        _SELECT + predicate + " ORDER BY r.rowid DESC LIMIT ?",
+        (*params, count),
+    ).fetchall()
+
+
+def require_scoped_subagent(connection, store, conversation_id, run_id, *, project_id=None):
+    """Verify one original delegation within the caller's read-only transaction."""
+    rows = _scoped_rows(connection, store, conversation_id, project_id=project_id, run_id=run_id)
+    if not rows or _source(connection, rows[0], store.workspace.id) is None:
+        raise SubagentNotFound("Subagent not found")
+    return rows[0]
+
+
 def read_subagents(
     store, conversation_id, *, project_id=None, before=None, limit=50, run_id=None, phase="all"
 ):
@@ -224,44 +294,18 @@ def read_subagents(
     boundary = _decode_cursor(before, scope)
     now = time.time()
     with store.connection() as connection:
+        connection.execute("PRAGMA query_only=ON")
         connection.execute("BEGIN")
-        if (
-            connection.execute(
-                "SELECT 1 FROM conversations WHERE id=?", (conversation_id,)
-            ).fetchone()
-            is None
-        ):
-            raise SubagentNotFound("Conversation not found")
-        if (
-            project_id is not None
-            and connection.execute(
-                "SELECT 1 FROM workspace_projects WHERE id=?", (project_id,)
-            ).fetchone()
-            is None
-        ):
-            raise SubagentNotFound("Project not found")
-        predicate = (
-            " WHERE q.conversation_id=? AND plan.approved_by='router_mandate:'||m.id"
-            " AND plan.digest=r.plan_digest"
+        rows = _scoped_rows(
+            connection,
+            store,
+            conversation_id,
+            project_id=project_id,
+            phase=phase,
+            run_id=run_id,
+            boundary=boundary,
+            count=1 if run_id is not None else limit + 1,
         )
-        params = [conversation_id]
-        if phase != "all":
-            states = _PHASE_STATES[phase]
-            predicate += " AND r.state IN (" + ",".join("?" for _ in states) + ")"
-            params.extend(states)
-        if project_id is not None:
-            predicate += " AND p.project_id=?"
-            params.append(project_id)
-        if run_id is not None:
-            predicate += " AND r.id=?"
-            params.append(run_id)
-        if boundary is not None:
-            predicate += " AND r.rowid<?"
-            params.append(boundary)
-        rows = connection.execute(
-            _SELECT + predicate + " ORDER BY r.rowid DESC LIMIT ?",
-            (*params, 1 if run_id is not None else limit + 1),
-        ).fetchall()
         items = []
         for row in rows[:limit]:
             source = _source(connection, row, store.workspace.id)

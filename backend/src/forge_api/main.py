@@ -69,6 +69,7 @@ from forge_core.runtime_supervisor import RuntimeSupervisor
 from forge_core.settings import Settings, Workspace, default_workspace_root
 from forge_core.store import Store
 from forge_core.subagent_activity import SubagentNotFound, read_subagents
+from forge_core.subagent_artifacts import read_subagent_artifacts
 from forge_core.superagent_delegation import SuperagentDelegation
 from forge_core.superagent_events import TriggerService
 from forge_core.superagent_loop import process_triggers
@@ -1432,6 +1433,24 @@ def conversation_subagent_detail(
         raise HTTPException(status_code=404, detail="Subagent not found in this scope") from None
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid subagent query") from None
+
+
+@app.get("/api/conversations/{conversation_id}/subagents/{run_id}/artifacts")
+def conversation_subagent_artifacts(
+    conversation_id: str,
+    run_id: str,
+    project_id: str | None = Query(default=None, max_length=200),
+    before: str | None = Query(default=None, max_length=96),
+    limit: int = Query(default=10, ge=1, le=20),
+):
+    try:
+        return read_subagent_artifacts(
+            store, conversation_id, run_id, project_id=project_id, before=before, limit=limit
+        )
+    except SubagentNotFound:
+        raise HTTPException(status_code=404, detail="Subagent not found in this scope") from None
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Invalid artifact query") from None
 
 
 @app.get("/api/activity")

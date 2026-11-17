@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import sqlite3
+from dataclasses import dataclass
 from pathlib import Path
 
 from .artifact_revision import verify_file_revision_chain
@@ -30,6 +31,22 @@ class ArtifactDiffTooLarge(ValueError):
     """A verified request exceeds the bounded UI diff budget."""
 
 
+@dataclass
+class VersionReadBudget:
+    """Shared limit across candidate chains, including rejected candidates."""
+
+    remaining_bytes: int = MAX_CHAIN_BYTES
+    remaining_versions: int = 64
+
+    def consume(self, byte_count):
+        if self.remaining_versions < 1 or byte_count > self.remaining_bytes:
+            self.remaining_bytes = 0
+            self.remaining_versions = 0
+            raise ArtifactDiffTooLarge
+        self.remaining_bytes -= byte_count
+        self.remaining_versions -= 1
+
+
 def _relative_path(store, scope):
     try:
         root = store.workspace.root.resolve()
@@ -49,7 +66,7 @@ def _relative_path(store, scope):
         raise ArtifactDiffUnavailable from None
 
 
-def _bounded_versions(connection, run_id, receipt_id):
+def _bounded_versions(connection, run_id, receipt_id, *, budget=None):
     """Bound parsing and hashing before the existing full binding validator runs."""
     versions, seen, total = {}, set(), 0
     current = receipt_id
@@ -60,8 +77,14 @@ def _bounded_versions(connection, run_id, receipt_id):
         row = connection.execute(
             "SELECT r.id AS receipt_id,r.created_at,r.execution_mode AS receipt_mode,"
             "length(i.parameters_json) AS parameter_size,length(r.result_json) AS result_size,"
+            "length(CAST(i.parameters_json AS BLOB)) AS parameter_bytes,"
+            "length(CAST(r.result_json AS BLOB)) AS result_bytes,"
+            "length(CAST(w.arguments_json AS BLOB)) AS call_argument_bytes,"
+            "length(CAST(w.result_json AS BLOB)) AS call_result_bytes,"
             "i.run_id,i.quest_id,i.state,i.tool_name,i.resource_scope "
-            "FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id WHERE r.id=?",
+            "FROM action_receipts r JOIN action_intents i ON i.id=r.intent_id "
+            "LEFT JOIN worker_tool_calls w ON w.run_id=i.run_id AND w.call_id=i.call_id "
+            "WHERE r.id=?",
             (current,),
         ).fetchone()
         if (
@@ -75,6 +98,18 @@ def _bounded_versions(connection, run_id, receipt_id):
             raise ArtifactDiffUnavailable
         if row["parameter_size"] > MAX_VERSION_BYTES * 6 + 8192:
             raise ArtifactDiffTooLarge
+        if budget is not None:
+            budget.consume(
+                sum(
+                    row[key] or 0
+                    for key in (
+                        "parameter_bytes",
+                        "result_bytes",
+                        "call_argument_bytes",
+                        "call_result_bytes",
+                    )
+                )
+            )
         raw = connection.execute(
             "SELECT i.parameters_json FROM action_receipts r "
             "JOIN action_intents i ON i.id=r.intent_id WHERE r.id=?",
