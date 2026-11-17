@@ -124,7 +124,7 @@ def test_natural_request_real_write_read_receipt_http_and_replay(tmp_path, monke
     assert asyncio.run(manager.run(run["id"]))["state"] == "review_pending", [
         [m for m in request.messages if m["role"] == "tool"] for request in model.requests
     ]
-    assert (tmp_path / path).read_text() == content
+    assert (tmp_path / path).read_bytes() == content.encode("utf-8")
     dispatcher = Dispatcher(store)
     deliver_all(dispatcher)
     for _ in range(10):
