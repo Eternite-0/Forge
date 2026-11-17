@@ -19,6 +19,8 @@ export interface ArtifactDiff {
   origin: { original_request_message_id: string | null; goal_update_message_id: string | null } | null;
 }
 
+export interface ArtifactExpectation { receiptId: string; runId: string; path: string; sha256: string; executionMode: "live" | "mock" }
+
 const record = (value: unknown): Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
 const identifier = (value: unknown): value is string => typeof value === "string" && /^[A-Za-z0-9_-]{1,200}$/.test(value);
 const nullableIdentifier = (value: unknown) => value === null || identifier(value);
@@ -26,8 +28,9 @@ const digest = (value: unknown) => typeof value === "string" && /^[a-f0-9]{64}$/
 const count = (value: unknown) => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
 
 /** Receipt identity, content and counts come only from the recorded Core artifact. */
-export async function readArtifactDiff(connection: Connection, receiptId: string, signal?: AbortSignal): Promise<ArtifactDiff> {
+export async function readArtifactDiff(connection: Connection, receiptId: string, signal?: AbortSignal, expected?: ArtifactExpectation): Promise<ArtifactDiff> {
   if (!identifier(receiptId)) throw new Error("回执标识无效，无法读取记录的更改。");
+  if (expected && (expected.receiptId !== receiptId || !identifier(expected.runId) || !digest(expected.sha256))) throw new Error("所选历史文件来源不完整。");
   const result = record(await request<unknown>(connection, `/api/artifacts/receipts/${encodeURIComponent(receiptId)}/diff`, { signal }));
   const origin = result.origin === null ? null : record(result.origin);
   if (result.receipt_id !== receiptId || !nullableIdentifier(result.base_receipt_id) || !identifier(result.quest_id) || !identifier(result.run_id)
@@ -42,5 +45,6 @@ export async function readArtifactDiff(connection: Connection, receiptId: string
     || result.change === "revised" && (result.base_receipt_id === null || result.base_sha256 === null)) {
     throw new Error("历史更改的基础回执不完整。");
   }
+  if (expected && (result.run_id !== expected.runId || path !== relativeFilePath(expected.path) || result.sha256 !== expected.sha256 || result.execution_mode !== expected.executionMode)) throw new Error("历史文件与所选子智能体回执不一致，未显示内容。");
   return { ...result, path } as unknown as ArtifactDiff;
 }

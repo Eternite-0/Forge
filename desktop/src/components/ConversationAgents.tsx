@@ -3,6 +3,7 @@ import type { Connection } from "../api";
 import { agentRole, agentTask, agentState, agentOutcome, agentMilestone, agentActive, orderedAgents, type ConversationAgent } from "../conversationAgents";
 import useConversationAgents from "../hooks/useConversationAgents";
 import { statusLabel } from "../presentation";
+import AgentArtifactFiles from "./AgentArtifactFiles";
 import AgentAvatar from "./AgentAvatar";
 import "../styles/conversation-agents.css";
 
@@ -87,6 +88,7 @@ export function ConversationAgentDetail({ connection, runId, onBack, onActivity,
         <section><h4>委派任务</h4><p>{run.task_title || "已委派任务"}</p>{run.task_objective && <p className="agent-objective">{run.task_objective}</p>}</section>
         <dl><div><dt>模型</dt><dd>{run.model_id || "未记录"}</dd></div><div><dt>委派来源</dt><dd>{run.source.kind === "message" ? "本对话请求" : "已登记触发事件"}</dd></div>{run.delegation_state === "revoked" && <div><dt>委派授权</dt><dd>已撤销</dd></div>}</dl>
         <section><h4>结果</h4><p>{agentOutcome(run.outcome?.kind)}</p><p className="conversation-agent-caption">执行成功不等于任务已验收。这里只显示 Core 已记录的状态，不展示内部思考或未核实草稿。</p></section>
+        <AgentArtifactFiles connection={connection} runId={runId} />
         <section><h4>里程碑</h4>{run.milestones?.length ? <ol className="agent-milestones">{run.milestones.map(item => <li key={item.event_id}><span>{agentMilestone(item.event_type)}</span><time dateTime={item.created_at}>{Number.isNaN(Date.parse(item.created_at)) ? "" : new Date(item.created_at).toLocaleString()}</time></li>)}</ol> : <p className="conversation-agent-caption">尚无可公开的里程碑。</p>}</section>
       </>}
       {run?.quest_id && <button type="button" className="conversation-agent-global" onClick={() => onTask(run.quest_id!)}>打开关联任务</button>}

@@ -34,3 +34,11 @@
 .conversation-agents button:focus-visible, .conversation-agent-detail button:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
 
 @media (min-width: 1181px) { .chat-workspace.agent-panel-visible > .conversation-shell { margin-right: 324px; } }
+
+.agent-artifact-list { display: grid; gap: 6px; margin: 12px 0; }
+.agent-artifact-list button { text-align: left; overflow-wrap: anywhere; }
+.agent-artifact-list span, .agent-artifact-list small { display: block; }
+.agent-artifact-list small { margin-top: 4px; color: var(--color-text-secondary); font-size: 11px; }
+.agent-artifact-document { margin-top: 14px; min-width: 0; }
+.agent-artifact-document .artifact-history-preview { min-width: 0; width: 100%; }
+.agent-artifact-document .artifact-history-heading { flex-wrap: wrap; gap: 6px; }

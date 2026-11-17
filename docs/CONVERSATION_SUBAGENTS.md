@@ -55,3 +55,16 @@ A cursor belongs to one workspace, conversation, optional project, and phase.
 An expired or mismatched cursor restarts that list rather than being applied to
 another scope. Exact run detail does not depend on phase and remains readable
 when the run moves between active and terminal.
+
+## Historical files
+
+Agents can leave file writes or revisions even when the run later fails or
+awaits review. Open “历史文件” in one agent's details to request a bounded
+page of its audited immutable file receipts. This is a separate on-demand
+read, not part of recurring agent status refreshes. Ineligible, unsafe or
+unverifiable entries are omitted; an unavailable page does not mean “no files.”
+
+The history preview verifies the selected run, receipt, path, digest and
+execution mode before displaying the recorded diff. Nothing here reads or
+replaces the current file, proves the overall task was accepted, or displays
+private model reasoning. Mock-generated receipts are explicitly marked.

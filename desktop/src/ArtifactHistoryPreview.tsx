@@ -3,11 +3,12 @@ import type { Connection } from "./api";
 import AnimatedDetails from "./AnimatedDetails";
 import CodePreview from "./CodePreview";
 import { errorMessage } from "./logic";
-import { readArtifactDiff, type ArtifactDiff } from "./artifactHistory";
+import { readArtifactDiff, type ArtifactDiff, type ArtifactExpectation } from "./artifactHistory";
 
 export interface ArtifactHistoryPreviewProps {
   connection: Connection | null;
   receiptId: string;
+  expected?: ArtifactExpectation;
   onClose: () => void;
   onRequest?: (messageId: string) => void | boolean;
   onLoaded?: (record: ArtifactDiff) => void;
@@ -16,12 +17,12 @@ export interface ArtifactHistoryPreviewProps {
 
 export default function ArtifactHistoryPreview(props: ArtifactHistoryPreviewProps) {
   const { connection, receiptId } = props;
-  const identity = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}` : "disconnected";
+  const identity = connection ? `${connection.base_url}|${connection.workspace_id || ""}|${connection.generation}|${connection.bearer}` : "disconnected";
   // A different workspace, Core generation or receipt must never paint a previous artifact.
-  return <ArtifactHistoryDocument key={`${identity}|${receiptId}`} {...props} />;
+  return <ArtifactHistoryDocument key={`${identity}|${receiptId}|${props.expected?.runId || ""}|${props.expected?.path || ""}|${props.expected?.sha256 || ""}|${props.expected?.executionMode || ""}`} {...props} />;
 }
 
-function ArtifactHistoryDocument({ connection, receiptId, onClose, onRequest, onLoaded, visible = true }: ArtifactHistoryPreviewProps) {
+function ArtifactHistoryDocument({ connection, receiptId, expected, onClose, onRequest, onLoaded, visible = true }: ArtifactHistoryPreviewProps) {
   const [state, setState] = useState<{ loading: boolean; error: string; document?: ArtifactDiff }>({ loading: !!connection, error: "" });
   const [refresh, setRefresh] = useState(0);
   const [notice, setNotice] = useState("");
@@ -43,12 +44,12 @@ function ArtifactHistoryDocument({ connection, receiptId, onClose, onRequest, on
     const timeout = window.setTimeout(() => pending.abort(), 30000);
     let current = true;
     setState((old) => ({ ...old, loading: true, error: "" }));
-    void readArtifactDiff(connection, receiptId, pending.signal)
+    void readArtifactDiff(connection, receiptId, pending.signal, expected)
       .then((document) => { if (current && serial === requestSerial.current) { setState({ loading: false, error: "", document }); loaded.current?.(document); } })
       .catch((problem) => { if (current && serial === requestSerial.current) setState((old) => ({ ...old, loading: false, error: errorMessage(problem) })); })
       .finally(() => window.clearTimeout(timeout));
     return () => { current = false; pending.abort(); window.clearTimeout(timeout); };
-  }, [connection?.base_url, connection?.workspace_id, connection?.generation, connection?.bearer, receiptId, refresh]);
+  }, [connection?.base_url, connection?.workspace_id, connection?.generation, connection?.bearer, receiptId, expected?.receiptId, expected?.runId, expected?.path, expected?.sha256, expected?.executionMode, refresh]);
   const document = state.document, available = !!document && !state.loading && !state.error;
   const originalRequest = document?.origin?.original_request_message_id, goalUpdate = document?.origin?.goal_update_message_id;
   return <section className="artifact-history-preview" aria-label="文件历史更改" aria-busy={state.loading} hidden={!visible}>

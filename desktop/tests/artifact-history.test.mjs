@@ -41,3 +41,14 @@ test("unavailable history remains an explicit Core error without a fallback to c
   await assert.rejects(readArtifactDiff(connection, "receipt_one"), /404.*History unavailable/);
   assert.deepEqual(calls, ["http://127.0.0.1:8765/api/artifacts/receipts/receipt_one/diff"]);
 });
+
+test("selected subagent history validates exact run, path, hash and mode before returning any content", async (t) => {
+  const expected = { receiptId: "receipt_one", runId: "run_one", path: "src/file.ts", sha256: "a".repeat(64), executionMode: "live" };
+  let value = fixture();
+  t.mock.method(globalThis, "fetch", async () => Response.json(value));
+  assert.equal((await readArtifactDiff(connection, "receipt_one", undefined, expected)).run_id, "run_one");
+  for (const change of [{ run_id: "another_run" }, { path: "src/other.ts" }, { sha256: "b".repeat(64) }, { execution_mode: "mock" }, { receipt_id: "another_receipt" }]) {
+    value = { ...fixture(), ...change };
+    await assert.rejects(readArtifactDiff(connection, "receipt_one", undefined, expected));
+  }
+});
