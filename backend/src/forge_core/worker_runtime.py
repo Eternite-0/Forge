@@ -2670,6 +2670,8 @@ class WorkerManager:
                         source_readback_available=source_readback_available,
                         per_message_overhead=WORKER_MESSAGE_FRAMING_BYTES,
                     )
+                    if compacted.get("deferred"):
+                        return self.get(run_id)
                     if compacted["source_count"]:
                         # A summary is a real, accounted model step. Re-read
                         # remaining steps/corrections, deadlines and inbox before

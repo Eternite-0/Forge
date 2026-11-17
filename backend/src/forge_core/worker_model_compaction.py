@@ -332,7 +332,26 @@ class WorkerModelCompactor:
                 )
             elif getattr(request, "_budget_post_started", None) is False:
                 with self.manager.store.unit_of_work() as work:
-                    refund_unsent_worker_model_call(work.connection, call_id, self.token)
+                    refunded = refund_unsent_worker_model_call(work.connection, call_id, self.token)
+                    if refunded and getattr(exc, "code", None) == "concurrency_unavailable":
+                        # A busy shared Gateway is not an exhausted context. Only
+                        # an exact current-owner, proven-unsent refund may defer;
+                        # unknown or submitted requests remain non-replayable.
+                        row = self._fence(work.connection)
+                        work.connection.execute(
+                            "UPDATE worker_runs SET state='queued',lease_token=NULL,"
+                            "lease_until=NULL,next_attempt_at=? WHERE id=?",
+                            (self.manager._now() + 1, self.run_id),
+                        )
+                        work.connection.execute(
+                            "UPDATE workers SET status='queued' WHERE id=?", (row["worker_id"],)
+                        )
+                        work.connection.execute(
+                            "UPDATE task_nodes SET status='queued' WHERE plan_id=? "
+                            "AND node_key=? AND worker_id=?",
+                            (row["plan_id"], row["node_key"], row["worker_id"]),
+                        )
+                        return {"messages": [], "source_count": 0, "deferred": True}
             raise DomainError(
                 "Worker compaction Provider failed; original context retained"
             ) from None
