@@ -2,7 +2,6 @@ import asyncio
 import base64
 import hashlib
 import json
-import logging
 import os
 import re
 import secrets
@@ -18,6 +17,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from forge_api.conversation_routes import conversation_routes
 from forge_api.security import ALLOWED_ORIGINS, SessionGuard
 from forge_core.artifact_diff import (
     ArtifactDiffInvalid,
@@ -65,6 +65,7 @@ from forge_core.quest_service import QuestService
 from forge_core.registry import DEFAULT_ROLES, ModelRegistry, TeamComposer
 from forge_core.router import RouterService
 from forge_core.runtime import ModelCallContext, ModelRequest
+from forge_core.runtime_supervisor import RuntimeSupervisor
 from forge_core.settings import Settings, Workspace, default_workspace_root
 from forge_core.store import Store
 from forge_core.superagent_delegation import SuperagentDelegation
@@ -289,28 +290,6 @@ async def _core_lifespan(application):
     reviewer = IndependentReviewService(manager, max_rounds=review_max_rounds_from_env())
     application.state.worker_manager = manager
     application.state.worker_scheduler = scheduler
-    stop = asyncio.Event()
-
-    async def run_loop(name, operation, enabled=lambda: True):
-        failures = 0
-        while not stop.is_set():
-            try:
-                if enabled():
-                    await operation()
-                watchdog.heartbeat(name, timeout_seconds=600)
-                failures = 0
-                application.state.background_health[name] = "ok"
-            except asyncio.CancelledError:
-                raise
-            except Exception:  # noqa: BLE001 - retry without exposing provider data
-                failures += 1
-                application.state.background_health[name] = "retrying"
-                try:
-                    watchdog.heartbeat(name, state="retrying", timeout_seconds=600)
-                except Exception:  # noqa: BLE001, S110 - one throttled warning follows below.
-                    pass
-                logging.getLogger(__name__).warning("Background %s failed; retrying", name)
-            await asyncio.sleep(min(0.5 * (2 ** min(failures, 6)), 30))
 
     async def dispatch_tick():
         await asyncio.to_thread(dispatcher.tick)
@@ -329,10 +308,6 @@ async def _core_lifespan(application):
         sources = LocalTriggerSources(store)
         await asyncio.to_thread(sources.poll_due)
         await asyncio.to_thread(sources.poll_files)
-
-    async def watchdog_tick():
-        await asyncio.to_thread(watchdog.tick)
-        watchdog.supervise(loops, restart_loop)
 
     project_cursor = ""
 
@@ -369,32 +344,21 @@ async def _core_lifespan(application):
         "sources": source_tick,
     }
 
-    def restart_loop(name):
-        watchdog.heartbeat(name, state="restarting", timeout_seconds=600)
-        return asyncio.create_task(
-            run_loop(
-                name,
-                operations[name],
-                lambda: (
-                    bool(router.model_id)
-                    if name in {"router", "planner", "composer", "delegation"}
-                    else True
-                ),
-            )
-        )
-
-    loops = {name: restart_loop(name) for name in operations}
-    watchdog_task = asyncio.create_task(run_loop("watchdog", watchdog_tick))
-    application.state.background_tasks = list(loops.values()) + [watchdog_task]
-    try:
+    supervisor = RuntimeSupervisor(
+        operations,
+        watchdog=watchdog,
+        health=application.state.background_health,
+        shutdown=scheduler.shutdown,
+        enabled=lambda name: (
+            bool(router.model_id)
+            if name in {"router", "planner", "composer", "delegation"}
+            else True
+        ),
+    )
+    application.state.runtime_supervisor = supervisor
+    application.state.background_tasks = supervisor.tasks
+    async with supervisor.running():
         yield
-    finally:
-        stop.set()
-        tasks = list(loops.values()) + [watchdog_task]
-        for background_task in tasks:
-            background_task.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
-        await scheduler.shutdown()
 
 
 @asynccontextmanager
@@ -1182,12 +1146,6 @@ async def internal_error(request: Request, exc: Exception):
     )
 
 
-class MessageIn(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-    content: str = Field(min_length=1, max_length=20000)
-    request_id: str | None = Field(default=None, min_length=1, max_length=200)
-
-
 class QuestTransitionIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     status: QuestStatus
@@ -1410,26 +1368,14 @@ def _encode_cursor(value):
     return base64.urlsafe_b64encode(str(value).encode("ascii")).decode("ascii").rstrip("=")
 
 
-@app.get("/api/conversation")
-def get_conversation(
-    before: str | None = Query(default=None, max_length=32),
-    limit: int = Query(default=200, ge=1, le=200),
-):
-    boundary = _cursor(before)
-    with store.connection() as connection:
-        rows = connection.execute(
-            "SELECT rowid,* FROM messages WHERE conversation_id='main' AND (? IS NULL OR rowid<?) ORDER BY rowid DESC LIMIT ?",
-            (boundary, boundary, limit + 1),
-        ).fetchall()
-    more = len(rows) > limit
-    page = list(reversed(rows[:limit]))
-    return {
-        "conversation_id": "main",
-        "router": store.ensure_router(),
-        "messages": [dict(row) for row in page],
-        "next_before": _encode_cursor(page[0]["rowid"]) if more and page else None,
-        "has_more": more,
-    }
+async def _submit_conversation_turn(content, *, request_id):
+    async with router_turn_lock:
+        return await router.handle_user_message(content, request_id=request_id)
+
+
+app.include_router(
+    conversation_routes(get_store=lambda: store, submit_turn=_submit_conversation_turn)
+)
 
 
 @app.get("/api/memory")
@@ -1478,9 +1424,9 @@ def worker_activity(
 @app.get("/api/settings")
 def settings_summary():
     saved = read_operator_settings(settings.workspace.root)
-    profile = router._model_profile({"models": [
-        {"id": item.id, "profile": item.model_dump_json()} for item in registry.list()
-    ]})
+    profile = router._model_profile(
+        {"models": [{"id": item.id, "profile": item.model_dump_json()} for item in registry.list()]}
+    )
     return {
         "workspace_id": settings.workspace.id,
         "workspace_root": str(settings.workspace.root),
@@ -1490,8 +1436,11 @@ def settings_summary():
         "provider_id": provider.config.id if provider.config else None,
         "router_model_id": router_model,
         "context_limit": router.effective_context_limit(profile),
-        "context_limit_source": "model_registry" if router.use_registry_context and profile
-        and profile.context_window else "operator_cap" if context_limit else "conservative_fallback",
+        "context_limit_source": "model_registry"
+        if router.use_registry_context and profile and profile.context_window
+        else "operator_cap"
+        if context_limit
+        else "conservative_fallback",
         "restore_fenced": (settings.workspace.root / FENCE_NAME).exists(),
         "revision": saved["revision"],
         "config": saved["config"],
@@ -1589,17 +1538,6 @@ def budget_summary():
         "historical_usage": metadata["historical_usage"],
         "breached": bool(metadata["breached"]),
     }
-
-
-@app.post("/api/conversation/message")
-async def send_message(payload: MessageIn):
-    try:
-        async with router_turn_lock:
-            return await router.handle_user_message(payload.content, request_id=payload.request_id)
-    except DomainError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
-    except ProviderError as exc:
-        raise HTTPException(status_code=503, detail=f"Provider unavailable: {exc.code}") from exc
 
 
 class TriggerSourceIn(BaseModel):

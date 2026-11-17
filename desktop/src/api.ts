@@ -43,7 +43,12 @@ export async function request<T>(connection: Connection, path: string, init?: Re
     }
     throw new ApiError(response.status, detail);
   }
-  return (await response.json()) as T;
+  try {
+    return (await response.json()) as T;
+  } catch {
+    // Headers are not a receipt. A committed write can lose its response body.
+    throw new ApiError(0, "Core 响应不完整或无法读取");
+  }
 }
 
 export async function browserConnection(baseUrl: string, secret: string): Promise<Connection> {

@@ -10,6 +10,7 @@ import socket
 import subprocess
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import httpx
 import pytest
@@ -238,9 +239,48 @@ def offline_stage(root, name):
         return gateway
 
     probe.make_gateway = factory
-    # Fail closed even if somebody accidentally removes the explicit transport.
-    socket.socket.connect = lambda *args: (_ for _ in ()).throw(AssertionError("network forbidden"))
-    asyncio.run(probe.stage(root, name))
+    async def guarded_stage():
+        # Windows initializes the event loop with a local socketpair before
+        # entering this coroutine. Block all stage networking, not that private
+        # loop bootstrap; MockTransport is still mandatory for provider calls.
+        def forbidden(*args, **kwargs):
+            raise AssertionError("network forbidden")
+
+        with (
+            patch.object(socket.socket, "connect", forbidden),
+            patch.object(socket.socket, "connect_ex", forbidden),
+            patch.object(socket, "create_connection", forbidden),
+        ):
+            await probe.stage(root, name)
+
+    asyncio.run(guarded_stage())
+
+
+def test_offline_stage_allows_loop_bootstrap_but_blocks_network(tmp_path, monkeypatch):
+    import _socket
+
+    # Exercise the Python socketpair fallback used by Windows even on Linux.
+    # The autouse guard must permit only loop construction in this test; the
+    # helper must reinstate the guard before any stage code executes.
+    monkeypatch.setattr(socket.socket, "connect", _socket.socket.connect)
+    monkeypatch.setattr(socket, "socketpair", socket._fallback_socketpair)
+    monkeypatch.setattr(probe, "load_plan", lambda root: {"source": {}})
+    seen = []
+
+    async def stage(root, name):
+        seen.append((root, name))
+        with socket.socket() as connection:
+            for operation in (connection.connect, connection.connect_ex):
+                with pytest.raises(AssertionError, match="network forbidden"):
+                    operation(("127.0.0.1", 9))
+        with pytest.raises(AssertionError, match="network forbidden"):
+            socket.create_connection(("127.0.0.1", 9))
+
+    monkeypatch.setattr(probe, "stage", stage)
+    monkeypatch.setattr(probe, "make_gateway", probe.make_gateway)
+    monkeypatch.setattr(probe, "source_freeze", probe.source_freeze)
+    offline_stage(tmp_path, "seed")
+    assert seen == [(tmp_path, "seed")]
 
 
 def offline_child(root, name):

@@ -30,6 +30,17 @@ test("permission and stale-version errors remain distinguishable", async (t) => 
     (error) => error instanceof ApiError && error.status === 0 && error.message.includes("connection refused"));
 });
 
+test("a successful header with an interrupted response body is a transport failure", async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  const stream = new ReadableStream({
+    start(controller) { controller.error(new TypeError("response body disconnected")); },
+  });
+  globalThis.fetch = async () => new Response(stream, { status: 200 });
+  await assert.rejects(request(connection, "/api/conversation/message", { method: "POST", body: "{}" }),
+    (error) => error instanceof ApiError && error.status === 0 && error.message.includes("响应不完整"));
+});
+
 test("browser bootstrap derives a bearer without persisting or sending the secret", async (t) => {
   const originalFetch = globalThis.fetch;
   const previousLocal = Object.getOwnPropertyDescriptor(globalThis, "localStorage");

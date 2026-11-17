@@ -5,6 +5,7 @@ import sqlite3
 
 import pytest
 
+from forge_core.conversation_read import read_committed_turn
 from forge_core.domain import ConversationMessage, DomainError, ForgeEvent, Quest
 from forge_core.registry import ModelRegistry, TeamComposer
 from forge_core.router import RouterService
@@ -142,7 +143,15 @@ def test_model_decision_and_request_idempotency(tmp_path):
         "candidates": [],
     }
     store, provider, router = make_router(tmp_path, decision)
+    assert read_committed_turn(store, "request-1") == {"state": "unknown"}
     first = asyncio.run(router.handle_user_message("研究", request_id="request-1"))
+    recovered = read_committed_turn(Store(path=store.path, workspace=store.workspace), "request-1")
+    assert recovered == {
+        "state": "committed",
+        "user_message": first["user_message"],
+        "assistant_message": first["assistant_message"],
+    }
+    assert provider.calls == 1
     second = asyncio.run(router.handle_user_message("研究", request_id="request-1"))
     assert first["intent"] == "create_quest"
     assert second["intent"] == "create_quest"
@@ -191,8 +200,10 @@ def test_invalid_model_output_is_atomic(tmp_path):
     assert {item["event_type"] for item in events} == {"router.decision_rejected"}
     diagnostics = [json.loads(item["payload"]) for item in events]
     assert [item["stage"] for item in diagnostics] == ["initial", "repair"]
-    assert all(set(item) == {"stage", "response_sha256", "errors", "response_shape", "execution_mode"}
-               for item in diagnostics)
+    assert all(
+        set(item) == {"stage", "response_sha256", "errors", "response_shape", "execution_mode"}
+        for item in diagnostics
+    )
     assert all(len(item["response_sha256"]) == 64 for item in diagnostics)
     assert "do it" not in json.dumps(events) and "passed" not in json.dumps(events)
 

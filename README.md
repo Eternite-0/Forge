@@ -11,6 +11,10 @@ FORGE is a self-built, general-purpose DeepSeek-style Super-agent desktop
 application: one persistent Router conversation coordinates hidden, isolated
 Workers and continuously receives events.
 
+The [Grok Bot-inspired runtime and desktop rebuild](docs/GROKBOT_REBUILD.md)
+documents the new session, replay, supervision, and delivery boundaries. It
+describes what was verified offline separately from live and native acceptance.
+
 ## Continuity review — 2026-11-16
 
 The `codex/phase1-continuous` review against `0bef3316` preserves the persistent

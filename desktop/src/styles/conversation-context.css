@@ -1,0 +1,21 @@
+.conversation-context { display: flex; align-items: start; flex: none; gap: 12px; padding: 8px 20px; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); font-size: 12px; line-height: 20px; }
+.conversation-context > details { flex: 1; min-width: 0; }
+.conversation-context summary { display: flex; align-items: center; gap: 10px; cursor: pointer; min-height: 28px; list-style: none; }
+.conversation-context summary::-webkit-details-marker { display: none; }
+.conversation-context summary > :first-child { flex: none; color: var(--color-text); }
+.context-workspace { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.context-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: end; }
+.conversation-context button { min-height: 28px; border: 1px solid var(--color-border-subtle); border-radius: 8px; padding: 3px 9px; background: var(--color-background-control-subtle); color: var(--color-text); font: inherit; }
+.context-details { padding: 10px 0; max-height: min(32vh, 240px); overflow: auto; }
+.context-details dl { display: block; margin: 0; }
+.context-details dl > div { display: flex; gap: 12px; margin-bottom: 6px; }
+.context-details dt { flex: 0 0 72px; }
+.context-details dd { margin: 0; color: var(--color-text); overflow-wrap: anywhere; min-width: 0; }
+.context-details p { margin: 8px 0; }
+.context-sources { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 10px; }
+@media (max-width: 600px) {
+  .conversation-context { flex-wrap: wrap; padding: 6px 12px; gap: 4px; }
+  .conversation-context > details { flex-basis: 100%; }
+  .context-actions { justify-content: start; }
+}
+@media (forced-colors: active) { .conversation-context button { border-color: ButtonText; } }

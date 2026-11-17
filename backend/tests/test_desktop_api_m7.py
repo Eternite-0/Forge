@@ -41,6 +41,34 @@ def test_desktop_api_history_memory_and_redaction(tmp_path, monkeypatch):
     assert [item["content"] for item in first["messages"]] == ["entry-4", "entry-5", "entry-6"]
     assert [item["content"] for item in second["messages"]] == ["entry-1", "entry-2", "entry-3"]
     assert first["has_more"] and second["has_more"]
+    assert (
+        client.get("/api/conversation", params={"after": first["resume_after"]}).status_code == 401
+    )
+    for index in range(7, 12):
+        main.store.add_message(ConversationMessage(role="assistant", content=f"entry-{index}"))
+    delta_response = client.get(
+        "/api/conversation", params={"limit": 3, "after": first["resume_after"]}, headers=headers
+    )
+    assert delta_response.status_code == 200
+    delta = delta_response.json()
+    assert delta["mode"] == "delta" and delta["has_newer"]
+    assert [item["content"] for item in delta["messages"]] == ["entry-7", "entry-8", "entry-9"]
+    tail = client.get(
+        "/api/conversation", params={"limit": 3, "after": delta["resume_after"]}, headers=headers
+    ).json()
+    assert not tail["has_newer"] and [item["content"] for item in tail["messages"]] == [
+        "entry-10",
+        "entry-11",
+    ]
+    assert client.get("/api/conversation?after=%3F", headers=headers).status_code == 422
+    assert (
+        client.get(
+            "/api/conversation",
+            params={"before": first["next_before"], "after": first["resume_after"]},
+            headers=headers,
+        ).status_code
+        == 422
+    )
     quest_page = client.get("/api/quests?limit=3", headers=headers).json()
     older = client.get(
         "/api/quests", params={"limit": 3, "before": quest_page["next_before"]}, headers=headers
