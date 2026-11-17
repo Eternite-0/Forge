@@ -171,7 +171,7 @@ def test_complete_notice_facts_fit_without_repeating_the_ordinary_router_policy(
             for key in ("source_sha256", "summary", "findings", "artifacts"):
                 assert actual[key] == original[key]
             assert "reviewed Worker claim" in actual["trust"]
-        assert len(context["completed_context"][0]["deliveries"]) == 3
+        assert context["completed_context"] == []  # Exact summaries occur once in notice.
         assert len(context["constraints"]["items"]) == 4
         assert completed.id in context["notice"]["source_event_ids"]
         assert "never invent execution" in request.messages[0]["content"].lower()
@@ -190,3 +190,65 @@ def test_complete_notice_facts_fit_without_repeating_the_ordinary_router_policy(
     assert store.list_quests()[0]["id"] == quest.id
     assert store.list_quests()[0]["status"] == "completed"
     assert json.loads(store.list_messages()[-1]["metadata"])["source"] == "router_notice"
+
+
+@pytest.mark.parametrize("oversized", [False, True])
+def test_chinese_completion_preserves_sources_without_duplicate_status_context(rig, oversized):
+    store, router, _ = rig
+    _quest, completed, _ = completed_specialists(store)
+    expected = {}
+    with store.unit_of_work() as work:
+        for row in work.connection.execute(
+            "SELECT id,payload FROM events WHERE event_type='worker.result'"
+        ).fetchall():
+            payload = json.loads(row["payload"])
+            delivery = json.loads(payload["claim"])
+            delivery["summary"] = "经过核查的中文结果。" * (80 if oversized else 60)
+            delivery["findings"] = ["任务证据与来源说明。" * (30 if oversized else 12)] * 3
+            payload["claim"] = json.dumps(delivery, ensure_ascii=False)
+            raw = json.dumps(payload, ensure_ascii=False)
+            work.connection.execute("UPDATE events SET payload=? WHERE id=?", (raw, row["id"]))
+            expected[row["id"]] = (delivery, hashlib.sha256(raw.encode()).hexdigest())
+    dispatcher = Dispatcher(store)
+    deliver_all(dispatcher)
+    observed = []
+
+    def summarize(request, _):
+        context = json.loads(request.messages[1]["content"])
+        assert context["completed_context"] == []
+        assert len(_json(context).encode()) <= 16000
+        summaries = context["notice"]["completed_delivery_summaries"]
+        assert len(summaries) == 3
+        for source in summaries:
+            delivery, digest = expected[source["source_event_id"]]
+            assert source["source_sha256"] == digest
+            assert source["summary"] == delivery["summary"]
+            assert source["findings"] == delivery["findings"]
+            assert source["artifacts"] == delivery["artifacts"]
+        observed.extend(summaries)
+        return response({"action": "update_user", "reply": "中文任务交付已完成，来源已保留。"})
+
+    router.provider = MockProvider(summarize)
+    with store.unit_of_work() as work:
+        work.connection.execute(
+            "UPDATE event_inbox SET notice_token='unicode',notice_next_attempt=? "
+            "WHERE consumer_id='router' AND event_id=?",
+            (time.time() + 60, completed.id),
+        )
+    if oversized:
+        from forge_core.domain import DomainError
+
+        with pytest.raises(DomainError, match="projection exceeds budget"):
+            asyncio.run(router._handle_notice([completed.id], "unicode"))
+        assert not router.provider.requests and not observed
+        return
+    assert asyncio.run(router._handle_notice([completed.id], "unicode"))
+    assert len(observed) == 3
+    message = store.list_messages()[-1]
+    assert (
+        message["conversation_id"] == "main"
+        and message["content"] == "中文任务交付已完成，来源已保留。"
+    )
+    assert json.loads(message["metadata"])["source_event_ids"] == [completed.id]
+    assert not asyncio.run(router._handle_notice([completed.id], "unicode"))
+    assert len(router.provider.requests) == 1

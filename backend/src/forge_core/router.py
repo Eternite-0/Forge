@@ -1455,6 +1455,12 @@ class RouterService:
         context["evidence"] = []
         context["memory"] = []
         context["recent_messages"] = []
+        # A completion notice carries the exact quest's source-linked summaries
+        # below. Ordinary status-query context duplicates those claims and may
+        # add unrelated completed quests; UTF-8 summaries can then exhaust the
+        # unchanged notice budget before inference, losing the user's update.
+        # Keep the snapshot intact for the existing source/CAS commit checks.
+        context["completed_context"] = []
         context["capsule"], context["capsule_truncated"] = _bounded_capsule(
             context["capsule"], 1600
         )
