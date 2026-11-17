@@ -183,7 +183,7 @@ export default function ConversationWorkspace({ workspace, connectionSetup }: { 
         home={home} workspaceName={currentWorkspaceName} native={native} connected={!!connection}
         error={outgoing.some(item => item.status === "failed") ? "" : sendError} requestId={pending?.requestId} />
     </main>
-    {executionOpen && <main className="execution-screen" aria-label="本对话执行详情" onKeyDown={event => { if (event.key === "Escape" && !detailOpen) { event.stopPropagation(); closeExecution(); } }}>
+    {executionOpen && <main className="execution-screen" aria-label="本对话执行详情" onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); if (detailOpen) closeAgentDetail(); else closeExecution(); } }}>
       <header className="execution-screen-header"><button type="button" ref={executionBack} onClick={closeExecution}>← 返回对话</button><h2>执行详情</h2></header>
       <div className="execution-screen-content" hidden={detailOpen} onKeyDown={event => { if (event.key === "Escape") { event.stopPropagation(); closeExecution(); } }}>
         <ChatTimeline executionView messages={messages} events={timelineEvents} outgoing={[]} quests={quests} workerRuns={agents.items} approvals={[]} native={native} connected={!!connection}

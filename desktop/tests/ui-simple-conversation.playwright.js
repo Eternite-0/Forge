@@ -78,6 +78,26 @@ async (page, { outputDir }) => {
   await page.locator('.conversation-agent-row').click();
   const panel = page.locator('.conversation-agent-detail');
   await panel.getByText('核对演示周报的内容与格式。', {exact:true}).waitFor();
+  for (const width of [1440, 900, 390, 320]) {
+    await page.setViewportSize({width,height:844});
+    await panel.getByRole('button',{name:'返回执行列表',exact:true}).focus();
+    await page.keyboard.press('Shift+Tab');
+    check(await page.locator('.execution-screen-header > button').evaluate(e=>e===document.activeElement), `${width}: reverse Tab reaches outer execution header`);
+    await page.keyboard.press('Escape');
+    await panel.waitFor({state:'hidden'});
+    await page.waitForFunction(()=>document.activeElement?.matches('.conversation-agent-row'));
+    check(await page.locator('.execution-screen').isVisible(), `${width}: Escape from outer header returns one level to execution list`);
+    await page.keyboard.press('Escape');
+    await draft.waitFor();
+    check(await door.evaluate(e=>e===document.activeElement) && await draft.inputValue()==='保留这个演示草稿', `${width}: second Escape returns to chat with draft and entry focus`);
+    await page.keyboard.press('Enter');
+    await page.locator('.conversation-agent-row').focus();
+    await page.keyboard.press('Enter');
+    await panel.getByText('核对演示周报的内容与格式。', {exact:true}).waitFor();
+    check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth), `${width}: keyboard round-trip keeps detail within viewport`);
+    await page.screenshot({path:`${outputDir}/child-keyboard-roundtrip-${width}-demo.png`});
+  }
+  await page.setViewportSize({width:1440,height:1000});
   check(!await panel.getByText('里程碑', {exact:true}).isVisible() && !await panel.getByText('模型', {exact:true}).isVisible() && !await panel.getByText('结果记录', {exact:true}).isVisible(), 'child detail initially shows responsibility/status, not logs/model/verification');
   check(await panel.getByRole('button', {name:/查看返回文件/}).isVisible(), 'real output navigation remains discoverable');
   check(await panel.evaluate(e=>getComputedStyle(e).position==='static') && !await page.locator('.execution-screen-content').isVisible(), 'selected run fills same execution screen without nested drawer');
