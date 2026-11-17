@@ -1194,12 +1194,15 @@ class NodeVerifier:
             work.append_event(
                 ForgeEvent(
                     event_type="task.verified",
+                    conversation_id=current["conversation_id"],
                     quest_id=quest_id,
                     worker_id=worker_id,
                     payload={
                         "protocol_version": 2,
                         "plan_id": plan["id"],
                         "task_node_key": node_key,
+                        "run_id": run["id"],
+                        "execution_mode": run["execution_mode"],
                     },
                 )
             )

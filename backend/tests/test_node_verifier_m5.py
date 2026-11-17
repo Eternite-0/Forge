@@ -5,6 +5,7 @@ The separate opt-in live_completion_probe.py performs real provider validation.
 """
 
 import asyncio
+import json
 
 import pytest
 
@@ -159,6 +160,11 @@ def reviewed_artifact(tmp_path, *, criterion=None, conditional=False):
 def test_independent_json_positive_path_settles_worker_and_rechecks_artifact(tmp_path):
     store, quest, _, run, artifact = reviewed_artifact(tmp_path)
     assert NodeVerifier(store).verify(quest.id, "n")["status"] == "completed"
+    verified = [event for event in store.list_events() if event["event_type"] == "task.verified"]
+    assert len(verified) == 1
+    assert verified[0]["conversation_id"] == store.get_quest(quest.id)["conversation_id"]
+    assert json.loads(verified[0]["payload"])["run_id"] == run["id"]
+    assert json.loads(verified[0]["payload"])["execution_mode"] == "live"
     with store.connection() as connection:
         assert (
             connection.execute("SELECT state FROM worker_runs WHERE id=?", (run["id"],)).fetchone()[
