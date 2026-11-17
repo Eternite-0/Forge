@@ -105,6 +105,19 @@ async (page, { outputDir }) => {
   await viewItems.waitFor();
   await page.keyboard.press('Escape');
   check(await menubar.getByRole('menuitem', { name: '视图', exact: true }).evaluate(node => node === document.activeElement), 'keyboard movement switches an open menu and Escape returns to its new trigger');
+  await fileMenu.press('ArrowDown');
+  const fileItems = page.getByRole('menu', { name: '文件菜单' });
+  await fileItems.getByRole('menuitem').first().waitFor();
+  await page.keyboard.press('Tab');
+  await fileItems.waitFor({ state: 'hidden' });
+  check(await editMenu.evaluate(node => node === document.activeElement), 'Tab exits an open application menu to the next focusable trigger');
+  await fileMenu.press('ArrowDown');
+  await fileItems.getByRole('menuitem').first().waitFor();
+  const focusDraft = page.getByRole('textbox', { name: '消息内容' });
+  await focusDraft.focus();
+  await fileItems.waitFor({ state: 'hidden' });
+  await page.keyboard.press('ArrowDown');
+  check(await focusDraft.evaluate(node => node === document.activeElement), 'ArrowDown in the composer cannot be intercepted by a menu that lost focus');
   await menubar.getByRole('menuitem', { name: '视图', exact: true }).evaluate(node => node.blur());
   await page.mouse.move(0, 0);
   const home = { titlebar: await rect('.desktop-chrome'), workspace: await rect('.chat-workspace'), composer: await rect('.composer'), context: await rect('.composer-workspace-context'), banner: await rect('.empty-conversation h2') };
@@ -186,6 +199,17 @@ async (page, { outputDir }) => {
     return body.scrollTop > 100 && end.getBoundingClientRect().bottom <= body.getBoundingClientRect().bottom;
   });
   check(await tree.locator('.file-tree-scroll').evaluate(element => element.scrollTop) === treePriorScroll, 'long Markdown scrolls to its final real section without moving the file tree');
+  // Visit the diff first so both editors exist; only the visible source should receive Find.
+  await showDiff.click();
+  await preview.locator('.code-preview-diff:visible .source-line').first().waitFor();
+  await showDiff.click();
+  await preview.getByRole('button', { name: '查看源代码', exact: true }).click();
+  await preview.getByRole('button', { name: '查找文件内容', exact: true }).click();
+  const markdownSourceFind = preview.locator('.document-source:visible .code-preview:not(.code-preview-diff)').getByRole('textbox', { name: '在文件中查找', exact: true });
+  await markdownSourceFind.waitFor();
+  await page.waitForFunction(() => document.activeElement.closest('.code-preview')?.matches(':not(.code-preview-diff)'));
+  check(await markdownSourceFind.evaluate(element => document.activeElement === element), 'the toolbar find opens and focuses visible Markdown source after visiting a stale hidden diff');
+  await markdownSourceFind.press('Escape');
   await tree.locator('.changed-file[title="src/config.py"]').click();
   if (await showDiff.getAttribute('aria-pressed') === 'false') await showDiff.click();
   await preview.locator('.code-preview-diff:visible [data-new-line="1"]').waitFor();

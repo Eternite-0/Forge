@@ -38,7 +38,21 @@ export default function useWorkspacePreview(workspace: WorkspaceState & ReturnTy
     previewResizeRestore.current = null;
     setPreviewOpen(true); setPreviewRequest({ id: ++previewSerial.current, mode, path, paths, receiptId });
   };
-  const closePreview = () => { captureReadingPosition(); previewResizeRestore.current = null; setPreviewOpen(false); setWorkspaceChanges(undefined); requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('.conversation-topbar :is(.home-open-files, .conversation-more-toggle)')?.focus({ preventScroll: true })); };
+  function focusConversationEntry() {
+    const container = workspaceRef.current;
+    if (!container) return;
+    const entry = Array.from(container.querySelectorAll<HTMLElement>(
+      '.conversation-topbar :is(.home-open-files, .conversation-more-toggle), textarea[aria-label="消息内容"]',
+    )).find(element => !element.closest("[hidden], [inert]") && element.getClientRects().length > 0);
+    entry?.focus({ preventScroll: true });
+  }
+  const closePreview = () => {
+    captureReadingPosition();
+    previewResizeRestore.current = null;
+    setPreviewOpen(false);
+    setWorkspaceChanges(undefined);
+    requestAnimationFrame(focusConversationEntry);
+  };
   const resizePreview = (width: number) => {
     captureReadingPosition();
     if (width < 160) { closePreview(); return; }
@@ -78,7 +92,17 @@ export default function useWorkspacePreview(workspace: WorkspaceState & ReturnTy
       if ((next.below960 !== previous.below960 && current.sidebarOpen && next.below960) || (next.below720 !== previous.below720 && next.below720)) {
         // Like Kg, a second narrower crossing replaces the saved open/closed state.
         previewResizeRestore.current = current.open ? "tabs" : "closed";
-        if (current.open) { captureReadingPosition(); setPreviewOpen(false); }
+        if (current.open) {
+          const pane = element.querySelector<HTMLElement>(".file-preview-workspace");
+          const focusWasInPreview = pane?.contains(document.activeElement);
+          captureReadingPosition(); setPreviewOpen(false);
+          if (focusWasInPreview) requestAnimationFrame(() => {
+            const focused = document.activeElement;
+            // Do not take focus from elsewhere or a preview restored by a fast resize.
+            if (previewResizeRestore.current === "tabs" &&
+                (focused === document.body || pane?.contains(focused))) focusConversationEntry();
+          });
+        }
       } else if (!next.below720 && !(current.sidebarOpen && next.below960)) {
         const restore = previewResizeRestore.current;
         previewResizeRestore.current = null;

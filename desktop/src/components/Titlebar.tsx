@@ -28,17 +28,34 @@ export default function Titlebar(props: TitlebarProps) {
   useEffect(() => {
     if (!menu) return;
     const close = (event: PointerEvent) => { if (event.target instanceof Node && !bar.current?.contains(event.target)) setMenu(null); };
+    const closeOutsideMenubar = (event: FocusEvent) => {
+      if (event.target instanceof Element && !event.target.closest(".application-menubar")) setMenu(null);
+    };
     const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setMenu(null); menuTrigger.current?.focus(); }
+      if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.altKey || event.ctrlKey || event.metaKey ||
+          !menuTrigger.current?.parentElement?.contains(document.activeElement)) return;
+      if (event.key === "Tab") {
+        // Leave native sequential focus untouched. Menus use arrow navigation,
+        // so their popup items are excluded from the page's Tab order.
+        requestAnimationFrame(() => setMenu(current => current === menu ? null : current));
+        return;
+      }
+      if (event.key === "Escape") { event.preventDefault(); setMenu(null); menuTrigger.current.focus(); return; }
       if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
       const items = Array.from(bar.current?.querySelectorAll<HTMLButtonElement>('.application-menu-panel [role="menuitem"]:not(:disabled)') || []);
       if (!items.length) return;
       event.preventDefault();
       const index = items.indexOf(document.activeElement as HTMLButtonElement);
-      items[event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : event.key === "ArrowDown" ? (index + 1) % items.length : (index - 1 + items.length) % items.length].focus();
+      items[event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : event.key === "ArrowDown" ? (index + 1) % items.length : (index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length)].focus();
     };
-    document.addEventListener("pointerdown", close); document.addEventListener("keydown", key);
-    return () => { document.removeEventListener("pointerdown", close); document.removeEventListener("keydown", key); };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("focusin", closeOutsideMenubar);
+    document.addEventListener("keydown", key);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("focusin", closeOutsideMenubar);
+      document.removeEventListener("keydown", key);
+    };
   }, [menu]);
   useEffect(() => {
     if (!notice) return;
@@ -95,7 +112,7 @@ export default function Titlebar(props: TitlebarProps) {
       <div role="menubar" aria-label="应用程序菜单" className="application-menubar" onKeyDown={moveMenu}>
         {Object.entries(commands).map(([name, entries]) => <div className="application-menu" key={name}>
           <button type="button" role="menuitem" data-app-menu={name} aria-haspopup="menu" aria-expanded={menu === name} onPointerDown={() => { const element = document.activeElement; if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) target.current = element; }} onClick={(event) => { menuTrigger.current = event.currentTarget; setMenu(menu === name ? null : name); }} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); menuTrigger.current = event.currentTarget; setMenu(name); requestAnimationFrame(() => bar.current?.querySelector<HTMLButtonElement>('.application-menu-panel button')?.focus()); } }}>{name}</button>
-          {menu === name && <div className="application-menu-panel" role="menu" aria-label={`${name}菜单`}>{entries.map((entry) => <button type="button" role="menuitem" key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>}
+          {menu === name && <div className="application-menu-panel" role="menu" aria-label={`${name}菜单`}>{entries.map((entry) => <button type="button" role="menuitem" tabIndex={-1} key={entry.label} onClick={() => { setMenu(null); entry.action(); }}><span>{entry.label}</span>{entry.shortcut && <kbd>{entry.shortcut}</kbd>}</button>)}</div>}
         </div>)}
       </div>
       {props.health && <div className="titlebar-actions">{props.health}</div>}
